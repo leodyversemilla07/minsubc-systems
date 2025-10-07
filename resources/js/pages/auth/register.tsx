@@ -26,22 +26,57 @@ export default function Register() {
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    required
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="name"
-                                    name="name"
-                                    placeholder="Full name"
-                                />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="first_name">First Name</Label>
+                                    <Input
+                                        id="first_name"
+                                        type="text"
+                                        required
+                                        autoFocus
+                                        tabIndex={1}
+                                        autoComplete="given-name"
+                                        name="first_name"
+                                        placeholder="First name"
+                                    />
+                                    <InputError
+                                        message={errors.first_name}
+                                        className="mt-2"
+                                    />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="middle_name">Middle Name</Label>
+                                    <Input
+                                        id="middle_name"
+                                        type="text"
+                                        tabIndex={2}
+                                        autoComplete="additional-name"
+                                        name="middle_name"
+                                        placeholder="Middle name (optional)"
+                                    />
+                                    <InputError
+                                        message={errors.middle_name}
+                                        className="mt-2"
+                                    />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="last_name">Last Name</Label>
+                                    <Input
+                                        id="last_name"
+                                        type="text"
+                                        required
+                                        tabIndex={3}
+                                        autoComplete="family-name"
+                                        name="last_name"
+                                        placeholder="Last name"
+                                    />
+                                    <InputError
+                                        message={errors.last_name}
+                                        className="mt-2"
+                                    />
+                                </div>
                             </div>
 
                             <div className="grid gap-2">
@@ -50,7 +85,7 @@ export default function Register() {
                                     id="email"
                                     type="email"
                                     required
-                                    tabIndex={2}
+                                    tabIndex={4}
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"

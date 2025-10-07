@@ -35,4 +35,18 @@ return [
         ],
     ],
 
+    'paymongo' => [
+        'public_key' => env('PAYMONGO_PUBLIC_KEY'),
+        'secret_key' => env('PAYMONGO_SECRET_KEY'),
+        'webhook_secret' => env('PAYMONGO_WEBHOOK_SECRET'),
+    ],
+
+    'semaphore' => [
+        'api_key' => env('SEMAPHORE_API_KEY'),
+        'sender_name' => env('SEMAPHORE_SENDER_NAME', 'MinSU-DRS'),
+    ],
+
+    'sendgrid' => [
+        'api_key' => env('SENDGRID_API_KEY'),
+    ],
 ];

@@ -19,10 +19,17 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
-                'name' => 'Test User',
+                'first_name' => 'Test',
+                'last_name' => 'User',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
             ]
         );
+
+        // Seed users and students
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+            UserStudentSeeder::class,
+        ]);
     }
 }
