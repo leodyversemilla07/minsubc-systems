@@ -29,10 +29,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware(['permission:make_payments'])->group(function () {
+        Route::get('document-requests/{document_request}/payment/method', [PaymentController::class, 'selectPaymentMethod'])
+            ->name('registrar.payments.method');
         Route::post('document-requests/{document_request}/payment/initiate', [PaymentController::class, 'initiatePayment'])
             ->name('registrar.payments.initiate');
         Route::post('document-requests/{document_request}/payment/cash', [PaymentController::class, 'generateCashPayment'])
             ->name('registrar.payments.cash');
+        Route::get('document-requests/{document_request}/payment/success', [PaymentController::class, 'paymentSuccess'])
+            ->name('registrar.payments.success');
     });
 
     Route::middleware(['permission:track_status'])->group(function () {
@@ -57,6 +61,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('registrar.admin.requests.mark-ready');
         Route::post('admin/requests/{document_request}/release', [AdminController::class, 'releaseDocument'])
             ->name('registrar.admin.requests.release');
+        Route::get('admin/requests/{document_request}/generate', [AdminController::class, 'generateDocument'])
+            ->name('registrar.admin.requests.generate');
+        Route::get('admin/requests/{document_request}/download', [AdminController::class, 'downloadDocument'])
+            ->name('registrar.admin.requests.download');
+
+        // Audit log routes - accessible to registrar admin and system admin
+        Route::get('admin/audit-logs', [AdminController::class, 'auditLogs'])->name('registrar.admin.audit-logs');
+        Route::get('admin/audit-logs/{audit_log}', [AdminController::class, 'showAuditLog'])->name('registrar.admin.audit-logs.show');
     });
 
     // Student management - accessible to registrar admin and system admin

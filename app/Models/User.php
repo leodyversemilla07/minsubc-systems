@@ -29,6 +29,15 @@ class User extends Authenticatable
     ];
 
     /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'full_name',
+    ];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
@@ -71,18 +80,5 @@ class User extends Authenticatable
     public function student(): HasOne
     {
         return $this->hasOne(\App\Modules\Registrar\Models\Student::class);
-    }
-
-    /**
-     * Generate a unique student ID in MBC2025-XXXX format.
-     */
-    public static function generateStudentId(): string
-    {
-        do {
-            $number = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
-            $studentId = 'MBC2025-'.$number;
-        } while (\App\Modules\Registrar\Models\Student::where('student_id', $studentId)->exists());
-
-        return $studentId;
     }
 }

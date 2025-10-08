@@ -7,6 +7,7 @@ import { DataTable } from '@/components/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { requests } from '@/routes/registrar/admin';
 import { show } from '@/routes/registrar/document-requests';
+import { statusColors } from '@/lib/status-colors';
 
 interface DocumentRequest {
     id: number;
@@ -14,8 +15,11 @@ interface DocumentRequest {
     status: string;
     created_at: string;
     student: {
-        first_name: string;
-        last_name: string;
+        user: {
+            first_name: string;
+            last_name: string;
+            full_name: string;
+        };
     };
 }
 
@@ -31,16 +35,6 @@ interface Props {
 }
 
 export default function Dashboard({ stats, recentRequests }: Props) {
-    const statusColors = {
-        pending_payment: 'bg-yellow-100 text-yellow-800',
-        payment_expired: 'bg-red-100 text-red-800',
-        paid: 'bg-blue-100 text-blue-800',
-        processing: 'bg-purple-100 text-purple-800',
-        ready_for_pickup: 'bg-green-100 text-green-800',
-        released: 'bg-gray-100 text-gray-800',
-        cancelled: 'bg-red-100 text-red-800',
-    };
-
     const columns: ColumnDef<DocumentRequest>[] = [
         {
             accessorKey: 'request_number',
@@ -53,15 +47,15 @@ export default function Dashboard({ stats, recentRequests }: Props) {
             accessorKey: 'student',
             header: 'Student',
             cell: ({ row }) => (
-                `${row.original.student.first_name} ${row.original.student.last_name}`
+                row.original.student.user.full_name
             ),
         },
         {
             accessorKey: 'status',
             header: 'Status',
             cell: ({ row }) => (
-                <Badge className={statusColors[row.original.status as keyof typeof statusColors] || 'bg-gray-100'}>
-                    {row.original.status.replace('_', ' ')}
+                <Badge className={statusColors[row.original.status as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
+                    {row.original.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 </Badge>
             ),
         },

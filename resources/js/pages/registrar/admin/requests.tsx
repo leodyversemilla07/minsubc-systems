@@ -22,9 +22,12 @@ interface DocumentRequest {
     created_at: string;
     student: {
         student_id: string;
-        first_name: string;
-        last_name: string;
-        email: string;
+        user: {
+            first_name: string;
+            last_name: string;
+            full_name: string;
+            email: string;
+        };
     };
     payments: Array<{
         id: number;
@@ -73,7 +76,7 @@ export default function Requests({ requests, filters }: RequestsProps) {
             header: 'Student',
             cell: ({ row }) => (
                 <div>
-                    <div className="font-medium">{`${row.original.student.first_name} ${row.original.student.last_name}`}</div>
+                    <div className="font-medium">{row.original.student.user.full_name}</div>
                     <div className="text-sm text-muted-foreground">{row.original.student.student_id}</div>
                 </div>
             ),

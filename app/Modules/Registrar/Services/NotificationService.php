@@ -2,6 +2,7 @@
 
 namespace App\Modules\Registrar\Services;
 
+use App\Models\SystemSetting;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Notification;
 use Illuminate\Support\Facades\Http;
@@ -17,9 +18,9 @@ class NotificationService
 
     public function __construct()
     {
-        $this->semaphoreApiKey = config('services.semaphore.api_key');
-        $this->semaphoreSenderName = config('services.semaphore.sender_name');
-        $this->sendgridApiKey = config('services.sendgrid.api_key');
+        $this->semaphoreApiKey = SystemSetting::getValue('sms_api_key');
+        $this->semaphoreSenderName = SystemSetting::getValue('semaphore_sender_name', 'MinSU-DRS');
+        $this->sendgridApiKey = SystemSetting::getValue('email_api_key');
     }
 
     /**
@@ -44,10 +45,13 @@ class NotificationService
                 'sendername' => $this->semaphoreSenderName ?? 'MinSU-DRS',
             ]);
 
-            if ($response->successful()) {
+            $responseData = $response->json();
+
+            // Check both HTTP status and API response content
+            if ($response->successful() && ! isset($responseData['apikey'])) {
                 Log::info('SMS sent successfully', [
                     'phone' => $phone,
-                    'response' => $response->json(),
+                    'response' => $responseData,
                 ]);
 
                 return true;
@@ -55,7 +59,8 @@ class NotificationService
 
             Log::error('SMS sending failed', [
                 'phone' => $phone,
-                'response' => $response->json(),
+                'http_status' => $response->status(),
+                'response' => $responseData,
             ]);
 
             return false;
@@ -143,11 +148,10 @@ class NotificationService
 
         // Store notification record
         Notification::create([
-            'document_request_id' => $request->id,
+            'request_id' => $request->id,
             'student_id' => $student->student_id,
-            'type' => 'request_submitted',
+            'type' => 'sms',
             'message' => $message,
-            'channel' => 'sms',
         ]);
 
         // Send SMS if phone available
@@ -173,11 +177,10 @@ class NotificationService
                   'Your request is now being processed.';
 
         Notification::create([
-            'document_request_id' => $request->id,
+            'request_id' => $request->id,
             'student_id' => $student->student_id,
-            'type' => 'payment_confirmed',
+            'type' => 'sms',
             'message' => $message,
-            'channel' => 'sms',
         ]);
 
         if ($student->phone) {
@@ -199,17 +202,23 @@ class NotificationService
         $student = $request->student;
         $message = "Your document request {$request->request_number} is ready for pickup at the Registrar's Office.";
 
-        Notification::create([
-            'document_request_id' => $request->id,
+        $notification = Notification::create([
+            'request_id' => $request->id,
             'student_id' => $student->student_id,
-            'type' => 'document_ready',
+            'type' => 'sms',
             'message' => $message,
-            'channel' => 'sms',
         ]);
 
+        $smsSent = false;
         if ($student->phone) {
-            $this->sendSms($student->phone, $message);
+            $smsSent = $this->sendSms($student->phone, $message);
         }
+
+        // Update notification status based on SMS sending result
+        $notification->update([
+            'status' => $smsSent ? 'sent' : 'failed',
+            'sent_at' => $smsSent ? now() : null,
+        ]);
 
         $this->sendEmail(
             $student->user->email,
@@ -226,17 +235,23 @@ class NotificationService
         $student = $request->student;
         $message = "Your document request {$request->request_number} has been released.";
 
-        Notification::create([
-            'document_request_id' => $request->id,
+        $notification = Notification::create([
+            'request_id' => $request->id,
             'student_id' => $student->student_id,
-            'type' => 'document_released',
+            'type' => 'sms',
             'message' => $message,
-            'channel' => 'sms',
         ]);
 
+        $smsSent = false;
         if ($student->phone) {
-            $this->sendSms($student->phone, $message);
+            $smsSent = $this->sendSms($student->phone, $message);
         }
+
+        // Update notification status based on SMS sending result
+        $notification->update([
+            'status' => $smsSent ? 'sent' : 'failed',
+            'sent_at' => $smsSent ? now() : null,
+        ]);
 
         $this->sendEmail(
             $student->user->email,

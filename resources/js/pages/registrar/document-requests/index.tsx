@@ -5,9 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Eye, Edit, ArrowUpDown } from 'lucide-react';
 import { DataTable } from '@/components/data-table';
 import { ColumnDef } from '@tanstack/react-table';
+import AppLayout from '@/layouts/app-layout';
 import { create } from '@/routes/registrar/document-requests';
 import { show } from '@/routes/registrar/document-requests';
 import { edit } from '@/routes/registrar/document-requests';
+import { index } from '@/routes/registrar/document-requests';
+import { type BreadcrumbItem } from '@/types';
+import { statusColors } from '@/lib/status-colors';
 
 interface DocumentRequest {
     id: number;
@@ -18,9 +22,12 @@ interface DocumentRequest {
     amount: number;
     created_at: string;
     student: {
-        first_name: string;
-        last_name: string;
         student_id: string;
+        user: {
+            first_name: string;
+            last_name: string;
+            full_name: string;
+        };
     };
 }
 
@@ -34,16 +41,6 @@ interface Props {
     };
 }
 
-const statusColors = {
-    pending_payment: 'bg-yellow-100 text-yellow-800',
-    payment_expired: 'bg-red-100 text-red-800',
-    paid: 'bg-blue-100 text-blue-800',
-    processing: 'bg-purple-100 text-purple-800',
-    ready_for_pickup: 'bg-green-100 text-green-800',
-    released: 'bg-gray-100 text-gray-800',
-    cancelled: 'bg-red-100 text-red-800',
-};
-
 const documentTypeLabels = {
     coe: 'Certificate of Enrollment',
     cog: 'Certificate of Grades',
@@ -55,6 +52,13 @@ const documentTypeLabels = {
     so: 'Special Order',
     form_137: 'Form 137',
 };
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Document Requests',
+        href: index().url,
+    },
+];
 
 export default function Index({ requests }: Props) {
     const columns: ColumnDef<DocumentRequest>[] = [
@@ -82,7 +86,7 @@ export default function Index({ requests }: Props) {
                 const student = row.original.student;
                 return (
                     <div>
-                        {student.first_name} {student.last_name}
+                        {student.user.full_name}
                         <br />
                         <span className="text-sm text-gray-500">
                             {student.student_id}
@@ -139,8 +143,8 @@ export default function Index({ requests }: Props) {
                 )
             },
             cell: ({ row }) => (
-                <Badge className={statusColors[row.getValue("status") as keyof typeof statusColors] || 'bg-gray-100'}>
-                    {(row.getValue("status") as string).replace('_', ' ')}
+                <Badge className={statusColors[row.getValue("status") as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
+                    {(row.getValue("status") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 </Badge>
             ),
         },
@@ -166,13 +170,13 @@ export default function Index({ requests }: Props) {
                 const request = row.original;
                 return (
                     <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" asChild>
+                        <Button variant="outline" size="icon" asChild>
                             <Link href={show(request.id)}>
                                 <Eye className="w-4 h-4" />
                             </Link>
                         </Button>
                         {request.status === 'pending_payment' && (
-                            <Button variant="outline" size="sm" asChild>
+                            <Button variant="outline" size="icon" asChild>
                                 <Link href={edit(request.id)}>
                                     <Edit className="w-4 h-4" />
                                 </Link>
@@ -185,13 +189,21 @@ export default function Index({ requests }: Props) {
     ];
 
     return (
-        <>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Document Requests" />
 
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold">Document Requests</h1>
-                    <Button asChild>
+            <div className="flex-1 space-y-8 p-6 md:p-8">
+                {/* Header */}
+                <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                    <div className="space-y-1">
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Document Requests
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Manage and track all document requests
+                        </p>
+                    </div>
+                    <Button asChild className="w-full sm:w-auto">
                         <Link href={create()}>
                             <Plus className="w-4 h-4 mr-2" />
                             New Request
@@ -199,11 +211,12 @@ export default function Index({ requests }: Props) {
                     </Button>
                 </div>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>All Requests</CardTitle>
+                {/* Requests Table */}
+                <Card className="transition-shadow hover:shadow-md">
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">All Requests</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-0">
                         <DataTable
                             columns={columns}
                             data={requests.data}
@@ -214,6 +227,6 @@ export default function Index({ requests }: Props) {
                     </CardContent>
                 </Card>
             </div>
-        </>
+        </AppLayout>
     );
 }

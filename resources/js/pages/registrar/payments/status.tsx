@@ -1,10 +1,14 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, CreditCard, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { show } from '@/routes/registrar/document-requests';
+import { show, index } from '@/routes/registrar/document-requests';
+import AppLayout from '@/layouts/app-layout';
+import { BreadcrumbItem } from '@/types';
+import { Head as InertiaHead } from '@inertiajs/react';
+import { statusColors, paymentStatusColors } from '@/lib/status-colors';
 
 interface DocumentRequest {
     id: number;
@@ -44,23 +48,6 @@ interface Props {
     request: DocumentRequest;
 }
 
-const statusColors = {
-    pending_payment: 'bg-yellow-100 text-yellow-800',
-    payment_expired: 'bg-red-100 text-red-800',
-    paid: 'bg-blue-100 text-blue-800',
-    processing: 'bg-purple-100 text-purple-800',
-    ready_for_pickup: 'bg-green-100 text-green-800',
-    released: 'bg-gray-100 text-gray-800',
-    cancelled: 'bg-red-100 text-red-800',
-};
-
-const paymentStatusColors = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    paid: 'bg-green-100 text-green-800',
-    failed: 'bg-red-100 text-red-800',
-    cancelled: 'bg-gray-100 text-gray-800',
-};
-
 const documentTypeLabels = {
     coe: 'Certificate of Enrollment',
     cog: 'Certificate of Grades',
@@ -74,6 +61,11 @@ const documentTypeLabels = {
 };
 
 export default function Status({ request }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Document Requests', href: index().url },
+        { title: `Request ${request.request_number}`, href: show(request.id).url },
+        { title: 'Payment Status', href: '#' },
+    ];
     const getStatusIcon = (status: string) => {
         switch (status) {
             case 'pending_payment':
@@ -101,21 +93,21 @@ export default function Status({ request }: Props) {
     };
 
     return (
-        <>
-            <Head title={`Payment Status - ${request.request_number}`} />
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <InertiaHead title={`Payment Status - ${request.request_number}`} />
 
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex items-center mb-6">
-                    <Button variant="outline" size="sm" asChild className="mr-4">
-                        <Link href={show(request.id)}>
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Back to Request
-                        </Link>
-                    </Button>
+            <div className="flex flex-col space-y-8 p-6 md:p-8">
+                <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
                     <div>
                         <h1 className="text-3xl font-bold">Payment Status</h1>
                         <p className="text-gray-600">Request {request.request_number}</p>
                     </div>
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href={show(request.id).url}>
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Back to Request
+                        </Link>
+                    </Button>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -132,8 +124,8 @@ export default function Status({ request }: Props) {
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
                                         <span className="font-medium">Status:</span>
-                                        <Badge className={statusColors[request.status as keyof typeof statusColors] || 'bg-gray-100'}>
-                                            {request.status.replace('_', ' ')}
+                                        <Badge className={statusColors[request.status as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
+                                            {request.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                         </Badge>
                                     </div>
 
@@ -194,8 +186,8 @@ export default function Status({ request }: Props) {
                                                             {new Date(payment.created_at).toLocaleString()}
                                                         </p>
                                                     </div>
-                                                    <Badge className={paymentStatusColors[payment.status as keyof typeof paymentStatusColors] || 'bg-gray-100'}>
-                                                        {payment.status}
+                                                    <Badge className={paymentStatusColors[payment.status as keyof typeof paymentStatusColors] || 'bg-muted text-muted-foreground'}>
+                                                        {payment.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                                     </Badge>
                                                 </div>
 
@@ -270,6 +262,6 @@ export default function Status({ request }: Props) {
                     </div>
                 </div>
             </div>
-        </>
+        </AppLayout>
     );
 }

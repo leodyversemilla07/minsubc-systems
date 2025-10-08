@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Head as InertiaHead } from '@inertiajs/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +9,9 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Spinner } from '@/components/ui/spinner';
 import { Search, CheckCircle, XCircle, Receipt } from 'lucide-react';
 import { toast } from 'sonner';
-import { cashierDashboard, verifyPayment, confirmCashPayment } from '@/routes/registrar/cashier';
+import { verifyPayment, confirmPayment } from '@/routes/registrar/cashier';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
 
 interface PaymentDetails {
     id: number;
@@ -23,6 +25,9 @@ interface PaymentDetails {
 }
 
 export default function Dashboard() {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Cashier Dashboard', href: '#' },
+    ];
     const [paymentReference, setPaymentReference] = useState('');
     const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null);
     const [loading, setLoading] = useState(false);
@@ -40,7 +45,7 @@ export default function Dashboard() {
         setPaymentDetails(null);
 
         try {
-            const response = await fetch(verifyPayment(), {
+            const response = await fetch(verifyPayment().url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,6 +63,7 @@ export default function Dashboard() {
                 setError(data.message || 'Payment reference not found');
             }
         } catch (err) {
+            console.error('Payment verification error:', err);
             setError('Failed to verify payment reference');
         } finally {
             setVerifying(false);
@@ -69,7 +75,7 @@ export default function Dashboard() {
 
         setLoading(true);
         try {
-            const response = await fetch(confirmCashPayment(), {
+            const response = await fetch(confirmPayment().url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,6 +94,7 @@ export default function Dashboard() {
                 toast.error(data.message || 'Failed to confirm payment');
             }
         } catch (err) {
+            console.error('Payment confirmation error:', err);
             toast.error('Failed to confirm payment');
         } finally {
             setLoading(false);
@@ -110,13 +117,15 @@ export default function Dashboard() {
     };
 
     return (
-        <>
-            <Head title="Cashier Dashboard" />
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <InertiaHead title="Cashier Dashboard" />
 
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex items-center mb-6">
-                    <Receipt className="w-8 h-8 mr-3 text-primary" />
-                    <h1 className="text-3xl font-bold">Cashier Dashboard</h1>
+            <div className="flex flex-col space-y-8 p-6 md:p-8">
+                <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+                    <div>
+                        <Receipt className="w-8 h-8 mr-3 text-primary" />
+                        <h1 className="text-3xl font-bold">Cashier Dashboard</h1>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -233,6 +242,6 @@ export default function Dashboard() {
                     </Card>
                 </div>
             </div>
-        </>
+        </AppLayout>
     );
 }

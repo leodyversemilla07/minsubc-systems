@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('quantity')->default(1);
             $table->text('purpose')->nullable();
             $table->decimal('amount', 10, 2);
-            $table->enum('payment_method', ['digital', 'cash']);
+            $table->enum('payment_method', ['digital', 'cash'])->nullable();
             $table->enum('status', [
                 'pending_payment',
                 'payment_expired',
@@ -29,7 +29,7 @@ return new class extends Migration
                 'ready_for_pickup',
                 'released',
                 'cancelled',
-                'rejected'
+                'rejected',
             ])->default('pending_payment');
             $table->timestamp('payment_deadline')->nullable();
             $table->unsignedBigInteger('processed_by')->nullable();

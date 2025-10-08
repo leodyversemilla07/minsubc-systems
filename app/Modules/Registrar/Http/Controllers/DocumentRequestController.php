@@ -2,6 +2,7 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Modules\Registrar\Http\Requests\StoreDocumentRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Services\NotificationService;
@@ -51,12 +52,20 @@ class DocumentRequestController extends Controller
                 'certificate_good_moral' => 'Certificate of Good Moral Character',
                 'cav' => 'Certificate of Authentication and Verification',
                 'diploma' => 'Diploma (Certified True Copy)',
-                'so' => 'Special Order',
+                'so' => 'Special Order copies',
                 'form_137' => 'Form 137',
             ],
             'processingTypes' => [
-                'regular' => ['label' => 'Regular Processing', 'days' => '5-7 working days', 'price' => 50],
-                'rush' => ['label' => 'Rush Processing', 'days' => '2-3 working days', 'price' => 150],
+                'regular' => [
+                    'label' => 'Regular Processing',
+                    'days' => '5-7 working days',
+                    'price' => 100,
+                ],
+                'rush' => [
+                    'label' => 'Rush Processing',
+                    'days' => '2-3 working days',
+                    'price' => 200,
+                ],
             ],
         ]);
     }
@@ -89,11 +98,31 @@ class DocumentRequestController extends Controller
                 'quantity' => $validated['quantity'],
                 'purpose' => $validated['purpose'],
                 'amount' => $amount,
-                'payment_method' => 'pending', // Will be set during payment
+                'payment_method' => null, // Will be set during payment
                 'status' => 'pending_payment',
                 'payment_deadline' => now()->addHours(48),
             ]);
         });
+
+        // Log document request creation
+        if ($createdRequest) {
+            AuditLog::log(
+                'document_request_created',
+                $user->id,
+                DocumentRequest::class,
+                $createdRequest->id,
+                null,
+                $createdRequest->toArray(),
+                "Document request {$createdRequest->request_number} created by student",
+                [
+                    'request_number' => $createdRequest->request_number,
+                    'document_type' => $createdRequest->document_type,
+                    'processing_type' => $createdRequest->processing_type,
+                    'quantity' => $createdRequest->quantity,
+                    'amount' => $createdRequest->amount,
+                ]
+            );
+        }
 
         // Send notification
         if ($createdRequest) {
@@ -109,7 +138,7 @@ class DocumentRequestController extends Controller
      */
     public function show(DocumentRequest $documentRequest)
     {
-        $documentRequest->load(['student', 'payments', 'notifications']);
+        $documentRequest->load(['student.user', 'payments', 'notifications']);
 
         return Inertia::render('registrar/document-requests/show', [
             'request' => $documentRequest,
@@ -125,6 +154,8 @@ class DocumentRequestController extends Controller
         if ($documentRequest->status !== 'pending_payment') {
             abort(403, 'Cannot edit request that is already being processed.');
         }
+
+        $documentRequest->load(['student.user']);
 
         return Inertia::render('registrar/document-requests/edit', [
             'request' => $documentRequest,

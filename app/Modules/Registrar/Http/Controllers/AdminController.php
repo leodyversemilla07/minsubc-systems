@@ -2,9 +2,12 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Modules\Registrar\Models\DocumentRequest;
+use App\Modules\Registrar\Services\DocumentGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -72,10 +75,30 @@ class AdminController extends Controller
         ]);
 
         $oldStatus = $documentRequest->status;
+        $oldRequest = $documentRequest->toArray();
+
         $documentRequest->update([
             'status' => $request->status,
             'notes' => $request->notes,
         ]);
+
+        // Log status change
+        AuditLog::log(
+            'document_request_status_updated',
+            Auth::id(),
+            DocumentRequest::class,
+            $documentRequest->id,
+            $oldRequest,
+            $documentRequest->fresh()->toArray(),
+            "Document request {$documentRequest->request_number} status changed from {$oldStatus} to {$request->status}",
+            [
+                'request_number' => $documentRequest->request_number,
+                'old_status' => $oldStatus,
+                'new_status' => $request->status,
+                'updated_by' => Auth::user()->name,
+                'notes' => $request->notes,
+            ]
+        );
 
         // Send notifications based on status change
         if ($request->status === 'ready_for_pickup' && $oldStatus !== 'ready_for_pickup') {
@@ -92,20 +115,47 @@ class AdminController extends Controller
     /**
      * Mark document as ready for pickup
      */
-    public function markReady(DocumentRequest $documentRequest)
+    public function markReady(DocumentRequest $documentRequest, DocumentGenerator $documentGenerator)
     {
         if ($documentRequest->status !== 'processing') {
             return back()->with('error', 'Request must be in processing status.');
         }
 
-        $documentRequest->update([
-            'status' => 'ready_for_pickup',
-            'processed_by' => Auth::id(),
-        ]);
+        try {
+            // Generate the document
+            $documentGenerator->generateDocument($documentRequest);
 
-        // TODO: Send notification to student
+            $oldRequest = $documentRequest->toArray();
 
-        return back()->with('success', 'Document marked as ready for pickup.');
+            // Update request status
+            $documentRequest->update([
+                'status' => 'ready_for_pickup',
+                'processed_by' => Auth::id(),
+            ]);
+
+            // Log document generation and status change
+            AuditLog::log(
+                'document_generated',
+                Auth::id(),
+                DocumentRequest::class,
+                $documentRequest->id,
+                $oldRequest,
+                $documentRequest->fresh()->toArray(),
+                "Document generated and marked as ready for pickup for request {$documentRequest->request_number}",
+                [
+                    'request_number' => $documentRequest->request_number,
+                    'document_type' => $documentRequest->document_type,
+                    'processed_by' => Auth::user()->name,
+                    'generated_at' => now()->toISOString(),
+                ]
+            );
+
+            // TODO: Send notification to student
+
+            return back()->with('success', 'Document generated and marked as ready for pickup.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to generate document: '.$e->getMessage());
+        }
     }
 
     /**
@@ -123,6 +173,8 @@ class AdminController extends Controller
             return back()->with('error', 'Document must be ready for pickup first.');
         }
 
+        $oldRequest = $documentRequest->toArray();
+
         $documentRequest->update([
             'status' => 'released',
             'released_by' => Auth::id(),
@@ -132,8 +184,179 @@ class AdminController extends Controller
             'released_at' => now(),
         ]);
 
+        // Log document release
+        AuditLog::log(
+            'document_released',
+            Auth::id(),
+            DocumentRequest::class,
+            $documentRequest->id,
+            $oldRequest,
+            $documentRequest->fresh()->toArray(),
+            "Document released for request {$documentRequest->request_number}",
+            [
+                'request_number' => $documentRequest->request_number,
+                'document_type' => $documentRequest->document_type,
+                'released_by' => Auth::user()->name,
+                'released_to' => $request->released_to,
+                'released_id_type' => $request->released_id_type,
+                'released_id_number' => $request->released_id_number,
+                'released_at' => now()->toISOString(),
+            ]
+        );
+
         // TODO: Send notification to student
 
         return back()->with('success', 'Document released successfully.');
+    }
+
+    /**
+     * Generate document PDF
+     */
+    public function generateDocument(DocumentRequest $documentRequest, DocumentGenerator $documentGenerator)
+    {
+        try {
+            // Generate the document
+            $filePath = $documentGenerator->generateDocument($documentRequest);
+
+            $oldRequest = $documentRequest->toArray();
+
+            // Update request status to indicate document is generated
+            $documentRequest->update([
+                'status' => 'ready_for_pickup',
+                'processed_by' => Auth::id(),
+            ]);
+
+            // Log document generation
+            AuditLog::log(
+                'document_generated',
+                Auth::id(),
+                DocumentRequest::class,
+                $documentRequest->id,
+                $oldRequest,
+                $documentRequest->fresh()->toArray(),
+                "Document generated for request {$documentRequest->request_number}",
+                [
+                    'request_number' => $documentRequest->request_number,
+                    'document_type' => $documentRequest->document_type,
+                    'file_path' => $filePath,
+                    'processed_by' => Auth::user()->name,
+                    'generated_at' => now()->toISOString(),
+                ]
+            );
+
+            return back()->with('success', 'Document generated successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to generate document: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Download generated document
+     */
+    public function downloadDocument(DocumentRequest $documentRequest)
+    {
+        $filename = $this->getDocumentFilename($documentRequest);
+
+        if (! Storage::exists('documents/'.$filename)) {
+            return back()->with('error', 'Document not found. Please generate it first.');
+        }
+
+        return Storage::download('documents/'.$filename, $filename);
+    }
+
+    /**
+     * Get the expected filename for a document
+     */
+    private function getDocumentFilename(DocumentRequest $documentRequest): string
+    {
+        $typeMap = [
+            'coe' => 'COE',
+            'tor' => 'TOR',
+            'cog' => 'COG',
+            'certificate_good_moral' => 'COG',
+            'honorable_dismissal' => 'Honorable_Dismissal',
+            'cav' => 'CAV',
+            'diploma' => 'Diploma',
+            'grades' => 'Grades',
+            'so' => 'SO',
+            'form_137' => 'Form_137',
+        ];
+
+        $prefix = $typeMap[$documentRequest->document_type] ?? 'Document';
+
+        return $prefix.'_'.$documentRequest->request_number.'.pdf';
+    }
+
+    /**
+     * Show audit logs for admin review
+     */
+    public function auditLogs(Request $request)
+    {
+        $query = AuditLog::with(['user'])
+            ->latest();
+
+        // Filter by action
+        if ($request->action) {
+            $query->where('action', $request->action);
+        }
+
+        // Filter by user
+        if ($request->user_id) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // Filter by model type
+        if ($request->model_type) {
+            $query->where('model_type', $request->model_type);
+        }
+
+        // Filter by date range
+        if ($request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Search in description
+        if ($request->search) {
+            $query->where('description', 'like', '%'.$request->search.'%');
+        }
+
+        $auditLogs = $query->paginate(50);
+
+        // Get unique actions for filter dropdown
+        $actions = AuditLog::distinct('action')->pluck('action')->sort();
+
+        // Get users who have audit logs
+        $users = \App\Models\User::whereHas('auditLogs')
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ];
+            });
+
+        return Inertia::render('registrar/admin/audit-logs', [
+            'auditLogs' => $auditLogs,
+            'filters' => $request->only(['action', 'user_id', 'model_type', 'date_from', 'date_to', 'search']),
+            'actions' => $actions,
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * Show detailed audit log entry
+     */
+    public function showAuditLog(AuditLog $auditLog)
+    {
+        $auditLog->load(['user']);
+
+        return Inertia::render('registrar/admin/audit-log-detail', [
+            'auditLog' => $auditLog,
+        ]);
     }
 }
