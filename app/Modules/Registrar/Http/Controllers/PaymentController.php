@@ -6,6 +6,7 @@ use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Payment;
 use App\Modules\Registrar\Services\NotificationService;
 use App\Modules\Registrar\Services\PaymentService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,48 +21,56 @@ class PaymentController extends Controller
     /**
      * Show payment method selection page
      */
-    public function selectPaymentMethod(DocumentRequest $request)
+    public function selectPaymentMethod(DocumentRequest $documentRequest)
     {
+        // Check if there's an existing pending cash payment
+        $existingCashPayment = Payment::where('request_id', $documentRequest->id)
+            ->where('payment_method', 'cash')
+            ->where('status', 'pending')
+            ->latest()
+            ->first();
+
         return Inertia::render('registrar/payments/method', [
-            'request' => $request->load('student.user'),
+            'request' => $documentRequest->load('student.user'),
+            'existingCashPayment' => $existingCashPayment,
         ]);
     }
 
     /**
      * Initiate digital payment for a document request
      */
-    public function initiatePayment(DocumentRequest $request)
+    public function initiatePayment(DocumentRequest $documentRequest)
     {
-        if ($request->status !== 'pending_payment') {
+        if ($documentRequest->status !== 'pending_payment') {
             return back()->withErrors([
                 'payment' => 'Payment cannot be initiated for this request. Only requests with pending payment status can be paid.',
             ]);
         }
 
-        $result = $this->paymentService->createCheckout($request);
+        $result = $this->paymentService->createCheckout($documentRequest);
 
         if ($result['success']) {
             // Create payment record
             $payment = Payment::create([
-                'request_id' => $request->id,
+                'request_id' => $documentRequest->id,
                 'payment_method' => 'digital',
                 'paymongo_checkout_id' => $result['checkout_id'],
-                'amount' => $request->amount,
+                'amount' => $documentRequest->amount,
                 'status' => 'pending',
             ]);
 
             // Log checkout payment creation
             \App\Models\AuditLog::log(
                 'payment_created',
-                $request->student->user_id,
+                $documentRequest->student->user_id,
                 Payment::class,
                 $payment->id,
                 null,
                 $payment->toArray(),
-                "Digital payment checkout initiated for document request {$request->request_number}",
+                "Digital payment checkout initiated for document request {$documentRequest->request_number}",
                 [
-                    'request_number' => $request->request_number,
-                    'amount' => $request->amount,
+                    'request_number' => $documentRequest->request_number,
+                    'amount' => $documentRequest->amount,
                     'payment_method' => 'digital',
                     'checkout_id' => $result['checkout_id'],
                 ]
@@ -80,11 +89,11 @@ class PaymentController extends Controller
     {
         $payload = $request->all();
 
-        // Verify webhook signature (implement proper verification)
-        // $signature = $request->header('paymongo-signature');
-        // if (!$this->payMongoService->verifyWebhookSignature($signature, json_encode($payload))) {
-        //     return response()->json(['error' => 'Invalid signature'], 401);
-        // }
+        // Verify webhook signature for security
+        $signature = $request->header('paymongo-signature');
+        if ($signature && ! $this->paymentService->verifyWebhookSignature($signature, json_encode($payload))) {
+            return response()->json(['error' => 'Invalid signature'], 401);
+        }
 
         $processed = $this->paymentService->handleWebhook($payload);
 
@@ -98,56 +107,89 @@ class PaymentController extends Controller
     /**
      * Generate payment reference for cash payment
      */
-    public function generateCashPayment(DocumentRequest $request)
+    public function generateCashPayment(DocumentRequest $documentRequest)
     {
-        if ($request->status !== 'pending_payment') {
+        if ($documentRequest->status !== 'pending_payment') {
             return back()->withErrors([
                 'payment' => 'Cash payment cannot be generated for this request.',
             ]);
         }
 
-        $prn = $this->paymentService->generatePaymentReference($request);
+        // Check if payment already exists
+        $existingPayment = Payment::where('request_id', $documentRequest->id)
+            ->where('payment_method', 'cash')
+            ->where('status', 'pending')
+            ->latest()
+            ->first();
+
+        if ($existingPayment) {
+            return back()->with([
+                'payment_reference' => $existingPayment->payment_reference_number,
+                'payment_amount' => $existingPayment->amount,
+                'payment_deadline' => $documentRequest->payment_deadline,
+            ])->with('success', 'Payment reference already exists!');
+        }
+
+        $prn = $this->paymentService->generatePaymentReference($documentRequest);
 
         // Create payment record for cash payment
         $payment = Payment::create([
-            'request_id' => $request->id,
+            'request_id' => $documentRequest->id,
             'payment_method' => 'cash',
-            'payment_reference' => $prn,
-            'amount' => $request->amount,
+            'payment_reference_number' => $prn,
+            'amount' => $documentRequest->amount,
             'status' => 'pending',
         ]);
 
         // Log cash payment reference generation
         \App\Models\AuditLog::log(
             'payment_created',
-            $request->student->user_id,
+            $documentRequest->student->user_id,
             Payment::class,
             $payment->id,
             null,
             $payment->toArray(),
-            "Cash payment reference generated for document request {$request->request_number}",
+            "Cash payment reference generated for document request {$documentRequest->request_number}",
             [
-                'request_number' => $request->request_number,
-                'amount' => $request->amount,
+                'request_number' => $documentRequest->request_number,
+                'amount' => $documentRequest->amount,
                 'payment_method' => 'cash',
-                'payment_reference' => $prn,
+                'payment_reference_number' => $prn,
             ]
         );
 
-        return back()->with([
-            'payment_reference' => $prn,
-            'payment_amount' => $request->amount,
-            'payment_deadline' => $request->payment_deadline,
+        return redirect()->route('registrar.payments.cash-reference', $payment);
+    }
+
+    /**
+     * Show cash payment reference details page
+     */
+    public function showCashPaymentReference(Payment $payment)
+    {
+        // Load the relationship first
+        $payment->load(['documentRequest.student.user']);
+
+        // Ensure this is a cash payment and belongs to the authenticated user
+        if ($payment->payment_method !== 'cash') {
+            abort(404);
+        }
+
+        if ($payment->documentRequest->student->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return Inertia::render('registrar/payments/cash-reference', [
+            'payment' => $payment,
         ]);
     }
 
     /**
      * Show payment status page
      */
-    public function showPaymentStatus(DocumentRequest $request)
+    public function showPaymentStatus(DocumentRequest $documentRequest)
     {
         return Inertia::render('registrar/payments/status', [
-            'request' => $request->load(['payments', 'student']),
+            'request' => $documentRequest->load(['payments', 'student']),
         ]);
     }
 
@@ -164,34 +206,32 @@ class PaymentController extends Controller
      */
     public function verifyPaymentReference(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'payment_reference' => 'required|string',
         ]);
 
-        $payment = Payment::where('payment_reference', $request->payment_reference)
+        $payment = Payment::where('payment_reference_number', $validated['payment_reference'])
             ->where('payment_method', 'cash')
             ->where('status', 'pending')
             ->with(['documentRequest.student.user'])
             ->first();
 
         if (! $payment) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Payment reference not found or already processed.',
-            ], 404);
+            return redirect()->route('registrar.cashier.dashboard')->withErrors([
+                'payment_reference' => 'Payment reference not found or already processed.',
+            ]);
         }
 
-        return response()->json([
-            'success' => true,
+        return redirect()->route('registrar.cashier.dashboard')->with([
             'payment' => [
                 'id' => $payment->id,
-                'reference' => $payment->payment_reference,
+                'reference' => $payment->payment_reference_number,
                 'amount' => $payment->amount,
                 'request_number' => $payment->documentRequest->request_number,
-                'student_name' => $payment->documentRequest->student->user->name,
+                'student_name' => $payment->documentRequest->student->user->full_name ?? 'N/A',
                 'student_id' => $payment->documentRequest->student->student_id,
                 'document_type' => $payment->documentRequest->document_type,
-                'created_at' => $payment->created_at,
+                'created_at' => $payment->created_at->toISOString(),
             ],
         ]);
     }
@@ -199,21 +239,21 @@ class PaymentController extends Controller
     /**
      * Handle successful payment return from PayMongo
      */
-    public function paymentSuccess(DocumentRequest $request)
+    public function paymentSuccess(DocumentRequest $documentRequest)
     {
         // Check if payment was successful
-        $payment = $request->payments()->where('status', 'paid')->first();
+        $payment = $documentRequest->payments()->where('status', 'paid')->first();
 
         if ($payment) {
             return Inertia::render('registrar/payments/success', [
-                'request' => $request->load(['student.user', 'payments']),
+                'request' => $documentRequest->load(['student.user', 'payments']),
                 'payment' => $payment,
             ]);
         }
 
         // Payment still processing, show waiting page
         return Inertia::render('registrar/payments/processing', [
-            'request' => $request->load(['student.user', 'payments']),
+            'request' => $documentRequest->load(['student.user', 'payments']),
         ]);
     }
 
@@ -222,22 +262,21 @@ class PaymentController extends Controller
      */
     public function confirmCashPayment(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'payment_reference_number' => 'required|string',
-            'official_receipt_number' => 'required|string',
+            'official_receipt_number' => 'required|string|unique:payments,official_receipt_number',
         ]);
 
-        $payment = Payment::where('payment_reference_number', $request->payment_reference_number)
+        $payment = Payment::where('payment_reference_number', $validated['payment_reference_number'])
             ->where('payment_method', 'cash')
             ->where('status', 'pending')
             ->with('documentRequest')
             ->first();
 
         if (! $payment) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Payment reference not found or already processed.',
-            ], 404);
+            return redirect()->route('registrar.cashier.dashboard')->withErrors([
+                'official_receipt_number' => 'Payment reference not found or already processed.',
+            ]);
         }
 
         $user = Auth::user();
@@ -246,7 +285,7 @@ class PaymentController extends Controller
         $payment->update([
             'status' => 'paid',
             'cashier_id' => $user->id,
-            'official_receipt_number' => $request->official_receipt_number,
+            'official_receipt_number' => $validated['official_receipt_number'],
             'paid_at' => now(),
         ]);
 
@@ -267,7 +306,7 @@ class PaymentController extends Controller
             "Cash payment confirmed for request {$payment->documentRequest->request_number}",
             [
                 'payment_reference' => $payment->payment_reference_number,
-                'official_receipt' => $request->official_receipt_number,
+                'official_receipt' => $validated['official_receipt_number'],
                 'amount' => $payment->amount,
             ]
         );
@@ -275,13 +314,40 @@ class PaymentController extends Controller
         // Send notification to student
         app(NotificationService::class)->notifyPaymentConfirmed($payment->documentRequest);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Payment confirmed successfully',
-            'request' => [
-                'request_number' => $payment->documentRequest->request_number,
-                'status' => 'paid',
+        return redirect()->route('registrar.cashier.dashboard')->with([
+            'confirmed' => [
+                'payment_reference' => $payment->payment_reference_number,
+                'official_receipt_number' => $validated['official_receipt_number'],
+                'amount' => $payment->amount,
+                'student_name' => $payment->documentRequest->student->user->full_name ?? 'N/A',
             ],
         ]);
+    }
+
+    /**
+     * Print official receipt for a confirmed payment
+     */
+    public function printOfficialReceipt(Payment $payment)
+    {
+        // Ensure only cashiers can access this and only for cash payments they confirmed
+        if (! Auth::user()->hasRole('cashier') || $payment->payment_method !== 'cash') {
+            abort(403);
+        }
+
+        // Only allow printing receipts for paid cash payments
+        if ($payment->status !== 'paid' || ! $payment->official_receipt_number) {
+            abort(404);
+        }
+
+        $pdf = Pdf::loadView('receipts.official', [
+            'payment' => $payment->load(['documentRequest.student.user', 'cashier']),
+            'university' => [
+                'name' => config('app.name', 'MinSU Document Request System'),
+                'address' => 'Address here',
+                'contact' => 'Contact here',
+            ],
+        ]);
+
+        return $pdf->download("{$payment->official_receipt_number}.pdf");
     }
 }

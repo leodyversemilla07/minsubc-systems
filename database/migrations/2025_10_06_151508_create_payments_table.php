@@ -36,6 +36,11 @@ return new class extends Migration
 
             $table->foreign('request_id')->references('id')->on('document_requests');
             $table->foreign('cashier_id')->references('id')->on('users');
+
+            // Performance indexes
+            $table->index('status');
+            $table->index('paymongo_checkout_id');
+            $table->index('paymongo_payment_intent_id');
         });
     }
 

@@ -1,8 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Eye, Edit, ArrowUpDown } from 'lucide-react';
+import { Plus, Eye, Edit, ArrowUpDown, MoreVertical } from 'lucide-react';
 import { DataTable } from '@/components/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import AppLayout from '@/layouts/app-layout';
@@ -12,6 +12,14 @@ import { edit } from '@/routes/registrar/document-requests';
 import { index } from '@/routes/registrar/document-requests';
 import { type BreadcrumbItem } from '@/types';
 import { statusColors } from '@/lib/status-colors';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface DocumentRequest {
     id: number;
@@ -168,21 +176,36 @@ export default function Index({ requests }: Props) {
             header: 'Actions',
             cell: ({ row }) => {
                 const request = row.original;
+                const canEdit = request.status === 'pending_payment';
+                
                 return (
-                    <div className="flex space-x-2">
-                        <Button variant="outline" size="icon" asChild>
-                            <Link href={show(request.id)}>
-                                <Eye className="w-4 h-4" />
-                            </Link>
-                        </Button>
-                        {request.status === 'pending_payment' && (
-                            <Button variant="outline" size="icon" asChild>
-                                <Link href={edit(request.id)}>
-                                    <Edit className="w-4 h-4" />
-                                </Link>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreVertical className="h-4 w-4" />
                             </Button>
-                        )}
-                    </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuLabel>Request Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            
+                            <DropdownMenuItem onClick={() => router.visit(show(request.request_number).url)}>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View Details
+                            </DropdownMenuItem>
+                            
+                            {canEdit && (
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => router.visit(edit(request.request_number).url)}>
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Edit Request
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 );
             },
         },

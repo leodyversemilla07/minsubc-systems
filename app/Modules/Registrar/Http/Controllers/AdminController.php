@@ -15,36 +15,18 @@ class AdminController extends Controller
     /**
      * Show the admin dashboard
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $stats = [
-            'pending_requests' => DocumentRequest::where('status', 'pending_payment')->count(),
-            'paid_requests' => DocumentRequest::where('status', 'paid')->count(),
-            'processing_requests' => DocumentRequest::where('status', 'processing')->count(),
-            'ready_for_pickup' => DocumentRequest::where('status', 'ready_for_pickup')->count(),
-            'total_today' => DocumentRequest::whereDate('created_at', today())->count(),
-        ];
-
-        $recentRequests = DocumentRequest::with(['student.user'])
-            ->latest()
-            ->limit(10)
-            ->get();
-
-        return Inertia::render('registrar/admin/dashboard', [
-            'stats' => $stats,
-            'recentRequests' => $recentRequests,
+        $query = DocumentRequest::with([
+            'student.user',
+            'payments',
+            'latestPayment',
+            'processor:id,first_name,last_name',
+            'releaser:id,first_name,last_name',
         ]);
-    }
-
-    /**
-     * Show all requests for admin management
-     */
-    public function requests(Request $request)
-    {
-        $query = DocumentRequest::with(['student.user', 'payments']);
 
         // Filter by status
-        if ($request->status) {
+        if ($request->status && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
 
@@ -58,9 +40,37 @@ class AdminController extends Controller
 
         $requests = $query->latest()->paginate(20);
 
-        return Inertia::render('registrar/admin/requests', [
+        // Calculate stats
+        $stats = [
+            'total' => DocumentRequest::count(),
+            'pending_payment' => DocumentRequest::where('status', 'pending_payment')->count(),
+            'paid' => DocumentRequest::where('status', 'paid')->count(),
+            'processing' => DocumentRequest::where('status', 'processing')->count(),
+            'ready_for_pickup' => DocumentRequest::where('status', 'ready_for_pickup')->count(),
+        ];
+
+        return Inertia::render('registrar/admin/dashboard', [
             'requests' => $requests,
             'filters' => $request->only(['status', 'date_from', 'date_to']),
+            'stats' => $stats,
+        ]);
+    }
+
+    /**
+     * Show a specific document request
+     */
+    public function show(DocumentRequest $documentRequest)
+    {
+        $documentRequest->load([
+            'student.user',
+            'payments',
+            'processor:id,first_name,last_name',
+            'releaser:id,first_name,last_name',
+            'notifications',
+        ]);
+
+        return Inertia::render('registrar/admin/show', [
+            'request' => $documentRequest,
         ]);
     }
 
@@ -70,7 +80,7 @@ class AdminController extends Controller
     public function updateStatus(Request $request, DocumentRequest $documentRequest)
     {
         $request->validate([
-            'status' => 'required|string|in:pending_payment,paid,processing,ready_for_pickup,released,cancelled',
+            'status' => 'required|string|in:pending_payment,payment_expired,paid,processing,ready_for_pickup,released,cancelled,rejected',
             'notes' => 'nullable|string|max:500',
         ]);
 
@@ -109,7 +119,8 @@ class AdminController extends Controller
             // $this->notificationService->notifyDocumentReleased($documentRequest);
         }
 
-        return back()->with('success', 'Request status updated successfully.');
+        return redirect()->route('registrar.admin.dashboard')
+            ->with('success', 'Request status updated successfully.');
     }
 
     /**
@@ -118,7 +129,8 @@ class AdminController extends Controller
     public function markReady(DocumentRequest $documentRequest, DocumentGenerator $documentGenerator)
     {
         if ($documentRequest->status !== 'processing') {
-            return back()->with('error', 'Request must be in processing status.');
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('error', 'Request must be in processing status.');
         }
 
         try {
@@ -152,9 +164,11 @@ class AdminController extends Controller
 
             // TODO: Send notification to student
 
-            return back()->with('success', 'Document generated and marked as ready for pickup.');
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('success', 'Document generated and marked as ready for pickup.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to generate document: '.$e->getMessage());
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('error', 'Failed to generate document: '.$e->getMessage());
         }
     }
 
@@ -170,7 +184,8 @@ class AdminController extends Controller
         ]);
 
         if ($documentRequest->status !== 'ready_for_pickup') {
-            return back()->with('error', 'Document must be ready for pickup first.');
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('error', 'Document must be ready for pickup first.');
         }
 
         $oldRequest = $documentRequest->toArray();
@@ -206,7 +221,8 @@ class AdminController extends Controller
 
         // TODO: Send notification to student
 
-        return back()->with('success', 'Document released successfully.');
+        return redirect()->route('registrar.admin.dashboard')
+            ->with('success', 'Document released successfully.');
     }
 
     /**
@@ -244,9 +260,11 @@ class AdminController extends Controller
                 ]
             );
 
-            return back()->with('success', 'Document generated successfully.');
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('success', 'Document generated successfully.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to generate document: '.$e->getMessage());
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('error', 'Failed to generate document: '.$e->getMessage());
         }
     }
 
@@ -258,7 +276,8 @@ class AdminController extends Controller
         $filename = $this->getDocumentFilename($documentRequest);
 
         if (! Storage::exists('documents/'.$filename)) {
-            return back()->with('error', 'Document not found. Please generate it first.');
+            return redirect()->route('registrar.admin.dashboard')
+                ->with('error', 'Document not found. Please generate it first.');
         }
 
         return Storage::download('documents/'.$filename, $filename);
@@ -272,12 +291,12 @@ class AdminController extends Controller
         $typeMap = [
             'coe' => 'COE',
             'tor' => 'TOR',
-            'cog' => 'COG',
-            'certificate_good_moral' => 'COG',
+            'cog' => 'COG', // Certificate of Grades
+            'certificate_good_moral' => 'CERTIFICATE_GOOD_MORAL',
             'honorable_dismissal' => 'Honorable_Dismissal',
             'cav' => 'CAV',
             'diploma' => 'Diploma',
-            'grades' => 'Grades',
+            'grades' => 'COG', // Certificate of Grades
             'so' => 'SO',
             'form_137' => 'Form_137',
         ];

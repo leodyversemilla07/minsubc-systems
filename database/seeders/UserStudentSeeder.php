@@ -169,7 +169,7 @@ class UserStudentSeeder extends Seeder
             );
 
             // Assign role to user
-            if (!$user->hasRole($role)) {
+            if (! $user->hasRole($role)) {
                 $user->assignRole($role);
             }
 

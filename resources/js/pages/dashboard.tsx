@@ -8,6 +8,7 @@ import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { create, index } from '@/routes/registrar/document-requests';
 import { type BreadcrumbItem } from '@/types';
+import { statusColors } from '@/lib/status-colors';
 import {
     FileText,
     Clock,
@@ -16,7 +17,8 @@ import {
     Plus,
     Eye,
     CreditCard,
-    TrendingUp
+    TrendingUp,
+    XCircle
 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -55,25 +57,16 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ user, stats, recent_requests }: DashboardProps) {
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'pending_payment': return 'bg-yellow-100 text-yellow-800';
-            case 'paid': return 'bg-blue-100 text-blue-800';
-            case 'processing': return 'bg-purple-100 text-purple-800';
-            case 'ready_for_pickup': return 'bg-green-100 text-green-800';
-            case 'released': return 'bg-gray-100 text-gray-800';
-            case 'cancelled': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
-    };
-
     const getStatusIcon = (status: string) => {
         switch (status) {
             case 'pending_payment': return <CreditCard className="w-4 h-4" />;
+            case 'payment_expired': return <XCircle className="w-4 h-4" />;
             case 'paid': return <CheckCircle className="w-4 h-4" />;
             case 'processing': return <Clock className="w-4 h-4" />;
             case 'ready_for_pickup': return <CheckCircle className="w-4 h-4" />;
             case 'released': return <CheckCircle className="w-4 h-4" />;
+            case 'cancelled': return <XCircle className="w-4 h-4" />;
+            case 'rejected': return <XCircle className="w-4 h-4" />;
             default: return <AlertCircle className="w-4 h-4" />;
         }
     };
@@ -217,8 +210,11 @@ export default function Dashboard({ user, stats, recent_requests }: DashboardPro
                                             </div>
                                         </div>
                                         <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
-                                            <Badge className={getStatusColor(request.status)}>
-                                                {request.status.replace('_', ' ')}
+                                            <Badge className={statusColors[request.status as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
+                                                <span className="flex items-center gap-1">
+                                                    {getStatusIcon(request.status)}
+                                                    {request.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                                </span>
                                             </Badge>
                                             <span className="text-sm text-muted-foreground">
                                                 {new Date(request.created_at).toLocaleDateString()}

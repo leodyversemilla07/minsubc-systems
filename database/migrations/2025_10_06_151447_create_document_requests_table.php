@@ -27,6 +27,7 @@ return new class extends Migration
                 'paid',
                 'processing',
                 'ready_for_pickup',
+                'picked_up',
                 'released',
                 'cancelled',
                 'rejected',
@@ -37,6 +38,9 @@ return new class extends Migration
             $table->string('released_to', 200)->nullable();
             $table->string('released_id_type', 50)->nullable();
             $table->timestamp('released_at')->nullable();
+            $table->boolean('picked_up_by_student')->default(false);
+            $table->timestamp('picked_up_at')->nullable();
+            $table->text('pickup_notes')->nullable();
             $table->text('rejection_reason')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
@@ -44,6 +48,11 @@ return new class extends Migration
             $table->foreign('student_id')->references('student_id')->on('students');
             $table->foreign('processed_by')->references('id')->on('users');
             $table->foreign('released_by')->references('id')->on('users');
+
+            // Performance indexes
+            $table->index('status');
+            $table->index('payment_deadline');
+            $table->index(['status', 'created_at']);
         });
     }
 

@@ -1,18 +1,14 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Edit, Download, CreditCard, Package, Info, MapPin, Clock as ClockIcon, IdCard } from 'lucide-react';
+import { Download, FileCheck } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { index } from '@/routes/registrar/document-requests';
-import { edit } from '@/routes/registrar/document-requests';
+import { dashboard } from '@/routes/registrar/admin';
 import { type BreadcrumbItem } from '@/types';
 import { statusColors } from '@/lib/status-colors';
-import { method } from '@/routes/registrar/payments';
-import AlertError from '@/components/alert-error';
 
 interface DocumentRequest {
     id: number;
@@ -59,7 +55,7 @@ interface Props {
     request: DocumentRequest;
 }
 
-const documentTypeLabels = {
+const documentTypeLabels: Record<string, string> = {
     coe: 'Certificate of Enrollment',
     cog: 'Certificate of Grades',
     tor: 'Transcript of Records',
@@ -72,31 +68,25 @@ const documentTypeLabels = {
 };
 
 export default function Show({ request }: Props) {
-    const { errors } = usePage().props;
-
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Document Requests',
-            href: index().url,
+            title: 'Admin Dashboard',
+            href: dashboard().url,
         },
         {
             title: `Request ${request.request_number}`,
             href: '#',
         },
     ];
+
+    const canGenerate = request.status === 'paid' || request.status === 'processing';
+    const canDownload = request.status === 'ready_for_pickup' || request.status === 'released';
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Document Request ${request.request_number}`} />
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
-                {/* Error Display */}
-                {errors && Object.keys(errors).length > 0 && (
-                    <AlertError
-                        errors={Object.values(errors).flat().filter(Boolean) as string[]}
-                        title="Payment Error"
-                    />
-                )}
-
                 {/* Header */}
                 <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                     <div className="space-y-1">
@@ -108,24 +98,26 @@ export default function Show({ request }: Props) {
                         </p>
                     </div>
                     <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
-                        {request.status === 'pending_payment' && (
-                            <>
-                                <Button variant="default" asChild className="w-full sm:w-auto">
-                                    <Link href={method(request.request_number)}>
-                                        <CreditCard className="w-4 h-4 mr-2" />
-                                        Select Payment Method
-                                    </Link>
-                                </Button>
-                                <Button variant="outline" asChild className="w-full sm:w-auto">
-                                    <Link href={edit(request.request_number)}>
-                                        <Edit className="w-4 h-4 mr-2" />
-                                        Edit
-                                    </Link>
-                                </Button>
-                            </>
+                        {canGenerate && (
+                            <Button 
+                                variant="default"
+                                onClick={() => {
+                                    if (confirm('Generate document for this request?')) {
+                                        window.location.href = `/admin/requests/${request.request_number}/generate`;
+                                    }
+                                }}
+                            >
+                                <FileCheck className="w-4 h-4 mr-2" />
+                                Generate Document
+                            </Button>
                         )}
-                        {request.status === 'released' && (
-                            <Button variant="outline" className="w-full sm:w-auto">
+                        {canDownload && (
+                            <Button 
+                                variant="default"
+                                onClick={() => {
+                                    window.location.href = `/admin/requests/${request.request_number}/download`;
+                                }}
+                            >
                                 <Download className="w-4 h-4 mr-2" />
                                 Download
                             </Button>
@@ -156,7 +148,7 @@ export default function Show({ request }: Props) {
                                     </div>
                                     <div>
                                         <Label className="text-sm font-medium text-muted-foreground">Document Type</Label>
-                                        <p>{documentTypeLabels[request.document_type as keyof typeof documentTypeLabels] || request.document_type}</p>
+                                        <p>{documentTypeLabels[request.document_type] || request.document_type}</p>
                                     </div>
                                     <div>
                                         <Label className="text-sm font-medium text-muted-foreground">Processing Type</Label>
@@ -264,99 +256,6 @@ export default function Show({ request }: Props) {
                                 </div>
                             </CardContent>
                         </Card>
-
-                        {/* Document Ready for Pickup - Informational Only */}
-                        {request.status === 'ready_for_pickup' && (
-                            <Card className="shadow-lg">
-                                <CardHeader className="space-y-3 pb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-primary rounded-lg shadow-sm">
-                                            <Package className="w-6 h-6 text-primary-foreground" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <CardTitle className="text-xl">Document Ready for Pickup</CardTitle>
-                                            <CardDescription className="text-base mt-1">
-                                                Your document is waiting for you at the Registrar's Office
-                                            </CardDescription>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="space-y-6 pt-6">
-                                    {/* Important Notice */}
-                                    <Alert>
-                                        <Info className="h-4 w-4" />
-                                        <AlertTitle>Ready to Claim</AlertTitle>
-                                        <AlertDescription>
-                                            Please visit the Registrar's Office during office hours to claim your document. Make sure to bring valid identification.
-                                        </AlertDescription>
-                                    </Alert>
-
-                                    {/* Office Information */}
-                                    <div className="grid gap-4 sm:grid-cols-2">
-                                        <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
-                                            <div className="flex items-start gap-3">
-                                                <div className="p-2 bg-primary/10 rounded-md">
-                                                    <MapPin className="h-4 w-4 text-primary" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-semibold text-sm">Location</p>
-                                                    <p className="text-sm text-muted-foreground mt-1">Registrar's Office<br/>Ground Floor, Admin Building</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
-                                            <div className="flex items-start gap-3">
-                                                <div className="p-2 bg-primary/10 rounded-md">
-                                                    <ClockIcon className="h-4 w-4 text-primary" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-semibold text-sm">Office Hours</p>
-                                                    <p className="text-sm text-muted-foreground mt-1">Monday - Friday<br/>8:00 AM - 5:00 PM</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Pickup Requirements */}
-                                    <Alert>
-                                        <IdCard className="h-4 w-4" />
-                                        <AlertTitle>What to Bring</AlertTitle>
-                                        <AlertDescription>
-                                            <ul className="list-inside list-disc space-y-1.5 mt-2 text-sm">
-                                                <li>Valid student ID or government-issued ID</li>
-                                                <li>Request number: <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono font-semibold">{request.request_number}</code></li>
-                                                <li>Authorization letter (if claiming on behalf of another person)</li>
-                                                <li>Payment for any additional fees if applicable</li>
-                                            </ul>
-                                        </AlertDescription>
-                                    </Alert>
-
-                                    {/* Pickup Instructions */}
-                                    <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
-                                        <h4 className="font-semibold text-sm flex items-center gap-2">
-                                            <Package className="h-4 w-4" />
-                                            Pickup Process
-                                        </h4>
-                                        <ol className="space-y-2 text-sm text-muted-foreground ml-6 list-decimal">
-                                            <li>Visit the Registrar's Office during office hours</li>
-                                            <li>Present your valid ID and request number to the staff</li>
-                                            <li>Staff will verify your identity</li>
-                                            <li>Sign the release log</li>
-                                            <li>Receive your sealed document</li>
-                                        </ol>
-                                    </div>
-
-                                    <Alert>
-                                        <Info className="h-4 w-4" />
-                                        <AlertDescription>
-                                            <strong>Note:</strong> Physical verification will be done by Registrar staff when you arrive. No online confirmation needed.
-                                        </AlertDescription>
-                                    </Alert>
-                                </CardContent>
-                            </Card>
-                        )}
 
                         {/* Notifications */}
                         <Card className="transition-shadow hover:shadow-md">

@@ -35,6 +35,7 @@ class User extends Authenticatable
      */
     protected $appends = [
         'full_name',
+        'name',
     ];
 
     /**
@@ -72,6 +73,14 @@ class User extends Authenticatable
         ]);
 
         return implode(' ', $parts);
+    }
+
+    /**
+     * Get the name of the user (alias for full_name).
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->full_name;
     }
 
     /**

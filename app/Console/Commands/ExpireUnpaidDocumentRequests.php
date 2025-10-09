@@ -50,7 +50,7 @@ class ExpireUnpaidDocumentRequests extends Command
                 $expiredRequests->map(function ($request) {
                     return [
                         $request->request_number,
-                        $request->student->user->name ?? 'Unknown',
+                        $request->student->user->full_name ?? 'Unknown',
                         $request->payment_deadline->format('Y-m-d H:i'),
                         $request->created_at->format('Y-m-d H:i'),
                     ];

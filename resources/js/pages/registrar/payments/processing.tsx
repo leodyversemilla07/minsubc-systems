@@ -33,7 +33,7 @@ interface PaymentProcessingProps {
 export default function PaymentProcessing({ request }: PaymentProcessingProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Document Requests', href: index().url },
-        { title: `Request ${request.request_number}`, href: show(request.id).url },
+        { title: `Request ${request.request_number}`, href: show(request.request_number).url },
         { title: 'Payment Processing', href: '#' },
     ];
     const getDocumentTypeLabel = (type: string) => {
@@ -86,7 +86,7 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm font-medium text-gray-500">Request Number</p>
                                     <p className="text-lg font-semibold">{request.request_number}</p>
@@ -99,7 +99,7 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm font-medium text-gray-500">Document Type</p>
                                     <p className="font-medium">{getDocumentTypeLabel(request.document_type)}</p>
@@ -119,7 +119,7 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                                 <CardTitle>Payment Information</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">Amount</p>
                                         <p className="text-2xl font-bold text-blue-600">₱{latestPayment.amount.toFixed(2)}</p>
@@ -148,7 +148,7 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm font-medium text-gray-500">Student ID</p>
                                     <p className="font-medium">{request.student.student_id}</p>
@@ -200,7 +200,7 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                             Check Status
                         </Button>
                         <Button variant="outline" asChild>
-                            <a href={show(request.id).url}>
+                            <a href={show(request.request_number).url}>
                                 View Request Details
                             </a>
                         </Button>

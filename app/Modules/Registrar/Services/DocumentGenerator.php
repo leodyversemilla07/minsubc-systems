@@ -35,8 +35,8 @@ class DocumentGenerator
         return match ($documentType) {
             'coe' => 'generateCoe',
             'tor' => 'generateTor',
-            'cog' => 'generateCog', // Certificate of Good Moral Character
-            'certificate_good_moral' => 'generateCog',
+            'cog' => 'generateGrades', // Certificate of Grades (COG)
+            'certificate_good_moral' => 'generateCertificateGoodMoral',
             'honorable_dismissal' => 'generateHonorableDismissal',
             'cav' => 'generateCav',
             'diploma' => 'generateDiploma',
@@ -96,9 +96,9 @@ class DocumentGenerator
     }
 
     /**
-     * Generate Certificate of Good Moral Character (COG)
+     * Generate Certificate of Good Moral Character
      */
-    private function generateCog(DocumentRequest $request, Student $student): string
+    private function generateCertificateGoodMoral(DocumentRequest $request, Student $student): string
     {
         $data = [
             'student' => $student,
@@ -108,10 +108,10 @@ class DocumentGenerator
             'purpose' => $request->purpose ?? 'For employment purposes',
         ];
 
-        $pdf = Pdf::loadView('documents.cog', $data);
+        $pdf = Pdf::loadView('documents.certificate_good_moral', $data);
         $pdf->setPaper('a4', 'portrait');
 
-        $filename = 'COG_'.$request->request_number.'.pdf';
+        $filename = 'CERTIFICATE_GOOD_MORAL_'.$request->request_number.'.pdf';
         $path = 'documents/'.$filename;
 
         Storage::put($path, $pdf->output());
@@ -120,7 +120,7 @@ class DocumentGenerator
     }
 
     /**
-     * Generate Certificate of Grades
+     * Generate Certificate of Grades (COG)
      */
     private function generateGrades(DocumentRequest $request, Student $student): string
     {
@@ -135,7 +135,7 @@ class DocumentGenerator
         $pdf = Pdf::loadView('documents.grades', $data);
         $pdf->setPaper('a4', 'portrait');
 
-        $filename = 'Grades_'.$request->request_number.'.pdf';
+        $filename = 'COG_'.$request->request_number.'.pdf';
         $path = 'documents/'.$filename;
 
         Storage::put($path, $pdf->output());

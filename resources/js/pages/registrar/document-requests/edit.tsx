@@ -40,7 +40,7 @@ export default function Edit({ request, documentTypes, processingTypes }: Props)
         },
         {
             title: `Request ${request.request_number}`,
-            href: show(request.id).url,
+            href: show(request.request_number).url,
         },
         {
             title: 'Edit',
@@ -73,7 +73,7 @@ export default function Edit({ request, documentTypes, processingTypes }: Props)
                         </CardHeader>
                         <CardContent className="pt-0">
                             <Form
-                                action={update(request.id)}
+                                action={update(request.request_number).url}
                                 method="patch"
                                 onSuccess={() => toast.success('Request updated successfully!')}
                                 onBefore={() => {

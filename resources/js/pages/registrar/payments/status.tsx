@@ -63,7 +63,7 @@ const documentTypeLabels = {
 export default function Status({ request }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Document Requests', href: index().url },
-        { title: `Request ${request.request_number}`, href: show(request.id).url },
+        { title: `Request ${request.request_number}`, href: show(request.request_number).url },
         { title: 'Payment Status', href: '#' },
     ];
     const getStatusIcon = (status: string) => {
@@ -103,7 +103,7 @@ export default function Status({ request }: Props) {
                         <p className="text-gray-600">Request {request.request_number}</p>
                     </div>
                     <Button variant="outline" size="sm" asChild>
-                        <Link href={show(request.id).url}>
+                        <Link href={show(request.request_number).url}>
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             Back to Request
                         </Link>

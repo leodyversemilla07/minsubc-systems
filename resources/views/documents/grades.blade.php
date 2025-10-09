@@ -92,7 +92,7 @@
         <p>This is to certify that</p>
 
         <div class="student-info">
-            <strong>{{ $student->user->name }}</strong><br>
+            <strong>{{ $student->user->full_name }}</strong><br>
             Student ID: {{ $student->student_id }}<br>
             Course: {{ $student->course }}<br>
             Year Level: {{ $student->year_level }}

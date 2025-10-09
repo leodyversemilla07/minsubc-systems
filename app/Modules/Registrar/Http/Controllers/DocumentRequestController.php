@@ -26,7 +26,12 @@ class DocumentRequestController extends Controller
 
         // For students, show their own requests
         // For staff, show all or filtered requests
-        $requests = DocumentRequest::with(['student.user'])
+        $requests = DocumentRequest::with([
+            'student.user',
+            'latestPayment',
+            'processor:id,first_name,last_name',
+            'releaser:id,first_name,last_name',
+        ])
             ->when($user->student, function ($query) use ($user) {
                 return $query->where('student_id', $user->student->student_id);
             })

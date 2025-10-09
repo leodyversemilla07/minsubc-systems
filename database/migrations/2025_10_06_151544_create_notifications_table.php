@@ -24,6 +24,10 @@ return new class extends Migration
 
             $table->foreign('request_id')->references('id')->on('document_requests');
             $table->foreign('student_id')->references('student_id')->on('students');
+
+            // Performance indexes
+            $table->index('status');
+            $table->index(['student_id', 'status']);
         });
     }
 

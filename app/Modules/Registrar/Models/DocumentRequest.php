@@ -3,6 +3,7 @@
 namespace App\Modules\Registrar\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class DocumentRequest extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'request_number',
         'student_id',
@@ -28,16 +31,29 @@ class DocumentRequest extends Model
         'released_at',
         'rejection_reason',
         'notes',
+        'picked_up_by_student',
+        'picked_up_at',
+        'pickup_notes',
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
+        'amount' => 'float',
         'quantity' => 'integer',
         'payment_deadline' => 'datetime',
         'released_at' => 'datetime',
         'processed_by' => 'integer',
         'released_by' => 'integer',
+        'picked_up_by_student' => 'boolean',
+        'picked_up_at' => 'datetime',
     ];
+
+    /**
+     * Get the route key name for Laravel route model binding.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'request_number';
+    }
 
     /**
      * Get the student that owns this document request.

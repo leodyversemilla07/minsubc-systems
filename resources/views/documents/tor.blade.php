@@ -97,7 +97,7 @@
         <table>
             <tr>
                 <td width="15%"><strong>Name:</strong></td>
-                <td width="35%">{{ $student->user->name }}</td>
+                <td width="35%">{{ $student->user->full_name }}</td>
                 <td width="15%"><strong>Student ID:</strong></td>
                 <td width="35%">{{ $student->student_id }}</td>
             </tr>

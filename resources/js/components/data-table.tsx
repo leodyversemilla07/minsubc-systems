@@ -158,9 +158,9 @@ export function DataTable<TData extends { id: number | string }, TValue>({
     })
 
     return (
-        <div className="w-full">
-            <div className="flex items-center py-4">
-                {filterColumn && (
+        <div className="w-full space-y-4">
+            {filterColumn && (
+                <div className="flex items-center">
                     <Input
                         placeholder={filterPlaceholder}
                         value={(table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""}
@@ -169,9 +169,9 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                         }
                         className="max-w-sm"
                     />
-                )}
-            </div>
-            <div className="rounded-md border">
+                </div>
+            )}
+            <div className="rounded-md border overflow-x-auto">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (

@@ -3,11 +3,14 @@
 namespace App\Modules\Registrar\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'request_id',
         'payment_method',
@@ -25,7 +28,7 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
+        'amount' => 'float',
         'paid_at' => 'datetime',
         'metadata' => 'array',
         'cashier_id' => 'integer',

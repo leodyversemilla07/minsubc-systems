@@ -3,6 +3,7 @@
 namespace App\Modules\Registrar\Services;
 
 use App\Models\AuditLog;
+use App\Models\PaymentWebhook;
 use App\Models\SystemSetting;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Payment;
@@ -128,12 +129,24 @@ class PaymentService
      */
     public function handleWebhook(array $payload): bool
     {
+        $eventId = $payload['data']['id'] ?? null;
+        $eventType = $payload['data']['attributes']['type'] ?? null;
+
+        // Log incoming webhook
+        $webhookLog = PaymentWebhook::create([
+            'event_id' => $eventId ?? 'unknown-'.uniqid(),
+            'event_type' => $eventType ?? 'unknown',
+            'payload' => $payload,
+            'processed' => false,
+        ]);
+
         try {
-            $eventType = $payload['data']['attributes']['type'] ?? null;
             $checkoutId = $payload['data']['attributes']['data']['id'] ?? null;
 
             if (! $eventType || ! $checkoutId) {
-                Log::warning('Invalid webhook payload', ['payload' => $payload]);
+                $errorMessage = 'Invalid webhook payload: missing event type or checkout ID';
+                Log::warning($errorMessage, ['payload' => $payload]);
+                $webhookLog->markAsFailed($errorMessage);
 
                 return false;
             }
@@ -142,7 +155,9 @@ class PaymentService
             $payment = Payment::where('paymongo_checkout_id', $checkoutId)->first();
 
             if (! $payment) {
-                Log::warning('Payment not found for checkout ID', ['checkout_id' => $checkoutId]);
+                $errorMessage = "Payment not found for checkout ID: {$checkoutId}";
+                Log::warning($errorMessage, ['checkout_id' => $checkoutId]);
+                $webhookLog->markAsFailed($errorMessage);
 
                 return false;
             }
@@ -161,13 +176,17 @@ class PaymentService
                     break;
             }
 
+            $webhookLog->markAsProcessed();
+
             return true;
 
         } catch (\Exception $e) {
-            Log::error('Webhook handling failed', [
+            $errorMessage = "Webhook handling failed: {$e->getMessage()}";
+            Log::error($errorMessage, [
                 'error' => $e->getMessage(),
                 'payload' => $payload,
             ]);
+            $webhookLog->markAsFailed($errorMessage);
 
             return false;
         }
@@ -180,33 +199,7 @@ class PaymentService
     {
         do {
             $prn = 'PRN-'.now()->format('Ymd').'-'.str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
-        } while (Payment::where('payment_reference', $prn)->exists());
-
-        // Create payment record for cash payment
-        $payment = Payment::create([
-            'document_request_id' => $request->id,
-            'payment_method' => 'cash',
-            'amount' => $request->amount,
-            'payment_reference' => $prn,
-            'status' => 'pending',
-        ]);
-
-        // Log cash payment creation
-        AuditLog::log(
-            'payment_created',
-            $request->student->user_id,
-            Payment::class,
-            $payment->id,
-            null,
-            $payment->toArray(),
-            "Cash payment reference generated for document request {$request->request_number}",
-            [
-                'request_number' => $request->request_number,
-                'amount' => $request->amount,
-                'payment_method' => 'cash',
-                'payment_reference' => $prn,
-            ]
-        );
+        } while (Payment::where('payment_reference_number', $prn)->exists());
 
         return $prn;
     }
@@ -216,7 +209,7 @@ class PaymentService
      */
     public function confirmCashPayment(string $paymentReference, string $confirmedBy): bool
     {
-        $payment = Payment::where('payment_reference', $paymentReference)->first();
+        $payment = Payment::where('payment_reference_number', $paymentReference)->first();
 
         if (! $payment || $payment->status !== 'pending') {
             return false;
@@ -243,7 +236,7 @@ class PaymentService
                 'request_number' => $payment->documentRequest->request_number,
                 'amount' => $payment->amount,
                 'confirmed_by' => $confirmedBy,
-                'payment_reference' => $paymentReference,
+                'payment_reference_number' => $paymentReference,
             ]
         );
 
@@ -275,7 +268,7 @@ class PaymentService
                 'data' => [
                     'attributes' => [
                         'billing' => [
-                            'name' => $request->student->user->name ?? 'Student',
+                            'name' => $request->student->user->full_name ?? 'Student',
                             'email' => $request->student->user->email,
                         ],
                         'line_items' => [
@@ -290,7 +283,7 @@ class PaymentService
                         'payment_method_types' => [
                             'card',
                             'gcash',
-                            'maya',
+                            'paymaya',
                             'grab_pay',
                         ],
                         'success_url' => route('registrar.payments.success', $request->id),
@@ -445,8 +438,24 @@ class PaymentService
      */
     public function verifyWebhookSignature(string $signature, string $payload): bool
     {
-        // In production, implement webhook signature verification
-        // using PayMongo's webhook secret
-        return true; // Placeholder for now
+        if (! $this->webhookSecret) {
+            Log::warning('Webhook secret not configured - skipping signature verification');
+
+            return true; // Allow webhook in development mode
+        }
+
+        // PayMongo uses HMAC SHA256 for webhook signature verification
+        $expectedSignature = hash_hmac('sha256', $payload, $this->webhookSecret);
+
+        $isValid = hash_equals($expectedSignature, $signature);
+
+        if (! $isValid) {
+            Log::warning('Webhook signature verification failed', [
+                'expected' => substr($expectedSignature, 0, 10).'...',
+                'received' => substr($signature, 0, 10).'...',
+            ]);
+        }
+
+        return $isValid;
     }
 }

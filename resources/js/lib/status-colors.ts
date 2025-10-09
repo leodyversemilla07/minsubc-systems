@@ -4,8 +4,10 @@ export const statusColors = {
     paid: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
     processing: 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400',
     ready_for_pickup: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+    picked_up: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400',
     released: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400',
     cancelled: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+    rejected: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
 } as const;
 
 export const paymentStatusColors = {

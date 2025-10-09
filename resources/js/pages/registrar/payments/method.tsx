@@ -1,12 +1,13 @@
-import { Head, Link, Form, usePage } from '@inertiajs/react';
+import { Head, Form, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { CreditCard, Banknote, ArrowLeft } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { CreditCard, Banknote, CheckCircle, InfoIcon } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { show } from '@/routes/registrar/document-requests';
-import { initiate, cash } from '@/routes/registrar/payments';
+import { initiate, cash, cashReference } from '@/routes/registrar/payments';
 import { type BreadcrumbItem } from '@/types';
 import { statusColors } from '@/lib/status-colors';
 
@@ -38,8 +39,16 @@ interface DocumentRequest {
     };
 }
 
+interface Payment {
+    id: number;
+    payment_reference_number: string;
+    amount: number;
+    status: string;
+}
+
 interface Props {
     request: DocumentRequest;
+    existingCashPayment?: Payment | null;
 }
 
 const documentTypeLabels = {
@@ -54,12 +63,7 @@ const documentTypeLabels = {
     form_137: 'Form 137',
 };
 
-export default function PaymentMethod({ request }: Props) {
-    const page = usePage();
-    const flash = page.props.flash as any;
-    const payment_reference = flash?.payment_reference;
-    const payment_amount = flash?.payment_amount;
-    const payment_deadline = flash?.payment_deadline;
+export default function PaymentMethod({ request, existingCashPayment }: Props) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -68,7 +72,7 @@ export default function PaymentMethod({ request }: Props) {
         },
         {
             title: `Request ${request.request_number}`,
-            href: show(request.id).url,
+            href: show(request.request_number).url,
         },
         {
             title: 'Select Payment Method',
@@ -82,21 +86,13 @@ export default function PaymentMethod({ request }: Props) {
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <div className="space-y-1">
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Select Payment Method
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Choose how you would like to pay for your document request
-                        </p>
-                    </div>
-                    <Button variant="outline" asChild>
-                        <Link href={show(request.id)}>
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Back to Request
-                        </Link>
-                    </Button>
+                <div className="space-y-1">
+                    <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                        Select Payment Method
+                    </h1>
+                    <p className="text-muted-foreground">
+                        Choose how you would like to pay for your document request
+                    </p>
                 </div>
 
                 {/* Request Summary */}
@@ -105,7 +101,7 @@ export default function PaymentMethod({ request }: Props) {
                         <CardTitle className="text-lg">Request Summary</CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
                                 <Label className="text-sm font-medium text-muted-foreground">Request Number</Label>
                                 <p className="font-semibold">{request.request_number}</p>
@@ -128,24 +124,47 @@ export default function PaymentMethod({ request }: Props) {
                     </CardContent>
                 </Card>
 
+                {/* Existing Cash Payment Alert */}
+                {existingCashPayment && (
+                    <Alert>
+                        <CheckCircle className="h-4 w-4" />
+                        <AlertTitle>Payment Reference Already Generated</AlertTitle>
+                        <AlertDescription>
+                            <p className="mb-2">
+                                You already have a payment reference number for this request.
+                            </p>
+                            <div className="flex items-center gap-2">
+                                <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
+                                    {existingCashPayment.payment_reference_number}
+                                </code>
+                                <Button asChild variant="outline" size="sm">
+                                    <Link href={cashReference(existingCashPayment.id).url}>
+                                        View Payment Reference
+                                    </Link>
+                                </Button>
+                            </div>
+                        </AlertDescription>
+                    </Alert>
+                )}
+
                 {/* Payment Method Options */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6" role="radiogroup" aria-label="Payment method selection">
                     {/* Online Payment */}
-                    <Card className="transition-shadow hover:shadow-md border-2 hover:border-primary/50">
+                    <Card className="transition-shadow hover:shadow-md border-2 hover:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
                         <CardHeader className="pb-4">
                             <CardTitle className="text-lg flex items-center">
-                                <CreditCard className="w-5 h-5 mr-2 text-primary" />
+                                <CreditCard className="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
                                 Online Payment
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-0 space-y-4">
                             <div className="space-y-2">
                                 <h4 className="font-medium">Pay instantly online</h4>
-                                <ul className="text-sm text-muted-foreground space-y-1">
-                                    <li>• E-wallets (GCash, Maya, GrabPay)</li>
-                                    <li>• Credit/Debit Cards (Visa, Mastercard, JCB)</li>
-                                    <li>• Online Banking (BPI, BDO, UnionBank)</li>
-                                    <li>• Over-the-Counter (7-Eleven, Cebuana)</li>
+                                <ul className="text-sm text-muted-foreground space-y-1" role="list">
+                                    <li role="listitem">E-wallets (GCash, PayMaya, GrabPay)</li>
+                                    <li role="listitem">Credit/Debit Cards (Visa, Mastercard, JCB)</li>
+                                    <li role="listitem">Online Banking (BPI, BDO, UnionBank)</li>
+                                    <li role="listitem">Over-the-Counter (7-Eleven, Cebuana)</li>
                                 </ul>
                             </div>
                             <div className="bg-muted/50 p-3 rounded-lg">
@@ -156,36 +175,57 @@ export default function PaymentMethod({ request }: Props) {
                                     Total: ₱{(request.amount + (request.amount * 0.025) + 15).toFixed(2)}
                                 </p>
                             </div>
-                            <Form action={initiate(request.id).url} method="post">
-                                {({ processing }) => (
-                                    <Button
-                                        className="w-full"
-                                        type="submit"
-                                        disabled={processing}
-                                    >
-                                        {processing ? 'Processing...' : 'Pay Online Now'}
-                                    </Button>
+                            <Form
+                                {...initiate.form(request.request_number)}
+                            >
+                                {({ processing, errors }) => (
+                                    <>
+                                        <Button
+                                            className="w-full"
+                                            type="submit"
+                                            disabled={processing}
+                                            size="lg"
+                                        >
+                                            {processing ? (
+                                                <>
+                                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                                                    Processing Payment...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <CreditCard className="w-4 h-4 mr-2" />
+                                                    Pay Online Now
+                                                </>
+                                            )}
+                                        </Button>
+
+                                        {errors.payment && (
+                                            <Alert variant="destructive" className="mt-4">
+                                                <AlertDescription>{errors.payment}</AlertDescription>
+                                            </Alert>
+                                        )}
+                                    </>
                                 )}
                             </Form>
                         </CardContent>
                     </Card>
 
                     {/* Cash Payment */}
-                    <Card className="transition-shadow hover:shadow-md border-2 hover:border-primary/50">
+                    <Card className="transition-shadow hover:shadow-md border-2 hover:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
                         <CardHeader className="pb-4">
                             <CardTitle className="text-lg flex items-center">
-                                <Banknote className="w-5 h-5 mr-2 text-primary" />
+                                <Banknote className="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
                                 Cash Payment
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-0 space-y-4">
                             <div className="space-y-2">
                                 <h4 className="font-medium">Pay at Cashier's Office</h4>
-                                <ul className="text-sm text-muted-foreground space-y-1">
-                                    <li>• No transaction fees</li>
-                                    <li>• Pay in person at the office</li>
-                                    <li>• Get Official Receipt immediately</li>
-                                    <li>• Payment deadline: {new Date(request.payment_deadline).toLocaleString()}</li>
+                                <ul className="text-sm text-muted-foreground space-y-1" role="list">
+                                    <li role="listitem">No transaction fees</li>
+                                    <li role="listitem">Pay in person at the office</li>
+                                    <li role="listitem">Get Official Receipt immediately</li>
+                                    <li role="listitem">Payment deadline: {new Date(request.payment_deadline).toLocaleString()}</li>
                                 </ul>
                             </div>
                             <div className="bg-success/10 border border-success/20 p-3 rounded-lg">
@@ -193,86 +233,65 @@ export default function PaymentMethod({ request }: Props) {
                                     No additional fees - Pay exactly ₱{request.amount}
                                 </p>
                             </div>
-                            <Form action={cash(request.id).url} method="post">
-                                {({ processing }) => (
-                                    <Button
-                                        variant="outline"
-                                        className="w-full"
-                                        type="submit"
-                                        disabled={processing}
-                                    >
-                                        {processing ? 'Generating PRN...' : 'Generate Payment Reference'}
-                                    </Button>
+                            <Form
+                                {...cash.form(request.request_number)}
+                            >
+                                {({ processing, errors }) => (
+                                    <>
+                                        {existingCashPayment ? (
+                                            <Button
+                                                variant="outline"
+                                                className="w-full"
+                                                asChild
+                                                size="lg"
+                                            >
+                                                <Link href={cashReference(existingCashPayment.id).url}>
+                                                    <CheckCircle className="w-4 h-4 mr-2" />
+                                                    View Payment Reference
+                                                </Link>
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="outline"
+                                                className="w-full"
+                                                type="submit"
+                                                disabled={processing}
+                                                size="lg"
+                                            >
+                                                {processing ? (
+                                                    <>
+                                                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+                                                        Generating PRN...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Banknote className="w-4 h-4 mr-2" />
+                                                        Generate Payment Reference
+                                                    </>
+                                                )}
+                                            </Button>
+                                        )}
+
+                                        {errors.payment && (
+                                            <Alert variant="destructive" className="mt-4">
+                                                <AlertDescription>{errors.payment}</AlertDescription>
+                                            </Alert>
+                                        )}
+                                    </>
                                 )}
                             </Form>
                         </CardContent>
                     </Card>
                 </div>
 
-                {/* Cash Payment Instructions */}
-                {payment_reference && (
-                    <Card className="border-success">
-                        <CardHeader className="pb-4">
-                            <CardTitle className="text-lg text-success flex items-center">
-                                <Banknote className="w-5 h-5 mr-2" />
-                                Cash Payment Reference Generated
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-0 space-y-4">
-                            <div className="bg-success/10 border border-success/20 p-4 rounded-lg">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Payment Reference Number</Label>
-                                        <p className="text-lg font-mono font-semibold text-success">{payment_reference}</p>
-                                    </div>
-                                    <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Amount to Pay</Label>
-                                        <p className="text-lg font-semibold">₱{payment_amount}</p>
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <Label className="text-sm font-medium text-muted-foreground">Payment Deadline</Label>
-                                        <p className="text-sm">{new Date(payment_deadline).toLocaleString()}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <h4 className="font-medium">Next Steps:</h4>
-                                <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                                    <li>Visit the Cashier's Office within 48 hours</li>
-                                    <li>Present this Payment Reference Number (PRN)</li>
-                                    <li>Pay ₱{payment_amount} in cash</li>
-                                    <li>Receive your Official Receipt</li>
-                                </ol>
-                            </div>
-
-                            <div className="bg-muted/50 p-3 rounded-lg">
-                                <p className="text-sm text-muted-foreground">
-                                    <strong>Important:</strong> This payment reference will expire on {new Date(payment_deadline).toLocaleDateString()} at {new Date(payment_deadline).toLocaleTimeString()}.
-                                    Make sure to complete your payment before the deadline.
-                                </p>
-                            </div>
-
-                            <Button asChild className="w-full">
-                                <Link href={show(request.id).url}>
-                                    View Request Details
-                                </Link>
-                            </Button>
-                        </CardContent>
-                    </Card>
-                )}
-
                 {/* Help Text */}
-                <Card className="bg-muted/30">
-                    <CardContent className="pt-6">
-                        <div className="text-center space-y-2">
-                            <h4 className="font-medium">Need Help?</h4>
-                            <p className="text-sm text-muted-foreground">
-                                Contact the Registrar's Office if you have questions about payment options or need assistance.
-                            </p>
-                        </div>
-                    </CardContent>
-                </Card>
+                <Alert>
+                    <InfoIcon className="h-4 w-4" />
+                    <AlertTitle>Need Help?</AlertTitle>
+                    <AlertDescription>
+                        Contact the Registrar's Office if you have questions about payment options or need assistance.
+                    </AlertDescription>
+                </Alert>
             </div>
         </AppLayout>
     );
