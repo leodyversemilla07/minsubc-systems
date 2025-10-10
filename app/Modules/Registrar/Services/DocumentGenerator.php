@@ -268,15 +268,11 @@ class DocumentGenerator
      */
     private function generateQrCode(DocumentRequest $request): string
     {
-        $verificationData = [
-            'request_number' => $request->request_number,
-            'student_id' => $request->student_id,
-            'document_type' => $request->document_type,
-            'issued_date' => now()->toDateString(),
-            'verification_hash' => hash('sha256', $request->request_number.$request->student_id.config('app.key')),
-        ];
-
-        $qrCodeData = json_encode($verificationData);
+        // Generate verification hash
+        $verificationHash = hash('sha256', $request->request_number.$request->student_id.config('app.key'));
+        
+        // Create verification URL
+        $verificationUrl = config('app.url').'/verify/'.$request->request_number.'?hash='.$verificationHash;
 
         $renderer = new ImageRenderer(
             new RendererStyle(200),
@@ -285,7 +281,7 @@ class DocumentGenerator
 
         $writer = new Writer($renderer);
 
-        return 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($qrCodeData));
+        return 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($verificationUrl));
     }
 
     /**
