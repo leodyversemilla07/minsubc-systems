@@ -45,12 +45,12 @@ class DocumentRequestFactory extends Factory
     }
 
     /**
-     * Indicate that the request is ready for pickup.
+     * Indicate that the request is ready for claim.
      */
-    public function readyForPickup(): static
+    public function readyForClaim(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'ready_for_pickup',
+            'status' => 'ready_for_claim',
         ]);
     }
 

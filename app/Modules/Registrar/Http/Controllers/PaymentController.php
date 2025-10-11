@@ -109,7 +109,7 @@ class PaymentController extends Controller
      */
     public function generateCashPayment(DocumentRequest $documentRequest)
     {
-        if ($documentRequest->status !== 'pending_payment') {
+        if ($documentRequest->status->value !== 'pending_payment') {
             return back()->withErrors([
                 'payment' => 'Cash payment cannot be generated for this request.',
             ]);
@@ -217,12 +217,14 @@ class PaymentController extends Controller
             ->first();
 
         if (! $payment) {
-            return redirect()->route('registrar.cashier.dashboard')->withErrors([
-                'payment_reference' => 'Payment reference not found or already processed.',
-            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment reference not found or already processed.',
+            ], 404);
         }
 
-        return redirect()->route('registrar.cashier.dashboard')->with([
+        return response()->json([
+            'success' => true,
             'payment' => [
                 'id' => $payment->id,
                 'reference' => $payment->payment_reference_number,
@@ -274,9 +276,10 @@ class PaymentController extends Controller
             ->first();
 
         if (! $payment) {
-            return redirect()->route('registrar.cashier.dashboard')->withErrors([
-                'official_receipt_number' => 'Payment reference not found or already processed.',
-            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment reference not found or already processed.',
+            ], 404);
         }
 
         $user = Auth::user();
@@ -314,12 +317,17 @@ class PaymentController extends Controller
         // Send notification to student
         app(NotificationService::class)->notifyPaymentConfirmed($payment->documentRequest);
 
-        return redirect()->route('registrar.cashier.dashboard')->with([
-            'confirmed' => [
-                'payment_reference' => $payment->payment_reference_number,
-                'official_receipt_number' => $validated['official_receipt_number'],
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment confirmed successfully',
+            'request' => [
+                'request_number' => $payment->documentRequest->request_number,
+                'status' => 'paid',
+            ],
+            'payment' => [
+                'reference' => $payment->payment_reference_number,
+                'official_receipt' => $payment->official_receipt_number,
                 'amount' => $payment->amount,
-                'student_name' => $payment->documentRequest->student->user->full_name ?? 'N/A',
             ],
         ]);
     }

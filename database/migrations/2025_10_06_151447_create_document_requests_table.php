@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('request_number', 20)->unique();
             $table->string('student_id', 20);
             $table->string('document_type', 50);
-            $table->enum('processing_type', ['regular', 'rush'])->default('regular');
             $table->integer('quantity')->default(1);
             $table->text('purpose')->nullable();
             $table->decimal('amount', 10, 2);
@@ -26,8 +25,8 @@ return new class extends Migration
                 'payment_expired',
                 'paid',
                 'processing',
-                'ready_for_pickup',
-                'picked_up',
+                'ready_for_claim',
+                'claimed',
                 'released',
                 'cancelled',
                 'rejected',
@@ -38,9 +37,9 @@ return new class extends Migration
             $table->string('released_to', 200)->nullable();
             $table->string('released_id_type', 50)->nullable();
             $table->timestamp('released_at')->nullable();
-            $table->boolean('picked_up_by_student')->default(false);
-            $table->timestamp('picked_up_at')->nullable();
-            $table->text('pickup_notes')->nullable();
+            $table->boolean('claimed_by_student')->default(false);
+            $table->timestamp('claimed_at')->nullable();
+            $table->text('claim_notes')->nullable();
             $table->text('rejection_reason')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

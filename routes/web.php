@@ -17,7 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'total_requests' => 0,
             'pending_payment' => 0,
             'processing' => 0,
-            'ready_for_pickup' => 0,
+            'ready_for_claim' => 0,
             'completed' => 0,
         ];
 
@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 'total_requests' => $studentRequests->count(),
                 'pending_payment' => (clone $studentRequests)->where('status', 'pending_payment')->count(),
                 'processing' => (clone $studentRequests)->whereIn('status', ['paid', 'processing'])->count(),
-                'ready_for_pickup' => (clone $studentRequests)->where('status', 'ready_for_pickup')->count(),
+                'ready_for_claim' => (clone $studentRequests)->whereIn('status', ['ready_for_claim', 'claimed'])->count(),
                 'completed' => (clone $studentRequests)->whereIn('status', ['released'])->count(),
             ];
 
@@ -53,31 +53,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Preview route for Blade templates (development only)
 Route::get('/preview/grades', function () {
     // Create mock data for preview
-    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest();
+    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest;
     $mockRequest->request_number = 'REQ-2025-001';
-    
-    $mockUser = new \App\Models\User();
+
+    $mockUser = new \App\Models\User;
     $mockUser->first_name = 'Juan';
     $mockUser->middle_name = 'Santos';
     $mockUser->last_name = 'Dela Cruz';
-    
-    $mockStudent = new \App\Modules\Registrar\Models\Student();
+
+    $mockStudent = new \App\Modules\Registrar\Models\Student;
     $mockStudent->student_id = '2024-00123';
     $mockStudent->course = 'Bachelor of Science in Computer Science';
     $mockStudent->year_level = '3rd Year';
     $mockStudent->setRelation('user', $mockUser);
-    
+
     // Generate verification QR code
     $verificationHash = hash('sha256', $mockRequest->request_number.$mockStudent->student_id.config('app.key'));
     $verificationUrl = config('app.url').'/verify/'.$mockRequest->request_number.'?hash='.$verificationHash;
-    
+
     $renderer = new \BaconQrCode\Renderer\ImageRenderer(
         new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
         new \BaconQrCode\Renderer\Image\SvgImageBackEnd
     );
     $writer = new \BaconQrCode\Writer($renderer);
     $qrCode = 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($verificationUrl));
-    
+
     $data = [
         'student' => $mockStudent,
         'request' => $mockRequest,
@@ -91,7 +91,7 @@ Route::get('/preview/grades', function () {
             ['subject' => 'Software Engineering', 'grade' => '1.25', 'semester' => '1st Semester 2025'],
         ],
     ];
-    
+
     return view('documents.grades', $data);
 });
 
@@ -102,32 +102,32 @@ Route::get('/preview', function () {
 
 // Preview route for Certificate of Enrollment
 Route::get('/preview/coe', function () {
-    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest();
+    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest;
     $mockRequest->request_number = 'REQ-2025-002';
     $mockRequest->purpose = 'scholarship application';
-    
-    $mockUser = new \App\Models\User();
+
+    $mockUser = new \App\Models\User;
     $mockUser->first_name = 'Maria';
     $mockUser->middle_name = 'Santos';
     $mockUser->last_name = 'Garcia';
-    
-    $mockStudent = new \App\Modules\Registrar\Models\Student();
+
+    $mockStudent = new \App\Modules\Registrar\Models\Student;
     $mockStudent->student_id = '2024-00456';
     $mockStudent->course = 'Bachelor of Science in Information Technology';
     $mockStudent->year_level = '2nd Year';
     $mockStudent->setRelation('user', $mockUser);
-    
+
     // Generate verification QR code
     $verificationHash = hash('sha256', $mockRequest->request_number.$mockStudent->student_id.config('app.key'));
     $verificationUrl = config('app.url').'/verify/'.$mockRequest->request_number.'?hash='.$verificationHash;
-    
+
     $renderer = new \BaconQrCode\Renderer\ImageRenderer(
         new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
         new \BaconQrCode\Renderer\Image\SvgImageBackEnd
     );
     $writer = new \BaconQrCode\Writer($renderer);
     $qrCode = 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($verificationUrl));
-    
+
     $data = [
         'student' => $mockStudent,
         'request' => $mockRequest,
@@ -135,37 +135,37 @@ Route::get('/preview/coe', function () {
         'issued_date' => now()->format('F j, Y'),
         'valid_until' => now()->addMonths(6)->format('F j, Y'),
     ];
-    
+
     return view('documents.coe', $data);
 });
 
 // Preview route for Certificate of Good Moral
 Route::get('/preview/good-moral', function () {
-    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest();
+    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest;
     $mockRequest->request_number = 'REQ-2025-003';
-    
-    $mockUser = new \App\Models\User();
+
+    $mockUser = new \App\Models\User;
     $mockUser->first_name = 'Pedro';
     $mockUser->middle_name = 'Reyes';
     $mockUser->last_name = 'Santos';
-    
-    $mockStudent = new \App\Modules\Registrar\Models\Student();
+
+    $mockStudent = new \App\Modules\Registrar\Models\Student;
     $mockStudent->student_id = '2023-00789';
     $mockStudent->course = 'Bachelor of Arts in Communication';
     $mockStudent->year_level = '4th Year';
     $mockStudent->setRelation('user', $mockUser);
-    
+
     // Generate verification QR code
     $verificationHash = hash('sha256', $mockRequest->request_number.$mockStudent->student_id.config('app.key'));
     $verificationUrl = config('app.url').'/verify/'.$mockRequest->request_number.'?hash='.$verificationHash;
-    
+
     $renderer = new \BaconQrCode\Renderer\ImageRenderer(
         new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
         new \BaconQrCode\Renderer\Image\SvgImageBackEnd
     );
     $writer = new \BaconQrCode\Writer($renderer);
     $qrCode = 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($verificationUrl));
-    
+
     $data = [
         'student' => $mockStudent,
         'request' => $mockRequest,
@@ -173,37 +173,37 @@ Route::get('/preview/good-moral', function () {
         'issued_date' => now()->format('F j, Y'),
         'purpose' => 'employment requirements',
     ];
-    
+
     return view('documents.certificate_good_moral', $data);
 });
 
 // Preview route for Transcript of Records
 Route::get('/preview/tor', function () {
-    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest();
+    $mockRequest = new \App\Modules\Registrar\Models\DocumentRequest;
     $mockRequest->request_number = 'REQ-2025-004';
-    
-    $mockUser = new \App\Models\User();
+
+    $mockUser = new \App\Models\User;
     $mockUser->first_name = 'Ana';
     $mockUser->middle_name = 'Cruz';
     $mockUser->last_name = 'Fernandez';
-    
-    $mockStudent = new \App\Modules\Registrar\Models\Student();
+
+    $mockStudent = new \App\Modules\Registrar\Models\Student;
     $mockStudent->student_id = '2022-00321';
     $mockStudent->course = 'Bachelor of Science in Accountancy';
     $mockStudent->year_level = '3rd Year';
     $mockStudent->setRelation('user', $mockUser);
-    
+
     // Generate verification QR code
     $verificationHash = hash('sha256', $mockRequest->request_number.$mockStudent->student_id.config('app.key'));
     $verificationUrl = config('app.url').'/verify/'.$mockRequest->request_number.'?hash='.$verificationHash;
-    
+
     $renderer = new \BaconQrCode\Renderer\ImageRenderer(
         new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
         new \BaconQrCode\Renderer\Image\SvgImageBackEnd
     );
     $writer = new \BaconQrCode\Writer($renderer);
     $qrCode = 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($verificationUrl));
-    
+
     $data = [
         'student' => $mockStudent,
         'request' => $mockRequest,
@@ -222,7 +222,7 @@ Route::get('/preview/tor', function () {
             ['code' => 'CS204', 'subject' => 'Web Development', 'units' => '3', 'grade' => '1.50', 'semester' => '2nd Sem 2023-2024'],
         ],
     ];
-    
+
     return view('documents.tor', $data);
 });
 

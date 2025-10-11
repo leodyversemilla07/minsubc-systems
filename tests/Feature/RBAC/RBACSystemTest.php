@@ -22,7 +22,7 @@ test('rbac permissions are created correctly', function (string $permission) {
 })->with([
     'submit_requests', 'view_own_requests', 'make_payments', 'track_status',
     'view_pending_cash_payments', 'confirm_cash_payments', 'issue_official_receipts', 'verify_payment_references',
-    'view_all_requests', 'process_documents', 'approve_requests', 'reject_requests', 'mark_ready_for_pickup', 'release_documents',
+    'view_all_requests', 'process_documents', 'approve_requests', 'reject_requests', 'mark_ready_for_claim', 'release_documents',
     'manage_users', 'system_configuration', 'full_system_access', 'database_management', 'view_reports', 'manage_system_settings',
 ]);
 

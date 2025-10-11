@@ -36,10 +36,9 @@ test('document request can be stored', function () {
     $user->assignRole('student');
 
     $requestData = [
-        'document_type' => 'coe',
-        'processing_type' => 'regular',
+        'document_type' => 'Certificate of Enrolment',
         'quantity' => 1,
-        'purpose' => 'For employment purposes',
+        'purpose' => 'Scholarship',
     ];
 
     // Act as the user and submit the form
@@ -52,10 +51,9 @@ test('document request can be stored', function () {
     // Assert the document request was created
     $this->assertDatabaseHas('document_requests', [
         'student_id' => $student->student_id,
-        'document_type' => 'coe',
-        'processing_type' => 'regular',
+        'document_type' => 'Certificate of Enrolment',
         'quantity' => 1,
-        'purpose' => 'For employment purposes',
+        'purpose' => 'Scholarship',
         'status' => 'pending_payment',
     ]);
 });
@@ -124,10 +122,10 @@ test('student can generate cash payment reference', function () {
 
     // Refresh request and assert status unchanged (still pending payment)
     $request->refresh();
-    expect($request->status)->toBe('pending_payment');
+    expect($request->status->value)->toBe('pending_payment');
 });
 
-test('student can confirm document pickup when ready', function () {
+test('student can confirm document claim when ready', function () {
     // Seed roles and permissions
     $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -136,16 +134,16 @@ test('student can confirm document pickup when ready', function () {
     $student = Student::factory()->create(['user_id' => $user->id]);
     $user->assignRole('student');
 
-    // Create a document request that's ready for pickup
+    // Create a document request that's ready for claim
     $request = \App\Modules\Registrar\Models\DocumentRequest::factory()->create([
         'student_id' => $student->student_id,
-        'status' => 'ready_for_pickup',
+        'status' => 'ready_for_claim',
     ]);
 
-    // Act as the user and confirm pickup
-    $response = $this->actingAs($user)->post(route('registrar.document-requests.confirm-pickup', $request), [
+    // Act as the user and confirm claim
+    $response = $this->actingAs($user)->post(route('registrar.document-requests.confirm-claim', $request), [
         'confirmation' => '1',
-        'pickup_notes' => 'Will pickup tomorrow morning',
+        'claim_notes' => 'Will collect tomorrow morning',
     ]);
 
     // Assert redirect back with success
@@ -154,12 +152,12 @@ test('student can confirm document pickup when ready', function () {
 
     // Assert request status updated
     $request->refresh();
-    expect($request->status)->toBe('picked_up');
-    expect($request->picked_up_by_student)->toBe(true);
-    expect($request->pickup_notes)->toBe('Will pickup tomorrow morning');
+    expect($request->status->value)->toBe('claimed');
+    expect($request->claimed_by_student)->toBe(true);
+    expect($request->claim_notes)->toBe('Will collect tomorrow morning');
 });
 
-test('student cannot confirm pickup for requests not ready', function () {
+test('student cannot confirm claim for requests not ready', function () {
     // Seed roles and permissions
     $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -174,18 +172,18 @@ test('student cannot confirm pickup for requests not ready', function () {
         'status' => 'processing',
     ]);
 
-    // Act as the user and try to confirm pickup
-    $response = $this->actingAs($user)->post(route('registrar.document-requests.confirm-pickup', $request), [
+    // Act as the user and try to confirm claim
+    $response = $this->actingAs($user)->post(route('registrar.document-requests.confirm-claim', $request), [
         'confirmation' => '1',
     ]);
 
     // Assert redirect back with error
     $response->assertRedirect();
-    $response->assertSessionHasErrors('pickup');
+    $response->assertSessionHasErrors('claim');
 
     // Assert status unchanged
     $request->refresh();
-    expect($request->status)->toBe('processing');
+    expect($request->status->value)->toBe('processing');
 });
 
 test('student cannot access other students requests', function () {
@@ -204,11 +202,11 @@ test('student cannot access other students requests', function () {
     // Create a document request for student1
     $request = \App\Modules\Registrar\Models\DocumentRequest::factory()->create([
         'student_id' => $student1->student_id,
-        'status' => 'ready_for_pickup',
+        'status' => 'ready_for_claim',
     ]);
 
-    // Act as user2 and try to confirm pickup for user1's request
-    $response = $this->actingAs($user2)->post(route('registrar.document-requests.confirm-pickup', $request), [
+    // Act as user2 and try to confirm claim for user1's request
+    $response = $this->actingAs($user2)->post(route('registrar.document-requests.confirm-claim', $request), [
         'confirmation' => '1',
     ]);
 
@@ -217,7 +215,7 @@ test('student cannot access other students requests', function () {
 
     // Assert status unchanged
     $request->refresh();
-    expect($request->status)->toBe('ready_for_pickup');
+    expect($request->status->value)->toBe('ready_for_claim');
 });
 
 test('cashier can access cashier dashboard', function () {
@@ -365,7 +363,7 @@ test('cashier can confirm cash payment with OR number', function () {
 
     // Assert document request status updated
     $request->refresh();
-    expect($request->status)->toBe('paid');
+    expect($request->status->value)->toBe('paid');
     expect($request->payment_method)->toBe('cash');
 });
 

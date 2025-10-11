@@ -270,7 +270,7 @@ class DocumentGenerator
     {
         // Generate verification hash
         $verificationHash = hash('sha256', $request->request_number.$request->student_id.config('app.key'));
-        
+
         // Create verification URL
         $verificationUrl = config('app.url').'/verify/'.$request->request_number.'?hash='.$verificationHash;
 

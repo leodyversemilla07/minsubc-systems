@@ -4,8 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Field, FieldLabel, FieldDescription } from '@/components/ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Calculator } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import AppLayout from '@/layouts/app-layout';
@@ -14,11 +12,19 @@ import { update } from '@/routes/registrar/document-requests';
 import { index } from '@/routes/registrar/document-requests';
 import { type BreadcrumbItem } from '@/types';
 
+interface DocumentTypeData {
+    value: string;
+    label: string;
+    price: number;
+    price_label: string;
+    is_per_page: boolean;
+    processing_time: string;
+}
+
 interface DocumentRequest {
     id: number;
     request_number: string;
     document_type: string;
-    processing_type: string;
     quantity: number;
     purpose: string;
     amount: number;
@@ -26,12 +32,35 @@ interface DocumentRequest {
 
 interface Props {
     request: DocumentRequest;
-    documentTypes: Record<string, string>;
-    processingTypes: Record<string, { label: string; days: string; price: number }>;
+    documentTypes: DocumentTypeData[];
 }
 
-export default function Edit({ request, documentTypes, processingTypes }: Props) {
-    const [calculatedAmount, setCalculatedAmount] = useState(request.amount);
+export default function Edit({ request, documentTypes }: Props) {
+    const initialType = documentTypes.find(t => t.value === request.document_type);
+    const [selectedType, setSelectedType] = useState<DocumentTypeData | null>(initialType || null);
+    const [quantity, setQuantity] = useState(request.quantity);
+    
+    // Extract purpose - check if it starts with "Other: "
+    const isOtherPurpose = request.purpose.startsWith('Other: ');
+    const initialPurpose = isOtherPurpose ? 'Other (please specify)' : request.purpose;
+    const initialCustomPurpose = isOtherPurpose ? request.purpose.replace('Other: ', '') : '';
+    
+    const [selectedPurpose, setSelectedPurpose] = useState<string>(initialPurpose);
+    const [customPurpose, setCustomPurpose] = useState<string>(initialCustomPurpose);
+
+    const purposeOptions = [
+        'Scholarship',
+        'Provincial scholarship',
+        'Municipal scholarship',
+        'Educational assistance',
+        'Financial assistance',
+        'Other (please specify)',
+    ];
+
+    const calculateAmount = () => {
+        if (!selectedType) return request.amount;
+        return selectedType.price * quantity;
+    };
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -76,17 +105,6 @@ export default function Edit({ request, documentTypes, processingTypes }: Props)
                                 action={update(request.request_number).url}
                                 method="patch"
                                 onSuccess={() => toast.success('Request updated successfully!')}
-                                onBefore={() => {
-                                    // Calculate amount before submission
-                                    const form = document.querySelector('form') as HTMLFormElement;
-                                    if (form) {
-                                        const formData = new FormData(form);
-                                        const processingType = formData.get('processing_type') as string;
-                                        const quantity = parseInt(formData.get('quantity') as string) || 1;
-                                        const basePrice = processingTypes[processingType]?.price || 50;
-                                        setCalculatedAmount(basePrice * quantity);
-                                    }
-                                }}
                             >
                                 {({
                                     errors,
@@ -96,49 +114,32 @@ export default function Edit({ request, documentTypes, processingTypes }: Props)
                                         <div>
                                             <Field>
                                                 <FieldLabel htmlFor="document_type">Document Type *</FieldLabel>
-                                                <Select name="document_type" defaultValue={request.document_type}>
-                                                    <SelectTrigger>
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {Object.entries(documentTypes).map(([key, label]) => (
-                                                            <SelectItem key={key} value={key}>
-                                                                {label}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                                {errors.document_type && (
-                                                    <FieldDescription className="text-destructive">{errors.document_type}</FieldDescription>
-                                                )}
-                                            </Field>
-                                        </div>
-
-                                        <div>
-                                            <Field>
-                                                <FieldLabel htmlFor="processing_type">Processing Type *</FieldLabel>
                                                 <Select
-                                                    name="processing_type"
-                                                    defaultValue={request.processing_type}
+                                                    name="document_type"
+                                                    defaultValue={request.document_type}
                                                     onValueChange={(value) => {
-                                                        const quantity = parseInt((document.querySelector('input[name="quantity"]') as HTMLInputElement)?.value) || request.quantity;
-                                                        const basePrice = processingTypes[value]?.price || 50;
-                                                        setCalculatedAmount(basePrice * quantity);
+                                                        const type = documentTypes.find(t => t.value === value);
+                                                        setSelectedType(type || null);
                                                     }}
                                                 >
                                                     <SelectTrigger>
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        {Object.entries(processingTypes).map(([key, type]) => (
-                                                            <SelectItem key={key} value={key}>
-                                                                {type.label} - {type.days} - ₱{type.price}
+                                                        {documentTypes.map((type) => (
+                                                            <SelectItem key={type.value} value={type.value}>
+                                                                {type.label} - {type.price_label}
                                                             </SelectItem>
                                                         ))}
                                                     </SelectContent>
                                                 </Select>
-                                                {errors.processing_type && (
-                                                    <FieldDescription className="text-destructive">{errors.processing_type}</FieldDescription>
+                                                {selectedType && (
+                                                    <FieldDescription>
+                                                        {selectedType.price_label} • Processing time: {selectedType.processing_time}
+                                                    </FieldDescription>
+                                                )}
+                                                {errors.document_type && (
+                                                    <FieldDescription className="text-destructive">{errors.document_type}</FieldDescription>
                                                 )}
                                             </Field>
                                         </div>
@@ -152,13 +153,11 @@ export default function Edit({ request, documentTypes, processingTypes }: Props)
                                                     min="1"
                                                     max="10"
                                                     defaultValue={request.quantity}
-                                                    onChange={(e) => {
-                                                        const quantity = parseInt(e.target.value) || 1;
-                                                        const processingType = (document.querySelector('select[name="processing_type"]') as HTMLSelectElement)?.value || request.processing_type;
-                                                        const basePrice = processingTypes[processingType]?.price || 50;
-                                                        setCalculatedAmount(basePrice * quantity);
-                                                    }}
+                                                    onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                                                 />
+                                                {selectedType?.is_per_page && (
+                                                    <FieldDescription>Number of pages</FieldDescription>
+                                                )}
                                                 {errors.quantity && (
                                                     <FieldDescription className="text-destructive">{errors.quantity}</FieldDescription>
                                                 )}
@@ -168,45 +167,65 @@ export default function Edit({ request, documentTypes, processingTypes }: Props)
                                         <div>
                                             <Field>
                                                 <FieldLabel htmlFor="purpose">Purpose *</FieldLabel>
-                                                <Textarea
+                                                <Select
                                                     name="purpose"
-                                                    defaultValue={request.purpose}
-                                                    placeholder="Please specify the purpose of this document request..."
-                                                    rows={4}
-                                                />
+                                                    defaultValue={initialPurpose}
+                                                    onValueChange={(value) => {
+                                                        setSelectedPurpose(value);
+                                                        if (value !== 'Other (please specify)') {
+                                                            setCustomPurpose('');
+                                                        }
+                                                    }}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {purposeOptions.map((option) => (
+                                                            <SelectItem key={option} value={option}>
+                                                                {option}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FieldDescription>Select the purpose of this document request.</FieldDescription>
                                                 {errors.purpose && (
                                                     <FieldDescription className="text-destructive">{errors.purpose}</FieldDescription>
                                                 )}
                                             </Field>
                                         </div>
 
-                                        <div className="bg-muted p-4 rounded-lg">
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-medium">Updated Amount:</span>
-                                                <span className="text-2xl font-bold text-success">
-                                                    ₱{calculatedAmount}
-                                                </span>
+                                        {selectedPurpose === 'Other (please specify)' && (
+                                            <div>
+                                                <Field>
+                                                    <FieldLabel htmlFor="custom_purpose">Please specify *</FieldLabel>
+                                                    <Input
+                                                        name="custom_purpose"
+                                                        type="text"
+                                                        placeholder="Enter your specific purpose..."
+                                                        value={customPurpose}
+                                                        onChange={(e) => setCustomPurpose(e.target.value)}
+                                                    />
+                                                    <FieldDescription>Provide more details about your purpose.</FieldDescription>
+                                                </Field>
                                             </div>
-                                            <p className="text-sm text-muted-foreground mt-1">
-                                                Amount will be recalculated based on processing type and quantity.
-                                            </p>
-                                        </div>
+                                        )}
 
-                                        <div className="flex justify-end space-x-4">
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={() => {
-                                                    const processingType = (document.querySelector('select[name="processing_type"]') as HTMLSelectElement)?.value || request.processing_type;
-                                                    const quantity = parseInt((document.querySelector('input[name="quantity"]') as HTMLInputElement)?.value) || request.quantity;
-                                                    const basePrice = processingTypes[processingType]?.price || 50;
-                                                    setCalculatedAmount(basePrice * quantity);
-                                                }}
-                                                disabled={processing}
-                                            >
-                                                <Calculator className="w-4 h-4 mr-2" />
-                                                Recalculate
-                                            </Button>
+                                        {selectedType && (
+                                            <div className="bg-muted p-4 rounded-lg">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-medium">Updated Amount:</span>
+                                                    <span className="text-2xl font-bold text-success">
+                                                        ₱{calculateAmount()}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-muted-foreground mt-1">
+                                                    {selectedType.price_label} × {quantity} {selectedType.is_per_page ? 'page(s)' : 'copy(ies)'}
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        <div className="flex justify-end">
                                             <Button type="submit" disabled={processing}>
                                                 {processing ? 'Updating...' : 'Update Request'}
                                             </Button>

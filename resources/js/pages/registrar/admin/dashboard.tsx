@@ -28,7 +28,7 @@ import {
 interface DocumentRequest {
     id: number;
     request_number: string;
-    status: 'pending_payment' | 'payment_expired' | 'paid' | 'processing' | 'ready_for_pickup' | 'released' | 'cancelled' | 'rejected';
+    status: 'pending_payment' | 'payment_expired' | 'paid' | 'processing' | 'ready_for_claim' | 'claimed' | 'released' | 'cancelled' | 'rejected';
     document_type: string;
     purpose: string;
     copies: number;
@@ -70,7 +70,8 @@ interface RequestsProps {
         pending_payment: number;
         paid: number;
         processing: number;
-        ready_for_pickup: number;
+        ready_for_claim: number;
+        claimed: number;
     };
 }
 
@@ -79,7 +80,8 @@ const statusConfig = {
     payment_expired: { label: 'Payment Expired', icon: XCircle },
     paid: { label: 'Paid', icon: CheckCircle },
     processing: { label: 'Processing', icon: AlertCircle },
-    ready_for_pickup: { label: 'Ready for Pickup', icon: CheckCircle },
+    ready_for_claim: { label: 'Ready for Claim', icon: CheckCircle },
+    claimed: { label: 'Claimed', icon: CheckCircle },
     released: { label: 'Released', icon: CheckCircle },
     cancelled: { label: 'Cancelled', icon: XCircle },
     rejected: { label: 'Rejected', icon: XCircle },
@@ -209,8 +211,8 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             cell: ({ row }) => {
                 const request = row.original;
                 const canGenerate = request.status === 'paid' || request.status === 'processing';
-                const canDownload = request.status === 'ready_for_pickup' || request.status === 'released';
-                const canRelease = request.status === 'ready_for_pickup';
+                const canDownload = request.status === 'ready_for_claim' || request.status === 'claimed' || request.status === 'released';
+                const canRelease = request.status === 'ready_for_claim' || request.status === 'claimed';
                 
                 return (
                     <DropdownMenu>
@@ -340,12 +342,22 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Ready for Pickup</CardTitle>
+                            <CardTitle className="text-sm font-medium">Ready for Claim</CardTitle>
                             <CheckCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.ready_for_pickup}</div>
+                            <div className="text-2xl font-bold">{stats.ready_for_claim}</div>
                             <p className="text-xs text-muted-foreground">Ready to claim</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Claimed</CardTitle>
+                            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.claimed}</div>
+                            <p className="text-xs text-muted-foreground">Picked up by students</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -415,10 +427,16 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                                             Processing
                                                         </span>
                                                     </SelectItem>
-                                                    <SelectItem value="ready_for_pickup">
+                                                    <SelectItem value="ready_for_claim">
                                                         <span className="flex items-center gap-2">
                                                             <CheckCircle className="h-3.5 w-3.5" />
-                                                            Ready for Pickup
+                                                            Ready for Claim
+                                                        </span>
+                                                    </SelectItem>
+                                                    <SelectItem value="claimed">
+                                                        <span className="flex items-center gap-2">
+                                                            <CheckCircle className="h-3.5 w-3.5" />
+                                                            Claimed
                                                         </span>
                                                     </SelectItem>
                                                     <SelectItem value="released">

@@ -30,22 +30,24 @@ A web-based system to automate document request processing for MinSU Registrar's
 - Real-time request tracking
 - Automated document generation
 - SMS/Email notifications
-- Physical pickup with ID verification
+- Physical claim with ID verification
 - Admin dashboard for registrar staff
 
 ### 1.3 Document Types Supported
-- Certificate of Enrollment (COE)
-- Certificate of Grades (COG) / Transcript of Records (TOR)
-- Honorable Dismissal
-- Certificate of Good Moral Character
-- Certificate of Authentication and Verification (CAV)
-- Diploma (Certified True Copy)
-- Special Order (SO) copies
-- Form 137 (if applicable)
+- Transcript of Record (TOR)
+- Certificate of Grades
+- Certificate of Enrolment
+- Certificate of Graduation
+- Certificate of GWA
+- Certification, Authentication, and Verification (CAV)
+- Mode of Instruction Certificate
+- Certificate of Upper 25%
+- Authentication / Certify True Copy
 
-### 1.4 Processing Types
-- **Regular Processing:** 5-7 working days (₱50-100)
-- **Rush Processing:** 2-3 working days (₱150-200)
+### 1.4 Processing Time
+- **Regular Processing:** 5-7 working days
+- All documents follow standard processing timeline
+- No rush processing available
 
 ---
 
@@ -251,7 +253,7 @@ A web-based system to automate document request processing for MinSU Registrar's
 |------|-------------|
 | **Student** | Submit requests, view own requests, make payments, track status |
 | **Cashier** | View pending cash payments, confirm cash payments, issue OR |
-| **Registrar Staff** | View all requests, process documents, approve/reject, mark ready for pickup |
+| **Registrar Staff** | View all requests, process documents, approve/reject, mark ready for claim |
 | **Registrar Admin** | All staff permissions + user management, system configuration |
 | **System Admin** | Full system access, database management, reports |
 
@@ -285,7 +287,6 @@ CREATE TABLE document_requests (
     request_number VARCHAR(20) UNIQUE NOT NULL, -- Format: REQ-YYYYMMDD-XXXX
     student_id VARCHAR(20) NOT NULL,
     document_type VARCHAR(50) NOT NULL,
-    processing_type ENUM('regular', 'rush') DEFAULT 'regular',
     quantity INT DEFAULT 1,
     purpose TEXT,
     amount DECIMAL(10,2) NOT NULL,
@@ -295,7 +296,8 @@ CREATE TABLE document_requests (
         'payment_expired',
         'paid',
         'processing',
-        'ready_for_pickup',
+        'ready_for_claim',
+        'claimed',
         'released',
         'cancelled',
         'rejected'
@@ -306,6 +308,9 @@ CREATE TABLE document_requests (
     released_to VARCHAR(200) NULL, -- Name of person who claimed
     released_id_type VARCHAR(50) NULL, -- ID type presented
     released_at TIMESTAMP NULL,
+    claimed_by_student BOOLEAN DEFAULT FALSE, -- Whether student claimed the document
+    claimed_at TIMESTAMP NULL, -- When the student claimed the document
+    claim_notes TEXT NULL, -- Notes from student when claiming
     rejection_reason TEXT NULL,
     notes TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -425,10 +430,12 @@ CREATE TABLE system_settings (
 
 -- Sample settings
 INSERT INTO system_settings (setting_key, setting_value, description) VALUES
-('regular_processing_days', '5-7', 'Regular processing time in working days'),
-('rush_processing_days', '2-3', 'Rush processing time in working days'),
-('coe_regular_price', '100', 'COE regular processing price in PHP'),
-('coe_rush_price', '200', 'COE rush processing price in PHP'),
+('processing_days', '5-7', 'Standard processing time in working days'),
+('tor_price_per_page', '50', 'Transcript of Record price per page in PHP'),
+('cog_price', '40', 'Certificate of Grades price in PHP'),
+('coe_price', '40', 'Certificate of Enrolment price in PHP'),
+('cav_price', '40', 'CAV price in PHP'),
+('authentication_price_per_page', '10', 'Authentication/Certify True Copy price per page in PHP'),
 ('cash_payment_deadline_hours', '48', 'Hours before cash payment expires'),
 ('paymongo_public_key', 'pk_test_xxxxx', 'PayMongo public key'),
 ('paymongo_secret_key', 'sk_test_xxxxx', 'PayMongo secret key (encrypted)');
@@ -447,8 +454,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
    ↓
 3. Fill Request Form:
    - Select document type
-   - Choose processing type (Regular/Rush)
-   - Enter quantity
+   - Enter quantity (if applicable)
    - Specify purpose
    - Review amount
    ↓
@@ -463,7 +469,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 8. Receive SMS/Email: "Payment confirmed. Request #REQ-20251006-0001"
    ↓
 9. Track status in Dashboard:
-   - Paid → Processing → Ready for Pickup
+   - Paid → Processing → Ready for Claim
    ↓
 10. Receive notification: "Document ready at Registrar Office"
     ↓
@@ -503,7 +509,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
     ↓
 12. Receive SMS: "Payment received. Request #REQ-20251006-0001 is being processed"
     ↓
-13. Track status → Ready for Pickup
+13. Track status → Ready for Claim
     ↓
 14. Visit Registrar → Claim document
 ```
@@ -572,7 +578,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
    ↓
 10. Physically sign and seal document
     ↓
-11. Click "Mark as Ready for Pickup"
+11. Click "Mark as Ready for Claim"
     ↓
 12. System sends notification to student
     ↓
@@ -630,8 +636,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 **Request:**
 ```json
 {
-  "document_type": "COE",
-  "processing_type": "regular",
+  "document_type": "Certificate of Enrolment",
   "quantity": 1,
   "purpose": "Employment requirement",
   "payment_method": "cash"
@@ -663,9 +668,8 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
   "requests": [
     {
       "request_number": "REQ-20251006-0001",
-      "document_type": "COE",
-      "processing_type": "regular",
-      "amount": 100.00,
+      "document_type": "Certificate of Enrolment",
+      "amount": 40.00,
       "status": "paid",
       "payment_method": "cash",
       "created_at": "2025-10-06T10:00:00Z",
@@ -756,7 +760,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 #### GET `/api/registrar/queue`
 **Headers:** `Authorization: Bearer {token}` (Registrar role)
 
-**Query params:** `?status=paid&processing_type=rush`
+**Query params:** `?status=paid`
 
 **Response:**
 ```json
@@ -771,10 +775,9 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
         "course": "BSIT",
         "year_level": 3
       },
-      "document_type": "COE",
-      "processing_type": "regular",
+      "document_type": "Certificate of Enrolment",
       "quantity": 1,
-      "amount": 100.00,
+      "amount": 40.00,
       "payment_method": "cash",
       "status": "paid",
       "paid_at": "2025-10-06T11:30:00Z",
@@ -807,7 +810,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 }
 ```
 
-#### POST `/api/registrar/ready-for-pickup/:requestNumber`
+#### POST `/api/registrar/ready-for-claim/:requestNumber`
 **Headers:** `Authorization: Bearer {token}` (Registrar role)
 
 **Response:**
@@ -816,7 +819,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
   "success": true,
   "request": {
     "request_number": "REQ-20251006-0001",
-    "status": "ready_for_pickup"
+    "status": "ready_for_claim"
   },
   "notification_sent": true
 }
@@ -1046,16 +1049,21 @@ Example: REQ-20251006-0001
 
 ### C. Document Pricing Matrix
 
-| Document Type | Regular (5-7 days) | Rush (2-3 days) |
-|--------------|-------------------|-----------------|
-| COE | ₱100 | ₱200 |
-| COG/TOR | ₱150 | ₱300 |
-| Honorable Dismissal | ₱100 | ₱200 |
-| Good Moral | ₱50 | ₱100 |
-| CAV | ₱200 | ₱350 |
-| Diploma Copy | ₱300 | ₱500 |
+| Document Type | Fee |
+|--------------|-----|
+| Transcript of Record | ₱50.00 per page |
+| Certificate of Grades | ₱40.00 |
+| Certificate of Enrolment | ₱40.00 |
+| Certificate of Graduation | ₱40.00 |
+| Certificate of GWA | ₱40.00 |
+| Certification, Authentication, and Verification (CAV) | ₱40.00 |
+| Mode of Instruction Certificate | ₱40.00 |
+| Certificate of Upper 25% | ₱40.00 |
+| Authentication / Certify True Copy | ₱10.00 per page |
 
-*Note: Prices subject to university approval*
+**Processing Time:** 5-7 working days (standard for all documents)
+
+*Note: Prices are official university rates*
 
 ### D. System Requirements
 
@@ -1156,11 +1164,11 @@ CREATE TABLE sequence_counters (
 ║   Student ID: 2021-00001               ║
 ║   Name: JUAN DELA CRUZ                 ║
 ║                                        ║
-║   Document: Certificate of Enrollment  ║
-║   Processing: Regular (5-7 days)       ║
+║   Document: Certificate of Enrolment   ║
+║   Processing: Standard (5-7 days)      ║
 ║   Quantity: 1                          ║
 ║                                        ║
-║   AMOUNT TO PAY: ₱100.00               ║
+║   AMOUNT TO PAY: ₱40.00                ║
 ║                                        ║
 ║   Payment Deadline:                    ║
 ║   October 8, 2025 - 5:00 PM            ║
@@ -1186,35 +1194,35 @@ Generated: October 6, 2025 10:00 AM
 │ MinSU Cashier Portal                    [Logout]    │
 ├─────────────────────────────────────────────────────┤
 │                                                     │
-│  👤 Cashier: Maria Santos                          │
-│  📅 Today: October 6, 2025                         │
+│  👤 Cashier: Maria Santos                           │
+│  📅 Today: October 6, 2025                          │
 │                                                     │
-│  ┌─────────────────────────────────────────────┐  │
-│  │  PENDING CASH PAYMENTS         [Refresh]    │  │
-│  ├─────────────────────────────────────────────┤  │
-│  │                                             │  │
-│  │  Search PRN: [________________] [Search]    │  │
-│  │                                             │  │
-│  │  Showing 15 pending payments                │  │
-│  │                                             │  │
-│  │  PRN              Student         Amount    │  │
-│  │  ───────────────────────────────────────    │  │
-│  │  PRN-20251006-0001 Juan D.       ₱100.00   │  │
-│  │  [View Details] [Confirm Payment]           │  │
-│  │                                             │  │
-│  │  PRN-20251006-0002 Maria C.      ₱200.00   │  │
-│  │  [View Details] [Confirm Payment]           │  │
-│  │                                             │  │
-│  │  ...                                        │  │
-│  └─────────────────────────────────────────────┘  │
+│  ┌─────────────────────────────────────────────┐    │
+│  │  PENDING CASH PAYMENTS         [Refresh]    │    │
+│  ├─────────────────────────────────────────────┤    │
+│  │                                             │    │
+│  │  Search PRN: [________________] [Search]    │    │
+│  │                                             │    │
+│  │  Showing 15 pending payments                │    │
+│  │                                             │    │
+│  │  PRN              Student         Amount    │    │
+│  │  ───────────────────────────────────────    │    │
+│  │  PRN-20251006-0001 Juan D.       ₱40.00     │    │
+│  │  [View Details] [Confirm Payment]           │    │
+│  │                                             │    │
+│  │  PRN-20251006-0002 Maria C.      ₱50.00     │    │
+│  │  [View Details] [Confirm Payment]           │    │
+│  │                                             │    │
+│  │  ...                                        │    │
+│  └─────────────────────────────────────────────┘    │
 │                                                     │
-│  ┌─────────────────────────────────────────────┐  │
-│  │  TODAY'S STATISTICS                         │  │
-│  ├─────────────────────────────────────────────┤  │
-│  │  Payments Received: 23                      │  │
-│  │  Total Amount: ₱3,450.00                    │  │
-│  │  Pending: 15                                │  │
-│  └─────────────────────────────────────────────┘  │
+│  ┌─────────────────────────────────────────────┐    │
+│  │  TODAY'S STATISTICS                         │    │
+│  ├─────────────────────────────────────────────┤    │
+│  │  Payments Received: 23                      │    │
+│  │  Total Amount: ₱3,450.00                    │    │
+│  │  Pending: 15                                │    │
+│  └─────────────────────────────────────────────┘    │
 │                                                     │
 └─────────────────────────────────────────────────────┘
 ```
@@ -1235,14 +1243,14 @@ Generated: October 6, 2025 10:00 AM
 │  └─ Contact: 0912-345-6789               │
 │                                          │
 │  Document Details:                       │
-│  ├─ Type: Certificate of Enrollment      │
-│  ├─ Processing: Regular (5-7 days)       │
+│  ├─ Type: Certificate of Enrolment       │
+│  ├─ Processing: Standard (5-7 days)      │
 │  └─ Quantity: 1                          │
 │                                          │
 │  Payment Information:                    │
-│  ├─ Amount: ₱100.00                      │
-│  ├─ Requested: Oct 6, 2025 10:00 AM     │
-│  └─ Deadline: Oct 8, 2025 5:00 PM       │
+│  ├─ Amount: ₱40.00                       │
+│  ├─ Requested: Oct 6, 2025 10:00 AM      │
+│  └─ Deadline: Oct 8, 2025 5:00 PM        │
 │                                          │
 │  Status: ⚠️ PENDING PAYMENT              │
 │                                          │
@@ -1391,18 +1399,18 @@ Verified by: _____________________
 **Template 1: Request Submitted (Cash Payment)**
 ```
 MinSU Registrar: Your document request #REQ-20251006-0001 has been submitted. 
-Pay ₱100.00 at Cashier's Office using PRN-20251006-0001 before Oct 8, 5PM. 
+Pay ₱40.00 at Cashier's Office using PRN-20251006-0001 before Oct 8, 5PM. 
 Track: minsu.edu.ph/track
 ```
 
 **Template 2: Payment Confirmed**
 ```
 MinSU Registrar: Payment confirmed for request #REQ-20251006-0001. 
-Your Certificate of Enrollment is now being processed. 
+Your Certificate of Enrolment is now being processed. 
 Estimated completion: 5-7 working days.
 ```
 
-**Template 3: Ready for Pickup**
+**Template 3: Ready for Claim**
 ```
 MinSU Registrar: Your document (REQ-20251006-0001) is ready! 
 Please claim at Registrar's Office (Mon-Fri, 8AM-5PM) with valid ID. 
@@ -1459,9 +1467,9 @@ Rate your experience: minsu.edu.ph/feedback
                 <h4>Payment Information</h4>
                 <p><strong>Request Number:</strong> REQ-20251006-0001</p>
                 <p><strong>Payment Reference:</strong> PRN-20251006-0001</p>
-                <p><strong>Document:</strong> Certificate of Enrollment</p>
-                <p><strong>Processing Type:</strong> Regular (5-7 working days)</p>
-                <p class="amount">Amount to Pay: ₱100.00</p>
+                <p><strong>Document:</strong> Certificate of Enrolment</p>
+                <p><strong>Processing Time:</strong> Standard (5-7 working days)</p>
+                <p class="amount">Amount to Pay: ₱40.00</p>
                 <p><strong>Payment Deadline:</strong> October 8, 2025 - 5:00 PM</p>
             </div>
             
@@ -2053,7 +2061,7 @@ private function checkDatabase(): array
 - [ ] Reviewing document requests
 - [ ] Generating documents from templates
 - [ ] Approving and rejecting requests
-- [ ] Marking documents as ready for pickup
+- [ ] Marking documents as ready for claim
 - [ ] Processing document release
 - [ ] Handling refunds
 - [ ] Using the admin dashboard

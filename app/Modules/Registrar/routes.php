@@ -26,6 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('registrar.document-requests.index');
         Route::get('document-requests/{documentRequest}', [DocumentRequestController::class, 'show'])
             ->name('registrar.document-requests.show');
+        Route::post('document-requests/{documentRequest}/confirm-claim', [DocumentRequestController::class, 'confirmClaim'])
+            ->name('registrar.document-requests.confirm-claim');
     });
 
     Route::middleware(['permission:make_payments', 'throttle:20,1'])->group(function () {

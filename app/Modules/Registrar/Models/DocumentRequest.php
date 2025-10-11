@@ -2,6 +2,7 @@
 
 namespace App\Modules\Registrar\Models;
 
+use App\Enums\DocumentRequestStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,6 @@ class DocumentRequest extends Model
         'request_number',
         'student_id',
         'document_type',
-        'processing_type',
         'quantity',
         'purpose',
         'amount',
@@ -31,20 +31,21 @@ class DocumentRequest extends Model
         'released_at',
         'rejection_reason',
         'notes',
-        'picked_up_by_student',
-        'picked_up_at',
-        'pickup_notes',
+        'claimed_by_student',
+        'claimed_at',
+        'claim_notes',
     ];
 
     protected $casts = [
+        'status' => DocumentRequestStatus::class,
         'amount' => 'float',
         'quantity' => 'integer',
         'payment_deadline' => 'datetime',
         'released_at' => 'datetime',
         'processed_by' => 'integer',
         'released_by' => 'integer',
-        'picked_up_by_student' => 'boolean',
-        'picked_up_at' => 'datetime',
+        'claimed_by_student' => 'boolean',
+        'claimed_at' => 'datetime',
     ];
 
     /**
@@ -108,15 +109,47 @@ class DocumentRequest extends Model
      */
     public function isPaid(): bool
     {
-        return $this->status === 'paid' || $this->payments()->where('status', 'paid')->exists();
+        return $this->status === DocumentRequestStatus::Paid || $this->payments()->where('status', 'paid')->exists();
+    }
+
+    /**
+     * Check if the request is pending payment.
+     */
+    public function isPendingPayment(): bool
+    {
+        return $this->status === DocumentRequestStatus::PendingPayment;
+    }
+
+    /**
+     * Check if the payment is expired.
+     */
+    public function isPaymentExpired(): bool
+    {
+        return $this->status === DocumentRequestStatus::PaymentExpired;
+    }
+
+    /**
+     * Check if the request is being processed.
+     */
+    public function isProcessing(): bool
+    {
+        return $this->status === DocumentRequestStatus::Processing;
     }
 
     /**
      * Check if the request is ready for pickup.
      */
-    public function isReadyForPickup(): bool
+    public function isReadyForClaim(): bool
     {
-        return $this->status === 'ready_for_pickup';
+        return $this->status === DocumentRequestStatus::ReadyForClaim;
+    }
+
+    /**
+     * Check if the request has been picked up.
+     */
+    public function isClaimed(): bool
+    {
+        return $this->status === DocumentRequestStatus::Claimed;
     }
 
     /**
@@ -124,6 +157,215 @@ class DocumentRequest extends Model
      */
     public function isReleased(): bool
     {
-        return $this->status === 'released';
+        return $this->status === DocumentRequestStatus::Released;
+    }
+
+    /**
+     * Check if the request is cancelled.
+     */
+    public function isCancelled(): bool
+    {
+        return $this->status === DocumentRequestStatus::Cancelled;
+    }
+
+    /**
+     * Check if the request is rejected.
+     */
+    public function isRejected(): bool
+    {
+        return $this->status === DocumentRequestStatus::Rejected;
+    }
+
+    /**
+     * Check if the request is in a final state.
+     */
+    public function isFinal(): bool
+    {
+        return $this->status->isFinal();
+    }
+
+    /**
+     * Check if the request is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->status->isActive();
+    }
+
+    /**
+     * Scope query to only active requests.
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', DocumentRequestStatus::activeStatuses());
+    }
+
+    /**
+     * Scope query to only pending payment requests.
+     */
+    public function scopePendingPayment($query)
+    {
+        return $query->where('status', DocumentRequestStatus::PendingPayment);
+    }
+
+    /**
+     * Scope query to only paid requests.
+     */
+    public function scopePaid($query)
+    {
+        return $query->where('status', DocumentRequestStatus::Paid);
+    }
+
+    /**
+     * Scope query to only processing requests.
+     */
+    public function scopeProcessing($query)
+    {
+        return $query->where('status', DocumentRequestStatus::Processing);
+    }
+
+    /**
+     * Scope query to only ready for claim requests.
+     */
+    public function scopeReadyForClaim($query)
+    {
+        return $query->where('status', DocumentRequestStatus::ReadyForClaim);
+    }
+
+    /**
+     * Scope query to only claimed requests.
+     */
+    public function scopeClaimed($query)
+    {
+        return $query->where('status', DocumentRequestStatus::Claimed);
+    }
+
+    /**
+     * Scope query to only released requests.
+     */
+    public function scopeReleased($query)
+    {
+        return $query->where('status', DocumentRequestStatus::Released);
+    }
+
+    /**
+     * Transition the request to a new status.
+     */
+    public function transitionTo(DocumentRequestStatus $newStatus, ?string $reason = null): bool
+    {
+        if (! $this->status->canTransitionTo($newStatus)) {
+            return false;
+        }
+
+        $this->status = $newStatus;
+
+        if ($newStatus === DocumentRequestStatus::Rejected && $reason) {
+            $this->rejection_reason = $reason;
+        }
+
+        if ($newStatus === DocumentRequestStatus::Claimed) {
+            $this->claimed_at = now();
+            $this->claimed_by_student = true;
+        }
+
+        if ($newStatus === DocumentRequestStatus::Released) {
+            $this->released_at = now();
+        }
+
+        return $this->save();
+    }
+
+    /**
+     * Mark the request as paid.
+     */
+    public function markAsPaid(string $paymentMethod, ?string $reference = null): bool
+    {
+        $this->payment_method = $paymentMethod;
+
+        return $this->transitionTo(DocumentRequestStatus::Paid);
+    }
+
+    /**
+     * Mark the request as processing.
+     */
+    public function markAsProcessing(): bool
+    {
+        return $this->transitionTo(DocumentRequestStatus::Processing);
+    }
+
+    /**
+     * Mark the request as ready for claim.
+     */
+    public function markAsReadyForClaim(): bool
+    {
+        return $this->transitionTo(DocumentRequestStatus::ReadyForClaim);
+    }
+
+    /**
+     * Mark the request as claimed.
+     */
+    public function markAsClaimed(): bool
+    {
+        return $this->transitionTo(DocumentRequestStatus::Claimed);
+    }
+
+    /**
+     * Mark the request as released.
+     */
+    public function markAsReleased(): bool
+    {
+        return $this->transitionTo(DocumentRequestStatus::Released);
+    }
+
+    /**
+     * Reject the request with a reason.
+     */
+    public function reject(string $reason): bool
+    {
+        return $this->transitionTo(DocumentRequestStatus::Rejected, $reason);
+    }
+
+    /**
+     * Cancel the request.
+     */
+    public function cancel(): bool
+    {
+        return $this->transitionTo(DocumentRequestStatus::Cancelled);
+    }
+
+    /**
+     * Get the count of document requests created today.
+     */
+    public static function getTodayRequestCount(?string $studentId = null): int
+    {
+        $query = self::whereDate('created_at', today());
+
+        if ($studentId !== null) {
+            $query->where('student_id', $studentId);
+        }
+
+        return $query->count();
+    }
+
+    /**
+     * Check if the daily request limit has been reached.
+     */
+    public static function hasReachedDailyLimit(?string $studentId = null): bool
+    {
+        $dailyLimit = \App\Models\SystemSetting::getDailyLimit();
+        $todayCount = self::getTodayRequestCount($studentId);
+
+        return $todayCount >= $dailyLimit;
+    }
+
+    /**
+     * Get the number of remaining requests allowed for today.
+     */
+    public static function getRemainingDailyRequests(?string $studentId = null): int
+    {
+        $dailyLimit = \App\Models\SystemSetting::getDailyLimit();
+        $todayCount = self::getTodayRequestCount($studentId);
+
+        return max(0, $dailyLimit - $todayCount);
     }
 }

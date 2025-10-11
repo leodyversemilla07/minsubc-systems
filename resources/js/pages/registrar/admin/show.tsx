@@ -80,7 +80,7 @@ export default function Show({ request }: Props) {
     ];
 
     const canGenerate = request.status === 'paid' || request.status === 'processing';
-    const canDownload = request.status === 'ready_for_pickup' || request.status === 'released';
+    const canDownload = request.status === 'ready_for_claim' || request.status === 'claimed' || request.status === 'released';
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

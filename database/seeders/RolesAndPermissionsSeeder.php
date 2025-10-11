@@ -30,12 +30,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'issue_official_receipts',
             'verify_payment_references', // For PRN verification
 
-            // Registrar Staff permissions (from DRS.md: "View all requests, process documents, approve/reject, mark ready for pickup")
+            // Registrar Staff permissions (from DRS.md: "View all requests, process documents, approve/reject, mark ready for claim")
             'view_all_requests',
             'process_documents',
             'approve_requests',
             'reject_requests',
-            'mark_ready_for_pickup',
+            'mark_ready_for_claim',
             'release_documents', // For final document release
 
             // Registrar Admin permissions (from DRS.md: "All staff permissions + user management, system configuration")
@@ -80,7 +80,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'process_documents',
             'approve_requests',
             'reject_requests',
-            'mark_ready_for_pickup',
+            'mark_ready_for_claim',
             'release_documents',
         ]);
 
@@ -91,7 +91,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'process_documents',
             'approve_requests',
             'reject_requests',
-            'mark_ready_for_pickup',
+            'mark_ready_for_claim',
             'release_documents',
             // Plus admin permissions
             'manage_users',
@@ -113,7 +113,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'process_documents',
             'approve_requests',
             'reject_requests',
-            'mark_ready_for_pickup',
+            'mark_ready_for_claim',
             'release_documents',
             'manage_users',
             'system_configuration',

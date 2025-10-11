@@ -46,7 +46,8 @@ class AdminController extends Controller
             'pending_payment' => DocumentRequest::where('status', 'pending_payment')->count(),
             'paid' => DocumentRequest::where('status', 'paid')->count(),
             'processing' => DocumentRequest::where('status', 'processing')->count(),
-            'ready_for_pickup' => DocumentRequest::where('status', 'ready_for_pickup')->count(),
+            'ready_for_claim' => DocumentRequest::where('status', 'ready_for_claim')->count(),
+            'claimed' => DocumentRequest::where('status', 'claimed')->count(),
         ];
 
         return Inertia::render('registrar/admin/dashboard', [
@@ -80,7 +81,7 @@ class AdminController extends Controller
     public function updateStatus(Request $request, DocumentRequest $documentRequest)
     {
         $request->validate([
-            'status' => 'required|string|in:pending_payment,payment_expired,paid,processing,ready_for_pickup,released,cancelled,rejected',
+            'status' => 'required|string|in:pending_payment,payment_expired,paid,processing,ready_for_claim,claimed,released,cancelled,rejected',
             'notes' => 'nullable|string|max:500',
         ]);
 
@@ -111,7 +112,7 @@ class AdminController extends Controller
         );
 
         // Send notifications based on status change
-        if ($request->status === 'ready_for_pickup' && $oldStatus !== 'ready_for_pickup') {
+        if ($request->status === 'ready_for_claim' && $oldStatus !== 'ready_for_claim') {
             // Notify student that document is ready
             // $this->notificationService->notifyDocumentReady($documentRequest);
         } elseif ($request->status === 'released' && $oldStatus !== 'released') {
@@ -141,7 +142,7 @@ class AdminController extends Controller
 
             // Update request status
             $documentRequest->update([
-                'status' => 'ready_for_pickup',
+                'status' => 'ready_for_claim',
                 'processed_by' => Auth::id(),
             ]);
 
@@ -153,7 +154,7 @@ class AdminController extends Controller
                 $documentRequest->id,
                 $oldRequest,
                 $documentRequest->fresh()->toArray(),
-                "Document generated and marked as ready for pickup for request {$documentRequest->request_number}",
+                "Document generated and marked as ready for claim for request {$documentRequest->request_number}",
                 [
                     'request_number' => $documentRequest->request_number,
                     'document_type' => $documentRequest->document_type,
@@ -165,7 +166,7 @@ class AdminController extends Controller
             // TODO: Send notification to student
 
             return redirect()->route('registrar.admin.dashboard')
-                ->with('success', 'Document generated and marked as ready for pickup.');
+                ->with('success', 'Document generated and marked as ready for claim.');
         } catch (\Exception $e) {
             return redirect()->route('registrar.admin.dashboard')
                 ->with('error', 'Failed to generate document: '.$e->getMessage());
@@ -183,9 +184,9 @@ class AdminController extends Controller
             'released_id_number' => 'nullable|string|max:50',
         ]);
 
-        if ($documentRequest->status !== 'ready_for_pickup') {
+        if ($documentRequest->status !== 'ready_for_claim') {
             return redirect()->route('registrar.admin.dashboard')
-                ->with('error', 'Document must be ready for pickup first.');
+                ->with('error', 'Document must be ready for claim first.');
         }
 
         $oldRequest = $documentRequest->toArray();
@@ -238,7 +239,7 @@ class AdminController extends Controller
 
             // Update request status to indicate document is generated
             $documentRequest->update([
-                'status' => 'ready_for_pickup',
+                'status' => 'ready_for_claim',
                 'processed_by' => Auth::id(),
             ]);
 

@@ -43,7 +43,7 @@ interface DashboardProps {
         total_requests: number;
         pending_payment: number;
         processing: number;
-        ready_for_pickup: number;
+        ready_for_claim: number;
         completed: number;
     };
     recent_requests: Array<{
@@ -63,7 +63,8 @@ export default function Dashboard({ user, stats, recent_requests }: DashboardPro
             case 'payment_expired': return <XCircle className="w-4 h-4" />;
             case 'paid': return <CheckCircle className="w-4 h-4" />;
             case 'processing': return <Clock className="w-4 h-4" />;
-            case 'ready_for_pickup': return <CheckCircle className="w-4 h-4" />;
+            case 'ready_for_claim': return <CheckCircle className="w-4 h-4" />;
+            case 'claimed': return <CheckCircle className="w-4 h-4" />;
             case 'released': return <CheckCircle className="w-4 h-4" />;
             case 'cancelled': return <XCircle className="w-4 h-4" />;
             case 'rejected': return <XCircle className="w-4 h-4" />;
@@ -148,13 +149,13 @@ export default function Dashboard({ user, stats, recent_requests }: DashboardPro
 
                     <Card className="transition-shadow hover:shadow-md">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                            <CardTitle className="text-sm font-medium">Ready for Pickup</CardTitle>
+                            <CardTitle className="text-sm font-medium">Ready for Claim</CardTitle>
                             <CheckCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent className="pt-0">
-                            <div className="text-2xl font-bold">{stats.ready_for_pickup}</div>
+                            <div className="text-2xl font-bold">{stats.ready_for_claim}</div>
                             <p className="text-xs text-muted-foreground mt-1">
-                                Available for pickup
+                                Available for claim
                             </p>
                         </CardContent>
                     </Card>

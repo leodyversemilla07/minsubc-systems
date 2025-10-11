@@ -2,7 +2,9 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Enums\DocumentType;
 use App\Models\AuditLog;
+use App\Models\SystemSetting;
 use App\Modules\Registrar\Http\Requests\StoreDocumentRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Services\NotificationService;
@@ -48,30 +50,24 @@ class DocumentRequestController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $student = $user->student;
+
+        if (! $student) {
+            return back()->withErrors(['student' => 'Student record not found. Please contact registrar.']);
+        }
+
+        $dailyLimit = SystemSetting::getDailyLimit();
+        $todayCount = DocumentRequest::getTodayRequestCount($student->student_id);
+        $remaining = DocumentRequest::getRemainingDailyRequests($student->student_id);
+        $hasReachedLimit = DocumentRequest::hasReachedDailyLimit($student->student_id);
+
         return Inertia::render('registrar/document-requests/create', [
-            'documentTypes' => [
-                'coe' => 'Certificate of Enrollment',
-                'cog' => 'Certificate of Grades',
-                'tor' => 'Transcript of Records',
-                'honorable_dismissal' => 'Honorable Dismissal',
-                'certificate_good_moral' => 'Certificate of Good Moral Character',
-                'cav' => 'Certificate of Authentication and Verification',
-                'diploma' => 'Diploma (Certified True Copy)',
-                'so' => 'Special Order copies',
-                'form_137' => 'Form 137',
-            ],
-            'processingTypes' => [
-                'regular' => [
-                    'label' => 'Regular Processing',
-                    'days' => '5-7 working days',
-                    'price' => 100,
-                ],
-                'rush' => [
-                    'label' => 'Rush Processing',
-                    'days' => '2-3 working days',
-                    'price' => 200,
-                ],
-            ],
+            'documentTypes' => DocumentType::withPrices(),
+            'dailyLimit' => $dailyLimit,
+            'todayCount' => $todayCount,
+            'remaining' => $remaining,
+            'hasReachedLimit' => $hasReachedLimit,
         ]);
     }
 
@@ -89,9 +85,9 @@ class DocumentRequestController extends Controller
 
         $validated = $request->validated();
 
-        // Calculate amount based on processing type
-        $basePrice = $validated['processing_type'] === 'rush' ? 150 : 50;
-        $amount = $basePrice * $validated['quantity'];
+        // Get document type enum and calculate amount
+        $documentType = DocumentType::from($validated['document_type']);
+        $amount = $documentType->basePrice() * $validated['quantity'];
 
         $createdRequest = null;
         DB::transaction(function () use ($student, $validated, $amount, &$createdRequest) {
@@ -99,7 +95,6 @@ class DocumentRequestController extends Controller
                 'request_number' => $this->generateRequestNumber(),
                 'student_id' => $student->student_id,
                 'document_type' => $validated['document_type'],
-                'processing_type' => $validated['processing_type'],
                 'quantity' => $validated['quantity'],
                 'purpose' => $validated['purpose'],
                 'amount' => $amount,
@@ -122,7 +117,6 @@ class DocumentRequestController extends Controller
                 [
                     'request_number' => $createdRequest->request_number,
                     'document_type' => $createdRequest->document_type,
-                    'processing_type' => $createdRequest->processing_type,
                     'quantity' => $createdRequest->quantity,
                     'amount' => $createdRequest->amount,
                 ]
@@ -164,21 +158,7 @@ class DocumentRequestController extends Controller
 
         return Inertia::render('registrar/document-requests/edit', [
             'request' => $documentRequest,
-            'documentTypes' => [
-                'coe' => 'Certificate of Enrollment',
-                'cog' => 'Certificate of Grades',
-                'tor' => 'Transcript of Records',
-                'honorable_dismissal' => 'Honorable Dismissal',
-                'certificate_good_moral' => 'Certificate of Good Moral Character',
-                'cav' => 'Certificate of Authentication and Verification',
-                'diploma' => 'Diploma (Certified True Copy)',
-                'so' => 'Special Order',
-                'form_137' => 'Form 137',
-            ],
-            'processingTypes' => [
-                'regular' => ['label' => 'Regular Processing', 'days' => '5-7 working days', 'price' => 50],
-                'rush' => ['label' => 'Rush Processing', 'days' => '2-3 working days', 'price' => 150],
-            ],
+            'documentTypes' => DocumentType::withPrices(),
         ]);
     }
 
@@ -193,13 +173,12 @@ class DocumentRequestController extends Controller
 
         $validated = $request->validated();
 
-        // Recalculate amount
-        $basePrice = $validated['processing_type'] === 'rush' ? 150 : 50;
-        $amount = $basePrice * $validated['quantity'];
+        // Get document type enum and recalculate amount
+        $documentType = DocumentType::from($validated['document_type']);
+        $amount = $documentType->basePrice() * $validated['quantity'];
 
         $documentRequest->update([
             'document_type' => $validated['document_type'],
-            'processing_type' => $validated['processing_type'],
             'quantity' => $validated['quantity'],
             'purpose' => $validated['purpose'],
             'amount' => $amount,
@@ -222,6 +201,61 @@ class DocumentRequestController extends Controller
 
         return redirect()->route('registrar.document-requests.index')
             ->with('success', 'Document request deleted successfully.');
+    }
+
+    /**
+     * Confirm document claim by student
+     */
+    public function confirmClaim(Request $request, DocumentRequest $documentRequest)
+    {
+        $user = Auth::user();
+
+        // Ensure the request belongs to the current user's student record
+        if (! $user->student || $documentRequest->student_id !== $user->student->student_id) {
+            abort(403, 'Unauthorized access to this request.');
+        }
+
+        // Only ready_for_claim requests can be confirmed
+        if ($documentRequest->status->value !== 'ready_for_claim') {
+            return back()->withErrors([
+                'claim' => 'This document is not ready for claim yet.',
+            ]);
+        }
+
+        $request->validate([
+            'confirmation' => 'required|boolean',
+            'claim_notes' => 'nullable|string|max:500',
+        ]);
+
+        if ($request->confirmation) {
+            // Mark as claimed
+            $documentRequest->markAsClaimed();
+
+            if ($request->claim_notes) {
+                $documentRequest->claim_notes = $request->claim_notes;
+                $documentRequest->save();
+            }
+
+            // Log the claim confirmation
+            AuditLog::log(
+                'document_claimed',
+                $user->id,
+                DocumentRequest::class,
+                $documentRequest->id,
+                null,
+                $documentRequest->toArray(),
+                'Student confirmed document claim'
+            );
+
+            // Send notification to registrar staff
+            $this->notificationService->notifyStudentClaimed($documentRequest);
+
+            return back()->with('success', 'Document claim confirmed! You can now collect your document from the registrar office.');
+        }
+
+        return back()->withErrors([
+            'confirmation' => 'Please confirm to proceed.',
+        ]);
     }
 
     /**

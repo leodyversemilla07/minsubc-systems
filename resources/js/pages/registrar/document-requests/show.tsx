@@ -265,8 +265,8 @@ export default function Show({ request }: Props) {
                             </CardContent>
                         </Card>
 
-                        {/* Document Ready for Pickup - Informational Only */}
-                        {request.status === 'ready_for_pickup' && (
+                        {/* Document Ready for Claim - Informational Only */}
+                        {(request.status === 'ready_for_claim' || request.status === 'claimed') && (
                             <Card className="shadow-lg">
                                 <CardHeader className="space-y-3 pb-6">
                                     <div className="flex items-center gap-3">
@@ -274,9 +274,14 @@ export default function Show({ request }: Props) {
                                             <Package className="w-6 h-6 text-primary-foreground" />
                                         </div>
                                         <div className="flex-1">
-                                            <CardTitle className="text-xl">Document Ready for Pickup</CardTitle>
+                                            <CardTitle className="text-xl">
+                                                {request.status === 'claimed' ? 'Document Claimed' : 'Document Ready for Claim'}
+                                            </CardTitle>
                                             <CardDescription className="text-base mt-1">
-                                                Your document is waiting for you at the Registrar's Office
+                                                {request.status === 'claimed' 
+                                                    ? 'You have picked up this document from the Registrar\'s Office'
+                                                    : 'Your document is waiting for you at the Registrar\'s Office'
+                                                }
                                             </CardDescription>
                                         </div>
                                     </div>

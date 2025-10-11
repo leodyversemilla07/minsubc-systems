@@ -117,7 +117,7 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         // Check if student has active document requests
-        if ($student->documentRequests()->whereIn('status', ['pending_payment', 'paid', 'processing', 'ready_for_pickup'])->exists()) {
+        if ($student->documentRequests()->whereIn('status', ['pending_payment', 'paid', 'processing', 'ready_for_claim', 'claimed'])->exists()) {
             return back()->with('error', 'Cannot delete student with active document requests.');
         }
 

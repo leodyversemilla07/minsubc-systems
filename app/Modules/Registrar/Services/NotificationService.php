@@ -275,4 +275,19 @@ class NotificationService
 
         // TODO: Send notification to registrar staff dashboard or email group
     }
+
+    /**
+     * Notify registrar staff when student claims document is ready
+     */
+    public function notifyStudentClaimed(DocumentRequest $request): void
+    {
+        Log::info('Student confirmed document ready for claim', [
+            'request_id' => $request->id,
+            'request_number' => $request->request_number,
+            'student_id' => $request->student_id,
+        ]);
+
+        // TODO: Send notification to registrar staff dashboard or email group
+        // This could notify staff that the student acknowledged the document is ready
+    }
 }
