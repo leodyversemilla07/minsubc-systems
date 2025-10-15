@@ -33,6 +33,9 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate --ansi
+          touch database/database.sqlite
+          echo "DB_DATABASE=${{ github.workspace }}/database/database.sqlite" >> .env
+          php artisan migrate --force --no-interaction
 
       - name: Run Pint
         run: vendor/bin/pint
