@@ -35,9 +35,7 @@ import {
     ChevronDown,
     Clock,
     DollarSign,
-    Download,
     Eye,
-    FileCheck,
     FileText,
     Filter,
     MoreVertical,
@@ -271,13 +269,6 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             header: 'Actions',
             cell: ({ row }) => {
                 const request = row.original;
-                const canGenerate =
-                    request.status === 'paid' ||
-                    request.status === 'processing';
-                const canDownload =
-                    request.status === 'ready_for_claim' ||
-                    request.status === 'claimed' ||
-                    request.status === 'released';
                 const canRelease =
                     request.status === 'ready_for_claim' ||
                     request.status === 'claimed';
@@ -311,38 +302,7 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                 View Details
                             </DropdownMenuItem>
 
-                            {canGenerate && (
-                                <>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem
-                                        onClick={() => {
-                                            if (
-                                                confirm(
-                                                    'Generate document for this request?',
-                                                )
-                                            ) {
-                                                window.location.href = `/admin/requests/${request.request_number}/generate`;
-                                            }
-                                        }}
-                                    >
-                                        <FileCheck className="mr-2 h-4 w-4" />
-                                        Generate Document
-                                    </DropdownMenuItem>
-                                </>
-                            )}
-
-                            {canDownload && (
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        window.location.href = `/admin/requests/${request.request_number}/download`;
-                                    }}
-                                >
-                                    <Download className="mr-2 h-4 w-4" />
-                                    Download Document
-                                </DropdownMenuItem>
-                            )}
-
-                            {canRelease && (
+                                            {canRelease && (
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem

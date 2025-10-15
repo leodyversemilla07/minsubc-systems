@@ -156,7 +156,6 @@ app/Modules/Registrar/
 │   ├── Notification.php                   ← Notification model
 │   └── AuditLog.php                       ← Audit log model
 ├── Services/
-│   ├── DocumentGenerator.php              ← PDF generation
 │   ├── PaymentService.php                 ← Payment processing logic
 │   └── NotificationService.php            ← Notification handling
 └── routes.php                             ← Module routes
@@ -603,7 +602,7 @@ Add module to sidebar navigation in `resources/js/components/nav-main.tsx`
 - Payment processing (digital via PayMongo, cash at counter)
 - Admin processing queue
 - Cashier payment verification
-- Document generation with QR verification
+- Integration with Registrar's existing document generation software
 
 **Routes:** All prefixed with `registrar.`
 - `registrar.document-requests.*` - Student document requests

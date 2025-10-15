@@ -428,13 +428,18 @@ test('cashier can print official receipt', function () {
         'paid_at' => now(),
     ]);
 
-    // Act as cashier and print receipt
+    // Act as cashier and access receipt data
     $response = $this->actingAs($cashier)->get(route('registrar.cashier.receipt', $payment));
 
-    // Assert PDF download response
-    $response->assertStatus(200);
-    $response->assertHeader('Content-Type', 'application/pdf');
-    $response->assertHeader('Content-Disposition', 'attachment; filename=OR-2025-001234.pdf');
+    // Assert JSON response with receipt data (for integration with registrar's existing software)
+    $response->assertStatus(200)
+        ->assertJson([
+            'official_receipt_number' => 'OR-2025-001234',
+            'payment' => [
+                'amount' => 100.00,
+                'status' => 'paid',
+            ],
+        ]);
 });
 
 test('cashier cannot print receipt for unconfirmed payment', function () {

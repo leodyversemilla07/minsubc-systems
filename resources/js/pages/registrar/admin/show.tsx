@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -8,7 +7,6 @@ import { statusColors } from '@/lib/status-colors';
 import { dashboard } from '@/routes/registrar/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Download, FileCheck } from 'lucide-react';
 
 interface DocumentRequest {
     id: number;
@@ -79,58 +77,19 @@ export default function Show({ request }: Props) {
         },
     ];
 
-    const canGenerate =
-        request.status === 'paid' || request.status === 'processing';
-    const canDownload =
-        request.status === 'ready_for_claim' ||
-        request.status === 'claimed' ||
-        request.status === 'released';
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Document Request ${request.request_number}`} />
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <div className="space-y-1">
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Request {request.request_number}
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Document Request Details
-                        </p>
-                    </div>
-                    <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-                        {canGenerate && (
-                            <Button
-                                variant="default"
-                                onClick={() => {
-                                    if (
-                                        confirm(
-                                            'Generate document for this request?',
-                                        )
-                                    ) {
-                                        window.location.href = `/admin/requests/${request.request_number}/generate`;
-                                    }
-                                }}
-                            >
-                                <FileCheck className="mr-2 h-4 w-4" />
-                                Generate Document
-                            </Button>
-                        )}
-                        {canDownload && (
-                            <Button
-                                variant="default"
-                                onClick={() => {
-                                    window.location.href = `/admin/requests/${request.request_number}/download`;
-                                }}
-                            >
-                                <Download className="mr-2 h-4 w-4" />
-                                Download
-                            </Button>
-                        )}
-                    </div>
+                <div className="space-y-1">
+                    <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                        Request {request.request_number}
+                    </h1>
+                    <p className="text-muted-foreground">
+                        Document Request Details
+                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

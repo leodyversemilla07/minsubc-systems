@@ -6,7 +6,6 @@ use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Payment;
 use App\Modules\Registrar\Services\NotificationService;
 use App\Modules\Registrar\Services\PaymentService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -333,7 +332,9 @@ class PaymentController extends Controller
     }
 
     /**
-     * Print official receipt for a confirmed payment
+     * Display official receipt information for a confirmed payment
+     * Note: Since registrar has their own software for receipt generation,
+     * this displays receipt data that can be integrated with their existing system
      */
     public function printOfficialReceipt(Payment $payment)
     {
@@ -342,20 +343,43 @@ class PaymentController extends Controller
             abort(403);
         }
 
-        // Only allow printing receipts for paid cash payments
+        // Only allow viewing receipts for paid cash payments
         if ($payment->status !== 'paid' || ! $payment->official_receipt_number) {
             abort(404);
         }
 
-        $pdf = Pdf::loadView('receipts.official', [
-            'payment' => $payment->load(['documentRequest.student.user', 'cashier']),
+        // Load related data
+        $payment->load(['documentRequest.student.user', 'cashier']);
+
+        // Return receipt data as JSON for integration with registrar's existing software
+        return response()->json([
+            'official_receipt_number' => $payment->official_receipt_number,
+            'payment' => [
+                'id' => $payment->id,
+                'amount' => $payment->amount,
+                'payment_method' => $payment->payment_method,
+                'status' => $payment->status,
+                'paid_at' => $payment->paid_at,
+                'reference_number' => $payment->reference_number,
+            ],
+            'document_request' => [
+                'request_number' => $payment->documentRequest->request_number,
+                'document_type' => $payment->documentRequest->document_type,
+                'purpose' => $payment->documentRequest->purpose,
+            ],
+            'student' => [
+                'student_id' => $payment->documentRequest->student->student_id,
+                'name' => $payment->documentRequest->student->user->full_name,
+                'email' => $payment->documentRequest->student->user->email,
+            ],
+            'cashier' => [
+                'name' => $payment->cashier->full_name ?? 'N/A',
+            ],
             'university' => [
                 'name' => config('app.name', 'MinSU Document Request System'),
                 'address' => 'Address here',
                 'contact' => 'Contact here',
             ],
         ]);
-
-        return $pdf->download("{$payment->official_receipt_number}.pdf");
     }
 }

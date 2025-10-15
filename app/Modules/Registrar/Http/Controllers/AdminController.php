@@ -4,10 +4,8 @@ namespace App\Modules\Registrar\Http\Controllers;
 
 use App\Models\AuditLog;
 use App\Modules\Registrar\Models\DocumentRequest;
-use App\Modules\Registrar\Services\DocumentGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -127,50 +125,42 @@ class AdminController extends Controller
     /**
      * Mark document as ready for pickup
      */
-    public function markReady(DocumentRequest $documentRequest, DocumentGenerator $documentGenerator)
+    public function markReady(DocumentRequest $documentRequest)
     {
         if ($documentRequest->status !== 'processing') {
             return redirect()->route('registrar.admin.dashboard')
                 ->with('error', 'Request must be in processing status.');
         }
 
-        try {
-            // Generate the document
-            $documentGenerator->generateDocument($documentRequest);
+        $oldRequest = $documentRequest->toArray();
 
-            $oldRequest = $documentRequest->toArray();
+        // Update request status - Registrar will handle document generation using their own software
+        $documentRequest->update([
+            'status' => 'ready_for_claim',
+            'processed_by' => Auth::id(),
+        ]);
 
-            // Update request status
-            $documentRequest->update([
-                'status' => 'ready_for_claim',
-                'processed_by' => Auth::id(),
-            ]);
+        // Log status change
+        AuditLog::log(
+            'document_ready',
+            Auth::id(),
+            DocumentRequest::class,
+            $documentRequest->id,
+            $oldRequest,
+            $documentRequest->fresh()->toArray(),
+            "Document marked as ready for claim for request {$documentRequest->request_number}",
+            [
+                'request_number' => $documentRequest->request_number,
+                'document_type' => $documentRequest->document_type,
+                'processed_by' => Auth::user()->name,
+                'marked_ready_at' => now()->toISOString(),
+            ]
+        );
 
-            // Log document generation and status change
-            AuditLog::log(
-                'document_generated',
-                Auth::id(),
-                DocumentRequest::class,
-                $documentRequest->id,
-                $oldRequest,
-                $documentRequest->fresh()->toArray(),
-                "Document generated and marked as ready for claim for request {$documentRequest->request_number}",
-                [
-                    'request_number' => $documentRequest->request_number,
-                    'document_type' => $documentRequest->document_type,
-                    'processed_by' => Auth::user()->name,
-                    'generated_at' => now()->toISOString(),
-                ]
-            );
+        // TODO: Send notification to student
 
-            // TODO: Send notification to student
-
-            return redirect()->route('registrar.admin.dashboard')
-                ->with('success', 'Document generated and marked as ready for claim.');
-        } catch (\Exception $e) {
-            return redirect()->route('registrar.admin.dashboard')
-                ->with('error', 'Failed to generate document: '.$e->getMessage());
-        }
+        return redirect()->route('registrar.admin.dashboard')
+            ->with('success', 'Document marked as ready for claim.');
     }
 
     /**
@@ -224,87 +214,6 @@ class AdminController extends Controller
 
         return redirect()->route('registrar.admin.dashboard')
             ->with('success', 'Document released successfully.');
-    }
-
-    /**
-     * Generate document PDF
-     */
-    public function generateDocument(DocumentRequest $documentRequest, DocumentGenerator $documentGenerator)
-    {
-        try {
-            // Generate the document
-            $filePath = $documentGenerator->generateDocument($documentRequest);
-
-            $oldRequest = $documentRequest->toArray();
-
-            // Update request status to indicate document is generated
-            $documentRequest->update([
-                'status' => 'ready_for_claim',
-                'processed_by' => Auth::id(),
-            ]);
-
-            // Log document generation
-            AuditLog::log(
-                'document_generated',
-                Auth::id(),
-                DocumentRequest::class,
-                $documentRequest->id,
-                $oldRequest,
-                $documentRequest->fresh()->toArray(),
-                "Document generated for request {$documentRequest->request_number}",
-                [
-                    'request_number' => $documentRequest->request_number,
-                    'document_type' => $documentRequest->document_type,
-                    'file_path' => $filePath,
-                    'processed_by' => Auth::user()->name,
-                    'generated_at' => now()->toISOString(),
-                ]
-            );
-
-            return redirect()->route('registrar.admin.dashboard')
-                ->with('success', 'Document generated successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('registrar.admin.dashboard')
-                ->with('error', 'Failed to generate document: '.$e->getMessage());
-        }
-    }
-
-    /**
-     * Download generated document
-     */
-    public function downloadDocument(DocumentRequest $documentRequest)
-    {
-        $filename = $this->getDocumentFilename($documentRequest);
-
-        if (! Storage::exists('documents/'.$filename)) {
-            return redirect()->route('registrar.admin.dashboard')
-                ->with('error', 'Document not found. Please generate it first.');
-        }
-
-        return Storage::download('documents/'.$filename, $filename);
-    }
-
-    /**
-     * Get the expected filename for a document
-     */
-    private function getDocumentFilename(DocumentRequest $documentRequest): string
-    {
-        $typeMap = [
-            'coe' => 'COE',
-            'tor' => 'TOR',
-            'cog' => 'COG', // Certificate of Grades
-            'certificate_good_moral' => 'CERTIFICATE_GOOD_MORAL',
-            'honorable_dismissal' => 'Honorable_Dismissal',
-            'cav' => 'CAV',
-            'diploma' => 'Diploma',
-            'grades' => 'COG', // Certificate of Grades
-            'so' => 'SO',
-            'form_137' => 'Form_137',
-        ];
-
-        $prefix = $typeMap[$documentRequest->document_type] ?? 'Document';
-
-        return $prefix.'_'.$documentRequest->request_number.'.pdf';
     }
 
     /**

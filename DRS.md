@@ -28,7 +28,7 @@ A web-based system to automate document request processing for MinSU Registrar's
 - Online document request submission
 - Dual payment modes: Digital (PayMongo) and Cash (Pay-at-Counter)
 - Real-time request tracking
-- Automated document generation
+- Integration with Registrar's existing document generation software
 - SMS/Email notifications
 - Physical claim with ID verification
 - Admin dashboard for registrar staff
@@ -564,38 +564,34 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
    - Payment status (Paid ✓)
    - Processing type
    ↓
-5. Click "Process Document"
+5. Click "Mark as Processing"
    ↓
-6. System auto-generates document from student database
+6. Use Registrar's existing software to generate document
    ↓
-7. Review generated document
+7. Physically prepare and sign document with university seal
    ↓
-8. Options:
-   - [Approve & Print] → Prints document
+8. Options in system:
+   - [Mark as Ready] → Document prepared
    - [Reject] → Enter reason, triggers refund
    ↓
-9. Print document with university seal/letterhead
+9. Click "Mark as Ready for Claim"
    ↓
-10. Physically sign and seal document
+10. System sends notification to student
     ↓
-11. Click "Mark as Ready for Claim"
+11. Student visits Registrar Office
     ↓
-12. System sends notification to student
+12. Verify student ID
     ↓
-13. Student visits Registrar Office
+13. Student signs release log
     ↓
-14. Verify student ID
+14. Click "Mark as Released"
     ↓
-15. Student signs release log
-    ↓
-16. Click "Mark as Released"
-    ↓
-17. Enter:
+15. Enter:
     - Released to: Juan Dela Cruz
     - ID Type: Student ID
     - ID Number: 2021-00001
     ↓
-18. Hand over document to student
+16. Hand over document to student
 ```
 
 ---
@@ -930,7 +926,7 @@ INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 - [ ] PayMongo integration
 - [ ] Cash payment system
 - [ ] Notification system (SMS/Email)
-- [ ] Document generation engine
+- [ ] Integration with Registrar's existing document software
 - [ ] Admin/staff APIs
 
 ### Phase 4: Frontend Development (Weeks 8-12)
@@ -1571,7 +1567,10 @@ setInterval(processNotificationQueue, 5 * 60 * 1000);
 
 ## 13. Document Generation System
 
-### 13.1 Template Engine
+> **⚠️ DEPRECATED:** This section is kept for historical reference only.  
+> **Current Implementation:** The system now integrates with the Registrar's existing document generation software instead of generating PDFs internally. The workflow tracks document requests through all stages (payment, processing, ready for claim, release) without generating documents in the system.
+
+### 13.1 Legacy Template Engine (Deprecated)
 
 **Certificate of Enrollment Template:**
 ```html

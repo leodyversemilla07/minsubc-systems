@@ -66,10 +66,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('registrar.admin.requests.mark-ready');
         Route::post('admin/requests/{documentRequest}/release', [AdminController::class, 'releaseDocument'])
             ->name('registrar.admin.requests.release');
-        Route::get('admin/requests/{documentRequest}/generate', [AdminController::class, 'generateDocument'])
-            ->name('registrar.admin.requests.generate');
-        Route::get('admin/requests/{documentRequest}/download', [AdminController::class, 'downloadDocument'])
-            ->name('registrar.admin.requests.download');
 
         // Audit log routes - accessible to registrar admin and system admin
         Route::get('admin/audit-logs', [AdminController::class, 'auditLogs'])->name('registrar.admin.audit-logs');

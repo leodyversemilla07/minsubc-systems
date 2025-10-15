@@ -59,7 +59,6 @@ The **MinSU BC Systems Platform** is a modern, modular monorepo application buil
 - ✅ **Audit Logging** - Complete activity tracking and compliance
 - ✅ **Real-time Notifications** - Email and SMS notifications
 - ✅ **Payment Integration** - PayMongo integration for online payments
-- ✅ **Document Generation** - Automated PDF generation with QR verification
 - ✅ **Dark Mode Support** - System-wide theme switching
 - ✅ **Responsive Design** - Mobile-first, works on all devices
 - ✅ **Type-Safe Frontend** - Full TypeScript implementation
@@ -73,7 +72,7 @@ The **MinSU BC Systems Platform** is a modern, modular monorepo application buil
 - Real-time request tracking with unique reference numbers
 - Admin processing queue and workflow management
 - Cashier portal for payment verification
-- Automated document generation with QR codes
+- Integration with Registrar's existing document generation software
 - Physical claim with ID verification
 - SMS/Email notifications at every status change
 
@@ -163,7 +162,6 @@ minsubc-systems/
 | **Inertia.js (Server)** | 2.0.10 | Modern monolith SPA adapter |
 | **Laravel Fortify** | 1.31.1 | Authentication backend |
 | **Spatie Permission** | 6.21 | Role-based access control |
-| **DomPDF** | 3.1 | PDF document generation |
 | **MySQL** | 8.0+ | Relational database |
 
 ### Frontend
