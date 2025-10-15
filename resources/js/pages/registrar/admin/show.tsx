@@ -1,14 +1,14 @@
-import { Head } from '@inertiajs/react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
-import { Download, FileCheck } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
+import { statusColors } from '@/lib/status-colors';
 import { dashboard } from '@/routes/registrar/admin';
 import { type BreadcrumbItem } from '@/types';
-import { statusColors } from '@/lib/status-colors';
+import { Head } from '@inertiajs/react';
+import { Download, FileCheck } from 'lucide-react';
 
 interface DocumentRequest {
     id: number;
@@ -79,8 +79,12 @@ export default function Show({ request }: Props) {
         },
     ];
 
-    const canGenerate = request.status === 'paid' || request.status === 'processing';
-    const canDownload = request.status === 'ready_for_claim' || request.status === 'claimed' || request.status === 'released';
+    const canGenerate =
+        request.status === 'paid' || request.status === 'processing';
+    const canDownload =
+        request.status === 'ready_for_claim' ||
+        request.status === 'claimed' ||
+        request.status === 'released';
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -97,88 +101,146 @@ export default function Show({ request }: Props) {
                             Document Request Details
                         </p>
                     </div>
-                    <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
+                    <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                         {canGenerate && (
-                            <Button 
+                            <Button
                                 variant="default"
                                 onClick={() => {
-                                    if (confirm('Generate document for this request?')) {
+                                    if (
+                                        confirm(
+                                            'Generate document for this request?',
+                                        )
+                                    ) {
                                         window.location.href = `/admin/requests/${request.request_number}/generate`;
                                     }
                                 }}
                             >
-                                <FileCheck className="w-4 h-4 mr-2" />
+                                <FileCheck className="mr-2 h-4 w-4" />
                                 Generate Document
                             </Button>
                         )}
                         {canDownload && (
-                            <Button 
+                            <Button
                                 variant="default"
                                 onClick={() => {
                                     window.location.href = `/admin/requests/${request.request_number}/download`;
                                 }}
                             >
-                                <Download className="w-4 h-4 mr-2" />
+                                <Download className="mr-2 h-4 w-4" />
                                 Download
                             </Button>
                         )}
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Main Request Details */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="space-y-6 lg:col-span-2">
                         <Card className="transition-shadow hover:shadow-md">
                             <CardHeader className="pb-4">
-                                <CardTitle className="text-lg">Request Information</CardTitle>
+                                <CardTitle className="text-lg">
+                                    Request Information
+                                </CardTitle>
                             </CardHeader>
-                            <CardContent className="pt-0 space-y-4">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <CardContent className="space-y-4 pt-0">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Request Number</Label>
-                                        <p className="text-lg font-semibold">{request.request_number}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Request Number
+                                        </Label>
+                                        <p className="text-lg font-semibold">
+                                            {request.request_number}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Status</Label>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Status
+                                        </Label>
                                         <div className="mt-1">
-                                            <Badge className={statusColors[request.status as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
-                                                {request.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                            <Badge
+                                                className={
+                                                    statusColors[
+                                                        request.status as keyof typeof statusColors
+                                                    ] ||
+                                                    'bg-muted text-muted-foreground'
+                                                }
+                                            >
+                                                {request.status
+                                                    .split('_')
+                                                    .map(
+                                                        (word) =>
+                                                            word
+                                                                .charAt(0)
+                                                                .toUpperCase() +
+                                                            word.slice(1),
+                                                    )
+                                                    .join(' ')}
                                             </Badge>
                                         </div>
                                     </div>
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Document Type</Label>
-                                        <p>{documentTypeLabels[request.document_type] || request.document_type}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Document Type
+                                        </Label>
+                                        <p>
+                                            {documentTypeLabels[
+                                                request.document_type
+                                            ] || request.document_type}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Processing Type</Label>
-                                        <p className="capitalize">{request.processing_type}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Processing Type
+                                        </Label>
+                                        <p className="capitalize">
+                                            {request.processing_type}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Quantity</Label>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Quantity
+                                        </Label>
                                         <p>{request.quantity}</p>
                                     </div>
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Amount</Label>
-                                        <p className="text-lg font-semibold text-success">₱{request.amount}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Amount
+                                        </Label>
+                                        <p className="text-lg font-semibold text-success">
+                                            ₱{request.amount}
+                                        </p>
                                     </div>
                                 </div>
 
                                 <Separator />
 
                                 <div>
-                                    <Label className="text-sm font-medium text-muted-foreground">Purpose</Label>
+                                    <Label className="text-sm font-medium text-muted-foreground">
+                                        Purpose
+                                    </Label>
                                     <p className="mt-1">{request.purpose}</p>
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Created</Label>
-                                        <p>{new Date(request.created_at).toLocaleDateString()}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Created
+                                        </Label>
+                                        <p>
+                                            {new Date(
+                                                request.created_at,
+                                            ).toLocaleDateString()}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Last Updated</Label>
-                                        <p>{new Date(request.updated_at).toLocaleDateString()}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Last Updated
+                                        </Label>
+                                        <p>
+                                            {new Date(
+                                                request.updated_at,
+                                            ).toLocaleDateString()}
+                                        </p>
                                     </div>
                                 </div>
                             </CardContent>
@@ -187,35 +249,77 @@ export default function Show({ request }: Props) {
                         {/* Payment Information */}
                         <Card className="transition-shadow hover:shadow-md">
                             <CardHeader className="pb-4">
-                                <CardTitle className="text-lg">Payment Information</CardTitle>
+                                <CardTitle className="text-lg">
+                                    Payment Information
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="pt-0">
                                 {request.payments.length > 0 ? (
                                     <div className="space-y-4">
                                         {request.payments.map((payment) => (
-                                            <div key={payment.id} className="border rounded-lg p-4 transition-colors hover:bg-muted/50">
-                                                <div className="flex justify-between items-start">
+                                            <div
+                                                key={payment.id}
+                                                className="rounded-lg border p-4 transition-colors hover:bg-muted/50"
+                                            >
+                                                <div className="flex items-start justify-between">
                                                     <div>
-                                                        <p className="font-medium">₱{payment.amount}</p>
+                                                        <p className="font-medium">
+                                                            ₱{payment.amount}
+                                                        </p>
                                                         <p className="text-sm text-muted-foreground capitalize">
-                                                            {payment.payment_method.replace('_', ' ')} • {payment.status.replace('_', ' ')}
+                                                            {payment.payment_method.replace(
+                                                                '_',
+                                                                ' ',
+                                                            )}{' '}
+                                                            •{' '}
+                                                            {payment.status.replace(
+                                                                '_',
+                                                                ' ',
+                                                            )}
                                                         </p>
                                                     </div>
-                                                    <Badge 
-                                                        variant={payment.status === 'paid' ? 'default' : 'secondary'}
-                                                        className={payment.status === 'paid' ? 'bg-green-600' : ''}
+                                                    <Badge
+                                                        variant={
+                                                            payment.status ===
+                                                            'paid'
+                                                                ? 'default'
+                                                                : 'secondary'
+                                                        }
+                                                        className={
+                                                            payment.status ===
+                                                            'paid'
+                                                                ? 'bg-green-600'
+                                                                : ''
+                                                        }
                                                     >
-                                                        {payment.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                                        {payment.status
+                                                            .split('_')
+                                                            .map(
+                                                                (word) =>
+                                                                    word
+                                                                        .charAt(
+                                                                            0,
+                                                                        )
+                                                                        .toUpperCase() +
+                                                                    word.slice(
+                                                                        1,
+                                                                    ),
+                                                            )
+                                                            .join(' ')}
                                                     </Badge>
                                                 </div>
-                                                <p className="text-xs text-muted-foreground mt-2">
-                                                    {new Date(payment.created_at).toLocaleString()}
+                                                <p className="mt-2 text-xs text-muted-foreground">
+                                                    {new Date(
+                                                        payment.created_at,
+                                                    ).toLocaleString()}
                                                 </p>
                                             </div>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-muted-foreground">No payments recorded yet.</p>
+                                    <p className="text-muted-foreground">
+                                        No payments recorded yet.
+                                    </p>
                                 )}
                             </CardContent>
                         </Card>
@@ -225,34 +329,62 @@ export default function Show({ request }: Props) {
                     <div className="space-y-6">
                         <Card className="transition-shadow hover:shadow-md">
                             <CardHeader className="pb-4">
-                                <CardTitle className="text-lg">Student Information</CardTitle>
+                                <CardTitle className="text-lg">
+                                    Student Information
+                                </CardTitle>
                             </CardHeader>
-                            <CardContent className="pt-0 space-y-3">
+                            <CardContent className="space-y-3 pt-0">
                                 <div>
-                                    <Label className="text-sm font-medium text-muted-foreground">Student ID</Label>
-                                    <p className="font-semibold">{request.student.student_id}</p>
+                                    <Label className="text-sm font-medium text-muted-foreground">
+                                        Student ID
+                                    </Label>
+                                    <p className="font-semibold">
+                                        {request.student.student_id}
+                                    </p>
                                 </div>
                                 <div>
-                                    <Label className="text-sm font-medium text-muted-foreground">Name</Label>
-                                    <p>{request.student.user?.full_name || 'Not available'}</p>
+                                    <Label className="text-sm font-medium text-muted-foreground">
+                                        Name
+                                    </Label>
+                                    <p>
+                                        {request.student.user?.full_name ||
+                                            'Not available'}
+                                    </p>
                                 </div>
                                 <div>
-                                    <Label className="text-sm font-medium text-muted-foreground">Email</Label>
-                                    <p className="text-sm">{request.student.user?.email || 'Not available'}</p>
+                                    <Label className="text-sm font-medium text-muted-foreground">
+                                        Email
+                                    </Label>
+                                    <p className="text-sm">
+                                        {request.student.user?.email ||
+                                            'Not available'}
+                                    </p>
                                 </div>
                                 {request.student.phone && (
                                     <div>
-                                        <Label className="text-sm font-medium text-muted-foreground">Phone</Label>
-                                        <p className="text-sm">{request.student.phone}</p>
+                                        <Label className="text-sm font-medium text-muted-foreground">
+                                            Phone
+                                        </Label>
+                                        <p className="text-sm">
+                                            {request.student.phone}
+                                        </p>
                                     </div>
                                 )}
                                 <div>
-                                    <Label className="text-sm font-medium text-muted-foreground">Course</Label>
-                                    <p className="text-sm">{request.student.course}</p>
+                                    <Label className="text-sm font-medium text-muted-foreground">
+                                        Course
+                                    </Label>
+                                    <p className="text-sm">
+                                        {request.student.course}
+                                    </p>
                                 </div>
                                 <div>
-                                    <Label className="text-sm font-medium text-muted-foreground">Year Level</Label>
-                                    <p className="text-sm">{request.student.year_level}</p>
+                                    <Label className="text-sm font-medium text-muted-foreground">
+                                        Year Level
+                                    </Label>
+                                    <p className="text-sm">
+                                        {request.student.year_level}
+                                    </p>
                                 </div>
                             </CardContent>
                         </Card>
@@ -260,29 +392,49 @@ export default function Show({ request }: Props) {
                         {/* Notifications */}
                         <Card className="transition-shadow hover:shadow-md">
                             <CardHeader className="pb-4">
-                                <CardTitle className="text-lg">Notifications</CardTitle>
+                                <CardTitle className="text-lg">
+                                    Notifications
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="pt-0">
                                 {request.notifications.length > 0 ? (
                                     <div className="space-y-3">
-                                        {request.notifications.map((notification) => (
-                                            <div key={notification.id} className="border rounded-lg p-3 transition-colors hover:bg-muted/50">
-                                                <div className="flex items-start gap-3">
-                                                    <Badge variant="outline" className="uppercase shrink-0">
-                                                        {notification.type}
-                                                    </Badge>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm leading-relaxed break-words">{notification.message}</p>
-                                                        <p className="text-xs text-muted-foreground mt-2">
-                                                            {notification.sent_at ? new Date(notification.sent_at).toLocaleString() : 'Pending'}
-                                                        </p>
+                                        {request.notifications.map(
+                                            (notification) => (
+                                                <div
+                                                    key={notification.id}
+                                                    className="rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                                                >
+                                                    <div className="flex items-start gap-3">
+                                                        <Badge
+                                                            variant="outline"
+                                                            className="shrink-0 uppercase"
+                                                        >
+                                                            {notification.type}
+                                                        </Badge>
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="text-sm leading-relaxed break-words">
+                                                                {
+                                                                    notification.message
+                                                                }
+                                                            </p>
+                                                            <p className="mt-2 text-xs text-muted-foreground">
+                                                                {notification.sent_at
+                                                                    ? new Date(
+                                                                          notification.sent_at,
+                                                                      ).toLocaleString()
+                                                                    : 'Pending'}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ),
+                                        )}
                                     </div>
                                 ) : (
-                                    <p className="text-muted-foreground">No notifications sent yet.</p>
+                                    <p className="text-muted-foreground">
+                                        No notifications sent yet.
+                                    </p>
                                 )}
                             </CardContent>
                         </Card>

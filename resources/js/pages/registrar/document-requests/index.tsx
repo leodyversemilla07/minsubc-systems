@@ -1,17 +1,7 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { DataTable } from '@/components/data-table';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Eye, Edit, ArrowUpDown, MoreVertical } from 'lucide-react';
-import { DataTable } from '@/components/data-table';
-import { ColumnDef } from '@tanstack/react-table';
-import AppLayout from '@/layouts/app-layout';
-import { create } from '@/routes/registrar/document-requests';
-import { show } from '@/routes/registrar/document-requests';
-import { edit } from '@/routes/registrar/document-requests';
-import { index } from '@/routes/registrar/document-requests';
-import { type BreadcrumbItem } from '@/types';
-import { statusColors } from '@/lib/status-colors';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,6 +10,18 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import AppLayout from '@/layouts/app-layout';
+import { statusColors } from '@/lib/status-colors';
+import {
+    create,
+    edit,
+    index,
+    show,
+} from '@/routes/registrar/document-requests';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, Edit, Eye, MoreVertical, Plus } from 'lucide-react';
 
 interface DocumentRequest {
     id: number;
@@ -76,15 +78,19 @@ export default function Index({ requests }: Props) {
                 return (
                     <Button
                         variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
                     >
                         Request #
                         <ArrowUpDown />
                     </Button>
-                )
+                );
             },
             cell: ({ row }) => (
-                <span className="font-medium">{row.getValue("request_number")}</span>
+                <span className="font-medium">
+                    {row.getValue('request_number')}
+                </span>
             ),
         },
         {
@@ -109,16 +115,21 @@ export default function Index({ requests }: Props) {
                 return (
                     <Button
                         variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
                     >
                         Document Type
                         <ArrowUpDown />
                     </Button>
-                )
+                );
             },
-            cell: ({ row }) => (
-                documentTypeLabels[row.getValue("document_type") as keyof typeof documentTypeLabels] || row.getValue("document_type")
-            ),
+            cell: ({ row }) =>
+                documentTypeLabels[
+                    row.getValue(
+                        'document_type',
+                    ) as keyof typeof documentTypeLabels
+                ] || row.getValue('document_type'),
         },
         {
             accessorKey: 'processing_type',
@@ -126,15 +137,19 @@ export default function Index({ requests }: Props) {
                 return (
                     <Button
                         variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
                     >
                         Processing
                         <ArrowUpDown />
                     </Button>
-                )
+                );
             },
             cell: ({ row }) => (
-                <span className="capitalize">{row.getValue("processing_type")}</span>
+                <span className="capitalize">
+                    {row.getValue('processing_type')}
+                </span>
             ),
         },
         {
@@ -143,16 +158,30 @@ export default function Index({ requests }: Props) {
                 return (
                     <Button
                         variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
                     >
                         Status
                         <ArrowUpDown />
                     </Button>
-                )
+                );
             },
             cell: ({ row }) => (
-                <Badge className={statusColors[row.getValue("status") as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
-                    {(row.getValue("status") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                <Badge
+                    className={
+                        statusColors[
+                            row.getValue('status') as keyof typeof statusColors
+                        ] || 'bg-muted text-muted-foreground'
+                    }
+                >
+                    {(row.getValue('status') as string)
+                        .split('_')
+                        .map(
+                            (word) =>
+                                word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(' ')}
                 </Badge>
             ),
         },
@@ -162,14 +191,16 @@ export default function Index({ requests }: Props) {
                 return (
                     <Button
                         variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
                     >
                         Amount
                         <ArrowUpDown />
                     </Button>
-                )
+                );
             },
-            cell: ({ row }) => `₱${row.getValue("amount")}`,
+            cell: ({ row }) => `₱${row.getValue('amount')}`,
         },
         {
             id: 'actions',
@@ -177,28 +208,47 @@ export default function Index({ requests }: Props) {
             cell: ({ row }) => {
                 const request = row.original;
                 const canEdit = request.status === 'pending_payment';
-                
+
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                            >
                                 <span className="sr-only">Open menu</span>
                                 <MoreVertical className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuLabel>Request Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                                Request Actions
+                            </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            
-                            <DropdownMenuItem onClick={() => router.visit(show(request.request_number).url)}>
+
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.visit(
+                                        show(request.request_number).url,
+                                    )
+                                }
+                            >
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Details
                             </DropdownMenuItem>
-                            
+
                             {canEdit && (
                                 <>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => router.visit(edit(request.request_number).url)}>
+                                    <DropdownMenuItem
+                                        onClick={() =>
+                                            router.visit(
+                                                edit(request.request_number)
+                                                    .url,
+                                            )
+                                        }
+                                    >
                                         <Edit className="mr-2 h-4 w-4" />
                                         Edit Request
                                     </DropdownMenuItem>
@@ -228,7 +278,7 @@ export default function Index({ requests }: Props) {
                     </div>
                     <Button asChild className="w-full sm:w-auto">
                         <Link href={create()}>
-                            <Plus className="w-4 h-4 mr-2" />
+                            <Plus className="mr-2 h-4 w-4" />
                             New Request
                         </Link>
                     </Button>

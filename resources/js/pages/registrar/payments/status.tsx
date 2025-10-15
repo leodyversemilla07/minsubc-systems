@@ -1,14 +1,20 @@
-import { Link } from '@inertiajs/react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, CreditCard, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { show, index } from '@/routes/registrar/document-requests';
 import AppLayout from '@/layouts/app-layout';
+import { paymentStatusColors, statusColors } from '@/lib/status-colors';
+import { index, show } from '@/routes/registrar/document-requests';
 import { BreadcrumbItem } from '@/types';
-import { Head as InertiaHead } from '@inertiajs/react';
-import { statusColors, paymentStatusColors } from '@/lib/status-colors';
+import { Head as InertiaHead, Link } from '@inertiajs/react';
+import {
+    AlertCircle,
+    ArrowLeft,
+    CheckCircle,
+    Clock,
+    CreditCard,
+    XCircle,
+} from 'lucide-react';
 
 interface DocumentRequest {
     id: number;
@@ -63,21 +69,24 @@ const documentTypeLabels = {
 export default function Status({ request }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Document Requests', href: index().url },
-        { title: `Request ${request.request_number}`, href: show(request.request_number).url },
+        {
+            title: `Request ${request.request_number}`,
+            href: show(request.request_number).url,
+        },
         { title: 'Payment Status', href: '#' },
     ];
     const getStatusIcon = (status: string) => {
         switch (status) {
             case 'pending_payment':
-                return <Clock className="w-5 h-5 text-yellow-600" />;
+                return <Clock className="h-5 w-5 text-yellow-600" />;
             case 'paid':
-                return <CheckCircle className="w-5 h-5 text-green-600" />;
+                return <CheckCircle className="h-5 w-5 text-green-600" />;
             case 'payment_expired':
-                return <XCircle className="w-5 h-5 text-red-600" />;
+                return <XCircle className="h-5 w-5 text-red-600" />;
             case 'cancelled':
-                return <XCircle className="w-5 h-5 text-red-600" />;
+                return <XCircle className="h-5 w-5 text-red-600" />;
             default:
-                return <AlertCircle className="w-5 h-5 text-gray-600" />;
+                return <AlertCircle className="h-5 w-5 text-gray-600" />;
         }
     };
 
@@ -100,19 +109,21 @@ export default function Status({ request }: Props) {
                 <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
                     <div>
                         <h1 className="text-3xl font-bold">Payment Status</h1>
-                        <p className="text-gray-600">Request {request.request_number}</p>
+                        <p className="text-gray-600">
+                            Request {request.request_number}
+                        </p>
                     </div>
                     <Button variant="outline" size="sm" asChild>
                         <Link href={show(request.request_number).url}>
-                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Request
                         </Link>
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Request Summary */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="space-y-6 lg:col-span-2">
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center">
@@ -122,42 +133,88 @@ export default function Status({ request }: Props) {
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium">Status:</span>
-                                        <Badge className={statusColors[request.status as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
-                                            {request.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium">
+                                            Status:
+                                        </span>
+                                        <Badge
+                                            className={
+                                                statusColors[
+                                                    request.status as keyof typeof statusColors
+                                                ] ||
+                                                'bg-muted text-muted-foreground'
+                                            }
+                                        >
+                                            {request.status
+                                                .split('_')
+                                                .map(
+                                                    (word) =>
+                                                        word
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                        word.slice(1),
+                                                )
+                                                .join(' ')}
                                         </Badge>
                                     </div>
 
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium">Document Type:</span>
-                                        <span>{documentTypeLabels[request.document_type as keyof typeof documentTypeLabels] || request.document_type}</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium">
+                                            Document Type:
+                                        </span>
+                                        <span>
+                                            {documentTypeLabels[
+                                                request.document_type as keyof typeof documentTypeLabels
+                                            ] || request.document_type}
+                                        </span>
                                     </div>
 
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium">Processing Type:</span>
-                                        <span className="capitalize">{request.processing_type}</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium">
+                                            Processing Type:
+                                        </span>
+                                        <span className="capitalize">
+                                            {request.processing_type}
+                                        </span>
                                     </div>
 
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium">Quantity:</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium">
+                                            Quantity:
+                                        </span>
                                         <span>{request.quantity}</span>
                                     </div>
 
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium">Amount:</span>
-                                        <span className="text-xl font-bold text-green-600">₱{request.amount}</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium">
+                                            Amount:
+                                        </span>
+                                        <span className="text-xl font-bold text-green-600">
+                                            ₱{request.amount}
+                                        </span>
                                     </div>
 
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium">Payment Method:</span>
-                                        <span>{getPaymentMethodLabel(request.payment_method)}</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-medium">
+                                            Payment Method:
+                                        </span>
+                                        <span>
+                                            {getPaymentMethodLabel(
+                                                request.payment_method,
+                                            )}
+                                        </span>
                                     </div>
 
                                     {request.payment_deadline && (
-                                        <div className="flex justify-between items-center">
-                                            <span className="font-medium">Payment Deadline:</span>
-                                            <span>{new Date(request.payment_deadline).toLocaleDateString()}</span>
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-medium">
+                                                Payment Deadline:
+                                            </span>
+                                            <span>
+                                                {new Date(
+                                                    request.payment_deadline,
+                                                ).toLocaleDateString()}
+                                            </span>
                                         </div>
                                     )}
                                 </div>
@@ -168,49 +225,99 @@ export default function Status({ request }: Props) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center">
-                                    <CreditCard className="w-5 h-5 mr-2" />
+                                    <CreditCard className="mr-2 h-5 w-5" />
                                     Payment History
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
                                 {request.payments.length === 0 ? (
-                                    <p className="text-gray-500 text-center py-4">No payment records found.</p>
+                                    <p className="py-4 text-center text-gray-500">
+                                        No payment records found.
+                                    </p>
                                 ) : (
                                     <div className="space-y-4">
                                         {request.payments.map((payment) => (
-                                            <div key={payment.id} className="border rounded-lg p-4">
-                                                <div className="flex justify-between items-start mb-2">
+                                            <div
+                                                key={payment.id}
+                                                className="rounded-lg border p-4"
+                                            >
+                                                <div className="mb-2 flex items-start justify-between">
                                                     <div>
-                                                        <p className="font-medium">{getPaymentMethodLabel(payment.payment_method)}</p>
+                                                        <p className="font-medium">
+                                                            {getPaymentMethodLabel(
+                                                                payment.payment_method,
+                                                            )}
+                                                        </p>
                                                         <p className="text-sm text-gray-600">
-                                                            {new Date(payment.created_at).toLocaleString()}
+                                                            {new Date(
+                                                                payment.created_at,
+                                                            ).toLocaleString()}
                                                         </p>
                                                     </div>
-                                                    <Badge className={paymentStatusColors[payment.status as keyof typeof paymentStatusColors] || 'bg-muted text-muted-foreground'}>
-                                                        {payment.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                                    <Badge
+                                                        className={
+                                                            paymentStatusColors[
+                                                                payment.status as keyof typeof paymentStatusColors
+                                                            ] ||
+                                                            'bg-muted text-muted-foreground'
+                                                        }
+                                                    >
+                                                        {payment.status
+                                                            .split('_')
+                                                            .map(
+                                                                (word) =>
+                                                                    word
+                                                                        .charAt(
+                                                                            0,
+                                                                        )
+                                                                        .toUpperCase() +
+                                                                    word.slice(
+                                                                        1,
+                                                                    ),
+                                                            )
+                                                            .join(' ')}
                                                     </Badge>
                                                 </div>
 
-                                                <div className="flex justify-between items-center">
-                                                    <span className="font-medium">Amount:</span>
-                                                    <span className="text-lg font-bold">₱{payment.amount}</span>
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-medium">
+                                                        Amount:
+                                                    </span>
+                                                    <span className="text-lg font-bold">
+                                                        ₱{payment.amount}
+                                                    </span>
                                                 </div>
 
                                                 {payment.paymongo_payment_intent_id && (
                                                     <div className="mt-2 text-sm text-gray-600">
-                                                        <span className="font-medium">Payment Intent ID:</span> {payment.paymongo_payment_intent_id}
+                                                        <span className="font-medium">
+                                                            Payment Intent ID:
+                                                        </span>{' '}
+                                                        {
+                                                            payment.paymongo_payment_intent_id
+                                                        }
                                                     </div>
                                                 )}
 
                                                 {payment.payment_reference_number && (
                                                     <div className="mt-2 text-sm text-gray-600">
-                                                        <span className="font-medium">Reference Number:</span> {payment.payment_reference_number}
+                                                        <span className="font-medium">
+                                                            Reference Number:
+                                                        </span>{' '}
+                                                        {
+                                                            payment.payment_reference_number
+                                                        }
                                                     </div>
                                                 )}
 
                                                 {payment.official_receipt_number && (
                                                     <div className="mt-2 text-sm text-gray-600">
-                                                        <span className="font-medium">Official Receipt:</span> {payment.official_receipt_number}
+                                                        <span className="font-medium">
+                                                            Official Receipt:
+                                                        </span>{' '}
+                                                        {
+                                                            payment.official_receipt_number
+                                                        }
                                                     </div>
                                                 )}
                                             </div>
@@ -230,14 +337,20 @@ export default function Status({ request }: Props) {
                             <CardContent>
                                 <div className="space-y-4">
                                     <div>
-                                        <p className="text-sm font-medium text-gray-600">Student ID</p>
-                                        <p className="font-medium">{request.student.student_id}</p>
+                                        <p className="text-sm font-medium text-gray-600">
+                                            Student ID
+                                        </p>
+                                        <p className="font-medium">
+                                            {request.student.student_id}
+                                        </p>
                                     </div>
 
                                     <Separator />
 
                                     <div>
-                                        <p className="text-sm font-medium text-gray-600">Name</p>
+                                        <p className="text-sm font-medium text-gray-600">
+                                            Name
+                                        </p>
                                         <p className="font-medium">
                                             {request.student.user?.full_name}
                                         </p>
@@ -246,15 +359,24 @@ export default function Status({ request }: Props) {
                                     <Separator />
 
                                     <div>
-                                        <p className="text-sm font-medium text-gray-600">Email</p>
-                                        <p className="font-medium">{request.student.user?.email}</p>
+                                        <p className="text-sm font-medium text-gray-600">
+                                            Email
+                                        </p>
+                                        <p className="font-medium">
+                                            {request.student.user?.email}
+                                        </p>
                                     </div>
 
                                     <Separator />
 
                                     <div>
-                                        <p className="text-sm font-medium text-gray-600">Phone</p>
-                                        <p className="font-medium">{request.student.phone || 'Not provided'}</p>
+                                        <p className="text-sm font-medium text-gray-600">
+                                            Phone
+                                        </p>
+                                        <p className="font-medium">
+                                            {request.student.phone ||
+                                                'Not provided'}
+                                        </p>
                                     </div>
                                 </div>
                             </CardContent>

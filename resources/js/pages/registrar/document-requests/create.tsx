@@ -1,18 +1,23 @@
-import { Head, Form } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Field, FieldLabel, FieldDescription } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Spinner } from '@/components/ui/spinner';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
+import AppLayout from '@/layouts/app-layout';
+import { index, store } from '@/routes/registrar/document-requests';
+import { type BreadcrumbItem } from '@/types';
+import { Form, Head } from '@inertiajs/react';
 import { AlertCircle, Info } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import AppLayout from '@/layouts/app-layout';
-import { index } from '@/routes/registrar/document-requests';
-import { store } from '@/routes/registrar/document-requests';
-import { type BreadcrumbItem } from '@/types';
 
 interface DocumentTypeData {
     value: string;
@@ -31,8 +36,16 @@ interface Props {
     hasReachedLimit: boolean;
 }
 
-export default function Create({ documentTypes, dailyLimit, todayCount, remaining, hasReachedLimit }: Props) {
-    const [selectedType, setSelectedType] = useState<DocumentTypeData | null>(null);
+export default function Create({
+    documentTypes,
+    dailyLimit,
+    todayCount,
+    remaining,
+    hasReachedLimit,
+}: Props) {
+    const [selectedType, setSelectedType] = useState<DocumentTypeData | null>(
+        null,
+    );
     const [quantity, setQuantity] = useState(1);
     const [selectedPurpose, setSelectedPurpose] = useState<string>('');
     const [customPurpose, setCustomPurpose] = useState<string>('');
@@ -85,8 +98,9 @@ export default function Create({ documentTypes, dailyLimit, todayCount, remainin
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>Daily Limit Reached</AlertTitle>
                         <AlertDescription>
-                            The maximum number of document requests ({dailyLimit}) for today has been reached. 
-                            Please try again tomorrow.
+                            The maximum number of document requests (
+                            {dailyLimit}) for today has been reached. Please try
+                            again tomorrow.
                         </AlertDescription>
                     </Alert>
                 ) : (
@@ -94,7 +108,8 @@ export default function Create({ documentTypes, dailyLimit, todayCount, remainin
                         <Info className="h-4 w-4" />
                         <AlertTitle>Daily Request Status</AlertTitle>
                         <AlertDescription>
-                            {todayCount} of {dailyLimit} requests submitted today. {remaining} requests remaining.
+                            {todayCount} of {dailyLimit} requests submitted
+                            today. {remaining} requests remaining.
                         </AlertDescription>
                     </Alert>
                 )}
@@ -109,21 +124,31 @@ export default function Create({ documentTypes, dailyLimit, todayCount, remainin
                             <Form
                                 action={store()}
                                 method="post"
-                                onSuccess={() => toast.success('Request submitted successfully!')}
+                                onSuccess={() =>
+                                    toast.success(
+                                        'Request submitted successfully!',
+                                    )
+                                }
                             >
-                                {({
-                                    errors,
-                                    processing
-                                }) => (
+                                {({ errors, processing }) => (
                                     <div className="space-y-6">
                                         <Field>
-                                            <FieldLabel htmlFor="document_type">Document Type *</FieldLabel>
+                                            <FieldLabel htmlFor="document_type">
+                                                Document Type *
+                                            </FieldLabel>
                                             <Select
                                                 name="document_type"
                                                 defaultValue=""
                                                 onValueChange={(value) => {
-                                                    const type = documentTypes.find(t => t.value === value);
-                                                    setSelectedType(type || null);
+                                                    const type =
+                                                        documentTypes.find(
+                                                            (t) =>
+                                                                t.value ===
+                                                                value,
+                                                        );
+                                                    setSelectedType(
+                                                        type || null,
+                                                    );
                                                 }}
                                                 disabled={hasReachedLimit}
                                             >
@@ -131,25 +156,43 @@ export default function Create({ documentTypes, dailyLimit, todayCount, remainin
                                                     <SelectValue placeholder="Select document type" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {documentTypes.map((type) => (
-                                                        <SelectItem key={type.value} value={type.value}>
-                                                            {type.label} - {type.price_label}
-                                                        </SelectItem>
-                                                    ))}
+                                                    {documentTypes.map(
+                                                        (type) => (
+                                                            <SelectItem
+                                                                key={type.value}
+                                                                value={
+                                                                    type.value
+                                                                }
+                                                            >
+                                                                {type.label} -{' '}
+                                                                {
+                                                                    type.price_label
+                                                                }
+                                                            </SelectItem>
+                                                        ),
+                                                    )}
                                                 </SelectContent>
                                             </Select>
                                             {selectedType && (
                                                 <FieldDescription>
-                                                    {selectedType.price_label} • Processing time: {selectedType.processing_time}
+                                                    {selectedType.price_label} •
+                                                    Processing time:{' '}
+                                                    {
+                                                        selectedType.processing_time
+                                                    }
                                                 </FieldDescription>
                                             )}
                                             {errors.document_type && (
-                                                <p className="text-sm text-destructive mt-1">{errors.document_type}</p>
+                                                <p className="mt-1 text-sm text-destructive">
+                                                    {errors.document_type}
+                                                </p>
                                             )}
                                         </Field>
 
                                         <Field>
-                                            <FieldLabel htmlFor="quantity">Quantity *</FieldLabel>
+                                            <FieldLabel htmlFor="quantity">
+                                                Quantity *
+                                            </FieldLabel>
                                             <Input
                                                 id="quantity"
                                                 name="quantity"
@@ -157,25 +200,40 @@ export default function Create({ documentTypes, dailyLimit, todayCount, remainin
                                                 min="1"
                                                 max="10"
                                                 defaultValue="1"
-                                                onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                                                onChange={(e) =>
+                                                    setQuantity(
+                                                        parseInt(
+                                                            e.target.value,
+                                                        ) || 1,
+                                                    )
+                                                }
                                                 disabled={hasReachedLimit}
                                             />
                                             {selectedType?.is_per_page && (
-                                                <FieldDescription>Number of pages</FieldDescription>
+                                                <FieldDescription>
+                                                    Number of pages
+                                                </FieldDescription>
                                             )}
                                             {errors.quantity && (
-                                                <p className="text-sm text-destructive mt-1">{errors.quantity}</p>
+                                                <p className="mt-1 text-sm text-destructive">
+                                                    {errors.quantity}
+                                                </p>
                                             )}
                                         </Field>
 
                                         <Field>
-                                            <FieldLabel htmlFor="purpose">Purpose *</FieldLabel>
+                                            <FieldLabel htmlFor="purpose">
+                                                Purpose *
+                                            </FieldLabel>
                                             <Select
                                                 name="purpose"
                                                 defaultValue=""
                                                 onValueChange={(value) => {
                                                     setSelectedPurpose(value);
-                                                    if (value !== 'Other (please specify)') {
+                                                    if (
+                                                        value !==
+                                                        'Other (please specify)'
+                                                    ) {
                                                         setCustomPurpose('');
                                                     }
                                                 }}
@@ -185,54 +243,86 @@ export default function Create({ documentTypes, dailyLimit, todayCount, remainin
                                                     <SelectValue placeholder="Select purpose" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {purposeOptions.map((option) => (
-                                                        <SelectItem key={option} value={option}>
-                                                            {option}
-                                                        </SelectItem>
-                                                    ))}
+                                                    {purposeOptions.map(
+                                                        (option) => (
+                                                            <SelectItem
+                                                                key={option}
+                                                                value={option}
+                                                            >
+                                                                {option}
+                                                            </SelectItem>
+                                                        ),
+                                                    )}
                                                 </SelectContent>
                                             </Select>
-                                            <FieldDescription>Select the purpose of this document request.</FieldDescription>
+                                            <FieldDescription>
+                                                Select the purpose of this
+                                                document request.
+                                            </FieldDescription>
                                             {errors.purpose && (
-                                                <p className="text-sm text-destructive mt-1">{errors.purpose}</p>
+                                                <p className="mt-1 text-sm text-destructive">
+                                                    {errors.purpose}
+                                                </p>
                                             )}
                                         </Field>
 
-                                        {selectedPurpose === 'Other (please specify)' && (
+                                        {selectedPurpose ===
+                                            'Other (please specify)' && (
                                             <Field>
-                                                <FieldLabel htmlFor="custom_purpose">Please specify *</FieldLabel>
+                                                <FieldLabel htmlFor="custom_purpose">
+                                                    Please specify *
+                                                </FieldLabel>
                                                 <Input
                                                     id="custom_purpose"
                                                     name="custom_purpose"
                                                     type="text"
                                                     placeholder="Enter your specific purpose..."
                                                     value={customPurpose}
-                                                    onChange={(e) => setCustomPurpose(e.target.value)}
+                                                    onChange={(e) =>
+                                                        setCustomPurpose(
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                     disabled={hasReachedLimit}
                                                 />
-                                                <FieldDescription>Provide more details about your purpose.</FieldDescription>
+                                                <FieldDescription>
+                                                    Provide more details about
+                                                    your purpose.
+                                                </FieldDescription>
                                             </Field>
                                         )}
 
                                         {selectedType && (
-                                            <div className="bg-muted p-4 rounded-lg">
+                                            <div className="rounded-lg bg-muted p-4">
                                                 <div className="flex items-center justify-between">
-                                                    <span className="font-medium">Total Amount:</span>
+                                                    <span className="font-medium">
+                                                        Total Amount:
+                                                    </span>
                                                     <span className="text-2xl font-bold text-success">
                                                         ₱{calculateAmount()}
                                                     </span>
                                                 </div>
-                                                <p className="text-sm text-muted-foreground mt-1">
-                                                    {selectedType.price_label} × {quantity} {selectedType.is_per_page ? 'page(s)' : 'copy(ies)'}
+                                                <p className="mt-1 text-sm text-muted-foreground">
+                                                    {selectedType.price_label} ×{' '}
+                                                    {quantity}{' '}
+                                                    {selectedType.is_per_page
+                                                        ? 'page(s)'
+                                                        : 'copy(ies)'}
                                                 </p>
                                             </div>
                                         )}
 
                                         <div className="flex justify-end">
-                                            <Button type="submit" disabled={hasReachedLimit || processing}>
+                                            <Button
+                                                type="submit"
+                                                disabled={
+                                                    hasReachedLimit ||
+                                                    processing
+                                                }
+                                            >
                                                 {processing ? (
                                                     <>
-                                                        <Spinner className="w-4 h-4 mr-2" />
+                                                        <Spinner className="mr-2 h-4 w-4" />
                                                         Submitting...
                                                     </>
                                                 ) : (

@@ -51,14 +51,19 @@ export default function Profile({
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <div className="grid gap-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="first_name">First Name</Label>
+                                            <Label htmlFor="first_name">
+                                                First Name
+                                            </Label>
                                             <Input
                                                 id="first_name"
                                                 type="text"
                                                 className="mt-1 block w-full"
-                                                defaultValue={auth.user.first_name as string}
+                                                defaultValue={
+                                                    auth.user
+                                                        .first_name as string
+                                                }
                                                 name="first_name"
                                                 required
                                                 autoComplete="given-name"
@@ -71,12 +76,17 @@ export default function Profile({
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="middle_name">Middle Name</Label>
+                                            <Label htmlFor="middle_name">
+                                                Middle Name
+                                            </Label>
                                             <Input
                                                 id="middle_name"
                                                 type="text"
                                                 className="mt-1 block w-full"
-                                                defaultValue={auth.user.middle_name as string}
+                                                defaultValue={
+                                                    auth.user
+                                                        .middle_name as string
+                                                }
                                                 name="middle_name"
                                                 autoComplete="additional-name"
                                                 placeholder="Middle name (optional)"
@@ -88,12 +98,17 @@ export default function Profile({
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="last_name">Last Name</Label>
+                                            <Label htmlFor="last_name">
+                                                Last Name
+                                            </Label>
                                             <Input
                                                 id="last_name"
                                                 type="text"
                                                 className="mt-1 block w-full"
-                                                defaultValue={auth.user.last_name as string}
+                                                defaultValue={
+                                                    auth.user
+                                                        .last_name as string
+                                                }
                                                 name="last_name"
                                                 required
                                                 autoComplete="family-name"

@@ -1,19 +1,40 @@
-import { Head as InertiaHead, Form } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
-import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
-import { Search, CheckCircle, XCircle, Receipt, DollarSign, User, FileText, Calendar } from 'lucide-react';
-import { toast } from 'sonner';
-import { verifyPayment, confirmPayment } from '@/routes/registrar/cashier';
 import AppLayout from '@/layouts/app-layout';
+import { confirmPayment, verifyPayment } from '@/routes/registrar/cashier';
 import { type BreadcrumbItem } from '@/types';
+import { Form, Head as InertiaHead } from '@inertiajs/react';
+import {
+    Calendar,
+    CheckCircle,
+    DollarSign,
+    FileText,
+    Receipt,
+    Search,
+    User,
+    XCircle,
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface PaymentDetails {
     id: number;
@@ -45,8 +66,11 @@ export default function Dashboard({ flash }: DashboardProps) {
         { title: 'Cashier Dashboard', href: '#' },
     ];
 
-    const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(flash?.payment || null);
-    const [confirmedPayment, setConfirmedPayment] = useState<ConfirmedPayment | null>(flash?.confirmed || null);
+    const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(
+        flash?.payment || null,
+    );
+    const [confirmedPayment, setConfirmedPayment] =
+        useState<ConfirmedPayment | null>(flash?.confirmed || null);
 
     // Update payment details when it comes from flash data
     useEffect(() => {
@@ -65,15 +89,15 @@ export default function Dashboard({ flash }: DashboardProps) {
 
     const formatDocumentType = (type: string) => {
         const types: Record<string, string> = {
-            'coe': 'Certificate of Enrollment',
-            'cog': 'Certificate of Grades',
-            'tor': 'Transcript of Records',
-            'honorable_dismissal': 'Honorable Dismissal',
-            'certificate_good_moral': 'Certificate of Good Moral Character',
-            'cav': 'Certificate of Authentication and Verification',
-            'diploma': 'Diploma (Certified True Copy)',
-            'so': 'Special Order',
-            'form_137': 'Form 137',
+            coe: 'Certificate of Enrollment',
+            cog: 'Certificate of Grades',
+            tor: 'Transcript of Records',
+            honorable_dismissal: 'Honorable Dismissal',
+            certificate_good_moral: 'Certificate of Good Moral Character',
+            cav: 'Certificate of Authentication and Verification',
+            diploma: 'Diploma (Certified True Copy)',
+            so: 'Special Order',
+            form_137: 'Form 137',
         };
         return types[type] || type;
     };
@@ -85,20 +109,23 @@ export default function Dashboard({ flash }: DashboardProps) {
             <div className="flex flex-col space-y-8 p-6 md:p-8">
                 <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
                     <div>
-                        <h1 className="text-3xl font-bold">Cashier Dashboard</h1>
+                        <h1 className="text-3xl font-bold">
+                            Cashier Dashboard
+                        </h1>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {/* Payment Verification Section */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Search className="w-5 h-5 text-primary" />
+                                <Search className="h-5 w-5 text-primary" />
                                 Verify Payment Reference
                             </CardTitle>
                             <CardDescription>
-                                Enter the payment reference number to verify and process payment
+                                Enter the payment reference number to verify and
+                                process payment
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -106,7 +133,9 @@ export default function Dashboard({ flash }: DashboardProps) {
                                 action={verifyPayment()}
                                 options={{ preserveScroll: true }}
                                 onSuccess={() => {
-                                    toast.success('Payment reference verified successfully');
+                                    toast.success(
+                                        'Payment reference verified successfully',
+                                    );
                                 }}
                                 onError={() => {
                                     toast.error('Payment reference not found');
@@ -115,7 +144,9 @@ export default function Dashboard({ flash }: DashboardProps) {
                                 {({ errors, processing }) => (
                                     <div className="space-y-4">
                                         <Field>
-                                            <FieldLabel htmlFor="payment_reference">Payment Reference Number</FieldLabel>
+                                            <FieldLabel htmlFor="payment_reference">
+                                                Payment Reference Number
+                                            </FieldLabel>
                                             <div className="flex gap-2">
                                                 <Input
                                                     id="payment_reference"
@@ -131,14 +162,14 @@ export default function Dashboard({ flash }: DashboardProps) {
                                                     size="icon"
                                                 >
                                                     {processing ? (
-                                                        <Spinner className="w-4 h-4" />
+                                                        <Spinner className="h-4 w-4" />
                                                     ) : (
-                                                        <Search className="w-4 h-4" />
+                                                        <Search className="h-4 w-4" />
                                                     )}
                                                 </Button>
                                             </div>
                                             {errors.payment_reference && (
-                                                <p className="text-sm text-destructive mt-1">
+                                                <p className="mt-1 text-sm text-destructive">
                                                     {errors.payment_reference}
                                                 </p>
                                             )}
@@ -147,8 +178,12 @@ export default function Dashboard({ flash }: DashboardProps) {
                                         {errors.payment_reference && (
                                             <Alert variant="destructive">
                                                 <XCircle className="h-4 w-4" />
-                                                <AlertTitle>Verification Failed</AlertTitle>
-                                                <AlertDescription>{errors.payment_reference}</AlertDescription>
+                                                <AlertTitle>
+                                                    Verification Failed
+                                                </AlertTitle>
+                                                <AlertDescription>
+                                                    {errors.payment_reference}
+                                                </AlertDescription>
                                             </Alert>
                                         )}
                                     </div>
@@ -161,11 +196,12 @@ export default function Dashboard({ flash }: DashboardProps) {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Receipt className="w-5 h-5 text-primary" />
+                                <Receipt className="h-5 w-5 text-primary" />
                                 Payment Details
                             </CardTitle>
                             <CardDescription>
-                                Review payment information and enter official receipt number
+                                Review payment information and enter official
+                                receipt number
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -175,71 +211,112 @@ export default function Dashboard({ flash }: DashboardProps) {
                                     options={{ preserveScroll: true }}
                                     transform={(data) => ({
                                         ...data,
-                                        payment_reference_number: paymentDetails.reference,
+                                        payment_reference_number:
+                                            paymentDetails.reference,
                                     })}
                                     onSuccess={() => {
-                                        toast.success('Payment confirmed successfully');
+                                        toast.success(
+                                            'Payment confirmed successfully',
+                                        );
                                     }}
                                     onError={() => {
-                                        toast.error('Failed to confirm payment');
+                                        toast.error(
+                                            'Failed to confirm payment',
+                                        );
                                     }}
                                 >
                                     {({ errors, processing }) => (
                                         <div className="space-y-6">
                                             <div className="space-y-4">
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                                     <div className="space-y-1">
-                                                        <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                                                            <FileText className="w-3 h-3" />
+                                                        <label className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
+                                                            <FileText className="h-3 w-3" />
                                                             Reference
                                                         </label>
-                                                        <p className="font-mono text-sm font-semibold break-all">{paymentDetails.reference}</p>
+                                                        <p className="font-mono text-sm font-semibold break-all">
+                                                            {
+                                                                paymentDetails.reference
+                                                            }
+                                                        </p>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                                                            <DollarSign className="w-3 h-3" />
+                                                        <label className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
+                                                            <DollarSign className="h-3 w-3" />
                                                             Amount
                                                         </label>
-                                                        <p className="text-lg font-bold text-primary">₱{paymentDetails.amount.toFixed(2)}</p>
+                                                        <p className="text-lg font-bold text-primary">
+                                                            ₱
+                                                            {paymentDetails.amount.toFixed(
+                                                                2,
+                                                            )}
+                                                        </p>
                                                     </div>
                                                 </div>
 
                                                 <Separator />
 
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                                     <div className="space-y-1">
-                                                        <label className="text-sm font-medium text-muted-foreground">Request Number</label>
-                                                        <p className="font-medium">{paymentDetails.request_number}</p>
+                                                        <label className="text-sm font-medium text-muted-foreground">
+                                                            Request Number
+                                                        </label>
+                                                        <p className="font-medium">
+                                                            {
+                                                                paymentDetails.request_number
+                                                            }
+                                                        </p>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                                                            <User className="w-3 h-3" />
+                                                        <label className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
+                                                            <User className="h-3 w-3" />
                                                             Student ID
                                                         </label>
-                                                        <p className="font-medium">{paymentDetails.student_id}</p>
+                                                        <p className="font-medium">
+                                                            {
+                                                                paymentDetails.student_id
+                                                            }
+                                                        </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-1">
-                                                    <label className="text-sm font-medium text-muted-foreground">Student Name</label>
-                                                    <p className="font-medium text-lg">{paymentDetails.student_name}</p>
+                                                    <label className="text-sm font-medium text-muted-foreground">
+                                                        Student Name
+                                                    </label>
+                                                    <p className="text-lg font-medium">
+                                                        {
+                                                            paymentDetails.student_name
+                                                        }
+                                                    </p>
                                                 </div>
 
                                                 <div className="space-y-1">
-                                                    <label className="text-sm font-medium text-muted-foreground">Document Type</label>
+                                                    <label className="text-sm font-medium text-muted-foreground">
+                                                        Document Type
+                                                    </label>
                                                     <div>
-                                                        <Badge variant="secondary" className="text-sm">
-                                                            {formatDocumentType(paymentDetails.document_type)}
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className="text-sm"
+                                                        >
+                                                            {formatDocumentType(
+                                                                paymentDetails.document_type,
+                                                            )}
                                                         </Badge>
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-1">
-                                                    <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                                                        <Calendar className="w-3 h-3" />
+                                                    <label className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
+                                                        <Calendar className="h-3 w-3" />
                                                         Request Date
                                                     </label>
-                                                    <p className="text-sm">{new Date(paymentDetails.created_at).toLocaleString()}</p>
+                                                    <p className="text-sm">
+                                                        {new Date(
+                                                            paymentDetails.created_at,
+                                                        ).toLocaleString()}
+                                                    </p>
                                                 </div>
                                             </div>
 
@@ -247,7 +324,10 @@ export default function Dashboard({ flash }: DashboardProps) {
 
                                             <Field>
                                                 <FieldLabel htmlFor="official_receipt_number">
-                                                    Official Receipt Number <span className="text-destructive">*</span>
+                                                    Official Receipt Number{' '}
+                                                    <span className="text-destructive">
+                                                        *
+                                                    </span>
                                                 </FieldLabel>
                                                 <Input
                                                     id="official_receipt_number"
@@ -258,8 +338,10 @@ export default function Dashboard({ flash }: DashboardProps) {
                                                     required
                                                 />
                                                 {errors.official_receipt_number && (
-                                                    <p className="text-sm text-destructive mt-1">
-                                                        {errors.official_receipt_number}
+                                                    <p className="mt-1 text-sm text-destructive">
+                                                        {
+                                                            errors.official_receipt_number
+                                                        }
                                                     </p>
                                                 )}
                                             </Field>
@@ -272,12 +354,12 @@ export default function Dashboard({ flash }: DashboardProps) {
                                             >
                                                 {processing ? (
                                                     <>
-                                                        <Spinner className="w-4 h-4 mr-2" />
+                                                        <Spinner className="mr-2 h-4 w-4" />
                                                         Confirming Payment...
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                                        <CheckCircle className="mr-2 h-4 w-4" />
                                                         Confirm Payment
                                                     </>
                                                 )}
@@ -291,9 +373,13 @@ export default function Dashboard({ flash }: DashboardProps) {
                                         <EmptyMedia variant="icon">
                                             <Receipt />
                                         </EmptyMedia>
-                                        <EmptyTitle>No Payment Selected</EmptyTitle>
+                                        <EmptyTitle>
+                                            No Payment Selected
+                                        </EmptyTitle>
                                         <EmptyDescription>
-                                            Enter a payment reference number above to view and confirm payment details
+                                            Enter a payment reference number
+                                            above to view and confirm payment
+                                            details
                                         </EmptyDescription>
                                     </EmptyHeader>
                                 </Empty>
@@ -303,10 +389,10 @@ export default function Dashboard({ flash }: DashboardProps) {
 
                     {/* Success Message Section */}
                     {confirmedPayment && (
-                        <Card className="lg:col-span-2 border-primary/20 bg-primary/5">
+                        <Card className="border-primary/20 bg-primary/5 lg:col-span-2">
                             <CardHeader>
-                                <CardTitle className="text-primary flex items-center gap-2">
-                                    <CheckCircle className="w-5 h-5" />
+                                <CardTitle className="flex items-center gap-2 text-primary">
+                                    <CheckCircle className="h-5 w-5" />
                                     Payment Confirmed Successfully
                                 </CardTitle>
                                 <CardDescription>
@@ -316,38 +402,69 @@ export default function Dashboard({ flash }: DashboardProps) {
                             <CardContent>
                                 <Alert className="bg-background">
                                     <CheckCircle className="h-4 w-4 text-primary" />
-                                    <AlertTitle>Transaction Complete</AlertTitle>
+                                    <AlertTitle>
+                                        Transaction Complete
+                                    </AlertTitle>
                                     <AlertDescription className="mt-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm mt-4">
+                                        <div className="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
                                             <div>
-                                                <span className="font-medium text-muted-foreground">Reference:</span>
-                                                <p className="font-mono text-sm mt-1 break-all">{confirmedPayment.payment_reference}</p>
+                                                <span className="font-medium text-muted-foreground">
+                                                    Reference:
+                                                </span>
+                                                <p className="mt-1 font-mono text-sm break-all">
+                                                    {
+                                                        confirmedPayment.payment_reference
+                                                    }
+                                                </p>
                                             </div>
                                             <div>
-                                                <span className="font-medium text-muted-foreground">Amount:</span>
-                                                <p className="font-semibold mt-1">₱{confirmedPayment.amount.toFixed(2)}</p>
+                                                <span className="font-medium text-muted-foreground">
+                                                    Amount:
+                                                </span>
+                                                <p className="mt-1 font-semibold">
+                                                    ₱
+                                                    {confirmedPayment.amount.toFixed(
+                                                        2,
+                                                    )}
+                                                </p>
                                             </div>
                                             <div>
-                                                <span className="font-medium text-muted-foreground">Student:</span>
-                                                <p className="font-medium mt-1 break-words">{confirmedPayment.student_name}</p>
+                                                <span className="font-medium text-muted-foreground">
+                                                    Student:
+                                                </span>
+                                                <p className="mt-1 font-medium break-words">
+                                                    {
+                                                        confirmedPayment.student_name
+                                                    }
+                                                </p>
                                             </div>
                                             <div>
-                                                <span className="font-medium text-muted-foreground">OR Number:</span>
-                                                <p className="font-medium mt-1 break-all">{confirmedPayment.official_receipt_number}</p>
+                                                <span className="font-medium text-muted-foreground">
+                                                    OR Number:
+                                                </span>
+                                                <p className="mt-1 font-medium break-all">
+                                                    {
+                                                        confirmedPayment.official_receipt_number
+                                                    }
+                                                </p>
                                             </div>
                                         </div>
                                     </AlertDescription>
                                 </Alert>
 
-                                <div className="flex flex-col sm:flex-row gap-2 mt-6">
+                                <div className="mt-6 flex flex-col gap-2 sm:flex-row">
                                     <Button
                                         onClick={() => window.print()}
                                         variant="default"
                                         className="flex-1"
                                     >
-                                        <Receipt className="w-4 h-4 mr-2" />
-                                        <span className="hidden sm:inline">Print Official Receipt</span>
-                                        <span className="sm:hidden">Print Receipt</span>
+                                        <Receipt className="mr-2 h-4 w-4" />
+                                        <span className="hidden sm:inline">
+                                            Print Official Receipt
+                                        </span>
+                                        <span className="sm:hidden">
+                                            Print Receipt
+                                        </span>
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -356,8 +473,12 @@ export default function Dashboard({ flash }: DashboardProps) {
                                         variant="outline"
                                         className="w-full sm:w-auto"
                                     >
-                                        <span className="hidden sm:inline">Process Another Payment</span>
-                                        <span className="sm:hidden">New Payment</span>
+                                        <span className="hidden sm:inline">
+                                            Process Another Payment
+                                        </span>
+                                        <span className="sm:hidden">
+                                            New Payment
+                                        </span>
                                     </Button>
                                 </div>
                             </CardContent>

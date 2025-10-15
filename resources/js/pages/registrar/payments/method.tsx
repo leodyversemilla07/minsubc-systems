@@ -1,15 +1,15 @@
-import { Head, Form, Link } from '@inertiajs/react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CreditCard, Banknote, CheckCircle, InfoIcon } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { show } from '@/routes/registrar/document-requests';
-import { initiate, cash, cashReference } from '@/routes/registrar/payments';
-import { type BreadcrumbItem } from '@/types';
 import { statusColors } from '@/lib/status-colors';
+import { show } from '@/routes/registrar/document-requests';
+import { cash, cashReference, initiate } from '@/routes/registrar/payments';
+import { type BreadcrumbItem } from '@/types';
+import { Form, Head, Link } from '@inertiajs/react';
+import { Banknote, CheckCircle, CreditCard, InfoIcon } from 'lucide-react';
 
 interface DocumentRequest {
     id: number;
@@ -64,7 +64,6 @@ const documentTypeLabels = {
 };
 
 export default function PaymentMethod({ request, existingCashPayment }: Props) {
-
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Document Requests',
@@ -91,34 +90,66 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                         Select Payment Method
                     </h1>
                     <p className="text-muted-foreground">
-                        Choose how you would like to pay for your document request
+                        Choose how you would like to pay for your document
+                        request
                     </p>
                 </div>
 
                 {/* Request Summary */}
                 <Card className="transition-shadow hover:shadow-md">
                     <CardHeader className="pb-4">
-                        <CardTitle className="text-lg">Request Summary</CardTitle>
+                        <CardTitle className="text-lg">
+                            Request Summary
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                             <div>
-                                <Label className="text-sm font-medium text-muted-foreground">Request Number</Label>
-                                <p className="font-semibold">{request.request_number}</p>
+                                <Label className="text-sm font-medium text-muted-foreground">
+                                    Request Number
+                                </Label>
+                                <p className="font-semibold">
+                                    {request.request_number}
+                                </p>
                             </div>
                             <div>
-                                <Label className="text-sm font-medium text-muted-foreground">Document Type</Label>
-                                <p>{documentTypeLabels[request.document_type as keyof typeof documentTypeLabels] || request.document_type}</p>
+                                <Label className="text-sm font-medium text-muted-foreground">
+                                    Document Type
+                                </Label>
+                                <p>
+                                    {documentTypeLabels[
+                                        request.document_type as keyof typeof documentTypeLabels
+                                    ] || request.document_type}
+                                </p>
                             </div>
                             <div>
-                                <Label className="text-sm font-medium text-muted-foreground">Status</Label>
-                                <Badge className={statusColors[request.status as keyof typeof statusColors] || 'bg-muted text-muted-foreground'}>
-                                    {request.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                <Label className="text-sm font-medium text-muted-foreground">
+                                    Status
+                                </Label>
+                                <Badge
+                                    className={
+                                        statusColors[
+                                            request.status as keyof typeof statusColors
+                                        ] || 'bg-muted text-muted-foreground'
+                                    }
+                                >
+                                    {request.status
+                                        .split('_')
+                                        .map(
+                                            (word) =>
+                                                word.charAt(0).toUpperCase() +
+                                                word.slice(1),
+                                        )
+                                        .join(' ')}
                                 </Badge>
                             </div>
                             <div>
-                                <Label className="text-sm font-medium text-muted-foreground">Amount</Label>
-                                <p className="text-lg font-semibold text-success">₱{request.amount}</p>
+                                <Label className="text-sm font-medium text-muted-foreground">
+                                    Amount
+                                </Label>
+                                <p className="text-lg font-semibold text-success">
+                                    ₱{request.amount}
+                                </p>
                             </div>
                         </div>
                     </CardContent>
@@ -128,17 +159,28 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                 {existingCashPayment && (
                     <Alert>
                         <CheckCircle className="h-4 w-4" />
-                        <AlertTitle>Payment Reference Already Generated</AlertTitle>
+                        <AlertTitle>
+                            Payment Reference Already Generated
+                        </AlertTitle>
                         <AlertDescription>
                             <p className="mb-2">
-                                You already have a payment reference number for this request.
+                                You already have a payment reference number for
+                                this request.
                             </p>
                             <div className="flex items-center gap-2">
-                                <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
-                                    {existingCashPayment.payment_reference_number}
+                                <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
+                                    {
+                                        existingCashPayment.payment_reference_number
+                                    }
                                 </code>
                                 <Button asChild variant="outline" size="sm">
-                                    <Link href={cashReference(existingCashPayment.id).url}>
+                                    <Link
+                                        href={
+                                            cashReference(
+                                                existingCashPayment.id,
+                                            ).url
+                                        }
+                                    >
                                         View Payment Reference
                                     </Link>
                                 </Button>
@@ -148,36 +190,63 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                 )}
 
                 {/* Payment Method Options */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6" role="radiogroup" aria-label="Payment method selection">
+                <div
+                    className="grid grid-cols-1 gap-6 md:grid-cols-2"
+                    role="radiogroup"
+                    aria-label="Payment method selection"
+                >
                     {/* Online Payment */}
-                    <Card className="transition-shadow hover:shadow-md border-2 hover:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
+                    <Card className="border-2 transition-shadow focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary/50 hover:shadow-md">
                         <CardHeader className="pb-4">
-                            <CardTitle className="text-lg flex items-center">
-                                <CreditCard className="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
+                            <CardTitle className="flex items-center text-lg">
+                                <CreditCard
+                                    className="mr-2 h-5 w-5 text-primary"
+                                    aria-hidden="true"
+                                />
                                 Online Payment
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="pt-0 space-y-4">
+                        <CardContent className="space-y-4 pt-0">
                             <div className="space-y-2">
-                                <h4 className="font-medium">Pay instantly online</h4>
-                                <ul className="text-sm text-muted-foreground space-y-1" role="list">
-                                    <li role="listitem">E-wallets (GCash, PayMaya, GrabPay)</li>
-                                    <li role="listitem">Credit/Debit Cards (Visa, Mastercard, JCB)</li>
-                                    <li role="listitem">Online Banking (BPI, BDO, UnionBank)</li>
-                                    <li role="listitem">Over-the-Counter (7-Eleven, Cebuana)</li>
+                                <h4 className="font-medium">
+                                    Pay instantly online
+                                </h4>
+                                <ul
+                                    className="space-y-1 text-sm text-muted-foreground"
+                                    role="list"
+                                >
+                                    <li role="listitem">
+                                        E-wallets (GCash, PayMaya, GrabPay)
+                                    </li>
+                                    <li role="listitem">
+                                        Credit/Debit Cards (Visa, Mastercard,
+                                        JCB)
+                                    </li>
+                                    <li role="listitem">
+                                        Online Banking (BPI, BDO, UnionBank)
+                                    </li>
+                                    <li role="listitem">
+                                        Over-the-Counter (7-Eleven, Cebuana)
+                                    </li>
                                 </ul>
                             </div>
-                            <div className="bg-muted/50 p-3 rounded-lg">
+                            <div className="rounded-lg bg-muted/50 p-3">
                                 <p className="text-sm">
-                                    <span className="font-medium">Processing Fee:</span> 2.5% + ₱15
+                                    <span className="font-medium">
+                                        Processing Fee:
+                                    </span>{' '}
+                                    2.5% + ₱15
                                 </p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Total: ₱{(request.amount + (request.amount * 0.025) + 15).toFixed(2)}
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                    Total: ₱
+                                    {(
+                                        request.amount +
+                                        request.amount * 0.025 +
+                                        15
+                                    ).toFixed(2)}
                                 </p>
                             </div>
-                            <Form
-                                {...initiate.form(request.request_number)}
-                            >
+                            <Form {...initiate.form(request.request_number)}>
                                 {({ processing, errors }) => (
                                     <>
                                         <Button
@@ -188,20 +257,25 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                         >
                                             {processing ? (
                                                 <>
-                                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                                                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                                                     Processing Payment...
                                                 </>
                                             ) : (
                                                 <>
-                                                    <CreditCard className="w-4 h-4 mr-2" />
+                                                    <CreditCard className="mr-2 h-4 w-4" />
                                                     Pay Online Now
                                                 </>
                                             )}
                                         </Button>
 
                                         {errors.payment && (
-                                            <Alert variant="destructive" className="mt-4">
-                                                <AlertDescription>{errors.payment}</AlertDescription>
+                                            <Alert
+                                                variant="destructive"
+                                                className="mt-4"
+                                            >
+                                                <AlertDescription>
+                                                    {errors.payment}
+                                                </AlertDescription>
                                             </Alert>
                                         )}
                                     </>
@@ -211,31 +285,47 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                     </Card>
 
                     {/* Cash Payment */}
-                    <Card className="transition-shadow hover:shadow-md border-2 hover:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
+                    <Card className="border-2 transition-shadow focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary/50 hover:shadow-md">
                         <CardHeader className="pb-4">
-                            <CardTitle className="text-lg flex items-center">
-                                <Banknote className="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
+                            <CardTitle className="flex items-center text-lg">
+                                <Banknote
+                                    className="mr-2 h-5 w-5 text-primary"
+                                    aria-hidden="true"
+                                />
                                 Cash Payment
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="pt-0 space-y-4">
+                        <CardContent className="space-y-4 pt-0">
                             <div className="space-y-2">
-                                <h4 className="font-medium">Pay at Cashier's Office</h4>
-                                <ul className="text-sm text-muted-foreground space-y-1" role="list">
+                                <h4 className="font-medium">
+                                    Pay at Cashier's Office
+                                </h4>
+                                <ul
+                                    className="space-y-1 text-sm text-muted-foreground"
+                                    role="list"
+                                >
                                     <li role="listitem">No transaction fees</li>
-                                    <li role="listitem">Pay in person at the office</li>
-                                    <li role="listitem">Get Official Receipt immediately</li>
-                                    <li role="listitem">Payment deadline: {new Date(request.payment_deadline).toLocaleString()}</li>
+                                    <li role="listitem">
+                                        Pay in person at the office
+                                    </li>
+                                    <li role="listitem">
+                                        Get Official Receipt immediately
+                                    </li>
+                                    <li role="listitem">
+                                        Payment deadline:{' '}
+                                        {new Date(
+                                            request.payment_deadline,
+                                        ).toLocaleString()}
+                                    </li>
                                 </ul>
                             </div>
-                            <div className="bg-success/10 border border-success/20 p-3 rounded-lg">
+                            <div className="rounded-lg border border-success/20 bg-success/10 p-3">
                                 <p className="text-sm font-medium text-success">
-                                    No additional fees - Pay exactly ₱{request.amount}
+                                    No additional fees - Pay exactly ₱
+                                    {request.amount}
                                 </p>
                             </div>
-                            <Form
-                                {...cash.form(request.request_number)}
-                            >
+                            <Form {...cash.form(request.request_number)}>
                                 {({ processing, errors }) => (
                                     <>
                                         {existingCashPayment ? (
@@ -245,8 +335,14 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                                 asChild
                                                 size="lg"
                                             >
-                                                <Link href={cashReference(existingCashPayment.id).url}>
-                                                    <CheckCircle className="w-4 h-4 mr-2" />
+                                                <Link
+                                                    href={
+                                                        cashReference(
+                                                            existingCashPayment.id,
+                                                        ).url
+                                                    }
+                                                >
+                                                    <CheckCircle className="mr-2 h-4 w-4" />
                                                     View Payment Reference
                                                 </Link>
                                             </Button>
@@ -260,21 +356,27 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                             >
                                                 {processing ? (
                                                     <>
-                                                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+                                                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                                                         Generating PRN...
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <Banknote className="w-4 h-4 mr-2" />
-                                                        Generate Payment Reference
+                                                        <Banknote className="mr-2 h-4 w-4" />
+                                                        Generate Payment
+                                                        Reference
                                                     </>
                                                 )}
                                             </Button>
                                         )}
 
                                         {errors.payment && (
-                                            <Alert variant="destructive" className="mt-4">
-                                                <AlertDescription>{errors.payment}</AlertDescription>
+                                            <Alert
+                                                variant="destructive"
+                                                className="mt-4"
+                                            >
+                                                <AlertDescription>
+                                                    {errors.payment}
+                                                </AlertDescription>
                                             </Alert>
                                         )}
                                     </>
@@ -289,7 +391,8 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                     <InfoIcon className="h-4 w-4" />
                     <AlertTitle>Need Help?</AlertTitle>
                     <AlertDescription>
-                        Contact the Registrar's Office if you have questions about payment options or need assistance.
+                        Contact the Registrar's Office if you have questions
+                        about payment options or need assistance.
                     </AlertDescription>
                 </Alert>
             </div>

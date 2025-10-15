@@ -26,9 +26,11 @@ export default function Register() {
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="first_name">First Name</Label>
+                                    <Label htmlFor="first_name">
+                                        First Name
+                                    </Label>
                                     <Input
                                         id="first_name"
                                         type="text"
@@ -46,7 +48,9 @@ export default function Register() {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="middle_name">Middle Name</Label>
+                                    <Label htmlFor="middle_name">
+                                        Middle Name
+                                    </Label>
                                     <Input
                                         id="middle_name"
                                         type="text"

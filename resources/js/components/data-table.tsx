@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -10,8 +9,9 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
-} from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+} from '@tanstack/react-table';
+import { MoreHorizontal } from 'lucide-react';
+import React, { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -24,15 +24,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty';
 import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import {
     Pagination,
     PaginationContent,
@@ -42,7 +35,14 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { Empty, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
 /**
  * A powerful, flexible data table component built on @tanstack/react-table.
@@ -83,14 +83,14 @@ import { Empty, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
  */
 
 interface DataTableProps<TData extends { id: number | string }, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-    onViewRequest?: (id: number | string) => void
-    getItemId?: (item: TData) => number | string
-    filterColumn?: string
-    filterPlaceholder?: string
-    emptyMessage?: string
-    enableRowSelection?: boolean
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+    onViewRequest?: (id: number | string) => void;
+    getItemId?: (item: TData) => number | string;
+    filterColumn?: string;
+    filterPlaceholder?: string;
+    emptyMessage?: string;
+    enableRowSelection?: boolean;
 }
 
 export function DataTable<TData extends { id: number | string }, TValue>({
@@ -99,28 +99,32 @@ export function DataTable<TData extends { id: number | string }, TValue>({
     onViewRequest,
     getItemId = (item: TData) => item.id,
     filterColumn,
-    filterPlaceholder = "Filter...",
-    emptyMessage = "No items found.",
-    enableRowSelection = false
+    filterPlaceholder = 'Filter...',
+    emptyMessage = 'No items found.',
+    enableRowSelection = false,
 }: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+        {},
+    );
+    const [rowSelection, setRowSelection] = useState({});
 
     // Add select column if row selection is enabled
     const tableColumns = React.useMemo(() => {
         if (!enableRowSelection) return columns;
 
         const selectColumn: ColumnDef<TData, TValue> = {
-            id: "select",
+            id: 'select',
             header: ({ table }) => (
                 <Checkbox
                     checked={
                         table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                        (table.getIsSomePageRowsSelected() && 'indeterminate')
                     }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    onCheckedChange={(value) =>
+                        table.toggleAllPageRowsSelected(!!value)
+                    }
                     aria-label="Select all"
                 />
             ),
@@ -155,7 +159,7 @@ export function DataTable<TData extends { id: number | string }, TValue>({
             columnVisibility,
             rowSelection,
         },
-    })
+    });
 
     return (
         <div className="w-full space-y-4">
@@ -163,15 +167,21 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                 <div className="flex items-center">
                     <Input
                         placeholder={filterPlaceholder}
-                        value={(table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""}
+                        value={
+                            (table
+                                .getColumn(filterColumn)
+                                ?.getFilterValue() as string) ?? ''
+                        }
                         onChange={(event) =>
-                            table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+                            table
+                                .getColumn(filterColumn)
+                                ?.setFilterValue(event.target.value)
                         }
                         className="max-w-sm"
                     />
                 </div>
             )}
-            <div className="rounded-md border overflow-x-auto">
+            <div className="overflow-x-auto rounded-md border">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -182,13 +192,16 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
                                         </TableHead>
-                                    )
+                                    );
                                 })}
-                                {onViewRequest && <TableHead>Actions</TableHead>}
+                                {onViewRequest && (
+                                    <TableHead>Actions</TableHead>
+                                )}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -197,13 +210,15 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
+                                    data-state={
+                                        row.getIsSelected() && 'selected'
+                                    }
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
                                                 cell.column.columnDef.cell,
-                                                cell.getContext()
+                                                cell.getContext(),
                                             )}
                                         </TableCell>
                                     ))}
@@ -211,15 +226,28 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                         <TableCell>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                                        <span className="sr-only">Open menu</span>
+                                                    <Button
+                                                        variant="ghost"
+                                                        className="h-8 w-8 p-0"
+                                                    >
+                                                        <span className="sr-only">
+                                                            Open menu
+                                                        </span>
                                                         <MoreHorizontal />
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                    <DropdownMenuLabel>
+                                                        Actions
+                                                    </DropdownMenuLabel>
                                                     <DropdownMenuItem
-                                                        onClick={() => onViewRequest(getItemId(row.original))}
+                                                        onClick={() =>
+                                                            onViewRequest(
+                                                                getItemId(
+                                                                    row.original,
+                                                                ),
+                                                            )
+                                                        }
                                                     >
                                                         View
                                                     </DropdownMenuItem>
@@ -232,7 +260,10 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={tableColumns.length + (onViewRequest ? 1 : 0)}
+                                    colSpan={
+                                        tableColumns.length +
+                                        (onViewRequest ? 1 : 0)
+                                    }
                                     className="h-24 text-center"
                                 >
                                     <Empty>
@@ -248,8 +279,8 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                 </Table>
             </div>
             <div className="flex items-center justify-between px-2 py-4">
-                <div className="text-muted-foreground text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                <div className="text-sm text-muted-foreground">
+                    {table.getFilteredSelectedRowModel().rows.length} of{' '}
                     {table.getFilteredRowModel().rows.length} row(s) selected.
                 </div>
                 <div className="ml-auto">
@@ -259,50 +290,70 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                 <PaginationPrevious
                                     onClick={() => table.previousPage()}
                                     className={cn(
-                                        !table.getCanPreviousPage() && "pointer-events-none opacity-50"
+                                        !table.getCanPreviousPage() &&
+                                            'pointer-events-none opacity-50',
                                     )}
                                 />
                             </PaginationItem>
 
                             {/* Page numbers */}
-                            {Array.from({ length: table.getPageCount() }, (_, i) => i + 1)
-                                .filter(page => {
-                                    const currentPage = table.getState().pagination.pageIndex + 1;
+                            {Array.from(
+                                { length: table.getPageCount() },
+                                (_, i) => i + 1,
+                            )
+                                .filter((page) => {
+                                    const currentPage =
+                                        table.getState().pagination.pageIndex +
+                                        1;
                                     return (
                                         page === 1 ||
                                         page === table.getPageCount() ||
-                                        (page >= currentPage - 1 && page <= currentPage + 1)
+                                        (page >= currentPage - 1 &&
+                                            page <= currentPage + 1)
                                     );
                                 })
                                 .reduce((acc: number[], page, index, array) => {
-                                    if (index > 0 && page - array[index - 1] > 1) {
+                                    if (
+                                        index > 0 &&
+                                        page - array[index - 1] > 1
+                                    ) {
                                         acc.push(-1);
                                     }
                                     acc.push(page);
                                     return acc;
                                 }, [])
-                                .map((page, index) => (
+                                .map((page, index) =>
                                     page === -1 ? (
-                                        <PaginationItem key={`ellipsis-${index}`}>
+                                        <PaginationItem
+                                            key={`ellipsis-${index}`}
+                                        >
                                             <PaginationEllipsis />
                                         </PaginationItem>
                                     ) : (
                                         <PaginationItem key={page}>
                                             <PaginationLink
-                                                onClick={() => table.setPageIndex(page - 1)}
-                                                isActive={table.getState().pagination.pageIndex + 1 === page}
+                                                onClick={() =>
+                                                    table.setPageIndex(page - 1)
+                                                }
+                                                isActive={
+                                                    table.getState().pagination
+                                                        .pageIndex +
+                                                        1 ===
+                                                    page
+                                                }
                                             >
                                                 {page}
                                             </PaginationLink>
                                         </PaginationItem>
-                                    )
-                                ))}
+                                    ),
+                                )}
 
                             <PaginationItem>
                                 <PaginationNext
                                     onClick={() => table.nextPage()}
                                     className={cn(
-                                        !table.getCanNextPage() && "pointer-events-none opacity-50"
+                                        !table.getCanNextPage() &&
+                                            'pointer-events-none opacity-50',
                                     )}
                                 />
                             </PaginationItem>
@@ -311,5 +362,5 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                 </div>
             </div>
         </div>
-    )
+    );
 }

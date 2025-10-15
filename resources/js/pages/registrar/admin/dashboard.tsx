@@ -1,21 +1,9 @@
-import { Head, router } from '@inertiajs/react';
+import { DataTable } from '@/components/data-table';
+import { ReleaseDocumentDialog } from '@/components/release-document-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Search, Filter, Clock, CheckCircle, XCircle, AlertCircle, FileText, DollarSign, Package, Calendar, ChevronDown, X, Download, FileCheck, MoreVertical, Eye } from 'lucide-react';
-import { DataTable } from '@/components/data-table';
-import { ColumnDef } from '@tanstack/react-table';
-import { dashboard } from '@/routes/registrar/admin';
-import { show } from '@/routes/registrar/admin/requests';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { FormEvent, useState } from 'react';
-import { Separator } from '@/components/ui/separator';
 import { DatePicker } from '@/components/ui/date-picker';
-import { statusColors } from '@/lib/status-colors';
-import { ReleaseDocumentDialog } from '@/components/release-document-dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -24,11 +12,55 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import AppLayout from '@/layouts/app-layout';
+import { statusColors } from '@/lib/status-colors';
+import { dashboard } from '@/routes/registrar/admin';
+import { show } from '@/routes/registrar/admin/requests';
+import { type BreadcrumbItem } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { ColumnDef } from '@tanstack/react-table';
+import {
+    AlertCircle,
+    Calendar,
+    CheckCircle,
+    ChevronDown,
+    Clock,
+    DollarSign,
+    Download,
+    Eye,
+    FileCheck,
+    FileText,
+    Filter,
+    MoreVertical,
+    Package,
+    Search,
+    X,
+    XCircle,
+} from 'lucide-react';
+import { FormEvent, useState } from 'react';
 
 interface DocumentRequest {
     id: number;
     request_number: string;
-    status: 'pending_payment' | 'payment_expired' | 'paid' | 'processing' | 'ready_for_claim' | 'claimed' | 'released' | 'cancelled' | 'rejected';
+    status:
+        | 'pending_payment'
+        | 'payment_expired'
+        | 'paid'
+        | 'processing'
+        | 'ready_for_claim'
+        | 'claimed'
+        | 'released'
+        | 'cancelled'
+        | 'rejected';
     document_type: string;
     purpose: string;
     copies: number;
@@ -90,15 +122,19 @@ const statusConfig = {
 export default function Dashboard({ requests, filters, stats }: RequestsProps) {
     const [statusFilter, setStatusFilter] = useState(filters.status || 'all');
     const [dateFrom, setDateFrom] = useState<Date | undefined>(
-        filters.date_from ? new Date(filters.date_from) : undefined
+        filters.date_from ? new Date(filters.date_from) : undefined,
     );
     const [dateTo, setDateTo] = useState<Date | undefined>(
-        filters.date_to ? new Date(filters.date_to) : undefined
+        filters.date_to ? new Date(filters.date_to) : undefined,
     );
     const [isFilterOpen, setIsFilterOpen] = useState(
-        !!(filters.status || filters.date_from || filters.date_to)
+        !!(filters.status || filters.date_from || filters.date_to),
     );
-    const [releaseDialog, setReleaseDialog] = useState<{ open: boolean; requestNumber: string; studentName?: string }>({
+    const [releaseDialog, setReleaseDialog] = useState<{
+        open: boolean;
+        requestNumber: string;
+        studentName?: string;
+    }>({
         open: false,
         requestNumber: '',
         studentName: '',
@@ -115,14 +151,22 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
 
     const handleFilterSubmit = (e: FormEvent) => {
         e.preventDefault();
-        router.get(dashboard().url, {
-            status: statusFilter === 'all' ? undefined : statusFilter,
-            date_from: dateFrom ? dateFrom.toISOString().split('T')[0] : undefined,
-            date_to: dateTo ? dateTo.toISOString().split('T')[0] : undefined,
-        }, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        router.get(
+            dashboard().url,
+            {
+                status: statusFilter === 'all' ? undefined : statusFilter,
+                date_from: dateFrom
+                    ? dateFrom.toISOString().split('T')[0]
+                    : undefined,
+                date_to: dateTo
+                    ? dateTo.toISOString().split('T')[0]
+                    : undefined,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     const handleClearFilters = () => {
@@ -145,8 +189,12 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             header: 'Student',
             cell: ({ row }) => (
                 <div>
-                    <div className="font-medium">{row.original.student.user.full_name}</div>
-                    <div className="text-sm text-muted-foreground">{row.original.student.student_id}</div>
+                    <div className="font-medium">
+                        {row.original.student.user.full_name}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                        {row.original.student.student_id}
+                    </div>
                 </div>
             ),
         },
@@ -155,8 +203,10 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             header: 'Document Type',
             cell: ({ row }) => (
                 <div className="max-w-xs">
-                    <div className="font-medium">{row.original.document_type}</div>
-                    <div className="text-sm text-muted-foreground whitespace-pre-wrap break-words line-clamp-2">
+                    <div className="font-medium">
+                        {row.original.document_type}
+                    </div>
+                    <div className="line-clamp-2 text-sm break-words whitespace-pre-wrap text-muted-foreground">
                         {row.original.purpose}
                     </div>
                 </div>
@@ -167,21 +217,29 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             header: 'Status',
             cell: ({ row }) => {
                 const status = row.original.status;
-                const config = statusConfig[status as keyof typeof statusConfig];
-                
+                const config =
+                    statusConfig[status as keyof typeof statusConfig];
+
                 // Fallback for undefined statuses
                 if (!config) {
                     return (
                         <Badge className="bg-muted text-muted-foreground">
-                            {status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                            {status
+                                .split('_')
+                                .map(
+                                    (word) =>
+                                        word.charAt(0).toUpperCase() +
+                                        word.slice(1),
+                                )
+                                .join(' ')}
                         </Badge>
                     );
                 }
-                
+
                 const Icon = config.icon;
                 return (
                     <Badge className={statusColors[status]}>
-                        <Icon className="w-3 h-3 mr-1" />
+                        <Icon className="mr-1 h-3 w-3" />
                         {config.label}
                     </Badge>
                 );
@@ -192,7 +250,10 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             header: 'Amount',
             cell: ({ row }) => (
                 <div className="font-medium">
-                    ₱{row.original.total_amount ? row.original.total_amount.toFixed(2) : '0.00'}
+                    ₱
+                    {row.original.total_amount
+                        ? row.original.total_amount.toFixed(2)
+                        : '0.00'}
                 </div>
             ),
         },
@@ -210,33 +271,56 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
             header: 'Actions',
             cell: ({ row }) => {
                 const request = row.original;
-                const canGenerate = request.status === 'paid' || request.status === 'processing';
-                const canDownload = request.status === 'ready_for_claim' || request.status === 'claimed' || request.status === 'released';
-                const canRelease = request.status === 'ready_for_claim' || request.status === 'claimed';
-                
+                const canGenerate =
+                    request.status === 'paid' ||
+                    request.status === 'processing';
+                const canDownload =
+                    request.status === 'ready_for_claim' ||
+                    request.status === 'claimed' ||
+                    request.status === 'released';
+                const canRelease =
+                    request.status === 'ready_for_claim' ||
+                    request.status === 'claimed';
+
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                            >
                                 <span className="sr-only">Open menu</span>
                                 <MoreVertical className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuLabel>Request Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                                Request Actions
+                            </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            
-                            <DropdownMenuItem onClick={() => router.visit(show(request.request_number).url)}>
+
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.visit(
+                                        show(request.request_number).url,
+                                    )
+                                }
+                            >
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Details
                             </DropdownMenuItem>
-                            
+
                             {canGenerate && (
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
                                         onClick={() => {
-                                            if (confirm('Generate document for this request?')) {
+                                            if (
+                                                confirm(
+                                                    'Generate document for this request?',
+                                                )
+                                            ) {
                                                 window.location.href = `/admin/requests/${request.request_number}/generate`;
                                             }
                                         }}
@@ -246,7 +330,7 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                     </DropdownMenuItem>
                                 </>
                             )}
-                            
+
                             {canDownload && (
                                 <DropdownMenuItem
                                     onClick={() => {
@@ -265,7 +349,8 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                         onClick={() => {
                                             setReleaseDialog({
                                                 open: true,
-                                                requestNumber: request.request_number,
+                                                requestNumber:
+                                                    request.request_number,
                                                 studentName: `${request.student.user.first_name} ${request.student.user.last_name}`,
                                             });
                                         }}
@@ -302,99 +387,155 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Total Requests
+                            </CardTitle>
                             <FileText className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total}</div>
-                            <p className="text-xs text-muted-foreground">All document requests</p>
+                            <div className="text-2xl font-bold">
+                                {stats.total}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                All document requests
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Pending Payment</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Pending Payment
+                            </CardTitle>
                             <Clock className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.pending_payment}</div>
-                            <p className="text-xs text-muted-foreground">Awaiting payment</p>
+                            <div className="text-2xl font-bold">
+                                {stats.pending_payment}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Awaiting payment
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Paid</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Paid
+                            </CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.paid}</div>
-                            <p className="text-xs text-muted-foreground">Payment received</p>
+                            <div className="text-2xl font-bold">
+                                {stats.paid}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Payment received
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Processing</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Processing
+                            </CardTitle>
                             <Package className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.processing}</div>
-                            <p className="text-xs text-muted-foreground">Being processed</p>
+                            <div className="text-2xl font-bold">
+                                {stats.processing}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Being processed
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Ready for Claim</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Ready for Claim
+                            </CardTitle>
                             <CheckCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.ready_for_claim}</div>
-                            <p className="text-xs text-muted-foreground">Ready to claim</p>
+                            <div className="text-2xl font-bold">
+                                {stats.ready_for_claim}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Ready to claim
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Claimed</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Claimed
+                            </CardTitle>
                             <CheckCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.claimed}</div>
-                            <p className="text-xs text-muted-foreground">Picked up by students</p>
+                            <div className="text-2xl font-bold">
+                                {stats.claimed}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Picked up by students
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
 
                 {/* Filters */}
                 <Card>
-                    <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => setIsFilterOpen(!isFilterOpen)}>
+                    <CardHeader
+                        className="cursor-pointer transition-colors hover:bg-muted/50"
+                        onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Filter className="h-4 w-4 text-muted-foreground" />
                                 <CardTitle className="text-base font-medium">
                                     Filters
                                     {hasActiveFilters && (
-                                        <Badge variant="secondary" className="ml-2 text-xs">
+                                        <Badge
+                                            variant="secondary"
+                                            className="ml-2 text-xs"
+                                        >
                                             Active
                                         </Badge>
                                     )}
                                 </CardTitle>
                             </div>
-                            <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown
+                                className={`h-4 w-4 text-muted-foreground transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
+                            />
                         </div>
                     </CardHeader>
-                    
+
                     {isFilterOpen && (
                         <>
                             <Separator />
                             <CardContent className="pt-6">
-                                <form onSubmit={handleFilterSubmit} className="space-y-6">
+                                <form
+                                    onSubmit={handleFilterSubmit}
+                                    className="space-y-6"
+                                >
                                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                         {/* Status Filter */}
                                         <div className="space-y-2">
-                                            <Label htmlFor="status" className="text-sm font-medium flex items-center gap-2">
+                                            <Label
+                                                htmlFor="status"
+                                                className="flex items-center gap-2 text-sm font-medium"
+                                            >
                                                 <CheckCircle className="h-3.5 w-3.5 text-muted-foreground" />
                                                 Status
                                             </Label>
-                                            <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                                <SelectTrigger id="status" className="h-10">
+                                            <Select
+                                                value={statusFilter}
+                                                onValueChange={setStatusFilter}
+                                            >
+                                                <SelectTrigger
+                                                    id="status"
+                                                    className="h-10"
+                                                >
                                                     <SelectValue placeholder="Select status..." />
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -463,7 +604,10 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
 
                                         {/* Date From Filter */}
                                         <div className="space-y-2">
-                                            <Label htmlFor="date_from" className="text-sm font-medium flex items-center gap-2">
+                                            <Label
+                                                htmlFor="date_from"
+                                                className="flex items-center gap-2 text-sm font-medium"
+                                            >
                                                 <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                                                 From Date
                                             </Label>
@@ -477,7 +621,10 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
 
                                         {/* Date To Filter */}
                                         <div className="space-y-2">
-                                            <Label htmlFor="date_to" className="text-sm font-medium flex items-center gap-2">
+                                            <Label
+                                                htmlFor="date_to"
+                                                className="flex items-center gap-2 text-sm font-medium"
+                                            >
                                                 <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                                                 To Date
                                             </Label>
@@ -492,13 +639,17 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
 
                                     {/* Action Buttons */}
                                     <div className="flex flex-wrap items-center gap-3">
-                                        <Button type="submit" size="default" className="gap-2">
+                                        <Button
+                                            type="submit"
+                                            size="default"
+                                            className="gap-2"
+                                        >
                                             <Search className="h-4 w-4" />
                                             Apply Filters
                                         </Button>
                                         {hasActiveFilters && (
-                                            <Button 
-                                                type="button" 
+                                            <Button
+                                                type="button"
                                                 variant="outline"
                                                 size="default"
                                                 onClick={handleClearFilters}
@@ -511,10 +662,14 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                         {hasActiveFilters && (
                                             <p className="text-sm text-muted-foreground">
                                                 {[
-                                                    statusFilter !== 'all' && 'Status',
+                                                    statusFilter !== 'all' &&
+                                                        'Status',
                                                     dateFrom && 'Start date',
-                                                    dateTo && 'End date'
-                                                ].filter(Boolean).join(', ')} applied
+                                                    dateTo && 'End date',
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(', ')}{' '}
+                                                applied
                                             </p>
                                         )}
                                     </div>
@@ -527,7 +682,9 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                 {/* Requests Table */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Document Requests ({requests.total})</CardTitle>
+                        <CardTitle>
+                            Document Requests ({requests.total})
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <DataTable
@@ -543,7 +700,9 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
 
             <ReleaseDocumentDialog
                 open={releaseDialog.open}
-                onOpenChange={(open) => setReleaseDialog({ ...releaseDialog, open })}
+                onOpenChange={(open) =>
+                    setReleaseDialog({ ...releaseDialog, open })
+                }
                 requestNumber={releaseDialog.requestNumber}
                 studentName={releaseDialog.studentName}
             />
