@@ -1,6 +1,6 @@
-# MinSU BC Systems Platform
-
 <div align="center">
+
+# MinSU BC Systems Platform
 
 ![Laravel](https://img.shields.io/badge/Laravel-12.32.5-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
