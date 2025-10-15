@@ -29,6 +29,11 @@ jobs:
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           npm install
 
+      - name: Setup Laravel Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+
       - name: Run Pint
         run: vendor/bin/pint
 
