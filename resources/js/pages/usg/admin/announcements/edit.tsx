@@ -620,6 +620,7 @@ export default function EditAnnouncement({
                                                                     window.open(
                                                                         attachment.file_path,
                                                                         '_blank',
+                                                                        'noopener,noreferrer'
                                                                     )
                                                                 }
                                                             >
