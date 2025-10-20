@@ -42,7 +42,7 @@ export default function CreateResolution({
         whereas_clauses: [''] as string[],
         resolved_clauses: [''] as string[],
         category: '',
-        status: 'Draft',
+        status: statuses[0] ?? '',
         author_name: '',
         co_authors: [] as string[],
         date_passed: '',
