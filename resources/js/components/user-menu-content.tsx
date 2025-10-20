@@ -16,11 +16,12 @@ interface UserMenuContentProps {
     user: User | null;
 }
 
-export function UserMenuContent({ user }: UserMenuContentProps) {
+export default function UserMenuContent({ user }: UserMenuContentProps) {
+    const cleanup = useMobileNavigation();
+
     if (!user) {
         return null;
     }
-    const cleanup = useMobileNavigation();
 
     const handleLogout = () => {
         cleanup();

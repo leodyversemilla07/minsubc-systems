@@ -11,7 +11,7 @@ interface TransparencyReport {
     slug: string;
     description: string;
     type: string;
-    data: any;
+    data: Record<string, unknown>;
     report_period_start: string;
     report_period_end: string;
     formatted_period: string;

@@ -32,7 +32,7 @@ export default function CreateOfficer({
 }: Props) {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    const { data, setData, post, processing, errors, wasSuccessful } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         name: '',
         position: '',
         department: '',
@@ -94,8 +94,6 @@ export default function CreateOfficer({
             .toUpperCase()
             .slice(0, 2);
     };
-
-    const currentYear = new Date().getFullYear();
 
     return (
         <>

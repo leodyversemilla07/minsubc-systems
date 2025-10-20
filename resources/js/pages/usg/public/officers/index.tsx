@@ -35,7 +35,6 @@ interface Props {
 
 export default function OfficersIndex({
     officers = [],
-    departments = [],
     stats = {
         total_officers: 0,
         active_officers: 0,

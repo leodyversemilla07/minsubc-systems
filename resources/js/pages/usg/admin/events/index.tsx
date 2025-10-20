@@ -45,7 +45,7 @@ interface Event {
 }
 
 interface Props {
-    events?: Event[] | any; // Make it optional and handle different data structures
+    events?: Event[] | { data: Event[] }; // Make it optional and handle different data structures
     filters?: {
         search?: string;
         category?: string;
@@ -63,13 +63,11 @@ export default function EventsManagement({
     canManage = true,
 }: Props) {
     // Ensure events is always an array
-    const safeEvents: Event[] = Array.isArray(events?.data)
-        ? events.data
-        : Array.isArray(events)
-          ? events
-          : [];
-
-    // Ensure categories and filters are always available
+    const safeEvents: Event[] = Array.isArray(events)
+        ? events
+        : events?.data && Array.isArray(events.data)
+          ? events.data
+          : []; // Ensure categories and filters are always available
     const safeCategories: string[] = Array.isArray(categories)
         ? categories
         : [];

@@ -57,7 +57,7 @@ export default function AnnouncementShow({
                     text: announcement.excerpt,
                     url: window.location.href,
                 });
-            } catch (error) {
+            } catch {
                 // User cancelled sharing or error occurred
                 console.log('Sharing cancelled');
             }

@@ -95,7 +95,6 @@ export default function EditOfficer({
             });
         } else {
             // Regular PUT for text-only updates
-            const { profile_image, _method, ...updateData } = data;
             put(`/usg/admin/officers/${officer.id}`, {
                 onSuccess: () => {
                     // Don't redirect, stay on page to show success message

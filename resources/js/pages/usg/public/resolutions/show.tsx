@@ -68,7 +68,7 @@ export default function ResolutionShow({
                     text: resolution.description,
                     url: window.location.href,
                 });
-            } catch (error) {
+            } catch {
                 console.log('Sharing cancelled');
             }
         } else {

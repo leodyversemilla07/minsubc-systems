@@ -34,15 +34,7 @@ export default function CreateAnnouncement({
         string | null
     >(null);
 
-    const {
-        data,
-        setData,
-        post,
-        processing,
-        errors,
-        wasSuccessful,
-        recentlySuccessful,
-    } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         title: '',
         content: '',
         excerpt: '',

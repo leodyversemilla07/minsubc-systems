@@ -34,7 +34,7 @@ interface Officer {
 }
 
 interface Props {
-    officers?: Officer[] | any;
+    officers?: Officer[] | { data: Officer[] };
     filters?: {
         search?: string;
         department?: string;
@@ -51,13 +51,11 @@ export default function OfficersManagement({
     canManage = true,
 }: Props) {
     // Ensure officers is always an array
-    const safeOfficers: Officer[] = Array.isArray(officers?.data)
-        ? officers.data
-        : Array.isArray(officers)
-          ? officers
-          : [];
-
-    // Ensure departments is always an array
+    const safeOfficers: Officer[] = Array.isArray(officers)
+        ? officers
+        : officers?.data && Array.isArray(officers.data)
+          ? officers.data
+          : []; // Ensure departments is always an array
     const safeDepartments: string[] = Array.isArray(departments)
         ? departments
         : [];
@@ -195,7 +193,7 @@ export default function OfficersManagement({
                                     </div>
                                     <div>
                                         <div className="text-2xl font-bold">
-                                            {officers.length}
+                                            {safeOfficers.length}
                                         </div>
                                         <div className="text-sm text-gray-600 dark:text-gray-400">
                                             Total Officers

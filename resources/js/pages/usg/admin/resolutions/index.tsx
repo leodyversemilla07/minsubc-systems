@@ -48,7 +48,7 @@ interface Resolution {
 }
 
 interface Props {
-    resolutions?: Resolution[] | any;
+    resolutions?: Resolution[] | { data: Resolution[] };
     filters?: {
         search?: string;
         status?: string;
@@ -68,13 +68,11 @@ export default function ResolutionsManagement({
     canManage = true,
 }: Props) {
     // Ensure resolutions is always an array
-    const safeResolutions: Resolution[] = Array.isArray(resolutions?.data)
-        ? resolutions.data
-        : Array.isArray(resolutions)
-          ? resolutions
-          : [];
-
-    // Ensure categories, years, and filters are always available
+    const safeResolutions: Resolution[] = Array.isArray(resolutions)
+        ? resolutions
+        : resolutions?.data && Array.isArray(resolutions.data)
+          ? resolutions.data
+          : []; // Ensure categories, years, and filters are always available
     const safeCategories: string[] = Array.isArray(categories)
         ? categories
         : [];

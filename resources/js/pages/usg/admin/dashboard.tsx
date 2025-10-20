@@ -44,7 +44,7 @@ interface RecentItem {
 interface QuickAction {
     label: string;
     description: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<{ className?: string }>;
     route: string;
     color: string;
 }

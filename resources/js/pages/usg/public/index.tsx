@@ -42,7 +42,7 @@ interface Officer {
 interface Props {
     announcements: Announcement[];
     upcomingEvents: Event[];
-    featuredOfficers: Officer[];
+    _featuredOfficers: Officer[];
     stats: {
         totalOfficers: number;
         totalResolutions: number;
@@ -61,7 +61,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function USGHomepage({
     announcements,
     upcomingEvents,
-    featuredOfficers,
     stats,
 }: Props) {
     return (

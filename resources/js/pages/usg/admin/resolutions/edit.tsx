@@ -131,7 +131,6 @@ export default function EditResolution({
             });
         } else {
             // Regular PUT for text-only updates
-            const { new_attachments, _method, ...updateData } = data;
             put(`/usg/admin/resolutions/${resolution.id}`, {
                 onSuccess: () => {
                     // Don't redirect, stay on page to show success message

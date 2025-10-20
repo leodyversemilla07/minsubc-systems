@@ -130,9 +130,8 @@ export default function ResolutionsIndex({
     const pendingResolutions = filteredResolutions.filter(
         (resolution) => resolution.status === 'pending',
     );
-    const archivedResolutions = filteredResolutions.filter(
-        (resolution) => resolution.status === 'archived',
-    );
+
+    const currentYear = new Date().getFullYear();
 
     // Group published resolutions by year
     const resolutionsByYear = publishedResolutions.reduce(
@@ -146,8 +145,6 @@ export default function ResolutionsIndex({
         },
         {} as { [year: string]: Resolution[] },
     );
-
-    const currentYear = new Date().getFullYear().toString();
 
     return (
         <PublicLayout>
@@ -394,7 +391,9 @@ export default function ResolutionsIndex({
 
                             {/* Previous Years Resolutions */}
                             {Object.entries(resolutionsByYear)
-                                .filter(([year]) => year !== currentYear)
+                                .filter(
+                                    ([year]) => year !== currentYear.toString(),
+                                )
                                 .map(([year, yearResolutions]) => (
                                     <div key={year}>
                                         <div className="mb-6 flex items-center gap-2">

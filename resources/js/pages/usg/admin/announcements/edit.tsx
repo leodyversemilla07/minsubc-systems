@@ -118,8 +118,6 @@ export default function EditAnnouncement({
             });
         } else {
             // Regular PUT for text-only updates
-            const { featured_image, new_attachments, _method, ...updateData } =
-                data;
             put(`/usg/admin/announcements/${announcement.id}`, {
                 onSuccess: () => {
                     // Don't redirect, stay on page to show success message

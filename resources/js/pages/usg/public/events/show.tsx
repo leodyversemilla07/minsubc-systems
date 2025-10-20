@@ -70,7 +70,7 @@ export default function EventShow({
                     text: `Join us for ${event.title} on ${formatDate(event.event_date)}`,
                     url: window.location.href,
                 });
-            } catch (error) {
+            } catch {
                 console.log('Sharing cancelled');
             }
         } else {

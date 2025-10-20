@@ -111,7 +111,6 @@ export default function EditEvent({
             });
         } else {
             // Regular PUT for text-only updates
-            const { featured_image, _method, ...updateData } = data;
             put(`/usg/admin/events/${event.id}`, {
                 onSuccess: () => {
                     // Don't redirect, stay on page to show success message

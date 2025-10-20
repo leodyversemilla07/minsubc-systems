@@ -41,7 +41,7 @@ interface Announcement {
 }
 
 interface Props {
-    announcements?: Announcement[] | any; // Make it optional and handle different data structures
+    announcements?: Announcement[] | { data: Announcement[] }; // Make it optional and handle different data structures
     filters?: {
         search?: string;
         status?: string;
@@ -59,13 +59,11 @@ export default function AnnouncementsManagement({
     canManage = true,
 }: Props) {
     // Ensure announcements is always an array
-    const safeAnnouncements: Announcement[] = Array.isArray(announcements?.data)
-        ? announcements.data
-        : Array.isArray(announcements)
-          ? announcements
-          : [];
-
-    // Ensure filters and categories are always available
+    const safeAnnouncements: Announcement[] = Array.isArray(announcements)
+        ? announcements
+        : announcements?.data && Array.isArray(announcements.data)
+          ? announcements.data
+          : []; // Ensure filters and categories are always available
     const safeFilters = filters || {};
     const safeCategories: string[] = Array.isArray(categories)
         ? categories

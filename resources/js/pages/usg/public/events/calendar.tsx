@@ -33,12 +33,7 @@ interface Props {
     currentYear?: number;
 }
 
-export default function EventsCalendar({
-    events,
-    categories,
-    currentMonth,
-    currentYear,
-}: Props) {
+export default function EventsCalendar({ events, categories }: Props) {
     const [searchQuery, setSearchQuery] = useState('');
     const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -97,23 +92,6 @@ export default function EventsCalendar({
 
     const handleEventClick = (event: Event) => {
         router.visit(`/usg/events/${event.id}`);
-    };
-
-    const getEventsByMonth = () => {
-        const eventsByMonth: { [key: string]: Event[] } = {};
-
-        filteredEvents.forEach((event) => {
-            const date = new Date(event.event_date);
-            const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
-
-            if (!eventsByMonth[monthKey]) {
-                eventsByMonth[monthKey] = [];
-            }
-
-            eventsByMonth[monthKey].push(event);
-        });
-
-        return eventsByMonth;
     };
 
     return (

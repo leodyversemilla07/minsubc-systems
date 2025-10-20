@@ -247,7 +247,11 @@ export default function AnnouncementsIndex({
                                                 >
                                                     <PriorityBadge
                                                         priority={
-                                                            priority as any
+                                                            priority as
+                                                                | 'low'
+                                                                | 'medium'
+                                                                | 'high'
+                                                                | 'urgent'
                                                         }
                                                         className="mr-1"
                                                     />
