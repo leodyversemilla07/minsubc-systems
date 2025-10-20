@@ -627,7 +627,7 @@ export default function CreateResolution({
                                                     e.target.value,
                                                 )
                                             }
-                                            onKeyPress={(e) =>
+                                            onKeyDown={(e) =>
                                                 handleKeyPress(e, 'coauthor')
                                             }
                                             disabled={!canManage}
