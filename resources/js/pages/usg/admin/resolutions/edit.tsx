@@ -969,6 +969,7 @@ export default function EditResolution({
                                                                     window.open(
                                                                         attachment.file_path,
                                                                         '_blank',
+                                                                        'noopener,noreferrer'
                                                                     )
                                                                 }
                                                             >
