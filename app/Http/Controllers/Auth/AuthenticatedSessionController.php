@@ -46,6 +46,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Clear any previous intended URL to force role-based redirect
+        $request->session()->forget('url.intended');
+
         // Log successful login
         AuditLog::log(
             'user_login',
@@ -64,7 +67,31 @@ class AuthenticatedSessionController extends Controller
             ]
         );
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Determine redirect URL based on user roles
+        $defaultUrl = $this->getRedirectUrl($user);
+
+        return redirect()->intended($defaultUrl);
+    }
+
+    /**
+     * Get the redirect URL based on user roles.
+     */
+    protected function getRedirectUrl($user): string
+    {
+        // USG users (admin or officer)
+        if ($user->hasAnyRole(['usg-admin', 'usg-officer'])) {
+            return route('usg.admin.dashboard');
+        }
+
+        // Registrar users
+        if ($user->hasAnyRole(['registrar-admin', 'registrar-staff'])) {
+            if (Route::has('registrar.dashboard')) {
+                return route('registrar.dashboard');
+            }
+        }
+
+        // Default to main dashboard
+        return route('dashboard');
     }
 
     /**

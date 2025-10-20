@@ -3,9 +3,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SearchBar from '@/components/usg/search-bar';
+import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
-    ArrowLeft,
     Calendar,
     Edit,
     Mail,
@@ -139,52 +139,40 @@ export default function OfficersManagement({
     };
 
     return (
-        <>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'Officers', href: '/usg/admin/officers' },
+            ]}
+        >
             <Head title="Officers Management - USG Admin" />
 
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                {/* Navigation */}
-                <div className="sticky top-0 z-10 border-b bg-white dark:bg-gray-800">
-                    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => router.visit('/usg/admin')}
-                                >
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Dashboard
-                                </Button>
-                                <div>
-                                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Officers Management
-                                    </h1>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Manage USG officer profiles and
-                                        information
-                                    </p>
-                                </div>
-                            </div>
-
-                            {canManage && (
-                                <Button
-                                    onClick={() =>
-                                        router.visit(
-                                            '/usg/admin/officers/create',
-                                        )
-                                    }
-                                >
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Add Officer
-                                </Button>
-                            )}
-                        </div>
+            <div className="flex-1 space-y-8 p-6 md:p-8">
+                {/* Header with action button */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Officers Management
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Manage USG officer profiles and information
+                        </p>
                     </div>
+
+                    {canManage && (
+                        <Button
+                            onClick={() =>
+                                router.visit('/usg/admin/officers/create')
+                            }
+                        >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Officer
+                        </Button>
+                    )}
                 </div>
 
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    {/* Stats */}
-                    <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
+                {/* Stats */}
+                <div className="grid gap-6 md:grid-cols-3">
                         <Card>
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
@@ -244,9 +232,9 @@ export default function OfficersManagement({
                         </Card>
                     </div>
 
-                    {/* Filters */}
-                    <Card className="mb-6">
-                        <CardContent className="p-6">
+                {/* Filters */}
+                <Card>
+                    <CardContent className="p-6">
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                                 <div className="md:col-span-2">
                                     <SearchBar
@@ -299,8 +287,8 @@ export default function OfficersManagement({
                         </CardContent>
                     </Card>
 
-                    {/* Officers List */}
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {/* Officers List */}
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {safeOfficers.length > 0 ? (
                             safeOfficers.map((officer) => (
                                 <Card
@@ -454,9 +442,8 @@ export default function OfficersManagement({
                         )}
                     </div>
 
-                    {/* Pagination could go here if needed */}
+                {/* Pagination could go here if needed */}
                 </div>
-            </div>
-        </>
+        </AppLayout>
     );
 }

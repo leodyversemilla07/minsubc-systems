@@ -56,4 +56,64 @@ class PublicAnnouncementController extends Controller
             'related' => $related,
         ]);
     }
+
+    public function category(string $category)
+    {
+        $announcements = $this->announcementService->searchAnnouncements('', [
+            'category' => $category,
+        ]);
+
+        $categories = $this->announcementService->getCategories();
+        $featured = $this->announcementService->getFeaturedAnnouncements(3);
+
+        return Inertia::render('usg/public/announcements/index', [
+            'announcements' => $announcements,
+            'categories' => $categories,
+            'featured' => $featured,
+            'filters' => [
+                'category' => $category,
+            ],
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $announcements = $this->announcementService->searchAnnouncements($query, [
+            'limit' => 20,
+        ]);
+
+        $categories = $this->announcementService->getCategories();
+
+        return Inertia::render('usg/public/search', [
+            'query' => $query,
+            'announcements' => $announcements,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function searchSuggestions(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $suggestions = $this->announcementService->searchAnnouncements($query, [
+            'limit' => 5,
+        ]);
+
+        return response()->json(
+            $suggestions->map(function ($announcement) {
+                return [
+                    'id' => $announcement->id,
+                    'title' => $announcement->title,
+                    'slug' => $announcement->slug,
+                    'category' => $announcement->category,
+                ];
+            })
+        );
+    }
 }

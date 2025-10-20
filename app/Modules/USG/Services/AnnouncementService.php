@@ -213,13 +213,34 @@ class AnnouncementService
      */
     public function getCategories(): array
     {
-        return Announcement::distinct('category')
+        // Predefined categories
+        $predefinedCategories = [
+            'Academic',
+            'Events',
+            'Student Affairs',
+            'Administration',
+            'Scholarships',
+            'Sports',
+            'Organizations',
+            'News',
+            'Updates',
+            'Important Notice',
+        ];
+
+        // Get existing categories from database
+        $existingCategories = Announcement::distinct('category')
             ->whereNotNull('category')
             ->where('category', '!=', '')
             ->pluck('category')
-            ->sort()
-            ->values()
             ->toArray();
+
+        // Merge and remove duplicates
+        $allCategories = array_unique(array_merge($predefinedCategories, $existingCategories));
+
+        // Sort alphabetically and return
+        sort($allCategories);
+
+        return array_values($allCategories);
     }
 
     /**

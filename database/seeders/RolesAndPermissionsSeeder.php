@@ -47,11 +47,36 @@ class RolesAndPermissionsSeeder extends Seeder
             'database_management',
             'view_reports',
             'manage_system_settings', // Additional admin capability
+
+            // USG Officer permissions
+            'usg_view_dashboard',
+            'usg_create_announcements',
+            'usg_edit_announcements',
+            'usg_delete_announcements',
+            'usg_publish_announcements',
+            'usg_create_events',
+            'usg_edit_events',
+            'usg_delete_events',
+            'usg_publish_events',
+            'usg_create_resolutions',
+            'usg_edit_resolutions',
+            'usg_delete_resolutions',
+            'usg_submit_resolutions',
+
+            // USG Admin permissions (additional to officer permissions)
+            'usg_manage_vmgo',
+            'usg_manage_officers',
+            'usg_approve_resolutions',
+            'usg_reject_resolutions',
+            'usg_manage_documents',
+            'usg_archive_content',
+            'usg_view_analytics',
+            'usg_manage_settings',
         ];
 
         // Create permissions
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Update cache to know about the newly created permissions
@@ -121,6 +146,74 @@ class RolesAndPermissionsSeeder extends Seeder
             'database_management',
             'view_reports',
             'manage_system_settings',
+            // USG permissions
+            'usg_view_dashboard',
+            'usg_create_announcements',
+            'usg_edit_announcements',
+            'usg_delete_announcements',
+            'usg_publish_announcements',
+            'usg_create_events',
+            'usg_edit_events',
+            'usg_delete_events',
+            'usg_publish_events',
+            'usg_create_resolutions',
+            'usg_edit_resolutions',
+            'usg_delete_resolutions',
+            'usg_submit_resolutions',
+            'usg_manage_vmgo',
+            'usg_manage_officers',
+            'usg_approve_resolutions',
+            'usg_reject_resolutions',
+            'usg_manage_documents',
+            'usg_archive_content',
+            'usg_view_analytics',
+            'usg_manage_settings',
+        ]);
+
+        // Create USG Officer role
+        $usgOfficerRole = Role::create(['name' => 'usg-officer']);
+        $usgOfficerRole->givePermissionTo([
+            'usg_view_dashboard',
+            'usg_create_announcements',
+            'usg_edit_announcements',
+            'usg_delete_announcements',
+            'usg_publish_announcements',
+            'usg_create_events',
+            'usg_edit_events',
+            'usg_delete_events',
+            'usg_publish_events',
+            'usg_create_resolutions',
+            'usg_edit_resolutions',
+            'usg_delete_resolutions',
+            'usg_submit_resolutions',
+        ]);
+
+        // Create USG Admin role (has all officer permissions plus admin-specific ones)
+        $usgAdminRole = Role::create(['name' => 'usg-admin']);
+        $usgAdminRole->givePermissionTo([
+            // All officer permissions
+            'usg_view_dashboard',
+            'usg_create_announcements',
+            'usg_edit_announcements',
+            'usg_delete_announcements',
+            'usg_publish_announcements',
+            'usg_create_events',
+            'usg_edit_events',
+            'usg_delete_events',
+            'usg_publish_events',
+            'usg_create_resolutions',
+            'usg_edit_resolutions',
+            'usg_delete_resolutions',
+            'usg_submit_resolutions',
+            // Plus admin permissions
+            'usg_manage_vmgo',
+            'usg_manage_officers',
+            'usg_approve_resolutions',
+            'usg_reject_resolutions',
+            'usg_manage_documents',
+            'usg_archive_content',
+            'usg_view_analytics',
+            'usg_manage_settings',
         ]);
     }
 }

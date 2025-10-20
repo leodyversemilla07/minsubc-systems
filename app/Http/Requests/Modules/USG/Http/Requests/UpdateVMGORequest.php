@@ -11,7 +11,7 @@ class UpdateVMGORequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,25 @@ class UpdateVMGORequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'vision' => ['required', 'string', 'max:5000'],
+            'mission' => ['required', 'string', 'max:5000'],
+            'goals' => ['required', 'array', 'min:1'],
+            'goals.*' => ['required', 'string', 'max:1000'],
+            'objectives' => ['required', 'array', 'min:1'],
+            'objectives.*' => ['required', 'string', 'max:1000'],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'goals.*' => 'goal',
+            'objectives.*' => 'objective',
         ];
     }
 }

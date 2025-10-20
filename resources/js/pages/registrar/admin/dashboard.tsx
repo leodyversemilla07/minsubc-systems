@@ -302,7 +302,7 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                 View Details
                             </DropdownMenuItem>
 
-                                            {canRelease && (
+                            {canRelease && (
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem

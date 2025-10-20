@@ -3,8 +3,8 @@
 namespace App\Modules\USG\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Modules\USG\Http\Requests\UpdateVMGORequest;
 use App\Modules\USG\Services\VMGOService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -21,7 +21,7 @@ class VMGOController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateVMGORequest $request)
     {
         $vmgo = $this->vmgoService->getCurrent();
 

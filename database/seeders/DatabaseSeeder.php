@@ -2,10 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\USG\AnnouncementSeeder;
+use Database\Seeders\USG\DocumentSeeder;
+use Database\Seeders\USG\EventSeeder;
+use Database\Seeders\USG\OfficerSeeder;
+use Database\Seeders\USG\ResolutionSeeder;
+use Database\Seeders\USG\TransparencyReportSeeder;
+use Database\Seeders\USG\VMGOSeeder;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,24 +18,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'first_name' => 'Test',
-                'last_name' => 'User',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-            ]
-        );
-
-        // Seed users and students
+        // Seed roles, users, and system settings
         $this->call([
             RolesAndPermissionsSeeder::class,
-            USGRolesAndPermissionsSeeder::class,
+            USGAdminSeeder::class,
             UserStudentSeeder::class,
             SystemSettingsSeeder::class,
+        ]);
+
+        // Seed USG module data
+        $this->call([
+            VMGOSeeder::class,
+            OfficerSeeder::class,
+            ResolutionSeeder::class,
+            AnnouncementSeeder::class,
+            EventSeeder::class,
+            DocumentSeeder::class,
+            TransparencyReportSeeder::class,
         ]);
     }
 }

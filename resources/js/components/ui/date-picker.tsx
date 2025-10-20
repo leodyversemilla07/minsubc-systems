@@ -20,6 +20,7 @@ interface DatePickerProps {
   maxDate?: Date
   className?: string
   showClearButton?: boolean
+  name?: string
 }
 
 export function DatePicker({
@@ -31,6 +32,7 @@ export function DatePicker({
   maxDate,
   className,
   showClearButton = true,
+  name,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -40,7 +42,17 @@ export function DatePicker({
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <>
+      {/* Hidden input for form submission */}
+      {name && date && (
+        <input
+          type="hidden"
+          name={name}
+          value={format(date, 'yyyy-MM-dd')}
+        />
+      )}
+      
+      <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -83,5 +95,6 @@ export function DatePicker({
         />
       </PopoverContent>
     </Popover>
+    </>
   )
 }

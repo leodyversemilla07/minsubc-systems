@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\USG;
 
 use App\Models\Modules\USG\Models\VMGO;
 use Illuminate\Database\Seeder;

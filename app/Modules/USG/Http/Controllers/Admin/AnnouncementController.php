@@ -3,6 +3,8 @@
 namespace App\Modules\USG\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Modules\USG\Http\Requests\StoreAnnouncementRequest;
+use App\Modules\USG\Http\Requests\UpdateAnnouncementRequest;
 use App\Modules\USG\Services\AnnouncementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +53,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreAnnouncementRequest $request)
     {
         $announcement = $this->announcementService->create(
             $request->validated(),
@@ -83,7 +85,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateAnnouncementRequest $request, int $id)
     {
         $announcement = $this->announcementService->getById($id);
 

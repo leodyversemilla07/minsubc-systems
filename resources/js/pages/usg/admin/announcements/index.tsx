@@ -8,11 +8,26 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import SearchBar from '@/components/usg/search-bar';
 import StatusBadge from '@/components/usg/status-badge';
+import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
-    ArrowLeft,
     Calendar,
     Edit,
     Eye,
@@ -86,18 +101,21 @@ export default function AnnouncementsManagement({
     };
 
     const handleStatusFilter = (status: string) => {
-        setSelectedStatus(status);
-        applyFilters({ status });
+        const filterValue = status === 'all' ? '' : status;
+        setSelectedStatus(filterValue);
+        applyFilters({ status: filterValue });
     };
 
     const handlePriorityFilter = (priority: string) => {
-        setSelectedPriority(priority);
-        applyFilters({ priority });
+        const filterValue = priority === 'all' ? '' : priority;
+        setSelectedPriority(filterValue);
+        applyFilters({ priority: filterValue });
     };
 
     const handleCategoryFilter = (category: string) => {
-        setSelectedCategory(category);
-        applyFilters({ category });
+        const filterValue = category === 'all' ? '' : category;
+        setSelectedCategory(filterValue);
+        applyFilters({ category: filterValue });
     };
 
     const applyFilters = (newFilters: Partial<typeof filters>) => {
@@ -170,414 +188,425 @@ export default function AnnouncementsManagement({
     const stats = getStatsData();
 
     return (
-        <>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'Announcements', href: '/usg/admin/announcements' },
+            ]}
+        >
             <Head title="Announcements Management - USG Admin" />
 
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                {/* Navigation */}
-                <div className="sticky top-0 z-10 border-b bg-white dark:bg-gray-800">
-                    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => router.visit('/usg/admin')}
-                                >
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Dashboard
-                                </Button>
-                                <div>
-                                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Announcements Management
-                                    </h1>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Create, edit and manage USG
-                                        announcements
-                                    </p>
-                                </div>
-                            </div>
-
-                            {canManage && (
-                                <Button
-                                    onClick={() =>
-                                        router.visit(
-                                            '/usg/admin/announcements/create',
-                                        )
-                                    }
-                                >
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    New Announcement
-                                </Button>
-                            )}
-                        </div>
+            <div className="flex-1 space-y-8 p-6 md:p-8">
+                {/* Header with action button */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Announcements Management
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Create, edit and manage USG announcements
+                        </p>
                     </div>
+
+                    {canManage && (
+                        <Button
+                            onClick={() =>
+                                router.visit('/usg/admin/announcements/create')
+                            }
+                        >
+                            <Plus className="mr-2 h-4 w-4" />
+                            New Announcement
+                        </Button>
+                    )}
                 </div>
 
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    {/* Stats */}
-                    <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-4">
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
-                                        <Megaphone className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.total}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Total
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
-                                        <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.published}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Published
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-yellow-100 p-3 dark:bg-yellow-900">
-                                        <Filter className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.pending}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Pending
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
-                                        <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.draft}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Drafts
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Filters */}
-                    <Card className="mb-6">
+                {/* Stats */}
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    <Card>
                         <CardContent className="p-6">
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
-                                <div className="md:col-span-2">
-                                    <SearchBar
-                                        placeholder="Search announcements by title or content..."
-                                        value={searchQuery}
-                                        onChange={(query) => {
-                                            setSearchQuery(query);
-                                            handleSearch(query);
-                                        }}
-                                    />
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
+                                    <Megaphone className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                                 </div>
-
                                 <div>
-                                    <select
-                                        value={selectedStatus}
-                                        onChange={(e) =>
-                                            handleStatusFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Status</option>
-                                        <option value="published">
-                                            Published
-                                        </option>
-                                        <option value="pending">Pending</option>
-                                        <option value="draft">Draft</option>
-                                        <option value="archived">
-                                            Archived
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <select
-                                        value={selectedPriority}
-                                        onChange={(e) =>
-                                            handlePriorityFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Priority</option>
-                                        <option value="urgent">Urgent</option>
-                                        <option value="high">High</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="low">Low</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <select
-                                        value={selectedCategory}
-                                        onChange={(e) =>
-                                            handleCategoryFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Categories</option>
-                                        {safeCategories.map((category) => (
-                                            <option
-                                                key={category}
-                                                value={category}
-                                            >
-                                                {category}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <div className="text-2xl font-bold">
+                                        {stats.total}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Total
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* Announcements List */}
-                    <div className="space-y-4">
-                        {safeAnnouncements.length > 0 ? (
-                            safeAnnouncements.map((announcement) => (
-                                <Card
-                                    key={announcement.id}
-                                    className="transition-shadow hover:shadow-lg"
+                    <Card>
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
+                                    <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold">
+                                        {stats.published}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Published
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-lg bg-yellow-100 p-3 dark:bg-yellow-900">
+                                    <Filter className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold">
+                                        {stats.pending}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Pending
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
+                                    <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold">
+                                        {stats.draft}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Drafts
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Filters */}
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
+                            <div className="md:col-span-2">
+                                <SearchBar
+                                    placeholder="Search announcements by title or content..."
+                                    value={searchQuery}
+                                    onChange={(query) => {
+                                        setSearchQuery(query);
+                                        handleSearch(query);
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedStatus}
+                                    onValueChange={handleStatusFilter}
                                 >
-                                    <CardContent className="p-6">
-                                        <div className="flex items-start justify-between">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="mb-2 flex items-center gap-3">
-                                                    <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
-                                                        {announcement.title}
-                                                    </h3>
-                                                    <StatusBadge
-                                                        status={
-                                                            announcement.status
-                                                        }
-                                                        showIcon
-                                                    />
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className={getPriorityColor(
-                                                            announcement.priority,
-                                                        )}
-                                                    >
-                                                        {announcement.priority.toUpperCase()}
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="All Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            All Status
+                                        </SelectItem>
+                                        <SelectItem value="published">
+                                            Published
+                                        </SelectItem>
+                                        <SelectItem value="pending">
+                                            Pending
+                                        </SelectItem>
+                                        <SelectItem value="draft">
+                                            Draft
+                                        </SelectItem>
+                                        <SelectItem value="archived">
+                                            Archived
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedPriority}
+                                    onValueChange={handlePriorityFilter}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="All Priority" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            All Priority
+                                        </SelectItem>
+                                        <SelectItem value="urgent">
+                                            Urgent
+                                        </SelectItem>
+                                        <SelectItem value="high">
+                                            High
+                                        </SelectItem>
+                                        <SelectItem value="medium">
+                                            Medium
+                                        </SelectItem>
+                                        <SelectItem value="low">Low</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedCategory}
+                                    onValueChange={handleCategoryFilter}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="All Categories" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            All Categories
+                                        </SelectItem>
+                                        {safeCategories.map((category) => (
+                                            <SelectItem
+                                                key={category}
+                                                value={category}
+                                            >
+                                                {category}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Announcements List */}
+                <div className="space-y-4">
+                    {safeAnnouncements.length > 0 ? (
+                        safeAnnouncements.map((announcement) => (
+                            <Card
+                                key={announcement.id}
+                                className="transition-shadow hover:shadow-lg"
+                            >
+                                <CardContent className="p-6">
+                                    <div className="flex items-start justify-between">
+                                        <div className="min-w-0 flex-1">
+                                            <div className="mb-2 flex items-center gap-3">
+                                                <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
+                                                    {announcement.title}
+                                                </h3>
+                                                <StatusBadge
+                                                    status={announcement.status}
+                                                    showIcon
+                                                />
+                                                <Badge
+                                                    variant="secondary"
+                                                    className={getPriorityColor(
+                                                        announcement.priority,
+                                                    )}
+                                                >
+                                                    {announcement.priority.toUpperCase()}
+                                                </Badge>
+                                                {announcement.category && (
+                                                    <Badge variant="outline">
+                                                        {announcement.category}
                                                     </Badge>
-                                                    {announcement.category && (
-                                                        <Badge variant="outline">
-                                                            {
-                                                                announcement.category
-                                                            }
-                                                        </Badge>
-                                                    )}
-                                                </div>
-
-                                                <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
-                                                    {announcement.excerpt ||
-                                                        announcement.content}
-                                                </p>
-
-                                                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                                                    <div className="flex items-center gap-1">
-                                                        <User className="h-4 w-4" />
-                                                        {announcement.author}
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <Calendar className="h-4 w-4" />
-                                                        {announcement.published_at
-                                                            ? `Published ${formatDate(announcement.published_at)}`
-                                                            : `Created ${formatDate(announcement.created_at)}`}
-                                                    </div>
-                                                    {announcement.views_count !==
-                                                        undefined && (
-                                                        <div className="flex items-center gap-1">
-                                                            <Eye className="h-4 w-4" />
-                                                            {
-                                                                announcement.views_count
-                                                            }{' '}
-                                                            views
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                )}
                                             </div>
 
-                                            <div className="flex items-center gap-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() =>
-                                                        router.visit(
-                                                            `/usg/announcements/${announcement.id}`,
-                                                        )
-                                                    }
-                                                >
-                                                    <Eye className="h-4 w-4" />
-                                                </Button>
+                                            <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
+                                                {announcement.excerpt ||
+                                                    announcement.content}
+                                            </p>
 
-                                                {canManage && (
-                                                    <>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() =>
-                                                                router.visit(
-                                                                    `/usg/admin/announcements/${announcement.id}/edit`,
-                                                                )
-                                                            }
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger
-                                                                asChild
-                                                            >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                >
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                {announcement.status ===
-                                                                    'draft' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                announcement,
-                                                                                'pending',
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Submit
-                                                                        for
-                                                                        Review
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                {announcement.status ===
-                                                                    'pending' && (
-                                                                    <>
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleStatusChange(
-                                                                                    announcement,
-                                                                                    'published',
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Publish
-                                                                        </DropdownMenuItem>
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleStatusChange(
-                                                                                    announcement,
-                                                                                    'draft',
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Return
-                                                                            to
-                                                                            Draft
-                                                                        </DropdownMenuItem>
-                                                                    </>
-                                                                )}
-                                                                {announcement.status ===
-                                                                    'published' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                announcement,
-                                                                                'archived',
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Archive
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                <DropdownMenuSeparator />
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleDelete(
-                                                                            announcement,
-                                                                        )
-                                                                    }
-                                                                    className="text-red-600 focus:text-red-600"
-                                                                >
-                                                                    <Trash2 className="mr-2 h-4 w-4" />
-                                                                    Delete
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </>
+                                            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                                <div className="flex items-center gap-1">
+                                                    <User className="h-4 w-4" />
+                                                    {announcement.author}
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <Calendar className="h-4 w-4" />
+                                                    {announcement.published_at
+                                                        ? `Published ${formatDate(announcement.published_at)}`
+                                                        : `Created ${formatDate(announcement.created_at)}`}
+                                                </div>
+                                                {announcement.views_count !==
+                                                    undefined && (
+                                                    <div className="flex items-center gap-1">
+                                                        <Eye className="h-4 w-4" />
+                                                        {
+                                                            announcement.views_count
+                                                        }{' '}
+                                                        views
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            ))
-                        ) : (
-                            <Card>
-                                <CardContent className="p-12 text-center">
-                                    <Megaphone className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                    <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-                                        No announcements found
-                                    </h3>
-                                    <p className="mb-6 text-gray-500 dark:text-gray-400">
-                                        {searchQuery ||
-                                        selectedStatus ||
-                                        selectedPriority ||
-                                        selectedCategory
-                                            ? 'Try adjusting your search filters'
-                                            : 'Get started by creating your first announcement'}
-                                    </p>
-                                    {canManage && (
-                                        <Button
-                                            onClick={() =>
-                                                router.visit(
-                                                    '/usg/admin/announcements/create',
-                                                )
-                                            }
-                                        >
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            Create Announcement
-                                        </Button>
-                                    )}
+
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() =>
+                                                    router.visit(
+                                                        `/usg/announcements/${announcement.id}`,
+                                                    )
+                                                }
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                            </Button>
+
+                                            {canManage && (
+                                                <>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            router.visit(
+                                                                `/usg/admin/announcements/${announcement.id}/edit`,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Edit className="h-4 w-4" />
+                                                    </Button>
+
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger
+                                                            asChild
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <MoreVertical className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            {announcement.status ===
+                                                                'draft' && (
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            announcement,
+                                                                            'pending',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Submit for
+                                                                    Review
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {announcement.status ===
+                                                                'pending' && (
+                                                                <>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                announcement,
+                                                                                'published',
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Publish
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                announcement,
+                                                                                'draft',
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Return
+                                                                        to Draft
+                                                                    </DropdownMenuItem>
+                                                                </>
+                                                            )}
+                                                            {announcement.status ===
+                                                                'published' && (
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            announcement,
+                                                                            'archived',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Archive
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        announcement,
+                                                                    )
+                                                                }
+                                                                className="text-red-600 focus:text-red-600"
+                                                            >
+                                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                                Delete
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                 </CardContent>
                             </Card>
-                        )}
-                    </div>
+                        ))
+                    ) : (
+                        <Card>
+                            <CardContent className="p-12">
+                                <Empty>
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon">
+                                            <Megaphone className="h-12 w-12" />
+                                        </EmptyMedia>
+                                        <EmptyTitle>
+                                            No announcements found
+                                        </EmptyTitle>
+                                        <EmptyDescription>
+                                            {searchQuery ||
+                                            selectedStatus ||
+                                            selectedPriority ||
+                                            selectedCategory
+                                                ? 'Try adjusting your search filters to see more results.'
+                                                : 'Get started by creating your first announcement to keep everyone informed.'}
+                                        </EmptyDescription>
+                                    </EmptyHeader>
+                                    {canManage && (
+                                        <EmptyContent>
+                                            <Button
+                                                onClick={() =>
+                                                    router.visit(
+                                                        '/usg/admin/announcements/create',
+                                                    )
+                                                }
+                                            >
+                                                <Plus className="mr-2 h-4 w-4" />
+                                                Create Announcement
+                                            </Button>
+                                        </EmptyContent>
+                                    )}
+                                </Empty>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
             </div>
-        </>
+        </AppLayout>
     );
 }

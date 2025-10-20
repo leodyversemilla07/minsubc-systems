@@ -10,10 +10,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import SearchBar from '@/components/usg/search-bar';
 import StatusBadge from '@/components/usg/status-badge';
+import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
     Archive,
-    ArrowLeft,
     Calendar,
     Download,
     Edit,
@@ -178,64 +178,53 @@ export default function ResolutionsManagement({
     const stats = getStatsData();
 
     return (
-        <>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'Resolutions', href: '/usg/admin/resolutions' },
+            ]}
+        >
             <Head title="Resolutions Management - USG Admin" />
 
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                {/* Navigation */}
-                <div className="sticky top-0 z-10 border-b bg-white dark:bg-gray-800">
-                    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => router.visit('/usg/admin')}
-                                >
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Dashboard
-                                </Button>
-                                <div>
-                                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Resolutions Management
-                                    </h1>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Create, edit and manage USG resolutions
-                                        and legislative documents
-                                    </p>
-                                </div>
-                            </div>
+            <div className="flex-1 space-y-8 p-6 md:p-8">
+                {/* Header with action buttons */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Resolutions Management
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Create, edit and manage USG resolutions and
+                            legislative documents
+                        </p>
+                    </div>
 
-                            <div className="flex items-center gap-3">
-                                <Button
-                                    variant="outline"
-                                    onClick={() =>
-                                        router.visit('/usg/resolutions')
-                                    }
-                                >
-                                    <Archive className="mr-2 h-4 w-4" />
-                                    View Archive
-                                </Button>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            variant="outline"
+                            onClick={() => router.visit('/usg/resolutions')}
+                        >
+                            <Archive className="mr-2 h-4 w-4" />
+                            View Archive
+                        </Button>
 
-                                {canManage && (
-                                    <Button
-                                        onClick={() =>
-                                            router.visit(
-                                                '/usg/admin/resolutions/create',
-                                            )
-                                        }
-                                    >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        New Resolution
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
+                        {canManage && (
+                            <Button
+                                onClick={() =>
+                                    router.visit(
+                                        '/usg/admin/resolutions/create',
+                                    )
+                                }
+                            >
+                                <Plus className="mr-2 h-4 w-4" />
+                                New Resolution
+                            </Button>
+                        )}
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    {/* Stats */}
-                    <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-5">
+                {/* Stats */}
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
                         <Card>
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
@@ -327,9 +316,9 @@ export default function ResolutionsManagement({
                         </Card>
                     </div>
 
-                    {/* Filters */}
-                    <Card className="mb-6">
-                        <CardContent className="p-6">
+                {/* Filters */}
+                <Card>
+                    <CardContent className="p-6">
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
                                 <div className="md:col-span-2">
                                     <SearchBar
@@ -405,8 +394,8 @@ export default function ResolutionsManagement({
                         </CardContent>
                     </Card>
 
-                    {/* Resolutions List */}
-                    <div className="space-y-4">
+                {/* Resolutions List */}
+                <div className="space-y-4">
                         {safeResolutions.length > 0 ? (
                             safeResolutions.map((resolution) => (
                                 <Card
@@ -733,7 +722,6 @@ export default function ResolutionsManagement({
                         )}
                     </div>
                 </div>
-            </div>
-        </>
+        </AppLayout>
     );
 }

@@ -13,7 +13,22 @@ return new class extends Migration
     {
         Schema::create('usg_announcements', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('content');
+            $table->text('excerpt')->nullable();
+            $table->string('category')->nullable();
+            $table->enum('priority', ['low', 'normal', 'high'])->default('normal');
+            $table->string('featured_image')->nullable();
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->dateTime('publish_date')->nullable();
+            $table->dateTime('expiry_date')->nullable();
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedInteger('views_count')->default(0);
             $table->timestamps();
+
+            $table->index(['status', 'publish_date', 'expiry_date']);
+            $table->index('author_id');
         });
     }
 

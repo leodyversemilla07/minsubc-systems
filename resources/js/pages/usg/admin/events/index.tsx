@@ -9,9 +9,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import SearchBar from '@/components/usg/search-bar';
+import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
-    ArrowLeft,
     Calendar,
     CalendarDays,
     Clock,
@@ -186,8 +186,8 @@ export default function EventsManagement({
     const getMonthOptions = () => {
         // Get all event dates as Date objects
         const eventDates = safeEvents
-            .map(e => new Date(e.date))
-            .filter(d => !isNaN(d.getTime()));
+            .map((e) => new Date(e.date))
+            .filter((d) => !isNaN(d.getTime()));
 
         // If no events, default to current year
         const now = new Date();
@@ -195,13 +195,23 @@ export default function EventsManagement({
         let minYear = currentYear;
         let maxYear = currentYear;
         if (eventDates.length > 0) {
-            minYear = Math.min(...eventDates.map(d => d.getFullYear()));
-            maxYear = Math.max(...eventDates.map(d => d.getFullYear()));
+            minYear = Math.min(...eventDates.map((d) => d.getFullYear()));
+            maxYear = Math.max(...eventDates.map((d) => d.getFullYear()));
         }
 
         const monthNames = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
         ];
 
         const months = [{ value: '', label: 'All Months' }];
@@ -209,7 +219,7 @@ export default function EventsManagement({
             for (let month = 0; month < 12; month++) {
                 months.push({
                     value: `${year}-${String(month + 1).padStart(2, '0')}`,
-                    label: `${monthNames[month]} ${year}`
+                    label: `${monthNames[month]} ${year}`,
                 });
             }
         }
@@ -219,64 +229,50 @@ export default function EventsManagement({
     const stats = getStatsData();
 
     return (
-        <>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'Events', href: '/usg/admin/events' },
+            ]}
+        >
             <Head title="Events Management - USG Admin" />
 
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                {/* Navigation */}
-                <div className="sticky top-0 z-10 border-b bg-white dark:bg-gray-800">
-                    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => router.visit('/usg/admin')}
-                                >
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Dashboard
-                                </Button>
-                                <div>
-                                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Events Management
-                                    </h1>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Create, edit and manage USG events and
-                                        activities
-                                    </p>
-                                </div>
-                            </div>
+            <div className="flex-1 space-y-8 p-6 md:p-8">
+                {/* Header with action buttons */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Events Management
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Create, edit and manage USG events and activities
+                        </p>
+                    </div>
 
-                            <div className="flex items-center gap-3">
-                                <Button
-                                    variant="outline"
-                                    onClick={() =>
-                                        router.visit('/usg/events/calendar')
-                                    }
-                                >
-                                    <CalendarDays className="mr-2 h-4 w-4" />
-                                    Calendar View
-                                </Button>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            variant="outline"
+                            onClick={() => router.visit('/usg/events/calendar')}
+                        >
+                            <CalendarDays className="mr-2 h-4 w-4" />
+                            Calendar View
+                        </Button>
 
-                                {canManage && (
-                                    <Button
-                                        onClick={() =>
-                                            router.visit(
-                                                '/usg/admin/events/create',
-                                            )
-                                        }
-                                    >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        New Event
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
+                        {canManage && (
+                            <Button
+                                onClick={() =>
+                                    router.visit('/usg/admin/events/create')
+                                }
+                            >
+                                <Plus className="mr-2 h-4 w-4" />
+                                New Event
+                            </Button>
+                        )}
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    {/* Stats */}
-                    <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-4">
+                {/* Stats */}
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                         <Card>
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
@@ -664,7 +660,6 @@ export default function EventsManagement({
                         )}
                     </div>
                 </div>
-            </div>
-        </>
+        </AppLayout>
     );
 }

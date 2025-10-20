@@ -51,10 +51,10 @@ class PublicTransparencyController extends Controller
             ->values();
 
         $years = TransparencyReport::published()
-            ->selectRaw("strftime('%Y', report_period_start) as year")
+            ->selectRaw('YEAR(report_period_start) as year')
             ->union(
                 TransparencyReport::published()
-                    ->selectRaw("strftime('%Y', report_period_end) as year")
+                    ->selectRaw('YEAR(report_period_end) as year')
             )
             ->distinct()
             ->orderBy('year', 'desc')

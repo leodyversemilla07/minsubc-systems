@@ -740,7 +740,10 @@ export default function EditResolution({
                                             }
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter') {
-                                                    handleKeyPress(e, 'coauthor');
+                                                    handleKeyPress(
+                                                        e,
+                                                        'coauthor',
+                                                    );
                                                 }
                                             }}
                                             disabled={!canManage}
@@ -969,7 +972,7 @@ export default function EditResolution({
                                                                     window.open(
                                                                         attachment.file_path,
                                                                         '_blank',
-                                                                        'noopener,noreferrer'
+                                                                        'noopener,noreferrer',
                                                                     )
                                                                 }
                                                             >
