@@ -28,19 +28,3 @@ export {
 };
 
 // Component validation - ensure all components are properly typed
-const componentValidation = {
-    AnnouncementCard,
-    CalendarWidget,
-    CategoryFilter,
-    EventCard,
-    FileUploader,
-    OfficerCard,
-    PriorityBadge,
-    ResolutionCard,
-    RichTextEditor,
-    SearchBar,
-    StatsCard,
-    StatusBadge,
-} as const;
-
-export default componentValidation;
