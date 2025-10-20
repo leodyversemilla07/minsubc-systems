@@ -1,12 +1,9 @@
-import { dashboard, login, register } from '@/routes';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import PublicLayout from '@/layouts/public-layout';
+import { Head, Link } from '@inertiajs/react';
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
-
     return (
-        <>
+        <PublicLayout>
             <Head title="Welcome - USG Information Portal">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
@@ -15,73 +12,161 @@ export default function Welcome() {
                 />
             </Head>
 
-            {/* Navigation */}
-            <nav className="fixed top-0 right-0 left-0 z-50 border-b border-green-200 bg-white shadow-sm backdrop-blur-md dark:border-gray-800 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-700 shadow-md">
-                                <span className="text-sm font-bold text-white">
-                                    USG
-                                </span>
-                            </div>
-                            <span className="font-semibold text-green-900 dark:text-white">
-                                MinSUBC Portal
+            {/* Hero Section */}
+            <section className="relative overflow-hidden bg-gradient-to-b from-white to-green-50 px-4 py-24 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
+                {/* Background Pattern */}
+                <div className="pointer-events-none absolute inset-0 opacity-10 dark:opacity-5">
+                    <svg
+                        className="h-full w-full"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <defs>
+                            <pattern
+                                id="hero-pattern"
+                                x="0"
+                                y="0"
+                                width="40"
+                                height="40"
+                                patternUnits="userSpaceOnUse"
+                            >
+                                <circle
+                                    cx="20"
+                                    cy="20"
+                                    r="1"
+                                    fill="currentColor"
+                                    className="text-green-700"
+                                />
+                            </pattern>
+                        </defs>
+                        <rect
+                            width="100%"
+                            height="100%"
+                            fill="url(#hero-pattern)"
+                        />
+                    </svg>
+                </div>
+
+                {/* Decorative Blobs */}
+                <div className="pointer-events-none absolute -top-24 right-0 h-96 w-96 rounded-full bg-green-200/30 blur-3xl dark:bg-green-900/20" />
+                <div className="pointer-events-none absolute -bottom-24 left-0 h-96 w-96 rounded-full bg-green-300/20 blur-3xl dark:bg-green-800/10" />
+
+                <div className="relative mx-auto max-w-7xl">
+                    <div className="text-center">
+                        {/* Badge */}
+                        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-200 bg-white px-4 py-2 shadow-sm dark:border-green-800 dark:bg-gray-800">
+                            <span className="flex h-2 w-2">
+                                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-green-500 opacity-75" />
+                                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
+                            </span>
+                            <span className="text-sm font-medium text-green-900 dark:text-green-400">
+                                Serving the MinSUBC Community
                             </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                            {auth.user ? (
-                                <Link
-                                    href={dashboard()}
-                                    className="rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-md transition-colors hover:bg-green-800"
-                                >
-                                    Dashboard
-                                </Link>
-                            ) : (
-                                <>
-                                    <Link
-                                        href={login()}
-                                        className="px-4 py-2 text-sm font-medium text-green-900 transition-colors hover:text-green-800 dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Log in
-                                    </Link>
-                                    <Link
-                                        href={register()}
-                                        className="rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-md transition-colors hover:bg-green-800"
-                                    >
-                                        Register
-                                    </Link>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </nav>
 
-            {/* Hero Section */}
-            <section className="bg-white px-4 pt-32 pb-20 sm:px-6 lg:px-8 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl text-center">
-                    <h1 className="mb-6 text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl dark:text-white">
-                        USG Information &<br />
-                        Transparency Portal
-                    </h1>
-                    <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-600 sm:text-xl dark:text-gray-300">
-                        Promoting transparency and facilitating information
-                        dissemination within the MinSUBC community.
-                    </p>
-                    <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                        <Link
-                            href="/announcements"
-                            className="rounded-lg bg-green-700 px-8 py-3 text-base font-medium text-white shadow-lg transition-colors hover:bg-green-800 hover:shadow-xl"
-                        >
-                            View Announcements
-                        </Link>
-                        <Link
-                            href="/events"
-                            className="rounded-lg border-2 border-green-700 bg-white px-8 py-3 text-base font-medium text-green-900 shadow-lg transition-colors hover:bg-green-50 dark:border-green-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-                        >
-                            Calendar of Events
-                        </Link>
+                        {/* Main Heading */}
+                        <h1 className="mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl lg:text-7xl dark:from-white dark:via-gray-100 dark:to-gray-300">
+                            USG Information &<br />
+                            Transparency Portal
+                        </h1>
+
+                        {/* Subheading */}
+                        <p className="mx-auto mb-8 max-w-3xl text-lg leading-relaxed text-gray-600 sm:text-xl lg:text-2xl dark:text-gray-300">
+                            Empowering students through{' '}
+                            <span className="font-semibold text-green-700 dark:text-green-400">
+                                transparency
+                            </span>
+                            , fostering{' '}
+                            <span className="font-semibold text-green-700 dark:text-green-400">
+                                engagement
+                            </span>
+                            , and building a stronger MinSUBC community
+                            together.
+                        </p>
+
+                        {/* CTA Buttons */}
+                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                            <Link
+                                href="/usg/announcements"
+                                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-green-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-green-800 hover:shadow-xl hover:shadow-green-700/20"
+                            >
+                                <span className="relative z-10">
+                                    View Announcements
+                                </span>
+                                <svg
+                                    className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                    />
+                                </svg>
+                                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-600 to-green-800 opacity-0 transition-opacity group-hover:opacity-100" />
+                            </Link>
+
+                            <Link
+                                href="/usg/events"
+                                className="group inline-flex items-center gap-2 rounded-lg border-2 border-green-700 bg-white px-8 py-4 text-base font-semibold text-green-900 shadow-lg transition-all hover:border-green-800 hover:bg-green-50 hover:shadow-xl dark:border-green-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                            >
+                                <svg
+                                    className="h-5 w-5 transition-transform group-hover:rotate-12"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                                <span>Calendar of Events</span>
+                            </Link>
+                        </div>
+
+                        {/* Stats Section */}
+                        <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-6 sm:grid-cols-4">
+                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
+                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
+                                    100%
+                                </div>
+                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                                    Transparency
+                                </div>
+                            </div>
+
+                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
+                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
+                                    24/7
+                                </div>
+                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                                    Access
+                                </div>
+                            </div>
+
+                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
+                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
+                                    Real-time
+                                </div>
+                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                                    Updates
+                                </div>
+                            </div>
+
+                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
+                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
+                                    Open
+                                </div>
+                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                                    Communication
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -121,7 +206,7 @@ export default function Welcome() {
                                 commitment to student governance.
                             </p>
                             <Link
-                                href="/vmgo"
+                                href="/usg/vmgo"
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 Learn more →
@@ -153,7 +238,7 @@ export default function Welcome() {
                                 organizational structure.
                             </p>
                             <Link
-                                href="/officers"
+                                href="/usg/officers"
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 View officers →
@@ -185,7 +270,7 @@ export default function Welcome() {
                                 documents.
                             </p>
                             <Link
-                                href="/resolutions"
+                                href="/usg/resolutions"
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 Browse resolutions →
@@ -217,7 +302,7 @@ export default function Welcome() {
                                 announcements.
                             </p>
                             <Link
-                                href="/announcements"
+                                href="/usg/announcements"
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 Read announcements →
@@ -249,7 +334,7 @@ export default function Welcome() {
                                 dates.
                             </p>
                             <Link
-                                href="/events"
+                                href="/usg/events"
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 View calendar →
@@ -281,7 +366,7 @@ export default function Welcome() {
                                 accountability.
                             </p>
                             <Link
-                                href="/transparency"
+                                href="/usg/transparency"
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 View reports →
@@ -290,20 +375,6 @@ export default function Welcome() {
                     </div>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="border-t border-green-700 bg-green-800 px-4 py-12 sm:px-6 lg:px-8 dark:border-gray-800 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-green-50 dark:text-gray-400">
-                        &copy; {new Date().getFullYear()} MinSUBC University
-                        Student Government. All rights reserved.
-                    </p>
-                    <p className="mt-2 text-sm text-green-100 dark:text-gray-500">
-                        Promoting transparency and serving the student
-                        community.
-                    </p>
-                </div>
-            </footer>
-        </>
+        </PublicLayout>
     );
 }
