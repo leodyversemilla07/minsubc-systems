@@ -738,9 +738,11 @@ export default function EditResolution({
                                                     e.target.value,
                                                 )
                                             }
-                                            onKeyPress={(e) =>
-                                                handleKeyPress(e, 'coauthor')
-                                            }
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleKeyPress(e, 'coauthor');
+                                                }
+                                            }}
                                             disabled={!canManage}
                                             className="flex-1"
                                         />
