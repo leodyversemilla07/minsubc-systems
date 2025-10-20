@@ -868,7 +868,7 @@ export default function EditResolution({
                                         onChange={(e) =>
                                             setCurrentTag(e.target.value)
                                         }
-                                        onKeyPress={(e) =>
+                                        onKeyDown={(e) =>
                                             handleKeyPress(e, 'tag')
                                         }
                                         disabled={!canManage}
