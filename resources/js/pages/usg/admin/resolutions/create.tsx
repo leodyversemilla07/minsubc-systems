@@ -758,9 +758,11 @@ export default function CreateResolution({
                                         onChange={(e) =>
                                             setCurrentTag(e.target.value)
                                         }
-                                        onKeyPress={(e) =>
-                                            handleKeyPress(e, 'tag')
-                                        }
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleKeyPress(e, 'tag');
+                                            }
+                                        }}
                                         disabled={!canManage}
                                         className="flex-1"
                                     />
