@@ -113,7 +113,7 @@ export default function EditAnnouncement({
             post(`/usg/admin/announcements/${announcement.id}`, {
                 forceFormData: true,
                 onSuccess: () => {
-                    router.visit('/usg/admin');
+                    router.visit('/usg/admin/announcements');
                 },
             });
         } else {
