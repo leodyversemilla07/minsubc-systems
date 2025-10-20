@@ -184,21 +184,35 @@ export default function EventsManagement({
     };
 
     const getMonthOptions = () => {
-        const months = [
-            { value: '', label: 'All Months' },
-            { value: '2024-01', label: 'January 2024' },
-            { value: '2024-02', label: 'February 2024' },
-            { value: '2024-03', label: 'March 2024' },
-            { value: '2024-04', label: 'April 2024' },
-            { value: '2024-05', label: 'May 2024' },
-            { value: '2024-06', label: 'June 2024' },
-            { value: '2024-07', label: 'July 2024' },
-            { value: '2024-08', label: 'August 2024' },
-            { value: '2024-09', label: 'September 2024' },
-            { value: '2024-10', label: 'October 2024' },
-            { value: '2024-11', label: 'November 2024' },
-            { value: '2024-12', label: 'December 2024' },
+        // Get all event dates as Date objects
+        const eventDates = safeEvents
+            .map(e => new Date(e.date))
+            .filter(d => !isNaN(d.getTime()));
+
+        // If no events, default to current year
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        let minYear = currentYear;
+        let maxYear = currentYear;
+        if (eventDates.length > 0) {
+            minYear = Math.min(...eventDates.map(d => d.getFullYear()));
+            maxYear = Math.max(...eventDates.map(d => d.getFullYear()));
+        }
+
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
         ];
+
+        const months = [{ value: '', label: 'All Months' }];
+        for (let year = minYear; year <= maxYear; year++) {
+            for (let month = 0; month < 12; month++) {
+                months.push({
+                    value: `${year}-${String(month + 1).padStart(2, '0')}`,
+                    label: `${monthNames[month]} ${year}`
+                });
+            }
+        }
         return months;
     };
 
