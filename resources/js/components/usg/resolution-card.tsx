@@ -20,7 +20,13 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path: string | null;
-    status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+    status:
+        | 'draft'
+        | 'pending'
+        | 'review'
+        | 'published'
+        | 'rejected'
+        | 'archived';
     category?: string;
     tags?: string[];
     created_at: string;

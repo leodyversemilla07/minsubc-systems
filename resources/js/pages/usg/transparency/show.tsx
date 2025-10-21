@@ -87,21 +87,31 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                 return (
                     <ul className="mt-2 list-inside list-disc space-y-1">
                         {value.map((item, index) => (
-                            <li key={index} className="text-gray-900 dark:text-white">
-                                {typeof item === 'object' ? JSON.stringify(item) : String(item)}
+                            <li
+                                key={index}
+                                className="text-gray-900 dark:text-white"
+                            >
+                                {typeof item === 'object'
+                                    ? JSON.stringify(item)
+                                    : String(item)}
                             </li>
                         ))}
                     </ul>
                 );
             }
-            
+
             // Handle objects (but not arrays) - render as key-value pairs
             if (typeof value === 'object' && value !== null) {
-                const entries = Object.entries(value as Record<string, unknown>);
+                const entries = Object.entries(
+                    value as Record<string, unknown>,
+                );
                 return (
                     <div className="mt-2 space-y-2 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
                         {entries.map(([key, val]) => (
-                            <div key={key} className="flex items-start justify-between gap-4 border-b border-gray-200 pb-2 last:border-0 last:pb-0 dark:border-gray-700">
+                            <div
+                                key={key}
+                                className="flex items-start justify-between gap-4 border-b border-gray-200 pb-2 last:border-0 last:pb-0 dark:border-gray-700"
+                            >
                                 <span className="font-medium text-gray-700 dark:text-gray-300">
                                     {key}
                                 </span>
@@ -113,9 +123,13 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                     </div>
                 );
             }
-            
+
             // Handle primitives
-            return <span className="text-gray-900 dark:text-white">{String(value)}</span>;
+            return (
+                <span className="text-gray-900 dark:text-white">
+                    {String(value)}
+                </span>
+            );
         };
 
         return (
@@ -129,12 +143,10 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                             key={key}
                             className="border-b border-gray-200 pb-4 last:border-0 dark:border-gray-700"
                         >
-                            <dt className="text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
+                            <dt className="text-sm font-medium text-gray-600 uppercase dark:text-gray-400">
                                 {key.replace(/_/g, ' ')}
                             </dt>
-                            <dd className="mt-2">
-                                {renderValue(value)}
-                            </dd>
+                            <dd className="mt-2">{renderValue(value)}</dd>
                         </div>
                     ))}
                 </div>
@@ -148,7 +160,6 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
 
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 py-16 text-white">
-                <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
                 <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <Button
                         asChild
@@ -184,24 +195,28 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                                 </div>
                             </div>
 
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 {report.title}
                             </h1>
 
                             <div className="mb-6 flex flex-wrap gap-4 text-sm text-cyan-100">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="h-4 w-4" />
-                                    <span>Period: {report.formatted_period}</span>
+                                    <span>
+                                        Period: {report.formatted_period}
+                                    </span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <User className="h-4 w-4" />
                                     <span>
-                                        Published by {report.created_by.first_name}{' '}
+                                        Published by{' '}
+                                        {report.created_by.first_name}{' '}
                                         {report.created_by.last_name}
                                     </span>
                                 </div>
                                 <div>
-                                    Published on {formatDate(report.published_at)}
+                                    Published on{' '}
+                                    {formatDate(report.published_at)}
                                 </div>
                             </div>
 
@@ -228,7 +243,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
             </div>
 
             {/* Main Content */}
-            <div className="mx-auto max-w-4xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-4xl px-4 pt-8 pb-16 sm:px-6 lg:px-8">
                 {/* Report Description */}
                 {report.description && (
                     <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
@@ -236,7 +251,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                             Report Summary
                         </h2>
                         <div
-                            className="prose max-w-none dark:prose-invert"
+                            className="prose dark:prose-invert max-w-none"
                             dangerouslySetInnerHTML={{
                                 __html: report.description.replace(
                                     /\n/g,
@@ -267,10 +282,14 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                                         <Badge
                                             className={`${getTypeColor(relatedReport.type)} shrink-0`}
                                         >
-                                            {formatTypeLabel(relatedReport.type)}
+                                            {formatTypeLabel(
+                                                relatedReport.type,
+                                            )}
                                         </Badge>
                                         <div className="text-right text-xs text-gray-600 dark:text-gray-400">
-                                            {formatDate(relatedReport.published_at)}
+                                            {formatDate(
+                                                relatedReport.published_at,
+                                            )}
                                         </div>
                                     </div>
 

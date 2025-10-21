@@ -1,4 +1,4 @@
-    import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import PriorityBadge from '@/components/usg/priority-badge';
 import USGLayout from '@/layouts/usg-layout';
@@ -19,12 +19,12 @@ interface Announcement {
     content: string;
     excerpt: string;
     slug: string;
-    priority: 'low' | 'medium' | 'high';
+    priority: 'low' | 'normal' | 'high';
     publish_date: string;
     views_count?: number;
     featured_image?: string;
     category?: string;
-    author?: string;
+    author_name?: string;
     tags?: string[];
     attachments?: {
         id: number;
@@ -90,9 +90,9 @@ export default function AnnouncementShow({
             <Head title={`${announcement.title} - USG Announcements`} />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-orange-700 via-orange-600 to-red-600 text-white py-12">
+            <section className="relative bg-gradient-to-br from-orange-700 via-orange-600 to-red-600 py-12 text-white">
                 <div className="absolute inset-0 bg-black/10"></div>
-                <div className="container mx-auto px-4 relative z-10">
+                <div className="relative z-10 container mx-auto px-4">
                     <Button
                         variant="ghost"
                         onClick={handleBack}
@@ -105,11 +105,11 @@ export default function AnnouncementShow({
             </section>
 
             {/* Main Content */}
-            <section className="py-16 bg-gray-50 dark:bg-gray-800">
-                <div className="container mx-auto px-4 max-w-4xl">
+            <section className="bg-gray-50 py-16 dark:bg-gray-800">
+                <div className="container mx-auto max-w-4xl px-4">
                     <article className="space-y-8">
                         {/* Header */}
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
                                 <div className="flex items-center gap-2">
                                     <PriorityBadge
@@ -143,10 +143,10 @@ export default function AnnouncementShow({
                                     {formatDate(announcement.publish_date)}
                                 </div>
 
-                                {announcement.author && (
+                                {announcement.author_name && (
                                     <div className="flex items-center gap-1">
                                         <User className="h-4 w-4" />
-                                        {announcement.author}
+                                        {announcement.author_name}
                                     </div>
                                 )}
 
@@ -161,7 +161,7 @@ export default function AnnouncementShow({
 
                         {/* Featured Image */}
                         {announcement.featured_image && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm overflow-hidden">
+                            <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-900">
                                 <img
                                     src={announcement.featured_image}
                                     alt={announcement.title}
@@ -171,7 +171,7 @@ export default function AnnouncementShow({
                         )}
 
                         {/* Content */}
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <div
                                 className="prose prose-gray dark:prose-invert max-w-none"
                                 dangerouslySetInnerHTML={{
@@ -182,19 +182,14 @@ export default function AnnouncementShow({
 
                         {/* Tags */}
                         {announcement.tags && announcement.tags.length > 0 && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                 <div className="mb-3 flex items-center gap-2">
                                     <Tag className="h-4 w-4" />
-                                    <span className="font-medium">
-                                        Tags
-                                    </span>
+                                    <span className="font-medium">Tags</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {announcement.tags.map((tag, index) => (
-                                        <Badge
-                                            key={index}
-                                            variant="secondary"
-                                        >
+                                        <Badge key={index} variant="secondary">
                                             {tag}
                                         </Badge>
                                     ))}
@@ -205,7 +200,7 @@ export default function AnnouncementShow({
                         {/* Attachments */}
                         {announcement.attachments &&
                             announcement.attachments.length > 0 && (
-                                <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                                <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                     <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">
                                         Attachments
                                     </h3>
@@ -214,7 +209,7 @@ export default function AnnouncementShow({
                                             (attachment) => (
                                                 <div
                                                     key={attachment.id}
-                                                    className="flex items-center justify-between rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                                                    className="flex items-center justify-between rounded-lg border border-gray-200 p-3 dark:border-gray-700"
                                                 >
                                                     <div className="flex items-center gap-3">
                                                         <ExternalLink className="h-4 w-4 text-gray-600 dark:text-gray-400" />
@@ -253,7 +248,7 @@ export default function AnnouncementShow({
 
                     {/* Related Announcements */}
                     {relatedAnnouncements.length > 0 && (
-                        <div className="space-y-6 mt-12">
+                        <div className="mt-12 space-y-6">
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                                 Related Announcements
                             </h2>
@@ -263,7 +258,7 @@ export default function AnnouncementShow({
                                     .map((related) => (
                                         <div
                                             key={related.id}
-                                            className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 cursor-pointer transition-all hover:shadow-md hover:-translate-y-1"
+                                            className="cursor-pointer rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:bg-gray-900"
                                             onClick={() =>
                                                 router.visit(
                                                     `/usg/announcements/${related.slug}`,
@@ -280,14 +275,17 @@ export default function AnnouncementShow({
                                                     ).toLocaleDateString()}
                                                 </div>
                                             </div>
-                                            <h3 className="mb-2 font-semibold text-gray-900 dark:text-white hover:text-orange-600 dark:hover:text-orange-500 line-clamp-2">
+                                            <h3 className="mb-2 line-clamp-2 font-semibold text-gray-900 hover:text-orange-600 dark:text-white dark:hover:text-orange-500">
                                                 {related.title}
                                             </h3>
                                             <p className="mb-3 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
                                                 {related.excerpt}
                                             </p>
                                             {related.category && (
-                                                <Badge variant="outline" className="text-xs">
+                                                <Badge
+                                                    variant="outline"
+                                                    className="text-xs"
+                                                >
                                                     {related.category}
                                                 </Badge>
                                             )}
@@ -298,18 +296,24 @@ export default function AnnouncementShow({
                     )}
 
                     {/* CTA Section */}
-                    <div className="bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-lg shadow-lg p-12 text-center mt-12">
-                        <h2 className="text-3xl font-bold mb-4">
+                    <div className="mt-12 rounded-lg bg-gradient-to-br from-orange-600 to-red-600 p-12 text-center text-white shadow-lg">
+                        <h2 className="mb-4 text-3xl font-bold">
                             Stay Updated with USG
                         </h2>
-                        <p className="text-lg mb-6 text-white/90">
-                            Never miss an important announcement. Follow us on social media.
+                        <p className="mb-6 text-lg text-white/90">
+                            Never miss an important announcement. Follow us on
+                            social media.
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
                             <Button
                                 variant="secondary"
                                 size="lg"
-                                onClick={() => window.open('https://facebook.com/minsubcusg', '_blank')}
+                                onClick={() =>
+                                    window.open(
+                                        'https://facebook.com/minsubcusg',
+                                        '_blank',
+                                    )
+                                }
                                 className="bg-white text-orange-600 hover:bg-gray-100"
                             >
                                 <ExternalLink className="mr-2 h-5 w-5" />
@@ -318,8 +322,10 @@ export default function AnnouncementShow({
                             <Button
                                 variant="secondary"
                                 size="lg"
-                                onClick={() => router.visit('/usg/announcements')}
-                                className="bg-white/10 text-white hover:bg-white/20 border-white/20"
+                                onClick={() =>
+                                    router.visit('/usg/announcements')
+                                }
+                                className="border-white/20 bg-white/10 text-white hover:bg-white/20"
                             >
                                 View All Announcements
                             </Button>

@@ -10,10 +10,10 @@ import {
     CheckCircle,
     Clock,
     MapPin,
+    PartyPopper,
     Share2,
     User,
     Users,
-    PartyPopper,
 } from 'lucide-react';
 
 interface Event {
@@ -138,9 +138,8 @@ export default function EventShow({
             <Head title={`${event.title} - USG Events`} />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                <div className="container mx-auto px-4 py-12 relative">
+            <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white">
+                <div className="relative container mx-auto px-4 py-12">
                     <Button
                         variant="ghost"
                         onClick={handleBack}
@@ -149,25 +148,25 @@ export default function EventShow({
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Events
                     </Button>
-                    
-                    <div className="flex items-center justify-center mb-6">
+
+                    <div className="mb-6 flex items-center justify-center">
                         <div className="inline-flex items-center justify-center rounded-full bg-white/10 p-3 backdrop-blur-sm">
                             <PartyPopper className="h-8 w-8" />
                         </div>
                     </div>
-                    
-                    <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
+
+                    <h1 className="mb-4 text-center text-4xl font-bold md:text-5xl">
                         {event.title}
                     </h1>
                 </div>
             </section>
 
             {/* Main Content */}
-            <section className="py-16 bg-gray-50 dark:bg-gray-800">
-                <div className="container mx-auto px-4 max-w-4xl">
+            <section className="bg-gray-50 py-16 dark:bg-gray-800">
+                <div className="container mx-auto max-w-4xl px-4">
                     <article className="space-y-8">
                         {/* Header */}
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
                                 <div className="flex items-center gap-2">
                                     <StatusBadge
@@ -191,10 +190,13 @@ export default function EventShow({
                                 </Button>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 text-gray-600 dark:text-gray-400">
+                            <div className="grid grid-cols-1 gap-6 text-gray-600 md:grid-cols-2 dark:text-gray-400">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="h-5 w-5" />
-                                    <span>{formatDate(event.event_date)} at {formatTime(event.event_time)}</span>
+                                    <span>
+                                        {formatDate(event.event_date)} at{' '}
+                                        {formatTime(event.event_time)}
+                                    </span>
                                 </div>
 
                                 <div className="flex items-center gap-2">
@@ -211,7 +213,9 @@ export default function EventShow({
                                     <div className="flex items-center gap-2">
                                         <Users className="h-5 w-5" />
                                         <span>
-                                            {event.current_participants || 0} / {event.max_participants} participants
+                                            {event.current_participants || 0} /{' '}
+                                            {event.max_participants}{' '}
+                                            participants
                                         </span>
                                     </div>
                                 )}
@@ -220,17 +224,19 @@ export default function EventShow({
 
                         {/* Registration Status Alert */}
                         {registrationStatus !== 'open' && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                 <div className="flex items-start gap-3">
                                     {registrationStatus === 'cancelled' && (
                                         <>
-                                            <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                            <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                                             <div>
                                                 <p className="font-medium text-red-900 dark:text-red-100">
                                                     Event Cancelled
                                                 </p>
                                                 <p className="text-sm text-red-700 dark:text-red-300">
-                                                    This event has been cancelled. Please check for alternative arrangements.
+                                                    This event has been
+                                                    cancelled. Please check for
+                                                    alternative arrangements.
                                                 </p>
                                             </div>
                                         </>
@@ -238,13 +244,14 @@ export default function EventShow({
 
                                     {registrationStatus === 'completed' && (
                                         <>
-                                            <CheckCircle className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                                            <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
                                             <div>
                                                 <p className="font-medium text-blue-900 dark:text-blue-100">
                                                     Event Completed
                                                 </p>
                                                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                                                    This event has already taken place.
+                                                    This event has already taken
+                                                    place.
                                                 </p>
                                             </div>
                                         </>
@@ -252,13 +259,14 @@ export default function EventShow({
 
                                     {registrationStatus === 'past' && (
                                         <>
-                                            <Clock className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
+                                            <Clock className="mt-0.5 h-5 w-5 flex-shrink-0 text-gray-600" />
                                             <div>
                                                 <p className="font-medium text-gray-900 dark:text-gray-100">
                                                     Past Event
                                                 </p>
                                                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                                                    This event has already occurred.
+                                                    This event has already
+                                                    occurred.
                                                 </p>
                                             </div>
                                         </>
@@ -266,13 +274,15 @@ export default function EventShow({
 
                                     {registrationStatus === 'full' && (
                                         <>
-                                            <Users className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                                            <Users className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-600" />
                                             <div>
                                                 <p className="font-medium text-orange-900 dark:text-orange-100">
                                                     Event Full
                                                 </p>
                                                 <p className="text-sm text-orange-700 dark:text-orange-300">
-                                                    This event has reached maximum capacity. You may join the waitlist.
+                                                    This event has reached
+                                                    maximum capacity. You may
+                                                    join the waitlist.
                                                 </p>
                                             </div>
                                         </>
@@ -280,13 +290,14 @@ export default function EventShow({
 
                                     {registrationStatus === 'closed' && (
                                         <>
-                                            <Clock className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                                            <Clock className="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-600" />
                                             <div>
                                                 <p className="font-medium text-yellow-900 dark:text-yellow-100">
                                                     Registration Closed
                                                 </p>
                                                 <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                                                    The registration deadline has passed.
+                                                    The registration deadline
+                                                    has passed.
                                                     {event.registration_deadline &&
                                                         ` Deadline was ${formatDate(event.registration_deadline)}.`}
                                                 </p>
@@ -299,7 +310,7 @@ export default function EventShow({
 
                         {/* Event Image */}
                         {event.image_path && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm overflow-hidden">
+                            <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-900">
                                 <img
                                     src={event.image_path}
                                     alt={event.title}
@@ -309,7 +320,7 @@ export default function EventShow({
                         )}
 
                         {/* Event Description */}
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
                                 About This Event
                             </h2>
@@ -323,64 +334,66 @@ export default function EventShow({
 
                         {/* Registration Section */}
                         {registrationStatus === 'open' && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                            <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
                                     Registration
                                 </h2>
 
                                 {isRegistered ? (
-                                        <div className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
-                                            <div className="flex items-center gap-2">
-                                                <CheckCircle className="h-5 w-5 text-green-600" />
-                                                <div>
-                                                    <p className="font-medium text-green-900 dark:text-green-100">
-                                                        You're registered!
-                                                    </p>
-                                                    <p className="text-sm text-green-700 dark:text-green-300">
-                                                        We look forward to seeing you at the event.
-                                                    </p>
-                                                </div>
+                                    <div className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle className="h-5 w-5 text-green-600" />
+                                            <div>
+                                                <p className="font-medium text-green-900 dark:text-green-100">
+                                                    You're registered!
+                                                </p>
+                                                <p className="text-sm text-green-700 dark:text-green-300">
+                                                    We look forward to seeing
+                                                    you at the event.
+                                                </p>
                                             </div>
-                                            <Button
-                                                variant="outline"
-                                                onClick={handleUnregister}
-                                                className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
-                                            >
-                                                Unregister
-                                            </Button>
                                         </div>
-                                    ) : (
-                                        <div className="space-y-4">
-                                            {event.registration_deadline && (
-                                                <p className="text-gray-600 dark:text-gray-400">
-                                                    Registration deadline:{' '}
-                                                    {formatDate(
-                                                        event.registration_deadline,
-                                                    )}
-                                                </p>
-                                            )}
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleUnregister}
+                                            className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
+                                        >
+                                            Unregister
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {event.registration_deadline && (
+                                            <p className="text-gray-600 dark:text-gray-400">
+                                                Registration deadline:{' '}
+                                                {formatDate(
+                                                    event.registration_deadline,
+                                                )}
+                                            </p>
+                                        )}
 
-                                            {canRegister ? (
-                                                <Button
-                                                    onClick={handleRegister}
-                                                    className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
-                                                    size="lg"
-                                                >
-                                                    Register for This Event
-                                                </Button>
-                                            ) : (
-                                                <p className="text-gray-600 dark:text-gray-400">
-                                                    Please log in to register for this event.
-                                                </p>
-                                            )}
-                                        </div>
-                                    )}
+                                        {canRegister ? (
+                                            <Button
+                                                onClick={handleRegister}
+                                                className="w-full bg-green-600 hover:bg-green-700 sm:w-auto"
+                                                size="lg"
+                                            >
+                                                Register for This Event
+                                            </Button>
+                                        ) : (
+                                            <p className="text-gray-600 dark:text-gray-400">
+                                                Please log in to register for
+                                                this event.
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
 
                         {/* Requirements */}
                         {event.requirements && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                 <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
                                     Requirements
                                 </h3>
@@ -395,7 +408,7 @@ export default function EventShow({
 
                         {/* Contact Information */}
                         {event.contact_info && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                 <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
                                     Contact Information
                                 </h3>
@@ -410,14 +423,13 @@ export default function EventShow({
 
                         {/* Tags */}
                         {event.tags && event.tags.length > 0 && (
-                            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
-                                <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Tags</h3>
+                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                                <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+                                    Tags
+                                </h3>
                                 <div className="flex flex-wrap gap-2">
                                     {event.tags.map((tag, index) => (
-                                        <Badge
-                                            key={index}
-                                            variant="secondary"
-                                        >
+                                        <Badge key={index} variant="secondary">
                                             {tag}
                                         </Badge>
                                     ))}
@@ -428,7 +440,7 @@ export default function EventShow({
 
                     {/* Related Events */}
                     {relatedEvents.length > 0 && (
-                        <div className="space-y-6 mt-12">
+                        <div className="mt-12 space-y-6">
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                                 Related Events
                             </h2>
@@ -436,7 +448,7 @@ export default function EventShow({
                                 {relatedEvents.slice(0, 4).map((related) => (
                                     <div
                                         key={related.id}
-                                        className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 cursor-pointer transition-all hover:shadow-md hover:-translate-y-1"
+                                        className="cursor-pointer rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:bg-gray-900"
                                         onClick={() =>
                                             router.visit(
                                                 `/usg/events/${related.id}`,
@@ -456,7 +468,7 @@ export default function EventShow({
                                                 </Badge>
                                             )}
                                         </div>
-                                        <h3 className="mb-3 line-clamp-2 font-semibold text-gray-900 dark:text-white hover:text-green-600 dark:hover:text-green-500">
+                                        <h3 className="mb-3 line-clamp-2 font-semibold text-gray-900 hover:text-green-600 dark:text-white dark:hover:text-green-500">
                                             {related.title}
                                         </h3>
                                         <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -476,12 +488,13 @@ export default function EventShow({
                     )}
 
                     {/* CTA Section */}
-                    <div className="bg-gradient-to-br from-green-600 to-teal-600 text-white rounded-lg shadow-lg p-12 text-center mt-12">
-                        <h2 className="text-3xl font-bold mb-4">
+                    <div className="mt-12 rounded-lg bg-gradient-to-br from-green-600 to-teal-600 p-12 text-center text-white shadow-lg">
+                        <h2 className="mb-4 text-3xl font-bold">
                             Explore More Events
                         </h2>
-                        <p className="text-lg mb-6 text-white/90">
-                            Discover more exciting events and activities organized by the USG
+                        <p className="mb-6 text-lg text-white/90">
+                            Discover more exciting events and activities
+                            organized by the USG
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
                             <Button
@@ -495,8 +508,10 @@ export default function EventShow({
                             <Button
                                 size="lg"
                                 variant="secondary"
-                                onClick={() => router.visit('/usg/events/calendar')}
-                                className="bg-white/10 text-white hover:bg-white/20 border-white/20"
+                                onClick={() =>
+                                    router.visit('/usg/events/calendar')
+                                }
+                                className="border-white/20 bg-white/10 text-white hover:bg-white/20"
                             >
                                 <Calendar className="mr-2 h-5 w-5" />
                                 Event Calendar

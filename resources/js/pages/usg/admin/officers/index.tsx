@@ -1,9 +1,28 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import SearchBar from '@/components/usg/search-bar';
 import AppLayout from '@/layouts/app-layout';
+import officerRoutes from '@/routes/usg/admin/officers';
 import { Head, router } from '@inertiajs/react';
 import {
     Calendar,
@@ -15,6 +34,7 @@ import {
     Trash2,
     User,
     Users,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -65,56 +85,62 @@ export default function OfficersManagement({
 
     const [searchQuery, setSearchQuery] = useState(safeFilters.search || '');
     const [selectedDepartment, setSelectedDepartment] = useState(
-        safeFilters.department || '',
+        safeFilters.department || undefined,
     );
     const [selectedStatus, setSelectedStatus] = useState(
-        safeFilters.status || '',
+        safeFilters.status || undefined,
     );
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
         router.get(
-            '/usg/admin/officers',
-            {
-                search: query,
-                department: selectedDepartment,
-                status: selectedStatus,
-            },
-            { preserveState: true },
+            officerRoutes.index({
+                query: {
+                    search: query,
+                    department: selectedDepartment || '',
+                    status: selectedStatus || '',
+                },
+            }),
         );
     };
 
-    const handleDepartmentFilter = (department: string) => {
+    const handleDepartmentChange = (value: string) => {
+        const department = value === 'all' ? undefined : value;
         setSelectedDepartment(department);
         router.get(
-            '/usg/admin/officers',
-            {
-                search: searchQuery,
-                department: department,
-                status: selectedStatus,
-            },
-            { preserveState: true },
+            officerRoutes.index({
+                query: {
+                    search: searchQuery,
+                    department: department || '',
+                    status: selectedStatus || '',
+                },
+            }),
         );
     };
 
-    const handleStatusFilter = (status: string) => {
+    const handleStatusChange = (value: string) => {
+        const status = value === 'all' ? undefined : value;
         setSelectedStatus(status);
         router.get(
-            '/usg/admin/officers',
-            {
-                search: searchQuery,
-                department: selectedDepartment,
-                status: status,
-            },
-            { preserveState: true },
+            officerRoutes.index({
+                query: {
+                    search: searchQuery,
+                    department: selectedDepartment || '',
+                    status: status || '',
+                },
+            }),
         );
     };
 
-    const handleDelete = (officer: Officer) => {
-        if (confirm(`Are you sure you want to delete ${officer.name}?`)) {
-            router.delete(`/usg/admin/officers/${officer.id}`);
-        }
+    const handleClearAllFilters = () => {
+        setSearchQuery('');
+        setSelectedDepartment(undefined);
+        setSelectedStatus(undefined);
+        router.get(officerRoutes.index());
     };
+
+    const hasActiveFilters =
+        searchQuery || selectedDepartment || selectedStatus;
 
     const getInitials = (name: string) => {
         return name
@@ -132,12 +158,6 @@ export default function OfficersManagement({
         });
     };
 
-    const getStatusColor = (isActive: boolean) => {
-        return isActive
-            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-            : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
-    };
-
     return (
         <AppLayout
             breadcrumbs={[
@@ -149,7 +169,7 @@ export default function OfficersManagement({
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header with action button */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
                             Officers Management
@@ -161,9 +181,8 @@ export default function OfficersManagement({
 
                     {canManage && (
                         <Button
-                            onClick={() =>
-                                router.visit('/usg/admin/officers/create')
-                            }
+                            onClick={() => router.visit(officerRoutes.create())}
+                            className="w-full sm:w-auto"
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             Add Officer
@@ -173,277 +192,442 @@ export default function OfficersManagement({
 
                 {/* Stats */}
                 <div className="grid gap-6 md:grid-cols-3">
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
-                                        <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-chart-1/10 via-chart-1/5 to-chart-1/10">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <div className="rounded-xl bg-gradient-to-br from-chart-1 to-chart-1/80 p-3 shadow-lg">
+                                        <Users className="h-6 w-6 text-white" />
                                     </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {safeOfficers.length}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Total Officers
-                                        </div>
-                                    </div>
+                                    <div className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-chart-1/20"></div>
                                 </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
-                                        <User className="h-6 w-6 text-green-600 dark:text-green-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {
-                                                safeOfficers.filter(
-                                                    (o) => o.is_active,
-                                                ).length
-                                            }
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Active Officers
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-purple-100 p-3 dark:bg-purple-900">
-                                        <MapPin className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {safeDepartments.length}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Departments
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                {/* Filters */}
-                <Card>
-                    <CardContent className="p-6">
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                                <div className="md:col-span-2">
-                                    <SearchBar
-                                        placeholder="Search officers by name, position, or department..."
-                                        value={searchQuery}
-                                        onChange={(query) => {
-                                            setSearchQuery(query);
-                                            handleSearch(query);
-                                        }}
-                                    />
-                                </div>
-
                                 <div>
-                                    <select
-                                        value={selectedDepartment}
-                                        onChange={(e) =>
-                                            handleDepartmentFilter(
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">
-                                            All Departments
-                                        </option>
-                                        {safeDepartments.map((dept) => (
-                                            <option key={dept} value={dept}>
-                                                {dept}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <select
-                                        value={selectedStatus}
-                                        onChange={(e) =>
-                                            handleStatusFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Status</option>
-                                        <option value="active">Active</option>
-                                        <option value="inactive">
-                                            Inactive
-                                        </option>
-                                    </select>
+                                    <div className="text-2xl font-bold text-foreground">
+                                        {safeOfficers.length}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        Total Officers
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
+                    <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-chart-2/10 via-chart-2/5 to-chart-2/10">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <div className="rounded-xl bg-gradient-to-br from-chart-2 to-chart-2/80 p-3 shadow-lg">
+                                        <User className="h-6 w-6 text-white" />
+                                    </div>
+                                    <div className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-green-500"></div>
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-foreground">
+                                        {
+                                            safeOfficers.filter(
+                                                (o) => o.is_active,
+                                            ).length
+                                        }
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        Active Officers
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-chart-3/10 via-chart-3/5 to-chart-3/10">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <div className="rounded-xl bg-gradient-to-br from-chart-3 to-chart-3/80 p-3 shadow-lg">
+                                        <MapPin className="h-6 w-6 text-white" />
+                                    </div>
+                                    <div className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-chart-3/20"></div>
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-foreground">
+                                        {safeDepartments.length}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        Departments
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Filters */}
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+                            <div className="md:col-span-2">
+                                <SearchBar
+                                    placeholder="Search officers by name, position, or department..."
+                                    value={searchQuery}
+                                    onChange={(query) => {
+                                        setSearchQuery(query);
+                                        handleSearch(query);
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedDepartment}
+                                    onValueChange={handleDepartmentChange}
+                                >
+                                    <SelectTrigger className="h-10 w-full">
+                                        <SelectValue placeholder="All Departments" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {safeDepartments.map((dept) => (
+                                            <SelectItem key={dept} value={dept}>
+                                                {dept}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedStatus}
+                                    onValueChange={handleStatusChange}
+                                >
+                                    <SelectTrigger className="h-10 w-full">
+                                        <SelectValue placeholder="All Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="active">
+                                            Active
+                                        </SelectItem>
+                                        <SelectItem value="inactive">
+                                            Inactive
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        {/* Active Filter Badges */}
+                        {hasActiveFilters && (
+                            <div className="mt-4 flex flex-wrap items-center gap-2">
+                                <span className="text-sm font-medium text-muted-foreground">
+                                    Active filters:
+                                </span>
+                                {searchQuery && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="gap-1"
+                                    >
+                                        Search: "{searchQuery}"
+                                        <button
+                                            onClick={() => handleSearch('')}
+                                            className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </Badge>
+                                )}
+                                {selectedDepartment && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="gap-1"
+                                    >
+                                        Department: {selectedDepartment}
+                                        <button
+                                            onClick={() =>
+                                                handleDepartmentChange('all')
+                                            }
+                                            className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </Badge>
+                                )}
+                                {selectedStatus && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="gap-1"
+                                    >
+                                        Status:{' '}
+                                        {selectedStatus === 'active'
+                                            ? 'Active'
+                                            : 'Inactive'}
+                                        <button
+                                            onClick={() =>
+                                                handleStatusChange('all')
+                                            }
+                                            className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </Badge>
+                                )}
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleClearAllFilters}
+                                    className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+                                >
+                                    Clear all
+                                </Button>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
                 {/* Officers List */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        {safeOfficers.length > 0 ? (
-                            safeOfficers.map((officer) => (
-                                <Card
-                                    key={officer.id}
-                                    className="transition-shadow hover:shadow-lg"
-                                >
-                                    <CardContent className="p-6">
-                                        <div className="mb-4 flex items-start justify-between">
-                                            <div className="flex items-start gap-4">
-                                                <Avatar className="h-16 w-16">
-                                                    <AvatarImage
-                                                        src={
-                                                            officer.profile_image
-                                                        }
-                                                    />
-                                                    <AvatarFallback className="bg-blue-100 font-semibold text-blue-600 dark:bg-blue-900 dark:text-blue-400">
-                                                        {getInitials(
-                                                            officer.name,
-                                                        )}
-                                                    </AvatarFallback>
-                                                </Avatar>
+                    {safeOfficers.length > 0 ? (
+                        safeOfficers.map((officer) => (
+                            <Card
+                                key={officer.id}
+                                className="group relative overflow-hidden border-border/50 transition-all duration-200 hover:shadow-xl hover:shadow-primary/5"
+                            >
+                                <CardContent className="p-6">
+                                    {/* Status Indicator */}
+                                    <div className="absolute top-4 right-4">
+                                        <Badge
+                                            variant="secondary"
+                                            className={`${
+                                                officer.is_active
+                                                    ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300'
+                                                    : 'border-gray-200 bg-gray-50 text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400'
+                                            } text-xs font-medium sm:text-sm`}
+                                        >
+                                            <div
+                                                className={`mr-1.5 h-2 w-2 rounded-full ${
+                                                    officer.is_active
+                                                        ? 'bg-green-500'
+                                                        : 'bg-gray-400'
+                                                }`}
+                                            />
+                                            <span className="hidden sm:inline">
+                                                {officer.is_active
+                                                    ? 'Active'
+                                                    : 'Inactive'}
+                                            </span>
+                                            <span className="sm:hidden">
+                                                {officer.is_active
+                                                    ? 'Active'
+                                                    : 'Inactive'}
+                                            </span>
+                                        </Badge>
+                                    </div>
 
-                                                <div className="min-w-0 flex-1">
-                                                    <div className="mb-1 flex items-center gap-2">
-                                                        <h3 className="font-semibold text-gray-900 dark:text-white">
-                                                            {officer.name}
-                                                        </h3>
-                                                        <Badge
-                                                            variant="secondary"
-                                                            className={getStatusColor(
-                                                                officer.is_active,
-                                                            )}
-                                                        >
-                                                            {officer.is_active
-                                                                ? 'Active'
-                                                                : 'Inactive'}
-                                                        </Badge>
-                                                    </div>
-                                                    <p className="mb-1 text-sm font-medium text-blue-600 dark:text-blue-400">
-                                                        {officer.position}
-                                                    </p>
-                                                    {officer.department && (
-                                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                            {officer.department}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
+                                    <div className="flex items-start gap-4 pr-20">
+                                        <Avatar className="h-16 w-16 ring-2 ring-primary/10 transition-all group-hover:ring-primary/20">
+                                            <AvatarImage
+                                                src={officer.profile_image}
+                                                className="object-cover"
+                                            />
+                                            <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-lg font-semibold text-primary">
+                                                {getInitials(officer.name)}
+                                            </AvatarFallback>
+                                        </Avatar>
 
-                                            {canManage && (
-                                                <div className="flex items-center gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            router.visit(
-                                                                `/usg/admin/officers/${officer.id}/edit`,
-                                                            )
-                                                        }
-                                                    >
-                                                        <Edit className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                officer,
-                                                            )
-                                                        }
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <Mail className="h-4 w-4" />
-                                                <a
-                                                    href={`mailto:${officer.email}`}
-                                                    className="hover:text-blue-600 dark:hover:text-blue-400"
-                                                >
-                                                    {officer.email}
-                                                </a>
-                                            </div>
-
-                                            {officer.phone && (
-                                                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                    <Phone className="h-4 w-4" />
-                                                    <a
-                                                        href={`tel:${officer.phone}`}
-                                                        className="hover:text-blue-600 dark:hover:text-blue-400"
-                                                    >
-                                                        {officer.phone}
-                                                    </a>
-                                                </div>
-                                            )}
-
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <Calendar className="h-4 w-4" />
-                                                Term:{' '}
-                                                {formatDate(officer.term_start)}
-                                                {officer.term_end &&
-                                                    ` - ${formatDate(officer.term_end)}`}
-                                            </div>
-                                        </div>
-
-                                        {officer.bio && (
-                                            <div className="mt-4 border-t pt-4">
-                                                <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
-                                                    {officer.bio}
+                                        <div className="min-w-0 flex-1 space-y-1">
+                                            <h3 className="text-lg leading-tight font-bold text-foreground">
+                                                {officer.name}
+                                            </h3>
+                                            <p className="text-sm font-semibold text-primary">
+                                                {officer.position}
+                                            </p>
+                                            {officer.department && (
+                                                <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                                                    <MapPin className="h-3 w-3" />
+                                                    {officer.department}
                                                 </p>
-                                            </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Contact Actions */}
+                                    <div className="mt-4 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8 flex-1 text-xs"
+                                            asChild
+                                        >
+                                            <a href={`mailto:${officer.email}`}>
+                                                <Mail className="mr-1.5 h-3 w-3" />
+                                                Email
+                                            </a>
+                                        </Button>
+                                        {officer.phone && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="h-8 flex-1 text-xs"
+                                                asChild
+                                            >
+                                                <a
+                                                    href={`tel:${officer.phone}`}
+                                                >
+                                                    <Phone className="mr-1.5 h-3 w-3" />
+                                                    Call
+                                                </a>
+                                            </Button>
                                         )}
-                                    </CardContent>
-                                </Card>
-                            ))
-                        ) : (
-                            <div className="col-span-full">
-                                <Card>
-                                    <CardContent className="p-12 text-center">
-                                        <Users className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                        <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-                                            No officers found
-                                        </h3>
-                                        <p className="mb-6 text-gray-500 dark:text-gray-400">
-                                            {searchQuery ||
-                                            selectedDepartment ||
-                                            selectedStatus
-                                                ? 'Try adjusting your search filters'
-                                                : 'Get started by adding your first officer'}
-                                        </p>
+                                    </div>
+
+                                    {/* Term Information */}
+                                    <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                                        <Calendar className="h-3 w-3" />
+                                        <span>
+                                            Term:{' '}
+                                            {formatDate(officer.term_start)}
+                                            {officer.term_end &&
+                                                ` - ${formatDate(officer.term_end)}`}
+                                        </span>
+                                    </div>
+
+                                    {/* Bio */}
+                                    {officer.bio && (
+                                        <div className="mt-4 border-t border-border/50 pt-4">
+                                            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                                                {officer.bio}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Management Actions */}
+                                    {canManage && (
+                                        <div className="mt-4 flex items-center justify-end gap-2 border-t border-border/50 pt-4">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() =>
+                                                    router.visit(
+                                                        officerRoutes.edit(
+                                                            officer.id,
+                                                        ),
+                                                    )
+                                                }
+                                                className="text-primary hover:bg-primary/10 hover:text-primary"
+                                            >
+                                                <Edit className="mr-1.5 h-3 w-3" />
+                                                Edit
+                                            </Button>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                    >
+                                                        <Trash2 className="mr-1.5 h-3 w-3" />
+                                                        Delete
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Delete Officer
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Are you sure you
+                                                            want to delete{' '}
+                                                            <strong>
+                                                                {officer.name}
+                                                            </strong>
+                                                            ? This action cannot
+                                                            be undone and will
+                                                            permanently remove
+                                                            the officer from the
+                                                            system.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() =>
+                                                                router.delete(
+                                                                    officerRoutes.destroy(
+                                                                        officer.id,
+                                                                    ),
+                                                                )
+                                                            }
+                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                        >
+                                                            Delete Officer
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (
+                        <div className="col-span-full">
+                            <Card className="border-dashed">
+                                <CardContent className="p-12 text-center">
+                                    <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5">
+                                        <Users className="h-12 w-12 text-primary/60" />
+                                    </div>
+                                    <h3 className="mb-2 text-xl font-semibold text-foreground">
+                                        {searchQuery ||
+                                        selectedDepartment ||
+                                        selectedStatus
+                                            ? 'No officers found'
+                                            : 'No officers yet'}
+                                    </h3>
+                                    <p className="mx-auto mb-8 max-w-md text-muted-foreground">
+                                        {searchQuery ||
+                                        selectedDepartment ||
+                                        selectedStatus
+                                            ? 'Try adjusting your search criteria or clearing some filters to see more results.'
+                                            : 'Get started by adding your first USG officer. Officers can manage student affairs and represent the student body.'}
+                                    </p>
+                                    <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                                        {hasActiveFilters && (
+                                            <Button
+                                                variant="outline"
+                                                onClick={handleClearAllFilters}
+                                                className="gap-2"
+                                            >
+                                                <X className="h-4 w-4" />
+                                                Clear Filters
+                                            </Button>
+                                        )}
                                         {canManage && (
                                             <Button
                                                 onClick={() =>
                                                     router.visit(
-                                                        '/usg/admin/officers/create',
+                                                        officerRoutes.create(),
                                                     )
                                                 }
+                                                className="gap-2"
                                             >
-                                                <Plus className="mr-2 h-4 w-4" />
-                                                Add Officer
+                                                <Plus className="h-4 w-4" />
+                                                Add First Officer
                                             </Button>
                                         )}
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        )}
-                    </div>
+                                    </div>
+                                    {!hasActiveFilters && !canManage && (
+                                        <p className="mt-4 text-sm text-muted-foreground">
+                                            Contact your administrator to add
+                                            officers.
+                                        </p>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
+                </div>
 
                 {/* Pagination could go here if needed */}
-                </div>
+            </div>
         </AppLayout>
     );
 }

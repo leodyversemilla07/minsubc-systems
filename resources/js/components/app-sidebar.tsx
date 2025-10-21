@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import { index } from '@/routes/registrar/document-requests';
+import registrar from '@/routes/registrar';
 import usg from '@/routes/usg';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
@@ -105,7 +105,7 @@ export function AppSidebar() {
                 },
                 {
                     title: 'Document Requests',
-                    href: index(),
+                    href: registrar.documentRequests.index(),
                     icon: ClipboardList,
                 },
             );
@@ -120,7 +120,7 @@ export function AppSidebar() {
                 },
                 {
                     title: 'Document Requests',
-                    href: index(),
+                    href: registrar.documentRequests.index(),
                     icon: ClipboardList,
                 },
             );

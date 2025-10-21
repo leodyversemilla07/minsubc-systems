@@ -2,7 +2,16 @@ import { Button } from '@/components/ui/button';
 import USGLayout from '@/layouts/usg-layout';
 import usg from '@/routes/usg';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, CheckCircle, Eye, Heart, Megaphone, Sparkles, Target, Users } from 'lucide-react';
+import {
+    ArrowRight,
+    CheckCircle,
+    Eye,
+    Heart,
+    Megaphone,
+    Sparkles,
+    Target,
+    Users,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface VMGO {
@@ -48,8 +57,9 @@ export default function VMGOPage({ vmgo }: Props) {
                                 VMGO Information Not Available
                             </h2>
                             <p className="text-lg text-gray-600 dark:text-gray-300">
-                                The Vision, Mission, Goals, and Objectives information is currently being updated.
-                                Please check back later.
+                                The Vision, Mission, Goals, and Objectives
+                                information is currently being updated. Please
+                                check back later.
                             </p>
                         </div>
                     </div>
@@ -61,7 +71,7 @@ export default function VMGOPage({ vmgo }: Props) {
     return (
         <USGLayout>
             <Head title="Vision, Mission, Goals & Objectives - USG" />
-            
+
             {/* Hero Section */}
             <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 py-16 text-white dark:from-blue-800 dark:via-blue-900 dark:to-gray-900">
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -73,7 +83,9 @@ export default function VMGOPage({ vmgo }: Props) {
                             Vision, Mission, Goals & Objectives
                         </h1>
                         <p className="mx-auto max-w-3xl text-lg text-blue-100 sm:text-xl">
-                            Our guiding principles and strategic direction for serving the MinSUBC community with excellence and integrity
+                            Our guiding principles and strategic direction for
+                            serving the MinSUBC community with excellence and
+                            integrity
                         </p>
                     </div>
                 </div>
@@ -92,7 +104,7 @@ export default function VMGOPage({ vmgo }: Props) {
                                 <div className="inline-flex rounded-full bg-blue-600 p-4 dark:bg-blue-500">
                                     <Eye className="h-8 w-8 text-white" />
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white lg:text-4xl">
+                                <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
                                     Our Vision
                                 </h2>
                             </div>
@@ -112,7 +124,7 @@ export default function VMGOPage({ vmgo }: Props) {
                                 <div className="inline-flex rounded-full bg-green-600 p-4 dark:bg-green-500">
                                     <Target className="h-8 w-8 text-white" />
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white lg:text-4xl">
+                                <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
                                     Our Mission
                                 </h2>
                             </div>
@@ -132,7 +144,7 @@ export default function VMGOPage({ vmgo }: Props) {
                                 <div className="inline-flex rounded-full bg-purple-600 p-4 dark:bg-purple-500">
                                     <Heart className="h-8 w-8 text-white" />
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white lg:text-4xl">
+                                <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
                                     Our Goals
                                 </h2>
                             </div>
@@ -167,7 +179,7 @@ export default function VMGOPage({ vmgo }: Props) {
                                 <div className="inline-flex rounded-full bg-orange-600 p-4 dark:bg-orange-500">
                                     <CheckCircle className="h-8 w-8 text-white" />
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white lg:text-4xl">
+                                <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
                                     Our Objectives
                                 </h2>
                             </div>
@@ -196,13 +208,15 @@ export default function VMGOPage({ vmgo }: Props) {
                             className={`transform rounded-xl border border-gray-200 bg-gray-50 p-6 transition-all duration-500 dark:border-gray-800 dark:bg-gray-900 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
                             style={{ transitionDelay: '1000ms' }}
                         >
-                            <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-600 dark:text-gray-400 sm:flex-row">
+                            <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-600 sm:flex-row dark:text-gray-400">
                                 <div className="flex items-center gap-2">
                                     <div className="h-2 w-2 animate-pulse rounded-full bg-blue-500"></div>
                                     <span>
                                         Effective Date:{' '}
                                         <span className="font-medium text-gray-900 dark:text-white">
-                                            {new Date(vmgo.effective_date).toLocaleDateString()}
+                                            {new Date(
+                                                vmgo.effective_date,
+                                            ).toLocaleDateString()}
                                         </span>
                                     </span>
                                 </div>
@@ -212,7 +226,8 @@ export default function VMGOPage({ vmgo }: Props) {
                                         <span>
                                             Last updated by:{' '}
                                             <span className="font-medium text-gray-900 dark:text-white">
-                                                {vmgo.updated_by.first_name} {vmgo.updated_by.last_name}
+                                                {vmgo.updated_by.first_name}{' '}
+                                                {vmgo.updated_by.last_name}
                                             </span>
                                         </span>
                                     </div>
@@ -238,17 +253,22 @@ export default function VMGOPage({ vmgo }: Props) {
                             <Sparkles className="h-8 w-8 animate-pulse text-yellow-300" />
                         </div>
                         <p className="mx-auto mb-10 max-w-3xl text-lg leading-relaxed text-green-50 dark:text-green-100">
-                            Join us in our mission to serve the MinSUBC community with dedication and excellence.
-                            Explore our upcoming events, read our latest announcements, and learn more about our
-                            dedicated officers who work tirelessly for student welfare.
+                            Join us in our mission to serve the MinSUBC
+                            community with dedication and excellence. Explore
+                            our upcoming events, read our latest announcements,
+                            and learn more about our dedicated officers who work
+                            tirelessly for student welfare.
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
-                                                        <Button
+                            <Button
                                 asChild
                                 size="lg"
-                                className="bg-white text-green-700 shadow-xl transition-all hover:bg-green-50 hover:-translate-y-0.5 hover:shadow-2xl"
+                                className="bg-white text-green-700 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
                             >
-                                <Link href={usg.events.index.url()} className="flex items-center gap-2 px-8 py-4 text-lg font-bold">
+                                <Link
+                                    href={usg.events.index.url()}
+                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
+                                >
                                     View Events
                                     <ArrowRight className="h-5 w-5" />
                                 </Link>
@@ -259,7 +279,10 @@ export default function VMGOPage({ vmgo }: Props) {
                                 variant="outline"
                                 className="border-2 border-white bg-transparent text-white backdrop-blur-sm transition-all hover:bg-white hover:text-green-700"
                             >
-                                <Link href={usg.officers.index.url()} className="flex items-center gap-2 px-8 py-4 text-lg font-bold">
+                                <Link
+                                    href={usg.officers.index.url()}
+                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
+                                >
                                     Meet Our Team
                                     <Users className="h-5 w-5" />
                                 </Link>
@@ -270,7 +293,10 @@ export default function VMGOPage({ vmgo }: Props) {
                                 variant="outline"
                                 className="border-2 border-white bg-transparent text-white backdrop-blur-sm transition-all hover:bg-white hover:text-green-700"
                             >
-                                <Link href={usg.announcements.index.url()} className="flex items-center gap-2 px-8 py-4 text-lg font-bold">
+                                <Link
+                                    href={usg.announcements.index.url()}
+                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
+                                >
                                     Latest Updates
                                     <Megaphone className="h-5 w-5" />
                                 </Link>
@@ -279,8 +305,6 @@ export default function VMGOPage({ vmgo }: Props) {
                     </div>
                 </div>
             </section>
-
-
         </USGLayout>
     );
 }

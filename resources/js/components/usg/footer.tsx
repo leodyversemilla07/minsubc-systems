@@ -1,6 +1,13 @@
 import usg from '@/routes/usg';
 import { Link } from '@inertiajs/react';
-import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import {
+    Facebook,
+    Instagram,
+    Mail,
+    MapPin,
+    Phone,
+    Twitter,
+} from 'lucide-react';
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
@@ -28,7 +35,8 @@ export default function Footer() {
                             University Student Government
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-300">
-                            Empowering MinSUBC students through leadership, advocacy, and community building.
+                            Empowering MinSUBC students through leadership,
+                            advocacy, and community building.
                         </p>
                         {/* Social Media Links */}
                         <div className="flex gap-3">
@@ -64,7 +72,7 @@ export default function Footer() {
 
                     {/* Quick Links */}
                     <div>
-                        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">
+                        <h3 className="mb-4 text-sm font-bold tracking-wider text-gray-900 uppercase dark:text-white">
                             Quick Links
                         </h3>
                         <ul className="space-y-3">
@@ -113,7 +121,7 @@ export default function Footer() {
 
                     {/* Resources */}
                     <div>
-                        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">
+                        <h3 className="mb-4 text-sm font-bold tracking-wider text-gray-900 uppercase dark:text-white">
                             Resources
                         </h3>
                         <ul className="space-y-3">
@@ -162,15 +170,17 @@ export default function Footer() {
 
                     {/* Contact Info */}
                     <div>
-                        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">
+                        <h3 className="mb-4 text-sm font-bold tracking-wider text-gray-900 uppercase dark:text-white">
                             Contact Us
                         </h3>
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3">
                                 <MapPin className="mt-1 h-4 w-4 flex-shrink-0 text-green-700 dark:text-green-400" />
                                 <span className="text-sm text-gray-600 dark:text-gray-300">
-                                    Mindoro State University<br />
-                                    Bongabong Campus<br />
+                                    Mindoro State University
+                                    <br />
+                                    Bongabong Campus
+                                    <br />
                                     Bongabong, Oriental Mindoro
                                 </span>
                             </li>
@@ -202,7 +212,9 @@ export default function Footer() {
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-                            © {currentYear} University Student Government - Mindoro State University, Bongabong Campus. All rights reserved.
+                            © {currentYear} University Student Government -
+                            Mindoro State University, Bongabong Campus. All
+                            rights reserved.
                         </p>
                         <div className="flex gap-6">
                             <Link

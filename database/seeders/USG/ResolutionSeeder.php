@@ -57,7 +57,7 @@ class ResolutionSeeder extends Seeder
         ];
 
         foreach ($resolutions as $index => $resolution) {
-            $resolutionNumber = 'USG-' . now()->year . '-' . str_pad($index + 1, 3, '0', STR_PAD_LEFT);
+            $resolutionNumber = 'USG-'.now()->year.'-'.str_pad($index + 1, 3, '0', STR_PAD_LEFT);
             $slug = Str::slug($resolution['title']);
 
             DB::table('usg_resolutions')->insert([

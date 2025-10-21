@@ -7,11 +7,11 @@ import { Head } from '@inertiajs/react';
 import {
     Calendar,
     Download,
+    ExternalLink,
     FileText,
     Gavel,
     Search,
     User,
-    ExternalLink,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,7 +23,13 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path: string | null;
-    status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+    status:
+        | 'draft'
+        | 'pending'
+        | 'review'
+        | 'published'
+        | 'rejected'
+        | 'archived';
     category?: string;
     tags?: string[];
     created_at: string;
@@ -146,29 +152,30 @@ export default function ResolutionsIndex({
             <Head title="Resolutions - USG Portal" />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                <div className="container mx-auto px-4 py-20 relative">
-                    <div className="max-w-4xl mx-auto text-center">
+            <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white">
+                <div className="relative container mx-auto px-4 py-20">
+                    <div className="mx-auto max-w-4xl text-center">
                         <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-4 backdrop-blur-sm">
                             <Gavel className="h-12 w-12" />
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                        <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             Official Resolutions
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 text-white/90">
-                            Browse official USG resolutions, legislative documents, and policy decisions that shape our university community
+                        <p className="mb-8 text-xl text-white/90 md:text-2xl">
+                            Browse official USG resolutions, legislative
+                            documents, and policy decisions that shape our
+                            university community
                         </p>
                     </div>
                 </div>
             </section>
 
             {/* Stats Bar */}
-            <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+            <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
                 <div className="container mx-auto px-4 py-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-blue-600 md:text-4xl dark:text-blue-500">
                                 {resolutions.total}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -176,7 +183,7 @@ export default function ResolutionsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-indigo-600 md:text-4xl dark:text-indigo-500">
                                 {publishedResolutions.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -184,7 +191,7 @@ export default function ResolutionsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-purple-600 dark:text-purple-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-purple-600 md:text-4xl dark:text-purple-500">
                                 {availableYears.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -192,7 +199,7 @@ export default function ResolutionsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-violet-600 dark:text-violet-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-violet-600 md:text-4xl dark:text-violet-500">
                                 {authors.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -204,8 +211,8 @@ export default function ResolutionsIndex({
             </section>
 
             {/* Main Content */}
-            <section className="py-16 bg-gray-50 dark:bg-gray-800">
-                <div className="container mx-auto px-4 max-w-7xl">
+            <section className="bg-gray-50 py-16 dark:bg-gray-800">
+                <div className="container mx-auto max-w-7xl px-4">
                     {/* Enhanced Search and Filters */}
                     <div className="mb-12">
                         <SearchBar
@@ -324,12 +331,12 @@ export default function ResolutionsIndex({
                     </div>
 
                     {filteredResolutions.length === 0 ? (
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-12 text-center">
+                        <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
                             <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No resolutions found
                             </h3>
-                            <p className="max-w-md mx-auto text-gray-600 dark:text-gray-400 mb-6">
+                            <p className="mx-auto mb-6 max-w-md text-gray-600 dark:text-gray-400">
                                 {searchQuery ||
                                 Object.values(activeFilters).some(
                                     (f) => f?.length,
@@ -456,13 +463,13 @@ export default function ResolutionsIndex({
 
                     {/* Statistics Card */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                        <div className="mt-12 rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
                                 Resolution Statistics
                             </h3>
                             <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
                                 <div className="text-center">
-                                    <div className="text-3xl font-bold text-blue-600 dark:text-blue-500 mb-2">
+                                    <div className="mb-2 text-3xl font-bold text-blue-600 dark:text-blue-500">
                                         {publishedResolutions.length}
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -470,7 +477,7 @@ export default function ResolutionsIndex({
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="text-3xl font-bold text-green-600 dark:text-green-500 mb-2">
+                                    <div className="mb-2 text-3xl font-bold text-green-600 dark:text-green-500">
                                         {availableYears.length}
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -478,7 +485,7 @@ export default function ResolutionsIndex({
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="text-3xl font-bold text-purple-600 dark:text-purple-500 mb-2">
+                                    <div className="mb-2 text-3xl font-bold text-purple-600 dark:text-purple-500">
                                         {authors.length}
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -486,7 +493,7 @@ export default function ResolutionsIndex({
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="text-3xl font-bold text-orange-600 dark:text-orange-500 mb-2">
+                                    <div className="mb-2 text-3xl font-bold text-orange-600 dark:text-orange-500">
                                         {
                                             resolutions.data.filter(
                                                 (r) => r.file_path,
@@ -503,12 +510,14 @@ export default function ResolutionsIndex({
 
                     {/* Call to Action */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12 bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-lg shadow-lg p-12 text-center">
+                        <div className="mt-12 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 p-12 text-center text-white shadow-lg">
                             <h3 className="mb-2 text-3xl font-bold">
                                 Stay Informed
                             </h3>
                             <p className="mb-6 text-lg text-white/90">
-                                Keep track of the latest USG resolutions and policy decisions that affect our university community
+                                Keep track of the latest USG resolutions and
+                                policy decisions that affect our university
+                                community
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
                                 <Button
@@ -522,7 +531,7 @@ export default function ResolutionsIndex({
                                 <Button
                                     size="lg"
                                     variant="secondary"
-                                    className="bg-white/10 text-white hover:bg-white/20 border-white/20"
+                                    className="border-white/20 bg-white/10 text-white hover:bg-white/20"
                                 >
                                     <ExternalLink className="mr-2 h-5 w-5" />
                                     Subscribe to Updates

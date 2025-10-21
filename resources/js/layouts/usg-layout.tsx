@@ -11,9 +11,7 @@ export default function USGLayout({ children }: USGLayoutProps) {
             <Header />
 
             {/* Main content - updated padding for taller header */}
-            <main className="flex-1 pt-28">
-                {children}
-            </main>
+            <main className="flex-1 pt-28">{children}</main>
 
             <Footer />
         </div>

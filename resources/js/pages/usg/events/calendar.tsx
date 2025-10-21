@@ -100,20 +100,19 @@ export default function EventsCalendar({ events, categories }: Props) {
 
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 py-16 text-white">
-                <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
                 <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-start gap-4">
                         <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
                             <CalendarIcon className="h-8 w-8" />
                         </div>
                         <div className="flex-1">
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 Events Calendar
                             </h1>
                             <p className="mb-6 max-w-2xl text-lg text-green-100">
                                 Discover and participate in USG events,
-                                activities, and programs. Choose between calendar
-                                and list views.
+                                activities, and programs. Choose between
+                                calendar and list views.
                             </p>
 
                             <div className="flex flex-wrap items-center gap-3">
@@ -168,11 +167,7 @@ export default function EventsCalendar({ events, categories }: Props) {
                         showFilters
                         filters={{
                             categories: categories,
-                            statuses: [
-                                'published',
-                                'cancelled',
-                                'completed',
-                            ],
+                            statuses: ['published', 'cancelled', 'completed'],
                         }}
                         activeFilters={{
                             categories: activeFilters.categories,

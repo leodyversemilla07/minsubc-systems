@@ -22,7 +22,10 @@ class OfficerController extends Controller
 
     public function create()
     {
-        return Inertia::render('usg/admin/officers/create');
+        return Inertia::render('usg/admin/officers/create', [
+            'departments' => $this->officerService->getDepartments(),
+            'positions' => $this->officerService->getPositions(),
+        ]);
     }
 
     public function store(Request $request)
@@ -40,6 +43,8 @@ class OfficerController extends Controller
 
         return Inertia::render('usg/admin/officers/edit', [
             'officer' => $officer,
+            'departments' => $this->officerService->getDepartments(),
+            'positions' => $this->officerService->getPositions(),
         ]);
     }
 

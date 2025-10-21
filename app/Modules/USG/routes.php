@@ -85,6 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Announcement Management
         Route::middleware(['role:usg-officer|usg-admin|system-admin'])->group(function () {
             Route::resource('announcements', AnnouncementController::class);
+            Route::get('announcements/{announcement:slug}/preview', [AnnouncementController::class, 'preview'])->name('announcements.preview');
             Route::patch('announcements/{announcement}/publish', [AnnouncementController::class, 'publish'])->name('announcements.publish');
             Route::patch('announcements/{announcement}/unpublish', [AnnouncementController::class, 'unpublish'])->name('announcements.unpublish');
             Route::patch('announcements/{announcement}/archive', [AnnouncementController::class, 'archive'])->name('announcements.archive');

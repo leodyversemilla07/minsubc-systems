@@ -320,12 +320,22 @@ class AnnouncementService
     }
 
     /**
-     * Get announcement by slug
+     * Get announcement by slug (public - published only)
      */
     public function getBySlug(string $slug): ?Announcement
     {
         return Announcement::published()
             ->with('author')
+            ->where('slug', $slug)
+            ->first();
+    }
+
+    /**
+     * Get announcement by slug (admin - all statuses)
+     */
+    public function getBySlugForAdmin(string $slug): ?Announcement
+    {
+        return Announcement::with('author')
             ->where('slug', $slug)
             ->first();
     }

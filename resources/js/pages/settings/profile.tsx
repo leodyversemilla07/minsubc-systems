@@ -61,8 +61,9 @@ export default function Profile({
                                                 type="text"
                                                 className="mt-1 block w-full"
                                                 defaultValue={
-                                                    auth.user
-                                                        .first_name as string
+                                                    (auth.user
+                                                        ?.first_name as string) ||
+                                                    ''
                                                 }
                                                 name="first_name"
                                                 required
@@ -84,8 +85,9 @@ export default function Profile({
                                                 type="text"
                                                 className="mt-1 block w-full"
                                                 defaultValue={
-                                                    auth.user
-                                                        .middle_name as string
+                                                    (auth.user
+                                                        ?.middle_name as string) ||
+                                                    ''
                                                 }
                                                 name="middle_name"
                                                 autoComplete="additional-name"
@@ -106,8 +108,9 @@ export default function Profile({
                                                 type="text"
                                                 className="mt-1 block w-full"
                                                 defaultValue={
-                                                    auth.user
-                                                        .last_name as string
+                                                    (auth.user
+                                                        ?.last_name as string) ||
+                                                    ''
                                                 }
                                                 name="last_name"
                                                 required
@@ -129,7 +132,9 @@ export default function Profile({
                                         id="email"
                                         type="email"
                                         className="mt-1 block w-full"
-                                        defaultValue={auth.user.email as string}
+                                        defaultValue={
+                                            (auth.user?.email as string) || ''
+                                        }
                                         name="email"
                                         required
                                         autoComplete="username"
@@ -143,7 +148,7 @@ export default function Profile({
                                 </div>
 
                                 {mustVerifyEmail &&
-                                    auth.user.email_verified_at === null && (
+                                    auth.user?.email_verified_at === null && (
                                         <div>
                                             <p className="-mt-4 text-sm text-muted-foreground">
                                                 Your email address is

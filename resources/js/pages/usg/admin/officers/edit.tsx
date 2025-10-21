@@ -1,16 +1,32 @@
+import { DatePicker } from '@/components/date-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Field,
+    FieldDescription,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import AppLayout from '@/layouts/app-layout';
+import officerRoutes from '@/routes/usg/admin/officers';
+import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
 import {
     AlertCircle,
-    ArrowLeft,
     Calendar,
-    CheckCircle,
     Eye,
     FileText,
     Mail,
@@ -42,31 +58,24 @@ interface Officer {
 
 interface Props {
     officer: Officer;
-    departments: string[];
-    positions: string[];
+    departments?: string[];
+    positions?: string[];
     canManage?: boolean;
+    breadcrumbs?: BreadcrumbItem[];
 }
 
 export default function EditOfficer({
     officer,
-    departments,
-    positions,
+    departments = [],
+    positions = [],
     canManage = true,
+    breadcrumbs,
 }: Props) {
     const [imagePreview, setImagePreview] = useState<string | null>(
         officer.profile_image || null,
     );
 
-    const {
-        data,
-        setData,
-        put,
-        post,
-        processing,
-        errors,
-        wasSuccessful,
-        recentlySuccessful,
-    } = useForm({
+    const { data, setData, put, post, processing, errors } = useForm({
         name: officer.name,
         position: officer.position,
         department: officer.department || '',
@@ -132,64 +141,25 @@ export default function EditOfficer({
             .slice(0, 2);
     };
 
+    const defaultBreadcrumbs: BreadcrumbItem[] = [
+        { title: 'Dashboard', href: '/usg/admin' },
+        { title: 'Officers', href: officerRoutes.index().url },
+        {
+            title: `Edit ${officer.name}`,
+            href: officerRoutes.edit(officer.id).url,
+        },
+    ];
+
+    const pageBreadcrumbs = breadcrumbs || defaultBreadcrumbs;
+
     return (
-        <>
+        <AppLayout breadcrumbs={pageBreadcrumbs}>
             <Head title={`Edit ${officer.name} - USG Admin`} />
-
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                {/* Navigation */}
-                <div className="sticky top-0 z-10 border-b bg-white dark:bg-gray-800">
-                    <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => router.visit('/usg/admin')}
-                                >
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Dashboard
-                                </Button>
-                                <div>
-                                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Edit Officer: {officer.name}
-                                    </h1>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        Update officer profile information
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <Button
-                                    variant="outline"
-                                    onClick={() =>
-                                        router.visit(
-                                            `/usg/officers#officer-${officer.id}`,
-                                        )
-                                    }
-                                >
-                                    <Eye className="mr-2 h-4 w-4" />
-                                    View Public Profile
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-                    {/* Success Message */}
-                    {(wasSuccessful || recentlySuccessful) && (
-                        <Alert className="mb-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-                            <CheckCircle className="h-4 w-4 text-green-600" />
-                            <AlertDescription className="text-green-800 dark:text-green-200">
-                                Officer profile has been updated successfully!
-                            </AlertDescription>
-                        </Alert>
-                    )}
-
+            <div className="min-h-screen bg-background">
+                <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
                     {/* Error Messages */}
                     {Object.keys(errors).length > 0 && (
-                        <Alert variant="destructive" className="mb-6">
+                        <Alert variant="destructive" className="mb-4 sm:mb-6">
                             <AlertCircle className="h-4 w-4" />
                             <AlertDescription>
                                 Please fix the errors below before saving.
@@ -198,7 +168,7 @@ export default function EditOfficer({
                     )}
 
                     {!canManage && (
-                        <Alert variant="destructive" className="mb-6">
+                        <Alert variant="destructive" className="mb-4 sm:mb-6">
                             <AlertCircle className="h-4 w-4" />
                             <AlertDescription>
                                 You don't have permission to edit officers.
@@ -206,33 +176,35 @@ export default function EditOfficer({
                         </Alert>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-8">
+                    <form
+                        onSubmit={handleSubmit}
+                        className="space-y-6 sm:space-y-8"
+                    >
                         {/* Profile Photo */}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <User className="h-5 w-5 text-blue-600" />
+                                    <User className="h-5 w-5 text-primary" />
                                     Profile Photo
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                <div className="flex items-center gap-6">
-                                    <Avatar className="h-24 w-24">
+                                <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-6">
+                                    <Avatar className="h-20 w-20 sm:h-24 sm:w-24">
                                         <AvatarImage
                                             src={imagePreview || undefined}
                                         />
-                                        <AvatarFallback className="bg-blue-100 text-lg font-semibold text-blue-600 dark:bg-blue-900 dark:text-blue-400">
+                                        <AvatarFallback className="bg-primary/10 text-lg font-semibold text-primary dark:bg-primary dark:text-primary-foreground">
                                             {getInitials(data.name)}
                                         </AvatarFallback>
                                     </Avatar>
-
-                                    <div className="space-y-2">
+                                    <div className="flex flex-col items-center gap-2 sm:items-start">
                                         <div className="flex items-center gap-2">
                                             <Label
                                                 htmlFor="profile-image"
                                                 className="cursor-pointer"
                                             >
-                                                <div className="flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-800">
+                                                <div className="flex items-center gap-2 rounded-md border border-input px-4 py-2 transition-colors hover:bg-accent">
                                                     <Upload className="h-4 w-4" />
                                                     {imagePreview
                                                         ? 'Change Photo'
@@ -260,13 +232,13 @@ export default function EditOfficer({
                                                 </Button>
                                             )}
                                         </div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        <p className="text-center text-sm text-muted-foreground sm:text-left">
                                             JPG, PNG up to 2MB
                                         </p>
                                     </div>
                                 </div>
                                 {errors.profile_image && (
-                                    <p className="text-sm text-red-600">
+                                    <p className="text-sm text-destructive">
                                         {errors.profile_image}
                                     </p>
                                 )}
@@ -277,16 +249,16 @@ export default function EditOfficer({
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <FileText className="h-5 w-5 text-green-600" />
+                                    <FileText className="h-5 w-5 text-success" />
                                     Basic Information
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-6">
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="name">
+                            <CardContent className="space-y-4 sm:space-y-6">
+                                <FieldGroup>
+                                    <Field>
+                                        <FieldLabel htmlFor="name">
                                             Full Name *
-                                        </Label>
+                                        </FieldLabel>
                                         <Input
                                             id="name"
                                             type="text"
@@ -297,99 +269,97 @@ export default function EditOfficer({
                                             }
                                             className={
                                                 errors.name
-                                                    ? 'border-red-500'
+                                                    ? 'border-destructive'
                                                     : ''
                                             }
                                             disabled={!canManage}
                                             required
                                         />
                                         {errors.name && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.name}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="position">
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="position">
                                             Position *
-                                        </Label>
-                                        <select
-                                            id="position"
+                                        </FieldLabel>
+                                        <Select
                                             value={data.position}
-                                            onChange={(e) =>
-                                                setData(
-                                                    'position',
-                                                    e.target.value,
-                                                )
+                                            onValueChange={(value) =>
+                                                setData('position', value)
                                             }
-                                            className={`w-full rounded-md border bg-white px-3 py-2 text-gray-900 dark:bg-gray-800 dark:text-gray-100 ${
-                                                errors.position
-                                                    ? 'border-red-500'
-                                                    : 'border-gray-300 dark:border-gray-600'
-                                            }`}
                                             disabled={!canManage}
                                             required
                                         >
-                                            <option value="">
-                                                Select Position
-                                            </option>
-                                            {positions.map((position) => (
-                                                <option
-                                                    key={position}
-                                                    value={position}
-                                                >
-                                                    {position}
-                                                </option>
-                                            ))}
-                                        </select>
+                                            <SelectTrigger
+                                                className={
+                                                    errors.position
+                                                        ? 'border-destructive'
+                                                        : ''
+                                                }
+                                            >
+                                                <SelectValue placeholder="Select Position" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {positions.map((position) => (
+                                                    <SelectItem
+                                                        key={position}
+                                                        value={position}
+                                                    >
+                                                        {position}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                         {errors.position && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.position}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="department">
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="department">
                                             Department
-                                        </Label>
-                                        <select
-                                            id="department"
+                                        </FieldLabel>
+                                        <Select
                                             value={data.department}
-                                            onChange={(e) =>
-                                                setData(
-                                                    'department',
-                                                    e.target.value,
-                                                )
+                                            onValueChange={(value) =>
+                                                setData('department', value)
                                             }
-                                            className={`w-full rounded-md border bg-white px-3 py-2 text-gray-900 dark:bg-gray-800 dark:text-gray-100 ${
-                                                errors.department
-                                                    ? 'border-red-500'
-                                                    : 'border-gray-300 dark:border-gray-600'
-                                            }`}
                                             disabled={!canManage}
                                         >
-                                            <option value="">
-                                                Select Department
-                                            </option>
-                                            {departments.map((dept) => (
-                                                <option key={dept} value={dept}>
-                                                    {dept}
-                                                </option>
-                                            ))}
-                                        </select>
+                                            <SelectTrigger
+                                                className={
+                                                    errors.department
+                                                        ? 'border-destructive'
+                                                        : ''
+                                                }
+                                            >
+                                                <SelectValue placeholder="Select Department" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {departments.map((dept) => (
+                                                    <SelectItem
+                                                        key={dept}
+                                                        value={dept}
+                                                    >
+                                                        {dept}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                         {errors.department && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.department}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="order">
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="order">
                                             Display Order
-                                        </Label>
+                                        </FieldLabel>
                                         <Input
                                             id="order"
                                             type="number"
@@ -404,23 +374,23 @@ export default function EditOfficer({
                                             }
                                             className={
                                                 errors.order
-                                                    ? 'border-red-500'
+                                                    ? 'border-destructive'
                                                     : ''
                                             }
                                             disabled={!canManage}
                                             min="0"
                                         />
                                         {errors.order && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.order}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        <FieldDescription>
                                             Lower numbers appear first in
                                             listings
-                                        </p>
-                                    </div>
-                                </div>
+                                        </FieldDescription>
+                                    </Field>
+                                </FieldGroup>
                             </CardContent>
                         </Card>
 
@@ -428,16 +398,16 @@ export default function EditOfficer({
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Mail className="h-5 w-5 text-purple-600" />
+                                    <Mail className="h-5 w-5 text-chart-2" />
                                     Contact Information
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-6">
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email">
+                            <CardContent className="space-y-4 sm:space-y-6">
+                                <FieldGroup>
+                                    <Field>
+                                        <FieldLabel htmlFor="email">
                                             Email Address *
-                                        </Label>
+                                        </FieldLabel>
                                         <Input
                                             id="email"
                                             type="email"
@@ -448,23 +418,22 @@ export default function EditOfficer({
                                             }
                                             className={
                                                 errors.email
-                                                    ? 'border-red-500'
+                                                    ? 'border-destructive'
                                                     : ''
                                             }
                                             disabled={!canManage}
                                             required
                                         />
                                         {errors.email && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.email}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="phone">
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="phone">
                                             Phone Number
-                                        </Label>
+                                        </FieldLabel>
                                         <Input
                                             id="phone"
                                             type="tel"
@@ -475,18 +444,18 @@ export default function EditOfficer({
                                             }
                                             className={
                                                 errors.phone
-                                                    ? 'border-red-500'
+                                                    ? 'border-destructive'
                                                     : ''
                                             }
                                             disabled={!canManage}
                                         />
                                         {errors.phone && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.phone}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-                                </div>
+                                    </Field>
+                                </FieldGroup>
                             </CardContent>
                         </Card>
 
@@ -494,104 +463,122 @@ export default function EditOfficer({
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Calendar className="h-5 w-5 text-orange-600" />
+                                    <Calendar className="h-5 w-5 text-chart-4" />
                                     Term Information
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-6">
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="term_start">
+                            <CardContent className="space-y-4 sm:space-y-6">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                                    <Field>
+                                        <FieldLabel htmlFor="term_start">
                                             Term Start *
-                                        </Label>
-                                        <Input
-                                            id="term_start"
-                                            type="date"
-                                            value={data.term_start}
-                                            onChange={(e) =>
+                                        </FieldLabel>
+                                        <DatePicker
+                                            date={
+                                                data.term_start
+                                                    ? new Date(data.term_start)
+                                                    : undefined
+                                            }
+                                            onDateChange={(date) =>
                                                 setData(
                                                     'term_start',
-                                                    e.target.value,
+                                                    date
+                                                        ? date
+                                                              .toISOString()
+                                                              .split('T')[0]
+                                                        : '',
                                                 )
                                             }
+                                            placeholder="Select term start date"
+                                            disabled={!canManage}
                                             className={
                                                 errors.term_start
-                                                    ? 'border-red-500'
+                                                    ? 'border-destructive'
                                                     : ''
                                             }
-                                            disabled={!canManage}
-                                            required
                                         />
                                         {errors.term_start && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.term_start}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="term_end">
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="term_end">
                                             Term End
-                                        </Label>
-                                        <Input
-                                            id="term_end"
-                                            type="date"
-                                            value={data.term_end}
-                                            onChange={(e) =>
+                                        </FieldLabel>
+                                        <DatePicker
+                                            date={
+                                                data.term_end
+                                                    ? new Date(data.term_end)
+                                                    : undefined
+                                            }
+                                            onDateChange={(date) =>
                                                 setData(
                                                     'term_end',
-                                                    e.target.value,
+                                                    date
+                                                        ? date
+                                                              .toISOString()
+                                                              .split('T')[0]
+                                                        : '',
                                                 )
                                             }
+                                            placeholder="Select term end date"
+                                            disabled={!canManage}
                                             className={
                                                 errors.term_end
-                                                    ? 'border-red-500'
+                                                    ? 'border-destructive'
                                                     : ''
                                             }
-                                            disabled={!canManage}
                                         />
                                         {errors.term_end && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.term_end}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="is_active">
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="is_active">
                                             Status
-                                        </Label>
-                                        <select
-                                            id="is_active"
+                                        </FieldLabel>
+                                        <Select
                                             value={
                                                 data.is_active
                                                     ? 'true'
                                                     : 'false'
                                             }
-                                            onChange={(e) =>
+                                            onValueChange={(value) =>
                                                 setData(
                                                     'is_active',
-                                                    e.target.value === 'true',
+                                                    value === 'true',
                                                 )
                                             }
-                                            className={`w-full rounded-md border bg-white px-3 py-2 text-gray-900 dark:bg-gray-800 dark:text-gray-100 ${
-                                                errors.is_active
-                                                    ? 'border-red-500'
-                                                    : 'border-gray-300 dark:border-gray-600'
-                                            }`}
                                             disabled={!canManage}
                                         >
-                                            <option value="true">Active</option>
-                                            <option value="false">
-                                                Inactive
-                                            </option>
-                                        </select>
+                                            <SelectTrigger
+                                                className={
+                                                    errors.is_active
+                                                        ? 'border-destructive'
+                                                        : ''
+                                                }
+                                            >
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="true">
+                                                    Active
+                                                </SelectItem>
+                                                <SelectItem value="false">
+                                                    Inactive
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                         {errors.is_active && (
-                                            <p className="text-sm text-red-600">
+                                            <FieldError>
                                                 {errors.is_active}
-                                            </p>
+                                            </FieldError>
                                         )}
-                                    </div>
+                                    </Field>
                                 </div>
                             </CardContent>
                         </Card>
@@ -600,15 +587,15 @@ export default function EditOfficer({
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Users className="h-5 w-5 text-red-600" />
+                                    <Users className="h-5 w-5 text-destructive" />
                                     Biography
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="bio">
+                            <CardContent className="space-y-3 sm:space-y-4">
+                                <Field>
+                                    <FieldLabel htmlFor="bio">
                                         About the Officer
-                                    </Label>
+                                    </FieldLabel>
                                     <Textarea
                                         id="bio"
                                         placeholder="Enter a brief biography, background, and qualifications..."
@@ -618,20 +605,20 @@ export default function EditOfficer({
                                         }
                                         rows={4}
                                         className={
-                                            errors.bio ? 'border-red-500' : ''
+                                            errors.bio
+                                                ? 'border-destructive'
+                                                : ''
                                         }
                                         disabled={!canManage}
                                     />
                                     {errors.bio && (
-                                        <p className="text-sm text-red-600">
-                                            {errors.bio}
-                                        </p>
+                                        <FieldError>{errors.bio}</FieldError>
                                     )}
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <FieldDescription>
                                         This will be displayed on the public
                                         officer profile
-                                    </p>
-                                </div>
+                                    </FieldDescription>
+                                </Field>
                             </CardContent>
                         </Card>
 
@@ -641,7 +628,7 @@ export default function EditOfficer({
                                 <CardTitle>Officer Information</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
                                     <div>
                                         <strong>Created:</strong>{' '}
                                         {new Date(
@@ -660,25 +647,43 @@ export default function EditOfficer({
 
                         {/* Action Buttons */}
                         {canManage && (
-                            <div className="flex items-center justify-end gap-4 pt-6">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() =>
-                                        router.visit('/usg/admin/officers')
-                                    }
-                                    disabled={processing}
-                                >
-                                    Cancel
-                                </Button>
+                            <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pt-6">
+                                <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() =>
+                                            router.visit(
+                                                officerRoutes.index().url,
+                                            )
+                                        }
+                                        disabled={processing}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() =>
+                                            router.visit(
+                                                `/usg/officers#officer-${officer.id}`,
+                                            )
+                                        }
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        View Public Profile
+                                    </Button>
+                                </div>
                                 <Button
                                     type="submit"
                                     disabled={processing}
-                                    className="min-w-[120px]"
+                                    className="w-full min-w-[120px] sm:w-auto"
                                 >
                                     {processing ? (
                                         <>
-                                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                                             Saving...
                                         </>
                                     ) : (
@@ -693,6 +698,6 @@ export default function EditOfficer({
                     </form>
                 </div>
             </div>
-        </>
+        </AppLayout>
     );
 }

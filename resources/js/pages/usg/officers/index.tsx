@@ -103,29 +103,30 @@ export default function OfficersIndex({
             <Head title="USG Officers" />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-purple-700 via-purple-600 to-blue-600 text-white py-20">
+            <section className="relative bg-gradient-to-br from-purple-700 via-purple-600 to-blue-600 py-20 text-white">
                 <div className="absolute inset-0 bg-black/10"></div>
-                <div className="container mx-auto px-4 relative z-10">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <div className="mb-6 inline-flex animate-pulse items-center justify-center rounded-full bg-white/20 backdrop-blur-sm p-4">
+                <div className="relative z-10 container mx-auto px-4">
+                    <div className="mx-auto max-w-4xl text-center">
+                        <div className="mb-6 inline-flex animate-pulse items-center justify-center rounded-full bg-white/20 p-4 backdrop-blur-sm">
                             <Users className="h-10 w-10 text-white" />
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                        <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             USG Officers
                         </h1>
-                        <p className="text-xl md:text-2xl text-purple-100">
-                            Meet the dedicated leaders serving our campus community
+                        <p className="text-xl text-purple-100 md:text-2xl">
+                            Meet the dedicated leaders serving our campus
+                            community
                         </p>
                     </div>
                 </div>
             </section>
 
             {/* Stats Bar */}
-            <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+            <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
                 <div className="container mx-auto px-4 py-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
                         <div className="text-center">
-                            <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+                            <div className="mb-2 text-4xl font-bold text-purple-600 dark:text-purple-400">
                                 {stats.total_officers}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -133,7 +134,7 @@ export default function OfficersIndex({
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
+                            <div className="mb-2 text-4xl font-bold text-green-600 dark:text-green-400">
                                 {stats.active_officers}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -141,7 +142,7 @@ export default function OfficersIndex({
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                            <div className="mb-2 text-4xl font-bold text-blue-600 dark:text-blue-400">
                                 {stats.departments_count}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -153,10 +154,10 @@ export default function OfficersIndex({
             </section>
 
             {/* Main Content */}
-            <section className="py-16 bg-gray-50 dark:bg-gray-800">
+            <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto px-4">
                     {/* Search and Filters */}
-                    <div className="mb-8 max-w-7xl mx-auto">
+                    <div className="mx-auto mb-8 max-w-7xl">
                         <SearchBar
                             value={searchQuery}
                             onChange={setSearchQuery}
@@ -203,12 +204,12 @@ export default function OfficersIndex({
                     </div>
 
                     {filteredOfficers.length === 0 ? (
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-12 text-center">
-                            <Search className="mb-4 h-12 w-12 text-gray-400 mx-auto" />
+                        <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
+                            <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No officers found
                             </h3>
-                            <p className="max-w-md mx-auto text-center text-gray-600 dark:text-gray-300">
+                            <p className="mx-auto max-w-md text-center text-gray-600 dark:text-gray-300">
                                 {searchQuery ||
                                 Object.values(activeFilters).some(
                                     (f) => f?.length,
@@ -236,7 +237,7 @@ export default function OfficersIndex({
                         <div className="space-y-8">
                             {/* Active Officers */}
                             {activeOfficers.length > 0 && (
-                                <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                                <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                     <h3 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                                         Current Officers
                                     </h3>
@@ -259,7 +260,7 @@ export default function OfficersIndex({
 
                             {/* Inactive Officers */}
                             {inactiveOfficers.length > 0 && (
-                                <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6">
+                                <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
                                     <h3 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                                         Past Officers
                                     </h3>
@@ -287,31 +288,38 @@ export default function OfficersIndex({
                             )}
                         </div>
                     )}
-
                 </div>
             </section>
 
             {/* Contact Section */}
             {activeOfficers.length > 0 && (
-                <section className="py-16 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+                <section className="bg-gradient-to-br from-purple-600 to-blue-600 py-16 text-white">
                     <div className="container mx-auto px-4">
-                        <div className="max-w-3xl mx-auto text-center">
-                            <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
-                            <p className="text-xl mb-8 text-purple-100">
-                                Have questions or suggestions? Feel free to reach out to any of our officers or contact the USG office directly.
+                        <div className="mx-auto max-w-3xl text-center">
+                            <h2 className="mb-4 text-3xl font-bold">
+                                Get in Touch
+                            </h2>
+                            <p className="mb-8 text-xl text-purple-100">
+                                Have questions or suggestions? Feel free to
+                                reach out to any of our officers or contact the
+                                USG office directly.
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                            <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-3 bg-white/20 rounded-full">
+                                    <div className="rounded-full bg-white/20 p-3">
                                         <Mail className="h-5 w-5" />
                                     </div>
-                                    <span className="text-lg">usg@must.edu.ph</span>
+                                    <span className="text-lg">
+                                        usg@must.edu.ph
+                                    </span>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <div className="p-3 bg-white/20 rounded-full">
+                                    <div className="rounded-full bg-white/20 p-3">
                                         <Phone className="h-5 w-5" />
                                     </div>
-                                    <span className="text-lg">(088) 856-1738</span>
+                                    <span className="text-lg">
+                                        (088) 856-1738
+                                    </span>
                                 </div>
                             </div>
                         </div>

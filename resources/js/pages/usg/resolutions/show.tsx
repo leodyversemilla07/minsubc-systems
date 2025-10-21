@@ -25,7 +25,13 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path: string | null;
-    status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+    status:
+        | 'draft'
+        | 'pending'
+        | 'review'
+        | 'published'
+        | 'rejected'
+        | 'archived';
     category?: string;
     tags?: string[];
     vote_results?: {
@@ -116,7 +122,6 @@ export default function ResolutionShow({
 
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 py-16 text-white">
-                <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
                 <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <Button
                         variant="ghost"
@@ -155,7 +160,7 @@ export default function ResolutionShow({
                                 )}
                             </div>
 
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 {resolution.title}
                             </h1>
 
@@ -180,8 +185,7 @@ export default function ResolutionShow({
 
                                 <div className="flex items-center gap-2">
                                     <Eye className="h-4 w-4" />
-                                    Resolution #
-                                    {resolution.resolution_number}
+                                    Resolution #{resolution.resolution_number}
                                 </div>
                             </div>
 
@@ -363,7 +367,9 @@ export default function ResolutionShow({
                                                     </div>
                                                     <div>
                                                         <div className="font-medium text-gray-900 dark:text-white">
-                                                            {attachment.filename}
+                                                            {
+                                                                attachment.filename
+                                                            }
                                                         </div>
                                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                                             {formatFileSize(
@@ -447,9 +453,7 @@ export default function ResolutionShow({
                         </p>
                         <div className="flex flex-col justify-center gap-4 sm:flex-row">
                             <Button
-                                onClick={() =>
-                                    router.visit('/usg/resolutions')
-                                }
+                                onClick={() => router.visit('/usg/resolutions')}
                                 className="bg-white text-blue-600 hover:bg-blue-50"
                             >
                                 View All Resolutions

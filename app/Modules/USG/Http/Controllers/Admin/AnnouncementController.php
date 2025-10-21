@@ -124,4 +124,21 @@ class AnnouncementController extends Controller
 
         return back()->with('success', 'Announcement unpublished successfully.');
     }
+
+    public function preview(string $slug)
+    {
+        $announcement = $this->announcementService->getBySlugForAdmin($slug);
+
+        if (! $announcement) {
+            abort(404, 'Announcement not found');
+        }
+
+        // Get related announcements (published only)
+        $related = $this->announcementService->getRelatedAnnouncements($announcement, 3);
+
+        return Inertia::render('usg/admin/announcements/preview', [
+            'announcement' => $announcement,
+            'related' => $related,
+        ]);
+    }
 }

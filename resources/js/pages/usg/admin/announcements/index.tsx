@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
     DropdownMenu,
@@ -26,7 +26,15 @@ import {
 import SearchBar from '@/components/usg/search-bar';
 import StatusBadge from '@/components/usg/status-badge';
 import AppLayout from '@/layouts/app-layout';
-import { Head, router } from '@inertiajs/react';
+import { cn } from '@/lib/utils';
+import {
+    create,
+    destroy,
+    edit,
+    index,
+    preview,
+} from '@/routes/usg/admin/announcements';
+import { Head, Link, router } from '@inertiajs/react';
 import {
     Calendar,
     Edit,
@@ -43,11 +51,12 @@ import { useState } from 'react';
 interface Announcement {
     id: number;
     title: string;
+    slug: string;
     content: string;
     excerpt?: string;
-    priority: 'low' | 'medium' | 'high' | 'urgent';
+    priority: 'low' | 'normal' | 'high';
     status: 'draft' | 'pending' | 'published' | 'archived';
-    author: string;
+    author_name: string;
     published_at?: string;
     created_at: string;
     updated_at: string;
@@ -78,7 +87,9 @@ export default function AnnouncementsManagement({
         ? announcements
         : announcements?.data && Array.isArray(announcements.data)
           ? announcements.data
-          : []; // Ensure filters and categories are always available
+          : [];
+
+    // Ensure filters and categories are always available
     const safeFilters = filters || {};
     const safeCategories: string[] = Array.isArray(categories)
         ? categories
@@ -120,7 +131,7 @@ export default function AnnouncementsManagement({
 
     const applyFilters = (newFilters: Partial<typeof filters>) => {
         router.get(
-            '/usg/admin/announcements',
+            index.url(),
             {
                 search: searchQuery,
                 status: selectedStatus,
@@ -136,7 +147,7 @@ export default function AnnouncementsManagement({
         if (
             confirm(`Are you sure you want to delete "${announcement.title}"?`)
         ) {
-            router.delete(`/usg/admin/announcements/${announcement.id}`);
+            router.delete(destroy.url(announcement.id));
         }
     };
 
@@ -191,7 +202,7 @@ export default function AnnouncementsManagement({
         <AppLayout
             breadcrumbs={[
                 { title: 'USG Admin', href: '/usg/admin' },
-                { title: 'Announcements', href: '/usg/admin/announcements' },
+                { title: 'Announcements', href: index.url() },
             ]}
         >
             <Head title="Announcements Management - USG Admin" />
@@ -209,14 +220,13 @@ export default function AnnouncementsManagement({
                     </div>
 
                     {canManage && (
-                        <Button
-                            onClick={() =>
-                                router.visit('/usg/admin/announcements/create')
-                            }
+                        <Link
+                            href={create.url()}
+                            className={cn(buttonVariants())}
                         >
-                            <Plus className="mr-2 h-4 w-4" />
+                            <Plus className="h-4 w-4" />
                             New Announcement
-                        </Button>
+                        </Link>
                     )}
                 </div>
 
@@ -433,7 +443,7 @@ export default function AnnouncementsManagement({
                                             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                                                 <div className="flex items-center gap-1">
                                                     <User className="h-4 w-4" />
-                                                    {announcement.author}
+                                                    {announcement.author_name}
                                                 </div>
                                                 <div className="flex items-center gap-1">
                                                     <Calendar className="h-4 w-4" />
@@ -455,31 +465,36 @@ export default function AnnouncementsManagement({
                                         </div>
 
                                         <div className="flex items-center gap-2">
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() =>
-                                                    router.visit(
-                                                        `/usg/announcements/${announcement.id}`,
-                                                    )
-                                                }
+                                            <Link
+                                                href={preview.url(
+                                                    announcement.slug,
+                                                )}
+                                                className={cn(
+                                                    buttonVariants({
+                                                        variant: 'ghost',
+                                                        size: 'sm',
+                                                    }),
+                                                )}
                                             >
                                                 <Eye className="h-4 w-4" />
-                                            </Button>
+                                            </Link>
 
                                             {canManage && (
                                                 <>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            router.visit(
-                                                                `/usg/admin/announcements/${announcement.id}/edit`,
-                                                            )
-                                                        }
+                                                    <Link
+                                                        href={edit.url(
+                                                            announcement.id,
+                                                        )}
+                                                        className={cn(
+                                                            buttonVariants({
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            }),
+                                                        )}
                                                     >
                                                         <Edit className="h-4 w-4" />
-                                                    </Button>
+                                                    </Link>
 
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger
@@ -589,16 +604,13 @@ export default function AnnouncementsManagement({
                                     </EmptyHeader>
                                     {canManage && (
                                         <EmptyContent>
-                                            <Button
-                                                onClick={() =>
-                                                    router.visit(
-                                                        '/usg/admin/announcements/create',
-                                                    )
-                                                }
+                                            <Link
+                                                href={create.url()}
+                                                className={cn(buttonVariants())}
                                             >
-                                                <Plus className="mr-2 h-4 w-4" />
+                                                <Plus className="h-4 w-4" />
                                                 Create Announcement
-                                            </Button>
+                                            </Link>
                                         </EmptyContent>
                                     )}
                                 </Empty>

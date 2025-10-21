@@ -99,7 +99,7 @@ class EventSeeder extends Seeder
         ];
 
         foreach ($events as $event) {
-            $slug = Str::slug($event['title']) . '-' . Str::random(6);
+            $slug = Str::slug($event['title']).'-'.Str::random(6);
 
             DB::table('usg_events')->insert([
                 'title' => $event['title'],

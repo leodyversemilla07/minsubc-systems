@@ -120,14 +120,13 @@ export default function TransparencyIndex({
 
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 py-16 text-white">
-                <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
                 <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-start gap-4">
                         <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
                             <BarChart3 className="h-8 w-8" />
                         </div>
                         <div className="flex-1">
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 Transparency Reports
                             </h1>
                             <p className="mb-6 max-w-3xl text-lg text-cyan-100">
@@ -221,7 +220,9 @@ export default function TransparencyIndex({
                             <select
                                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                                 value={selectedType}
-                                onChange={(e) => setSelectedType(e.target.value)}
+                                onChange={(e) =>
+                                    setSelectedType(e.target.value)
+                                }
                             >
                                 <option value="">All Types</option>
                                 {types.map((type) => (
@@ -235,7 +236,9 @@ export default function TransparencyIndex({
                             <select
                                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                                 value={selectedYear}
-                                onChange={(e) => setSelectedYear(e.target.value)}
+                                onChange={(e) =>
+                                    setSelectedYear(e.target.value)
+                                }
                             >
                                 <option value="">All Years</option>
                                 {years.map((year) => (
@@ -281,7 +284,6 @@ export default function TransparencyIndex({
                                 {reports.total !== 1 ? 's' : ''} Found
                             </h2>
                         </div>
-
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                             {reports.data.map((report) => (
                                 <div
@@ -290,7 +292,11 @@ export default function TransparencyIndex({
                                 >
                                     <div className="mb-4">
                                         <div className="mb-3 flex items-start justify-between">
-                                            <Badge className={getTypeColor(report.type)}>
+                                            <Badge
+                                                className={getTypeColor(
+                                                    report.type,
+                                                )}
+                                            >
                                                 {formatTypeLabel(report.type)}
                                             </Badge>
                                             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
@@ -323,7 +329,10 @@ export default function TransparencyIndex({
                                     <div className="mb-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                                         <div className="flex items-center gap-2">
                                             <Calendar className="h-4 w-4" />
-                                            <span>Period: {report.formatted_period}</span>
+                                            <span>
+                                                Period:{' '}
+                                                {report.formatted_period}
+                                            </span>
                                         </div>
                                         <div>
                                             <span className="text-gray-500 dark:text-gray-500">
@@ -341,7 +350,11 @@ export default function TransparencyIndex({
                                     </div>
 
                                     <div className="flex gap-2">
-                                        <Button asChild variant="outline" size="sm">
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            size="sm"
+                                        >
                                             <Link
                                                 href={`/usg/transparency/${report.slug}`}
                                             >
@@ -350,7 +363,11 @@ export default function TransparencyIndex({
                                             </Link>
                                         </Button>
                                         {report.file_path && (
-                                            <Button asChild size="sm" variant="default">
+                                            <Button
+                                                asChild
+                                                size="sm"
+                                                variant="default"
+                                            >
                                                 <Link
                                                     href={`/usg/transparency/${report.slug}/download`}
                                                 >
@@ -364,7 +381,8 @@ export default function TransparencyIndex({
                                     </div>
                                 </div>
                             ))}
-                        </div>                        {/* Pagination */}
+                        </div>{' '}
+                        {/* Pagination */}
                         {reports.last_page > 1 && (
                             <div className="mt-8 flex justify-center">
                                 <div className="flex gap-2">
@@ -381,17 +399,27 @@ export default function TransparencyIndex({
                                             }
                                             size="sm"
                                             onClick={() => {
-                                                const params = new URLSearchParams();
+                                                const params =
+                                                    new URLSearchParams();
                                                 if (searchQuery.trim())
                                                     params.set(
                                                         'search',
                                                         searchQuery.trim(),
                                                     );
                                                 if (selectedType)
-                                                    params.set('type', selectedType);
+                                                    params.set(
+                                                        'type',
+                                                        selectedType,
+                                                    );
                                                 if (selectedYear)
-                                                    params.set('year', selectedYear);
-                                                params.set('page', page.toString());
+                                                    params.set(
+                                                        'year',
+                                                        selectedYear,
+                                                    );
+                                                params.set(
+                                                    'page',
+                                                    page.toString(),
+                                                );
 
                                                 router.get(
                                                     `/usg/transparency?${params.toString()}`,

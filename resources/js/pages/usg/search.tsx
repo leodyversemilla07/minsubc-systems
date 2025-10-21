@@ -44,14 +44,13 @@ export default function USGSearch({ query, announcements }: SearchProps) {
 
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-gray-600 via-slate-600 to-gray-700 py-16 text-white">
-                <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
                 <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-start gap-4">
                         <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
                             <Search className="h-8 w-8" />
                         </div>
                         <div className="flex-1">
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 Search USG Content
                             </h1>
                             <p className="mb-6 max-w-3xl text-lg text-gray-100">
@@ -79,7 +78,7 @@ export default function USGSearch({ query, announcements }: SearchProps) {
                     <form onSubmit={handleSearch}>
                         <div className="flex gap-2">
                             <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
                                 <Input
                                     type="search"
                                     placeholder="Search announcements, events, resolutions..."

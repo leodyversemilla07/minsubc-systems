@@ -13,6 +13,7 @@ import {
 type Status =
     | 'draft'
     | 'pending'
+    | 'review'
     | 'published'
     | 'rejected'
     | 'archived'
@@ -38,6 +39,13 @@ const statusConfig = {
     pending: {
         variant: 'default' as const,
         label: 'Pending',
+        icon: Clock,
+        className:
+            'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    },
+    review: {
+        variant: 'default' as const,
+        label: 'Under Review',
         icon: Clock,
         className:
             'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
@@ -96,7 +104,24 @@ export default function StatusBadge({
     className,
     showIcon = false,
 }: StatusBadgeProps) {
-    const config = statusConfig[status];
+    const config = statusConfig[status] ?? null;
+
+    // Defensive fallback when an unknown status is provided.
+    if (!config) {
+        // Log the unknown status to help with debugging in the browser console.
+        // This will help backend or data providers identify what value is missing.
+        // Avoid cluttering logs in production — this is a low-risk informational log.
+        console.warn('[StatusBadge] Unknown status:', status);
+        return (
+            <Badge
+                variant="secondary"
+                className={cn('bg-gray-100 text-gray-700', className)}
+            >
+                {String(status) || 'Unknown'}
+            </Badge>
+        );
+    }
+
     const Icon = config.icon;
 
     return (
@@ -104,7 +129,7 @@ export default function StatusBadge({
             variant={config.variant}
             className={cn(config.className, className)}
         >
-            {showIcon && <Icon className="mr-1 h-3 w-3" />}
+            {showIcon && Icon && <Icon className="mr-1 h-3 w-3" />}
             {config.label}
         </Badge>
     );

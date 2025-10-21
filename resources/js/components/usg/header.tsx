@@ -26,7 +26,12 @@ export default function Header() {
     const isActive = (href: string) => {
         const usgIndexUrl = usg.index.url();
         if (href === usgIndexUrl) {
-            return currentUrl === href || currentUrl === '/' || currentUrl === '/usg' || currentUrl === '/usg/';
+            return (
+                currentUrl === href ||
+                currentUrl === '/' ||
+                currentUrl === '/usg' ||
+                currentUrl === '/usg/'
+            );
         }
         return currentUrl.startsWith(href);
     };
@@ -36,7 +41,10 @@ export default function Header() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Top row: Logo, Name, and Auth buttons */}
                 <div className="flex h-16 items-center justify-between">
-                    <Link href={usg.index.url()} className="flex items-center gap-3 transition-opacity hover:opacity-80">
+                    <Link
+                        href={usg.index.url()}
+                        className="flex items-center gap-3 transition-opacity hover:opacity-80"
+                    >
                         <img
                             src="/minsu-logo.png"
                             alt="MinSUBC Logo"
@@ -48,13 +56,13 @@ export default function Header() {
                             className="h-10 w-10 rounded-full object-contain"
                         />
                         <div className="flex flex-col">
-                            <span className="hidden text-xs font-semibold leading-tight text-green-900 dark:text-white lg:block">
+                            <span className="hidden text-xs leading-tight font-semibold text-green-900 lg:block dark:text-white">
                                 Mindoro State University — Bongabong Campus
                             </span>
-                            <span className="text-xs font-semibold leading-tight text-green-900 dark:text-white lg:text-sm">
+                            <span className="text-xs leading-tight font-semibold text-green-900 lg:text-sm dark:text-white">
                                 University Student Government
                             </span>
-                            <span className="text-xs font-semibold text-green-900 dark:text-white lg:hidden">
+                            <span className="text-xs font-semibold text-green-900 lg:hidden dark:text-white">
                                 MinSU Bongabong | USG
                             </span>
                         </div>
@@ -74,7 +82,7 @@ export default function Header() {
                             <>
                                 <Link
                                     href={login()}
-                                    className="hidden px-4 py-2 text-sm font-medium text-green-900 transition-colors hover:text-green-800 dark:text-gray-300 dark:hover:text-white sm:block"
+                                    className="hidden px-4 py-2 text-sm font-medium text-green-900 transition-colors hover:text-green-800 sm:block dark:text-gray-300 dark:hover:text-white"
                                 >
                                     Log in
                                 </Link>
@@ -104,7 +112,7 @@ export default function Header() {
                 </div>
 
                 {/* Bottom row: Desktop Navigation */}
-                <div className="hidden border-t border-green-100 py-3 dark:border-gray-800 md:block">
+                <div className="hidden border-t border-green-100 py-3 md:block dark:border-gray-800">
                     <div className="flex items-center space-x-2">
                         {navigationLinks.map((link) => {
                             const active = isActive(link.href);
@@ -128,7 +136,7 @@ export default function Header() {
 
             {/* Mobile Navigation */}
             {isMenuOpen && (
-                <div className="border-t border-green-200 bg-white dark:border-gray-800 dark:bg-gray-900 md:hidden">
+                <div className="border-t border-green-200 bg-white md:hidden dark:border-gray-800 dark:bg-gray-900">
                     <div className="mx-auto max-w-7xl space-y-2 px-4 py-4 sm:px-6 lg:px-8">
                         {navigationLinks.map((link) => {
                             const active = isActive(link.href);
@@ -147,7 +155,7 @@ export default function Header() {
                                 </Link>
                             );
                         })}
-                        
+
                         {/* Mobile auth buttons */}
                         <div className="border-t border-green-200 pt-4 dark:border-gray-800">
                             {auth.user ? (

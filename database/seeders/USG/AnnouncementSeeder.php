@@ -69,7 +69,7 @@ class AnnouncementSeeder extends Seeder
         ];
 
         foreach ($announcements as $announcement) {
-            $slug = Str::slug($announcement['title']) . '-' . Str::random(6);
+            $slug = Str::slug($announcement['title']).'-'.Str::random(6);
             $publishDate = $announcement['status'] === 'published' ? now()->subDays(rand(1, 15)) : null;
 
             DB::table('usg_announcements')->insert([

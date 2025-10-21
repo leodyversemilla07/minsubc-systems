@@ -1,19 +1,4 @@
-import AnnouncementCard from './announcement-card';
-import CalendarWidget from './calendar-widget';
-import { CategoryFilter } from './category-filter';
-import EventCard from './event-card';
-import { FileUploader } from './file-uploader';
-import Footer from './footer';
-import Header from './header';
-import OfficerCard from './officer-card';
-import PriorityBadge from './priority-badge';
-import ResolutionCard from './resolution-card';
-import { RichTextEditor } from './rich-text-editor';
-import SearchBar from './search-bar';
-import StatsCard from './stats-card';
-import StatusBadge from './status-badge';
-
-// Export all components for easy importing
+// Re-export all components for easy importing
 export { default as AnnouncementCard } from './announcement-card';
 export { default as CalendarWidget } from './calendar-widget';
 export { CategoryFilter } from './category-filter';

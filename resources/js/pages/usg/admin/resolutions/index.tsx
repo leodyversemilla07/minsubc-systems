@@ -8,6 +8,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Progress } from '@/components/ui/progress';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import SearchBar from '@/components/usg/search-bar';
 import StatusBadge from '@/components/usg/status-badge';
 import AppLayout from '@/layouts/app-layout';
@@ -36,7 +44,13 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path?: string;
-    status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+    status:
+        | 'draft'
+        | 'pending'
+        | 'review'
+        | 'published'
+        | 'rejected'
+        | 'archived';
     category?: string;
     vote_results?: {
         for: number;
@@ -81,12 +95,14 @@ export default function ResolutionsManagement({
 
     const [searchQuery, setSearchQuery] = useState(safeFilters.search || '');
     const [selectedStatus, setSelectedStatus] = useState(
-        safeFilters.status || '',
+        safeFilters.status || 'all',
     );
     const [selectedCategory, setSelectedCategory] = useState(
-        safeFilters.category || '',
+        safeFilters.category || 'all',
     );
-    const [selectedYear, setSelectedYear] = useState(safeFilters.year || '');
+    const [selectedYear, setSelectedYear] = useState(safeFilters.year || 'all');
+    const [isLoading, setIsLoading] = useState(false);
+    const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -109,16 +125,20 @@ export default function ResolutionsManagement({
     };
 
     const applyFilters = (newFilters: Partial<typeof filters>) => {
+        setIsLoading(true);
         router.get(
             '/usg/admin/resolutions',
             {
                 search: searchQuery,
-                status: selectedStatus,
-                category: selectedCategory,
-                year: selectedYear,
+                status: selectedStatus === 'all' ? '' : selectedStatus,
+                category: selectedCategory === 'all' ? '' : selectedCategory,
+                year: selectedYear === 'all' ? '' : selectedYear,
                 ...newFilters,
             },
-            { preserveState: true },
+            {
+                preserveState: true,
+                onFinish: () => setIsLoading(false),
+            },
         );
     };
 
@@ -129,9 +149,16 @@ export default function ResolutionsManagement({
     };
 
     const handleStatusChange = (resolution: Resolution, newStatus: string) => {
-        router.patch(`/usg/admin/resolutions/${resolution.id}/status`, {
-            status: newStatus,
-        });
+        setUpdatingStatus(resolution.id.toString());
+        router.patch(
+            `/usg/admin/resolutions/${resolution.id}/status`,
+            {
+                status: newStatus,
+            },
+            {
+                onFinish: () => setUpdatingStatus(null),
+            },
+        );
     };
 
     const handleDownload = (resolution: Resolution) => {
@@ -186,26 +213,31 @@ export default function ResolutionsManagement({
         >
             <Head title="Resolutions Management - USG Admin" />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
+            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header with action buttons */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between lg:items-center">
+                    <div className="space-y-1">
+                        <h1 className="text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
                             Resolutions Management
                         </h1>
-                        <p className="text-muted-foreground">
+                        <p className="text-sm text-muted-foreground sm:text-base">
                             Create, edit and manage USG resolutions and
                             legislative documents
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
                         <Button
                             variant="outline"
                             onClick={() => router.visit('/usg/resolutions')}
+                            size="sm"
+                            className="w-full justify-center sm:w-auto sm:justify-start"
                         >
                             <Archive className="mr-2 h-4 w-4" />
-                            View Archive
+                            <span className="hidden sm:inline">
+                                View Archive
+                            </span>
+                            <span className="sm:hidden">Archive</span>
                         </Button>
 
                         {canManage && (
@@ -215,496 +247,691 @@ export default function ResolutionsManagement({
                                         '/usg/admin/resolutions/create',
                                     )
                                 }
+                                size="sm"
+                                className="w-full justify-center sm:w-auto sm:justify-start"
                             >
                                 <Plus className="mr-2 h-4 w-4" />
-                                New Resolution
+                                <span className="hidden sm:inline">
+                                    New Resolution
+                                </span>
+                                <span className="sm:hidden">New</span>
                             </Button>
                         )}
                     </div>
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
-                                        <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.total}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Total
-                                        </div>
-                                    </div>
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                    <Card
+                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        onClick={() => handleStatusFilter('all')}
+                    >
+                        <CardContent className="p-4 md:p-6">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="rounded-lg bg-chart-1 p-2 transition-colors md:p-3">
+                                    <FileText className="h-5 w-5 text-foreground md:h-6 md:w-6" />
                                 </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
-                                        <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                <div className="min-w-0 flex-1">
+                                    <div className="text-xl font-bold md:text-2xl">
+                                        {stats.total}
                                     </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.published}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Published
-                                        </div>
+                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                        Total
                                     </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-yellow-100 p-3 dark:bg-yellow-900">
-                                        <Filter className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.pending}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Pending
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
-                                        <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.draft}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            Drafts
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="rounded-lg bg-purple-100 p-3 dark:bg-purple-900">
-                                        <Vote className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-bold">
-                                            {stats.withVotes}
-                                        </div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            With Votes
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                {/* Filters */}
-                <Card>
-                    <CardContent className="p-6">
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
-                                <div className="md:col-span-2">
-                                    <SearchBar
-                                        placeholder="Search resolutions by title, number, or content..."
-                                        value={searchQuery}
-                                        onChange={(query) => {
-                                            setSearchQuery(query);
-                                            handleSearch(query);
-                                        }}
-                                    />
-                                </div>
-
-                                <div>
-                                    <select
-                                        value={selectedStatus}
-                                        onChange={(e) =>
-                                            handleStatusFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Status</option>
-                                        <option value="published">
-                                            Published
-                                        </option>
-                                        <option value="pending">Pending</option>
-                                        <option value="draft">Draft</option>
-                                        <option value="rejected">
-                                            Rejected
-                                        </option>
-                                        <option value="archived">
-                                            Archived
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <select
-                                        value={selectedCategory}
-                                        onChange={(e) =>
-                                            handleCategoryFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Categories</option>
-                                        {safeCategories.map((category) => (
-                                            <option
-                                                key={category}
-                                                value={category}
-                                            >
-                                                {category}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <select
-                                        value={selectedYear}
-                                        onChange={(e) =>
-                                            handleYearFilter(e.target.value)
-                                        }
-                                        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-                                    >
-                                        <option value="">All Years</option>
-                                        {safeYears.map((year) => (
-                                            <option key={year} value={year}>
-                                                {year}
-                                            </option>
-                                        ))}
-                                    </select>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
+                    <Card
+                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        onClick={() => handleStatusFilter('published')}
+                    >
+                        <CardContent className="p-4 md:p-6">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="rounded-lg bg-chart-2 p-2 transition-colors md:p-3">
+                                    <Eye className="h-5 w-5 text-success md:h-6 md:w-6" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="text-xl font-bold md:text-2xl">
+                                        {stats.published}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                        Published
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card
+                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        onClick={() => handleStatusFilter('pending')}
+                    >
+                        <CardContent className="p-4 md:p-6">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="rounded-lg bg-chart-3 p-2 transition-colors md:p-3">
+                                    <Filter className="h-5 w-5 text-foreground md:h-6 md:w-6" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="text-xl font-bold md:text-2xl">
+                                        {stats.pending}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                        Pending
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card
+                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        onClick={() => handleStatusFilter('draft')}
+                    >
+                        <CardContent className="p-4 md:p-6">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="rounded-lg bg-chart-4 p-2 transition-colors md:p-3">
+                                    <Edit className="h-5 w-5 text-muted-foreground md:h-6 md:w-6" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="text-xl font-bold md:text-2xl">
+                                        {stats.draft}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                        Drafts
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card
+                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md sm:col-span-2 md:col-span-3 lg:col-span-1"
+                        onClick={() => handleStatusFilter('all')}
+                    >
+                        <CardContent className="p-4 md:p-6">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="rounded-lg bg-chart-5 p-2 transition-colors md:p-3">
+                                    <Vote className="h-5 w-5 text-foreground md:h-6 md:w-6" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <div className="text-xl font-bold md:text-2xl">
+                                        {stats.withVotes}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                        With Votes
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Filters */}
+                <Card>
+                    <CardContent className="p-4 md:p-6">
+                        {isLoading && (
+                            <div className="mb-4 flex items-center justify-center">
+                                <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-foreground"></div>
+                                <span className="ml-2 text-sm text-muted-foreground">
+                                    Loading...
+                                </span>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                            <div className="sm:col-span-2 lg:col-span-2">
+                                <SearchBar
+                                    placeholder="Search resolutions..."
+                                    value={searchQuery}
+                                    onChange={(query) => {
+                                        setSearchQuery(query);
+                                        handleSearch(query);
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedStatus}
+                                    onValueChange={handleStatusFilter}
+                                >
+                                    <SelectTrigger className="h-10 w-full">
+                                        <SelectValue placeholder="All Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            All Status
+                                        </SelectItem>
+                                        <SelectItem value="published">
+                                            Published
+                                        </SelectItem>
+                                        <SelectItem value="pending">
+                                            Pending
+                                        </SelectItem>
+                                        <SelectItem value="draft">
+                                            Draft
+                                        </SelectItem>
+                                        <SelectItem value="rejected">
+                                            Rejected
+                                        </SelectItem>
+                                        <SelectItem value="archived">
+                                            Archived
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedCategory}
+                                    onValueChange={handleCategoryFilter}
+                                >
+                                    <SelectTrigger className="h-10 w-full">
+                                        <SelectValue placeholder="All Categories" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            All Categories
+                                        </SelectItem>
+                                        {safeCategories.map((category) => (
+                                            <SelectItem
+                                                key={category}
+                                                value={category}
+                                            >
+                                                {category}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div>
+                                <Select
+                                    value={selectedYear}
+                                    onValueChange={handleYearFilter}
+                                >
+                                    <SelectTrigger className="h-10 w-full">
+                                        <SelectValue placeholder="All Years" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">
+                                            All Years
+                                        </SelectItem>
+                                        {safeYears.map((year) => (
+                                            <SelectItem key={year} value={year}>
+                                                {year}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
                 {/* Resolutions List */}
                 <div className="space-y-4">
-                        {safeResolutions.length > 0 ? (
-                            safeResolutions.map((resolution) => (
-                                <Card
-                                    key={resolution.id}
-                                    className="transition-shadow hover:shadow-lg"
-                                >
-                                    <CardContent className="p-6">
-                                        <div className="flex items-start justify-between">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="mb-2 flex items-center gap-3">
+                    {safeResolutions.length > 0 ? (
+                        safeResolutions.map((resolution) => (
+                            <Card
+                                key={resolution.id}
+                                className="transition-shadow hover:shadow-lg"
+                            >
+                                <CardContent className="p-4 md:p-6">
+                                    {/* Compact Header */}
+                                    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                        <div className="min-w-0 flex-1">
+                                            <div className="mb-2 flex flex-wrap items-center gap-2">
+                                                <Badge
+                                                    variant="outline"
+                                                    className="shrink-0 font-mono text-xs"
+                                                >
+                                                    {
+                                                        resolution.resolution_number
+                                                    }
+                                                </Badge>
+                                                <StatusBadge
+                                                    status={resolution.status}
+                                                    showIcon
+                                                />
+                                                {resolution.category && (
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className="text-xs"
+                                                    >
+                                                        {resolution.category}
+                                                    </Badge>
+                                                )}
+                                                {resolution.file_path && (
                                                     <Badge
                                                         variant="outline"
-                                                        className="font-mono"
+                                                        className="text-xs"
                                                     >
-                                                        {
-                                                            resolution.resolution_number
-                                                        }
+                                                        <FileText className="mr-1 h-3 w-3" />
+                                                        Document
                                                     </Badge>
-                                                    <StatusBadge
-                                                        status={
-                                                            resolution.status
-                                                        }
-                                                        showIcon
-                                                    />
-                                                    {resolution.category && (
-                                                        <Badge variant="secondary">
-                                                            {
-                                                                resolution.category
-                                                            }
-                                                        </Badge>
-                                                    )}
-                                                    {resolution.file_path && (
-                                                        <Badge variant="outline">
-                                                            <FileText className="mr-1 h-3 w-3" />
-                                                            Document
-                                                        </Badge>
-                                                    )}
-                                                </div>
-
-                                                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                                    {resolution.title}
-                                                </h3>
-
-                                                <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
-                                                    {resolution.description}
-                                                </p>
-
-                                                <div className="mb-4 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                                                    <div className="flex items-center gap-1">
-                                                        <User className="h-4 w-4" />
-                                                        {resolution.author}
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <Calendar className="h-4 w-4" />
-                                                        {formatDate(
-                                                            resolution.date_passed,
-                                                        )}
-                                                    </div>
-                                                    {resolution.vote_results &&
-                                                        getTotalVotes(
-                                                            resolution.vote_results,
-                                                        ) > 0 && (
-                                                            <div className="flex items-center gap-1">
-                                                                <Vote className="h-4 w-4" />
-                                                                {getTotalVotes(
-                                                                    resolution.vote_results,
-                                                                )}{' '}
-                                                                votes
-                                                            </div>
-                                                        )}
-                                                </div>
-
-                                                {/* Vote Results */}
-                                                {resolution.vote_results &&
-                                                    getTotalVotes(
-                                                        resolution.vote_results,
-                                                    ) > 0 && (
-                                                        <div className="grid grid-cols-3 gap-3 text-xs">
-                                                            <div className="rounded bg-green-50 p-2 text-center dark:bg-green-950">
-                                                                <div className="font-bold text-green-700 dark:text-green-300">
-                                                                    {
-                                                                        resolution
-                                                                            .vote_results
-                                                                            .for
-                                                                    }
-                                                                </div>
-                                                                <div className="text-green-600 dark:text-green-400">
-                                                                    For (
-                                                                    {getVotePercentage(
-                                                                        resolution
-                                                                            .vote_results
-                                                                            .for,
-                                                                        getTotalVotes(
-                                                                            resolution.vote_results,
-                                                                        ),
-                                                                    )}
-                                                                    %)
-                                                                </div>
-                                                            </div>
-                                                            <div className="rounded bg-red-50 p-2 text-center dark:bg-red-950">
-                                                                <div className="font-bold text-red-700 dark:text-red-300">
-                                                                    {
-                                                                        resolution
-                                                                            .vote_results
-                                                                            .against
-                                                                    }
-                                                                </div>
-                                                                <div className="text-red-600 dark:text-red-400">
-                                                                    Against (
-                                                                    {getVotePercentage(
-                                                                        resolution
-                                                                            .vote_results
-                                                                            .against,
-                                                                        getTotalVotes(
-                                                                            resolution.vote_results,
-                                                                        ),
-                                                                    )}
-                                                                    %)
-                                                                </div>
-                                                            </div>
-                                                            <div className="rounded bg-gray-50 p-2 text-center dark:bg-gray-800">
-                                                                <div className="font-bold text-gray-700 dark:text-gray-300">
-                                                                    {
-                                                                        resolution
-                                                                            .vote_results
-                                                                            .abstain
-                                                                    }
-                                                                </div>
-                                                                <div className="text-gray-600 dark:text-gray-400">
-                                                                    Abstain (
-                                                                    {getVotePercentage(
-                                                                        resolution
-                                                                            .vote_results
-                                                                            .abstain,
-                                                                        getTotalVotes(
-                                                                            resolution.vote_results,
-                                                                        ),
-                                                                    )}
-                                                                    %)
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                )}
                                             </div>
+                                            <h3 className="text-base leading-tight font-semibold text-foreground md:text-lg">
+                                                {resolution.title}
+                                            </h3>
+                                        </div>
 
-                                            <div className="flex items-center gap-2">
+                                        {/* Primary Actions */}
+                                        <div className="flex shrink-0 items-center gap-1">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() =>
+                                                    router.visit(
+                                                        `/usg/resolutions/${resolution.id}`,
+                                                    )
+                                                }
+                                                className="h-8 w-8 touch-manipulation p-0"
+                                                title="View Resolution"
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                            </Button>
+
+                                            {resolution.file_path && (
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
                                                     onClick={() =>
-                                                        router.visit(
-                                                            `/usg/resolutions/${resolution.id}`,
+                                                        handleDownload(
+                                                            resolution,
                                                         )
                                                     }
+                                                    className="h-8 w-8 touch-manipulation p-0"
+                                                    title="Download Document"
                                                 >
-                                                    <Eye className="h-4 w-4" />
+                                                    <Download className="h-4 w-4" />
                                                 </Button>
+                                            )}
 
-                                                {resolution.file_path && (
+                                            {canManage && (
+                                                <>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() =>
-                                                            handleDownload(
-                                                                resolution,
+                                                            router.visit(
+                                                                `/usg/admin/resolutions/${resolution.id}/edit`,
                                                             )
                                                         }
+                                                        className="h-8 w-8 touch-manipulation p-0"
+                                                        title="Edit Resolution"
                                                     >
-                                                        <Download className="h-4 w-4" />
+                                                        <Edit className="h-4 w-4" />
                                                     </Button>
-                                                )}
 
-                                                {canManage && (
-                                                    <>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() =>
-                                                                router.visit(
-                                                                    `/usg/admin/resolutions/${resolution.id}/edit`,
-                                                                )
-                                                            }
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger
+                                                            asChild
                                                         >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger
-                                                                asChild
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="h-8 w-8 touch-manipulation p-0"
+                                                                title="More Actions"
                                                             >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                >
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                {resolution.status ===
-                                                                    'draft' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                resolution,
-                                                                                'pending',
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Submit
-                                                                        for
-                                                                        Review
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                {resolution.status ===
-                                                                    'pending' && (
-                                                                    <>
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleStatusChange(
-                                                                                    resolution,
-                                                                                    'published',
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Publish
-                                                                        </DropdownMenuItem>
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleStatusChange(
-                                                                                    resolution,
-                                                                                    'rejected',
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Reject
-                                                                        </DropdownMenuItem>
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleStatusChange(
-                                                                                    resolution,
-                                                                                    'draft',
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Return
-                                                                            to
-                                                                            Draft
-                                                                        </DropdownMenuItem>
-                                                                    </>
-                                                                )}
-                                                                {resolution.status ===
-                                                                    'published' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                resolution,
-                                                                                'archived',
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Archive
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                <DropdownMenuSeparator />
+                                                                <MoreVertical className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            {resolution.status ===
+                                                                'draft' && (
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
-                                                                        router.visit(
-                                                                            `/usg/admin/resolutions/${resolution.id}/votes`,
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    Manage Votes
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuSeparator />
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleDelete(
+                                                                        handleStatusChange(
                                                                             resolution,
+                                                                            'pending',
                                                                         )
                                                                     }
-                                                                    className="text-red-600 focus:text-red-600"
+                                                                    disabled={
+                                                                        updatingStatus ===
+                                                                        resolution.id.toString()
+                                                                    }
                                                                 >
-                                                                    <Trash2 className="mr-2 h-4 w-4" />
-                                                                    Delete
+                                                                    {updatingStatus ===
+                                                                    resolution.id.toString() ? (
+                                                                        <>
+                                                                            <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                            Updating...
+                                                                        </>
+                                                                    ) : (
+                                                                        'Submit for Review'
+                                                                    )}
                                                                 </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </>
-                                                )}
-                                            </div>
+                                                            )}
+                                                            {resolution.status ===
+                                                                'pending' && (
+                                                                <>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                resolution,
+                                                                                'published',
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            updatingStatus ===
+                                                                            resolution.id.toString()
+                                                                        }
+                                                                    >
+                                                                        {updatingStatus ===
+                                                                        resolution.id.toString() ? (
+                                                                            <>
+                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                                Updating...
+                                                                            </>
+                                                                        ) : (
+                                                                            'Publish'
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                resolution,
+                                                                                'rejected',
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            updatingStatus ===
+                                                                            resolution.id.toString()
+                                                                        }
+                                                                    >
+                                                                        {updatingStatus ===
+                                                                        resolution.id.toString() ? (
+                                                                            <>
+                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                                Updating...
+                                                                            </>
+                                                                        ) : (
+                                                                            'Reject'
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                resolution,
+                                                                                'draft',
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            updatingStatus ===
+                                                                            resolution.id.toString()
+                                                                        }
+                                                                    >
+                                                                        {updatingStatus ===
+                                                                        resolution.id.toString() ? (
+                                                                            <>
+                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                                Updating...
+                                                                            </>
+                                                                        ) : (
+                                                                            'Return to Draft'
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                </>
+                                                            )}
+                                                            {resolution.status ===
+                                                                'published' && (
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            resolution,
+                                                                            'archived',
+                                                                        )
+                                                                    }
+                                                                    disabled={
+                                                                        updatingStatus ===
+                                                                        resolution.id.toString()
+                                                                    }
+                                                                >
+                                                                    {updatingStatus ===
+                                                                    resolution.id.toString() ? (
+                                                                        <>
+                                                                            <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                            Updating...
+                                                                        </>
+                                                                    ) : (
+                                                                        'Archive'
+                                                                    )}
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    router.visit(
+                                                                        `/usg/admin/resolutions/${resolution.id}/votes`,
+                                                                    )
+                                                                }
+                                                            >
+                                                                Manage Votes
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        resolution,
+                                                                    )
+                                                                }
+                                                                className="text-destructive focus:text-destructive"
+                                                            >
+                                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                                Delete
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </>
+                                            )}
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            ))
-                        ) : (
-                            <Card>
-                                <CardContent className="p-12 text-center">
-                                    <FileText className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                    <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-                                        No resolutions found
-                                    </h3>
-                                    <p className="mb-6 text-gray-500 dark:text-gray-400">
-                                        {searchQuery ||
-                                        selectedStatus ||
-                                        selectedCategory ||
-                                        selectedYear
-                                            ? 'Try adjusting your search filters'
-                                            : 'Get started by creating your first resolution'}
+                                    </div>
+
+                                    {/* Description */}
+                                    <p className="mb-3 line-clamp-2 text-sm text-muted-foreground md:mb-4 md:text-base">
+                                        {resolution.description}
                                     </p>
+
+                                    {/* Metadata */}
+                                    <div className="mb-3 flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 md:mb-4 md:text-sm">
+                                        <div className="flex min-w-0 items-center gap-1">
+                                            <User className="h-3 w-3 shrink-0 md:h-4 md:w-4" />
+                                            <span className="truncate">
+                                                {resolution.author}
+                                            </span>
+                                        </div>
+                                        <div className="flex shrink-0 items-center gap-1">
+                                            <Calendar className="h-3 w-3 md:h-4 md:w-4" />
+                                            {formatDate(resolution.date_passed)}
+                                        </div>
+                                        {resolution.vote_results &&
+                                            getTotalVotes(
+                                                resolution.vote_results,
+                                            ) > 0 && (
+                                                <div className="flex shrink-0 items-center gap-1">
+                                                    <Vote className="h-3 w-3 md:h-4 md:w-4" />
+                                                    {getTotalVotes(
+                                                        resolution.vote_results,
+                                                    )}{' '}
+                                                    votes
+                                                </div>
+                                            )}
+                                    </div>
+
+                                    {/* Vote Results */}
+                                    {resolution.vote_results &&
+                                        getTotalVotes(resolution.vote_results) >
+                                            0 && (
+                                            <div className="space-y-3 border-t border-border pt-3 md:pt-4">
+                                                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                                                    <Vote className="h-4 w-4" />
+                                                    Vote Results (
+                                                    {getTotalVotes(
+                                                        resolution.vote_results,
+                                                    )}{' '}
+                                                    total)
+                                                </div>
+                                                <div className="space-y-3">
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center justify-between text-xs md:text-sm">
+                                                            <span className="font-medium text-success">
+                                                                For
+                                                            </span>
+                                                            <span className="font-medium text-muted-foreground">
+                                                                {
+                                                                    resolution
+                                                                        .vote_results
+                                                                        .for
+                                                                }{' '}
+                                                                (
+                                                                {getVotePercentage(
+                                                                    resolution
+                                                                        .vote_results
+                                                                        .for,
+                                                                    getTotalVotes(
+                                                                        resolution.vote_results,
+                                                                    ),
+                                                                )}
+                                                                %)
+                                                            </span>
+                                                        </div>
+                                                        <Progress
+                                                            value={getVotePercentage(
+                                                                resolution
+                                                                    .vote_results
+                                                                    .for,
+                                                                getTotalVotes(
+                                                                    resolution.vote_results,
+                                                                ),
+                                                            )}
+                                                            className="h-2"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center justify-between text-xs md:text-sm">
+                                                            <span className="font-medium text-destructive">
+                                                                Against
+                                                            </span>
+                                                            <span className="font-medium text-muted-foreground">
+                                                                {
+                                                                    resolution
+                                                                        .vote_results
+                                                                        .against
+                                                                }{' '}
+                                                                (
+                                                                {getVotePercentage(
+                                                                    resolution
+                                                                        .vote_results
+                                                                        .against,
+                                                                    getTotalVotes(
+                                                                        resolution.vote_results,
+                                                                    ),
+                                                                )}
+                                                                %)
+                                                            </span>
+                                                        </div>
+                                                        <Progress
+                                                            value={getVotePercentage(
+                                                                resolution
+                                                                    .vote_results
+                                                                    .against,
+                                                                getTotalVotes(
+                                                                    resolution.vote_results,
+                                                                ),
+                                                            )}
+                                                            className="h-2"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center justify-between text-xs md:text-sm">
+                                                            <span className="font-medium text-muted-foreground">
+                                                                Abstain
+                                                            </span>
+                                                            <span className="font-medium text-muted-foreground">
+                                                                {
+                                                                    resolution
+                                                                        .vote_results
+                                                                        .abstain
+                                                                }{' '}
+                                                                (
+                                                                {getVotePercentage(
+                                                                    resolution
+                                                                        .vote_results
+                                                                        .abstain,
+                                                                    getTotalVotes(
+                                                                        resolution.vote_results,
+                                                                    ),
+                                                                )}
+                                                                %)
+                                                            </span>
+                                                        </div>
+                                                        <Progress
+                                                            value={getVotePercentage(
+                                                                resolution
+                                                                    .vote_results
+                                                                    .abstain,
+                                                                getTotalVotes(
+                                                                    resolution.vote_results,
+                                                                ),
+                                                            )}
+                                                            className="h-2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (
+                        <Card>
+                            <CardContent className="p-12 text-center">
+                                <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
+                                    <FileText className="h-12 w-12 text-muted-foreground" />
+                                </div>
+                                <h3 className="mb-2 text-xl font-semibold text-foreground">
+                                    {searchQuery ||
+                                    selectedStatus !== 'all' ||
+                                    selectedCategory !== 'all' ||
+                                    selectedYear !== 'all'
+                                        ? 'No resolutions match your filters'
+                                        : 'No resolutions yet'}
+                                </h3>
+                                <p className="mx-auto mb-8 max-w-md text-muted-foreground">
+                                    {searchQuery ||
+                                    selectedStatus !== 'all' ||
+                                    selectedCategory !== 'all' ||
+                                    selectedYear !== 'all'
+                                        ? 'Try adjusting your search criteria or clearing some filters to see more results.'
+                                        : 'Get started by creating your first resolution. Legislative documents and proposals can be managed here.'}
+                                </p>
+                                <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                                    {(searchQuery ||
+                                        selectedStatus !== 'all' ||
+                                        selectedCategory !== 'all' ||
+                                        selectedYear !== 'all') && (
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => {
+                                                setSearchQuery('');
+                                                setSelectedStatus('all');
+                                                setSelectedCategory('all');
+                                                setSelectedYear('all');
+                                                applyFilters({
+                                                    search: '',
+                                                    status: 'all',
+                                                    category: 'all',
+                                                    year: 'all',
+                                                });
+                                            }}
+                                            className="w-full sm:w-auto"
+                                        >
+                                            Clear Filters
+                                        </Button>
+                                    )}
                                     {canManage && (
                                         <Button
                                             onClick={() =>
@@ -712,16 +939,18 @@ export default function ResolutionsManagement({
                                                     '/usg/admin/resolutions/create',
                                                 )
                                             }
+                                            className="w-full sm:w-auto"
                                         >
                                             <Plus className="mr-2 h-4 w-4" />
                                             Create Resolution
                                         </Button>
                                     )}
-                                </CardContent>
-                            </Card>
-                        )}
-                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
+            </div>
         </AppLayout>
     );
 }

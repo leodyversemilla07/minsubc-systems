@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { show as publicShow } from '@/routes/usg/announcements';
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Calendar, Eye } from 'lucide-react';
 
@@ -8,7 +9,7 @@ interface Announcement {
     title: string;
     excerpt: string;
     slug: string;
-    priority: 'low' | 'medium' | 'high';
+    priority: 'low' | 'normal' | 'high';
     publish_date: string;
     views_count?: number;
     featured_image?: string;
@@ -28,7 +29,7 @@ export default function AnnouncementCard({
 }: AnnouncementCardProps) {
     const priorityVariant = {
         low: 'secondary',
-        medium: 'default',
+        normal: 'default',
         high: 'destructive',
     } as const;
 
@@ -73,7 +74,7 @@ export default function AnnouncementCard({
 
                     {/* Title */}
                     <Link
-                        href={`/usg/announcements/${announcement.slug}`}
+                        href={publicShow.url(announcement.slug)}
                         className="group/title block"
                     >
                         <h3
@@ -112,7 +113,7 @@ export default function AnnouncementCard({
                         </div>
 
                         <Link
-                            href={`/usg/announcements/${announcement.slug}`}
+                            href={publicShow.url(announcement.slug)}
                             className="flex items-center gap-1 font-medium text-blue-600 transition-colors hover:text-blue-700"
                         >
                             Read more

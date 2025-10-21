@@ -26,6 +26,10 @@ class Announcement extends Model
         'views_count',
     ];
 
+    protected $appends = [
+        'author_name',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -39,6 +43,14 @@ class Announcement extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    // Accessors
+    protected function authorName(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => $this->author?->full_name ?? $this->author?->name ?? 'Unknown',
+        );
     }
 
     // Scopes

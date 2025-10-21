@@ -7,11 +7,11 @@ import { Head, router } from '@inertiajs/react';
 import {
     Calendar as CalendarIcon,
     Clock,
+    ExternalLink,
     MapPin,
     PartyPopper,
     Search,
     Users,
-    ExternalLink,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -156,18 +156,19 @@ export default function EventsIndex({
             <Head title="Events - USG Portal" />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                <div className="container mx-auto px-4 py-20 relative">
-                    <div className="max-w-4xl mx-auto text-center">
+            <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white">
+                <div className="relative container mx-auto px-4 py-20">
+                    <div className="mx-auto max-w-4xl text-center">
                         <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-4 backdrop-blur-sm">
                             <PartyPopper className="h-12 w-12" />
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                        <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             USG Events
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 text-white/90">
-                            Join us for exciting events, workshops, and activities organized by the University Student Government
+                        <p className="mb-8 text-xl text-white/90 md:text-2xl">
+                            Join us for exciting events, workshops, and
+                            activities organized by the University Student
+                            Government
                         </p>
                         <Button
                             size="lg"
@@ -183,11 +184,11 @@ export default function EventsIndex({
             </section>
 
             {/* Stats Bar */}
-            <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+            <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
                 <div className="container mx-auto px-4 py-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-green-600 md:text-4xl dark:text-green-500">
                                 {events.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -195,7 +196,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-emerald-600 md:text-4xl dark:text-emerald-500">
                                 {upcomingEvents.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -203,7 +204,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-teal-600 dark:text-teal-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-teal-600 md:text-4xl dark:text-teal-500">
                                 {pastEvents.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -211,7 +212,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="text-3xl md:text-4xl font-bold text-cyan-600 dark:text-cyan-500 mb-2">
+                            <div className="mb-2 text-3xl font-bold text-cyan-600 md:text-4xl dark:text-cyan-500">
                                 {categories.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -223,8 +224,8 @@ export default function EventsIndex({
             </section>
 
             {/* Main Content */}
-            <section className="py-16 bg-gray-50 dark:bg-gray-800">
-                <div className="container mx-auto px-4 max-w-7xl">
+            <section className="bg-gray-50 py-16 dark:bg-gray-800">
+                <div className="container mx-auto max-w-7xl px-4">
                     {/* Search and Filters */}
                     <div className="mb-12">
                         <SearchBar
@@ -287,15 +288,15 @@ export default function EventsIndex({
                         )}
 
                     {/* Results Summary */}
-                    <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
+                    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                             {filteredEvents.length} Event
                             {filteredEvents.length !== 1 ? 's' : ''}
                         </h2>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex flex-wrap gap-2">
                             <Badge
                                 variant="default"
-                                className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
+                                className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                             >
                                 {upcomingEvents.length} Upcoming
                             </Badge>
@@ -307,7 +308,7 @@ export default function EventsIndex({
                             {cancelledEvents.length > 0 && (
                                 <Badge
                                     variant="outline"
-                                    className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-400"
+                                    className="border-red-200 text-red-700 dark:border-red-800 dark:text-red-400"
                                 >
                                     {cancelledEvents.length} Cancelled
                                 </Badge>
@@ -316,12 +317,12 @@ export default function EventsIndex({
                     </div>
 
                     {filteredEvents.length === 0 ? (
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-12 text-center">
+                        <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
                             <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No events found
                             </h3>
-                            <p className="max-w-md mx-auto text-gray-600 dark:text-gray-400 mb-6">
+                            <p className="mx-auto mb-6 max-w-md text-gray-600 dark:text-gray-400">
                                 {searchQuery ||
                                 Object.values(activeFilters).some(
                                     (f) => f?.length || f,
@@ -444,21 +445,21 @@ export default function EventsIndex({
 
                     {/* Quick Actions */}
                     {upcomingEvents.length > 0 && (
-                        <div className="mt-12 bg-gradient-to-br from-green-600 to-teal-600 text-white rounded-lg shadow-lg p-12 text-center">
+                        <div className="mt-12 rounded-lg bg-gradient-to-br from-green-600 to-teal-600 p-12 text-center text-white shadow-lg">
                             <h3 className="mb-2 text-2xl font-bold">
                                 Stay Connected
                             </h3>
                             <p className="mb-6 text-lg text-white/90">
-                                Don't miss out on exciting events. Subscribe to our newsletter or follow us on social media for updates.
+                                Don't miss out on exciting events. Subscribe to
+                                our newsletter or follow us on social media for
+                                updates.
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
                                 <Button
                                     size="lg"
                                     variant="secondary"
                                     onClick={() =>
-                                        router.visit(
-                                            '/usg/events/calendar',
-                                        )
+                                        router.visit('/usg/events/calendar')
                                     }
                                     className="bg-white text-green-600 hover:bg-gray-100"
                                 >
@@ -468,7 +469,7 @@ export default function EventsIndex({
                                 <Button
                                     size="lg"
                                     variant="secondary"
-                                    className="bg-white/10 text-white hover:bg-white/20 border-white/20"
+                                    className="border-white/20 bg-white/10 text-white hover:bg-white/20"
                                 >
                                     <ExternalLink className="mr-2 h-5 w-5" />
                                     Subscribe to Updates

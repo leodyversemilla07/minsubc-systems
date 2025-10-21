@@ -3,7 +3,6 @@
 namespace Database\Seeders\USG;
 
 use App\Models\Modules\USG\Models\Officer;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class OfficerSeeder extends Seeder

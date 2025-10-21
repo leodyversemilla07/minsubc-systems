@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-type Priority = 'low' | 'medium' | 'high' | 'urgent';
+type Priority = 'low' | 'normal' | 'high';
 
 interface PriorityBadgeProps {
     priority: Priority;
@@ -15,9 +15,9 @@ const priorityConfig = {
         className:
             'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
     },
-    medium: {
+    normal: {
         variant: 'default' as const,
-        label: 'Medium',
+        label: 'Normal',
         className:
             'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
     },
@@ -26,12 +26,6 @@ const priorityConfig = {
         label: 'High',
         className:
             'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
-    },
-    urgent: {
-        variant: 'destructive' as const,
-        label: 'Urgent',
-        className:
-            'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 animate-pulse',
     },
 };
 
