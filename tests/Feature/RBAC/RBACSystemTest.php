@@ -8,7 +8,7 @@ pest()->use(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function () {
     $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
-    $this->seed(\Database\Seeders\UserStudentSeeder::class);
+    $this->seed(\Database\Seeders\UserSeeder::class);
 });
 
 test('rbac roles are created correctly', function (string $role) {
@@ -40,7 +40,8 @@ test('system admin role has all permissions', function () {
     $adminRole = Role::where('name', 'system-admin')->first();
     expect($adminRole)->not->toBeNull();
 
-    expect($adminRole->permissions()->count())->toBe(20); // All permissions
+    // System admin should have all 41 permissions (20 registrar + 21 USG permissions)
+    expect($adminRole->permissions()->count())->toBe(41);
 });
 
 test('users have correct roles assigned', function () {

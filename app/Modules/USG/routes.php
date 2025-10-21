@@ -119,9 +119,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 });
-
-// API Routes for Frontend (if needed)
-Route::prefix('api/usg')->name('api.usg.')->middleware(['throttle:60,1'])->group(function () {
-    // Search autocomplete
-    Route::get('search/suggestions', [PageController::class, 'searchSuggestions'])->name('search.suggestions');
-});

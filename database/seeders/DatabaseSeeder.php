@@ -21,8 +21,7 @@ class DatabaseSeeder extends Seeder
         // Seed roles, users, and system settings
         $this->call([
             RolesAndPermissionsSeeder::class,
-            USGAdminSeeder::class,
-            UserStudentSeeder::class,
+            UserSeeder::class,
             SystemSettingsSeeder::class,
         ]);
 

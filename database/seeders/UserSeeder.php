@@ -6,14 +6,22 @@ use App\Models\User;
 use App\Modules\Registrar\Models\Student;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
-class UserStudentSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        // Ensure the usg-admin role exists
+        if (! Role::where('name', 'usg-admin')->exists()) {
+            $this->command->error('The usg-admin role does not exist. Please run RolesAndPermissionsSeeder first.');
+
+            return;
+        }
+
         // Create sample users for different roles based on RBAC system
         $users = [
             // Students
@@ -143,6 +151,17 @@ class UserStudentSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
                 'role' => 'registrar-admin',
+            ],
+
+            // USG Admin
+            [
+                'first_name' => 'USG',
+                'middle_name' => null,
+                'last_name' => 'Administrator',
+                'email' => 'usg-admin@minsu.edu.ph',
+                'password' => Hash::make('USGAdmin@2024'),
+                'email_verified_at' => now(),
+                'role' => 'usg-admin',
             ],
 
             // System Admin

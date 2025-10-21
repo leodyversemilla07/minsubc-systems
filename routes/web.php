@@ -19,11 +19,16 @@ Route::redirect('/transparency', '/usg/transparency');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = Auth::user();
-
-        // Redirect USG admins and officers to their dashboard
         $userRoles = $user->roles->pluck('name')->toArray();
+
+        // Redirect USG admins, officers, and system admins to USG admin dashboard
         if (array_intersect($userRoles, ['usg-admin', 'usg-officer', 'system-admin'])) {
             return redirect()->route('usg.admin.dashboard');
+        }
+
+        // Redirect registrar staff and admins to registrar admin dashboard
+        if (array_intersect($userRoles, ['registrar-admin', 'registrar-staff'])) {
+            return redirect()->route('registrar.admin.dashboard');
         }
 
         // Get stats for the user
@@ -76,11 +81,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';
 
 // Registrar Module Routes
-require __DIR__ . '/../app/Modules/Registrar/routes.php';
+require __DIR__.'/../app/Modules/Registrar/routes.php';
 
 // USG Module Routes
-require __DIR__ . '/../app/Modules/USG/routes.php';
+require __DIR__.'/../app/Modules/USG/routes.php';

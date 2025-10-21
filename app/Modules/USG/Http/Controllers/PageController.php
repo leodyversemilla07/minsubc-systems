@@ -435,28 +435,4 @@ class PageController extends Controller
             'categories' => $categories,
         ]);
     }
-
-    public function searchSuggestions(Request $request)
-    {
-        $query = $request->get('q', '');
-
-        if (strlen($query) < 2) {
-            return response()->json([]);
-        }
-
-        $suggestions = $this->announcementService->searchAnnouncements($query, [
-            'limit' => 5,
-        ]);
-
-        return response()->json(
-            $suggestions->map(function ($announcement) {
-                return [
-                    'id' => $announcement->id,
-                    'title' => $announcement->title,
-                    'slug' => $announcement->slug,
-                    'category' => $announcement->category,
-                ];
-            })
-        );
-    }
 }
