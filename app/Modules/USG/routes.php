@@ -7,12 +7,7 @@ use App\Modules\USG\Http\Controllers\Admin\EventController;
 use App\Modules\USG\Http\Controllers\Admin\OfficerController;
 use App\Modules\USG\Http\Controllers\Admin\ResolutionController;
 use App\Modules\USG\Http\Controllers\Admin\VMGOController;
-use App\Modules\USG\Http\Controllers\PublicAnnouncementController;
-use App\Modules\USG\Http\Controllers\PublicEventController;
-use App\Modules\USG\Http\Controllers\PublicOfficerController;
-use App\Modules\USG\Http\Controllers\PublicResolutionController;
-use App\Modules\USG\Http\Controllers\PublicTransparencyController;
-use App\Modules\USG\Http\Controllers\PublicVMGOController;
+use App\Modules\USG\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,39 +23,38 @@ use Illuminate\Support\Facades\Route;
 // Public Routes (No Authentication Required)
 Route::prefix('usg')->name('usg.')->group(function () {
     // Homepage
-    Route::get('/', [PublicVMGOController::class, 'index'])->name('index');
+    Route::get('/', [PageController::class, 'index'])->name('index');
 
     // Vision, Mission, Goals, Objectives
-    Route::get('/vmgo', [PublicVMGOController::class, 'show'])->name('vmgo.show');
+    Route::get('/vmgo', [PageController::class, 'vmgo'])->name('vmgo.show');
 
     // Officers
-    Route::get('/officers', [PublicOfficerController::class, 'index'])->name('officers.index');
-    Route::get('/officers/{officer}', [PublicOfficerController::class, 'show'])->name('officers.show');
+    Route::get('/officers', [PageController::class, 'officers'])->name('officers.index');
 
     // Announcements
-    Route::get('/announcements', [PublicAnnouncementController::class, 'index'])->name('announcements.index');
-    Route::get('/announcements/{announcement:slug}', [PublicAnnouncementController::class, 'show'])->name('announcements.show');
-    Route::get('/announcements/category/{category}', [PublicAnnouncementController::class, 'category'])->name('announcements.category');
+    Route::get('/announcements', [PageController::class, 'announcements'])->name('announcements.index');
+    Route::get('/announcements/{announcement:slug}', [PageController::class, 'announcementShow'])->name('announcements.show');
+    Route::get('/announcements/category/{category}', [PageController::class, 'announcementCategory'])->name('announcements.category');
 
     // Events
-    Route::get('/events', [PublicEventController::class, 'index'])->name('events.index');
-    Route::get('/events/calendar', [PublicEventController::class, 'calendar'])->name('events.calendar');
-    Route::get('/events/{event:slug}', [PublicEventController::class, 'show'])->name('events.show');
-    Route::get('/events/calendar/data', [PublicEventController::class, 'calendarData'])->name('events.calendar.data');
+    Route::get('/events', [PageController::class, 'events'])->name('events.index');
+    Route::get('/events/calendar', [PageController::class, 'eventsCalendar'])->name('events.calendar');
+    Route::get('/events/{event:slug}', [PageController::class, 'eventShow'])->name('events.show');
+    Route::get('/events/calendar/data', [PageController::class, 'eventsCalendarData'])->name('events.calendar.data');
 
     // Resolutions
-    Route::get('/resolutions', [PublicResolutionController::class, 'index'])->name('resolutions.index');
-    Route::get('/resolutions/{resolution}', [PublicResolutionController::class, 'show'])->name('resolutions.show');
-    Route::get('/resolutions/{resolution}/download', [PublicResolutionController::class, 'download'])->name('resolutions.download');
-    Route::get('/resolutions/category/{category}', [PublicResolutionController::class, 'category'])->name('resolutions.category');
+    Route::get('/resolutions', [PageController::class, 'resolutions'])->name('resolutions.index');
+    Route::get('/resolutions/{resolution}', [PageController::class, 'resolutionShow'])->name('resolutions.show');
+    Route::get('/resolutions/{resolution}/download', [PageController::class, 'resolutionDownload'])->name('resolutions.download');
+    Route::get('/resolutions/category/{category}', [PageController::class, 'resolutionCategory'])->name('resolutions.category');
 
     // Transparency Reports
-    Route::get('/transparency', [PublicTransparencyController::class, 'index'])->name('transparency.index');
-    Route::get('/transparency/{transparencyReport:slug}', [PublicTransparencyController::class, 'show'])->name('transparency.show');
-    Route::get('/transparency/{transparencyReport:slug}/download', [PublicTransparencyController::class, 'download'])->name('transparency.download');
+    Route::get('/transparency', [PageController::class, 'transparency'])->name('transparency.index');
+    Route::get('/transparency/{transparencyReport:slug}', [PageController::class, 'transparencyShow'])->name('transparency.show');
+    Route::get('/transparency/{transparencyReport:slug}/download', [PageController::class, 'transparencyDownload'])->name('transparency.download');
 
     // Search
-    Route::get('/search', [PublicAnnouncementController::class, 'search'])->name('search');
+    Route::get('/search', [PageController::class, 'search'])->name('search');
 });
 
 // Authenticated Routes
@@ -128,9 +122,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // API Routes for Frontend (if needed)
 Route::prefix('api/usg')->name('api.usg.')->middleware(['throttle:60,1'])->group(function () {
-    // Calendar data for frontend calendar widget
-    Route::get('events/calendar/{year}/{month}', [PublicEventController::class, 'calendarApiData'])->name('events.calendar.api');
-
     // Search autocomplete
-    Route::get('search/suggestions', [PublicAnnouncementController::class, 'searchSuggestions'])->name('search.suggestions');
+    Route::get('search/suggestions', [PageController::class, 'searchSuggestions'])->name('search.suggestions');
 });

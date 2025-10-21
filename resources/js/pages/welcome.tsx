@@ -1,9 +1,10 @@
-import PublicLayout from '@/layouts/public-layout';
+import USGLayout from '@/layouts/usg-layout';
+import usg from '@/routes/usg';
 import { Head, Link } from '@inertiajs/react';
 
 export default function Welcome() {
     return (
-        <PublicLayout>
+        <USGLayout>
             <Head title="Welcome - USG Information Portal">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
@@ -86,7 +87,7 @@ export default function Welcome() {
                         {/* CTA Buttons */}
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                             <Link
-                                href="/usg/announcements"
+                                href={usg.announcements.index.url()}
                                 className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-green-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-green-800 hover:shadow-xl hover:shadow-green-700/20"
                             >
                                 <span className="relative z-10">
@@ -109,7 +110,7 @@ export default function Welcome() {
                             </Link>
 
                             <Link
-                                href="/usg/events"
+                                href={usg.events.index.url()}
                                 className="group inline-flex items-center gap-2 rounded-lg border-2 border-green-700 bg-white px-8 py-4 text-base font-semibold text-green-900 shadow-lg transition-all hover:border-green-800 hover:bg-green-50 hover:shadow-xl dark:border-green-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                             >
                                 <svg
@@ -206,7 +207,7 @@ export default function Welcome() {
                                 commitment to student governance.
                             </p>
                             <Link
-                                href="/usg/vmgo"
+                                href={usg.vmgo.show.url()}
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 Learn more →
@@ -238,7 +239,7 @@ export default function Welcome() {
                                 organizational structure.
                             </p>
                             <Link
-                                href="/usg/officers"
+                                href={usg.officers.index.url()}
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 View officers →
@@ -270,7 +271,7 @@ export default function Welcome() {
                                 documents.
                             </p>
                             <Link
-                                href="/usg/resolutions"
+                                href={usg.resolutions.index.url()}
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 Browse resolutions →
@@ -302,7 +303,7 @@ export default function Welcome() {
                                 announcements.
                             </p>
                             <Link
-                                href="/usg/announcements"
+                                href={usg.announcements.index.url()}
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 Read announcements →
@@ -334,7 +335,7 @@ export default function Welcome() {
                                 dates.
                             </p>
                             <Link
-                                href="/usg/events"
+                                href={usg.events.index.url()}
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 View calendar →
@@ -366,7 +367,7 @@ export default function Welcome() {
                                 accountability.
                             </p>
                             <Link
-                                href="/usg/transparency"
+                                href={usg.transparency.index.url()}
                                 className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
                             >
                                 View reports →
@@ -375,6 +376,6 @@ export default function Welcome() {
                     </div>
                 </div>
             </section>
-        </PublicLayout>
+        </USGLayout>
     );
 }

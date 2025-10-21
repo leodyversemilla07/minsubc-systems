@@ -26,6 +26,11 @@ class Resolution extends Model
         'published_at',
     ];
 
+    protected $appends = [
+        'date_passed',
+        'author',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -33,6 +38,17 @@ class Resolution extends Model
             'approved_at' => 'datetime',
             'published_at' => 'datetime',
         ];
+    }
+
+    // Accessors
+    public function getDatePassedAttribute(): ?string
+    {
+        return $this->resolution_date?->toDateTimeString();
+    }
+
+    public function getAuthorAttribute(): string
+    {
+        return $this->submittedBy?->name ?? 'Unknown';
     }
 
     // Relationships

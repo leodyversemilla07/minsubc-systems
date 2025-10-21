@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Storage;
 class ResolutionService
 {
     /**
+     * Get published resolutions query
+     */
+    public function getPublishedQuery()
+    {
+        return Resolution::published()
+            ->with(['submittedBy', 'approvedBy']);
+    }
+
+    /**
      * Get published resolutions with pagination
      */
     public function getPublishedResolutions(int $perPage = 15): LengthAwarePaginator
@@ -204,6 +213,22 @@ class ResolutionService
             ->whereNotNull('category')
             ->where('category', '!=', '')
             ->pluck('category')
+            ->sort()
+            ->values()
+            ->toArray();
+    }
+
+    /**
+     * Get resolution authors
+     */
+    public function getAuthors(): array
+    {
+        return Resolution::published()
+            ->with('submittedBy')
+            ->get()
+            ->pluck('submittedBy.name')
+            ->filter()
+            ->unique()
             ->sort()
             ->values()
             ->toArray();

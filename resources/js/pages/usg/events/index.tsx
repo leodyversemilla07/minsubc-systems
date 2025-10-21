@@ -1,9 +1,8 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import EventCard from '@/components/usg/event-card';
 import SearchBar from '@/components/usg/search-bar';
-import PublicLayout from '@/layouts/public-layout';
+import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import {
     Calendar as CalendarIcon,
@@ -12,8 +11,9 @@ import {
     PartyPopper,
     Search,
     Users,
+    ExternalLink,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Event {
     id: number;
@@ -49,11 +49,6 @@ export default function EventsIndex({
         statuses?: string[];
         dateRange?: string;
     }>({});
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
 
     const filteredEvents = events.filter((event) => {
         // Search filter
@@ -157,110 +152,116 @@ export default function EventsIndex({
     );
 
     return (
-        <PublicLayout>
+        <USGLayout>
             <Head title="Events - USG Portal" />
 
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-                {/* Animated background elements */}
-                <div className="pointer-events-none fixed inset-0 overflow-hidden">
-                    <div className="absolute -top-40 -right-40 h-80 w-80 animate-pulse rounded-full bg-purple-400/10"></div>
-                    <div className="animation-delay-1000 absolute top-1/2 -left-40 h-96 w-96 animate-pulse rounded-full bg-pink-400/10"></div>
-                    <div className="animation-delay-2000 absolute right-1/4 bottom-20 h-60 w-60 animate-pulse rounded-full bg-indigo-400/10"></div>
+            {/* Hero Section */}
+            <section className="relative bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
+                <div className="container mx-auto px-4 py-20 relative">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-4 backdrop-blur-sm">
+                            <PartyPopper className="h-12 w-12" />
+                        </div>
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                            USG Events
+                        </h1>
+                        <p className="text-xl md:text-2xl mb-8 text-white/90">
+                            Join us for exciting events, workshops, and activities organized by the University Student Government
+                        </p>
+                        <Button
+                            size="lg"
+                            variant="secondary"
+                            onClick={() => router.visit('/usg/events/calendar')}
+                            className="bg-white text-green-600 hover:bg-gray-100"
+                        >
+                            <CalendarIcon className="mr-2 h-5 w-5" />
+                            View Calendar
+                        </Button>
+                    </div>
                 </div>
+            </section>
 
-                {/* Animated Header */}
-                <div
-                    className={`relative border-b bg-gradient-to-r from-white/80 to-purple-50/80 backdrop-blur-sm dark:from-gray-800/80 dark:to-gray-900/80 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} transition-all duration-1000`}
-                >
-                    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                        <div className="text-center">
-                            <div className="mb-6">
-                                <div className="mb-4 inline-flex animate-pulse items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 p-4">
-                                    <PartyPopper className="h-8 w-8 text-white" />
-                                </div>
+            {/* Stats Bar */}
+            <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-500 mb-2">
+                                {events.length}
                             </div>
-                            <div className="mb-4 flex items-center justify-center gap-3">
-                                <h1 className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
-                                    Upcoming Events
-                                </h1>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Total Events
                             </div>
-                            <p className="mx-auto max-w-3xl text-xl leading-relaxed text-muted-foreground">
-                                Join us for exciting events, workshops, and
-                                activities organized by the University Student
-                                Government. Make memories and connect with your
-                                community!
-                            </p>
-
-                            {/* Stats */}
-                            <div
-                                className={`mt-8 flex transform justify-center gap-8 transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                                style={{ transitionDelay: '200ms' }}
-                            >
-                                <div className="text-center">
-                                    <div className="text-3xl font-bold text-purple-600">
-                                        {events.length}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Total Events
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-3xl font-bold text-pink-600">
-                                        {upcomingEvents.length}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Upcoming
-                                    </div>
-                                </div>
+                        </div>
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-500 mb-2">
+                                {upcomingEvents.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Upcoming
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-teal-600 dark:text-teal-500 mb-2">
+                                {pastEvents.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Past Events
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-cyan-600 dark:text-cyan-500 mb-2">
+                                {categories.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Categories
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* Main Content */}
-                <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    {/* Enhanced Search and Filters */}
-                    <div
-                        className={`mb-12 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                        style={{ transitionDelay: '400ms' }}
-                    >
-                        <div className="group relative">
-                            <SearchBar
-                                value={searchQuery}
-                                onChange={setSearchQuery}
-                                placeholder="Search events by title, description, location, or organizer..."
-                                showFilters
-                                filters={{
-                                    categories: categories,
-                                    statuses: [
-                                        'published',
-                                        'draft',
-                                        'cancelled',
-                                        'completed',
-                                    ],
-                                    dateRanges: [
-                                        'Today',
-                                        'Tomorrow',
-                                        'This Week',
-                                        'This Month',
-                                        'Upcoming',
-                                        'Past',
-                                    ],
-                                }}
-                                activeFilters={{
-                                    categories: activeFilters.categories,
-                                    statuses: activeFilters.statuses,
-                                    dateRange: activeFilters.dateRange,
-                                }}
-                                onFiltersChange={(filters) => {
-                                    setActiveFilters({
-                                        categories: filters.categories,
-                                        statuses: filters.statuses,
-                                        dateRange: filters.dateRange,
-                                    });
-                                }}
-                            />
-                        </div>
+            {/* Main Content */}
+            <section className="py-16 bg-gray-50 dark:bg-gray-800">
+                <div className="container mx-auto px-4 max-w-7xl">
+                    {/* Search and Filters */}
+                    <div className="mb-12">
+                        <SearchBar
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder="Search events by title, description, location, or organizer..."
+                            showFilters
+                            filters={{
+                                categories: categories,
+                                statuses: [
+                                    'published',
+                                    'draft',
+                                    'cancelled',
+                                    'completed',
+                                ],
+                                dateRanges: [
+                                    'Today',
+                                    'Tomorrow',
+                                    'This Week',
+                                    'This Month',
+                                    'Upcoming',
+                                    'Past',
+                                ],
+                            }}
+                            activeFilters={{
+                                categories: activeFilters.categories,
+                                statuses: activeFilters.statuses,
+                                dateRange: activeFilters.dateRange,
+                            }}
+                            onFiltersChange={(filters) => {
+                                setActiveFilters({
+                                    categories: filters.categories,
+                                    statuses: filters.statuses,
+                                    dateRange: filters.dateRange,
+                                });
+                            }}
+                        />
                     </div>
 
                     {/* Featured Events */}
@@ -286,68 +287,63 @@ export default function EventsIndex({
                         )}
 
                     {/* Results Summary */}
-                    <div className="mb-6 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                {filteredEvents.length} Event
-                                {filteredEvents.length !== 1 ? 's' : ''}
-                            </h2>
-                            <div className="flex gap-2">
-                                <Badge
-                                    variant="default"
-                                    className="bg-blue-100 text-blue-700"
-                                >
-                                    {upcomingEvents.length} Upcoming
+                    <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                            {filteredEvents.length} Event
+                            {filteredEvents.length !== 1 ? 's' : ''}
+                        </h2>
+                        <div className="flex gap-2 flex-wrap">
+                            <Badge
+                                variant="default"
+                                className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
+                            >
+                                {upcomingEvents.length} Upcoming
+                            </Badge>
+                            {pastEvents.length > 0 && (
+                                <Badge variant="secondary">
+                                    {pastEvents.length} Past
                                 </Badge>
-                                {pastEvents.length > 0 && (
-                                    <Badge variant="secondary">
-                                        {pastEvents.length} Past
-                                    </Badge>
-                                )}
-                                {cancelledEvents.length > 0 && (
-                                    <Badge
-                                        variant="outline"
-                                        className="border-red-200 text-red-700"
-                                    >
-                                        {cancelledEvents.length} Cancelled
-                                    </Badge>
-                                )}
-                            </div>
+                            )}
+                            {cancelledEvents.length > 0 && (
+                                <Badge
+                                    variant="outline"
+                                    className="border-red-200 dark:border-red-800 text-red-700 dark:text-red-400"
+                                >
+                                    {cancelledEvents.length} Cancelled
+                                </Badge>
+                            )}
                         </div>
                     </div>
 
                     {filteredEvents.length === 0 ? (
-                        <Card>
-                            <CardContent className="flex flex-col items-center justify-center py-12">
-                                <Search className="mb-4 h-12 w-12 text-gray-400" />
-                                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                    No events found
-                                </h3>
-                                <p className="max-w-md text-center text-gray-600 dark:text-gray-300">
-                                    {searchQuery ||
-                                    Object.values(activeFilters).some(
-                                        (f) => f?.length || f,
-                                    )
-                                        ? "Try adjusting your search terms or filters to find what you're looking for."
-                                        : 'No events are currently scheduled.'}
-                                </p>
-                                {(searchQuery ||
-                                    Object.values(activeFilters).some(
-                                        (f) => f?.length || f,
-                                    )) && (
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => {
-                                            setSearchQuery('');
-                                            setActiveFilters({});
-                                        }}
-                                        className="mt-4"
-                                    >
-                                        Clear search and filters
-                                    </Button>
-                                )}
-                            </CardContent>
-                        </Card>
+                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-12 text-center">
+                            <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                                No events found
+                            </h3>
+                            <p className="max-w-md mx-auto text-gray-600 dark:text-gray-400 mb-6">
+                                {searchQuery ||
+                                Object.values(activeFilters).some(
+                                    (f) => f?.length || f,
+                                )
+                                    ? "Try adjusting your search terms or filters to find what you're looking for."
+                                    : 'No events are currently scheduled.'}
+                            </p>
+                            {(searchQuery ||
+                                Object.values(activeFilters).some(
+                                    (f) => f?.length || f,
+                                )) && (
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        setSearchQuery('');
+                                        setActiveFilters({});
+                                    }}
+                                >
+                                    Clear search and filters
+                                </Button>
+                            )}
+                        </div>
                     ) : (
                         <div className="space-y-12">
                             {/* Upcoming Events */}
@@ -448,38 +444,40 @@ export default function EventsIndex({
 
                     {/* Quick Actions */}
                     {upcomingEvents.length > 0 && (
-                        <div className="mt-12 text-center">
-                            <Card>
-                                <CardContent className="p-6">
-                                    <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                        Stay Connected
-                                    </h3>
-                                    <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                        Don't miss out on exciting events.
-                                        Subscribe to our newsletter or follow us
-                                        on social media for updates.
-                                    </p>
-                                    <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                                        <Button
-                                            onClick={() =>
-                                                router.visit(
-                                                    '/usg/events/calendar',
-                                                )
-                                            }
-                                        >
-                                            <CalendarIcon className="mr-2 h-4 w-4" />
-                                            View Calendar
-                                        </Button>
-                                        <Button variant="outline">
-                                            Subscribe to Updates
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                        <div className="mt-12 bg-gradient-to-br from-green-600 to-teal-600 text-white rounded-lg shadow-lg p-12 text-center">
+                            <h3 className="mb-2 text-2xl font-bold">
+                                Stay Connected
+                            </h3>
+                            <p className="mb-6 text-lg text-white/90">
+                                Don't miss out on exciting events. Subscribe to our newsletter or follow us on social media for updates.
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-4">
+                                <Button
+                                    size="lg"
+                                    variant="secondary"
+                                    onClick={() =>
+                                        router.visit(
+                                            '/usg/events/calendar',
+                                        )
+                                    }
+                                    className="bg-white text-green-600 hover:bg-gray-100"
+                                >
+                                    <CalendarIcon className="mr-2 h-5 w-5" />
+                                    View Calendar
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="secondary"
+                                    className="bg-white/10 text-white hover:bg-white/20 border-white/20"
+                                >
+                                    <ExternalLink className="mr-2 h-5 w-5" />
+                                    Subscribe to Updates
+                                </Button>
+                            </div>
                         </div>
                     )}
                 </div>
-            </div>
-        </PublicLayout>
+            </section>
+        </USGLayout>
     );
 }

@@ -1,9 +1,8 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import ResolutionCard from '@/components/usg/resolution-card';
 import SearchBar from '@/components/usg/search-bar';
-import PublicLayout from '@/layouts/public-layout';
+import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
 import {
     Calendar,
@@ -12,8 +11,9 @@ import {
     Gavel,
     Search,
     User,
+    ExternalLink,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Resolution {
     id: number;
@@ -53,11 +53,6 @@ export default function ResolutionsIndex({
         statuses?: string[];
         years?: string[];
     }>({});
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
 
     const filteredResolutions = resolutions.data.filter((resolution) => {
         // Search filter
@@ -147,101 +142,98 @@ export default function ResolutionsIndex({
     );
 
     return (
-        <PublicLayout>
+        <USGLayout>
             <Head title="Resolutions - USG Portal" />
 
-            <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-                {/* Animated background elements */}
-                <div className="pointer-events-none fixed inset-0 overflow-hidden">
-                    <div className="absolute -top-40 -right-40 h-80 w-80 animate-pulse rounded-full bg-emerald-400/10"></div>
-                    <div className="animation-delay-1000 absolute top-1/2 -left-40 h-96 w-96 animate-pulse rounded-full bg-teal-400/10"></div>
-                    <div className="animation-delay-2000 absolute right-1/4 bottom-20 h-60 w-60 animate-pulse rounded-full bg-green-400/10"></div>
+            {/* Hero Section */}
+            <section className="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
+                <div className="container mx-auto px-4 py-20 relative">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-4 backdrop-blur-sm">
+                            <Gavel className="h-12 w-12" />
+                        </div>
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                            Official Resolutions
+                        </h1>
+                        <p className="text-xl md:text-2xl mb-8 text-white/90">
+                            Browse official USG resolutions, legislative documents, and policy decisions that shape our university community
+                        </p>
+                    </div>
                 </div>
+            </section>
 
-                {/* Animated Header */}
-                <div
-                    className={`relative border-b bg-gradient-to-r from-white/80 to-emerald-50/80 backdrop-blur-sm dark:from-gray-800/80 dark:to-gray-900/80 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} transition-all duration-1000`}
-                >
-                    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                        <div className="text-center">
-                            <div className="mb-6">
-                                <div className="mb-4 inline-flex animate-pulse items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 p-4">
-                                    <Gavel className="h-8 w-8 text-white" />
-                                </div>
+            {/* Stats Bar */}
+            <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-500 mb-2">
+                                {resolutions.total}
                             </div>
-                            <div className="mb-4 flex items-center justify-center gap-3">
-                                <h1 className="bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
-                                    Official Resolutions
-                                </h1>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Total Resolutions
                             </div>
-                            <p className="mx-auto max-w-3xl text-xl leading-relaxed text-muted-foreground">
-                                Browse official USG resolutions, legislative
-                                documents, and policy decisions that shape our
-                                university community. Transparency in
-                                governance.
-                            </p>
-
-                            {/* Stats */}
-                            <div
-                                className={`mt-8 flex transform justify-center gap-8 transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                                style={{ transitionDelay: '200ms' }}
-                            >
-                                <div className="text-center">
-                                    <div className="text-3xl font-bold text-emerald-600">
-                                        {resolutions.total}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Total Resolutions
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-3xl font-bold text-teal-600">
-                                        {publishedResolutions.length}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Published
-                                    </div>
-                                </div>
+                        </div>
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-500 mb-2">
+                                {publishedResolutions.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Published
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-purple-600 dark:text-purple-500 mb-2">
+                                {availableYears.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Years Active
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-3xl md:text-4xl font-bold text-violet-600 dark:text-violet-500 mb-2">
+                                {authors.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                                Authors
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* Main Content */}
-                <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            {/* Main Content */}
+            <section className="py-16 bg-gray-50 dark:bg-gray-800">
+                <div className="container mx-auto px-4 max-w-7xl">
                     {/* Enhanced Search and Filters */}
-                    <div
-                        className={`mb-12 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                        style={{ transitionDelay: '400ms' }}
-                    >
-                        <div className="group relative">
-                            <SearchBar
-                                value={searchQuery}
-                                onChange={setSearchQuery}
-                                placeholder="Search resolutions by title, number, author, or content..."
-                                showFilters
-                                filters={{
-                                    categories: categories,
-                                    statuses: [
-                                        'published',
-                                        'draft',
-                                        'pending',
-                                        'archived',
-                                    ],
-                                }}
-                                activeFilters={{
-                                    categories: activeFilters.categories,
-                                    statuses: activeFilters.statuses,
-                                }}
-                                onFiltersChange={(filters) => {
-                                    setActiveFilters({
-                                        ...activeFilters,
-                                        categories: filters.categories,
-                                        statuses: filters.statuses,
-                                    });
-                                }}
-                            />
-                        </div>
+                    <div className="mb-12">
+                        <SearchBar
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder="Search resolutions by title, number, author, or content..."
+                            showFilters
+                            filters={{
+                                categories: categories,
+                                statuses: [
+                                    'published',
+                                    'draft',
+                                    'pending',
+                                    'archived',
+                                ],
+                            }}
+                            activeFilters={{
+                                categories: activeFilters.categories,
+                                statuses: activeFilters.statuses,
+                            }}
+                            onFiltersChange={(filters) => {
+                                setActiveFilters({
+                                    ...activeFilters,
+                                    categories: filters.categories,
+                                    statuses: filters.statuses,
+                                });
+                            }}
+                        />
 
                         {/* Additional Filters */}
                         <div className="mt-4 flex flex-wrap gap-4">
@@ -332,37 +324,34 @@ export default function ResolutionsIndex({
                     </div>
 
                     {filteredResolutions.length === 0 ? (
-                        <Card>
-                            <CardContent className="flex flex-col items-center justify-center py-12">
-                                <Search className="mb-4 h-12 w-12 text-gray-400" />
-                                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                    No resolutions found
-                                </h3>
-                                <p className="max-w-md text-center text-gray-600 dark:text-gray-300">
-                                    {searchQuery ||
-                                    Object.values(activeFilters).some(
-                                        (f) => f?.length,
-                                    )
-                                        ? "Try adjusting your search terms or filters to find what you're looking for."
-                                        : 'No resolutions are currently available.'}
-                                </p>
-                                {(searchQuery ||
-                                    Object.values(activeFilters).some(
-                                        (f) => f?.length,
-                                    )) && (
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => {
-                                            setSearchQuery('');
-                                            setActiveFilters({});
-                                        }}
-                                        className="mt-4"
-                                    >
-                                        Clear search and filters
-                                    </Button>
-                                )}
-                            </CardContent>
-                        </Card>
+                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-12 text-center">
+                            <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                                No resolutions found
+                            </h3>
+                            <p className="max-w-md mx-auto text-gray-600 dark:text-gray-400 mb-6">
+                                {searchQuery ||
+                                Object.values(activeFilters).some(
+                                    (f) => f?.length,
+                                )
+                                    ? "Try adjusting your search terms or filters to find what you're looking for."
+                                    : 'No resolutions are currently available.'}
+                            </p>
+                            {(searchQuery ||
+                                Object.values(activeFilters).some(
+                                    (f) => f?.length,
+                                )) && (
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        setSearchQuery('');
+                                        setActiveFilters({});
+                                    }}
+                                >
+                                    Clear search and filters
+                                </Button>
+                            )}
+                        </div>
                     ) : (
                         <div className="space-y-8">
                             {/* Current Year Resolutions */}
@@ -467,83 +456,82 @@ export default function ResolutionsIndex({
 
                     {/* Statistics Card */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12">
-                            <Card>
-                                <CardContent className="p-6">
-                                    <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                        Resolution Statistics
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                                        <div className="text-center">
-                                            <div className="text-2xl font-bold text-blue-600">
-                                                {publishedResolutions.length}
-                                            </div>
-                                            <div className="text-sm text-muted-foreground">
-                                                Published
-                                            </div>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="text-2xl font-bold text-green-600">
-                                                {availableYears.length}
-                                            </div>
-                                            <div className="text-sm text-muted-foreground">
-                                                Years Active
-                                            </div>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="text-2xl font-bold text-purple-600">
-                                                {authors.length}
-                                            </div>
-                                            <div className="text-sm text-muted-foreground">
-                                                Authors
-                                            </div>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="text-2xl font-bold text-orange-600">
-                                                {
-                                                    resolutions.data.filter(
-                                                        (r) => r.file_path,
-                                                    ).length
-                                                }
-                                            </div>
-                                            <div className="text-sm text-muted-foreground">
-                                                With Documents
-                                            </div>
-                                        </div>
+                        <div className="mt-12 bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8">
+                            <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
+                                Resolution Statistics
+                            </h3>
+                            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+                                <div className="text-center">
+                                    <div className="text-3xl font-bold text-blue-600 dark:text-blue-500 mb-2">
+                                        {publishedResolutions.length}
                                     </div>
-                                </CardContent>
-                            </Card>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Published
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-3xl font-bold text-green-600 dark:text-green-500 mb-2">
+                                        {availableYears.length}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Years Active
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-3xl font-bold text-purple-600 dark:text-purple-500 mb-2">
+                                        {authors.length}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        Authors
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-3xl font-bold text-orange-600 dark:text-orange-500 mb-2">
+                                        {
+                                            resolutions.data.filter(
+                                                (r) => r.file_path,
+                                            ).length
+                                        }
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        With Documents
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
 
                     {/* Call to Action */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12 text-center">
-                            <Card>
-                                <CardContent className="p-6">
-                                    <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                        Stay Informed
-                                    </h3>
-                                    <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                        Keep track of the latest USG resolutions
-                                        and policy decisions that affect our
-                                        university community.
-                                    </p>
-                                    <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                                        <Button variant="outline">
-                                            <Download className="mr-2 h-4 w-4" />
-                                            Download Archive
-                                        </Button>
-                                        <Button variant="outline">
-                                            Subscribe to Updates
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                        <div className="mt-12 bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-lg shadow-lg p-12 text-center">
+                            <h3 className="mb-2 text-3xl font-bold">
+                                Stay Informed
+                            </h3>
+                            <p className="mb-6 text-lg text-white/90">
+                                Keep track of the latest USG resolutions and policy decisions that affect our university community
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-4">
+                                <Button
+                                    size="lg"
+                                    variant="secondary"
+                                    className="bg-white text-blue-600 hover:bg-gray-100"
+                                >
+                                    <Download className="mr-2 h-5 w-5" />
+                                    Download Archive
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="secondary"
+                                    className="bg-white/10 text-white hover:bg-white/20 border-white/20"
+                                >
+                                    <ExternalLink className="mr-2 h-5 w-5" />
+                                    Subscribe to Updates
+                                </Button>
+                            </div>
                         </div>
                     )}
                 </div>
-            </div>
-        </PublicLayout>
+            </section>
+        </USGLayout>
     );
 }
