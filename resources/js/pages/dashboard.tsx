@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Progress } from '@/components/ui/progress';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
@@ -293,22 +294,25 @@ export default function Dashboard({
                                 ))}
                             </div>
                         ) : (
-                            <div className="py-12 text-center">
-                                <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                                <h3 className="mb-2 text-lg font-medium">
-                                    No requests yet
-                                </h3>
-                                <p className="mx-auto mb-6 max-w-sm text-muted-foreground">
-                                    Create your first document request to get
-                                    started.
-                                </p>
-                                <Button asChild>
-                                    <Link href={create()}>
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Create Request
-                                    </Link>
-                                </Button>
-                            </div>
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <FileText className="h-8 w-8" />
+                                    </EmptyMedia>
+                                    <EmptyTitle>No requests yet</EmptyTitle>
+                                    <EmptyDescription>
+                                        Create your first document request to get started.
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                                <EmptyContent>
+                                    <Button asChild>
+                                        <Link href={create()}>
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Create Request
+                                        </Link>
+                                    </Button>
+                                </EmptyContent>
+                            </Empty>
                         )}
                     </CardContent>
                 </Card>

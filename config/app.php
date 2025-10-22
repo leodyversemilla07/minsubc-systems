@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Document Request Daily Limit
+    |--------------------------------------------------------------------------
+    |
+    | The maximum number of document requests a student can submit per day.
+    | This helps prevent abuse and ensures fair usage of the system.
+    |
+    */
+
+    'document_request_daily_limit' => env('DOCUMENT_REQUEST_DAILY_LIMIT', 5),
+
 ];

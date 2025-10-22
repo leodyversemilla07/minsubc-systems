@@ -20,7 +20,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
 import { dashboard } from '@/routes/registrar/admin';
@@ -32,7 +31,6 @@ import {
     AlertCircle,
     Calendar,
     CheckCircle,
-    ChevronDown,
     Clock,
     DollarSign,
     Eye,
@@ -50,15 +48,15 @@ interface DocumentRequest {
     id: number;
     request_number: string;
     status:
-        | 'pending_payment'
-        | 'payment_expired'
-        | 'paid'
-        | 'processing'
-        | 'ready_for_claim'
-        | 'claimed'
-        | 'released'
-        | 'cancelled'
-        | 'rejected';
+    | 'pending_payment'
+    | 'payment_expired'
+    | 'paid'
+    | 'processing'
+    | 'ready_for_claim'
+    | 'claimed'
+    | 'released'
+    | 'cancelled'
+    | 'rejected';
     document_type: string;
     purpose: string;
     copies: number;
@@ -124,9 +122,6 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
     );
     const [dateTo, setDateTo] = useState<Date | undefined>(
         filters.date_to ? new Date(filters.date_to) : undefined,
-    );
-    const [isFilterOpen, setIsFilterOpen] = useState(
-        !!(filters.status || filters.date_from || filters.date_to),
     );
     const [releaseDialog, setReleaseDialog] = useState<{
         open: boolean;
@@ -445,198 +440,184 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
 
                 {/* Filters */}
                 <Card>
-                    <CardHeader
-                        className="cursor-pointer transition-colors hover:bg-muted/50"
-                        onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    >
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Filter className="h-4 w-4 text-muted-foreground" />
-                                <CardTitle className="text-base font-medium">
-                                    Filters
-                                    {hasActiveFilters && (
-                                        <Badge
-                                            variant="secondary"
-                                            className="ml-2 text-xs"
-                                        >
-                                            Active
-                                        </Badge>
-                                    )}
-                                </CardTitle>
-                            </div>
-                            <ChevronDown
-                                className={`h-4 w-4 text-muted-foreground transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
-                            />
+                    <CardHeader>
+                        <div className="flex items-center gap-2">
+                            <Filter className="h-4 w-4 text-muted-foreground" />
+                            <CardTitle className="text-base font-medium">
+                                Filters
+                                {hasActiveFilters && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="ml-2 text-xs"
+                                    >
+                                        Active
+                                    </Badge>
+                                )}
+                            </CardTitle>
                         </div>
                     </CardHeader>
-
-                    {isFilterOpen && (
-                        <>
-                            <Separator />
-                            <CardContent className="pt-6">
-                                <form
-                                    onSubmit={handleFilterSubmit}
-                                    className="space-y-6"
-                                >
-                                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                                        {/* Status Filter */}
-                                        <div className="space-y-2">
-                                            <Label
-                                                htmlFor="status"
-                                                className="flex items-center gap-2 text-sm font-medium"
-                                            >
-                                                <CheckCircle className="h-3.5 w-3.5 text-muted-foreground" />
-                                                Status
-                                            </Label>
-                                            <Select
-                                                value={statusFilter}
-                                                onValueChange={setStatusFilter}
-                                            >
-                                                <SelectTrigger
-                                                    id="status"
-                                                    className="h-10"
-                                                >
-                                                    <SelectValue placeholder="Select status..." />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="all">
-                                                        <span className="flex items-center gap-2">
-                                                            All Statuses
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="pending_payment">
-                                                        <span className="flex items-center gap-2">
-                                                            <Clock className="h-3.5 w-3.5" />
-                                                            Pending Payment
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="payment_expired">
-                                                        <span className="flex items-center gap-2">
-                                                            <XCircle className="h-3.5 w-3.5" />
-                                                            Payment Expired
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="paid">
-                                                        <span className="flex items-center gap-2">
-                                                            <DollarSign className="h-3.5 w-3.5" />
-                                                            Paid
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="processing">
-                                                        <span className="flex items-center gap-2">
-                                                            <Package className="h-3.5 w-3.5" />
-                                                            Processing
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="ready_for_claim">
-                                                        <span className="flex items-center gap-2">
-                                                            <CheckCircle className="h-3.5 w-3.5" />
-                                                            Ready for Claim
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="claimed">
-                                                        <span className="flex items-center gap-2">
-                                                            <CheckCircle className="h-3.5 w-3.5" />
-                                                            Claimed
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="released">
-                                                        <span className="flex items-center gap-2">
-                                                            <CheckCircle className="h-3.5 w-3.5" />
-                                                            Released
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="cancelled">
-                                                        <span className="flex items-center gap-2">
-                                                            <XCircle className="h-3.5 w-3.5" />
-                                                            Cancelled
-                                                        </span>
-                                                    </SelectItem>
-                                                    <SelectItem value="rejected">
-                                                        <span className="flex items-center gap-2">
-                                                            <XCircle className="h-3.5 w-3.5" />
-                                                            Rejected
-                                                        </span>
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-
-                                        {/* Date From Filter */}
-                                        <div className="space-y-2">
-                                            <Label
-                                                htmlFor="date_from"
-                                                className="flex items-center gap-2 text-sm font-medium"
-                                            >
-                                                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-                                                From Date
-                                            </Label>
-                                            <DatePicker
-                                                date={dateFrom}
-                                                onDateChange={setDateFrom}
-                                                placeholder="Select start date"
-                                                maxDate={dateTo}
-                                            />
-                                        </div>
-
-                                        {/* Date To Filter */}
-                                        <div className="space-y-2">
-                                            <Label
-                                                htmlFor="date_to"
-                                                className="flex items-center gap-2 text-sm font-medium"
-                                            >
-                                                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-                                                To Date
-                                            </Label>
-                                            <DatePicker
-                                                date={dateTo}
-                                                onDateChange={setDateTo}
-                                                placeholder="Select end date"
-                                                minDate={dateFrom}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Action Buttons */}
-                                    <div className="flex flex-wrap items-center gap-3">
-                                        <Button
-                                            type="submit"
-                                            size="default"
-                                            className="gap-2"
+                    <CardContent className="pt-6">
+                        <form
+                            onSubmit={handleFilterSubmit}
+                            className="space-y-6"
+                        >
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                {/* Status Filter */}
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="status"
+                                        className="flex items-center gap-2 text-sm font-medium"
+                                    >
+                                        <CheckCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                                        Status
+                                    </Label>
+                                    <Select
+                                        value={statusFilter}
+                                        onValueChange={setStatusFilter}
+                                    >
+                                        <SelectTrigger
+                                            id="status"
+                                            className="h-10"
                                         >
-                                            <Search className="h-4 w-4" />
-                                            Apply Filters
-                                        </Button>
-                                        {hasActiveFilters && (
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                size="default"
-                                                onClick={handleClearFilters}
-                                                className="gap-2"
-                                            >
-                                                <X className="h-4 w-4" />
-                                                Clear All
-                                            </Button>
-                                        )}
-                                        {hasActiveFilters && (
-                                            <p className="text-sm text-muted-foreground">
-                                                {[
-                                                    statusFilter !== 'all' &&
-                                                        'Status',
-                                                    dateFrom && 'Start date',
-                                                    dateTo && 'End date',
-                                                ]
-                                                    .filter(Boolean)
-                                                    .join(', ')}{' '}
-                                                applied
-                                            </p>
-                                        )}
-                                    </div>
-                                </form>
-                            </CardContent>
-                        </>
-                    )}
+                                            <SelectValue placeholder="Select status..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">
+                                                <span className="flex items-center gap-2">
+                                                    All Statuses
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="pending_payment">
+                                                <span className="flex items-center gap-2">
+                                                    <Clock className="h-3.5 w-3.5" />
+                                                    Pending Payment
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="payment_expired">
+                                                <span className="flex items-center gap-2">
+                                                    <XCircle className="h-3.5 w-3.5" />
+                                                    Payment Expired
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="paid">
+                                                <span className="flex items-center gap-2">
+                                                    <DollarSign className="h-3.5 w-3.5" />
+                                                    Paid
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="processing">
+                                                <span className="flex items-center gap-2">
+                                                    <Package className="h-3.5 w-3.5" />
+                                                    Processing
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="ready_for_claim">
+                                                <span className="flex items-center gap-2">
+                                                    <CheckCircle className="h-3.5 w-3.5" />
+                                                    Ready for Claim
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="claimed">
+                                                <span className="flex items-center gap-2">
+                                                    <CheckCircle className="h-3.5 w-3.5" />
+                                                    Claimed
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="released">
+                                                <span className="flex items-center gap-2">
+                                                    <CheckCircle className="h-3.5 w-3.5" />
+                                                    Released
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="cancelled">
+                                                <span className="flex items-center gap-2">
+                                                    <XCircle className="h-3.5 w-3.5" />
+                                                    Cancelled
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="rejected">
+                                                <span className="flex items-center gap-2">
+                                                    <XCircle className="h-3.5 w-3.5" />
+                                                    Rejected
+                                                </span>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                {/* Date From Filter */}
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="date_from"
+                                        className="flex items-center gap-2 text-sm font-medium"
+                                    >
+                                        <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                                        From Date
+                                    </Label>
+                                    <DatePicker
+                                        date={dateFrom}
+                                        onDateChange={setDateFrom}
+                                        placeholder="Select start date"
+                                        maxDate={dateTo}
+                                    />
+                                </div>
+
+                                {/* Date To Filter */}
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="date_to"
+                                        className="flex items-center gap-2 text-sm font-medium"
+                                    >
+                                        <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                                        To Date
+                                    </Label>
+                                    <DatePicker
+                                        date={dateTo}
+                                        onDateChange={setDateTo}
+                                        placeholder="Select end date"
+                                        minDate={dateFrom}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-wrap items-center gap-3">
+                                <Button
+                                    type="submit"
+                                    size="default"
+                                    className="gap-2"
+                                >
+                                    <Search className="h-4 w-4" />
+                                    Apply Filters
+                                </Button>
+                                {hasActiveFilters && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="default"
+                                        onClick={handleClearFilters}
+                                        className="gap-2"
+                                    >
+                                        <X className="h-4 w-4" />
+                                        Clear All
+                                    </Button>
+                                )}
+                                {hasActiveFilters && (
+                                    <p className="text-sm text-muted-foreground">
+                                        {[
+                                            statusFilter !== 'all' &&
+                                            'Status',
+                                            dateFrom && 'Start date',
+                                            dateTo && 'End date',
+                                        ]
+                                            .filter(Boolean)
+                                            .join(', ')}{' '}
+                                        applied
+                                    </p>
+                                )}
+                            </div>
+                        </form>
+                    </CardContent>
                 </Card>
 
                 {/* Requests Table */}

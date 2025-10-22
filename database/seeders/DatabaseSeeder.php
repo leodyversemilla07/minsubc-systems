@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsSeeder::class,
             UserSeeder::class,
-            SystemSettingsSeeder::class,
         ]);
 
         // Seed USG module data

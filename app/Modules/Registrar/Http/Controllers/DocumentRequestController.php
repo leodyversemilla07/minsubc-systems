@@ -2,9 +2,9 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Enums\DocumentRequestStatus;
 use App\Enums\DocumentType;
 use App\Models\AuditLog;
-use App\Models\SystemSetting;
 use App\Modules\Registrar\Http\Requests\StoreDocumentRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Services\NotificationService;
@@ -57,7 +57,7 @@ class DocumentRequestController extends Controller
             return back()->withErrors(['student' => 'Student record not found. Please contact registrar.']);
         }
 
-        $dailyLimit = SystemSetting::getDailyLimit();
+        $dailyLimit = config('app.document_request_daily_limit', 5);
         $todayCount = DocumentRequest::getTodayRequestCount($student->student_id);
         $remaining = DocumentRequest::getRemainingDailyRequests($student->student_id);
         $hasReachedLimit = DocumentRequest::hasReachedDailyLimit($student->student_id);
@@ -150,7 +150,7 @@ class DocumentRequestController extends Controller
     public function edit(DocumentRequest $documentRequest)
     {
         // Only allow editing if status is pending_payment
-        if ($documentRequest->status !== 'pending_payment') {
+        if ($documentRequest->status !== DocumentRequestStatus::PendingPayment) {
             abort(403, 'Cannot edit request that is already being processed.');
         }
 
@@ -167,7 +167,7 @@ class DocumentRequestController extends Controller
      */
     public function update(StoreDocumentRequest $request, DocumentRequest $documentRequest)
     {
-        if ($documentRequest->status !== 'pending_payment') {
+        if ($documentRequest->status !== DocumentRequestStatus::PendingPayment) {
             abort(403, 'Cannot update request that is already being processed.');
         }
 
@@ -193,7 +193,7 @@ class DocumentRequestController extends Controller
      */
     public function destroy(DocumentRequest $documentRequest)
     {
-        if (! in_array($documentRequest->status, ['pending_payment', 'payment_expired', 'cancelled'])) {
+        if (! in_array($documentRequest->status, [DocumentRequestStatus::PendingPayment, DocumentRequestStatus::PaymentExpired, DocumentRequestStatus::Cancelled])) {
             abort(403, 'Cannot delete request that is being processed.');
         }
 

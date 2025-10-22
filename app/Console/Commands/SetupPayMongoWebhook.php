@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\SystemSetting;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -31,11 +30,11 @@ class SetupPayMongoWebhook extends Command
         $this->newLine();
 
         // Get PayMongo secret key
-        $secretKey = SystemSetting::getValue('paymongo_secret_key');
+        $secretKey = config('services.paymongo.secret_key');
 
         if (! $secretKey || $secretKey === 'sk_test_xxxxx') {
             $this->error('❌ PayMongo secret key not configured!');
-            $this->line('Please update your PayMongo API keys first.');
+            $this->line('Please set PAYMONGO_SECRET_KEY in your .env file.');
 
             return Command::FAILURE;
         }
@@ -82,24 +81,13 @@ class SetupPayMongoWebhook extends Command
                 $this->line("🔑 Webhook Secret: <fg=yellow>{$webhookSecret}</>");
                 $this->newLine();
 
-                // Store webhook secret in system settings
-                $setting = SystemSetting::updateOrCreate(
-                    ['setting_key' => 'paymongo_webhook_secret'],
-                    [
-                        'setting_value' => $webhookSecret,
-                        'description' => 'PayMongo webhook secret key for signature verification',
-                    ]
-                );
+                $this->warn('⚠️  Please add the following to your .env file:');
+                $this->line("PAYMONGO_WEBHOOK_SECRET={$webhookSecret}");
+                $this->line("PAYMONGO_WEBHOOK_ID={$webhookId}");
+                $this->newLine();
 
-                SystemSetting::updateOrCreate(
-                    ['setting_key' => 'paymongo_webhook_id'],
-                    [
-                        'setting_value' => $webhookId,
-                        'description' => 'PayMongo webhook ID',
-                    ]
-                );
-
-                $this->info('✅ Webhook secret saved to system settings!');
+                $this->info('✅ Webhook successfully registered with PayMongo!');
+                $this->line('Restart your application after updating the .env file.');
                 $this->newLine();
 
                 $this->line('📋 Listening for events:');

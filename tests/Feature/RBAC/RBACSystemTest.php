@@ -23,7 +23,7 @@ test('rbac permissions are created correctly', function (string $permission) {
     'submit_requests', 'view_own_requests', 'make_payments', 'track_status',
     'view_pending_cash_payments', 'confirm_cash_payments', 'issue_official_receipts', 'verify_payment_references',
     'view_all_requests', 'process_documents', 'approve_requests', 'reject_requests', 'mark_ready_for_claim', 'release_documents',
-    'manage_users', 'system_configuration', 'full_system_access', 'database_management', 'view_reports', 'manage_system_settings',
+    'manage_users', 'system_configuration', 'full_system_access', 'database_management', 'view_reports',
 ]);
 
 test('student role has correct permissions', function () {
@@ -40,8 +40,8 @@ test('system admin role has all permissions', function () {
     $adminRole = Role::where('name', 'system-admin')->first();
     expect($adminRole)->not->toBeNull();
 
-    // System admin should have all 41 permissions (20 registrar + 21 USG permissions)
-    expect($adminRole->permissions()->count())->toBe(41);
+    // System admin should have all 40 permissions (19 registrar + 21 USG permissions)
+    expect($adminRole->permissions()->count())->toBe(40);
 });
 
 test('users have correct roles assigned', function () {

@@ -95,7 +95,7 @@ class StoreDocumentRequest extends FormRequest
         }
 
         $remaining = DocumentRequest::getRemainingDailyRequests($student->student_id);
-        $dailyLimit = \App\Models\SystemSetting::getDailyLimit();
+        $dailyLimit = config('app.document_request_daily_limit', 5);
 
         abort(429, "Daily document request limit has been reached. You have submitted {$dailyLimit} requests today. Please try again tomorrow.");
     }

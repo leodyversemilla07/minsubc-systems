@@ -4,7 +4,6 @@ namespace App\Modules\Registrar\Services;
 
 use App\Models\AuditLog;
 use App\Models\PaymentWebhook;
-use App\Models\SystemSetting;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Payment;
 use Illuminate\Support\Facades\Http;
@@ -12,11 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentService
 {
-    private string $baseUrl;
+    private ?string $baseUrl;
 
-    private string $secretKey;
+    private ?string $secretKey;
 
-    private string $publicKey;
+    private ?string $publicKey;
 
     private ?string $webhookSecret;
 
@@ -24,9 +23,9 @@ class PaymentService
         private NotificationService $notificationService
     ) {
         $this->baseUrl = 'https://api.paymongo.com/v1';
-        $this->secretKey = SystemSetting::getValue('paymongo_secret_key', 'sk_test_xxxxx');
-        $this->publicKey = SystemSetting::getValue('paymongo_public_key', 'pk_test_xxxxx');
-        $this->webhookSecret = SystemSetting::getValue('paymongo_webhook_secret');
+        $this->secretKey = config('services.paymongo.secret_key');
+        $this->publicKey = config('services.paymongo.public_key');
+        $this->webhookSecret = config('services.paymongo.webhook_secret');
     }
 
     /**

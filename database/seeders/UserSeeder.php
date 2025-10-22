@@ -194,18 +194,39 @@ class UserSeeder extends Seeder
 
             // Create student record if this is a student
             if ($role === 'student' && $studentData) {
-                Student::firstOrCreate(
-                    ['student_id' => $studentData['student_id']],
-                    array_merge($studentData, ['user_id' => $user->id])
-                );
+                if (! Student::where('student_id', $studentData['student_id'])->exists()) {
+                    Student::create(array_merge($studentData, ['user_id' => $user->id]));
+                }
             }
         }
 
         // Create additional random students using factories
         User::factory(15)->create()->each(function ($user) {
             $user->assignRole('student');
-            Student::factory()->create([
+
+            // Generate a unique student ID that doesn't conflict with predefined ones
+            $studentId = 'MBC2025-'.str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
+            while (Student::where('student_id', $studentId)->exists()) {
+                $studentId = 'MBC2025-'.str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
+            }
+
+            Student::create([
                 'user_id' => $user->id,
+                'student_id' => $studentId,
+                'phone' => fake()->phoneNumber(),
+                'course' => fake()->randomElement([
+                    'Bachelor of Science in Computer Science',
+                    'Bachelor of Science in Information Technology',
+                    'Bachelor of Science in Business Administration',
+                    'Bachelor of Science in Accountancy',
+                    'Bachelor of Science in Nursing',
+                    'Bachelor of Arts in Communication',
+                    'Bachelor of Science in Engineering',
+                    'Bachelor of Science in Education',
+                ]),
+                'year_level' => fake()->numberBetween(1, 4),
+                'campus' => 'Bongabong Campus',
+                'status' => fake()->randomElement(['active', 'inactive', 'graduated']),
             ]);
         });
     }

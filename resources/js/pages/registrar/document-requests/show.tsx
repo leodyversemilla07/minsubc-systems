@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
 import { edit, index } from '@/routes/registrar/document-requests';
@@ -22,6 +23,9 @@ import {
     CreditCard,
     Download,
     Edit,
+    Eye,
+    FileText,
+    HelpCircle,
     IdCard,
     Info,
     MapPin,
@@ -99,70 +103,348 @@ export default function Show({ request }: Props) {
         },
     ];
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Document Request ${request.request_number}`} />
+        <TooltipProvider>
+            <AppLayout breadcrumbs={breadcrumbs}>
+                <Head title={`Document Request ${request.request_number}`} />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
-                {/* Error Display */}
-                {errors && Object.keys(errors).length > 0 && (
-                    <AlertError
-                        errors={
-                            Object.values(errors)
-                                .flat()
-                                .filter(Boolean) as string[]
-                        }
-                        title="Payment Error"
-                    />
-                )}
+                <div className="flex-1 space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
+                    {/* Error Display */}
+                    {errors && Object.keys(errors).length > 0 && (
+                        <AlertError
+                            errors={
+                                Object.values(errors)
+                                    .flat()
+                                    .filter(Boolean) as string[]
+                            }
+                            title="Payment Error"
+                        />
+                    )}
 
-                {/* Header */}
-                <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <div className="space-y-1">
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Request {request.request_number}
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Document Request Details
-                        </p>
+                    {/* Enhanced Header */}
+                    <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                                    <Eye className="h-4 w-4 md:h-5 md:w-5 text-primary" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">
+                                        Request {request.request_number}
+                                    </h1>
+                                    <p className="text-sm md:text-base text-muted-foreground">
+                                        Document Request Details
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 self-start sm:self-center">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Badge variant="outline" className="gap-1 text-xs md:text-sm">
+                                            <FileText className="h-3 w-3" />
+                                            <span className="hidden sm:inline">Viewing Request</span>
+                                            <span className="sm:hidden">Viewing</span>
+                                        </Badge>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>You are currently viewing request details</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
                     </div>
-                    <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+
+                    {/* Status Overview Card */}
+                    <Card className="mb-4 md:mb-6">
+                        <CardHeader className="pb-3">
+                            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                                <div className="flex items-center gap-2">
+                                    <Info className="h-4 w-4 text-muted-foreground" />
+                                    <CardTitle className="text-sm md:text-base">
+                                        Request Status
+                                    </CardTitle>
+                                </div>
+                                <Badge
+                                    className={
+                                        statusColors[
+                                            request.status as keyof typeof statusColors
+                                        ] ||
+                                        'bg-muted text-muted-foreground'
+                                    }
+                                >
+                                    {request.status
+                                        .split('_')
+                                        .map(
+                                            (word) =>
+                                                word
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                word.slice(1),
+                                        )
+                                        .join(' ')}
+                                </Badge>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-3 md:space-y-4">
+                            <Alert className="text-xs md:text-sm">
+                                <Info className="h-3 w-3 md:h-4 md:w-4" />
+                                <AlertDescription className="text-xs md:text-sm">
+                                    This request is currently in the "{request.status
+                                        .split('_')
+                                        .map(
+                                            (word) =>
+                                                word
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                word.slice(1),
+                                        )
+                                        .join(' ')}" status. You can view all details below.
+                                </AlertDescription>
+                            </Alert>
+                        </CardContent>
+                    </Card>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
                         {request.status === 'pending_payment' && (
                             <>
-                                <Button
-                                    variant="default"
-                                    asChild
-                                    className="w-full sm:w-auto"
-                                >
-                                    <Link href={method(request.request_number)}>
-                                        <CreditCard className="mr-2 h-4 w-4" />
-                                        Select Payment Method
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    asChild
-                                    className="w-full sm:w-auto"
-                                >
-                                    <Link href={edit(request.request_number)}>
-                                        <Edit className="mr-2 h-4 w-4" />
-                                        Edit
-                                    </Link>
-                                </Button>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="default"
+                                                asChild
+                                                size="lg"
+                                                className="w-full sm:w-auto min-w-[160px] h-11 md:h-12 text-sm md:text-base"
+                                            >
+                                                <Link href={method(request.request_number)}>
+                                                    <CreditCard className="mr-2 h-4 w-4" />
+                                                    Select Payment Method
+                                                </Link>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Choose your preferred payment method to complete the transaction</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                asChild
+                                                size="lg"
+                                                className="w-full sm:w-auto min-w-[120px] h-11 md:h-12 text-sm md:text-base"
+                                            >
+                                                <Link href={edit(request.request_number)}>
+                                                    <Edit className="mr-2 h-4 w-4" />
+                                                    Edit Request
+                                                </Link>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Modify your document request details</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </>
                         )}
                         {request.status === 'released' && (
-                            <Button
-                                variant="outline"
-                                className="w-full sm:w-auto"
-                            >
-                                <Download className="mr-2 h-4 w-4" />
-                                Download
-                            </Button>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            size="lg"
+                                            className="w-full sm:w-auto min-w-[140px] h-11 md:h-12 text-sm md:text-base"
+                                        >
+                                            <Download className="mr-2 h-4 w-4" />
+                                            Download Document
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Download your completed document</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         )}
                     </div>
-                </div>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                    {/* Help & Processing Information */}
+                    <div className="grid gap-4 md:gap-6 grid-cols-1 xl:grid-cols-3">
+                        {/* Processing Timeline */}
+                        <div className="space-y-4 xl:col-span-2">
+                            <Card className="transition-shadow hover:shadow-md">
+                                <CardHeader className="pb-4">
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <Info className="h-5 w-5 text-primary" />
+                                        Processing Timeline
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 pt-0">
+                                    <div className="space-y-3">
+                                        <div className="flex items-start gap-3">
+                                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
+                                                1
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                                    <p className="text-sm font-medium">Request Submitted</p>
+                                                    <Badge variant="outline" className="text-xs w-fit">
+                                                        ✓ Complete
+                                                    </Badge>
+                                                </div>
+                                                <p className="text-xs text-muted-foreground mt-1">
+                                                    Your document request has been received and is being processed.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-3">
+                                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
+                                                2
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                                    <p className="text-sm font-medium">
+                                                        {request.status === 'pending_payment' ? 'Payment Required' :
+                                                         request.status === 'processing' ? 'Document Processing' :
+                                                         request.status === 'ready_for_claim' ? 'Ready for Pickup' :
+                                                         request.status === 'claimed' ? 'Document Claimed' : 'Completed'}
+                                                    </p>
+                                                    <Badge
+                                                        variant={request.status === 'claimed' ? 'default' : 'secondary'}
+                                                        className={`text-xs w-fit ${request.status === 'claimed' ? 'bg-green-600' : ''}`}
+                                                    >
+                                                        {request.status === 'claimed' ? '✓ Complete' : 'In Progress'}
+                                                    </Badge>
+                                                </div>
+                                                <p className="text-xs text-muted-foreground mt-1">
+                                                    {request.status === 'pending_payment' ? 'Complete payment to proceed with processing.' :
+                                                     request.status === 'processing' ? 'Your document is being prepared by our staff.' :
+                                                     request.status === 'ready_for_claim' ? 'Your document is ready for pickup at the Registrar\'s Office.' :
+                                                     request.status === 'claimed' ? 'You have successfully claimed your document.' : 'Your request has been completed.'}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {request.status === 'ready_for_claim' && (
+                                            <div className="flex items-start gap-3">
+                                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary flex-shrink-0">
+                                                    3
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                                        <p className="text-sm font-medium">Pickup Document</p>
+                                                        <Badge variant="outline" className="text-xs w-fit">
+                                                            Pending
+                                                        </Badge>
+                                                    </div>
+                                                    <p className="text-xs text-muted-foreground mt-1">
+                                                        Visit the Registrar's Office during office hours to claim your document.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Cost Summary & Help */}
+                        <div className="space-y-4">
+                            <Card className="transition-shadow hover:shadow-md">
+                                <CardHeader className="pb-4">
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <CreditCard className="h-5 w-5 text-primary" />
+                                        Cost Summary
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 pt-0">
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-sm text-muted-foreground">Document Fee</span>
+                                            <span className="text-sm font-medium">₱{request.amount}</span>
+                                        </div>
+                                        <Separator />
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-sm font-medium">Total Amount</span>
+                                            <span className="text-lg font-bold text-success">₱{request.amount}</span>
+                                        </div>
+                                    </div>
+
+                                    {request.status === 'pending_payment' && (
+                                        <Alert className="mt-4">
+                                            <CreditCard className="h-4 w-4" />
+                                            <AlertDescription className="text-xs">
+                                                Payment is required to proceed with document processing.
+                                            </AlertDescription>
+                                        </Alert>
+                                    )}
+                                </CardContent>
+                            </Card>
+
+                            <Card className="transition-shadow hover:shadow-md">
+                                <CardHeader className="pb-4">
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <HelpCircle className="h-5 w-5 text-primary" />
+                                        Need Help?
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 pt-0">
+                                    <div className="space-y-3">
+                                        <div className="flex items-start gap-3">
+                                            <div className="rounded-md bg-primary/10 p-2 flex-shrink-0">
+                                                <FileText className="h-4 w-4 text-primary" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium">Document Status</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Track your request progress in real-time.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-3">
+                                            <div className="rounded-md bg-primary/10 p-2 flex-shrink-0">
+                                                <CreditCard className="h-4 w-4 text-primary" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium">Payment</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Secure online payment processing.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-3">
+                                            <div className="rounded-md bg-primary/10 p-2 flex-shrink-0">
+                                                <MapPin className="h-4 w-4 text-primary" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium">Pickup Location</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Registrar's Office, Ground Floor.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Separator />
+
+                                    <div className="text-center">
+                                        <p className="text-xs text-muted-foreground">
+                                            For urgent inquiries, contact the Registrar's Office directly.
+                                        </p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+
+                    <div className="grid gap-6 md:gap-8 grid-cols-1 xl:grid-cols-3">
                     {/* Main Request Details */}
                     <div className="space-y-6 lg:col-span-2">
                         <Card className="transition-shadow hover:shadow-md">
@@ -186,25 +468,40 @@ export default function Show({ request }: Props) {
                                             Status
                                         </Label>
                                         <div className="mt-1">
-                                            <Badge
-                                                className={
-                                                    statusColors[
-                                                        request.status as keyof typeof statusColors
-                                                    ] ||
-                                                    'bg-muted text-muted-foreground'
-                                                }
-                                            >
-                                                {request.status
-                                                    .split('_')
-                                                    .map(
-                                                        (word) =>
-                                                            word
-                                                                .charAt(0)
-                                                                .toUpperCase() +
-                                                            word.slice(1),
-                                                    )
-                                                    .join(' ')}
-                                            </Badge>
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Badge
+                                                            className={
+                                                                statusColors[
+                                                                    request.status as keyof typeof statusColors
+                                                                ] ||
+                                                                'bg-muted text-muted-foreground'
+                                                            }
+                                                        >
+                                                            {request.status
+                                                                .split('_')
+                                                                .map(
+                                                                    (word) =>
+                                                                        word
+                                                                            .charAt(0)
+                                                                            .toUpperCase() +
+                                                                        word.slice(1),
+                                                                )
+                                                                .join(' ')}
+                                                        </Badge>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>
+                                                            {request.status === 'pending_payment' ? 'Payment is required to process this request' :
+                                                             request.status === 'processing' ? 'Your document is being prepared' :
+                                                             request.status === 'ready_for_claim' ? 'Document is ready for pickup at the Registrar\'s Office' :
+                                                             request.status === 'claimed' ? 'Document has been successfully claimed' :
+                                                             'Request completed'}
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
                                         </div>
                                     </div>
                                     <div>
@@ -455,13 +752,13 @@ export default function Show({ request }: Props) {
                                     </Alert>
 
                                     {/* Office Information */}
-                                    <div className="grid gap-4 sm:grid-cols-2">
+                                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
                                         <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
                                             <div className="flex items-start gap-3">
-                                                <div className="rounded-md bg-primary/10 p-2">
+                                                <div className="rounded-md bg-primary/10 p-2 flex-shrink-0">
                                                     <MapPin className="h-4 w-4 text-primary" />
                                                 </div>
-                                                <div>
+                                                <div className="flex-1 min-w-0">
                                                     <p className="text-sm font-semibold">
                                                         Location
                                                     </p>
@@ -476,10 +773,10 @@ export default function Show({ request }: Props) {
                                         </div>
                                         <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
                                             <div className="flex items-start gap-3">
-                                                <div className="rounded-md bg-primary/10 p-2">
+                                                <div className="rounded-md bg-primary/10 p-2 flex-shrink-0">
                                                     <ClockIcon className="h-4 w-4 text-primary" />
                                                 </div>
-                                                <div>
+                                                <div className="flex-1 min-w-0">
                                                     <p className="text-sm font-semibold">
                                                         Office Hours
                                                     </p>
@@ -613,7 +910,8 @@ export default function Show({ request }: Props) {
                         </Card>
                     </div>
                 </div>
-            </div>
-        </AppLayout>
+                </div>
+            </AppLayout>
+        </TooltipProvider>
     );
 }

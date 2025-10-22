@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\SystemSetting;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -31,10 +30,11 @@ class ListPayMongoWebhooks extends Command
         $this->newLine();
 
         // Get PayMongo secret key
-        $secretKey = SystemSetting::getValue('paymongo_secret_key');
+        $secretKey = config('services.paymongo.secret_key');
 
         if (! $secretKey || $secretKey === 'sk_test_xxxxx') {
             $this->error('❌ PayMongo secret key not configured!');
+            $this->line('Please set PAYMONGO_SECRET_KEY in your .env file.');
 
             return Command::FAILURE;
         }

@@ -96,17 +96,12 @@ export function AppSidebar() {
             );
         }
         // Registrar Navigation
-        else if (hasAnyRole(['registrar', 'cashier'])) {
+        else if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             items.push(
                 {
                     title: 'Dashboard',
                     href: dashboard(),
                     icon: LayoutGrid,
-                },
-                {
-                    title: 'Document Requests',
-                    href: registrar.documentRequests.index(),
-                    icon: ClipboardList,
                 },
             );
         }

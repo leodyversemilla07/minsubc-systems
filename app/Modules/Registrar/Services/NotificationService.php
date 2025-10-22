@@ -2,7 +2,6 @@
 
 namespace App\Modules\Registrar\Services;
 
-use App\Models\SystemSetting;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Notification;
 use Illuminate\Support\Facades\Http;
@@ -18,9 +17,9 @@ class NotificationService
 
     public function __construct()
     {
-        $this->semaphoreApiKey = SystemSetting::getValue('sms_api_key');
-        $this->semaphoreSenderName = SystemSetting::getValue('semaphore_sender_name', 'MinSU-DRS');
-        $this->sendgridApiKey = SystemSetting::getValue('email_api_key');
+        $this->semaphoreApiKey = config('services.semaphore.api_key');
+        $this->semaphoreSenderName = config('services.semaphore.sender_name', 'MinSU-DRS');
+        $this->sendgridApiKey = config('services.sendgrid.api_key');
     }
 
     /**

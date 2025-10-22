@@ -46,7 +46,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'full_system_access',
             'database_management',
             'view_reports',
-            'manage_system_settings', // Additional admin capability
 
             // USG Officer permissions
             'usg_view_dashboard',
@@ -145,7 +144,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'full_system_access',
             'database_management',
             'view_reports',
-            'manage_system_settings',
             // USG permissions
             'usg_view_dashboard',
             'usg_create_announcements',

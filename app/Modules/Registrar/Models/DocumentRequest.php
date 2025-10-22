@@ -352,7 +352,7 @@ class DocumentRequest extends Model
      */
     public static function hasReachedDailyLimit(?string $studentId = null): bool
     {
-        $dailyLimit = \App\Models\SystemSetting::getDailyLimit();
+        $dailyLimit = config('app.document_request_daily_limit', 5);
         $todayCount = self::getTodayRequestCount($studentId);
 
         return $todayCount >= $dailyLimit;
@@ -363,7 +363,7 @@ class DocumentRequest extends Model
      */
     public static function getRemainingDailyRequests(?string $studentId = null): int
     {
-        $dailyLimit = \App\Models\SystemSetting::getDailyLimit();
+        $dailyLimit = config('app.document_request_daily_limit', 5);
         $todayCount = self::getTodayRequestCount($studentId);
 
         return max(0, $dailyLimit - $todayCount);

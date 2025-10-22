@@ -10,7 +10,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
+import { FileText, MoreHorizontal } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -24,7 +24,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Input } from '@/components/ui/input';
 import {
     Pagination,
@@ -267,10 +267,15 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                     className="h-24 text-center"
                                 >
                                     <Empty>
-                                        <EmptyTitle>No items found</EmptyTitle>
-                                        <EmptyDescription>
-                                            {emptyMessage}
-                                        </EmptyDescription>
+                                        <EmptyHeader>
+                                            <EmptyMedia variant="icon">
+                                                <FileText className="h-8 w-8" />
+                                            </EmptyMedia>
+                                            <EmptyTitle>No document requests found</EmptyTitle>
+                                            <EmptyDescription>
+                                                {emptyMessage}
+                                            </EmptyDescription>
+                                        </EmptyHeader>
                                     </Empty>
                                 </TableCell>
                             </TableRow>
