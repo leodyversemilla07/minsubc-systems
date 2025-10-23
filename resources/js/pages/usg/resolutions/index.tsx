@@ -9,7 +9,6 @@ import {
     Download,
     ExternalLink,
     FileText,
-    Gavel,
     Search,
     User,
 } from 'lucide-react';
@@ -152,16 +151,13 @@ export default function ResolutionsIndex({
             <Head title="Resolutions - USG Portal" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white">
-                <div className="relative container mx-auto px-4 py-20">
+            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
+                <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
-                        <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-4 backdrop-blur-sm">
-                            <Gavel className="h-12 w-12" />
-                        </div>
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             Official Resolutions
                         </h1>
-                        <p className="mb-8 text-xl text-white/90 md:text-2xl">
+                        <p className="text-xl text-[var(--usg-hero-text)] md:text-2xl">
                             Browse official USG resolutions, legislative
                             documents, and policy decisions that shape our
                             university community
@@ -175,7 +171,7 @@ export default function ResolutionsIndex({
                 <div className="container mx-auto px-4 py-8">
                     <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-blue-600 md:text-4xl dark:text-blue-500">
+                            <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)] md:text-4xl">
                                 {resolutions.total}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -183,7 +179,7 @@ export default function ResolutionsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-indigo-600 md:text-4xl dark:text-indigo-500">
+                            <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)] md:text-4xl">
                                 {publishedResolutions.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -191,7 +187,7 @@ export default function ResolutionsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-purple-600 md:text-4xl dark:text-purple-500">
+                            <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)] md:text-4xl">
                                 {availableYears.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -199,7 +195,7 @@ export default function ResolutionsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-violet-600 md:text-4xl dark:text-violet-500">
+                            <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] md:text-4xl">
                                 {authors.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -312,7 +308,7 @@ export default function ResolutionsIndex({
                             <div className="flex gap-2">
                                 <Badge
                                     variant="default"
-                                    className="bg-green-100 text-green-700"
+                                    className="border-[var(--usg-secondary)] bg-[var(--usg-light)] text-[var(--usg-primary)]"
                                 >
                                     {publishedResolutions.length} Published
                                 </Badge>
@@ -469,7 +465,7 @@ export default function ResolutionsIndex({
                             </h3>
                             <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
                                 <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-blue-600 dark:text-blue-500">
+                                    <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)]">
                                         {publishedResolutions.length}
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -477,7 +473,7 @@ export default function ResolutionsIndex({
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-green-600 dark:text-green-500">
+                                    <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)]">
                                         {availableYears.length}
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -485,7 +481,7 @@ export default function ResolutionsIndex({
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-purple-600 dark:text-purple-500">
+                                    <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)]">
                                         {authors.length}
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -493,7 +489,7 @@ export default function ResolutionsIndex({
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-orange-600 dark:text-orange-500">
+                                    <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)]">
                                         {
                                             resolutions.data.filter(
                                                 (r) => r.file_path,
@@ -510,7 +506,7 @@ export default function ResolutionsIndex({
 
                     {/* Call to Action */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 p-12 text-center text-white shadow-lg">
+                        <div className="mt-12 rounded-lg bg-[var(--usg-primary)] p-12 text-center text-white shadow-lg">
                             <h3 className="mb-2 text-3xl font-bold">
                                 Stay Informed
                             </h3>
@@ -523,7 +519,7 @@ export default function ResolutionsIndex({
                                 <Button
                                     size="lg"
                                     variant="secondary"
-                                    className="bg-white text-blue-600 hover:bg-gray-100"
+                                    className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
                                 >
                                     <Download className="mr-2 h-5 w-5" />
                                     Download Archive

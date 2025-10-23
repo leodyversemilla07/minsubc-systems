@@ -4,7 +4,7 @@ import OfficerCard from '@/components/usg/officer-card';
 import SearchBar from '@/components/usg/search-bar';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
-import { Mail, Phone, Search, Users } from 'lucide-react';
+import { Mail, Phone, Search } from 'lucide-react';
 import { useState } from 'react';
 
 interface Officer {
@@ -103,17 +103,13 @@ export default function OfficersIndex({
             <Head title="USG Officers" />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-purple-700 via-purple-600 to-blue-600 py-20 text-white">
-                <div className="absolute inset-0 bg-black/10"></div>
+            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
-                        <div className="mb-6 inline-flex animate-pulse items-center justify-center rounded-full bg-white/20 p-4 backdrop-blur-sm">
-                            <Users className="h-10 w-10 text-white" />
-                        </div>
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             USG Officers
                         </h1>
-                        <p className="text-xl text-purple-100 md:text-2xl">
+                        <p className="text-xl text-[var(--usg-hero-text)] md:text-2xl">
                             Meet the dedicated leaders serving our campus
                             community
                         </p>
@@ -126,7 +122,7 @@ export default function OfficersIndex({
                 <div className="container mx-auto px-4 py-8">
                     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
                         <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-purple-600 dark:text-purple-400">
+                            <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
                                 {stats.total_officers}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -134,7 +130,7 @@ export default function OfficersIndex({
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-green-600 dark:text-green-400">
+                            <div className="mb-2 text-4xl font-bold text-[var(--usg-secondary)]">
                                 {stats.active_officers}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -142,7 +138,7 @@ export default function OfficersIndex({
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-blue-600 dark:text-blue-400">
+                            <div className="mb-2 text-4xl font-bold text-[var(--usg-accent)]">
                                 {stats.departments_count}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -190,7 +186,7 @@ export default function OfficersIndex({
                             <div className="flex gap-2">
                                 <Badge
                                     variant="default"
-                                    className="bg-green-100 text-green-700"
+                                    className="bg-[var(--usg-light)] text-[var(--usg-primary)]"
                                 >
                                     {activeOfficers.length} Active
                                 </Badge>
@@ -293,13 +289,13 @@ export default function OfficersIndex({
 
             {/* Contact Section */}
             {activeOfficers.length > 0 && (
-                <section className="bg-gradient-to-br from-purple-600 to-blue-600 py-16 text-white">
+                <section className="bg-[var(--usg-primary)] py-16 text-white">
                     <div className="container mx-auto px-4">
                         <div className="mx-auto max-w-3xl text-center">
                             <h2 className="mb-4 text-3xl font-bold">
                                 Get in Touch
                             </h2>
-                            <p className="mb-8 text-xl text-purple-100">
+                            <p className="mb-8 text-xl text-[var(--usg-hero-text)]">
                                 Have questions or suggestions? Feel free to
                                 reach out to any of our officers or contact the
                                 USG office directly.

@@ -103,17 +103,13 @@ export default function AnnouncementsIndex({
             <Head title="Announcements - USG" />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-orange-700 via-orange-600 to-red-600 py-20 text-white">
-                <div className="absolute inset-0 bg-black/10"></div>
+            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
-                        <div className="mb-6 inline-flex animate-pulse items-center justify-center rounded-full bg-white/20 p-4 backdrop-blur-sm">
-                            <Bell className="h-10 w-10 text-white" />
-                        </div>
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             Latest Announcements
                         </h1>
-                        <p className="text-xl text-orange-100 md:text-2xl">
+                        <p className="text-xl text-[var(--usg-hero-text)] md:text-2xl">
                             Stay updated with the latest news, events, and
                             important information from USG
                         </p>
@@ -126,7 +122,7 @@ export default function AnnouncementsIndex({
                 <div className="container mx-auto px-4 py-8">
                     <div className="mx-auto flex max-w-2xl justify-center gap-12">
                         <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-orange-600 dark:text-orange-400">
+                            <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
                                 {announcements.total}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -134,7 +130,7 @@ export default function AnnouncementsIndex({
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-green-600 dark:text-green-400">
+                            <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
                                 {publishedAnnouncements.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -181,7 +177,7 @@ export default function AnnouncementsIndex({
                             <div className="mt-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                                 <div className="flex flex-wrap items-center gap-3">
                                     <div className="flex items-center gap-2">
-                                        <Sparkles className="h-4 w-4 text-orange-500" />
+                                        <Sparkles className="h-4 w-4 text-[var(--usg-primary)]" />
                                         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Filter by priority:
                                         </span>
@@ -246,7 +242,7 @@ export default function AnnouncementsIndex({
                     <div className="mb-8">
                         <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-full bg-gradient-to-r from-orange-500 to-red-500 p-3">
+                                <div className="rounded-full bg-[var(--usg-primary)] p-3">
                                     <Bell className="h-6 w-6 text-white" />
                                 </div>
                                 <div>
@@ -265,7 +261,7 @@ export default function AnnouncementsIndex({
                             <div className="flex gap-3">
                                 <Badge
                                     variant="default"
-                                    className="rounded-full bg-green-600 px-4 py-2 text-sm font-medium text-white dark:bg-green-500"
+                                    className="rounded-full bg-[var(--usg-primary)] px-4 py-2 text-sm font-medium text-white dark:bg-[var(--usg-dark)]"
                                 >
                                     <div className="flex items-center gap-1">
                                         <div className="h-2 w-2 animate-pulse rounded-full bg-white"></div>
@@ -295,8 +291,8 @@ export default function AnnouncementsIndex({
 
                     {filteredAnnouncements.length === 0 ? (
                         <div className="rounded-lg bg-white p-16 text-center shadow-sm dark:bg-gray-900">
-                            <div className="mb-6 inline-flex items-center justify-center rounded-full bg-orange-100 p-6 dark:bg-orange-900/30">
-                                <Bell className="h-12 w-12 text-orange-600 dark:text-orange-400" />
+                            <div className="mb-6 inline-flex items-center justify-center rounded-full bg-[var(--usg-light)] p-6">
+                                <Bell className="h-12 w-12 text-[var(--usg-primary)]" />
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
                                 No announcements found
@@ -330,7 +326,7 @@ export default function AnnouncementsIndex({
                             {publishedAnnouncements.length > 0 && (
                                 <div>
                                     <div className="mb-6 flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                                        <div className="rounded-full bg-gradient-to-r from-orange-500 to-red-500 p-2">
+                                        <div className="rounded-full bg-[var(--usg-primary)] p-2">
                                             <Calendar className="h-5 w-5 text-white" />
                                         </div>
                                         <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -395,7 +391,7 @@ export default function AnnouncementsIndex({
 
             {/* Call to Action */}
             {publishedAnnouncements.length > 0 && (
-                <section className="bg-gradient-to-br from-orange-600 to-red-600 py-20 text-white">
+                <section className="bg-[var(--usg-primary)] py-20 text-white">
                     <div className="container mx-auto px-4">
                         <div className="mx-auto max-w-3xl text-center">
                             <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/20 p-4 backdrop-blur-sm">
@@ -404,7 +400,7 @@ export default function AnnouncementsIndex({
                             <h2 className="mb-6 text-4xl font-bold">
                                 Stay Connected & Informed
                             </h2>
-                            <p className="mb-8 text-xl text-orange-100">
+                            <p className="mb-8 text-xl text-[var(--usg-hero-text)]">
                                 Don't miss out on important updates from the
                                 University Student Government
                             </p>
@@ -412,7 +408,7 @@ export default function AnnouncementsIndex({
                                 <Button
                                     size="lg"
                                     variant="outline"
-                                    className="border-0 bg-white text-orange-600 hover:bg-orange-50"
+                                    className="border-0 bg-white text-[var(--usg-primary)] hover:bg-[var(--usg-light)]"
                                 >
                                     <svg
                                         className="mr-2 h-4 w-4"

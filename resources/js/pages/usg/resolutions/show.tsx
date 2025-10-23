@@ -253,11 +253,11 @@ export default function ResolutionShow({
                             </h2>
                             <div className="space-y-4">
                                 <div className="grid grid-cols-3 gap-4 text-center">
-                                    <div className="rounded-lg bg-green-50 p-4 dark:bg-green-950">
-                                        <div className="text-2xl font-bold text-green-700 dark:text-green-300">
+                                    <div className="rounded-lg bg-[var(--usg-very-light)] p-4 dark:bg-[var(--usg-very-dark)]">
+                                        <div className="text-2xl font-bold text-[var(--usg-primary)] dark:text-[var(--usg-light)]">
                                             {resolution.vote_results.for}
                                         </div>
-                                        <div className="text-sm text-green-600 dark:text-green-400">
+                                        <div className="text-sm text-[var(--usg-primary)] dark:text-[var(--usg-accent)]">
                                             For (
                                             {getVotePercentage(
                                                 resolution.vote_results.for,
@@ -301,7 +301,7 @@ export default function ResolutionShow({
                                 <div className="h-3 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                                     <div className="flex h-full">
                                         <div
-                                            className="bg-green-500"
+                                            className="bg-[var(--usg-primary)]"
                                             style={{
                                                 width: `${getVotePercentage(resolution.vote_results.for)}%`,
                                             }}

@@ -9,7 +9,6 @@ import {
     Clock,
     ExternalLink,
     MapPin,
-    PartyPopper,
     Search,
     Users,
 } from 'lucide-react';
@@ -156,16 +155,13 @@ export default function EventsIndex({
             <Head title="Events - USG Portal" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white">
-                <div className="relative container mx-auto px-4 py-20">
+            <section className="relative overflow-hidden bg-[var(--usg-primary)] py-20 text-white">
+                <div className="relative container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
-                        <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-4 backdrop-blur-sm">
-                            <PartyPopper className="h-12 w-12" />
-                        </div>
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             USG Events
                         </h1>
-                        <p className="mb-8 text-xl text-white/90 md:text-2xl">
+                        <p className="text-xl text-[var(--usg-hero-text)] md:text-2xl">
                             Join us for exciting events, workshops, and
                             activities organized by the University Student
                             Government
@@ -174,7 +170,7 @@ export default function EventsIndex({
                             size="lg"
                             variant="secondary"
                             onClick={() => router.visit('/usg/events/calendar')}
-                            className="bg-white text-green-600 hover:bg-gray-100"
+                            className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
                         >
                             <CalendarIcon className="mr-2 h-5 w-5" />
                             View Calendar
@@ -188,7 +184,7 @@ export default function EventsIndex({
                 <div className="container mx-auto px-4 py-8">
                     <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-green-600 md:text-4xl dark:text-green-500">
+                            <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)] md:text-4xl">
                                 {events.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -196,7 +192,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-emerald-600 md:text-4xl dark:text-emerald-500">
+                            <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)] md:text-4xl">
                                 {upcomingEvents.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -204,7 +200,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-teal-600 md:text-4xl dark:text-teal-500">
+                            <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)] md:text-4xl">
                                 {pastEvents.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -212,7 +208,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 text-3xl font-bold text-cyan-600 md:text-4xl dark:text-cyan-500">
+                            <div className="mb-2 inline-block rounded px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] bg-[var(--usg-text)] md:text-4xl">
                                 {categories.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -445,7 +441,7 @@ export default function EventsIndex({
 
                     {/* Quick Actions */}
                     {upcomingEvents.length > 0 && (
-                        <div className="mt-12 rounded-lg bg-gradient-to-br from-green-600 to-teal-600 p-12 text-center text-white shadow-lg">
+                        <div className="mt-12 rounded-lg bg-[var(--usg-primary)] p-12 text-center text-white shadow-lg">
                             <h3 className="mb-2 text-2xl font-bold">
                                 Stay Connected
                             </h3>
@@ -461,7 +457,7 @@ export default function EventsIndex({
                                     onClick={() =>
                                         router.visit('/usg/events/calendar')
                                     }
-                                    className="bg-white text-green-600 hover:bg-gray-100"
+                                    className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
                                 >
                                     <CalendarIcon className="mr-2 h-5 w-5" />
                                     View Calendar

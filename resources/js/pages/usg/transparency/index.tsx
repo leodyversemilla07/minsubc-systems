@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import {
-    BarChart3,
     Calendar,
     Download,
     Eye,
@@ -94,7 +93,7 @@ export default function TransparencyIndex({
     const getTypeColor = (type: string) => {
         switch (type) {
             case 'financial':
-                return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+                return 'bg-[var(--usg-light)] text-[var(--usg-primary)] dark:bg-[var(--usg-dark)] dark:text-[var(--usg-light)]';
             case 'meeting_minutes':
                 return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
             case 'budget':
@@ -119,25 +118,20 @@ export default function TransparencyIndex({
             <Head title="Transparency Reports - USG" />
 
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 py-16 text-white">
-                <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-start gap-4">
-                        <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
-                            <BarChart3 className="h-8 w-8" />
-                        </div>
-                        <div className="flex-1">
-                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
-                                Transparency Reports
-                            </h1>
-                            <p className="mb-6 max-w-3xl text-lg text-cyan-100">
-                                Access public records, financial reports, and
-                                other transparency documents from the USG.
-                                Promoting openness and accountability.
-                            </p>
-                        </div>
+            <section className="relative overflow-hidden bg-[var(--usg-primary)] py-20 text-white">
+                <div className="relative container mx-auto px-4">
+                    <div className="mx-auto max-w-4xl text-center">
+                        <h1 className="mb-6 text-5xl font-bold md:text-6xl">
+                            Transparency Reports
+                        </h1>
+                        <p className="text-xl text-[var(--usg-hero-text)] md:text-2xl">
+                            Access public records, financial reports, and
+                            other transparency documents from the USG.
+                            Promoting openness and accountability.
+                        </p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* Stats Bar */}
             <div className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-800">
@@ -145,7 +139,7 @@ export default function TransparencyIndex({
                     <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
                         <div className="text-center">
                             <div className="mb-2 flex items-center justify-center">
-                                <FileText className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+                                <FileText className="h-5 w-5 text-[var(--usg-primary)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
                                 {stats.total_reports}
@@ -156,7 +150,7 @@ export default function TransparencyIndex({
                         </div>
                         <div className="text-center">
                             <div className="mb-2 flex items-center justify-center">
-                                <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                <TrendingUp className="h-5 w-5 text-[var(--usg-secondary)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
                                 {stats.financial_reports}
@@ -167,7 +161,7 @@ export default function TransparencyIndex({
                         </div>
                         <div className="text-center">
                             <div className="mb-2 flex items-center justify-center">
-                                <Calendar className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                <Calendar className="h-5 w-5 text-[var(--usg-accent)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
                                 {stats.meeting_minutes}
@@ -178,7 +172,7 @@ export default function TransparencyIndex({
                         </div>
                         <div className="text-center">
                             <div className="mb-2 flex items-center justify-center">
-                                <Download className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                                <Download className="h-5 w-5 rounded-sm bg-[var(--usg-text)] p-0.5 text-[var(--usg-neutral)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
                                 {stats.total_downloads}
@@ -196,7 +190,7 @@ export default function TransparencyIndex({
                 {/* Search and Filters */}
                 <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                     <div className="mb-4 flex items-center gap-2">
-                        <div className="rounded-lg bg-cyan-600 p-2">
+                        <div className="rounded-lg bg-[var(--usg-primary)] p-2">
                             <FileText className="h-5 w-5 text-white" />
                         </div>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -313,7 +307,7 @@ export default function TransparencyIndex({
                                         <h3 className="mb-2 line-clamp-2 text-lg font-semibold text-gray-900 dark:text-white">
                                             <Link
                                                 href={`/usg/transparency/${report.slug}`}
-                                                className="hover:text-cyan-600 dark:hover:text-cyan-400"
+                                                className="hover:text-[var(--usg-primary)] dark:hover:text-[var(--usg-accent)]"
                                             >
                                                 {report.title}
                                             </Link>

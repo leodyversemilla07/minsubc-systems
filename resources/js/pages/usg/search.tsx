@@ -207,12 +207,12 @@ export default function USGSearch({ query, announcements }: SearchProps) {
 
                         <TextLink
                             href={usg.events.index.url()}
-                            className="group block rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-green-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-800 dark:hover:border-green-700"
+                            className="group block rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-[var(--usg-medium)] hover:shadow-md dark:border-gray-800 dark:bg-gray-800 dark:hover:border-[var(--usg-primary)]"
                         >
-                            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 transition-colors group-hover:bg-green-600 group-hover:text-white dark:bg-green-900 dark:text-green-400">
+                            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--usg-light)] text-[var(--usg-primary)] transition-colors group-hover:bg-[var(--usg-primary)] group-hover:text-white dark:bg-[var(--usg-dark)] dark:text-[var(--usg-accent)]">
                                 <Calendar className="h-6 w-6" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-green-600 dark:text-white dark:group-hover:text-green-400">
+                            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[var(--usg-primary)] dark:text-white dark:group-hover:text-[var(--usg-accent)]">
                                 All Events
                             </h3>
                             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
