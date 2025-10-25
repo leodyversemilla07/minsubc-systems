@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'student_id' => [
                 'required',
                 'string',
-                'regex:/^MBC2025-\d{4}$/',
+                'regex:/^(2018|2019)-(000[1-9]|00[1-9][0-9]|0[1-9][0-9]{2}|[1-2][0-9]{3}|3000)$|^MBC(2020|2021|2022|2023|2024|2025)-\d{4}$/',
                 'unique:students,student_id',
             ],
             'phone' => 'nullable|string|max:20',

@@ -1,381 +1,166 @@
-import USGLayout from '@/layouts/usg-layout';
-import usg from '@/routes/usg';
 import { Head, Link } from '@inertiajs/react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, FileText, Users } from 'lucide-react';
 
 export default function Welcome() {
     return (
-        <USGLayout>
-            <Head title="Welcome - USG Information Portal">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link
-                    href="https://fonts.bunny.net/css?family=inter:400,500,600,700"
-                    rel="stylesheet"
-                />
-            </Head>
+        <>
+            <Head title="MinSU Bongabong Systems - Student Portal" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-b from-white to-green-50 px-4 py-24 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
-                {/* Background Pattern */}
-                <div className="pointer-events-none absolute inset-0 opacity-10 dark:opacity-5">
-                    <svg
-                        className="h-full w-full"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <defs>
-                            <pattern
-                                id="hero-pattern"
-                                x="0"
-                                y="0"
-                                width="40"
-                                height="40"
-                                patternUnits="userSpaceOnUse"
-                            >
-                                <circle
-                                    cx="20"
-                                    cy="20"
-                                    r="1"
-                                    fill="currentColor"
-                                    className="text-green-700"
-                                />
-                            </pattern>
-                        </defs>
-                        <rect
-                            width="100%"
-                            height="100%"
-                            fill="url(#hero-pattern)"
-                        />
-                    </svg>
-                </div>
-
-                {/* Decorative Blobs */}
-                <div className="pointer-events-none absolute -top-24 right-0 h-96 w-96 rounded-full bg-green-200/30 blur-3xl dark:bg-green-900/20" />
-                <div className="pointer-events-none absolute -bottom-24 left-0 h-96 w-96 rounded-full bg-green-300/20 blur-3xl dark:bg-green-800/10" />
-
-                <div className="relative mx-auto max-w-7xl">
-                    <div className="text-center">
-                        {/* Badge */}
-                        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-200 bg-white px-4 py-2 shadow-sm dark:border-green-800 dark:bg-gray-800">
-                            <span className="flex h-2 w-2">
-                                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-green-500 opacity-75" />
-                                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-600" />
-                            </span>
-                            <span className="text-sm font-medium text-green-900 dark:text-green-400">
-                                Serving the MinSUBC Community
-                            </span>
-                        </div>
-
-                        {/* Main Heading */}
-                        <h1 className="mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl lg:text-7xl dark:from-white dark:via-gray-100 dark:to-gray-300">
-                            USG Information &<br />
-                            Transparency Portal
-                        </h1>
-
-                        {/* Subheading */}
-                        <p className="mx-auto mb-8 max-w-3xl text-lg leading-relaxed text-gray-600 sm:text-xl lg:text-2xl dark:text-gray-300">
-                            Empowering students through{' '}
-                            <span className="font-semibold text-green-700 dark:text-green-400">
-                                transparency
-                            </span>
-                            , fostering{' '}
-                            <span className="font-semibold text-green-700 dark:text-green-400">
-                                engagement
-                            </span>
-                            , and building a stronger MinSUBC community
-                            together.
-                        </p>
-
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Link
-                                href={usg.announcements.index.url()}
-                                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-green-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-green-800 hover:shadow-xl hover:shadow-green-700/20"
-                            >
-                                <span className="relative z-10">
-                                    View Announcements
-                                </span>
-                                <svg
-                                    className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                    />
-                                </svg>
-                                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-600 to-green-800 opacity-0 transition-opacity group-hover:opacity-100" />
-                            </Link>
-
-                            <Link
-                                href={usg.events.index.url()}
-                                className="group inline-flex items-center gap-2 rounded-lg border-2 border-green-700 bg-white px-8 py-4 text-base font-semibold text-green-900 shadow-lg transition-all hover:border-green-800 hover:bg-green-50 hover:shadow-xl dark:border-green-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-                            >
-                                <svg
-                                    className="h-5 w-5 transition-transform group-hover:rotate-12"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                </svg>
-                                <span>Calendar of Events</span>
-                            </Link>
-                        </div>
-
-                        {/* Stats Section */}
-                        <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-6 sm:grid-cols-4">
-                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
-                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
-                                    100%
-                                </div>
-                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
-                                    Transparency
-                                </div>
-                            </div>
-
-                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
-                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
-                                    24/7
-                                </div>
-                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
-                                    Access
-                                </div>
-                            </div>
-
-                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
-                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
-                                    Real-time
-                                </div>
-                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
-                                    Updates
-                                </div>
-                            </div>
-
-                            <div className="rounded-xl border border-green-100 bg-white/80 p-6 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80">
-                                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
-                                    Open
-                                </div>
-                                <div className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-300">
-                                    Communication
-                                </div>
-                            </div>
+            <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50 px-4 py-16 sm:px-6 sm:py-24 lg:px-8 dark:from-green-900 dark:via-gray-900 dark:to-green-900">
+                <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+                <div className="relative mx-auto max-w-4xl text-center">
+                    <div className="mb-8 flex justify-center">
+                        <div className="relative">
+                            <div className="absolute inset-0 rounded-full bg-green-200 blur-xl opacity-30 dark:bg-green-800"></div>
+                            <img
+                                src="/minsu-logo.png"
+                                alt="MinSU Logo"
+                                className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full object-contain shadow-lg"
+                            />
                         </div>
                     </div>
+                    <h1 className="mb-6 text-4xl font-bold tracking-tight text-green-900 sm:text-5xl lg:text-6xl dark:text-white">
+                        Welcome to{' '}
+                        <span className="bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent dark:from-green-400 dark:to-green-600">
+                            MinSU Bongabong Systems
+                        </span>
+                    </h1>
+                    <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-600 sm:text-xl dark:text-gray-300">
+                        Your comprehensive student portal for University Student Government, Academic Records, and Student Services.
+                        Access all your university resources in one unified platform.
+                    </p>
                 </div>
             </section>
 
-            {/* Features Grid */}
-            <section className="bg-white px-4 py-20 sm:px-6 lg:px-8 dark:bg-gray-800">
+            {/* Modules Section */}
+            <section className="bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 dark:bg-gray-900">
                 <div className="mx-auto max-w-7xl">
-                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {/* Feature 1 */}
-                        <div className="rounded-xl border border-gray-200 p-6 transition-all hover:border-green-300 hover:shadow-lg dark:border-gray-700 dark:hover:border-green-600">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                <svg
-                                    className="h-6 w-6 text-green-700 dark:text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                    />
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 text-xl font-semibold text-green-900 dark:text-white">
-                                Vision & Mission
-                            </h3>
-                            <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                Learn about our goals, objectives, and
-                                commitment to student governance.
-                            </p>
-                            <Link
-                                href={usg.vmgo.show.url()}
-                                className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
-                            >
-                                Learn more →
-                            </Link>
-                        </div>
+                    <div className="mb-12 text-center">
+                        <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl dark:text-white">
+                            Choose Your Portal
+                        </h2>
+                        <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
+                            Select the service you need to access your university resources and manage your academic journey.
+                        </p>
+                    </div>
 
-                        {/* Feature 2 */}
-                        <div className="rounded-xl border border-gray-200 p-6 transition-all hover:border-green-300 hover:shadow-lg dark:border-gray-700 dark:hover:border-green-600">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                <svg
-                                    className="h-6 w-6 text-green-700 dark:text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    <div className="grid grid-cols-1 gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
+                        {/* USG Card */}
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
+                            <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-green-900/20" />
+                            <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-green-100 opacity-20 dark:bg-green-800/30" />
+                            <CardHeader className="relative pb-4">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-100 to-green-200 shadow-lg dark:from-green-800 dark:to-green-700">
+                                    <img
+                                        src="/usg-logo.png"
+                                        alt="USG Logo"
+                                        className="h-10 w-10 rounded-full object-contain"
                                     />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 text-xl font-semibold text-green-900 dark:text-white">
-                                USG Officers
-                            </h3>
-                            <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                Meet the current officers and view the
-                                organizational structure.
-                            </p>
-                            <Link
-                                href={usg.officers.index.url()}
-                                className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
-                            >
-                                View officers →
-                            </Link>
-                        </div>
+                                </div>
+                                <CardTitle className="text-xl font-bold text-green-900 dark:text-white">
+                                    USG Portal
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative pb-4">
+                                <CardDescription className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    University Student Government information, announcements, events, resolutions, and transparency reports.
+                                </CardDescription>
+                            </CardContent>
+                            <CardFooter className="relative pt-4">
+                                <Button asChild className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg transition-all duration-200 hover:from-green-700 hover:to-green-800 hover:shadow-xl dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700">
+                                    <Link href="/usg" className="flex items-center justify-center">
+                                        <span className="hidden sm:inline">Visit USG Portal</span>
+                                        <span className="sm:hidden">USG Portal</span>
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
 
-                        {/* Feature 3 */}
-                        <div className="rounded-xl border border-gray-200 p-6 transition-all hover:border-green-300 hover:shadow-lg dark:border-gray-700 dark:hover:border-green-600">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                <svg
-                                    className="h-6 w-6 text-green-700 dark:text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 text-xl font-semibold text-green-900 dark:text-white">
-                                Resolutions
-                            </h3>
-                            <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                Access official resolutions and legislative
-                                documents.
-                            </p>
-                            <Link
-                                href={usg.resolutions.index.url()}
-                                className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
-                            >
-                                Browse resolutions →
-                            </Link>
-                        </div>
+                        {/* Registrar Card */}
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-blue-900/20" />
+                            <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-blue-100 opacity-20 dark:bg-blue-800/30" />
+                            <CardHeader className="relative pb-4">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-blue-200 shadow-lg dark:from-blue-800 dark:to-blue-700">
+                                    <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                <CardTitle className="text-xl font-bold text-blue-900 dark:text-white">
+                                    Registrar
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative pb-4">
+                                <CardDescription className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    Document requests, transcript applications, certificate processing, and academic record management.
+                                </CardDescription>
+                            </CardContent>
+                            <CardFooter className="relative pt-4">
+                                <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700">
+                                    <Link href="/register" className="flex items-center justify-center">
+                                        <span className="hidden sm:inline">Access Registrar</span>
+                                        <span className="sm:hidden">Registrar</span>
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
 
-                        {/* Feature 4 */}
-                        <div className="rounded-xl border border-gray-200 p-6 transition-all hover:border-green-300 hover:shadow-lg dark:border-gray-700 dark:hover:border-green-600">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                <svg
-                                    className="h-6 w-6 text-green-700 dark:text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 text-xl font-semibold text-green-900 dark:text-white">
-                                Announcements
-                            </h3>
-                            <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                Stay updated with the latest news and
-                                announcements.
-                            </p>
-                            <Link
-                                href={usg.announcements.index.url()}
-                                className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
-                            >
-                                Read announcements →
-                            </Link>
-                        </div>
-
-                        {/* Feature 5 */}
-                        <div className="rounded-xl border border-gray-200 p-6 transition-all hover:border-green-300 hover:shadow-lg dark:border-gray-700 dark:hover:border-green-600">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                <svg
-                                    className="h-6 w-6 text-green-700 dark:text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 text-xl font-semibold text-green-900 dark:text-white">
-                                Events Calendar
-                            </h3>
-                            <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                View upcoming events, meetings, and important
-                                dates.
-                            </p>
-                            <Link
-                                href={usg.events.index.url()}
-                                className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
-                            >
-                                View calendar →
-                            </Link>
-                        </div>
-
-                        {/* Feature 6 */}
-                        <div className="rounded-xl border border-gray-200 p-6 transition-all hover:border-green-300 hover:shadow-lg dark:border-gray-700 dark:hover:border-green-600">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                <svg
-                                    className="h-6 w-6 text-green-700 dark:text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 text-xl font-semibold text-green-900 dark:text-white">
-                                Transparency Reports
-                            </h3>
-                            <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                View statistics and public records ensuring
-                                accountability.
-                            </p>
-                            <Link
-                                href={usg.transparency.index.url()}
-                                className="font-medium text-green-700 hover:text-green-800 dark:text-green-400"
-                            >
-                                View reports →
-                            </Link>
-                        </div>
+                        {/* SAS Card */}
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-purple-900/20" />
+                            <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-purple-100 opacity-20 dark:bg-purple-800/30" />
+                            <CardHeader className="relative pb-4">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 shadow-lg dark:from-purple-800 dark:to-purple-700">
+                                    <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                                </div>
+                                <CardTitle className="text-xl font-bold text-purple-900 dark:text-white">
+                                    Student Affairs & Services
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative pb-4">
+                                <CardDescription className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    Scholarships, insurance, student organizations, calendar of activities, and student support services.
+                                </CardDescription>
+                            </CardContent>
+                            <CardFooter className="relative pt-4">
+                                <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg transition-all duration-200 hover:from-purple-700 hover:to-purple-800 hover:shadow-xl dark:from-purple-500 dark:to-purple-600 dark:hover:from-purple-600 dark:hover:to-purple-700">
+                                    <Link href="/sas" className="flex items-center justify-center">
+                                        <span className="hidden sm:inline">Visit SAS Portal</span>
+                                        <span className="sm:hidden">SAS Portal</span>
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
                     </div>
                 </div>
             </section>
-        </USGLayout>
+
+            {/* Footer */}
+            <footer className="border-t border-gray-200 bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 dark:border-gray-700 dark:bg-gray-800">
+                <div className="mx-auto max-w-7xl">
+                    <div className="flex flex-col items-center justify-between space-y-6 sm:flex-row sm:space-y-0">
+                        <div className="flex items-center space-x-3">
+                            <img
+                                src="/minsu-logo.png"
+                                alt="MinSU Logo"
+                                className="h-8 w-8 rounded-full object-contain"
+                            />
+                            <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                                MinSU Bongabong Systems
+                            </span>
+                        </div>
+                        <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400">
+                            <span>© 2025 Mindoro State University - Bongabong Campus</span>
+                            <span>•</span>
+                            <span>All rights reserved</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </>
     );
 }
