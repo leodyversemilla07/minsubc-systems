@@ -21,9 +21,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user = Auth::user();
         $userRoles = $user->roles->pluck('name')->toArray();
 
-        // Redirect USG admins, officers, and system admins to USG admin dashboard
-        if (array_intersect($userRoles, ['usg-admin', 'usg-officer', 'system-admin'])) {
+        // Redirect USG admins and officers to USG admin dashboard
+        if (array_intersect($userRoles, ['usg-admin', 'usg-officer'])) {
             return redirect()->route('usg.admin.dashboard');
+        }
+
+        // Redirect super admin to super admin dashboard
+        if (in_array('super_admin', $userRoles)) {
+            return redirect()->route('super-admin.dashboard');
         }
 
         // Redirect registrar staff and admins to registrar admin dashboard
@@ -83,6 +88,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+// Super Admin Routes
+Route::middleware(['auth', 'verified', 'permission:super_admin_access'])->prefix('super-admin')->name('super-admin.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users', [App\Http\Controllers\SuperAdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [App\Http\Controllers\SuperAdminController::class, 'showUser'])->name('users.show');
+    Route::patch('/users/{user}/roles', [App\Http\Controllers\SuperAdminController::class, 'updateUserRoles'])->name('users.update-roles');
+    Route::patch('/users/{user}/reset-password', [App\Http\Controllers\SuperAdminController::class, 'resetUserPassword'])->name('users.reset-password');
+    Route::patch('/users/{user}/disable', [App\Http\Controllers\SuperAdminController::class, 'disableUser'])->name('users.disable');
+    Route::patch('/users/{user}/enable', [App\Http\Controllers\SuperAdminController::class, 'enableUser'])->name('users.enable');
+    Route::get('/system-settings', [App\Http\Controllers\SuperAdminController::class, 'systemSettings'])->name('system-settings');
+    Route::patch('/system-settings/{systemSetting}', [App\Http\Controllers\SuperAdminController::class, 'updateSystemSetting'])->name('system-settings.update');
+    Route::get('/audit-logs', [App\Http\Controllers\SuperAdminController::class, 'auditLogs'])->name('audit-logs');
+    Route::get('/audit-logs/{auditLog}', [App\Http\Controllers\SuperAdminController::class, 'showAuditLog'])->name('audit-logs.show');
+    Route::get('/reports', [App\Http\Controllers\SuperAdminController::class, 'reports'])->name('reports');
+    Route::get('/system-config', [App\Http\Controllers\SuperAdminController::class, 'systemConfig'])->name('system-config');
+});
 
 // Registrar Module Routes
 require __DIR__.'/../app/Modules/Registrar/routes.php';

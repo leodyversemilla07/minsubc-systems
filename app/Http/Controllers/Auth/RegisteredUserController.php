@@ -56,6 +56,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Assign student role to the user
+        $user->assignRole('student');
+
         // Create student record for the user
         Student::create([
             'student_id' => $request->student_id,

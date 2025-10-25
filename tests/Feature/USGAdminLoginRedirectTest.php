@@ -46,23 +46,6 @@ it('redirects usg-officer to usg admin dashboard when accessing dashboard', func
     $response->assertRedirect(route('usg.admin.dashboard'));
 });
 
-it('redirects system-admin to usg admin dashboard when accessing dashboard', function () {
-    Role::firstOrCreate(['name' => 'system-admin']);
-
-    $user = User::factory()->create([
-        'email' => 'test-system-admin@minsu.edu.ph',
-        'password' => Hash::make('password123'),
-        'email_verified_at' => now(),
-    ]);
-    $user->assignRole('system-admin');
-
-    actingAs($user);
-
-    $response = $this->get('/dashboard');
-
-    $response->assertRedirect(route('usg.admin.dashboard'));
-});
-
 it('does not redirect student when accessing dashboard', function () {
     Role::firstOrCreate(['name' => 'student']);
 

@@ -1,5 +1,7 @@
 <?php
 
+use Database\Seeders\RolesAndPermissionsSeeder;
+
 test('registration screen can be rendered', function () {
     $response = $this->get(route('register'));
 
@@ -7,6 +9,9 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
+    // Seed roles and permissions for testing
+    $this->seed(RolesAndPermissionsSeeder::class);
+
     $response = $this->post(route('register.store'), [
         'first_name' => 'Test',
         'middle_name' => 'User',
@@ -19,9 +24,17 @@ test('new users can register', function () {
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+
+    // Assert that the user has the student role assigned
+    $user = auth()->user();
+    expect($user->hasRole('student'))->toBeTrue();
+    expect($user->hasPermissionTo('view_own_requests'))->toBeTrue();
 });
 
 test('new users can register with 2018 student id', function () {
+    // Seed roles and permissions for testing
+    $this->seed(RolesAndPermissionsSeeder::class);
+
     $response = $this->post(route('register.store'), [
         'first_name' => 'Test',
         'middle_name' => 'User',
@@ -34,6 +47,11 @@ test('new users can register with 2018 student id', function () {
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+
+    // Assert that the user has the student role assigned
+    $user = auth()->user();
+    expect($user->hasRole('student'))->toBeTrue();
+    expect($user->hasPermissionTo('view_own_requests'))->toBeTrue();
 });
 
 test('registration fails with invalid student id', function () {

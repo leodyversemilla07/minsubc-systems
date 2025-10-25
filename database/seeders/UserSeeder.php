@@ -15,11 +15,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Ensure the usg-admin role exists
-        if (! Role::where('name', 'usg-admin')->exists()) {
-            $this->command->error('The usg-admin role does not exist. Please run RolesAndPermissionsSeeder first.');
+        // Ensure required roles exist
+        $requiredRoles = ['student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'super_admin'];
 
-            return;
+        foreach ($requiredRoles as $roleName) {
+            if (! Role::where('name', $roleName)->exists()) {
+                $this->command->error("The {$roleName} role does not exist. Please run RolesAndPermissionsSeeder first.");
+
+                return;
+            }
         }
 
         // Create sample users for different roles based on RBAC system
@@ -164,15 +168,15 @@ class UserSeeder extends Seeder
                 'role' => 'usg-admin',
             ],
 
-            // System Admin
+            // Super Admin
             [
-                'first_name' => 'Administrator',
+                'first_name' => 'Super',
                 'middle_name' => null,
-                'last_name' => 'System',
-                'email' => 'admin@minsu.edu.ph',
-                'password' => Hash::make('password'),
+                'last_name' => 'Administrator',
+                'email' => 'superadmin@minsu.edu.ph',
+                'password' => Hash::make('SuperAdmin@2024'),
                 'email_verified_at' => now(),
-                'role' => 'system-admin',
+                'role' => 'super_admin',
             ],
         ];
 

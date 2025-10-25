@@ -71,6 +71,19 @@ class RolesAndPermissionsSeeder extends Seeder
             'usg_archive_content',
             'usg_view_analytics',
             'usg_manage_settings',
+
+            // Super Admin permissions (highest authority - can manage everything including other admins)
+            'super_admin_access',
+            'manage_all_users',
+            'manage_all_roles',
+            'manage_system_admins',
+            'view_all_audit_logs',
+            'manage_global_settings',
+            'enable_disable_modules',
+            'database_admin_access',
+            'system_wide_reports',
+            'security_administration',
+            'password_reset_admin',
         ];
 
         // Create permissions
@@ -122,52 +135,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'system_configuration',
         ]);
 
-        $systemAdminRole = Role::create(['name' => 'system-admin']);
-        $systemAdminRole->givePermissionTo([
-            // All permissions for full system access
-            'submit_requests',
-            'view_own_requests',
-            'make_payments',
-            'track_status',
-            'view_pending_cash_payments',
-            'confirm_cash_payments',
-            'issue_official_receipts',
-            'verify_payment_references',
-            'view_all_requests',
-            'process_documents',
-            'approve_requests',
-            'reject_requests',
-            'mark_ready_for_claim',
-            'release_documents',
-            'manage_users',
-            'system_configuration',
-            'full_system_access',
-            'database_management',
-            'view_reports',
-            // USG permissions
-            'usg_view_dashboard',
-            'usg_create_announcements',
-            'usg_edit_announcements',
-            'usg_delete_announcements',
-            'usg_publish_announcements',
-            'usg_create_events',
-            'usg_edit_events',
-            'usg_delete_events',
-            'usg_publish_events',
-            'usg_create_resolutions',
-            'usg_edit_resolutions',
-            'usg_delete_resolutions',
-            'usg_submit_resolutions',
-            'usg_manage_vmgo',
-            'usg_manage_officers',
-            'usg_approve_resolutions',
-            'usg_reject_resolutions',
-            'usg_manage_documents',
-            'usg_archive_content',
-            'usg_view_analytics',
-            'usg_manage_settings',
-        ]);
-
         // Create USG Officer role
         $usgOfficerRole = Role::create(['name' => 'usg-officer']);
         $usgOfficerRole->givePermissionTo([
@@ -212,6 +179,64 @@ class RolesAndPermissionsSeeder extends Seeder
             'usg_archive_content',
             'usg_view_analytics',
             'usg_manage_settings',
+        ]);
+
+        // Create Super Admin role (highest authority - can manage everything)
+        $superAdminRole = Role::create(['name' => 'super_admin']);
+        $superAdminRole->givePermissionTo([
+            // All existing permissions for complete system access
+            'submit_requests',
+            'view_own_requests',
+            'make_payments',
+            'track_status',
+            'view_pending_cash_payments',
+            'confirm_cash_payments',
+            'issue_official_receipts',
+            'verify_payment_references',
+            'view_all_requests',
+            'process_documents',
+            'approve_requests',
+            'reject_requests',
+            'mark_ready_for_claim',
+            'release_documents',
+            'manage_users',
+            'system_configuration',
+            'full_system_access',
+            'database_management',
+            'view_reports',
+            'usg_view_dashboard',
+            'usg_create_announcements',
+            'usg_edit_announcements',
+            'usg_delete_announcements',
+            'usg_publish_announcements',
+            'usg_create_events',
+            'usg_edit_events',
+            'usg_delete_events',
+            'usg_publish_events',
+            'usg_create_resolutions',
+            'usg_edit_resolutions',
+            'usg_delete_resolutions',
+            'usg_submit_resolutions',
+            'usg_manage_vmgo',
+            'usg_manage_officers',
+            'usg_approve_resolutions',
+            'usg_reject_resolutions',
+            'usg_manage_documents',
+            'usg_archive_content',
+            'usg_view_analytics',
+            'usg_manage_settings',
+            // Plus super admin specific permissions
+            'super_admin_access',
+            'manage_all_users',
+            'manage_all_roles',
+            'manage_system_admins',
+            'view_all_audit_logs',
+            'manage_global_settings',
+            'enable_disable_modules',
+            'database_admin_access',
+            'system_wide_reports',
+            'security_administration',
+            'password_reset_admin',
         ]);
     }
 }

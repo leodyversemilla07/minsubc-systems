@@ -13,6 +13,7 @@ import {
 import { dashboard } from '@/routes';
 import registrar from '@/routes/registrar';
 import usg from '@/routes/usg';
+import superAdmin from '@/routes/super-admin';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -60,47 +61,84 @@ export function AppSidebar() {
     const getMainNavItems = (): NavItem[] => {
         const items: NavItem[] = [];
 
+        // Super Admin Navigation
+        if (hasAnyRole(['super_admin'])) {
+            items.push(
+                {
+                    title: 'Super Admin Dashboard',
+                    href: superAdmin.dashboard.url(),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'User Management',
+                    href: superAdmin.users.url(),
+                    icon: Users,
+                },
+                {
+                    title: 'System Settings',
+                    href: superAdmin.systemSettings.url(),
+                    icon: FileText,
+                },
+                {
+                    title: 'Audit Logs',
+                    href: superAdmin.auditLogs.url(),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Reports',
+                    href: superAdmin.reports.url(),
+                    icon: Target,
+                },
+                {
+                    title: 'System Config',
+                    href: superAdmin.systemConfig.url(),
+                    icon: BookOpen,
+                },
+            );
+        }
+
         // USG Admin/Officer Navigation
-        if (hasAnyRole(['usg-admin', 'usg-officer'])) {
+        else if (hasAnyRole(['usg-admin', 'usg-officer'])) {
             items.push(
                 {
                     title: 'USG Dashboard',
-                    href: usg.admin.dashboard(),
+                    href: usg.admin.dashboard.url(),
                     icon: LayoutGrid,
                 },
                 {
                     title: 'Announcements',
-                    href: usg.admin.announcements.index(),
+                    href: usg.admin.announcements.index.url(),
                     icon: Megaphone,
                 },
                 {
                     title: 'Events',
-                    href: usg.admin.events.index(),
+                    href: usg.admin.events.index.url(),
                     icon: Calendar,
                 },
                 {
                     title: 'Resolutions',
-                    href: usg.admin.resolutions.index(),
+                    href: usg.admin.resolutions.index.url(),
                     icon: FileText,
                 },
                 {
                     title: 'Officers',
-                    href: usg.admin.officers.index(),
+                    href: usg.admin.officers.index.url(),
                     icon: Users,
                 },
                 {
                     title: 'VMGO',
-                    href: usg.admin.vmgo.edit(),
+                    href: usg.admin.vmgo.edit.url(),
                     icon: Target,
                 },
             );
         }
+        
         // Registrar Navigation
         else if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             items.push(
                 {
                     title: 'Dashboard',
-                    href: dashboard(),
+                    href: dashboard.url(),
                     icon: LayoutGrid,
                 },
             );
@@ -110,12 +148,12 @@ export function AppSidebar() {
             items.push(
                 {
                     title: 'Dashboard',
-                    href: dashboard(),
+                    href: dashboard.url(),
                     icon: LayoutGrid,
                 },
                 {
                     title: 'Document Requests',
-                    href: registrar.documentRequests.index(),
+                    href: registrar.documentRequests.index.url(),
                     icon: ClipboardList,
                 },
             );
@@ -132,7 +170,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard.url()} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

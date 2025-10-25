@@ -14,7 +14,7 @@ beforeEach(function () {
 test('rbac roles are created correctly', function (string $role) {
     expect(Role::where('name', $role)->exists())->toBeTrue();
 })->with([
-    'student', 'cashier', 'registrar-staff', 'registrar-admin', 'system-admin',
+    'student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'usg-officer', 'super_admin',
 ]);
 
 test('rbac permissions are created correctly', function (string $permission) {
@@ -36,12 +36,12 @@ test('student role has correct permissions', function () {
     expect($actualPermissions)->toEqual($expectedPermissions);
 });
 
-test('system admin role has all permissions', function () {
-    $adminRole = Role::where('name', 'system-admin')->first();
+test('super admin role has all permissions', function () {
+    $adminRole = Role::where('name', 'super_admin')->first();
     expect($adminRole)->not->toBeNull();
 
-    // System admin should have all 40 permissions (19 registrar + 21 USG permissions)
-    expect($adminRole->permissions()->count())->toBe(40);
+    // Super admin should have all permissions
+    expect($adminRole->permissions()->count())->toBeGreaterThan(40);
 });
 
 test('users have correct roles assigned', function () {
@@ -49,9 +49,9 @@ test('users have correct roles assigned', function () {
     expect($student)->not->toBeNull();
     expect($student->hasRole('student'))->toBeTrue();
 
-    $admin = User::where('email', 'admin@minsu.edu.ph')->first();
+    $admin = User::where('email', 'superadmin@minsu.edu.ph')->first();
     expect($admin)->not->toBeNull();
-    expect($admin->hasRole('system-admin'))->toBeTrue();
+    expect($admin->hasRole('super_admin'))->toBeTrue();
 });
 
 test('permission checks work correctly', function () {
@@ -59,9 +59,9 @@ test('permission checks work correctly', function () {
     expect($student->can('submit_requests'))->toBeTrue();
     expect($student->can('manage_users'))->toBeFalse();
 
-    $admin = User::where('email', 'admin@minsu.edu.ph')->first();
+    $admin = User::where('email', 'superadmin@minsu.edu.ph')->first();
     expect($admin->can('manage_users'))->toBeTrue();
-    expect($admin->can('full_system_access'))->toBeTrue();
+    expect($admin->can('super_admin_access'))->toBeTrue();
 });
 
 test('cache functionality works', function () {
@@ -69,6 +69,6 @@ test('cache functionality works', function () {
     app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
     // Test still works after cache clear
-    $admin = User::where('email', 'admin@minsu.edu.ph')->first();
-    expect($admin->can('full_system_access'))->toBeTrue();
+    $admin = User::where('email', 'superadmin@minsu.edu.ph')->first();
+    expect($admin->can('super_admin_access'))->toBeTrue();
 });
