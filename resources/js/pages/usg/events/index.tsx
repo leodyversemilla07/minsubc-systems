@@ -208,7 +208,7 @@ export default function EventsIndex({
                             </div>
                         </div>
                         <div>
-                            <div className="mb-2 inline-block rounded px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] bg-[var(--usg-text)] md:text-4xl">
+                            <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] md:text-4xl">
                                 {categories.length}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">

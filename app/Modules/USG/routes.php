@@ -30,6 +30,7 @@ Route::prefix('usg')->name('usg.')->group(function () {
 
     // Officers
     Route::get('/officers', [PageController::class, 'officers'])->name('officers.index');
+    Route::get('/officers/{id}', [PageController::class, 'officerShow'])->name('officers.show');
 
     // Announcements
     Route::get('/announcements', [PageController::class, 'announcements'])->name('announcements.index');

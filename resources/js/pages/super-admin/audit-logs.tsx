@@ -1,8 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -11,20 +17,13 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Search,
-    Filter,
-    Eye,
-    User,
-    Calendar,
-    Database,
-} from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { type BreadcrumbItem } from '@/types';
-import { useState } from 'react';
 import { auditLogs } from '@/routes/super-admin';
 import { show } from '@/routes/super-admin/audit-logs';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { Calendar, Database, Eye, Filter, Search, User } from 'lucide-react';
+import { useState } from 'react';
 
 interface AuditLog {
     id: number;
@@ -70,11 +69,21 @@ interface AuditLogsProps {
     modelTypes: string[];
 }
 
-export default function AuditLogs({ auditLogs: logs, filters, actions, users, modelTypes }: AuditLogsProps) {
+export default function AuditLogs({
+    auditLogs: logs,
+    filters,
+    actions,
+    users,
+    modelTypes,
+}: AuditLogsProps) {
     const [searchTerm, setSearchTerm] = useState(filters.search || '');
-    const [selectedAction, setSelectedAction] = useState(filters.action || 'all');
+    const [selectedAction, setSelectedAction] = useState(
+        filters.action || 'all',
+    );
     const [selectedUser, setSelectedUser] = useState(filters.user_id || 'all');
-    const [selectedModelType, setSelectedModelType] = useState(filters.model_type || 'all');
+    const [selectedModelType, setSelectedModelType] = useState(
+        filters.model_type || 'all',
+    );
     const [dateFrom, setDateFrom] = useState(filters.date_from || '');
     const [dateTo, setDateTo] = useState(filters.date_to || '');
 
@@ -90,17 +99,22 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
     ];
 
     const handleSearch = () => {
-        router.get(auditLogs.url(), {
-            search: searchTerm,
-            action: selectedAction === 'all' ? '' : selectedAction,
-            user_id: selectedUser === 'all' ? '' : selectedUser,
-            model_type: selectedModelType === 'all' ? '' : selectedModelType,
-            date_from: dateFrom,
-            date_to: dateTo,
-        }, {
-            preserveState: true,
-            replace: true,
-        });
+        router.get(
+            auditLogs.url(),
+            {
+                search: searchTerm,
+                action: selectedAction === 'all' ? '' : selectedAction,
+                user_id: selectedUser === 'all' ? '' : selectedUser,
+                model_type:
+                    selectedModelType === 'all' ? '' : selectedModelType,
+                date_from: dateFrom,
+                date_to: dateTo,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
     };
 
     const handleFilterChange = (key: string, value: string) => {
@@ -118,11 +132,21 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
 
         // Update local state
         switch (key) {
-            case 'action': setSelectedAction(value); break;
-            case 'user_id': setSelectedUser(value); break;
-            case 'model_type': setSelectedModelType(value); break;
-            case 'date_from': setDateFrom(value); break;
-            case 'date_to': setDateTo(value); break;
+            case 'action':
+                setSelectedAction(value);
+                break;
+            case 'user_id':
+                setSelectedUser(value);
+                break;
+            case 'model_type':
+                setSelectedModelType(value);
+                break;
+            case 'date_from':
+                setDateFrom(value);
+                break;
+            case 'date_to':
+                setDateTo(value);
+                break;
         }
 
         router.get(auditLogs.url(), newFilters, {
@@ -132,19 +156,28 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
     };
 
     const getActionBadgeVariant = (action: string) => {
-        const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-            'created': 'default',
-            'updated': 'secondary',
-            'deleted': 'destructive',
-            'login': 'outline',
-            'logout': 'outline',
+        const variants: Record<
+            string,
+            'default' | 'secondary' | 'destructive' | 'outline'
+        > = {
+            created: 'default',
+            updated: 'secondary',
+            deleted: 'destructive',
+            login: 'outline',
+            logout: 'outline',
         };
         return variants[action] || 'outline';
     };
 
     const formatModelType = (modelType: string | null) => {
         if (!modelType) return '-';
-        return modelType.split('\\').pop()?.replace(/([A-Z])/g, ' $1').trim() || modelType;
+        return (
+            modelType
+                .split('\\')
+                .pop()
+                ?.replace(/([A-Z])/g, ' $1')
+                .trim() || modelType
+        );
     };
 
     return (
@@ -170,47 +203,85 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                     <CardContent>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             <div className="relative">
-                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                                <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     placeholder="Search logs..."
                                     value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                                    onChange={(e) =>
+                                        setSearchTerm(e.target.value)
+                                    }
+                                    onKeyPress={(e) =>
+                                        e.key === 'Enter' && handleSearch()
+                                    }
                                     className="pl-8"
                                 />
                             </div>
-                            <Select value={selectedAction || 'all'} onValueChange={(value) => handleFilterChange('action', value === 'all' ? '' : value)}>
+                            <Select
+                                value={selectedAction || 'all'}
+                                onValueChange={(value) =>
+                                    handleFilterChange(
+                                        'action',
+                                        value === 'all' ? '' : value,
+                                    )
+                                }
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Filter by action" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Actions</SelectItem>
+                                    <SelectItem value="all">
+                                        All Actions
+                                    </SelectItem>
                                     {actions.map((action) => (
                                         <SelectItem key={action} value={action}>
-                                            {action.charAt(0).toUpperCase() + action.slice(1)}
+                                            {action.charAt(0).toUpperCase() +
+                                                action.slice(1)}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                            <Select value={selectedUser || 'all'} onValueChange={(value) => handleFilterChange('user_id', value === 'all' ? '' : value)}>
+                            <Select
+                                value={selectedUser || 'all'}
+                                onValueChange={(value) =>
+                                    handleFilterChange(
+                                        'user_id',
+                                        value === 'all' ? '' : value,
+                                    )
+                                }
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Filter by user" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Users</SelectItem>
+                                    <SelectItem value="all">
+                                        All Users
+                                    </SelectItem>
                                     {users.map((user) => (
-                                        <SelectItem key={user.id} value={user.id.toString()}>
+                                        <SelectItem
+                                            key={user.id}
+                                            value={user.id.toString()}
+                                        >
                                             {user.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                            <Select value={selectedModelType || 'all'} onValueChange={(value) => handleFilterChange('model_type', value === 'all' ? '' : value)}>
+                            <Select
+                                value={selectedModelType || 'all'}
+                                onValueChange={(value) =>
+                                    handleFilterChange(
+                                        'model_type',
+                                        value === 'all' ? '' : value,
+                                    )
+                                }
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Filter by model" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Models</SelectItem>
+                                    <SelectItem value="all">
+                                        All Models
+                                    </SelectItem>
                                     {modelTypes.map((type) => (
                                         <SelectItem key={type} value={type}>
                                             {formatModelType(type)}
@@ -222,16 +293,29 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                 type="date"
                                 placeholder="From date"
                                 value={dateFrom}
-                                onChange={(e) => handleFilterChange('date_from', e.target.value)}
+                                onChange={(e) =>
+                                    handleFilterChange(
+                                        'date_from',
+                                        e.target.value,
+                                    )
+                                }
                             />
                             <Input
                                 type="date"
                                 placeholder="To date"
                                 value={dateTo}
-                                onChange={(e) => handleFilterChange('date_to', e.target.value)}
+                                onChange={(e) =>
+                                    handleFilterChange(
+                                        'date_to',
+                                        e.target.value,
+                                    )
+                                }
                             />
                             <div className="flex gap-2">
-                                <Button onClick={handleSearch} className="flex-1">
+                                <Button
+                                    onClick={handleSearch}
+                                    className="flex-1"
+                                >
                                     <Filter className="mr-2 h-4 w-4" />
                                     Apply
                                 </Button>
@@ -244,7 +328,14 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                         setSelectedModelType('all');
                                         setDateFrom('');
                                         setDateTo('');
-                                        router.get(auditLogs.url(), {}, { preserveState: true, replace: true });
+                                        router.get(
+                                            auditLogs.url(),
+                                            {},
+                                            {
+                                                preserveState: true,
+                                                replace: true,
+                                            },
+                                        );
                                     }}
                                 >
                                     Clear
@@ -268,14 +359,20 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                     <TableHead>Model</TableHead>
                                     <TableHead>Description</TableHead>
                                     <TableHead>Timestamp</TableHead>
-                                    <TableHead className="w-[100px]">Actions</TableHead>
+                                    <TableHead className="w-[100px]">
+                                        Actions
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {logs.data.map((log) => (
                                     <TableRow key={log.id}>
                                         <TableCell>
-                                            <Badge variant={getActionBadgeVariant(log.action)}>
+                                            <Badge
+                                                variant={getActionBadgeVariant(
+                                                    log.action,
+                                                )}
+                                            >
                                                 {log.action}
                                             </Badge>
                                         </TableCell>
@@ -285,7 +382,11 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                                     <User className="h-4 w-4 text-muted-foreground" />
                                                     <div>
                                                         <div className="font-medium">
-                                                            {log.user.first_name} {log.user.last_name}
+                                                            {
+                                                                log.user
+                                                                    .first_name
+                                                            }{' '}
+                                                            {log.user.last_name}
                                                         </div>
                                                         <div className="text-sm text-muted-foreground">
                                                             {log.user.email}
@@ -293,7 +394,9 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <span className="text-muted-foreground">System</span>
+                                                <span className="text-muted-foreground">
+                                                    System
+                                                </span>
                                             )}
                                         </TableCell>
                                         <TableCell>
@@ -302,21 +405,29 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                                     <Database className="h-4 w-4 text-muted-foreground" />
                                                     <div>
                                                         <div className="font-medium">
-                                                            {formatModelType(log.model_type)}
+                                                            {formatModelType(
+                                                                log.model_type,
+                                                            )}
                                                         </div>
                                                         {log.model_id && (
                                                             <div className="text-sm text-muted-foreground">
-                                                                ID: {log.model_id}
+                                                                ID:{' '}
+                                                                {log.model_id}
                                                             </div>
                                                         )}
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <span className="text-muted-foreground">-</span>
+                                                <span className="text-muted-foreground">
+                                                    -
+                                                </span>
                                             )}
                                         </TableCell>
                                         <TableCell className="max-w-xs">
-                                            <div className="truncate" title={log.description}>
+                                            <div
+                                                className="truncate"
+                                                title={log.description}
+                                            >
                                                 {log.description}
                                             </div>
                                         </TableCell>
@@ -324,13 +435,18 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                                             <div className="flex items-center space-x-2">
                                                 <Calendar className="h-4 w-4 text-muted-foreground" />
                                                 <div className="text-sm">
-                                                    {new Date(log.created_at).toLocaleString()}
+                                                    {new Date(
+                                                        log.created_at,
+                                                    ).toLocaleString()}
                                                 </div>
                                             </div>
                                         </TableCell>
                                         <TableCell>
                                             <Link href={show.url(log.id)}>
-                                                <Button variant="outline" size="sm">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                >
                                                     <Eye className="h-4 w-4" />
                                                 </Button>
                                             </Link>
@@ -344,9 +460,15 @@ export default function AuditLogs({ auditLogs: logs, filters, actions, users, mo
                         {logs.last_page > 1 && (
                             <div className="flex items-center justify-between pt-4">
                                 <p className="text-sm text-muted-foreground">
-                                    Showing {((logs.current_page - 1) * logs.per_page) + 1} to{' '}
-                                    {Math.min(logs.current_page * logs.per_page, logs.total)} of{' '}
-                                    {logs.total} audit logs
+                                    Showing{' '}
+                                    {(logs.current_page - 1) * logs.per_page +
+                                        1}{' '}
+                                    to{' '}
+                                    {Math.min(
+                                        logs.current_page * logs.per_page,
+                                        logs.total,
+                                    )}{' '}
+                                    of {logs.total} audit logs
                                 </p>
                                 {/* Add pagination component here */}
                             </div>

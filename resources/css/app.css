@@ -101,20 +101,20 @@
     --sidebar-ring: oklch(0.87 0 0);
 
     /* Custom USG Color Palette */
-    --usg-primary: #2E7D32;
-    --usg-secondary: #66BB6A;
-    --usg-accent: #A5D6A7;
-    --usg-dark: #1B5E20;
-    --usg-light: #E8F5E9;
-    --usg-neutral: #F5F5F5;
+    --usg-primary: #2e7d32;
+    --usg-secondary: #66bb6a;
+    --usg-accent: #a5d6a7;
+    --usg-dark: #1b5e20;
+    --usg-light: #e8f5e9;
+    --usg-neutral: #f5f5f5;
     --usg-text: #263238;
-    --usg-hero-text: #E8F5E9;
+    --usg-hero-text: #e8f5e9;
 
     /* Additional USG variables for complete coverage */
-    --usg-very-light: #F1F8E9;     /* Even lighter green for subtle hovers */
-    --usg-very-dark: #0D4F1A;      /* Even darker green for deep backgrounds */
-    --usg-medium: #4CAF50;         /* Standard medium green for balanced elements */
-    --usg-hover: #E8F5E9;          /* Specific hover background color */
+    --usg-very-light: #f1f8e9; /* Even lighter green for subtle hovers */
+    --usg-very-dark: #0d4f1a; /* Even darker green for deep backgrounds */
+    --usg-medium: #4caf50; /* Standard medium green for balanced elements */
+    --usg-hover: #e8f5e9; /* Specific hover background color */
 }
 
 .dark {

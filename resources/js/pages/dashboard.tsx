@@ -2,7 +2,14 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
 import { Progress } from '@/components/ui/progress';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
@@ -301,7 +308,8 @@ export default function Dashboard({
                                     </EmptyMedia>
                                     <EmptyTitle>No requests yet</EmptyTitle>
                                     <EmptyDescription>
-                                        Create your first document request to get started.
+                                        Create your first document request to
+                                        get started.
                                     </EmptyDescription>
                                 </EmptyHeader>
                                 <EmptyContent>

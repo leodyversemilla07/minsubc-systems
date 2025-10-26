@@ -1,20 +1,26 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import AppLayout from '@/layouts/app-layout';
 import {
-    Users,
-    Shield,
+    auditLogs,
+    reports,
+    systemConfig,
+    systemSettings,
+    users,
+} from '@/routes/super-admin';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import {
     Activity,
-    Settings,
     BarChart3,
     Database,
+    Eye,
+    Settings,
+    Shield,
     TrendingUp,
     UserCheck,
-    Eye,
+    Users,
 } from 'lucide-react';
-import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { type BreadcrumbItem } from '@/types';
-import { users, systemSettings, auditLogs, reports, systemConfig } from '@/routes/super-admin';
 
 interface DashboardProps {
     stats: {
@@ -44,7 +50,11 @@ interface DashboardProps {
     };
 }
 
-export default function Dashboard({ stats, recentAuditLogs, userActivity }: DashboardProps) {
+export default function Dashboard({
+    stats,
+    recentAuditLogs,
+    userActivity,
+}: DashboardProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Super Admin Dashboard',
@@ -109,11 +119,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Total Users
+                            </CardTitle>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total_users}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total_users}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 {stats.active_users} active users
                             </p>
@@ -121,11 +135,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">System Admins</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                System Admins
+                            </CardTitle>
                             <Shield className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.system_admins}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.system_admins}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 {stats.total_roles} total roles
                             </p>
@@ -133,11 +151,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Audit Logs</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Audit Logs
+                            </CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total_audit_logs}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total_audit_logs}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 +{stats.recent_audit_logs} this week
                             </p>
@@ -145,11 +167,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">System Settings</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                System Settings
+                            </CardTitle>
                             <Settings className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.system_settings_count}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.system_settings_count}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 Configuration items
                             </p>
@@ -161,11 +187,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">New Users (30d)</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                New Users (30d)
+                            </CardTitle>
                             <UserCheck className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{userActivity.new_users}</div>
+                            <div className="text-2xl font-bold">
+                                {userActivity.new_users}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 Recent registrations
                             </p>
@@ -173,11 +203,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active Users (30d)</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Active Users (30d)
+                            </CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{userActivity.active_users_30d}</div>
+                            <div className="text-2xl font-bold">
+                                {userActivity.active_users_30d}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 Users with recent activity
                             </p>
@@ -185,11 +219,15 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Login Attempts (30d)</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Login Attempts (30d)
+                            </CardTitle>
                             <Eye className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{userActivity.login_attempts}</div>
+                            <div className="text-2xl font-bold">
+                                {userActivity.login_attempts}
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 Authentication events
                             </p>
@@ -208,9 +246,13 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                                 <Link key={action.title} href={action.href}>
                                     <Card className="cursor-pointer transition-colors hover:bg-muted/50">
                                         <CardContent className="flex items-center space-x-4 p-4">
-                                            <action.icon className={`h-8 w-8 ${action.color}`} />
+                                            <action.icon
+                                                className={`h-8 w-8 ${action.color}`}
+                                            />
                                             <div>
-                                                <h3 className="font-medium">{action.title}</h3>
+                                                <h3 className="font-medium">
+                                                    {action.title}
+                                                </h3>
                                                 <p className="text-sm text-muted-foreground">
                                                     {action.description}
                                                 </p>
@@ -236,17 +278,20 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                     <CardContent>
                         <div className="space-y-4">
                             {recentAuditLogs.length === 0 ? (
-                                <p className="text-center text-muted-foreground py-4">
+                                <p className="py-4 text-center text-muted-foreground">
                                     No recent activity
                                 </p>
                             ) : (
                                 recentAuditLogs.map((log) => (
-                                    <div key={log.id} className="flex items-start space-x-4">
+                                    <div
+                                        key={log.id}
+                                        className="flex items-start space-x-4"
+                                    >
                                         <div className="flex-shrink-0">
                                             <Activity className="h-5 w-5 text-muted-foreground" />
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium truncate">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-sm font-medium">
                                                 {log.description}
                                             </p>
                                             <div className="flex items-center space-x-2 text-xs text-muted-foreground">
@@ -254,11 +299,21 @@ export default function Dashboard({ stats, recentAuditLogs, userActivity }: Dash
                                                 {log.user && (
                                                     <>
                                                         <span>•</span>
-                                                        <span>{log.user.first_name} {log.user.last_name}</span>
+                                                        <span>
+                                                            {
+                                                                log.user
+                                                                    .first_name
+                                                            }{' '}
+                                                            {log.user.last_name}
+                                                        </span>
                                                     </>
                                                 )}
                                                 <span>•</span>
-                                                <span>{new Date(log.created_at).toLocaleString()}</span>
+                                                <span>
+                                                    {new Date(
+                                                        log.created_at,
+                                                    ).toLocaleString()}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

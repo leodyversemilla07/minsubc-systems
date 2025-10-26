@@ -3,13 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Calendar,
-    Download,
-    Eye,
-    FileText,
-    TrendingUp,
-} from 'lucide-react';
+import { Calendar, Download, Eye, FileText, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 
 interface TransparencyReport {
@@ -125,9 +119,9 @@ export default function TransparencyIndex({
                             Transparency Reports
                         </h1>
                         <p className="text-xl text-[var(--usg-hero-text)] md:text-2xl">
-                            Access public records, financial reports, and
-                            other transparency documents from the USG.
-                            Promoting openness and accountability.
+                            Access public records, financial reports, and other
+                            transparency documents from the USG. Promoting
+                            openness and accountability.
                         </p>
                     </div>
                 </div>

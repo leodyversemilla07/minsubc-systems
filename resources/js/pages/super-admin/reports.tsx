@@ -1,20 +1,20 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import AppLayout from '@/layouts/app-layout';
+import { reports } from '@/routes/super-admin';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import {
-    Users,
-    Shield,
     Activity,
+    Calendar,
+    Database,
     Settings,
+    Shield,
     TrendingUp,
     UserCheck,
-    Database,
-    Calendar,
+    Users,
 } from 'lucide-react';
-import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
-import { type BreadcrumbItem } from '@/types';
-import { reports } from '@/routes/super-admin';
 
 interface ReportsProps {
     userStats: {
@@ -44,7 +44,12 @@ interface ReportsProps {
     };
 }
 
-export default function Reports({ userStats, roleStats, auditStats, settingsStats }: ReportsProps) {
+export default function Reports({
+    userStats,
+    roleStats,
+    auditStats,
+    settingsStats,
+}: ReportsProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Super Admin',
@@ -56,13 +61,15 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
         },
     ];
 
-    const userVerificationRate = userStats.total_users > 0
-        ? (userStats.verified_users / userStats.total_users) * 100
-        : 0;
+    const userVerificationRate =
+        userStats.total_users > 0
+            ? (userStats.verified_users / userStats.total_users) * 100
+            : 0;
 
-    const twoFactorRate = userStats.total_users > 0
-        ? (userStats.users_with_2fa / userStats.total_users) * 100
-        : 0;
+    const twoFactorRate =
+        userStats.total_users > 0
+            ? (userStats.users_with_2fa / userStats.total_users) * 100
+            : 0;
 
     const totalRoles = roleStats.reduce((sum, role) => sum + role.count, 0);
 
@@ -85,41 +92,59 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Total Users
+                            </CardTitle>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{userStats.total_users.toLocaleString()}</div>
+                            <div className="text-2xl font-bold">
+                                {userStats.total_users.toLocaleString()}
+                            </div>
                             <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                                 <TrendingUp className="h-3 w-3" />
-                                <span>+{userStats.new_users_30d} in last 30 days</span>
+                                <span>
+                                    +{userStats.new_users_30d} in last 30 days
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">User Verification</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                User Verification
+                            </CardTitle>
                             <UserCheck className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{userVerificationRate.toFixed(1)}%</div>
-                            <Progress value={userVerificationRate} className="mt-2" />
-                            <p className="text-xs text-muted-foreground mt-2">
-                                {userStats.verified_users} of {userStats.total_users} verified
+                            <div className="text-2xl font-bold">
+                                {userVerificationRate.toFixed(1)}%
+                            </div>
+                            <Progress
+                                value={userVerificationRate}
+                                className="mt-2"
+                            />
+                            <p className="mt-2 text-xs text-muted-foreground">
+                                {userStats.verified_users} of{' '}
+                                {userStats.total_users} verified
                             </p>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Two-Factor Auth</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Two-Factor Auth
+                            </CardTitle>
                             <Shield className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{twoFactorRate.toFixed(1)}%</div>
+                            <div className="text-2xl font-bold">
+                                {twoFactorRate.toFixed(1)}%
+                            </div>
                             <Progress value={twoFactorRate} className="mt-2" />
-                            <p className="text-xs text-muted-foreground mt-2">
+                            <p className="mt-2 text-xs text-muted-foreground">
                                 {userStats.users_with_2fa} users enabled
                             </p>
                         </CardContent>
@@ -134,9 +159,15 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                     <CardContent>
                         <div className="space-y-4">
                             {roleStats.map((role) => {
-                                const percentage = totalRoles > 0 ? (role.count / totalRoles) * 100 : 0;
+                                const percentage =
+                                    totalRoles > 0
+                                        ? (role.count / totalRoles) * 100
+                                        : 0;
                                 return (
-                                    <div key={role.name} className="flex items-center justify-between">
+                                    <div
+                                        key={role.name}
+                                        className="flex items-center justify-between"
+                                    >
                                         <div className="flex items-center space-x-2">
                                             <Badge variant="outline">
                                                 {role.name}
@@ -146,8 +177,11 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                                             </span>
                                         </div>
                                         <div className="flex items-center space-x-2">
-                                            <Progress value={percentage} className="w-24" />
-                                            <span className="text-sm font-medium w-12 text-right">
+                                            <Progress
+                                                value={percentage}
+                                                className="w-24"
+                                            />
+                                            <span className="w-12 text-right text-sm font-medium">
                                                 {percentage.toFixed(1)}%
                                             </span>
                                         </div>
@@ -170,21 +204,29 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                                     <Activity className="h-4 w-4 text-muted-foreground" />
                                     <span className="text-sm">Total Logs</span>
                                 </div>
-                                <span className="font-bold">{auditStats.total_logs.toLocaleString()}</span>
+                                <span className="font-bold">
+                                    {auditStats.total_logs.toLocaleString()}
+                                </span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                     <Calendar className="h-4 w-4 text-muted-foreground" />
-                                    <span className="text-sm">Last 30 Days</span>
+                                    <span className="text-sm">
+                                        Last 30 Days
+                                    </span>
                                 </div>
-                                <span className="font-bold">{auditStats.logs_30d.toLocaleString()}</span>
+                                <span className="font-bold">
+                                    {auditStats.logs_30d.toLocaleString()}
+                                </span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                                     <span className="text-sm">Last 7 Days</span>
                                 </div>
-                                <span className="font-bold">{auditStats.logs_7d.toLocaleString()}</span>
+                                <span className="font-bold">
+                                    {auditStats.logs_7d.toLocaleString()}
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
@@ -195,17 +237,29 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-3">
-                                {auditStats.top_actions.slice(0, 5).map((action, index) => (
-                                    <div key={action.action} className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <Badge variant="secondary" className="text-xs">
-                                                {index + 1}
-                                            </Badge>
-                                            <span className="text-sm capitalize">{action.action}</span>
+                                {auditStats.top_actions
+                                    .slice(0, 5)
+                                    .map((action, index) => (
+                                        <div
+                                            key={action.action}
+                                            className="flex items-center justify-between"
+                                        >
+                                            <div className="flex items-center space-x-2">
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="text-xs"
+                                                >
+                                                    {index + 1}
+                                                </Badge>
+                                                <span className="text-sm capitalize">
+                                                    {action.action}
+                                                </span>
+                                            </div>
+                                            <span className="font-medium">
+                                                {action.count}
+                                            </span>
                                         </div>
-                                        <span className="font-medium">{action.count}</span>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
                         </CardContent>
                     </Card>
@@ -218,33 +272,41 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className="flex items-center justify-between rounded-lg border p-4">
                                 <div className="flex items-center space-x-3">
                                     <Settings className="h-8 w-8 text-muted-foreground" />
                                     <div>
-                                        <p className="font-medium">Total Settings</p>
+                                        <p className="font-medium">
+                                            Total Settings
+                                        </p>
                                         <p className="text-sm text-muted-foreground">
                                             System configuration items
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-2xl font-bold">{settingsStats.total_settings}</p>
+                                    <p className="text-2xl font-bold">
+                                        {settingsStats.total_settings}
+                                    </p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className="flex items-center justify-between rounded-lg border p-4">
                                 <div className="flex items-center space-x-3">
                                     <Database className="h-8 w-8 text-muted-foreground" />
                                     <div>
-                                        <p className="font-medium">Recently Updated</p>
+                                        <p className="font-medium">
+                                            Recently Updated
+                                        </p>
                                         <p className="text-sm text-muted-foreground">
                                             Last 7 days
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-2xl font-bold">{settingsStats.recently_updated}</p>
+                                    <p className="text-2xl font-bold">
+                                        {settingsStats.recently_updated}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -258,23 +320,29 @@ export default function Reports({ userStats, roleStats, auditStats, settingsStat
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <div className="text-center p-4 border rounded-lg">
+                            <div className="rounded-lg border p-4 text-center">
                                 <div className="text-2xl font-bold text-green-600">
                                     {userStats.new_users_7d}
                                 </div>
-                                <p className="text-sm text-muted-foreground">New users this week</p>
+                                <p className="text-sm text-muted-foreground">
+                                    New users this week
+                                </p>
                             </div>
-                            <div className="text-center p-4 border rounded-lg">
+                            <div className="rounded-lg border p-4 text-center">
                                 <div className="text-2xl font-bold text-blue-600">
                                     {auditStats.logs_7d}
                                 </div>
-                                <p className="text-sm text-muted-foreground">Audit logs this week</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Audit logs this week
+                                </p>
                             </div>
-                            <div className="text-center p-4 border rounded-lg">
+                            <div className="rounded-lg border p-4 text-center">
                                 <div className="text-2xl font-bold text-orange-600">
                                     {settingsStats.recently_updated}
                                 </div>
-                                <p className="text-sm text-muted-foreground">Settings updated this week</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Settings updated this week
+                                </p>
                             </div>
                         </div>
                     </CardContent>

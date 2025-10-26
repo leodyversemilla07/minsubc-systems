@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import registrar from '@/routes/registrar';
-import usg from '@/routes/usg';
 import superAdmin from '@/routes/super-admin';
+import usg from '@/routes/usg';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -132,16 +132,16 @@ export function AppSidebar() {
                 },
             );
         }
-        
+
         // Registrar Navigation
-        else if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
-            items.push(
-                {
-                    title: 'Dashboard',
-                    href: dashboard.url(),
-                    icon: LayoutGrid,
-                },
-            );
+        else if (
+            hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
+        ) {
+            items.push({
+                title: 'Dashboard',
+                href: dashboard.url(),
+                icon: LayoutGrid,
+            });
         }
         // Student/Default Navigation
         else {

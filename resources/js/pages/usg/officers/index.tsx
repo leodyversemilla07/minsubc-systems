@@ -1,11 +1,8 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import OfficerCard from '@/components/usg/officer-card';
-import SearchBar from '@/components/usg/search-bar';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
-import { Mail, Phone, Search } from 'lucide-react';
-import { useState } from 'react';
+import { Mail, Phone } from 'lucide-react';
 
 interface Officer {
     id: number;
@@ -40,56 +37,7 @@ export default function OfficersIndex({
         departments_count: 0,
     },
 }: Props) {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [activeFilters, setActiveFilters] = useState<{
-        positions?: string[];
-        departments?: string[];
-        statuses?: string[];
-    }>({});
-
-    // Extract unique positions from officers data
-    const positions = Array.from(
-        new Set(officers.map((officer) => officer.position)),
-    ).filter(Boolean);
-
-    const filteredOfficers = (officers || []).filter((officer) => {
-        // Search filter
-        const matchesSearch =
-            searchQuery === '' ||
-            officer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            officer.position
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            (officer.department &&
-                officer.department
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase()));
-
-        // Position filter
-        const matchesPosition =
-            !activeFilters.positions?.length ||
-            activeFilters.positions.includes(officer.position);
-
-        // Department filter
-        const matchesDepartment =
-            !activeFilters.departments?.length ||
-            (officer.department &&
-                activeFilters.departments.includes(officer.department));
-
-        // Status filter
-        const matchesStatus =
-            !activeFilters.statuses?.length ||
-            activeFilters.statuses.includes(
-                officer.is_active ? 'active' : 'inactive',
-            );
-
-        return (
-            matchesSearch &&
-            matchesPosition &&
-            matchesDepartment &&
-            matchesStatus
-        );
-    });
+    const filteredOfficers = officers;
 
     const activeOfficers = filteredOfficers.filter(
         (officer) => officer.is_active,
@@ -104,7 +52,7 @@ export default function OfficersIndex({
 
             {/* Hero Section */}
             <section className="relative bg-[var(--usg-primary)] py-20 text-white">
-                <div className="relative z-10 container mx-auto px-4">
+                <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             USG Officers
@@ -119,7 +67,7 @@ export default function OfficersIndex({
 
             {/* Stats Bar */}
             <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-                <div className="container mx-auto px-4 py-8">
+                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
                         <div className="text-center">
                             <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
@@ -151,31 +99,7 @@ export default function OfficersIndex({
 
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
-                <div className="container mx-auto px-4">
-                    {/* Search and Filters */}
-                    <div className="mx-auto mb-8 max-w-7xl">
-                        <SearchBar
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder="Search officers by name, position, or department..."
-                            showFilters
-                            filters={{
-                                categories: positions,
-                                statuses: ['active', 'inactive'],
-                            }}
-                            activeFilters={{
-                                categories: activeFilters.positions,
-                                statuses: activeFilters.statuses,
-                            }}
-                            onFiltersChange={(filters) => {
-                                setActiveFilters({
-                                    positions: filters.categories,
-                                    statuses: filters.statuses,
-                                });
-                            }}
-                        />
-                    </div>
-
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {/* Results Summary */}
                     <div className="mb-6 flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -201,39 +125,18 @@ export default function OfficersIndex({
 
                     {filteredOfficers.length === 0 ? (
                         <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
-                            <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No officers found
                             </h3>
                             <p className="mx-auto max-w-md text-center text-gray-600 dark:text-gray-300">
-                                {searchQuery ||
-                                Object.values(activeFilters).some(
-                                    (f) => f?.length,
-                                )
-                                    ? "Try adjusting your search terms or filters to find what you're looking for."
-                                    : 'No officers are currently available.'}
+                                No officers are currently available.
                             </p>
-                            {(searchQuery ||
-                                Object.values(activeFilters).some(
-                                    (f) => f?.length,
-                                )) && (
-                                <Button
-                                    variant="outline"
-                                    onClick={() => {
-                                        setSearchQuery('');
-                                        setActiveFilters({});
-                                    }}
-                                    className="mt-4"
-                                >
-                                    Clear search and filters
-                                </Button>
-                            )}
                         </div>
                     ) : (
                         <div className="space-y-8">
                             {/* Active Officers */}
                             {activeOfficers.length > 0 && (
-                                <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                                <>
                                     <h3 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                                         Current Officers
                                     </h3>
@@ -251,12 +154,12 @@ export default function OfficersIndex({
                                                 />
                                             ))}
                                     </div>
-                                </div>
+                                </>
                             )}
 
                             {/* Inactive Officers */}
                             {inactiveOfficers.length > 0 && (
-                                <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                                <>
                                     <h3 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                                         Past Officers
                                     </h3>
@@ -280,7 +183,7 @@ export default function OfficersIndex({
                                                 />
                                             ))}
                                     </div>
-                                </div>
+                                </>
                             )}
                         </div>
                     )}
@@ -290,7 +193,7 @@ export default function OfficersIndex({
             {/* Contact Section */}
             {activeOfficers.length > 0 && (
                 <section className="bg-[var(--usg-primary)] py-16 text-white">
-                    <div className="container mx-auto px-4">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-3xl text-center">
                             <h2 className="mb-4 text-3xl font-bold">
                                 Get in Touch

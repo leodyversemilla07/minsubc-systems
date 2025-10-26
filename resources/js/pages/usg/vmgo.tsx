@@ -12,7 +12,6 @@ import {
     Target,
     Users,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 interface VMGO {
     id: number;
@@ -32,17 +31,6 @@ interface Props {
 }
 
 export default function VMGOPage({ vmgo }: Props) {
-    const [isVisible, setIsVisible] = useState(false);
-    const [activeSection, setActiveSection] = useState(0);
-
-    useEffect(() => {
-        setIsVisible(true);
-        const timer = setInterval(() => {
-            setActiveSection((prev) => (prev + 1) % 4);
-        }, 3000);
-        return () => clearInterval(timer);
-    }, []);
-
     if (!vmgo) {
         return (
             <USGLayout>
@@ -92,144 +80,105 @@ export default function VMGOPage({ vmgo }: Props) {
             <div className="bg-white py-16 dark:bg-gray-900">
                 <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                     <div className="space-y-16">
-                        {/* Vision */}
-                        <div
-                            className={`group transform transition-all duration-500 ${activeSection === 0 ? 'scale-105' : ''} ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                            style={{ transitionDelay: '200ms' }}
-                        >
-                            <div className="mb-6 flex items-center gap-4">
-                                <div className="inline-flex rounded-full bg-[var(--usg-primary)] p-4">
-                                    <Eye className="h-8 w-8 text-white" />
+                        {/* Vision and Mission Row */}
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                            {/* Vision */}
+                            <div className="h-full rounded-2xl bg-[var(--usg-primary)] p-8 text-white shadow-xl">
+                                <div className="mb-6 flex items-center gap-4">
+                                    <div className="inline-flex rounded-full bg-white/20 p-3 backdrop-blur-sm">
+                                        <Eye className="h-6 w-6 text-white" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold">
+                                        Our Vision
+                                    </h3>
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
-                                    Our Vision
-                                </h2>
-                            </div>
-                            <div className="relative rounded-2xl border-l-[var(--usg-primary)] border-l-4 bg-[var(--usg-light)] p-8 dark:bg-gray-800/50">
-                                <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
+                                <p className="text-lg leading-relaxed text-white/90">
                                     {vmgo.vision}
                                 </p>
                             </div>
-                        </div>
 
-                        {/* Mission */}
-                        <div
-                            className={`group transform transition-all duration-500 ${activeSection === 1 ? 'scale-105' : ''} ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                            style={{ transitionDelay: '400ms' }}
-                        >
-                            <div className="mb-6 flex items-center gap-4">
-                                <div className="inline-flex rounded-full bg-[var(--usg-primary)] p-4">
-                                    <Target className="h-8 w-8 text-white" />
+                            {/* Mission */}
+                            <div className="h-full rounded-2xl bg-[var(--usg-secondary)] p-8 text-gray-900 shadow-xl">
+                                <div className="mb-6 flex items-center gap-4">
+                                    <div className="inline-flex rounded-full bg-white/20 p-3 backdrop-blur-sm">
+                                        <Target className="h-6 w-6 text-gray-900" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900">
+                                        Our Mission
+                                    </h3>
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
-                                    Our Mission
-                                </h2>
-                            </div>
-                            <div className="relative rounded-2xl border-l-[var(--usg-primary)] border-l-4 bg-[var(--usg-light)] p-8 dark:bg-gray-800/50">
-                                <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
+                                <p className="text-lg leading-relaxed text-gray-800">
                                     {vmgo.mission}
                                 </p>
                             </div>
                         </div>
 
                         {/* Goals */}
-                        <div
-                            className={`group transform transition-all duration-500 ${activeSection === 2 ? 'scale-105' : ''} ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                            style={{ transitionDelay: '600ms' }}
-                        >
-                            <div className="mb-6 flex items-center gap-4">
-                                <div className="inline-flex rounded-full bg-[var(--usg-secondary)] p-4">
-                                    <Heart className="h-8 w-8 text-white" />
+                        <div className="mb-8 text-center">
+                            <div className="mb-4 inline-flex items-center gap-4 rounded-full bg-[var(--usg-light)] px-6 py-3 dark:bg-gray-800">
+                                <div className="inline-flex rounded-full bg-[var(--usg-secondary)] p-2">
+                                    <Heart className="h-5 w-5 text-white" />
                                 </div>
                                 <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
                                     Our Goals
                                 </h2>
                             </div>
-                            <div className="space-y-4">
-                                {vmgo.goals.map((goal, index) => (
-                                    <div
-                                        key={index}
-                                        className={`flex transform items-start gap-4 rounded-xl border-l-[var(--usg-secondary)] border-l-4 bg-[var(--usg-light)] p-6 transition-all duration-500 hover:shadow-lg dark:bg-gray-800/50 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
-                                        style={{
-                                            transitionDelay: `${800 + index * 100}ms`
-                                        }}
-                                    >
-                                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[var(--usg-secondary)]">
-                                            <span className="text-lg font-bold text-white">
-                                                {index + 1}
-                                            </span>
-                                        </div>
-                                        <p className="flex-1 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
+                                The key objectives we strive to achieve for our
+                                community
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                            {vmgo.goals.map((goal, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-start gap-4 rounded-xl bg-white p-6 shadow-lg hover:shadow-xl dark:bg-gray-800"
+                                >
+                                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[var(--usg-secondary)] text-white shadow-lg">
+                                        <span className="text-lg font-bold">
+                                            {index + 1}
+                                        </span>
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                                             {goal}
                                         </p>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
 
                         {/* Objectives */}
-                        <div
-                            className={`group transform transition-all duration-500 ${activeSection === 3 ? 'scale-105' : ''} ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                            style={{ transitionDelay: '800ms' }}
-                        >
-                            <div className="mb-6 flex items-center gap-4">
-                                <div className="inline-flex rounded-full bg-[var(--usg-accent)] p-4">
-                                    <CheckCircle className="h-8 w-8 text-white" />
+                        <div className="mb-8 text-center">
+                            <div className="mb-4 inline-flex items-center gap-4 rounded-full bg-[var(--usg-light)] px-6 py-3 dark:bg-gray-800">
+                                <div className="inline-flex rounded-full bg-[var(--usg-accent)] p-2">
+                                    <CheckCircle className="h-5 w-5 text-white" />
                                 </div>
                                 <h2 className="text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
                                     Our Objectives
                                 </h2>
                             </div>
-                            <div className="space-y-4">
-                                {vmgo.objectives.map((objective, index) => (
-                                    <div
-                                        key={index}
-                                        className={`flex transform items-start gap-4 rounded-xl border-l-[var(--usg-accent)] border-l-4 bg-[var(--usg-light)] p-6 transition-all duration-500 hover:shadow-lg dark:bg-gray-800/50 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
-                                        style={{
-                                            transitionDelay: `${1000 + index * 100}ms`
-                                        }}
-                                    >
-                                        <div className="mt-1">
-                                            <CheckCircle className="h-6 w-6 text-[var(--usg-accent)]" />
-                                        </div>
-                                        <p className="flex-1 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
+                                Specific actions and strategies to fulfill our
+                                mission
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                            {vmgo.objectives.map((objective, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-start gap-4 rounded-xl bg-white p-6 shadow-lg hover:shadow-xl dark:bg-gray-800"
+                                >
+                                    <div className="mt-1 flex-shrink-0">
+                                        <CheckCircle className="h-8 w-8 text-[var(--usg-accent)]" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                                             {objective}
                                         </p>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Metadata */}
-                        <div
-                            className={`transform rounded-xl border border-gray-200 bg-gray-50 p-6 transition-all duration-500 dark:border-gray-800 dark:bg-gray-900 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                            style={{ transitionDelay: '1000ms' }}
-                        >
-                            <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-600 sm:flex-row dark:text-gray-400">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-2 w-2 animate-pulse rounded-full bg-[var(--usg-primary)]"></div>
-                                    <span>
-                                        Effective Date:{' '}
-                                        <span className="font-medium text-gray-900 dark:text-white">
-                                            {new Date(
-                                                vmgo.effective_date,
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    </span>
                                 </div>
-                                {vmgo.updated_by && (
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-2 w-2 animate-pulse rounded-full bg-[var(--usg-secondary)]"></div>
-                                        <span>
-                                            Last updated by:{' '}
-                                            <span className="font-medium text-gray-900 dark:text-white">
-                                                {vmgo.updated_by.first_name}{' '}
-                                                {vmgo.updated_by.last_name}
-                                            </span>
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -238,67 +187,62 @@ export default function VMGOPage({ vmgo }: Props) {
             {/* Call to Action Section */}
             <section className="bg-[var(--usg-dark)] py-20 text-white">
                 <div className="container mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-                    <div
-                        className={`transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                        style={{ transitionDelay: '1200ms' }}
-                    >
-                        <div className="mb-6 inline-flex items-center justify-center gap-3">
-                            <Sparkles className="h-8 w-8 animate-pulse text-yellow-300" />
-                            <h2 className="text-3xl font-bold lg:text-4xl">
-                                Want to get involved?
-                            </h2>
-                            <Sparkles className="h-8 w-8 animate-pulse text-yellow-300" />
-                        </div>
-                        <p className="mx-auto mb-10 max-w-3xl text-lg leading-relaxed text-[var(--usg-hero-text)] dark:text-[var(--usg-light)]">
-                            Join us in our mission to serve the MinSUBC
-                            community with dedication and excellence. Explore
-                            our upcoming events, read our latest announcements,
-                            and learn more about our dedicated officers who work
-                            tirelessly for student welfare.
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <Button
-                                asChild
-                                size="lg"
-                                className="bg-white text-[var(--usg-primary)] shadow-xl transition-all hover:-translate-y-0.5 hover:bg-[var(--usg-light)] hover:shadow-2xl"
+                    <div className="mb-6 inline-flex items-center justify-center gap-3">
+                        <Sparkles className="h-8 w-8 text-yellow-300" />
+                        <h2 className="text-3xl font-bold lg:text-4xl">
+                            Want to get involved?
+                        </h2>
+                        <Sparkles className="h-8 w-8 text-yellow-300" />
+                    </div>
+                    <p className="mx-auto mb-10 max-w-3xl text-lg leading-relaxed text-[var(--usg-hero-text)] dark:text-[var(--usg-light)]">
+                        Join us in our mission to serve the MinSUBC community
+                        with dedication and excellence. Explore our upcoming
+                        events, read our latest announcements, and learn more
+                        about our dedicated officers who work tirelessly for
+                        student welfare.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <Button
+                            asChild
+                            size="lg"
+                            className="bg-white text-[var(--usg-primary)] shadow-xl hover:bg-[var(--usg-light)] hover:shadow-2xl"
+                        >
+                            <Link
+                                href={usg.events.index.url()}
+                                className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
                             >
-                                <Link
-                                    href={usg.events.index.url()}
-                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                                >
-                                    View Events
-                                    <ArrowRight className="h-5 w-5" />
-                                </Link>
-                            </Button>
-                            <Button
-                                asChild
-                                size="lg"
-                                variant="outline"
-                                className="border-2 border-white bg-transparent text-white backdrop-blur-sm transition-all hover:bg-white hover:text-[var(--usg-primary)]"
+                                View Events
+                                <ArrowRight className="h-5 w-5" />
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            size="lg"
+                            variant="outline"
+                            className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]"
+                        >
+                            <Link
+                                href={usg.officers.index.url()}
+                                className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
                             >
-                                <Link
-                                    href={usg.officers.index.url()}
-                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                                >
-                                    Meet Our Team
-                                    <Users className="h-5 w-5" />
-                                </Link>
-                            </Button>
-                            <Button
-                                asChild
-                                size="lg"
-                                variant="outline"
-                                className="border-2 border-white bg-transparent text-white backdrop-blur-sm transition-all hover:bg-white hover:text-[var(--usg-primary)]"
+                                Meet Our Team
+                                <Users className="h-5 w-5" />
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            size="lg"
+                            variant="outline"
+                            className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]"
+                        >
+                            <Link
+                                href={usg.announcements.index.url()}
+                                className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
                             >
-                                <Link
-                                    href={usg.announcements.index.url()}
-                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                                >
-                                    Latest Updates
-                                    <Megaphone className="h-5 w-5" />
-                                </Link>
-                            </Button>
-                        </div>
+                                Latest Updates
+                                <Megaphone className="h-5 w-5" />
+                            </Link>
+                        </Button>
                     </div>
                 </div>
             </section>

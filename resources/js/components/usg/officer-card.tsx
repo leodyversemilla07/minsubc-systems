@@ -57,8 +57,8 @@ export default function OfficerCard({
     };
 
     return (
-        <Card className="group transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-            <CardContent className={`p-${compact ? '4' : '6'} text-center`}>
+        <Card className="group m-2">
+            <CardContent className={`p-${compact ? '4' : '8'} text-center`}>
                 {/* Avatar */}
                 <div className="mb-4">
                     <Avatar

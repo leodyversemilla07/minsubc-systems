@@ -24,7 +24,13 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
 import { Input } from '@/components/ui/input';
 import {
     Pagination,
@@ -271,7 +277,9 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                             <EmptyMedia variant="icon">
                                                 <FileText className="h-8 w-8" />
                                             </EmptyMedia>
-                                            <EmptyTitle>No document requests found</EmptyTitle>
+                                            <EmptyTitle>
+                                                No document requests found
+                                            </EmptyTitle>
                                             <EmptyDescription>
                                                 {emptyMessage}
                                             </EmptyDescription>

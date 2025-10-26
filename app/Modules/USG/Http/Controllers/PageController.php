@@ -43,11 +43,19 @@ class PageController extends Controller
             'recentAnnouncements' => $this->announcementService->getStatistics()['this_month'] ?? 0,
         ];
 
-        return Inertia::render('usg/index', [
+        // Get featured officers for homepage
+        $featuredOfficers = \App\Models\Modules\USG\Models\Officer::active()
+            ->select(['id', 'name', 'position', 'photo'])
+            ->orderBy('order')
+            ->limit(6)
+            ->get();
+
+        return Inertia::render('usg/home', [
             'vmgo' => $vmgo,
             'announcements' => $announcements,
             'upcomingEvents' => $upcomingEvents,
             'stats' => $stats,
+            '_featuredOfficers' => $featuredOfficers,
         ]);
     }
 
@@ -79,6 +87,19 @@ class PageController extends Controller
             'officers' => $officers,
             'departments' => $departments,
             'stats' => $stats,
+        ]);
+    }
+
+    public function officerShow(int $id): Response
+    {
+        $officer = $this->officerService->getById($id);
+
+        if (! $officer) {
+            abort(404, 'Officer not found');
+        }
+
+        return Inertia::render('usg/officers/show', [
+            'officer' => $officer,
         ]);
     }
 

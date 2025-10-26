@@ -1,15 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import {
-    User,
-    Database,
-    FileText,
-    Code,
-    Clock,
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+import { Clock, Code, Database, FileText, User } from 'lucide-react';
 
 interface AuditLog {
     id: number;
@@ -54,19 +48,28 @@ export default function AuditLogDetail({ auditLog }: AuditLogDetailProps) {
     ];
 
     const getActionBadgeVariant = (action: string) => {
-        const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-            'created': 'default',
-            'updated': 'secondary',
-            'deleted': 'destructive',
-            'login': 'outline',
-            'logout': 'outline',
+        const variants: Record<
+            string,
+            'default' | 'secondary' | 'destructive' | 'outline'
+        > = {
+            created: 'default',
+            updated: 'secondary',
+            deleted: 'destructive',
+            login: 'outline',
+            logout: 'outline',
         };
         return variants[action] || 'outline';
     };
 
     const formatModelType = (modelType: string | null) => {
         if (!modelType) return '-';
-        return modelType.split('\\').pop()?.replace(/([A-Z])/g, ' $1').trim() || modelType;
+        return (
+            modelType
+                .split('\\')
+                .pop()
+                ?.replace(/([A-Z])/g, ' $1')
+                .trim() || modelType
+        );
     };
 
     const formatJson = (data: Record<string, unknown> | null) => {
@@ -100,40 +103,62 @@ export default function AuditLogDetail({ auditLog }: AuditLogDetailProps) {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Action</label>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Action
+                                </label>
                                 <div className="mt-1">
-                                    <Badge variant={getActionBadgeVariant(auditLog.action)}>
+                                    <Badge
+                                        variant={getActionBadgeVariant(
+                                            auditLog.action,
+                                        )}
+                                    >
                                         {auditLog.action}
                                     </Badge>
                                 </div>
                             </div>
 
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Description</label>
-                                <p className="mt-1 text-sm">{auditLog.description}</p>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Description
+                                </label>
+                                <p className="mt-1 text-sm">
+                                    {auditLog.description}
+                                </p>
                             </div>
 
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Timestamp</label>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Timestamp
+                                </label>
                                 <div className="mt-1 flex items-center space-x-2">
                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                     <span className="text-sm">
-                                        {new Date(auditLog.created_at).toLocaleString()}
+                                        {new Date(
+                                            auditLog.created_at,
+                                        ).toLocaleString()}
                                     </span>
                                 </div>
                             </div>
 
                             {auditLog.ip_address && (
                                 <div>
-                                    <label className="text-sm font-medium text-muted-foreground">IP Address</label>
-                                    <p className="mt-1 text-sm font-mono">{auditLog.ip_address}</p>
+                                    <label className="text-sm font-medium text-muted-foreground">
+                                        IP Address
+                                    </label>
+                                    <p className="mt-1 font-mono text-sm">
+                                        {auditLog.ip_address}
+                                    </p>
                                 </div>
                             )}
 
                             {auditLog.user_agent && (
                                 <div>
-                                    <label className="text-sm font-medium text-muted-foreground">User Agent</label>
-                                    <p className="mt-1 text-sm break-all">{auditLog.user_agent}</p>
+                                    <label className="text-sm font-medium text-muted-foreground">
+                                        User Agent
+                                    </label>
+                                    <p className="mt-1 text-sm break-all">
+                                        {auditLog.user_agent}
+                                    </p>
                                 </div>
                             )}
                         </CardContent>
@@ -151,22 +176,35 @@ export default function AuditLogDetail({ auditLog }: AuditLogDetailProps) {
                             {auditLog.user ? (
                                 <div className="space-y-3">
                                     <div>
-                                        <label className="text-sm font-medium text-muted-foreground">Name</label>
+                                        <label className="text-sm font-medium text-muted-foreground">
+                                            Name
+                                        </label>
                                         <p className="mt-1 font-medium">
-                                            {auditLog.user.first_name} {auditLog.user.last_name}
+                                            {auditLog.user.first_name}{' '}
+                                            {auditLog.user.last_name}
                                         </p>
                                     </div>
                                     <div>
-                                        <label className="text-sm font-medium text-muted-foreground">Email</label>
-                                        <p className="mt-1 text-sm">{auditLog.user.email}</p>
+                                        <label className="text-sm font-medium text-muted-foreground">
+                                            Email
+                                        </label>
+                                        <p className="mt-1 text-sm">
+                                            {auditLog.user.email}
+                                        </p>
                                     </div>
                                     <div>
-                                        <label className="text-sm font-medium text-muted-foreground">User ID</label>
-                                        <p className="mt-1 text-sm font-mono">{auditLog.user.id}</p>
+                                        <label className="text-sm font-medium text-muted-foreground">
+                                            User ID
+                                        </label>
+                                        <p className="mt-1 font-mono text-sm">
+                                            {auditLog.user.id}
+                                        </p>
                                     </div>
                                 </div>
                             ) : (
-                                <p className="text-muted-foreground">System action (no user)</p>
+                                <p className="text-muted-foreground">
+                                    System action (no user)
+                                </p>
                             )}
                         </CardContent>
                     </Card>
@@ -183,44 +221,59 @@ export default function AuditLogDetail({ auditLog }: AuditLogDetailProps) {
                             {auditLog.model_type ? (
                                 <div className="space-y-3">
                                     <div>
-                                        <label className="text-sm font-medium text-muted-foreground">Model Type</label>
+                                        <label className="text-sm font-medium text-muted-foreground">
+                                            Model Type
+                                        </label>
                                         <p className="mt-1 font-medium">
-                                            {formatModelType(auditLog.model_type)}
+                                            {formatModelType(
+                                                auditLog.model_type,
+                                            )}
                                         </p>
                                     </div>
                                     {auditLog.model_id && (
                                         <div>
-                                            <label className="text-sm font-medium text-muted-foreground">Model ID</label>
-                                            <p className="mt-1 text-sm font-mono">{auditLog.model_id}</p>
+                                            <label className="text-sm font-medium text-muted-foreground">
+                                                Model ID
+                                            </label>
+                                            <p className="mt-1 font-mono text-sm">
+                                                {auditLog.model_id}
+                                            </p>
                                         </div>
                                     )}
                                     <div>
-                                        <label className="text-sm font-medium text-muted-foreground">Full Model Type</label>
-                                        <p className="mt-1 text-sm font-mono break-all">{auditLog.model_type}</p>
+                                        <label className="text-sm font-medium text-muted-foreground">
+                                            Full Model Type
+                                        </label>
+                                        <p className="mt-1 font-mono text-sm break-all">
+                                            {auditLog.model_type}
+                                        </p>
                                     </div>
                                 </div>
                             ) : (
-                                <p className="text-muted-foreground">No model associated</p>
+                                <p className="text-muted-foreground">
+                                    No model associated
+                                </p>
                             )}
                         </CardContent>
                     </Card>
 
                     {/* Metadata */}
-                    {auditLog.metadata && Object.keys(auditLog.metadata).length > 0 && (
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center space-x-2">
-                                    <Code className="h-5 w-5" />
-                                    <span>Additional Metadata</span>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <pre className="text-xs bg-muted p-3 rounded-md overflow-x-auto">
-                                    {formatJson(auditLog.metadata)}
-                                </pre>
-                            </CardContent>
-                        </Card>
-                    )}
+                    {auditLog.metadata &&
+                        Object.keys(auditLog.metadata).length > 0 && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center space-x-2">
+                                        <Code className="h-5 w-5" />
+                                        <span>Additional Metadata</span>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs">
+                                        {formatJson(auditLog.metadata)}
+                                    </pre>
+                                </CardContent>
+                            </Card>
+                        )}
                 </div>
 
                 {/* Changes */}
@@ -230,10 +283,12 @@ export default function AuditLogDetail({ auditLog }: AuditLogDetailProps) {
                         {auditLog.old_values && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-red-600">Old Values</CardTitle>
+                                    <CardTitle className="text-red-600">
+                                        Old Values
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <pre className="text-xs bg-red-50 dark:bg-red-950 p-3 rounded-md overflow-x-auto">
+                                    <pre className="overflow-x-auto rounded-md bg-red-50 p-3 text-xs dark:bg-red-950">
                                         {formatJson(auditLog.old_values)}
                                     </pre>
                                 </CardContent>
@@ -244,10 +299,12 @@ export default function AuditLogDetail({ auditLog }: AuditLogDetailProps) {
                         {auditLog.new_values && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-green-600">New Values</CardTitle>
+                                    <CardTitle className="text-green-600">
+                                        New Values
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <pre className="text-xs bg-green-50 dark:bg-green-950 p-3 rounded-md overflow-x-auto">
+                                    <pre className="overflow-x-auto rounded-md bg-green-50 p-3 text-xs dark:bg-green-950">
                                         {formatJson(auditLog.new_values)}
                                     </pre>
                                 </CardContent>

@@ -1,6 +1,13 @@
-import { Head, Link } from '@inertiajs/react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, FileText, Users } from 'lucide-react';
 
 export default function Welcome() {
@@ -10,27 +17,29 @@ export default function Welcome() {
 
             {/* Hero Section */}
             <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50 px-4 py-12 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 dark:from-green-900 dark:via-gray-900 dark:to-green-900">
-                <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+                <div className="bg-grid-pattern absolute inset-0 opacity-5"></div>
                 <div className="relative mx-auto max-w-4xl text-center">
                     <div className="mb-8 flex justify-center">
                         <div className="relative">
-                            <div className="absolute inset-0 rounded-full bg-green-200 blur-xl opacity-30 dark:bg-green-800"></div>
+                            <div className="absolute inset-0 rounded-full bg-green-200 opacity-30 blur-xl dark:bg-green-800"></div>
                             <img
                                 src="/minsu-logo.png"
                                 alt="MinSU Logo"
-                                className="relative h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-full object-contain shadow-lg"
+                                className="relative h-16 w-16 rounded-full object-contain shadow-lg sm:h-20 sm:w-20 md:h-24 md:w-24"
                             />
                         </div>
                     </div>
-                    <h1 className="mb-4 text-3xl font-bold tracking-tight text-green-900 sm:text-4xl sm:mb-6 md:text-5xl lg:text-6xl dark:text-white">
+                    <h1 className="mb-4 text-3xl font-bold tracking-tight text-green-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl dark:text-white">
                         Welcome to{' '}
                         <span className="bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent dark:from-green-400 dark:to-green-600">
                             Mindoro State University Bongabong Campus Systems
                         </span>
                     </h1>
-                    <p className="mx-auto mb-8 max-w-2xl text-base text-gray-600 sm:text-lg sm:mb-12 md:text-xl dark:text-gray-300">
-                        Your comprehensive student portal for University Student Government, Academic Records, and Student Services.
-                        Access all your university resources in one unified platform.
+                    <p className="mx-auto mb-8 max-w-2xl text-base text-gray-600 sm:mb-12 sm:text-lg md:text-xl dark:text-gray-300">
+                        Your comprehensive student portal for University Student
+                        Government, Academic Records, and Student Services.
+                        Access all your university resources in one unified
+                        platform.
                     </p>
                 </div>
             </section>
@@ -39,17 +48,19 @@ export default function Welcome() {
             <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 dark:bg-gray-900">
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-8 text-center sm:mb-12">
-                        <h2 className="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl sm:mb-4 md:text-4xl dark:text-white">
+                        <h2 className="mb-3 text-2xl font-bold text-gray-900 sm:mb-4 sm:text-3xl md:text-4xl dark:text-white">
                             Choose Your Portal
                         </h2>
                         <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg dark:text-gray-300">
-                            Select the service you need to access your university resources and manage your academic journey.
+                            Select the service you need to access your
+                            university resources and manage your academic
+                            journey.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
                         {/* USG Card */}
-                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-gray-800 dark:shadow-gray-900/20">
                             <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-green-900/20" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-green-100 opacity-20 dark:bg-green-800/30" />
                             <CardHeader className="relative pb-4">
@@ -65,15 +76,27 @@ export default function Welcome() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="relative pb-4">
-                                <CardDescription className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                    University Student Government information, announcements, events, resolutions, and transparency reports.
+                                <CardDescription className="leading-relaxed text-gray-600 dark:text-gray-300">
+                                    University Student Government information,
+                                    announcements, events, resolutions, and
+                                    transparency reports.
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg transition-all duration-200 hover:from-green-700 hover:to-green-800 hover:shadow-xl dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700">
-                                    <Link href="/usg" className="flex items-center justify-center">
-                                        <span className="hidden sm:inline">Visit USG Portal</span>
-                                        <span className="sm:hidden">USG Portal</span>
+                                <Button
+                                    asChild
+                                    className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg transition-all duration-200 hover:from-green-700 hover:to-green-800 hover:shadow-xl dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700"
+                                >
+                                    <Link
+                                        href="/usg"
+                                        className="flex items-center justify-center"
+                                    >
+                                        <span className="hidden sm:inline">
+                                            Visit USG Portal
+                                        </span>
+                                        <span className="sm:hidden">
+                                            USG Portal
+                                        </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </Link>
                                 </Button>
@@ -81,7 +104,7 @@ export default function Welcome() {
                         </Card>
 
                         {/* Registrar Card */}
-                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-gray-800 dark:shadow-gray-900/20">
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-blue-900/20" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-blue-100 opacity-20 dark:bg-blue-800/30" />
                             <CardHeader className="relative pb-4">
@@ -93,15 +116,27 @@ export default function Welcome() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="relative pb-4">
-                                <CardDescription className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                    Document requests, transcript applications, certificate processing, and academic record management.
+                                <CardDescription className="leading-relaxed text-gray-600 dark:text-gray-300">
+                                    Document requests, transcript applications,
+                                    certificate processing, and academic record
+                                    management.
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700">
-                                    <Link href="/register" className="flex items-center justify-center">
-                                        <span className="hidden sm:inline">Access Registrar</span>
-                                        <span className="sm:hidden">Registrar</span>
+                                <Button
+                                    asChild
+                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700"
+                                >
+                                    <Link
+                                        href="/register"
+                                        className="flex items-center justify-center"
+                                    >
+                                        <span className="hidden sm:inline">
+                                            Access Registrar
+                                        </span>
+                                        <span className="sm:hidden">
+                                            Registrar
+                                        </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </Link>
                                 </Button>
@@ -109,7 +144,7 @@ export default function Welcome() {
                         </Card>
 
                         {/* SAS Card */}
-                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-gray-800 dark:shadow-gray-900/20">
                             <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-purple-900/20" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-purple-100 opacity-20 dark:bg-purple-800/30" />
                             <CardHeader className="relative pb-4">
@@ -121,15 +156,27 @@ export default function Welcome() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="relative pb-4">
-                                <CardDescription className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                    Scholarships, insurance, student organizations, calendar of activities, and student support services.
+                                <CardDescription className="leading-relaxed text-gray-600 dark:text-gray-300">
+                                    Scholarships, insurance, student
+                                    organizations, calendar of activities, and
+                                    student support services.
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg transition-all duration-200 hover:from-purple-700 hover:to-purple-800 hover:shadow-xl dark:from-purple-500 dark:to-purple-600 dark:hover:from-purple-600 dark:hover:to-purple-700">
-                                    <Link href="/sas" className="flex items-center justify-center">
-                                        <span className="hidden sm:inline">Visit SAS Portal</span>
-                                        <span className="sm:hidden">SAS Portal</span>
+                                <Button
+                                    asChild
+                                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg transition-all duration-200 hover:from-purple-700 hover:to-purple-800 hover:shadow-xl dark:from-purple-500 dark:to-purple-600 dark:hover:from-purple-600 dark:hover:to-purple-700"
+                                >
+                                    <Link
+                                        href="/sas"
+                                        className="flex items-center justify-center"
+                                    >
+                                        <span className="hidden sm:inline">
+                                            Visit SAS Portal
+                                        </span>
+                                        <span className="sm:hidden">
+                                            SAS Portal
+                                        </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </Link>
                                 </Button>
@@ -150,11 +197,15 @@ export default function Welcome() {
                                 className="h-6 w-6 rounded-full object-contain sm:h-8 sm:w-8"
                             />
                             <span className="text-base font-semibold text-gray-900 sm:text-lg dark:text-white">
-                                Mindoro State University Bongabong Campus Systems
+                                Mindoro State University Bongabong Campus
+                                Systems
                             </span>
                         </div>
                         <div className="flex items-center space-x-6 text-xs text-gray-600 sm:text-sm dark:text-gray-400">
-                            <span>© 2025 Mindoro State University Bongabong Campus</span>
+                            <span>
+                                © 2025 Mindoro State University Bongabong
+                                Campus
+                            </span>
                         </div>
                     </div>
                 </div>

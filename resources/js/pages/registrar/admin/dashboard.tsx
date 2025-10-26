@@ -48,15 +48,15 @@ interface DocumentRequest {
     id: number;
     request_number: string;
     status:
-    | 'pending_payment'
-    | 'payment_expired'
-    | 'paid'
-    | 'processing'
-    | 'ready_for_claim'
-    | 'claimed'
-    | 'released'
-    | 'cancelled'
-    | 'rejected';
+        | 'pending_payment'
+        | 'payment_expired'
+        | 'paid'
+        | 'processing'
+        | 'ready_for_claim'
+        | 'claimed'
+        | 'released'
+        | 'cancelled'
+        | 'rejected';
     document_type: string;
     purpose: string;
     copies: number;
@@ -605,8 +605,7 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                 {hasActiveFilters && (
                                     <p className="text-sm text-muted-foreground">
                                         {[
-                                            statusFilter !== 'all' &&
-                                            'Status',
+                                            statusFilter !== 'all' && 'Status',
                                             dateFrom && 'Start date',
                                             dateTo && 'End date',
                                         ]
