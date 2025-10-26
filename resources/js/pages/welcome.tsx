@@ -6,10 +6,10 @@ import { ArrowRight, FileText, Users } from 'lucide-react';
 export default function Welcome() {
     return (
         <>
-            <Head title="MinSU Bongabong Systems - Student Portal" />
+            <Head title="Mindoro State University Bongabong Campus - Student Portal" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50 px-4 py-16 sm:px-6 sm:py-24 lg:px-8 dark:from-green-900 dark:via-gray-900 dark:to-green-900">
+            <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-green-50 px-4 py-12 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 dark:from-green-900 dark:via-gray-900 dark:to-green-900">
                 <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
                 <div className="relative mx-auto max-w-4xl text-center">
                     <div className="mb-8 flex justify-center">
@@ -18,17 +18,17 @@ export default function Welcome() {
                             <img
                                 src="/minsu-logo.png"
                                 alt="MinSU Logo"
-                                className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-full object-contain shadow-lg"
+                                className="relative h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-full object-contain shadow-lg"
                             />
                         </div>
                     </div>
-                    <h1 className="mb-6 text-4xl font-bold tracking-tight text-green-900 sm:text-5xl lg:text-6xl dark:text-white">
+                    <h1 className="mb-4 text-3xl font-bold tracking-tight text-green-900 sm:text-4xl sm:mb-6 md:text-5xl lg:text-6xl dark:text-white">
                         Welcome to{' '}
                         <span className="bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent dark:from-green-400 dark:to-green-600">
-                            MinSU Bongabong Systems
+                            Mindoro State University Bongabong Campus Systems
                         </span>
                     </h1>
-                    <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-600 sm:text-xl dark:text-gray-300">
+                    <p className="mx-auto mb-8 max-w-2xl text-base text-gray-600 sm:text-lg sm:mb-12 md:text-xl dark:text-gray-300">
                         Your comprehensive student portal for University Student Government, Academic Records, and Student Services.
                         Access all your university resources in one unified platform.
                     </p>
@@ -36,18 +36,18 @@ export default function Welcome() {
             </section>
 
             {/* Modules Section */}
-            <section className="bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 dark:bg-gray-900">
+            <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 md:py-20 lg:px-8 lg:py-24 dark:bg-gray-900">
                 <div className="mx-auto max-w-7xl">
-                    <div className="mb-12 text-center">
-                        <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl dark:text-white">
+                    <div className="mb-8 text-center sm:mb-12">
+                        <h2 className="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl sm:mb-4 md:text-4xl dark:text-white">
                             Choose Your Portal
                         </h2>
-                        <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
+                        <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg dark:text-gray-300">
                             Select the service you need to access your university resources and manage your academic journey.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
                         {/* USG Card */}
                         <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 dark:bg-gray-800 dark:shadow-gray-900/20">
                             <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-green-900/20" />
@@ -140,23 +140,21 @@ export default function Welcome() {
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-gray-200 bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 dark:border-gray-700 dark:bg-gray-800">
+            <footer className="border-t border-gray-200 bg-gray-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 dark:border-gray-700 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl">
-                    <div className="flex flex-col items-center justify-between space-y-6 sm:flex-row sm:space-y-0">
-                        <div className="flex items-center space-x-3">
+                    <div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
                             <img
                                 src="/minsu-logo.png"
                                 alt="MinSU Logo"
-                                className="h-8 w-8 rounded-full object-contain"
+                                className="h-6 w-6 rounded-full object-contain sm:h-8 sm:w-8"
                             />
-                            <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                                MinSU Bongabong Systems
+                            <span className="text-base font-semibold text-gray-900 sm:text-lg dark:text-white">
+                                Mindoro State University Bongabong Campus Systems
                             </span>
                         </div>
-                        <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400">
-                            <span>© 2025 Mindoro State University - Bongabong Campus</span>
-                            <span>•</span>
-                            <span>All rights reserved</span>
+                        <div className="flex items-center space-x-6 text-xs text-gray-600 sm:text-sm dark:text-gray-400">
+                            <span>© 2025 Mindoro State University Bongabong Campus</span>
                         </div>
                     </div>
                 </div>
