@@ -45,9 +45,9 @@ class StoreDocumentRequest extends FormRequest
 
         return [
             'document_type' => ['required', 'string', Rule::enum(DocumentType::class)],
-            'quantity' => 'required|integer|min:1|max:10',
+            'quantity' => ['required', 'integer', 'min:1', 'max:10'],
             'purpose' => ['required', 'string', Rule::in($purposeOptions)],
-            'custom_purpose' => 'required_if:purpose,Other (please specify)|nullable|string|max:500',
+            'custom_purpose' => ['required_if:purpose,Other (please specify)', 'nullable', 'string', 'max:500'],
         ];
     }
 

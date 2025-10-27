@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Models\User;
 use App\Modules\Registrar\Models\Student;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,31 +28,16 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'first_name' => 'required|string|max:100',
-            'middle_name' => 'nullable|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'student_id' => [
-                'required',
-                'string',
-                'regex:/^(2018|2019)-(000[1-9]|00[1-9][0-9]|0[1-9][0-9]{2}|[1-2][0-9]{3}|3000)$|^MBC(2020|2021|2022|2023|2024|2025)-\d{4}$/',
-                'unique:students,student_id',
-            ],
-            'phone' => 'nullable|string|max:20',
-            'course' => 'nullable|string|max:100',
-            'year_level' => 'nullable|integer|min:1|max:4',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'first_name' => $validated['first_name'],
+            'middle_name' => $validated['middle_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
         // Assign student role to the user
@@ -61,11 +45,11 @@ class RegisteredUserController extends Controller
 
         // Create student record for the user
         Student::create([
-            'student_id' => $request->student_id,
+            'student_id' => $validated['student_id'],
             'user_id' => $user->id,
-            'phone' => $request->phone ?? null,
-            'course' => $request->course ?? null,
-            'year_level' => $request->year_level ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'course' => $validated['course'] ?? null,
+            'year_level' => $validated['year_level'] ?? null,
             'campus' => 'Bongabong Campus',
             'status' => 'active',
         ]);

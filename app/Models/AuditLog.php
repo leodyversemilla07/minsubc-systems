@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -72,7 +73,7 @@ class AuditLog extends Model
     /**
      * Get the model that was affected by this action.
      */
-    public function getAffectedModel()
+    public function getAffectedModel(): ?Model
     {
         if (! $this->model_type || ! $this->model_id) {
             return null;
@@ -84,7 +85,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by action type.
      */
-    public function scopeAction($query, string $action): mixed
+    public function scopeAction(Builder $query, string $action): Builder
     {
         return $query->where('action', $action);
     }
@@ -92,7 +93,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by model type.
      */
-    public function scopeModelType($query, string $modelType): mixed
+    public function scopeModelType(Builder $query, string $modelType): Builder
     {
         return $query->where('model_type', $modelType);
     }
@@ -100,7 +101,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by user.
      */
-    public function scopeByUser($query, int $userId): mixed
+    public function scopeByUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);
     }
@@ -108,7 +109,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by date range.
      */
-    public function scopeDateRange($query, string $from, string $to): mixed
+    public function scopeDateRange(Builder $query, string $from, string $to): Builder
     {
         return $query->whereBetween('created_at', [$from, $to]);
     }

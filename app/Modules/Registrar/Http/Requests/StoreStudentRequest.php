@@ -28,11 +28,11 @@ class StoreStudentRequest extends FormRequest
                 'regex:/^MBC2025-\d{4}$/',
                 'unique:students,student_id',
             ],
-            'phone' => 'required|string|max:20',
-            'course' => 'required|string|max:100',
-            'year_level' => 'required|integer|min:1|max:4',
-            'campus' => 'required|string|max:50',
-            'status' => 'required|in:active,inactive,graduated',
+            'phone' => ['required', 'string', 'max:20'],
+            'course' => ['required', 'string', 'max:100'],
+            'year_level' => ['required', 'integer', 'min:1', 'max:4'],
+            'campus' => ['required', 'string', 'max:50'],
+            'status' => ['required', 'in:active,inactive,graduated'],
         ];
     }
 
@@ -42,8 +42,17 @@ class StoreStudentRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'student_id.required' => 'Student ID is required.',
             'student_id.regex' => 'Student ID must be in the format MBC2025-XXXX (e.g., MBC2025-0001).',
             'student_id.unique' => 'This student ID is already taken.',
+            'phone.required' => 'Phone number is required.',
+            'course.required' => 'Course is required.',
+            'year_level.required' => 'Year level is required.',
+            'year_level.min' => 'Year level must be between 1 and 4.',
+            'year_level.max' => 'Year level must be between 1 and 4.',
+            'campus.required' => 'Campus is required.',
+            'status.required' => 'Status is required.',
+            'status.in' => 'Invalid status selected.',
         ];
     }
 }

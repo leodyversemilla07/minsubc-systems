@@ -4,6 +4,7 @@ namespace App\Modules\Registrar\Models;
 
 use App\Enums\DocumentRequestStatus;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -198,7 +199,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only active requests.
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->whereIn('status', DocumentRequestStatus::activeStatuses());
     }
@@ -206,7 +207,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only pending payment requests.
      */
-    public function scopePendingPayment($query)
+    public function scopePendingPayment(Builder $query): Builder
     {
         return $query->where('status', DocumentRequestStatus::PendingPayment);
     }
@@ -214,7 +215,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only paid requests.
      */
-    public function scopePaid($query)
+    public function scopePaid(Builder $query): Builder
     {
         return $query->where('status', DocumentRequestStatus::Paid);
     }
@@ -222,7 +223,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only processing requests.
      */
-    public function scopeProcessing($query)
+    public function scopeProcessing(Builder $query): Builder
     {
         return $query->where('status', DocumentRequestStatus::Processing);
     }
@@ -230,7 +231,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only ready for claim requests.
      */
-    public function scopeReadyForClaim($query)
+    public function scopeReadyForClaim(Builder $query): Builder
     {
         return $query->where('status', DocumentRequestStatus::ReadyForClaim);
     }
@@ -238,7 +239,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only claimed requests.
      */
-    public function scopeClaimed($query)
+    public function scopeClaimed(Builder $query): Builder
     {
         return $query->where('status', DocumentRequestStatus::Claimed);
     }
@@ -246,7 +247,7 @@ class DocumentRequest extends Model
     /**
      * Scope query to only released requests.
      */
-    public function scopeReleased($query)
+    public function scopeReleased(Builder $query): Builder
     {
         return $query->where('status', DocumentRequestStatus::Released);
     }

@@ -9,28 +9,18 @@ use Illuminate\Support\Facades\Log;
 
 class NotificationService
 {
-    private ?string $semaphoreApiKey;
-
-    private ?string $semaphoreSenderName;
-
-    private ?string $sendgridApiKey;
-
-    public function __construct()
-    {
-        $this->semaphoreApiKey = config('services.semaphore.api_key');
-        $this->semaphoreSenderName = config('services.semaphore.sender_name', 'MinSU-DRS');
-        $this->sendgridApiKey = config('services.sendgrid.api_key');
-    }
-
     /**
      * Send SMS notification
      */
     public function sendSms(string $phone, string $message): bool
     {
-        if (! $this->semaphoreApiKey || ! $phone) {
+        $semaphoreApiKey = config('services.semaphore.api_key');
+        $semaphoreSenderName = config('services.semaphore.sender_name', 'MinSU-DRS');
+
+        if (! $semaphoreApiKey || ! $phone) {
             Log::warning('SMS not sent: Missing API key or phone number', [
                 'phone' => $phone,
-                'has_api_key' => ! empty($this->semaphoreApiKey),
+                'has_api_key' => ! empty($semaphoreApiKey),
             ]);
 
             return false;
@@ -38,10 +28,10 @@ class NotificationService
 
         try {
             $response = Http::post('https://api.semaphore.co/api/v4/messages', [
-                'apikey' => $this->semaphoreApiKey,
+                'apikey' => $semaphoreApiKey,
                 'number' => $phone,
                 'message' => $message,
-                'sendername' => $this->semaphoreSenderName ?? 'MinSU-DRS',
+                'sendername' => $semaphoreSenderName ?? 'MinSU-DRS',
             ]);
 
             $responseData = $response->json();
@@ -78,10 +68,12 @@ class NotificationService
      */
     public function sendEmail(string $email, string $subject, string $message): bool
     {
-        if (! $this->sendgridApiKey || ! $email) {
+        $sendgridApiKey = config('services.sendgrid.api_key');
+
+        if (! $sendgridApiKey || ! $email) {
             Log::warning('Email not sent: Missing API key or email address', [
                 'email' => $email,
-                'has_api_key' => ! empty($this->sendgridApiKey),
+                'has_api_key' => ! empty($sendgridApiKey),
             ]);
 
             return false;
@@ -89,7 +81,7 @@ class NotificationService
 
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer '.$this->sendgridApiKey,
+                'Authorization' => 'Bearer '.$sendgridApiKey,
                 'Content-Type' => 'application/json',
             ])->post('https://api.sendgrid.com/v3/mail/send', [
                 'personalizations' => [
