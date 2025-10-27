@@ -3,8 +3,8 @@
 namespace Database\Seeders\USG;
 
 use App\Models\User;
+use App\Modules\USG\Models\Resolution;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ResolutionSeeder extends Seeder
@@ -60,7 +60,7 @@ class ResolutionSeeder extends Seeder
             $resolutionNumber = 'USG-'.now()->year.'-'.str_pad($index + 1, 3, '0', STR_PAD_LEFT);
             $slug = Str::slug($resolution['title']);
 
-            DB::table('usg_resolutions')->insert([
+            Resolution::create([
                 'resolution_number' => $resolutionNumber,
                 'title' => $resolution['title'],
                 'description' => $resolution['description'],

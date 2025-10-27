@@ -3,8 +3,8 @@
 namespace Database\Seeders\USG;
 
 use App\Models\User;
+use App\Modules\USG\Models\Event;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class EventSeeder extends Seeder
@@ -101,7 +101,7 @@ class EventSeeder extends Seeder
         foreach ($events as $event) {
             $slug = Str::slug($event['title']).'-'.Str::random(6);
 
-            DB::table('usg_events')->insert([
+            Event::create([
                 'title' => $event['title'],
                 'slug' => $slug,
                 'description' => $event['description'],

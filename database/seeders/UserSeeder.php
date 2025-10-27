@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Ensure required roles exist
-        $requiredRoles = ['student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'super_admin'];
+        $requiredRoles = ['student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'super-admin'];
 
         foreach ($requiredRoles as $roleName) {
             if (! Role::where('name', $roleName)->exists()) {
@@ -176,7 +176,7 @@ class UserSeeder extends Seeder
                 'email' => 'superadmin@minsu.edu.ph',
                 'password' => Hash::make('SuperAdmin@2024'),
                 'email_verified_at' => now(),
-                'role' => 'super_admin',
+                'role' => 'super-admin',
             ],
         ];
 

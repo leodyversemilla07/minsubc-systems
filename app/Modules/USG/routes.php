@@ -65,26 +65,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('usg/admin')->name('usg.admin.')->group(function () {
 
         // Dashboard - accessible to all USG members
-        Route::middleware(['role:usg-officer|usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         });
 
         // VMGO Management - restricted to USG Admins and System Admins
-        Route::middleware(['role:usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
             Route::get('/vmgo/edit', [VMGOController::class, 'edit'])->name('vmgo.edit');
             Route::patch('/vmgo', [VMGOController::class, 'update'])->name('vmgo.update');
             Route::get('/vmgo/history', [VMGOController::class, 'history'])->name('vmgo.history');
         });
 
         // Officer Management - restricted to USG Admins and System Admins
-        Route::middleware(['role:usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
             Route::resource('officers', OfficerController::class)->except(['show']);
             Route::post('officers/reorder', [OfficerController::class, 'reorder'])->name('officers.reorder');
             Route::patch('officers/{officer}/toggle-active', [OfficerController::class, 'toggleActive'])->name('officers.toggle-active');
         });
 
         // Announcement Management
-        Route::middleware(['role:usg-officer|usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::resource('announcements', AnnouncementController::class);
             Route::get('announcements/{announcement:slug}/preview', [AnnouncementController::class, 'preview'])->name('announcements.preview');
             Route::patch('announcements/{announcement}/publish', [AnnouncementController::class, 'publish'])->name('announcements.publish');
@@ -93,7 +93,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         // Event Management
-        Route::middleware(['role:usg-officer|usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::resource('events', EventController::class);
             Route::patch('events/{event}/publish', [EventController::class, 'publish'])->name('events.publish');
             Route::patch('events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
@@ -101,13 +101,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         // Resolution Management
-        Route::middleware(['role:usg-officer|usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::resource('resolutions', ResolutionController::class);
             Route::patch('resolutions/{resolution}/submit', [ResolutionController::class, 'submit'])->name('resolutions.submit');
         });
 
         // Resolution Approval - restricted to USG Admins and System Admins
-        Route::middleware(['role:usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
             Route::get('resolutions/pending', [ResolutionController::class, 'pending'])->name('resolutions.pending');
             Route::patch('resolutions/{resolution}/approve', [ResolutionController::class, 'approve'])->name('resolutions.approve');
             Route::patch('resolutions/{resolution}/reject', [ResolutionController::class, 'reject'])->name('resolutions.reject');
@@ -115,7 +115,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         // Document Management - restricted to USG Admins and System Admins
-        Route::middleware(['role:usg-admin|system-admin'])->group(function () {
+        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
             Route::resource('documents', DocumentController::class);
             Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
         });

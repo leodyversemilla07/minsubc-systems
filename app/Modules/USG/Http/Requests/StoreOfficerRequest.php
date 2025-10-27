@@ -11,7 +11,7 @@ class StoreOfficerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->hasAnyRole(['usg-admin', 'system-admin']);
+        return $this->user()->hasAnyRole(['usg-admin', 'super-admin']);
     }
 
     /**

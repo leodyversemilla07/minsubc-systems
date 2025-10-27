@@ -182,7 +182,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Create Super Admin role (highest authority - can manage everything)
-        $superAdminRole = Role::create(['name' => 'super_admin']);
+        $superAdminRole = Role::create(['name' => 'super-admin']);
         $superAdminRole->givePermissionTo([
             // All existing permissions for complete system access
             'submit_requests',

@@ -30,6 +30,13 @@ class PaymentService
 
     /**
      * Create a PayMongo payment intent for digital payment
+     *
+     * @return array{
+     *     success: bool,
+     *     client_key?: string,
+     *     payment_intent_id?: string,
+     *     error?: string
+     * }
      */
     public function createPaymentIntent(DocumentRequest $request): array
     {
@@ -44,7 +51,7 @@ class PaymentService
             $response = Http::withHeaders([
                 'Authorization' => 'Basic '.base64_encode($this->secretKey.':'),
                 'Content-Type' => 'application/json',
-            ])->post('https://api.paymongo.com/v1/payment_intents', [
+            ])->post("{$this->baseUrl}/payment_intents", [
                 'data' => [
                     'attributes' => [
                         'amount' => $request->amount * 100, // PayMongo expects amount in centavos
@@ -125,6 +132,9 @@ class PaymentService
 
     /**
      * Handle PayMongo webhook for payment events.
+     *
+     * @param  array<string, mixed>  $payload  Webhook payload data
+     * @return bool True if webhook was handled successfully
      */
     public function handleWebhook(array $payload): bool
     {
@@ -193,6 +203,9 @@ class PaymentService
 
     /**
      * Generate payment reference number for cash payments
+     *
+     * @param  DocumentRequest  $request  Document request
+     * @return string Payment reference number (e.g., PRN-20251027-0001)
      */
     public function generatePaymentReference(DocumentRequest $request): string
     {
@@ -205,6 +218,10 @@ class PaymentService
 
     /**
      * Confirm cash payment
+     *
+     * @param  string  $paymentReference  Payment reference number to confirm
+     * @param  string  $confirmedBy  User ID who confirmed the payment
+     * @return bool True if payment was confirmed, false otherwise
      */
     public function confirmCashPayment(string $paymentReference, string $confirmedBy): bool
     {
@@ -229,7 +246,7 @@ class PaymentService
             Payment::class,
             $payment->id,
             $oldPayment,
-            $payment->fresh()->toArray(),
+            $payment->toArray(),
             "Cash payment confirmed for document request {$payment->documentRequest->request_number}",
             [
                 'request_number' => $payment->documentRequest->request_number,
@@ -256,6 +273,14 @@ class PaymentService
 
     /**
      * Create a PayMongo checkout session for a document request.
+     *
+     * @return array{
+     *     success: bool,
+     *     checkout_id?: string,
+     *     checkout_url?: string,
+     *     reference_number?: string,
+     *     error?: string
+     * }
      */
     public function createCheckout(DocumentRequest $request): array
     {
@@ -329,6 +354,8 @@ class PaymentService
 
     /**
      * Retrieve checkout session details.
+     *
+     * @return array<string, mixed>|null
      */
     public function getCheckoutSession(string $checkoutId): ?array
     {
@@ -355,6 +382,9 @@ class PaymentService
 
     /**
      * Handle successful payment webhook.
+     *
+     * @param  Payment  $payment  Payment instance to update
+     * @param  array<string, mixed>  $payload  Webhook payload data
      */
     private function handlePaymentSuccess(Payment $payment, array $payload): void
     {
@@ -377,7 +407,7 @@ class PaymentService
             Payment::class,
             $payment->id,
             $oldPayment,
-            $payment->fresh()->toArray(),
+            $payment->toArray(),
             "Digital payment completed for document request {$payment->documentRequest->request_number}",
             [
                 'request_number' => $payment->documentRequest->request_number,
@@ -401,6 +431,9 @@ class PaymentService
 
     /**
      * Handle failed payment webhook.
+     *
+     * @param  Payment  $payment  Payment instance to update
+     * @param  array<string, mixed>  $payload  Webhook payload data
      */
     private function handlePaymentFailed(Payment $payment, array $payload): void
     {
@@ -417,7 +450,7 @@ class PaymentService
             Payment::class,
             $payment->id,
             $oldPayment,
-            $payment->fresh()->toArray(),
+            $payment->toArray(),
             "Digital payment failed for document request {$payment->documentRequest->request_number}",
             [
                 'request_number' => $payment->documentRequest->request_number,
@@ -434,6 +467,10 @@ class PaymentService
 
     /**
      * Verify webhook signature (for production security).
+     *
+     * @param  string  $signature  Signature from webhook header
+     * @param  string  $payload  Raw webhook payload
+     * @return bool True if signature is valid
      */
     public function verifyWebhookSignature(string $signature, string $payload): bool
     {

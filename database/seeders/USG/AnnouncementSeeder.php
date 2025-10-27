@@ -3,8 +3,8 @@
 namespace Database\Seeders\USG;
 
 use App\Models\User;
+use App\Modules\USG\Models\Announcement;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AnnouncementSeeder extends Seeder
@@ -72,7 +72,7 @@ class AnnouncementSeeder extends Seeder
             $slug = Str::slug($announcement['title']).'-'.Str::random(6);
             $publishDate = $announcement['status'] === 'published' ? now()->subDays(rand(1, 15)) : null;
 
-            DB::table('usg_announcements')->insert([
+            Announcement::create([
                 'title' => $announcement['title'],
                 'slug' => $slug,
                 'content' => $announcement['content'],

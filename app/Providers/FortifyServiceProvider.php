@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -20,13 +21,13 @@ class FortifyServiceProvider extends ServiceProvider
         // Custom login response to redirect based on user role
         $this->app->instance(LoginResponse::class, new class implements LoginResponse
         {
-            public function toResponse($request): \Illuminate\Http\RedirectResponse
+            public function toResponse($request): RedirectResponse
             {
                 $user = auth()->user();
                 $userRoles = $user->roles->pluck('name')->toArray();
 
                 // Redirect USG admins, officers, and system admins to USG admin dashboard
-                if (array_intersect($userRoles, ['usg-admin', 'usg-officer', 'system-admin'])) {
+                if (array_intersect($userRoles, ['usg-admin', 'usg-officer', 'super-admin'])) {
                     return redirect()->intended(route('usg.admin.dashboard'));
                 }
 

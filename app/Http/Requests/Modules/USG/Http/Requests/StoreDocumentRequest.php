@@ -4,7 +4,7 @@ namespace App\Http\Requests\Modules\USG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateResolutionRequest extends FormRequest
+class StoreDocumentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

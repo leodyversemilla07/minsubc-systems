@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\AuditLog;
+use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Events\RoleAttached;
@@ -48,7 +50,7 @@ class RoleEventServiceProvider extends ServiceProvider
         AuditLog::log(
             'user_role_attached',
             auth()->id(),
-            \App\Models\User::class,
+            User::class,
             $user->id,
             ['roles' => $user->roles->pluck('name')->toArray()], // Roles before attachment
             ['roles' => $user->fresh()->roles->pluck('name')->toArray()], // Roles after attachment
@@ -76,7 +78,7 @@ class RoleEventServiceProvider extends ServiceProvider
         AuditLog::log(
             'user_role_detached',
             auth()->id(),
-            \App\Models\User::class,
+            User::class,
             $user->id,
             ['roles' => $user->fresh()->roles->pluck('name')->toArray()], // Roles before detachment (after refresh)
             ['roles' => $user->roles->pluck('name')->toArray()], // Roles after detachment
@@ -104,7 +106,7 @@ class RoleEventServiceProvider extends ServiceProvider
         }
 
         if (is_object($rolesOrIds)) {
-            if ($rolesOrIds instanceof \Illuminate\Support\Collection) {
+            if ($rolesOrIds instanceof Collection) {
                 return $rolesOrIds->map(function ($role) {
                     return is_object($role) && method_exists($role, 'getAttribute')
                         ? $role->getAttribute('name')

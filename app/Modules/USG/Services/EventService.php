@@ -127,7 +127,7 @@ class EventService
 
         $event->update($data);
 
-        return $event->fresh();
+        return $event;
     }
 
     /**
@@ -137,7 +137,7 @@ class EventService
     {
         $event->update(['status' => 'published']);
 
-        return $event->fresh();
+        return $event;
     }
 
     /**
@@ -147,7 +147,7 @@ class EventService
     {
         $event->update(['status' => 'cancelled']);
 
-        return $event->fresh();
+        return $event;
     }
 
     /**
@@ -157,7 +157,7 @@ class EventService
     {
         $event->update(['status' => 'archived']);
 
-        return $event->fresh();
+        return $event;
     }
 
     /**
@@ -216,6 +216,18 @@ class EventService
 
     /**
      * Get calendar data for frontend
+     *
+     * @return array<int, array{
+     *     id: int,
+     *     title: string,
+     *     start: string,
+     *     end: string,
+     *     allDay: bool,
+     *     color: string,
+     *     url: string,
+     *     description: string|null,
+     *     location: string|null
+     * }>
      */
     public function getCalendarData(int $year, int $month): array
     {
@@ -444,6 +456,25 @@ class EventService
 
     /**
      * Transform event for frontend display
+     *
+     * @return array{
+     *     id: int,
+     *     title: string,
+     *     description: string|null,
+     *     date: string,
+     *     time: string|null,
+     *     end_time: string|null,
+     *     location: string|null,
+     *     category: string|null,
+     *     max_attendees: int|null,
+     *     registration_required: bool,
+     *     registration_deadline: string|null,
+     *     status: string,
+     *     organizer: string|null,
+     *     created_at: string,
+     *     updated_at: string,
+     *     attendees_count: int
+     * }
      */
     public function transformEventForFrontend(Event $event): array
     {

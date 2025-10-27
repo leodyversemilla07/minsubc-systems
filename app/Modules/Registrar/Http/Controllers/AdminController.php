@@ -3,6 +3,7 @@
 namespace App\Modules\Registrar\Http\Controllers;
 
 use App\Models\AuditLog;
+use App\Models\User;
 use App\Modules\Registrar\Http\Requests\ReleaseDocumentRequest;
 use App\Modules\Registrar\Http\Requests\UpdateDocumentRequestStatusRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
@@ -97,7 +98,7 @@ class AdminController extends Controller
             DocumentRequest::class,
             $documentRequest->id,
             $oldRequest,
-            $documentRequest->fresh()->toArray(),
+            $documentRequest->toArray(),
             "Document request {$documentRequest->request_number} status changed from {$oldStatus} to {$request->validated('status')}",
             [
                 'request_number' => $documentRequest->request_number,
@@ -110,11 +111,9 @@ class AdminController extends Controller
 
         // Send notifications based on status change
         if ($request->status === 'ready_for_claim' && $oldStatus !== 'ready_for_claim') {
-            // Notify student that document is ready
-            // $this->notificationService->notifyDocumentReady($documentRequest);
+            $this->notificationService->notifyDocumentReady($documentRequest);
         } elseif ($request->status === 'released' && $oldStatus !== 'released') {
-            // Notify student that document is released
-            // $this->notificationService->notifyDocumentReleased($documentRequest);
+            $this->notificationService->notifyDocumentReleased($documentRequest);
         }
 
         return redirect()->route('registrar.admin.dashboard')
@@ -188,7 +187,7 @@ class AdminController extends Controller
             DocumentRequest::class,
             $documentRequest->id,
             $oldRequest,
-            $documentRequest->fresh()->toArray(),
+            $documentRequest->toArray(),
             "Document released for request {$documentRequest->request_number}",
             [
                 'request_number' => $documentRequest->request_number,
@@ -250,7 +249,7 @@ class AdminController extends Controller
         $actions = AuditLog::distinct('action')->pluck('action')->sort();
 
         // Get users who have audit logs
-        $users = \App\Models\User::whereHas('auditLogs')
+        $users = User::whereHas('auditLogs')
             ->select('id', 'first_name', 'last_name', 'email')
             ->get()
             ->map(function ($user) {

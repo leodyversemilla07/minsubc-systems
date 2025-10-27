@@ -8,6 +8,7 @@ use App\Modules\USG\Http\Requests\UpdateEventRequest;
 use App\Modules\USG\Services\EventService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,7 +34,7 @@ class EventController extends Controller
         });
 
         // Create new paginator with transformed data
-        $transformedPaginator = new \Illuminate\Pagination\LengthAwarePaginator(
+        $transformedPaginator = new LengthAwarePaginator(
             $transformedEvents,
             $events->total(),
             $events->perPage(),
@@ -47,7 +48,7 @@ class EventController extends Controller
             'events' => $transformedPaginator,
             'categories' => $categories,
             'filters' => $filters,
-            'canManage' => true, // Add permission check if needed
+            'canManage' => Auth::user()->hasAnyRole(['usg-officer', 'usg-admin', 'super-admin']),
         ]);
     }
 

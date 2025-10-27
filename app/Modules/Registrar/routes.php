@@ -57,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Admin routes - accessible to registrar staff and admins
-    Route::middleware(['role:registrar-staff|registrar-admin|system-admin'])->group(function () {
+    Route::middleware(['role:registrar-staff|registrar-admin|super-admin'])->group(function () {
         Route::get('admin', [AdminController::class, 'dashboard'])->name('registrar.admin.dashboard');
         Route::get('admin/requests/{documentRequest}', [AdminController::class, 'show'])->name('registrar.admin.requests.show');
         Route::patch('admin/requests/{documentRequest}/status', [AdminController::class, 'updateStatus'])
@@ -73,7 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Student management - accessible to registrar admin and system admin
-    Route::middleware(['role:registrar-admin|system-admin'])->group(function () {
+    Route::middleware(['role:registrar-admin|super-admin'])->group(function () {
         Route::resource('students', StudentController::class)
             ->names('registrar.students');
     });

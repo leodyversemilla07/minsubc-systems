@@ -125,7 +125,7 @@ class ResolutionService
 
         $resolution->update($data);
 
-        return $resolution->fresh();
+        return $resolution;
     }
 
     /**
@@ -137,7 +137,7 @@ class ResolutionService
             'status' => 'pending',
         ]);
 
-        return $resolution->fresh();
+        return $resolution;
     }
 
     /**
@@ -152,7 +152,7 @@ class ResolutionService
             'published_at' => now(),
         ]);
 
-        return $resolution->fresh();
+        return $resolution;
     }
 
     /**
@@ -172,7 +172,7 @@ class ResolutionService
 
         $resolution->update($updateData);
 
-        return $resolution->fresh();
+        return $resolution;
     }
 
     /**
@@ -182,7 +182,7 @@ class ResolutionService
     {
         $resolution->update(['status' => 'archived']);
 
-        return $resolution->fresh();
+        return $resolution;
     }
 
     /**
@@ -248,6 +248,14 @@ class ResolutionService
 
     /**
      * Get resolution statistics
+     *
+     * @return array{
+     *     total: int,
+     *     published: int,
+     *     pending: int,
+     *     draft: int,
+     *     this_year: int
+     * }
      */
     public function getStatistics(): array
     {
@@ -262,6 +270,14 @@ class ResolutionService
 
     /**
      * Handle file upload
+     *
+     * @param  UploadedFile  $file  File to upload
+     * @return array{
+     *     path: string,
+     *     original_name: string,
+     *     size: int,
+     *     mime_type: string
+     * }
      */
     private function handleFileUpload(UploadedFile $file): array
     {
@@ -383,6 +399,6 @@ class ResolutionService
     {
         $resolution->update(['status' => 'review']);
 
-        return $resolution->fresh();
+        return $resolution;
     }
 }

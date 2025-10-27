@@ -14,7 +14,7 @@ beforeEach(function () {
 test('rbac roles are created correctly', function (string $role) {
     expect(Role::where('name', $role)->exists())->toBeTrue();
 })->with([
-    'student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'usg-officer', 'super_admin',
+    'student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'usg-officer', 'super-admin',
 ]);
 
 test('rbac permissions are created correctly', function (string $permission) {
@@ -37,7 +37,7 @@ test('student role has correct permissions', function () {
 });
 
 test('super admin role has all permissions', function () {
-    $adminRole = Role::where('name', 'super_admin')->first();
+    $adminRole = Role::where('name', 'super-admin')->first();
     expect($adminRole)->not->toBeNull();
 
     // Super admin should have all permissions
@@ -51,7 +51,7 @@ test('users have correct roles assigned', function () {
 
     $admin = User::where('email', 'superadmin@minsu.edu.ph')->first();
     expect($admin)->not->toBeNull();
-    expect($admin->hasRole('super_admin'))->toBeTrue();
+    expect($admin->hasRole('super-admin'))->toBeTrue();
 });
 
 test('permission checks work correctly', function () {

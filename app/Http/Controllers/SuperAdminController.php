@@ -41,7 +41,7 @@ class SuperAdminController extends Controller
             'total_users' => $userStats->total_users,
             'active_users' => $userStats->active_users,
             'total_roles' => Role::count(),
-            'system_admins' => User::role(['system-admin', 'super_admin'])->count(),
+            'system_admins' => User::role(['super-admin'])->count(),
             'total_audit_logs' => $auditStats->total_audit_logs,
             'recent_audit_logs' => $auditStats->recent_audit_logs,
             'system_settings_count' => SystemSetting::count(),

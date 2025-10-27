@@ -11,7 +11,7 @@ class StoreAnnouncementRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->hasAnyRole(['usg-officer', 'usg-admin', 'system-admin']);
+        return $this->user()->hasAnyRole(['usg-officer', 'usg-admin', 'super-admin']);
     }
 
     /**

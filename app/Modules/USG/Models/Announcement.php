@@ -4,6 +4,7 @@ namespace App\Modules\USG\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,9 +50,9 @@ class Announcement extends Model
     }
 
     // Accessors
-    protected function authorName(): \Illuminate\Database\Eloquent\Casts\Attribute
+    protected function authorName(): Attribute
     {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+        return Attribute::make(
             get: fn () => $this->author?->full_name ?? $this->author?->name ?? 'Unknown',
         );
     }

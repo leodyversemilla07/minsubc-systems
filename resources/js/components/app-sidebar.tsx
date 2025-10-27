@@ -62,7 +62,7 @@ export function AppSidebar() {
         const items: NavItem[] = [];
 
         // Super Admin Navigation
-        if (hasAnyRole(['super_admin'])) {
+        if (hasAnyRole(['super-admin'])) {
             items.push(
                 {
                     title: 'Super Admin Dashboard',

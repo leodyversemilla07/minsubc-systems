@@ -2,6 +2,7 @@
 
 namespace App\Modules\Registrar\Services;
 
+use App\Models\User;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Notification;
 use Illuminate\Support\Facades\Http;
@@ -315,7 +316,7 @@ class NotificationService
     private function getRegistrarStaffEmails(): array
     {
         // Get users with registrar roles
-        $staffUsers = \App\Models\User::role(['registrar-admin', 'registrar-staff'])
+        $staffUsers = User::role(['registrar-admin', 'registrar-staff'])
             ->pluck('email')
             ->toArray();
 

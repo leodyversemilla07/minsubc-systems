@@ -3,6 +3,7 @@
 namespace App\Modules\USG\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\USG\Models\Officer;
 use App\Modules\USG\Models\TransparencyReport;
 use App\Modules\USG\Services\AnnouncementService;
 use App\Modules\USG\Services\EventService;
@@ -45,7 +46,8 @@ class PageController extends Controller
         ];
 
         // Get featured officers for homepage
-        $featuredOfficers = \App\Models\Modules\USG\Models\Officer::active()
+        $featuredOfficers = Officer::active()
+            ->with('user')
             ->select(['id', 'name', 'position', 'photo'])
             ->orderBy('order')
             ->limit(6)

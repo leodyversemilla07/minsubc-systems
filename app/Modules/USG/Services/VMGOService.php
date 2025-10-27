@@ -5,6 +5,7 @@ namespace App\Modules\USG\Services;
 use App\Modules\USG\Models\VMGO;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class VMGOService
 {
@@ -66,13 +67,13 @@ class VMGOService
             'updated_by' => $updatedBy,
         ]);
 
-        return $vmgo->fresh();
+        return $vmgo;
     }
 
     /**
      * Get VMGO history with pagination
      */
-    public function getHistory(int $perPage = 10): \Illuminate\Pagination\LengthAwarePaginator
+    public function getHistory(int $perPage = 10): LengthAwarePaginator
     {
         return VMGO::with('updatedBy')
             ->orderBy('effective_date', 'desc')

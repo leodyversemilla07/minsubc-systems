@@ -128,7 +128,7 @@ class AnnouncementService
 
         $announcement->update($data);
 
-        return $announcement->fresh();
+        return $announcement;
     }
 
     /**
@@ -141,7 +141,7 @@ class AnnouncementService
             'publish_date' => $announcement->publish_date ?? now(),
         ]);
 
-        return $announcement->fresh();
+        return $announcement;
     }
 
     /**
@@ -151,7 +151,7 @@ class AnnouncementService
     {
         $announcement->update(['status' => 'draft']);
 
-        return $announcement->fresh();
+        return $announcement;
     }
 
     /**
@@ -161,7 +161,7 @@ class AnnouncementService
     {
         $announcement->update(['status' => 'archived']);
 
-        return $announcement->fresh();
+        return $announcement;
     }
 
     /**

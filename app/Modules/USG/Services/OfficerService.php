@@ -79,7 +79,7 @@ class OfficerService
 
         $officer->update($data);
 
-        return $officer->fresh();
+        return $officer;
     }
 
     /**
@@ -114,7 +114,7 @@ class OfficerService
     {
         $officer->update(['is_active' => ! $officer->is_active]);
 
-        return $officer->fresh();
+        return $officer;
     }
 
     /**

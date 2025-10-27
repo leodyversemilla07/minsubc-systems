@@ -2,6 +2,7 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Modules\Registrar\Http\Requests\ConfirmCashPaymentRequest;
 use App\Modules\Registrar\Http\Requests\VerifyPaymentReferenceRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
@@ -63,7 +64,7 @@ class PaymentController extends Controller
             ]);
 
             // Log checkout payment creation
-            \App\Models\AuditLog::log(
+            AuditLog::log(
                 'payment_created',
                 $documentRequest->student->user_id,
                 Payment::class,
@@ -145,7 +146,7 @@ class PaymentController extends Controller
         ]);
 
         // Log cash payment reference generation
-        \App\Models\AuditLog::log(
+        AuditLog::log(
             'payment_created',
             $documentRequest->student->user_id,
             Payment::class,
@@ -295,7 +296,7 @@ class PaymentController extends Controller
         ]);
 
         // Log the action
-        \App\Models\AuditLog::log(
+        AuditLog::log(
             'payment_confirmed',
             $user->id,
             Payment::class,
