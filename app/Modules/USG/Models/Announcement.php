@@ -3,6 +3,7 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
+use Database\Factories\Modules\USG\AnnouncementFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,14 @@ class Announcement extends Model
     use HasFactory;
 
     protected $table = 'usg_announcements';
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): AnnouncementFactory
+    {
+        return AnnouncementFactory::new();
+    }
 
     protected $fillable = [
         'title',

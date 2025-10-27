@@ -75,7 +75,7 @@ class VMGOService
      */
     public function getHistory(int $perPage = 10): LengthAwarePaginator
     {
-        return VMGO::with('updatedBy')
+        return VMGO::with('updatedByUser')
             ->orderBy('effective_date', 'desc')
             ->paginate($perPage);
     }
@@ -85,7 +85,7 @@ class VMGOService
      */
     public function getAllVersions(): Collection
     {
-        return VMGO::with('updatedBy')
+        return VMGO::with('updatedByUser')
             ->orderBy('effective_date', 'desc')
             ->get();
     }

@@ -26,7 +26,7 @@ class UpdateResolutionRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'resolution_number' => ['nullable', 'string', 'max:50', Rule::unique('resolutions', 'resolution_number')->ignore($resolutionId)],
+            'resolution_number' => ['nullable', 'string', 'max:50', Rule::unique('usg_resolutions', 'resolution_number')->ignore($resolutionId)],
             'description' => ['nullable', 'string'],
             'content' => ['required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],

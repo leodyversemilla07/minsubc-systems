@@ -46,7 +46,7 @@ class EventFactory extends Factory
             'organizer' => 'University Student Government',
             'is_recurring' => false,
             'recurrence_rule' => null,
-            'status' => 'scheduled',
+            'status' => 'published',
             'created_by' => User::factory(),
         ];
     }
@@ -61,7 +61,7 @@ class EventFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'start_date' => $startDate,
             'end_date' => $startDate->copy()->addHours(rand(2, 8)),
-            'status' => 'scheduled',
+            'status' => 'published',
         ]);
     }
 
@@ -75,7 +75,7 @@ class EventFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'start_date' => $startDate,
             'end_date' => $startDate->copy()->addHours(rand(2, 8)),
-            'status' => 'completed',
+            'status' => 'archived',
         ]);
     }
 
@@ -99,7 +99,7 @@ class EventFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'start_date' => $startDate,
             'end_date' => $startDate->copy()->addHours(6),
-            'status' => 'scheduled',
+            'status' => 'published',
         ]);
     }
 

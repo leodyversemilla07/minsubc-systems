@@ -3,6 +3,7 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
+use Database\Factories\Modules\USG\ResolutionFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,14 @@ class Resolution extends Model
     use HasFactory;
 
     protected $table = 'usg_resolutions';
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): ResolutionFactory
+    {
+        return ResolutionFactory::new();
+    }
 
     protected $fillable = [
         'resolution_number',

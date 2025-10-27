@@ -33,6 +33,11 @@ class StoreAnnouncementRequest extends FormRequest
             'expires_at' => ['nullable', 'date', 'after:publish_at'],
             'is_published' => ['required', 'boolean'],
             'is_pinned' => ['required', 'boolean'],
+            // These fields are added by prepareForValidation()
+            'status' => ['sometimes', 'string', 'in:draft,published,archived'],
+            'priority' => ['sometimes', 'string', 'in:normal,high'],
+            'publish_date' => ['sometimes', 'date'],
+            'expiry_date' => ['sometimes', 'nullable', 'date'],
         ];
     }
 

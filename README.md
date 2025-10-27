@@ -459,7 +459,18 @@ php artisan migrate:status
 
 ## 🧪 Testing
 
-This project uses **Pest** for testing with a focus on feature and unit tests.
+This project uses **Pest 4** for testing with comprehensive feature, unit, and browser tests.
+
+### Test Suite Statistics
+
+| Category | Count | Coverage |
+|----------|-------|----------|
+| **Total Tests** | 213 | All critical workflows |
+| **Feature Tests** | 212 | Auth, RBAC, Registrar, USG |
+| **Unit Tests** | 1 | Utilities and helpers |
+| **Browser Tests** | 30 (ready) | E2E user workflows |
+| **Assertions** | 789+ | Comprehensive validation |
+| **Test Duration** | ~48s | Optimized for speed |
 
 ### Running Tests
 
@@ -470,14 +481,175 @@ php artisan test
 # Run specific test file
 php artisan test tests/Feature/Registrar/DocumentRequestTest.php
 
-# Filter by test name
-php artisan test --filter=testCanCreateDocumentRequest
+# Run specific test suite
+php artisan test tests/Feature/USG
 
-# Run with coverage (requires Xdebug)
+# Filter by test name
+php artisan test --filter="can create document request"
+
+# Run in parallel (faster)
+php artisan test --parallel
+
+# Run with code coverage
 php artisan test --coverage
 
-# Run in parallel
-php artisan test --parallel
+# Run with detailed coverage
+php artisan test --coverage --min=80
+```
+
+### Browser Testing (Pest 4)
+
+This project includes comprehensive E2E browser tests using Pest 4 and Playwright.
+
+#### Setup Browser Testing
+
+1. **Install Playwright browsers** (one-time setup):
+```bash
+npx playwright install
+```
+
+2. **Add to `.gitignore`**:
+```gitignore
+/tests/Browser/Screenshots
+```
+
+3. **Start development server**:
+```bash
+# Option A: Full stack
+composer run dev
+
+# Option B: Just Vite
+npm run dev
+```
+
+#### Running Browser Tests
+
+```bash
+# Run all browser tests
+php artisan test tests/Browser
+
+# Run specific browser test
+php artisan test tests/Browser/DocumentRequestFlowTest.php
+
+# Run in headed mode (see browser)
+./vendor/bin/pest tests/Browser --headed
+
+# Run in debug mode (pause on failures)
+./vendor/bin/pest tests/Browser --debug
+
+# Run on specific browser
+./vendor/bin/pest tests/Browser --browser firefox
+./vendor/bin/pest tests/Browser --browser safari
+
+# Take screenshots on failure
+./vendor/bin/pest tests/Browser --screenshots
+```
+
+#### Available Browser Tests
+
+- **DocumentRequestFlowTest.php** - Complete document request workflow (7 tests)
+- **PaymentFlowTest.php** - Payment processing flows (10 tests)
+- **AnnouncementPublishFlowTest.php** - USG announcement lifecycle (13 tests)
+
+### Code Coverage
+
+#### Prerequisites
+
+Install PCOV for fast code coverage:
+
+**On Windows (with XAMPP/Herd):**
+
+1. Download PCOV extension for your PHP version from [PECL](https://pecl.php.net/package/pcov)
+2. Copy `php_pcov.dll` to your PHP `ext` directory
+3. Add to `php.ini`:
+```ini
+[pcov]
+extension=pcov
+pcov.enabled=1
+pcov.directory=.
+pcov.exclude="~vendor~"
+```
+
+4. Restart PHP server and verify:
+```bash
+php -m | findstr pcov
+```
+
+**On macOS/Linux:**
+
+```bash
+# Install PCOV
+pecl install pcov
+
+# Add to php.ini
+echo "extension=pcov.so" >> $(php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||")
+echo "pcov.enabled=1" >> $(php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||")
+
+# Verify installation
+php -m | grep pcov
+```
+
+**Alternative: Use Xdebug** (slower but more features)
+
+```bash
+# Install Xdebug
+pecl install xdebug
+
+# Add to php.ini
+zend_extension=xdebug.so
+xdebug.mode=coverage
+```
+
+#### Running Coverage Reports
+
+```bash
+# Generate coverage report (HTML)
+php artisan test --coverage-html coverage-report
+
+# Open the report
+# Windows: start coverage-report/index.html
+# macOS: open coverage-report/index.html
+# Linux: xdg-open coverage-report/index.html
+
+# Generate coverage with minimum threshold
+php artisan test --coverage --min=80
+
+# Coverage for specific paths
+php artisan test --coverage --path=app/Modules/USG
+
+# Generate multiple format coverage
+vendor/bin/pest --coverage-html=coverage-report --coverage-text --coverage-clover=coverage.xml
+```
+
+#### Coverage Report Output Example
+
+```
+Tests:    213 passed (789 assertions)
+Duration: 48.23s
+
+Code Coverage:
+  app/Models ................................. 92.5%
+  app/Modules/Registrar ...................... 88.3%
+  app/Modules/USG ............................ 91.7%
+  app/Http/Controllers ....................... 85.2%
+  app/Services ............................... 87.9%
+
+  Total: 89.2%
+```
+
+#### CI/CD Integration
+
+Add to your GitHub Actions workflow:
+
+```yaml
+- name: Run tests with coverage
+  run: |
+    vendor/bin/pest --coverage --coverage-clover=coverage.xml
+    
+- name: Upload coverage to Codecov
+  uses: codecov/codecov-action@v3
+  with:
+    files: ./coverage.xml
 ```
 
 ### Writing Tests

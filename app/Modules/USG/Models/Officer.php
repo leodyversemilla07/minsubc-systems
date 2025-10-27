@@ -3,6 +3,7 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
+use Database\Factories\Modules\USG\OfficerFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,14 @@ class Officer extends Model
     use HasFactory;
 
     protected $table = 'usg_officers';
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): OfficerFactory
+    {
+        return OfficerFactory::new();
+    }
 
     protected $fillable = [
         'user_id',

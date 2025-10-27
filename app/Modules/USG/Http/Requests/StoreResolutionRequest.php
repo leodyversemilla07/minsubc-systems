@@ -23,7 +23,7 @@ class StoreResolutionRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'resolution_number' => ['nullable', 'string', 'max:50', 'unique:resolutions,resolution_number'],
+            'resolution_number' => ['nullable', 'string', 'max:50', 'unique:usg_resolutions,resolution_number'],
             'description' => ['nullable', 'string'],
             'content' => ['required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],
