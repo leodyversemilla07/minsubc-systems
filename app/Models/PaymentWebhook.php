@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentWebhook extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'event_id',
         'event_type',
@@ -27,7 +30,7 @@ class PaymentWebhook extends Model
     /**
      * Scope to get unprocessed webhooks.
      */
-    public function scopeUnprocessed($query)
+    public function scopeUnprocessed($query): mixed
     {
         return $query->where('processed', false);
     }
@@ -35,7 +38,7 @@ class PaymentWebhook extends Model
     /**
      * Scope to get failed webhooks.
      */
-    public function scopeFailed($query)
+    public function scopeFailed($query): mixed
     {
         return $query->whereNotNull('error_message');
     }

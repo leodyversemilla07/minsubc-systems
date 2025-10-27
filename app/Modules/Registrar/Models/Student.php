@@ -27,10 +27,13 @@ class Student extends Model
         'status',
     ];
 
-    protected $casts = [
-        'status' => 'string',
-        'year_level' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'status' => 'string',
+            'year_level' => 'integer',
+        ];
+    }
 
     /**
      * Get the user associated with this student.

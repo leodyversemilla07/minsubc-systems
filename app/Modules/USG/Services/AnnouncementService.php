@@ -2,7 +2,7 @@
 
 namespace App\Modules\USG\Services;
 
-use App\Models\Modules\USG\Models\Announcement;
+use App\Modules\USG\Models\Announcement;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;

@@ -24,7 +24,7 @@ class ListPayMongoWebhooks extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('📋 Fetching PayMongo Webhooks...');
         $this->newLine();

@@ -36,17 +36,20 @@ class DocumentRequest extends Model
         'claim_notes',
     ];
 
-    protected $casts = [
-        'status' => DocumentRequestStatus::class,
-        'amount' => 'float',
-        'quantity' => 'integer',
-        'payment_deadline' => 'datetime',
-        'released_at' => 'datetime',
-        'processed_by' => 'integer',
-        'released_by' => 'integer',
-        'claimed_by_student' => 'boolean',
-        'claimed_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'status' => DocumentRequestStatus::class,
+            'amount' => 'float',
+            'quantity' => 'integer',
+            'payment_deadline' => 'datetime',
+            'released_at' => 'datetime',
+            'processed_by' => 'integer',
+            'released_by' => 'integer',
+            'claimed_by_student' => 'boolean',
+            'claimed_at' => 'datetime',
+        ];
+    }
 
     /**
      * Get the route key name for Laravel route model binding.
@@ -367,5 +370,17 @@ class DocumentRequest extends Model
         $todayCount = self::getTodayRequestCount($studentId);
 
         return max(0, $dailyLimit - $todayCount);
+    }
+
+    /**
+     * Generate a unique request number.
+     */
+    public static function generateRequestNumber(): string
+    {
+        do {
+            $number = 'REQ-'.now()->format('Ymd').'-'.str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        } while (self::where('request_number', $number)->exists());
+
+        return $number;
     }
 }

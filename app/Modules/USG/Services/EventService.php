@@ -2,7 +2,7 @@
 
 namespace App\Modules\USG\Services;
 
-use App\Models\Modules\USG\Models\Event;
+use App\Modules\USG\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -394,5 +394,102 @@ class EventService
     {
         return Event::with('creator')
             ->find($id);
+    }
+
+    /**
+     * Get paginated events with filters for admin
+     */
+    public function getPaginatedWithFilters(array $filters = []): LengthAwarePaginator
+    {
+        $query = Event::with('creator');
+
+        // Apply search filter
+        if (! empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('organizer', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply category filter
+        if (! empty($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
+
+        // Apply status filter
+        if (! empty($filters['status'])) {
+            $statusMapping = [
+                'scheduled' => 'published',
+                'ongoing' => 'published',
+                'completed' => 'published',
+                'cancelled' => 'cancelled',
+            ];
+            if (isset($statusMapping[$filters['status']])) {
+                $query->where('status', $statusMapping[$filters['status']]);
+            }
+        }
+
+        // Apply month filter
+        if (! empty($filters['month'])) {
+            [$year, $monthNum] = explode('-', $filters['month']);
+            $query->whereYear('start_date', $year)
+                ->whereMonth('start_date', $monthNum);
+        }
+
+        return $query->latest('created_at')->paginate(15);
+    }
+
+    /**
+     * Transform event for frontend display
+     */
+    public function transformEventForFrontend(Event $event): array
+    {
+        return [
+            'id' => $event->id,
+            'title' => $event->title,
+            'description' => $event->description,
+            'date' => $event->start_date->toDateString(),
+            'time' => $event->all_day ? null : $event->start_date->format('H:i:s'),
+            'end_time' => $event->all_day ? null : ($event->end_date ? $event->end_date->format('H:i:s') : null),
+            'location' => $event->location,
+            'category' => $event->category,
+            'max_attendees' => null, // Not implemented yet
+            'registration_required' => false, // Not implemented yet
+            'registration_deadline' => null, // Not implemented yet
+            'status' => $this->mapBackendStatusToFrontend($event),
+            'organizer' => $event->organizer,
+            'created_at' => $event->created_at->toISOString(),
+            'updated_at' => $event->updated_at->toISOString(),
+            'attendees_count' => 0, // Not implemented yet
+        ];
+    }
+
+    /**
+     * Map backend status to frontend status
+     */
+    private function mapBackendStatusToFrontend(Event $event): string
+    {
+        switch ($event->status) {
+            case 'published':
+                // Check if event is upcoming, ongoing, or completed
+                if ($event->start_date->isFuture()) {
+                    return 'scheduled';
+                } elseif ($event->start_date->isPast() && ($event->end_date ? $event->end_date->isFuture() : true)) {
+                    return 'ongoing';
+                } else {
+                    return 'completed';
+                }
+            case 'cancelled':
+                return 'cancelled';
+            case 'draft':
+                return 'scheduled'; // Draft events are considered scheduled
+            case 'archived':
+                return 'completed'; // Archived events are considered completed
+            default:
+                return 'scheduled';
+        }
     }
 }

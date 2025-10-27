@@ -5,13 +5,15 @@ namespace App\Modules\Registrar\Http\Controllers;
 use App\Enums\DocumentRequestStatus;
 use App\Enums\DocumentType;
 use App\Models\AuditLog;
+use App\Modules\Registrar\Http\Requests\ConfirmClaimRequest;
 use App\Modules\Registrar\Http\Requests\StoreDocumentRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Services\NotificationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DocumentRequestController extends Controller
 {
@@ -22,7 +24,7 @@ class DocumentRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $user = Auth::user();
 
@@ -48,7 +50,7 @@ class DocumentRequestController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
         $user = Auth::user();
         $student = $user->student;
@@ -74,7 +76,7 @@ class DocumentRequestController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDocumentRequest $request)
+    public function store(StoreDocumentRequest $request): RedirectResponse
     {
         $user = Auth::user();
         $student = $user->student;
@@ -89,20 +91,17 @@ class DocumentRequestController extends Controller
         $documentType = DocumentType::from($validated['document_type']);
         $amount = $documentType->basePrice() * $validated['quantity'];
 
-        $createdRequest = null;
-        DB::transaction(function () use ($student, $validated, $amount, &$createdRequest) {
-            $createdRequest = DocumentRequest::create([
-                'request_number' => $this->generateRequestNumber(),
-                'student_id' => $student->student_id,
-                'document_type' => $validated['document_type'],
-                'quantity' => $validated['quantity'],
-                'purpose' => $validated['purpose'],
-                'amount' => $amount,
-                'payment_method' => null, // Will be set during payment
-                'status' => 'pending_payment',
-                'payment_deadline' => now()->addHours(48),
-            ]);
-        });
+        $createdRequest = DocumentRequest::create([
+            'request_number' => DocumentRequest::generateRequestNumber(),
+            'student_id' => $student->student_id,
+            'document_type' => $validated['document_type'],
+            'quantity' => $validated['quantity'],
+            'purpose' => $validated['purpose'],
+            'amount' => $amount,
+            'payment_method' => null, // Will be set during payment
+            'status' => 'pending_payment',
+            'payment_deadline' => now()->addHours(48),
+        ]);
 
         // Log document request creation
         if ($createdRequest) {
@@ -135,7 +134,7 @@ class DocumentRequestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DocumentRequest $documentRequest)
+    public function show(DocumentRequest $documentRequest): Response
     {
         $documentRequest->load(['student.user', 'payments', 'notifications']);
 
@@ -147,7 +146,7 @@ class DocumentRequestController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DocumentRequest $documentRequest)
+    public function edit(DocumentRequest $documentRequest): Response
     {
         // Only allow editing if status is pending_payment
         if ($documentRequest->status !== DocumentRequestStatus::PendingPayment) {
@@ -165,7 +164,7 @@ class DocumentRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreDocumentRequest $request, DocumentRequest $documentRequest)
+    public function update(StoreDocumentRequest $request, DocumentRequest $documentRequest): RedirectResponse
     {
         if ($documentRequest->status !== DocumentRequestStatus::PendingPayment) {
             abort(403, 'Cannot update request that is already being processed.');
@@ -191,7 +190,7 @@ class DocumentRequestController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DocumentRequest $documentRequest)
+    public function destroy(DocumentRequest $documentRequest): RedirectResponse
     {
         if (! in_array($documentRequest->status, [DocumentRequestStatus::PendingPayment, DocumentRequestStatus::PaymentExpired, DocumentRequestStatus::Cancelled])) {
             abort(403, 'Cannot delete request that is being processed.');
@@ -206,7 +205,7 @@ class DocumentRequestController extends Controller
     /**
      * Confirm document claim by student
      */
-    public function confirmClaim(Request $request, DocumentRequest $documentRequest)
+    public function confirmClaim(ConfirmClaimRequest $request, DocumentRequest $documentRequest): RedirectResponse
     {
         $user = Auth::user();
 
@@ -221,11 +220,6 @@ class DocumentRequestController extends Controller
                 'claim' => 'This document is not ready for claim yet.',
             ]);
         }
-
-        $request->validate([
-            'confirmation' => 'required|boolean',
-            'claim_notes' => 'nullable|string|max:500',
-        ]);
 
         if ($request->confirmation) {
             // Mark as claimed
@@ -256,17 +250,5 @@ class DocumentRequestController extends Controller
         return back()->withErrors([
             'confirmation' => 'Please confirm to proceed.',
         ]);
-    }
-
-    /**
-     * Generate a unique request number.
-     */
-    private function generateRequestNumber(): string
-    {
-        do {
-            $number = 'REQ-'.now()->format('Ymd').'-'.str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
-        } while (DocumentRequest::where('request_number', $number)->exists());
-
-        return $number;
     }
 }

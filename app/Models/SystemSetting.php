@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
 class SystemSetting extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -47,7 +50,7 @@ class SystemSetting extends Model
     /**
      * Set the value of the setting, encrypting if necessary.
      */
-    public function setValueAttribute($value): void
+    public function setValueAttribute(mixed $value): void
     {
         if ($this->is_encrypted && $value) {
             $this->attributes['value'] = Crypt::encryptString($value);
@@ -59,7 +62,7 @@ class SystemSetting extends Model
     /**
      * Get a setting value by key.
      */
-    public static function getValue(string $key, $default = null)
+    public static function getValue(string $key, mixed $default = null): mixed
     {
         $setting = static::where('setting_key', $key)->first();
 
@@ -69,7 +72,7 @@ class SystemSetting extends Model
     /**
      * Set a setting value by key.
      */
-    public static function setValue(string $key, $value, string $type = 'general', ?string $description = null, bool $encrypt = false): static
+    public static function setValue(string $key, mixed $value, string $type = 'general', ?string $description = null, bool $encrypt = false): static
     {
         return static::updateOrCreate(
             ['setting_key' => $key],

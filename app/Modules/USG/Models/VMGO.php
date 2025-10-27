@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models\Modules\USG\Models;
+namespace App\Modules\USG\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VMGO extends Model
 {
+    use HasFactory;
+
     protected $table = 'usg_vmgo';
 
     protected $fillable = [

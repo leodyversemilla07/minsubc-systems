@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Modules\USG\Http\Requests;
+namespace App\Http\Requests\SuperAdmin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEventRequest extends FormRequest
+class UpdateSystemSettingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('super_admin');
     }
 
     /**
@@ -22,7 +22,19 @@ class UpdateEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'value' => ['required'],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'value.required' => 'Setting value is required.',
         ];
     }
 }

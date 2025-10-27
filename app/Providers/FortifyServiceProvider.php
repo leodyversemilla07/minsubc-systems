@@ -20,7 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
         // Custom login response to redirect based on user role
         $this->app->instance(LoginResponse::class, new class implements LoginResponse
         {
-            public function toResponse($request)
+            public function toResponse($request): \Illuminate\Http\RedirectResponse
             {
                 $user = auth()->user();
                 $userRoles = $user->roles->pluck('name')->toArray();

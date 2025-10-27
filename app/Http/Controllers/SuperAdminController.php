@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SuperAdmin\ResetUserPasswordRequest;
+use App\Http\Requests\SuperAdmin\UpdateSystemSettingRequest;
+use App\Http\Requests\SuperAdmin\UpdateUserRolesRequest;
 use App\Models\AuditLog;
 use App\Models\SystemSetting;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Inertia\Response;
 use Spatie\Permission\Models\Role;
 
 class SuperAdminController extends Controller
@@ -17,16 +21,29 @@ class SuperAdminController extends Controller
     /**
      * Show the super admin dashboard
      */
-    public function dashboard(Request $request)
+    public function dashboard(Request $request): Response
     {
-        // System statistics
+        // System statistics - Optimized with single queries
+        $userStats = User::selectRaw('
+            COUNT(*) as total_users,
+            SUM(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END) as active_users,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_users,
+            SUM(CASE WHEN updated_at >= ? THEN 1 ELSE 0 END) as active_users_30d
+        ', [now()->subDays(30), now()->subDays(30)])->first();
+
+        $auditStats = AuditLog::selectRaw('
+            COUNT(*) as total_audit_logs,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as recent_audit_logs,
+            SUM(CASE WHEN action = "login" AND created_at >= ? THEN 1 ELSE 0 END) as login_attempts
+        ', [now()->subDays(7), now()->subDays(30)])->first();
+
         $stats = [
-            'total_users' => User::count(),
-            'active_users' => User::where('email_verified_at', '!=', null)->count(),
+            'total_users' => $userStats->total_users,
+            'active_users' => $userStats->active_users,
             'total_roles' => Role::count(),
             'system_admins' => User::role(['system-admin', 'super_admin'])->count(),
-            'total_audit_logs' => AuditLog::count(),
-            'recent_audit_logs' => AuditLog::where('created_at', '>=', now()->subDays(7))->count(),
+            'total_audit_logs' => $auditStats->total_audit_logs,
+            'recent_audit_logs' => $auditStats->recent_audit_logs,
             'system_settings_count' => SystemSetting::count(),
         ];
 
@@ -38,11 +55,9 @@ class SuperAdminController extends Controller
 
         // User activity summary (last 30 days)
         $userActivity = [
-            'new_users' => User::where('created_at', '>=', now()->subDays(30))->count(),
-            'active_users_30d' => User::where('updated_at', '>=', now()->subDays(30))->count(),
-            'login_attempts' => AuditLog::where('action', 'login')
-                ->where('created_at', '>=', now()->subDays(30))
-                ->count(),
+            'new_users' => $userStats->new_users,
+            'active_users_30d' => $userStats->active_users_30d,
+            'login_attempts' => $auditStats->login_attempts,
         ];
 
         return Inertia::render('super-admin/dashboard', [
@@ -55,7 +70,7 @@ class SuperAdminController extends Controller
     /**
      * Show user management interface
      */
-    public function users(Request $request)
+    public function users(Request $request): Response
     {
         $query = User::with(['roles']);
 
@@ -117,7 +132,7 @@ class SuperAdminController extends Controller
     /**
      * Show user details and management
      */
-    public function showUser(User $user)
+    public function showUser(User $user): Response
     {
         $user->load(['roles', 'auditLogs' => function ($query) {
             $query->latest()->take(20);
@@ -134,13 +149,8 @@ class SuperAdminController extends Controller
     /**
      * Update user roles
      */
-    public function updateUserRoles(Request $request, User $user)
+    public function updateUserRoles(UpdateUserRolesRequest $request, User $user): RedirectResponse
     {
-        $request->validate([
-            'roles' => 'required|array',
-            'roles.*' => 'string|exists:roles,name',
-        ]);
-
         $oldRoles = $user->roles->pluck('name')->toArray();
 
         // Sync roles
@@ -170,12 +180,8 @@ class SuperAdminController extends Controller
     /**
      * Reset user password
      */
-    public function resetUserPassword(Request $request, User $user)
+    public function resetUserPassword(ResetUserPasswordRequest $request, User $user): RedirectResponse
     {
-        $request->validate([
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
         $user->update([
             'password' => Hash::make($request->password),
         ]);
@@ -202,7 +208,7 @@ class SuperAdminController extends Controller
     /**
      * Disable user account
      */
-    public function disableUser(User $user)
+    public function disableUser(User $user): RedirectResponse
     {
         if ($user->id === Auth::id()) {
             return redirect()->back()->with('error', 'You cannot disable your own account.');
@@ -234,7 +240,7 @@ class SuperAdminController extends Controller
     /**
      * Enable user account
      */
-    public function enableUser(User $user)
+    public function enableUser(User $user): RedirectResponse
     {
         $user->update([
             'email_verified_at' => now(),
@@ -262,7 +268,7 @@ class SuperAdminController extends Controller
     /**
      * Show system settings management
      */
-    public function systemSettings(Request $request)
+    public function systemSettings(Request $request): Response
     {
         $query = SystemSetting::query();
 
@@ -292,14 +298,10 @@ class SuperAdminController extends Controller
     }
 
     /**
-     * Update system setting
+     * Update a system setting
      */
-    public function updateSystemSetting(Request $request, SystemSetting $systemSetting)
+    public function updateSystemSetting(UpdateSystemSettingRequest $request, SystemSetting $systemSetting): RedirectResponse
     {
-        $request->validate([
-            'value' => 'required|string',
-        ]);
-
         $oldValue = $systemSetting->value;
 
         $systemSetting->update([
@@ -330,7 +332,7 @@ class SuperAdminController extends Controller
     /**
      * Show audit logs
      */
-    public function auditLogs(Request $request)
+    public function auditLogs(Request $request): Response
     {
         $query = AuditLog::with(['user'])
             ->latest();
@@ -395,7 +397,7 @@ class SuperAdminController extends Controller
     /**
      * Show detailed audit log entry
      */
-    public function showAuditLog(AuditLog $auditLog)
+    public function showAuditLog(AuditLog $auditLog): Response
     {
         $auditLog->load(['user']);
 
@@ -407,17 +409,17 @@ class SuperAdminController extends Controller
     /**
      * Show system reports
      */
-    public function reports(Request $request)
+    public function reports(Request $request): Response
     {
-        // User statistics
-        $userStats = [
-            'total_users' => User::count(),
-            'verified_users' => User::whereNotNull('email_verified_at')->count(),
-            'unverified_users' => User::whereNull('email_verified_at')->count(),
-            'users_with_2fa' => User::whereNotNull('two_factor_secret')->count(),
-            'new_users_30d' => User::where('created_at', '>=', now()->subDays(30))->count(),
-            'new_users_7d' => User::where('created_at', '>=', now()->subDays(7))->count(),
-        ];
+        // User statistics - Optimized with single query
+        $userStats = User::selectRaw('
+            COUNT(*) as total_users,
+            SUM(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END) as verified_users,
+            SUM(CASE WHEN email_verified_at IS NULL THEN 1 ELSE 0 END) as unverified_users,
+            SUM(CASE WHEN two_factor_secret IS NOT NULL THEN 1 ELSE 0 END) as users_with_2fa,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_users_30d,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_users_7d
+        ', [now()->subDays(30), now()->subDays(7)])->first();
 
         // Role distribution
         $roleStats = Role::withCount('users')->get()->map(function ($role) {
@@ -427,23 +429,31 @@ class SuperAdminController extends Controller
             ];
         });
 
-        // Audit log statistics
+        // Audit log statistics - Optimized with single query
+        $auditLogStats = AuditLog::selectRaw('
+            COUNT(*) as total_logs,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as logs_30d,
+            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as logs_7d
+        ', [now()->subDays(30), now()->subDays(7)])->first();
+
         $auditStats = [
-            'total_logs' => AuditLog::count(),
-            'logs_30d' => AuditLog::where('created_at', '>=', now()->subDays(30))->count(),
-            'logs_7d' => AuditLog::where('created_at', '>=', now()->subDays(7))->count(),
-            'top_actions' => AuditLog::select('action', DB::raw('count(*) as count'))
+            'total_logs' => $auditLogStats->total_logs,
+            'logs_30d' => $auditLogStats->logs_30d,
+            'logs_7d' => $auditLogStats->logs_7d,
+            'top_actions' => AuditLog::query()
+                ->select('action')
+                ->selectRaw('count(*) as count')
                 ->groupBy('action')
                 ->orderBy('count', 'desc')
                 ->take(10)
                 ->get(),
         ];
 
-        // System settings summary
-        $settingsStats = [
-            'total_settings' => SystemSetting::count(),
-            'recently_updated' => SystemSetting::where('updated_at', '>=', now()->subDays(7))->count(),
-        ];
+        // System settings summary - Optimized with single query
+        $settingsStats = SystemSetting::selectRaw('
+            COUNT(*) as total_settings,
+            SUM(CASE WHEN updated_at >= ? THEN 1 ELSE 0 END) as recently_updated
+        ', [now()->subDays(7)])->first();
 
         return Inertia::render('super-admin/reports', [
             'userStats' => $userStats,
@@ -456,7 +466,7 @@ class SuperAdminController extends Controller
     /**
      * Show system configuration (modules, features)
      */
-    public function systemConfig(Request $request)
+    public function systemConfig(Request $request): Response
     {
         // System information
         $system = [

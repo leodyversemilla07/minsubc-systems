@@ -27,12 +27,15 @@ class Payment extends Model
         'metadata',
     ];
 
-    protected $casts = [
-        'amount' => 'float',
-        'paid_at' => 'datetime',
-        'metadata' => 'array',
-        'cashier_id' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'float',
+            'paid_at' => 'datetime',
+            'metadata' => 'array',
+            'cashier_id' => 'integer',
+        ];
+    }
 
     /**
      * Get the document request that this payment belongs to.

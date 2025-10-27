@@ -3,15 +3,19 @@
 namespace App\Modules\USG\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Modules\USG\Http\Requests\StoreOfficerRequest;
+use App\Modules\USG\Http\Requests\UpdateOfficerRequest;
 use App\Modules\USG\Services\OfficerService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class OfficerController extends Controller
 {
     public function __construct(private OfficerService $officerService) {}
 
-    public function index()
+    public function index(): Response
     {
         $officers = $this->officerService->getPaginatedOfficers();
 
@@ -20,7 +24,7 @@ class OfficerController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('usg/admin/officers/create', [
             'departments' => $this->officerService->getDepartments(),
@@ -28,7 +32,7 @@ class OfficerController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreOfficerRequest $request): RedirectResponse
     {
         $officer = $this->officerService->create($request->validated());
 
@@ -37,7 +41,7 @@ class OfficerController extends Controller
             ->with('success', 'Officer added successfully.');
     }
 
-    public function edit(int $id)
+    public function edit(int $id): Response
     {
         $officer = $this->officerService->getById($id);
 
@@ -48,7 +52,7 @@ class OfficerController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateOfficerRequest $request, int $id): RedirectResponse
     {
         $officer = $this->officerService->getById($id);
         $this->officerService->update($officer, $request->validated());
@@ -58,7 +62,7 @@ class OfficerController extends Controller
             ->with('success', 'Officer updated successfully.');
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         $officer = $this->officerService->getById($id);
         $this->officerService->delete($officer);
@@ -68,14 +72,14 @@ class OfficerController extends Controller
             ->with('success', 'Officer deleted successfully.');
     }
 
-    public function reorder(Request $request)
+    public function reorder(Request $request): RedirectResponse
     {
         $this->officerService->reorder($request->get('officers', []));
 
         return back()->with('success', 'Officers reordered successfully.');
     }
 
-    public function toggleActive(int $id)
+    public function toggleActive(int $id): RedirectResponse
     {
         $officer = $this->officerService->getById($id);
         $this->officerService->toggleActive($officer);

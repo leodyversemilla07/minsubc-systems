@@ -2,7 +2,8 @@
 
 namespace App\Modules\USG\Services;
 
-use App\Models\Modules\USG\Models\Resolution;
+use App\Modules\USG\Models\Resolution;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,7 +14,7 @@ class ResolutionService
     /**
      * Get published resolutions query
      */
-    public function getPublishedQuery()
+    public function getPublishedQuery(): Builder
     {
         return Resolution::published()
             ->with(['submittedBy', 'approvedBy']);

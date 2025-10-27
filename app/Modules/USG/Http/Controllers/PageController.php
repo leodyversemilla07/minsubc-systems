@@ -3,12 +3,13 @@
 namespace App\Modules\USG\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Modules\USG\Models\TransparencyReport;
+use App\Modules\USG\Models\TransparencyReport;
 use App\Modules\USG\Services\AnnouncementService;
 use App\Modules\USG\Services\EventService;
 use App\Modules\USG\Services\OfficerService;
 use App\Modules\USG\Services\ResolutionService;
 use App\Modules\USG\Services\VMGOService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -218,12 +219,12 @@ class PageController extends Controller
         return Inertia::render('usg/events/show', [
             'event' => $event,
             'relatedEvents' => $relatedEvents,
-            'isRegistered' => false, // TODO: Check if user is registered
-            'canRegister' => true, // TODO: Check if user can register
+            'isRegistered' => $event->isUserRegistered(auth()->id()),
+            'canRegister' => auth()->check(),
         ]);
     }
 
-    public function eventsCalendarData(Request $request)
+    public function eventsCalendarData(Request $request): JsonResponse
     {
         $year = $request->get('year', now()->year);
         $month = $request->get('month', now()->month);

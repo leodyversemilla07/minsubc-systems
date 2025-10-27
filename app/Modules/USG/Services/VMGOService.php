@@ -2,7 +2,7 @@
 
 namespace App\Modules\USG\Services;
 
-use App\Models\Modules\USG\Models\VMGO;
+use App\Modules\USG\Models\VMGO;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 

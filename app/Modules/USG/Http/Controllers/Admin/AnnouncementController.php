@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Modules\USG\Http\Requests\StoreAnnouncementRequest;
 use App\Modules\USG\Http\Requests\UpdateAnnouncementRequest;
 use App\Modules\USG\Services\AnnouncementService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AnnouncementController extends Controller
 {
     public function __construct(private AnnouncementService $announcementService) {}
 
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $search = $request->get('search');
         $status = $request->get('status');
@@ -44,7 +46,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         $categories = $this->announcementService->getCategories();
 
@@ -53,7 +55,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function store(StoreAnnouncementRequest $request)
+    public function store(StoreAnnouncementRequest $request): RedirectResponse
     {
         $announcement = $this->announcementService->create(
             $request->validated(),
@@ -65,7 +67,7 @@ class AnnouncementController extends Controller
             ->with('success', 'Announcement created successfully.');
     }
 
-    public function show(int $id)
+    public function show(int $id): Response
     {
         $announcement = $this->announcementService->getById($id);
 
@@ -74,7 +76,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): Response
     {
         $announcement = $this->announcementService->getById($id);
         $categories = $this->announcementService->getCategories();
@@ -85,7 +87,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function update(UpdateAnnouncementRequest $request, int $id)
+    public function update(UpdateAnnouncementRequest $request, int $id): RedirectResponse
     {
         $announcement = $this->announcementService->getById($id);
 
@@ -99,7 +101,7 @@ class AnnouncementController extends Controller
             ->with('success', 'Announcement updated successfully.');
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         $announcement = $this->announcementService->getById($id);
         $this->announcementService->delete($announcement);
@@ -109,7 +111,7 @@ class AnnouncementController extends Controller
             ->with('success', 'Announcement deleted successfully.');
     }
 
-    public function publish(int $id)
+    public function publish(int $id): RedirectResponse
     {
         $announcement = $this->announcementService->getById($id);
         $this->announcementService->publish($announcement);
@@ -117,7 +119,7 @@ class AnnouncementController extends Controller
         return back()->with('success', 'Announcement published successfully.');
     }
 
-    public function unpublish(int $id)
+    public function unpublish(int $id): RedirectResponse
     {
         $announcement = $this->announcementService->getById($id);
         $this->announcementService->unpublish($announcement);
@@ -125,7 +127,7 @@ class AnnouncementController extends Controller
         return back()->with('success', 'Announcement unpublished successfully.');
     }
 
-    public function preview(string $slug)
+    public function preview(string $slug): Response
     {
         $announcement = $this->announcementService->getBySlugForAdmin($slug);
 

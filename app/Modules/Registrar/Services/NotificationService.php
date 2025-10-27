@@ -264,15 +264,28 @@ class NotificationService
      */
     public function notifyStaffNewRequest(DocumentRequest $request): void
     {
-        // This would typically send to a staff notification system
-        // For now, we'll log it
-        Log::info('New document request submitted', [
-            'request_id' => $request->id,
-            'student_id' => $request->student_id,
-            'document_type' => $request->document_type,
-        ]);
+        $student = $request->student;
+        $staffEmails = $this->getRegistrarStaffEmails();
 
-        // TODO: Send notification to registrar staff dashboard or email group
+        $subject = "New Document Request - {$request->request_number}";
+        $message = "A new document request has been submitted by {$student->user->name}.\n\n".
+                  "Request Number: {$request->request_number}\n".
+                  "Student ID: {$student->student_id}\n".
+                  "Document Type: {$request->document_type}\n".
+                  "Status: {$request->status}\n".
+                  "Payment Deadline: {$request->payment_deadline->format('F d, Y g:i A')}\n\n".
+                  'View request: '.route('registrar.admin.dashboard');
+
+        // Send email to all staff members
+        foreach ($staffEmails as $email) {
+            $this->sendEmail($email, $subject, $message);
+        }
+
+        Log::info('Registrar staff notified about new document request', [
+            'request_id' => $request->id,
+            'request_number' => $request->request_number,
+            'staff_count' => count($staffEmails),
+        ]);
     }
 
     /**
@@ -280,13 +293,48 @@ class NotificationService
      */
     public function notifyStudentClaimed(DocumentRequest $request): void
     {
-        Log::info('Student confirmed document ready for claim', [
+        $student = $request->student;
+        $staffEmails = $this->getRegistrarStaffEmails();
+
+        $subject = "Student Acknowledged - {$request->request_number}";
+        $message = "The student has acknowledged that their document is ready for claim.\n\n".
+                  "Request Number: {$request->request_number}\n".
+                  "Student: {$student->user->name}\n".
+                  "Student ID: {$student->student_id}\n".
+                  "Document Type: {$request->document_type}\n\n".
+                  "Please prepare the document for release.\n\n".
+                  'View request: '.route('registrar.admin.dashboard');
+
+        // Send email to all staff members
+        foreach ($staffEmails as $email) {
+            $this->sendEmail($email, $subject, $message);
+        }
+
+        Log::info('Registrar staff notified about student acknowledgment', [
             'request_id' => $request->id,
             'request_number' => $request->request_number,
-            'student_id' => $request->student_id,
+            'staff_count' => count($staffEmails),
         ]);
+    }
 
-        // TODO: Send notification to registrar staff dashboard or email group
-        // This could notify staff that the student acknowledged the document is ready
+    /**
+     * Get list of registrar staff email addresses
+     */
+    private function getRegistrarStaffEmails(): array
+    {
+        // Get users with registrar roles
+        $staffUsers = \App\Models\User::role(['registrar-admin', 'registrar-staff'])
+            ->pluck('email')
+            ->toArray();
+
+        // Fallback to a configured email if no staff found
+        if (empty($staffUsers)) {
+            $fallbackEmail = config('services.registrar.notification_email');
+            if ($fallbackEmail) {
+                return [$fallbackEmail];
+            }
+        }
+
+        return $staffUsers;
     }
 }

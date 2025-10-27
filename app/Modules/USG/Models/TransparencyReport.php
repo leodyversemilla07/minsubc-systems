@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Models\Modules\USG\Models;
+namespace App\Modules\USG\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TransparencyReport extends Model
 {
+    use HasFactory;
+
     protected $table = 'usg_transparency_reports';
 
     protected $fillable = [

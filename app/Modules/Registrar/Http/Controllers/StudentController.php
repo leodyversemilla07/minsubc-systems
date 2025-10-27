@@ -2,16 +2,20 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Modules\Registrar\Http\Requests\StoreStudentRequest;
+use App\Modules\Registrar\Http\Requests\UpdateStudentRequest;
 use App\Modules\Registrar\Models\Student;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class StudentController extends Controller
 {
     /**
      * Display a listing of students.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Student::with('user');
 
@@ -40,7 +44,7 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new student.
      */
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('registrar/students/create');
     }
@@ -48,18 +52,8 @@ class StudentController extends Controller
     /**
      * Store a newly created student.
      */
-    public function store(Request $request)
+    public function store(StoreStudentRequest $request): RedirectResponse
     {
-        $request->validate([
-            'student_id' => 'required|string|unique:students,student_id',
-            'user_id' => 'required|exists:users,id',
-            'phone' => 'nullable|string|max:20',
-            'course' => 'nullable|string|max:100',
-            'year_level' => 'nullable|integer|min:1|max:6',
-            'campus' => 'nullable|string|max:100',
-            'status' => 'required|in:active,inactive,graduated',
-        ]);
-
         Student::create($request->validated());
 
         return redirect()->route('registrar.students.index')
@@ -69,7 +63,7 @@ class StudentController extends Controller
     /**
      * Display the specified student.
      */
-    public function show(Student $student)
+    public function show(Student $student): Response
     {
         $student->load(['user', 'documentRequests' => function ($query) {
             $query->latest()->limit(10);
@@ -83,7 +77,7 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified student.
      */
-    public function edit(Student $student)
+    public function edit(Student $student): Response
     {
         return Inertia::render('registrar/students/edit', [
             'student' => $student,
@@ -93,18 +87,8 @@ class StudentController extends Controller
     /**
      * Update the specified student.
      */
-    public function update(Request $request, Student $student)
+    public function update(UpdateStudentRequest $request, Student $student): RedirectResponse
     {
-        $request->validate([
-            'student_id' => 'required|string|unique:students,student_id,'.$student->student_id.',student_id',
-            'user_id' => 'required|exists:users,id',
-            'phone' => 'nullable|string|max:20',
-            'course' => 'nullable|string|max:100',
-            'year_level' => 'nullable|integer|min:1|max:6',
-            'campus' => 'nullable|string|max:100',
-            'status' => 'required|in:active,inactive,graduated',
-        ]);
-
         $student->update($request->validated());
 
         return redirect()->route('registrar.students.index')
@@ -114,7 +98,7 @@ class StudentController extends Controller
     /**
      * Remove the specified student.
      */
-    public function destroy(Student $student)
+    public function destroy(Student $student): RedirectResponse
     {
         // Check if student has active document requests
         if ($student->documentRequests()->whereIn('status', ['pending_payment', 'paid', 'processing', 'ready_for_claim', 'claimed'])->exists()) {

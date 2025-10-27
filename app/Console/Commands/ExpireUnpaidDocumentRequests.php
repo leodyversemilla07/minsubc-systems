@@ -25,7 +25,7 @@ class ExpireUnpaidDocumentRequests extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $isDryRun = $this->option('dry-run');
 
@@ -38,7 +38,7 @@ class ExpireUnpaidDocumentRequests extends Command
         if ($expiredRequests->isEmpty()) {
             $this->info('No expired unpaid document requests found.');
 
-            return;
+            return Command::SUCCESS;
         }
 
         $this->info("Found {$expiredRequests->count()} expired unpaid document requests.");
@@ -57,7 +57,7 @@ class ExpireUnpaidDocumentRequests extends Command
                 })
             );
 
-            return;
+            return Command::SUCCESS;
         }
 
         $expiredCount = 0;
@@ -75,5 +75,7 @@ class ExpireUnpaidDocumentRequests extends Command
         }
 
         $this->info("Successfully expired {$expiredCount} document requests.");
+
+        return Command::SUCCESS;
     }
 }

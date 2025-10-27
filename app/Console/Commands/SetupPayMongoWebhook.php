@@ -24,7 +24,7 @@ class SetupPayMongoWebhook extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('🔧 Setting up PayMongo Webhook...');
         $this->newLine();

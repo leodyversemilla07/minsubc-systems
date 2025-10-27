@@ -3,17 +3,24 @@
 namespace App\Modules\Registrar\Http\Controllers;
 
 use App\Models\AuditLog;
+use App\Modules\Registrar\Http\Requests\ReleaseDocumentRequest;
+use App\Modules\Registrar\Http\Requests\UpdateDocumentRequestStatusRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
+use App\Modules\Registrar\Services\NotificationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminController extends Controller
 {
+    public function __construct(private NotificationService $notificationService) {}
+
     /**
      * Show the admin dashboard
      */
-    public function dashboard(Request $request)
+    public function dashboard(Request $request): Response
     {
         $query = DocumentRequest::with([
             'student.user',
@@ -38,15 +45,15 @@ class AdminController extends Controller
 
         $requests = $query->latest()->paginate(20);
 
-        // Calculate stats
-        $stats = [
-            'total' => DocumentRequest::count(),
-            'pending_payment' => DocumentRequest::where('status', 'pending_payment')->count(),
-            'paid' => DocumentRequest::where('status', 'paid')->count(),
-            'processing' => DocumentRequest::where('status', 'processing')->count(),
-            'ready_for_claim' => DocumentRequest::where('status', 'ready_for_claim')->count(),
-            'claimed' => DocumentRequest::where('status', 'claimed')->count(),
-        ];
+        // Calculate stats with a single optimized query
+        $stats = DocumentRequest::selectRaw('
+            COUNT(*) as total,
+            SUM(CASE WHEN status = "pending_payment" THEN 1 ELSE 0 END) as pending_payment,
+            SUM(CASE WHEN status = "paid" THEN 1 ELSE 0 END) as paid,
+            SUM(CASE WHEN status = "processing" THEN 1 ELSE 0 END) as processing,
+            SUM(CASE WHEN status = "ready_for_claim" THEN 1 ELSE 0 END) as ready_for_claim,
+            SUM(CASE WHEN status = "claimed" THEN 1 ELSE 0 END) as claimed
+        ')->first();
 
         return Inertia::render('registrar/admin/dashboard', [
             'requests' => $requests,
@@ -58,7 +65,7 @@ class AdminController extends Controller
     /**
      * Show a specific document request
      */
-    public function show(DocumentRequest $documentRequest)
+    public function show(DocumentRequest $documentRequest): Response
     {
         $documentRequest->load([
             'student.user',
@@ -76,20 +83,12 @@ class AdminController extends Controller
     /**
      * Update request status
      */
-    public function updateStatus(Request $request, DocumentRequest $documentRequest)
+    public function updateStatus(UpdateDocumentRequestStatusRequest $request, DocumentRequest $documentRequest): RedirectResponse
     {
-        $request->validate([
-            'status' => 'required|string|in:pending_payment,payment_expired,paid,processing,ready_for_claim,claimed,released,cancelled,rejected',
-            'notes' => 'nullable|string|max:500',
-        ]);
-
         $oldStatus = $documentRequest->status;
         $oldRequest = $documentRequest->toArray();
 
-        $documentRequest->update([
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
+        $documentRequest->update($request->validated());
 
         // Log status change
         AuditLog::log(
@@ -99,7 +98,7 @@ class AdminController extends Controller
             $documentRequest->id,
             $oldRequest,
             $documentRequest->fresh()->toArray(),
-            "Document request {$documentRequest->request_number} status changed from {$oldStatus} to {$request->status}",
+            "Document request {$documentRequest->request_number} status changed from {$oldStatus} to {$request->validated('status')}",
             [
                 'request_number' => $documentRequest->request_number,
                 'old_status' => $oldStatus,
@@ -125,7 +124,7 @@ class AdminController extends Controller
     /**
      * Mark document as ready for pickup
      */
-    public function markReady(DocumentRequest $documentRequest)
+    public function markReady(DocumentRequest $documentRequest): RedirectResponse
     {
         if ($documentRequest->status !== 'processing') {
             return redirect()->route('registrar.admin.dashboard')
@@ -143,21 +142,19 @@ class AdminController extends Controller
         // Log status change
         AuditLog::log(
             'document_ready',
-            Auth::id(),
-            DocumentRequest::class,
-            $documentRequest->id,
-            $oldRequest,
-            $documentRequest->fresh()->toArray(),
-            "Document marked as ready for claim for request {$documentRequest->request_number}",
+            'Document marked as ready for claim',
+            $documentRequest,
             [
                 'request_number' => $documentRequest->request_number,
+                'student_id' => $documentRequest->student_id,
                 'document_type' => $documentRequest->document_type,
                 'processed_by' => Auth::user()->name,
                 'marked_ready_at' => now()->toISOString(),
             ]
         );
 
-        // TODO: Send notification to student
+        // Send notification to student
+        $this->notificationService->notifyDocumentReady($documentRequest);
 
         return redirect()->route('registrar.admin.dashboard')
             ->with('success', 'Document marked as ready for claim.');
@@ -166,14 +163,8 @@ class AdminController extends Controller
     /**
      * Release document to student
      */
-    public function releaseDocument(Request $request, DocumentRequest $documentRequest)
+    public function releaseDocument(ReleaseDocumentRequest $request, DocumentRequest $documentRequest): RedirectResponse
     {
-        $request->validate([
-            'released_to' => 'required|string|max:100',
-            'released_id_type' => 'required|string|in:student_id,drivers_license,passport,others',
-            'released_id_number' => 'nullable|string|max:50',
-        ]);
-
         if ($documentRequest->status !== 'ready_for_claim') {
             return redirect()->route('registrar.admin.dashboard')
                 ->with('error', 'Document must be ready for claim first.');
@@ -210,7 +201,8 @@ class AdminController extends Controller
             ]
         );
 
-        // TODO: Send notification to student
+        // Send notification to student
+        $this->notificationService->notifyDocumentReleased($documentRequest);
 
         return redirect()->route('registrar.admin.dashboard')
             ->with('success', 'Document released successfully.');
@@ -219,7 +211,7 @@ class AdminController extends Controller
     /**
      * Show audit logs for admin review
      */
-    public function auditLogs(Request $request)
+    public function auditLogs(Request $request): Response
     {
         $query = AuditLog::with(['user'])
             ->latest();
@@ -280,7 +272,7 @@ class AdminController extends Controller
     /**
      * Show detailed audit log entry
      */
-    public function showAuditLog(AuditLog $auditLog)
+    public function showAuditLog(AuditLog $auditLog): Response
     {
         $auditLog->load(['user']);
 

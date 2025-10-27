@@ -2,14 +2,18 @@
 
 namespace App\Modules\Registrar\Http\Controllers;
 
+use App\Modules\Registrar\Http\Requests\ConfirmCashPaymentRequest;
+use App\Modules\Registrar\Http\Requests\VerifyPaymentReferenceRequest;
 use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Models\Payment;
 use App\Modules\Registrar\Services\NotificationService;
 use App\Modules\Registrar\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PaymentController extends Controller
 {
@@ -20,7 +24,7 @@ class PaymentController extends Controller
     /**
      * Show payment method selection page
      */
-    public function selectPaymentMethod(DocumentRequest $documentRequest)
+    public function selectPaymentMethod(DocumentRequest $documentRequest): Response
     {
         // Check if there's an existing pending cash payment
         $existingCashPayment = Payment::where('request_id', $documentRequest->id)
@@ -38,7 +42,7 @@ class PaymentController extends Controller
     /**
      * Initiate digital payment for a document request
      */
-    public function initiatePayment(DocumentRequest $documentRequest)
+    public function initiatePayment(DocumentRequest $documentRequest): RedirectResponse
     {
         if ($documentRequest->status !== 'pending_payment') {
             return back()->withErrors([
@@ -106,7 +110,7 @@ class PaymentController extends Controller
     /**
      * Generate payment reference for cash payment
      */
-    public function generateCashPayment(DocumentRequest $documentRequest)
+    public function generateCashPayment(DocumentRequest $documentRequest): RedirectResponse
     {
         if ($documentRequest->status->value !== 'pending_payment') {
             return back()->withErrors([
@@ -163,7 +167,7 @@ class PaymentController extends Controller
     /**
      * Show cash payment reference details page
      */
-    public function showCashPaymentReference(Payment $payment)
+    public function showCashPaymentReference(Payment $payment): Response
     {
         // Load the relationship first
         $payment->load(['documentRequest.student.user']);
@@ -185,7 +189,7 @@ class PaymentController extends Controller
     /**
      * Show payment status page
      */
-    public function showPaymentStatus(DocumentRequest $documentRequest)
+    public function showPaymentStatus(DocumentRequest $documentRequest): Response
     {
         return Inertia::render('registrar/payments/status', [
             'request' => $documentRequest->load(['payments', 'student']),
@@ -195,7 +199,7 @@ class PaymentController extends Controller
     /**
      * Show cashier dashboard
      */
-    public function cashierDashboard()
+    public function cashierDashboard(): Response
     {
         return Inertia::render('registrar/cashier/dashboard');
     }
@@ -203,13 +207,9 @@ class PaymentController extends Controller
     /**
      * Verify payment reference and return payment details
      */
-    public function verifyPaymentReference(Request $request)
+    public function verifyPaymentReference(VerifyPaymentReferenceRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'payment_reference' => 'required|string',
-        ]);
-
-        $payment = Payment::where('payment_reference_number', $validated['payment_reference'])
+        $payment = Payment::where('payment_reference_number', $request->validated('payment_reference'))
             ->where('payment_method', 'cash')
             ->where('status', 'pending')
             ->with(['documentRequest.student.user'])
@@ -240,7 +240,7 @@ class PaymentController extends Controller
     /**
      * Handle successful payment return from PayMongo
      */
-    public function paymentSuccess(DocumentRequest $documentRequest)
+    public function paymentSuccess(DocumentRequest $documentRequest): Response
     {
         // Check if payment was successful
         $payment = $documentRequest->payments()->where('status', 'paid')->first();
@@ -261,12 +261,9 @@ class PaymentController extends Controller
     /**
      * Confirm cash payment by cashier
      */
-    public function confirmCashPayment(Request $request)
+    public function confirmCashPayment(ConfirmCashPaymentRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'payment_reference_number' => 'required|string',
-            'official_receipt_number' => 'required|string|unique:payments,official_receipt_number',
-        ]);
+        $validated = $request->validated();
 
         $payment = Payment::where('payment_reference_number', $validated['payment_reference_number'])
             ->where('payment_method', 'cash')
@@ -336,7 +333,7 @@ class PaymentController extends Controller
      * Note: Since registrar has their own software for receipt generation,
      * this displays receipt data that can be integrated with their existing system
      */
-    public function printOfficialReceipt(Payment $payment)
+    public function printOfficialReceipt(Payment $payment): JsonResponse
     {
         // Ensure only cashiers can access this and only for cash payments they confirmed
         if (! Auth::user()->hasRole('cashier') || $payment->payment_method !== 'cash') {

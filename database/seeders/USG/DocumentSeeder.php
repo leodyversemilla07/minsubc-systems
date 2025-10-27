@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\USG;
 
-use App\Models\Modules\USG\Models\Document;
 use App\Models\User;
+use App\Modules\USG\Models\Document;
 use Illuminate\Database\Seeder;
 
 class DocumentSeeder extends Seeder

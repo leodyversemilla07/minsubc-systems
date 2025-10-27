@@ -8,6 +8,7 @@ use App\Modules\USG\Services\EventService;
 use App\Modules\USG\Services\OfficerService;
 use App\Modules\USG\Services\ResolutionService;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
@@ -18,7 +19,7 @@ class DashboardController extends Controller
         private ResolutionService $resolutionService
     ) {}
 
-    public function index()
+    public function index(): Response
     {
         $stats = [
             'announcements' => $this->announcementService->getStatistics(),

@@ -3,16 +3,20 @@
 namespace App\Modules\USG\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Modules\USG\Http\Requests\StoreResolutionRequest;
+use App\Modules\USG\Http\Requests\UpdateResolutionRequest;
 use App\Modules\USG\Services\ResolutionService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ResolutionController extends Controller
 {
     public function __construct(private ResolutionService $resolutionService) {}
 
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $search = $request->get('search');
         $category = $request->get('category');
@@ -39,7 +43,7 @@ class ResolutionController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         $categories = $this->resolutionService->getCategories();
 
@@ -48,7 +52,7 @@ class ResolutionController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreResolutionRequest $request): RedirectResponse
     {
         $resolution = $this->resolutionService->create(
             $request->validated(),
@@ -60,7 +64,7 @@ class ResolutionController extends Controller
             ->with('success', 'Resolution created successfully.');
     }
 
-    public function show(int $id)
+    public function show(int $id): Response
     {
         $resolution = $this->resolutionService->getById($id);
 
@@ -69,7 +73,7 @@ class ResolutionController extends Controller
         ]);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): Response
     {
         $resolution = $this->resolutionService->getById($id);
         $categories = $this->resolutionService->getCategories();
@@ -80,7 +84,7 @@ class ResolutionController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateResolutionRequest $request, int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
 
@@ -94,7 +98,7 @@ class ResolutionController extends Controller
             ->with('success', 'Resolution updated successfully.');
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
         $this->resolutionService->delete($resolution);
@@ -104,7 +108,7 @@ class ResolutionController extends Controller
             ->with('success', 'Resolution deleted successfully.');
     }
 
-    public function submit(int $id)
+    public function submit(int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
         $this->resolutionService->submit($resolution);
@@ -112,7 +116,7 @@ class ResolutionController extends Controller
         return back()->with('success', 'Resolution submitted for approval.');
     }
 
-    public function pending()
+    public function pending(): Response
     {
         $resolutions = $this->resolutionService->getPendingResolutions();
 
@@ -121,7 +125,7 @@ class ResolutionController extends Controller
         ]);
     }
 
-    public function approve(int $id)
+    public function approve(int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
         $this->resolutionService->approve($resolution, Auth::id());
@@ -129,7 +133,7 @@ class ResolutionController extends Controller
         return back()->with('success', 'Resolution approved successfully.');
     }
 
-    public function reject(int $id)
+    public function reject(int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
         $this->resolutionService->reject($resolution, Auth::id());
@@ -137,7 +141,7 @@ class ResolutionController extends Controller
         return back()->with('success', 'Resolution rejected.');
     }
 
-    public function archive(int $id)
+    public function archive(int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
         $this->resolutionService->archive($resolution);

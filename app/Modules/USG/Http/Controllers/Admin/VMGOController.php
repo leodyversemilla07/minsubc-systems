@@ -3,16 +3,18 @@
 namespace App\Modules\USG\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Modules\USG\Http\Requests\UpdateVMGORequest;
+use App\Modules\USG\Http\Requests\UpdateVMGORequest;
 use App\Modules\USG\Services\VMGOService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class VMGOController extends Controller
 {
     public function __construct(private VMGOService $vmgoService) {}
 
-    public function edit()
+    public function edit(): Response
     {
         $vmgo = $this->vmgoService->getCurrent();
 
@@ -21,7 +23,7 @@ class VMGOController extends Controller
         ]);
     }
 
-    public function update(UpdateVMGORequest $request)
+    public function update(UpdateVMGORequest $request): RedirectResponse
     {
         $vmgo = $this->vmgoService->getCurrent();
 
@@ -36,7 +38,7 @@ class VMGOController extends Controller
             ->with('success', 'VMGO updated successfully.');
     }
 
-    public function history()
+    public function history(): Response
     {
         $history = $this->vmgoService->getHistory();
 

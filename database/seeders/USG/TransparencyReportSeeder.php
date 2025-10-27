@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\USG;
 
-use App\Models\Modules\USG\Models\TransparencyReport;
 use App\Models\User;
+use App\Modules\USG\Models\TransparencyReport;
 use Illuminate\Database\Seeder;
 
 class TransparencyReportSeeder extends Seeder

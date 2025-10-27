@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AuditLog extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'action',
@@ -20,11 +23,14 @@ class AuditLog extends Model
         'metadata',
     ];
 
-    protected $casts = [
-        'old_values' => 'array',
-        'new_values' => 'array',
-        'metadata' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'old_values' => 'array',
+            'new_values' => 'array',
+            'metadata' => 'array',
+        ];
+    }
 
     /**
      * Get the user who performed this action.
@@ -78,7 +84,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by action type.
      */
-    public function scopeAction($query, string $action)
+    public function scopeAction($query, string $action): mixed
     {
         return $query->where('action', $action);
     }
@@ -86,7 +92,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by model type.
      */
-    public function scopeModelType($query, string $modelType)
+    public function scopeModelType($query, string $modelType): mixed
     {
         return $query->where('model_type', $modelType);
     }
@@ -94,7 +100,7 @@ class AuditLog extends Model
     /**
      * Scope to filter by user.
      */
-    public function scopeByUser($query, int $userId)
+    public function scopeByUser($query, int $userId): mixed
     {
         return $query->where('user_id', $userId);
     }
@@ -102,8 +108,50 @@ class AuditLog extends Model
     /**
      * Scope to filter by date range.
      */
-    public function scopeDateRange($query, string $from, string $to)
+    public function scopeDateRange($query, string $from, string $to): mixed
     {
         return $query->whereBetween('created_at', [$from, $to]);
+    }
+
+    /**
+     * Log a document request creation.
+     */
+    public static function logDocumentRequestCreated(int $userId, int $requestId, array $data): static
+    {
+        return static::log(
+            action: 'request_created',
+            userId: $userId,
+            modelType: 'App\Modules\Registrar\Models\DocumentRequest',
+            modelId: $requestId,
+            newValues: $data
+        );
+    }
+
+    /**
+     * Log a payment confirmation.
+     */
+    public static function logPaymentConfirmed(int $userId, int $paymentId, array $data): static
+    {
+        return static::log(
+            action: 'payment_confirmed',
+            userId: $userId,
+            modelType: 'App\Modules\Registrar\Models\Payment',
+            modelId: $paymentId,
+            newValues: $data
+        );
+    }
+
+    /**
+     * Log a document release.
+     */
+    public static function logDocumentReleased(int $userId, int $requestId, array $data): static
+    {
+        return static::log(
+            action: 'document_released',
+            userId: $userId,
+            modelType: 'App\Modules\Registrar\Models\DocumentRequest',
+            modelId: $requestId,
+            newValues: $data
+        );
     }
 }
