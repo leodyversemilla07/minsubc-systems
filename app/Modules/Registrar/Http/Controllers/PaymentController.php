@@ -12,7 +12,6 @@ use App\Modules\Registrar\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -168,7 +167,7 @@ class PaymentController extends Controller
     /**
      * Show cash payment reference details page
      */
-    public function showCashPaymentReference(Payment $payment): Response
+    public function showCashPaymentReference(Payment $payment, Request $request): Response
     {
         // Load the relationship first
         $payment->load(['documentRequest.student.user']);
@@ -178,7 +177,7 @@ class PaymentController extends Controller
             abort(404);
         }
 
-        if ($payment->documentRequest->student->user_id !== Auth::id()) {
+        if ($payment->documentRequest->student->user_id !== $request->user()->id) {
             abort(403);
         }
 
@@ -279,7 +278,7 @@ class PaymentController extends Controller
             ], 404);
         }
 
-        $user = Auth::user();
+        $user = $request->user();
 
         // Update payment
         $payment->update([
@@ -334,10 +333,10 @@ class PaymentController extends Controller
      * Note: Since registrar has their own software for receipt generation,
      * this displays receipt data that can be integrated with their existing system
      */
-    public function printOfficialReceipt(Payment $payment): JsonResponse
+    public function printOfficialReceipt(Payment $payment, Request $request): JsonResponse
     {
         // Ensure only cashiers can access this and only for cash payments they confirmed
-        if (! Auth::user()->hasRole('cashier') || $payment->payment_method !== 'cash') {
+        if (! $request->user()->hasRole('cashier') || $payment->payment_method !== 'cash') {
             abort(403);
         }
 

@@ -9,7 +9,16 @@ import {
 } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
-import { Calendar, Compass, Edit, Eye, Flag, Target, Trophy, User } from 'lucide-react';
+import {
+    Calendar,
+    Compass,
+    Edit,
+    Eye,
+    Flag,
+    Target,
+    Trophy,
+    User,
+} from 'lucide-react';
 
 interface VMGOVersion {
     id: number;
@@ -95,9 +104,7 @@ export default function VMGOHistory({ history }: Props) {
                     <div className="flex gap-2">
                         <Button
                             variant="outline"
-                            onClick={() =>
-                                router.visit('/usg/admin/vmgo/edit')
-                            }
+                            onClick={() => router.visit('/usg/admin/vmgo/edit')}
                         >
                             <Edit className="mr-2 h-4 w-4" />
                             Edit Current

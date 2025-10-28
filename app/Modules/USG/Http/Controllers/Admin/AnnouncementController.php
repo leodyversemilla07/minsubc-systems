@@ -8,7 +8,6 @@ use App\Modules\USG\Http\Requests\UpdateAnnouncementRequest;
 use App\Modules\USG\Services\AnnouncementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -59,7 +58,7 @@ class AnnouncementController extends Controller
     {
         $announcement = $this->announcementService->create(
             $request->validated(),
-            Auth::id()
+            $request->user()->id
         );
 
         return redirect()

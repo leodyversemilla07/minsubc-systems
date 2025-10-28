@@ -23,7 +23,6 @@ class DocumentRequestFactory extends Factory
             'request_number' => 'REQ-'.now()->format('Ymd').'-'.$this->faker->unique()->numberBetween(1000, 9999),
             'student_id' => $this->faker->regexify('[A-Z]{3}[0-9]{5}'),
             'document_type' => $this->faker->randomElement(['coe', 'cog', 'tor', 'honorable_dismissal', 'certificate_good_moral', 'cav', 'diploma', 'so', 'form_137']),
-            'processing_type' => $this->faker->randomElement(['regular', 'rush']),
             'quantity' => $this->faker->numberBetween(1, 3),
             'purpose' => $this->faker->sentence(),
             'amount' => $this->faker->randomFloat(2, 50, 200),

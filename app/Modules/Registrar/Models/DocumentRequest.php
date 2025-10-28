@@ -4,6 +4,7 @@ namespace App\Modules\Registrar\Models;
 
 use App\Enums\DocumentRequestStatus;
 use App\Models\User;
+use Database\Factories\DocumentRequestFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -383,5 +384,13 @@ class DocumentRequest extends Model
         } while (self::where('request_number', $number)->exists());
 
         return $number;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): DocumentRequestFactory
+    {
+        return DocumentRequestFactory::new();
     }
 }

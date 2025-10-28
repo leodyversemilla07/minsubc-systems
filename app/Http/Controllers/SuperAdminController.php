@@ -10,7 +10,6 @@ use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -159,7 +158,7 @@ class SuperAdminController extends Controller
         // Log role change
         AuditLog::log(
             'user_roles_updated',
-            Auth::id(),
+            $request->user()->id,
             User::class,
             $user->id,
             ['roles' => $oldRoles],
@@ -170,7 +169,7 @@ class SuperAdminController extends Controller
                 'user_name' => $user->name,
                 'old_roles' => $oldRoles,
                 'new_roles' => $request->roles,
-                'updated_by' => Auth::user()->name,
+                'updated_by' => $request->user()->name,
             ]
         );
 
@@ -189,7 +188,7 @@ class SuperAdminController extends Controller
         // Log password reset
         AuditLog::log(
             'user_password_reset',
-            Auth::id(),
+            $request->user()->id,
             User::class,
             $user->id,
             [],
@@ -198,7 +197,7 @@ class SuperAdminController extends Controller
             [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'reset_by' => Auth::user()->name,
+                'reset_by' => $request->user()->name,
             ]
         );
 
@@ -208,9 +207,9 @@ class SuperAdminController extends Controller
     /**
      * Disable user account
      */
-    public function disableUser(User $user): RedirectResponse
+    public function disableUser(Request $request, User $user): RedirectResponse
     {
-        if ($user->id === Auth::id()) {
+        if ($user->id === $request->user()->id) {
             return redirect()->back()->with('error', 'You cannot disable your own account.');
         }
 
@@ -221,7 +220,7 @@ class SuperAdminController extends Controller
         // Log user disable
         AuditLog::log(
             'user_disabled',
-            Auth::id(),
+            $request->user()->id,
             User::class,
             $user->id,
             ['email_verified_at' => $user->email_verified_at],
@@ -230,7 +229,7 @@ class SuperAdminController extends Controller
             [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'disabled_by' => Auth::user()->name,
+                'disabled_by' => $request->user()->name,
             ]
         );
 
@@ -240,7 +239,7 @@ class SuperAdminController extends Controller
     /**
      * Enable user account
      */
-    public function enableUser(User $user): RedirectResponse
+    public function enableUser(Request $request, User $user): RedirectResponse
     {
         $user->update([
             'email_verified_at' => now(),
@@ -249,7 +248,7 @@ class SuperAdminController extends Controller
         // Log user enable
         AuditLog::log(
             'user_enabled',
-            Auth::id(),
+            $request->user()->id,
             User::class,
             $user->id,
             ['email_verified_at' => $user->email_verified_at],
@@ -258,7 +257,7 @@ class SuperAdminController extends Controller
             [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'enabled_by' => Auth::user()->name,
+                'enabled_by' => $request->user()->name,
             ]
         );
 
@@ -306,13 +305,13 @@ class SuperAdminController extends Controller
 
         $systemSetting->update([
             'value' => $request->value,
-            'updated_by' => Auth::id(),
+            'updated_by' => $request->user()->id,
         ]);
 
         // Log setting change
         AuditLog::log(
             'system_setting_updated',
-            Auth::id(),
+            $request->user()->id,
             SystemSetting::class,
             $systemSetting->id,
             ['value' => $oldValue],
@@ -322,7 +321,7 @@ class SuperAdminController extends Controller
                 'setting_key' => $systemSetting->setting_key,
                 'old_value' => $oldValue,
                 'new_value' => $request->value,
-                'updated_by' => Auth::user()->name,
+                'updated_by' => $request->user()->name,
             ]
         );
 

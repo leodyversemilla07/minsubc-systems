@@ -74,4 +74,40 @@ class EventFactory extends Factory
             'status' => 'published',
         ]);
     }
+
+    /**
+     * Indicate that the event is cancelled.
+     */
+    public function cancelled(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'cancelled',
+        ]);
+    }
+
+    /**
+     * Indicate that the event is upcoming (in the future).
+     */
+    public function upcoming(): static
+    {
+        $startDate = $this->faker->dateTimeBetween('+1 week', '+3 months');
+
+        return $this->state(fn (array $attributes) => [
+            'start_date' => $startDate,
+            'end_date' => (clone $startDate)->modify('+2 hours'),
+        ]);
+    }
+
+    /**
+     * Indicate that the event is in the past.
+     */
+    public function past(): static
+    {
+        $startDate = $this->faker->dateTimeBetween('-3 months', '-1 week');
+
+        return $this->state(fn (array $attributes) => [
+            'start_date' => $startDate,
+            'end_date' => (clone $startDate)->modify('+2 hours'),
+        ]);
+    }
 }

@@ -55,8 +55,8 @@ describe('Print Stylesheet', function () {
         $printCssPath = resource_path('css/print.css');
         $content = File::get($printCssPath);
 
-        expect($content)->toContain('a[href^="http"]::after');
-        expect($content)->toContain('content: " (" attr(href) ")"');
+        expect($content)->toContain("a[href^='http']::after");
+        expect($content)->toContain("content: ' (' attr(href) ')'");
     });
 
     it('defines announcement print styles', function () {

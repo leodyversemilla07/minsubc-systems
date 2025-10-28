@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
@@ -16,11 +15,12 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string $roles): Response
     {
-        if (! Auth::check()) {
+        $user = $request->user();
+
+        if (! $user) {
             return redirect()->route('login');
         }
 
-        $user = Auth::user();
         $roleArray = explode('|', $roles);
 
         foreach ($roleArray as $role) {

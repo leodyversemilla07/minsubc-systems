@@ -9,7 +9,6 @@ use App\Modules\USG\Services\EventService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -48,7 +47,7 @@ class EventController extends Controller
             'events' => $transformedPaginator,
             'categories' => $categories,
             'filters' => $filters,
-            'canManage' => Auth::user()->hasAnyRole(['usg-officer', 'usg-admin', 'super-admin']),
+            'canManage' => $request->user()->hasAnyRole(['usg-officer', 'usg-admin', 'super-admin']),
         ]);
     }
 
@@ -65,7 +64,7 @@ class EventController extends Controller
     {
         $event = $this->eventService->create(
             $request->validated(),
-            Auth::id()
+            $request->user()->id
         );
 
         return redirect()

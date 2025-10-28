@@ -13,17 +13,15 @@ class FOIService
 {
     public function submitRequest(int $userId, array $data): FOIRequest
     {
-        return DB::transaction(function () use ($userId, $data) {
-            return FOIRequest::create([
-                'user_id' => $userId,
-                'title' => $data['title'],
-                'description' => $data['description'],
-                'request_type' => $data['request_type'] ?? 'information',
-                'priority' => $data['priority'] ?? 'medium',
-                'status' => FOIRequestStatus::Pending->value,
-                'submitted_at' => now(),
-            ]);
-        });
+        return FOIRequest::create([
+            'user_id' => $userId,
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'request_type' => $data['request_type'] ?? 'information',
+            'priority' => $data['priority'] ?? 'medium',
+            'status' => FOIRequestStatus::Pending->value,
+            'submitted_at' => now(),
+        ]);
     }
 
     public function updateStatus(
@@ -32,27 +30,25 @@ class FOIService
         int $reviewerId,
         ?string $reason = null
     ): FOIRequest {
-        return DB::transaction(function () use ($requestId, $status, $reviewerId, $reason) {
-            $request = FOIRequest::findOrFail($requestId);
+        $request = FOIRequest::findOrFail($requestId);
 
-            $updateData = [
-                'status' => $status->value,
-                'reviewer_id' => $reviewerId,
-            ];
+        $updateData = [
+            'status' => $status->value,
+            'reviewer_id' => $reviewerId,
+        ];
 
-            if ($status === FOIRequestStatus::UnderReview && ! $request->reviewed_at) {
-                $updateData['reviewed_at'] = now();
-            } elseif ($status === FOIRequestStatus::Completed) {
-                $updateData['completed_at'] = now();
-            } elseif ($status === FOIRequestStatus::Rejected) {
-                $updateData['rejected_at'] = now();
-                $updateData['rejection_reason'] = $reason;
-            }
+        if ($status === FOIRequestStatus::UnderReview && ! $request->reviewed_at) {
+            $updateData['reviewed_at'] = now();
+        } elseif ($status === FOIRequestStatus::Completed) {
+            $updateData['completed_at'] = now();
+        } elseif ($status === FOIRequestStatus::Rejected) {
+            $updateData['rejected_at'] = now();
+            $updateData['rejection_reason'] = $reason;
+        }
 
-            $request->update($updateData);
+        $request->update($updateData);
 
-            return $request->fresh();
-        });
+        return $request->fresh();
     }
 
     public function addResponse(

@@ -7,6 +7,7 @@ use App\Enums\FOIRequestStatus;
 use App\Enums\FOIRequestType;
 use App\Models\User;
 use Database\Factories\FOIRequestFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -82,27 +83,27 @@ class FOIRequest extends Model
         return $this->status === FOIRequestStatus::Rejected;
     }
 
-    public function scopePending($query)
+    public function scopePending(Builder $query): Builder
     {
         return $query->where('status', FOIRequestStatus::Pending->value);
     }
 
-    public function scopeUnderReview($query)
+    public function scopeUnderReview(Builder $query): Builder
     {
         return $query->where('status', FOIRequestStatus::UnderReview->value);
     }
 
-    public function scopeCompleted($query)
+    public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', FOIRequestStatus::Completed->value);
     }
 
-    public function scopeRejected($query)
+    public function scopeRejected(Builder $query): Builder
     {
         return $query->where('status', FOIRequestStatus::Rejected->value);
     }
 
-    public function scopeForUser($query, int $userId)
+    public function scopeForUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);
     }

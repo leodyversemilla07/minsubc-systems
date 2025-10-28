@@ -4,6 +4,7 @@ namespace App\Modules\USG\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\USG\Services\SearchService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -45,7 +46,7 @@ class SearchController extends Controller
     /**
      * Get search suggestions (AJAX endpoint)
      */
-    public function suggestions(Request $request)
+    public function suggestions(Request $request): JsonResponse
     {
         $query = $request->input('q');
 

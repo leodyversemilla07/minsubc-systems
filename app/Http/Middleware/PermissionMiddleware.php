@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class PermissionMiddleware
@@ -16,11 +15,13 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next, string $permission): Response
     {
-        if (! Auth::check()) {
+        $user = $request->user();
+
+        if (! $user) {
             return redirect()->route('login');
         }
 
-        if (! Auth::user()->can($permission)) {
+        if (! $user->can($permission)) {
             abort(403, 'Unauthorized. You do not have the required permission: '.$permission);
         }
 

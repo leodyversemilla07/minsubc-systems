@@ -11,7 +11,6 @@ use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,9 +23,9 @@ class DocumentRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $user = Auth::user();
+        $user = $request->user();
 
         // For students, show their own requests
         // For staff, show all or filtered requests
@@ -50,9 +49,9 @@ class DocumentRequestController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        $user = Auth::user();
+        $user = $request->user();
         $student = $user->student;
 
         if (! $student) {
@@ -78,7 +77,7 @@ class DocumentRequestController extends Controller
      */
     public function store(StoreDocumentRequest $request): RedirectResponse
     {
-        $user = Auth::user();
+        $user = $request->user();
         $student = $user->student;
 
         if (! $student) {
@@ -207,7 +206,7 @@ class DocumentRequestController extends Controller
      */
     public function confirmClaim(ConfirmClaimRequest $request, DocumentRequest $documentRequest): RedirectResponse
     {
-        $user = Auth::user();
+        $user = $request->user();
 
         // Ensure the request belongs to the current user's student record
         if (! $user->student || $documentRequest->student_id !== $user->student->student_id) {

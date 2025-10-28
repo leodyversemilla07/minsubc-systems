@@ -9,7 +9,6 @@ use App\Modules\USG\Models\Document;
 use App\Modules\USG\Services\DocumentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -70,7 +69,7 @@ class DocumentController extends Controller
     {
         $this->documentService->create(
             $request->validated(),
-            Auth::id()
+            $request->user()->id
         );
 
         return redirect()

@@ -8,7 +8,6 @@ use App\Modules\USG\Http\Requests\UpdateResolutionRequest;
 use App\Modules\USG\Services\ResolutionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,7 +55,7 @@ class ResolutionController extends Controller
     {
         $resolution = $this->resolutionService->create(
             $request->validated(),
-            Auth::id()
+            $request->user()->id
         );
 
         return redirect()
@@ -125,18 +124,18 @@ class ResolutionController extends Controller
         ]);
     }
 
-    public function approve(int $id): RedirectResponse
+    public function approve(int $id, Request $request): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
-        $this->resolutionService->approve($resolution, Auth::id());
+        $this->resolutionService->approve($resolution, $request->user()->id);
 
         return back()->with('success', 'Resolution approved successfully.');
     }
 
-    public function reject(int $id): RedirectResponse
+    public function reject(int $id, Request $request): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
-        $this->resolutionService->reject($resolution, Auth::id());
+        $this->resolutionService->reject($resolution, $request->user()->id);
 
         return back()->with('success', 'Resolution rejected.');
     }

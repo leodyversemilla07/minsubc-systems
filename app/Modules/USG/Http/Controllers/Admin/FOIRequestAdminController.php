@@ -5,6 +5,7 @@ namespace App\Modules\USG\Http\Controllers\Admin;
 use App\Enums\FOIRequestStatus;
 use App\Http\Controllers\Controller;
 use App\Modules\USG\Http\Requests\AddFOIResponseRequest;
+use App\Modules\USG\Http\Requests\UpdateFOINotesRequest;
 use App\Modules\USG\Http\Requests\UpdateFOIStatusRequest;
 use App\Modules\USG\Models\FOIRequest;
 use App\Modules\USG\Services\FOIService;
@@ -74,13 +75,9 @@ class FOIRequestAdminController extends Controller
         return back()->with('success', 'Response added successfully.');
     }
 
-    public function updateNotes(Request $request, FOIRequest $foiRequest): RedirectResponse
+    public function updateNotes(UpdateFOINotesRequest $request, FOIRequest $foiRequest): RedirectResponse
     {
-        $validated = $request->validate([
-            'internal_notes' => ['nullable', 'string', 'max:5000'],
-        ]);
-
-        $this->foiService->addInternalNote($foiRequest->id, $validated['internal_notes'] ?? '');
+        $this->foiService->addInternalNote($foiRequest->id, $request->validated('internal_notes') ?? '');
 
         return back()->with('success', 'Internal notes updated successfully.');
     }

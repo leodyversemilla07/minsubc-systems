@@ -10,7 +10,6 @@ use App\Modules\Registrar\Models\DocumentRequest;
 use App\Modules\Registrar\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -94,7 +93,7 @@ class AdminController extends Controller
         // Log status change
         AuditLog::log(
             'document_request_status_updated',
-            Auth::id(),
+            $request->user()->id,
             DocumentRequest::class,
             $documentRequest->id,
             $oldRequest,
@@ -104,7 +103,7 @@ class AdminController extends Controller
                 'request_number' => $documentRequest->request_number,
                 'old_status' => $oldStatus,
                 'new_status' => $request->status,
-                'updated_by' => Auth::user()->name,
+                'updated_by' => $request->user()->name,
                 'notes' => $request->notes,
             ]
         );
@@ -123,7 +122,7 @@ class AdminController extends Controller
     /**
      * Mark document as ready for pickup
      */
-    public function markReady(DocumentRequest $documentRequest): RedirectResponse
+    public function markReady(Request $request, DocumentRequest $documentRequest): RedirectResponse
     {
         if ($documentRequest->status !== 'processing') {
             return redirect()->route('registrar.admin.dashboard')
@@ -135,7 +134,7 @@ class AdminController extends Controller
         // Update request status - Registrar will handle document generation using their own software
         $documentRequest->update([
             'status' => 'ready_for_claim',
-            'processed_by' => Auth::id(),
+            'processed_by' => $request->user()->id,
         ]);
 
         // Log status change
@@ -147,7 +146,7 @@ class AdminController extends Controller
                 'request_number' => $documentRequest->request_number,
                 'student_id' => $documentRequest->student_id,
                 'document_type' => $documentRequest->document_type,
-                'processed_by' => Auth::user()->name,
+                'processed_by' => $request->user()->name,
                 'marked_ready_at' => now()->toISOString(),
             ]
         );
@@ -173,7 +172,7 @@ class AdminController extends Controller
 
         $documentRequest->update([
             'status' => 'released',
-            'released_by' => Auth::id(),
+            'released_by' => $request->user()->id,
             'released_to' => $request->released_to,
             'released_id_type' => $request->released_id_type,
             'released_id_number' => $request->released_id_number,
@@ -183,7 +182,7 @@ class AdminController extends Controller
         // Log document release
         AuditLog::log(
             'document_released',
-            Auth::id(),
+            $request->user()->id,
             DocumentRequest::class,
             $documentRequest->id,
             $oldRequest,
@@ -192,7 +191,7 @@ class AdminController extends Controller
             [
                 'request_number' => $documentRequest->request_number,
                 'document_type' => $documentRequest->document_type,
-                'released_by' => Auth::user()->name,
+                'released_by' => $request->user()->name,
                 'released_to' => $request->released_to,
                 'released_id_type' => $request->released_id_type,
                 'released_id_number' => $request->released_id_number,

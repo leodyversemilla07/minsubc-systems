@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\SuperAdminController;
 use App\Modules\Registrar\Models\DocumentRequest;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,8 +19,8 @@ Route::redirect('/resolutions', '/usg/resolutions');
 Route::redirect('/transparency', '/usg/transparency');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        $user = Auth::user();
+    Route::get('dashboard', function (Request $request) {
+        $user = $request->user();
         $userRoles = $user->roles->pluck('name')->toArray();
 
         // Redirect USG admins and officers to USG admin dashboard

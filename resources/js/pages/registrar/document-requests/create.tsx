@@ -214,7 +214,9 @@ export default function Create({
                                             <Info className="h-3 w-3 md:h-4 md:w-4" />
                                             <AlertDescription className="text-xs md:text-sm">
                                                 You have {remaining} request
-                                                {remaining === 1 ? '' : 's'}{' '}
+                                                {remaining === 1
+                                                    ? ''
+                                                    : 's'}{' '}
                                                 remaining today.
                                             </AlertDescription>
                                         </Alert>

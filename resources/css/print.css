@@ -35,7 +35,7 @@
     .menu,
     button,
     .no-print,
-    [data-print="hide"],
+    [data-print='hide'],
     .print-hide {
         display: none !important;
     }
@@ -43,9 +43,9 @@
     /* Hide interactive elements */
     .btn,
     .button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"],
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset'],
     .action-button,
     .toolbar,
     .pagination,
@@ -116,15 +116,15 @@
         text-decoration: underline !important;
     }
 
-    a[href^="http"]::after {
-        content: " (" attr(href) ")" !important;
+    a[href^='http']::after {
+        content: ' (' attr(href) ')' !important;
         font-size: 9pt !important;
         font-style: italic !important;
     }
 
-    a[href^="#"]::after,
-    a[href^="javascript:"]::after {
-        content: "" !important;
+    a[href^='#']::after,
+    a[href^='javascript:']::after {
+        content: '' !important;
     }
 
     /* Lists */
@@ -202,7 +202,7 @@
     }
 
     /* USG-specific styles */
-    
+
     /* Document header */
     .print-header,
     .document-header {

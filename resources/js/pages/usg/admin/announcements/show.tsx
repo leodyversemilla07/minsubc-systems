@@ -82,9 +82,7 @@ export default function AnnouncementShow({ announcement }: Props) {
                     </Button>
 
                     <Button
-                        onClick={() =>
-                            router.visit(edit.url(announcement.id))
-                        }
+                        onClick={() => router.visit(edit.url(announcement.id))}
                     >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit Announcement

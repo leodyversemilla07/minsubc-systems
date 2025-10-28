@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Modules\USG\Http\Requests\UpdateVMGORequest;
 use App\Modules\USG\Services\VMGOService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,9 +27,9 @@ class VMGOController extends Controller
         $vmgo = $this->vmgoService->getCurrent();
 
         if ($vmgo) {
-            $this->vmgoService->update($vmgo, $request->validated(), Auth::id());
+            $this->vmgoService->update($vmgo, $request->validated(), $request->user()->id);
         } else {
-            $this->vmgoService->updateOrCreate($request->validated(), Auth::id());
+            $this->vmgoService->updateOrCreate($request->validated(), $request->user()->id);
         }
 
         return redirect()
