@@ -66,7 +66,6 @@ Route::prefix('usg')->name('usg.')->group(function () {
 
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
-
     // FOI Request Routes - available to all authenticated users
     Route::prefix('usg/foi')->name('usg.foi.')->group(function () {
         Route::get('/', [FOIRequestController::class, 'index'])->name('index');
@@ -77,7 +76,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // USG Admin Routes - accessible to USG Officers and System Admins
     Route::prefix('usg/admin')->name('usg.admin.')->group(function () {
-
         // Dashboard - accessible to all USG members
         Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

@@ -20,10 +20,11 @@ test('usg-admin can view events index', function () {
         ->get(route('usg.admin.events.index'));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/events/index')
-        ->has('events')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/events/index')
+            ->has('events')
+            ->has('categories')
     );
 });
 
@@ -110,9 +111,10 @@ test('usg-admin can view event create form', function () {
         ->get(route('usg.admin.events.create'));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/events/create')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/events/create')
+            ->has('categories')
     );
 });
 
@@ -211,10 +213,11 @@ test('usg-admin can view event edit form', function () {
         ->get(route('usg.admin.events.edit', $event->id));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/events/edit')
-        ->has('event')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/events/edit')
+            ->has('event')
+            ->has('categories')
     );
 });
 

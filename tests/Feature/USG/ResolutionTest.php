@@ -22,11 +22,12 @@ test('usg-admin can view resolutions index', function () {
         ->get(route('usg.admin.resolutions.index'));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/resolutions/index')
-        ->has('resolutions')
-        ->has('categories')
-        ->has('statistics')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/resolutions/index')
+            ->has('resolutions')
+            ->has('categories')
+            ->has('statistics')
     );
 });
 
@@ -95,9 +96,10 @@ test('usg-admin can view resolution create form', function () {
         ->get(route('usg.admin.resolutions.create'));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/resolutions/create')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/resolutions/create')
+            ->has('categories')
     );
 });
 
@@ -178,10 +180,11 @@ test('usg-admin can view resolution edit form', function () {
         ->get(route('usg.admin.resolutions.edit', $resolution->id));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/resolutions/edit')
-        ->has('resolution')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/resolutions/edit')
+            ->has('resolution')
+            ->has('categories')
     );
 });
 

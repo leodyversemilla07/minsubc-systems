@@ -115,8 +115,9 @@ describe('Print-Friendly Pages', function () {
         $response = $this->get(route('usg.announcements.show', $announcement->slug));
 
         $response->assertSuccessful();
-        $response->assertInertia(fn ($page) => $page->component('usg/announcements/show')
-            ->has('announcement')
+        $response->assertInertia(
+            fn ($page) => $page->component('usg/announcements/show')
+                ->has('announcement')
         );
     });
 
@@ -129,8 +130,9 @@ describe('Print-Friendly Pages', function () {
         $response = $this->get(route('usg.resolutions.show', $resolution->id));
 
         $response->assertSuccessful();
-        $response->assertInertia(fn ($page) => $page->component('usg/resolutions/show')
-            ->has('resolution')
+        $response->assertInertia(
+            fn ($page) => $page->component('usg/resolutions/show')
+                ->has('resolution')
         );
     });
 
@@ -143,8 +145,9 @@ describe('Print-Friendly Pages', function () {
         $response = $this->get(route('usg.events.show', $event->slug));
 
         $response->assertSuccessful();
-        $response->assertInertia(fn ($page) => $page->component('usg/events/show')
-            ->has('event')
+        $response->assertInertia(
+            fn ($page) => $page->component('usg/events/show')
+                ->has('event')
         );
     });
 
@@ -157,8 +160,9 @@ describe('Print-Friendly Pages', function () {
         $response = $this->get(route('usg.transparency.show', $report->slug));
 
         $response->assertSuccessful();
-        $response->assertInertia(fn ($page) => $page->component('usg/transparency/show')
-            ->has('report')
+        $response->assertInertia(
+            fn ($page) => $page->component('usg/transparency/show')
+                ->has('report')
         );
     });
 });

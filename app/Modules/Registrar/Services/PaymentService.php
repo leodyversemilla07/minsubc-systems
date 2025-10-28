@@ -188,7 +188,6 @@ class PaymentService
             $webhookLog->markAsProcessed();
 
             return true;
-
         } catch (\Exception $e) {
             $errorMessage = "Webhook handling failed: {$e->getMessage()}";
             Log::error($errorMessage, [
@@ -338,7 +337,6 @@ class PaymentService
                 'success' => false,
                 'error' => 'Failed to create checkout session',
             ];
-
         } catch (\Exception $e) {
             Log::error('PayMongo checkout creation exception', [
                 'request_id' => $request->id,
@@ -369,7 +367,6 @@ class PaymentService
             }
 
             return null;
-
         } catch (\Exception $e) {
             Log::error('PayMongo checkout retrieval failed', [
                 'checkout_id' => $checkoutId,

@@ -102,7 +102,6 @@ class SetupPayMongoWebhook extends Command
             $this->line(json_encode($errorBody, JSON_PRETTY_PRINT));
 
             return Command::FAILURE;
-
         } catch (\Exception $e) {
             $this->error('❌ Exception: '.$e->getMessage());
 

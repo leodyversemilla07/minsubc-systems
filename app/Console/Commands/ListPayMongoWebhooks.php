@@ -78,7 +78,6 @@ class ListPayMongoWebhooks extends Command
             $this->line($response->body());
 
             return Command::FAILURE;
-
         } catch (\Exception $e) {
             $this->error('❌ Exception: '.$e->getMessage());
 

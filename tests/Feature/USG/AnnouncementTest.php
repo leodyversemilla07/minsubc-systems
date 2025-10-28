@@ -17,10 +17,11 @@ test('usg-admin can view announcements index', function () {
         ->get(route('usg.admin.announcements.index'));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/announcements/index')
-        ->has('announcements')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/announcements/index')
+            ->has('announcements')
+            ->has('categories')
     );
 });
 
@@ -91,9 +92,10 @@ test('usg-admin can view announcement create form', function () {
         ->get(route('usg.admin.announcements.create'));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/announcements/create')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/announcements/create')
+            ->has('categories')
     );
 });
 
@@ -181,11 +183,12 @@ test('usg-admin can view single announcement', function () {
         ->get(route('usg.admin.announcements.show', $announcement->id));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/announcements/show')
-        ->has('announcement')
-        ->where('announcement.id', $announcement->id)
-        ->where('announcement.title', $announcement->title)
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/announcements/show')
+            ->has('announcement')
+            ->where('announcement.id', $announcement->id)
+            ->where('announcement.title', $announcement->title)
     );
 });
 
@@ -240,10 +243,11 @@ test('usg-admin can view announcement edit form', function () {
         ->get(route('usg.admin.announcements.edit', $announcement->id));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/announcements/edit')
-        ->has('announcement')
-        ->has('categories')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/announcements/edit')
+            ->has('announcement')
+            ->has('categories')
     );
 });
 
@@ -461,8 +465,9 @@ test('admin can preview announcement before publishing', function () {
         ->get(route('usg.admin.announcements.preview', $announcement->slug));
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('usg/admin/announcements/preview')
-        ->has('announcement')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('usg/admin/announcements/preview')
+            ->has('announcement')
     );
 });

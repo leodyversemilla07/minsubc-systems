@@ -42,7 +42,7 @@ class EventCreatedNotification extends Notification implements ShouldQueue
     {
         $eventUrl = route('usg.events.show', $this->event->slug);
 
-        $message = (new MailMessage)
+        $message = (new MailMessage())
             ->subject('New Event: '.$this->event->title)
             ->greeting('Hello '.$notifiable->first_name.'!')
             ->line('A new event has been created that might interest you.')

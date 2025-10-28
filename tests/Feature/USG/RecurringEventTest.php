@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 describe('RecurrenceService', function () {
     beforeEach(function () {
-        $this->service = new RecurrenceService;
+        $this->service = new RecurrenceService();
     });
 
     it('generates daily occurrences', function () {

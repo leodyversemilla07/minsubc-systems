@@ -22,41 +22,30 @@ class SuperAdminController extends Controller
      */
     public function dashboard(Request $request): Response
     {
-        // System statistics - Optimized with single queries
-        $userStats = User::selectRaw('
-            COUNT(*) as total_users,
-            SUM(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END) as active_users,
-            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_users,
-            SUM(CASE WHEN updated_at >= ? THEN 1 ELSE 0 END) as active_users_30d
-        ', [now()->subDays(30), now()->subDays(30)])->first();
-
-        $auditStats = AuditLog::selectRaw('
-            COUNT(*) as total_audit_logs,
-            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as recent_audit_logs,
-            SUM(CASE WHEN action = "login" AND created_at >= ? THEN 1 ELSE 0 END) as login_attempts
-        ', [now()->subDays(7), now()->subDays(30)])->first();
+        $thirtyDaysAgo = now()->subDays(30);
+        $sevenDaysAgo = now()->subDays(7);
 
         $stats = [
-            'total_users' => $userStats->total_users,
-            'active_users' => $userStats->active_users,
+            'total_users' => User::count(),
+            'active_users' => User::whereNotNull('email_verified_at')->count(),
             'total_roles' => Role::count(),
             'system_admins' => User::role(['super-admin'])->count(),
-            'total_audit_logs' => $auditStats->total_audit_logs,
-            'recent_audit_logs' => $auditStats->recent_audit_logs,
+            'total_audit_logs' => AuditLog::count(),
+            'recent_audit_logs' => AuditLog::where('created_at', '>=', $sevenDaysAgo)->count(),
             'system_settings_count' => SystemSetting::count(),
         ];
 
-        // Recent audit logs
         $recentAuditLogs = AuditLog::with(['user'])
             ->latest()
             ->take(10)
             ->get();
 
-        // User activity summary (last 30 days)
         $userActivity = [
-            'new_users' => $userStats->new_users,
-            'active_users_30d' => $userStats->active_users_30d,
-            'login_attempts' => $auditStats->login_attempts,
+            'new_users' => User::where('created_at', '>=', $thirtyDaysAgo)->count(),
+            'active_users_30d' => User::where('updated_at', '>=', $thirtyDaysAgo)->count(),
+            'login_attempts' => AuditLog::where('action', 'login')
+                ->where('created_at', '>=', $thirtyDaysAgo)
+                ->count(),
         ];
 
         return Inertia::render('super-admin/dashboard', [
@@ -410,17 +399,18 @@ class SuperAdminController extends Controller
      */
     public function reports(Request $request): Response
     {
-        // User statistics - Optimized with single query
-        $userStats = User::selectRaw('
-            COUNT(*) as total_users,
-            SUM(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END) as verified_users,
-            SUM(CASE WHEN email_verified_at IS NULL THEN 1 ELSE 0 END) as unverified_users,
-            SUM(CASE WHEN two_factor_secret IS NOT NULL THEN 1 ELSE 0 END) as users_with_2fa,
-            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_users_30d,
-            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as new_users_7d
-        ', [now()->subDays(30), now()->subDays(7)])->first();
+        $thirtyDaysAgo = now()->subDays(30);
+        $sevenDaysAgo = now()->subDays(7);
 
-        // Role distribution
+        $userStats = [
+            'total_users' => User::count(),
+            'verified_users' => User::whereNotNull('email_verified_at')->count(),
+            'unverified_users' => User::whereNull('email_verified_at')->count(),
+            'users_with_2fa' => User::whereNotNull('two_factor_secret')->count(),
+            'new_users_30d' => User::where('created_at', '>=', $thirtyDaysAgo)->count(),
+            'new_users_7d' => User::where('created_at', '>=', $sevenDaysAgo)->count(),
+        ];
+
         $roleStats = Role::withCount('users')->get()->map(function ($role) {
             return [
                 'name' => $role->name,
@@ -428,17 +418,10 @@ class SuperAdminController extends Controller
             ];
         });
 
-        // Audit log statistics - Optimized with single query
-        $auditLogStats = AuditLog::selectRaw('
-            COUNT(*) as total_logs,
-            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as logs_30d,
-            SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as logs_7d
-        ', [now()->subDays(30), now()->subDays(7)])->first();
-
         $auditStats = [
-            'total_logs' => $auditLogStats->total_logs,
-            'logs_30d' => $auditLogStats->logs_30d,
-            'logs_7d' => $auditLogStats->logs_7d,
+            'total_logs' => AuditLog::count(),
+            'logs_30d' => AuditLog::where('created_at', '>=', $thirtyDaysAgo)->count(),
+            'logs_7d' => AuditLog::where('created_at', '>=', $sevenDaysAgo)->count(),
             'top_actions' => AuditLog::query()
                 ->select('action')
                 ->selectRaw('count(*) as count')
@@ -448,11 +431,10 @@ class SuperAdminController extends Controller
                 ->get(),
         ];
 
-        // System settings summary - Optimized with single query
-        $settingsStats = SystemSetting::selectRaw('
-            COUNT(*) as total_settings,
-            SUM(CASE WHEN updated_at >= ? THEN 1 ELSE 0 END) as recently_updated
-        ', [now()->subDays(7)])->first();
+        $settingsStats = [
+            'total_settings' => SystemSetting::count(),
+            'recently_updated' => SystemSetting::where('updated_at', '>=', $sevenDaysAgo)->count(),
+        ];
 
         return Inertia::render('super-admin/reports', [
             'userStats' => $userStats,

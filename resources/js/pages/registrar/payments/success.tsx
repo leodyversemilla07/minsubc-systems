@@ -10,7 +10,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/registrar/document-requests';
 import { type BreadcrumbItem } from '@/types';
-import { Head as InertiaHead } from '@inertiajs/react';
+import { Head as InertiaHead, Link } from '@inertiajs/react';
 import { CheckCircle, FileText, User } from 'lucide-react';
 
 interface PaymentSuccessProps {
@@ -251,10 +251,10 @@ export default function PaymentSuccess({
                     {/* Actions */}
                     <div className="flex justify-center gap-4">
                         <Button asChild>
-                            <a href={index().url}>View My Requests</a>
+                            <Link href={index().url}>View My Requests</Link>
                         </Button>
                         <Button variant="outline" asChild>
-                            <a href="/dashboard">Back to Dashboard</a>
+                            <Link href="/dashboard">Back to Dashboard</Link>
                         </Button>
                     </div>
                 </div>

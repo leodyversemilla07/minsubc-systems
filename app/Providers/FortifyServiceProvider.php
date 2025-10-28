@@ -18,25 +18,21 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Custom login response to redirect based on user role
-        $this->app->instance(LoginResponse::class, new class implements LoginResponse
+        $this->app->instance(LoginResponse::class, new class() implements LoginResponse
         {
             public function toResponse($request): RedirectResponse
             {
                 $user = auth()->user();
                 $userRoles = $user->roles->pluck('name')->toArray();
 
-                // Redirect USG admins, officers, and system admins to USG admin dashboard
                 if (array_intersect($userRoles, ['usg-admin', 'usg-officer', 'super-admin'])) {
                     return redirect()->intended(route('usg.admin.dashboard'));
                 }
 
-                // Redirect registrar staff and admins to registrar admin dashboard
                 if (array_intersect($userRoles, ['registrar-admin', 'registrar-staff'])) {
                     return redirect()->intended(route('registrar.admin.dashboard'));
                 }
 
-                // Default redirect to general dashboard
                 return redirect()->intended(route('dashboard'));
             }
         });

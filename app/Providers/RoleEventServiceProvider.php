@@ -21,16 +21,14 @@ class RoleEventServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
+     * Bootstrap services and register event listeners for role changes.
      */
     public function boot(): void
     {
-        // Listen for role attachment events
         Event::listen(RoleAttached::class, function (RoleAttached $event) {
             $this->logRoleAttached($event);
         });
 
-        // Listen for role detachment events
         Event::listen(RoleDetached::class, function (RoleDetached $event) {
             $this->logRoleDetached($event);
         });
@@ -44,7 +42,6 @@ class RoleEventServiceProvider extends ServiceProvider
         $user = $event->model;
         $rolesOrIds = $event->rolesOrIds;
 
-        // Convert rolesOrIds to role names
         $roleNames = $this->normalizeRolesToNames($rolesOrIds);
 
         AuditLog::log(
@@ -52,8 +49,8 @@ class RoleEventServiceProvider extends ServiceProvider
             auth()->id(),
             User::class,
             $user->id,
-            ['roles' => $user->roles->pluck('name')->toArray()], // Roles before attachment
-            ['roles' => $user->fresh()->roles->pluck('name')->toArray()], // Roles after attachment
+            ['roles' => $user->roles->pluck('name')->toArray()],
+            ['roles' => $user->fresh()->roles->pluck('name')->toArray()],
             "Role(s) attached to user {$user->name} ({$user->email}): ".implode(', ', $roleNames),
             [
                 'user_email' => $user->email,
@@ -72,7 +69,6 @@ class RoleEventServiceProvider extends ServiceProvider
         $user = $event->model;
         $rolesOrIds = $event->rolesOrIds;
 
-        // Convert rolesOrIds to role names
         $roleNames = $this->normalizeRolesToNames($rolesOrIds);
 
         AuditLog::log(
@@ -80,8 +76,8 @@ class RoleEventServiceProvider extends ServiceProvider
             auth()->id(),
             User::class,
             $user->id,
-            ['roles' => $user->fresh()->roles->pluck('name')->toArray()], // Roles before detachment (after refresh)
-            ['roles' => $user->roles->pluck('name')->toArray()], // Roles after detachment
+            ['roles' => $user->fresh()->roles->pluck('name')->toArray()],
+            ['roles' => $user->roles->pluck('name')->toArray()],
             "Role(s) detached from user {$user->name} ({$user->email}): ".implode(', ', $roleNames),
             [
                 'user_email' => $user->email,
@@ -114,13 +110,11 @@ class RoleEventServiceProvider extends ServiceProvider
                 })->toArray();
             }
 
-            // Single role object
             return method_exists($rolesOrIds, 'getAttribute')
                 ? [$rolesOrIds->getAttribute('name')]
                 : [(string) $rolesOrIds];
         }
 
-        // Single ID or name
         return [(string) $rolesOrIds];
     }
 }

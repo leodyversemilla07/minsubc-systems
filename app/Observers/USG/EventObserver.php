@@ -28,7 +28,6 @@ class EventObserver
      */
     public function created(Event $event): void
     {
-        // Only send notifications for published events
         if ($event->status !== 'published') {
             return;
         }
@@ -41,26 +40,22 @@ class EventObserver
      */
     public function updated(Event $event): void
     {
-        // Check if status changed to cancelled
         if ($event->isDirty('status') && $event->status === 'cancelled') {
             $this->notifyUsers(new EventCancelledNotification($event));
 
             return;
         }
 
-        // Check if status changed to published (was draft)
         if ($event->isDirty('status') && $event->status === 'published' && $event->getOriginal('status') === 'draft') {
             $this->notifyUsers(new EventCreatedNotification($event));
 
             return;
         }
 
-        // Only notify for published events
         if ($event->status !== 'published') {
             return;
         }
 
-        // Check if any tracked fields changed
         $changes = $this->getRelevantChanges($event);
 
         if (! empty($changes)) {
@@ -92,12 +87,10 @@ class EventObserver
      */
     protected function notifyUsers(object $notification): void
     {
-        // Get all users who have notifications enabled
         $users = User::query()
             ->whereNotNull('email_verified_at')
             ->get();
 
-        // Send notification - the notification itself will check user preferences
         Notification::send($users, $notification);
     }
 }

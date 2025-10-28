@@ -42,7 +42,7 @@ class EventCancelledNotification extends Notification implements ShouldQueue
     {
         $eventUrl = route('usg.events.show', $this->event->slug);
 
-        $message = (new MailMessage)
+        $message = (new MailMessage())
             ->subject('Event Cancelled: '.$this->event->title)
             ->greeting('Hello '.$notifiable->first_name.'!')
             ->line('We regret to inform you that the following event has been cancelled:')

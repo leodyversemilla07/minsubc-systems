@@ -42,7 +42,7 @@ class EventUpdatedNotification extends Notification implements ShouldQueue
     {
         $eventUrl = route('usg.events.show', $this->event->slug);
 
-        $message = (new MailMessage)
+        $message = (new MailMessage())
             ->subject('Event Updated: '.$this->event->title)
             ->greeting('Hello '.$notifiable->first_name.'!')
             ->line('An event you might be interested in has been updated.')

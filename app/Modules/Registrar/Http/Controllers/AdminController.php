@@ -45,15 +45,14 @@ class AdminController extends Controller
 
         $requests = $query->latest()->paginate(20);
 
-        // Calculate stats with a single optimized query
-        $stats = DocumentRequest::selectRaw('
-            COUNT(*) as total,
-            SUM(CASE WHEN status = "pending_payment" THEN 1 ELSE 0 END) as pending_payment,
-            SUM(CASE WHEN status = "paid" THEN 1 ELSE 0 END) as paid,
-            SUM(CASE WHEN status = "processing" THEN 1 ELSE 0 END) as processing,
-            SUM(CASE WHEN status = "ready_for_claim" THEN 1 ELSE 0 END) as ready_for_claim,
-            SUM(CASE WHEN status = "claimed" THEN 1 ELSE 0 END) as claimed
-        ')->first();
+        $stats = [
+            'total' => DocumentRequest::count(),
+            'pending_payment' => DocumentRequest::where('status', 'pending_payment')->count(),
+            'paid' => DocumentRequest::where('status', 'paid')->count(),
+            'processing' => DocumentRequest::where('status', 'processing')->count(),
+            'ready_for_claim' => DocumentRequest::where('status', 'ready_for_claim')->count(),
+            'claimed' => DocumentRequest::where('status', 'claimed')->count(),
+        ];
 
         return Inertia::render('registrar/admin/dashboard', [
             'requests' => $requests,

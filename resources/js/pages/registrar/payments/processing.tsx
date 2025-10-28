@@ -10,7 +10,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { index, show } from '@/routes/registrar/document-requests';
 import { type BreadcrumbItem } from '@/types';
-import { Head as InertiaHead } from '@inertiajs/react';
+import { Head as InertiaHead, Link } from '@inertiajs/react';
 import { Clock, FileText, User } from 'lucide-react';
 
 interface PaymentProcessingProps {
@@ -270,12 +270,12 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                             Check Status
                         </Button>
                         <Button variant="outline" asChild>
-                            <a href={show(request.request_number).url}>
+                            <Link href={show(request.request_number).url}>
                                 View Request Details
-                            </a>
+                            </Link>
                         </Button>
                         <Button variant="outline" asChild>
-                            <a href="/dashboard">Back to Dashboard</a>
+                            <Link href="/dashboard">Back to Dashboard</Link>
                         </Button>
                     </div>
 
