@@ -28,6 +28,9 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'notify_event_created',
+        'notify_event_updated',
+        'notify_event_cancelled',
     ];
 
     /**
@@ -60,6 +63,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'notify_event_created' => 'boolean',
+            'notify_event_updated' => 'boolean',
+            'notify_event_cancelled' => 'boolean',
         ];
     }
 

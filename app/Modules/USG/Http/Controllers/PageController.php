@@ -7,6 +7,7 @@ use App\Modules\USG\Models\Officer;
 use App\Modules\USG\Models\TransparencyReport;
 use App\Modules\USG\Services\AnnouncementService;
 use App\Modules\USG\Services\EventService;
+use App\Modules\USG\Services\ICalService;
 use App\Modules\USG\Services\OfficerService;
 use App\Modules\USG\Services\ResolutionService;
 use App\Modules\USG\Services\VMGOService;
@@ -24,6 +25,7 @@ class PageController extends Controller
         private AnnouncementService $announcementService,
         private EventService $eventService,
         private ResolutionService $resolutionService,
+        private ICalService $iCalService,
     ) {}
 
     // ========================================
@@ -234,6 +236,40 @@ class PageController extends Controller
         return response()->json(
             $this->eventService->getCalendarData($year, $month)
         );
+    }
+
+    /**
+     * Export a single event as iCalendar file
+     */
+    public function eventExportICal(string $slug): \Symfony\Component\HttpFoundation\Response
+    {
+        $event = $this->eventService->getBySlug($slug);
+
+        if (! $event) {
+            abort(404, 'Event not found');
+        }
+
+        $icalContent = $this->iCalService->generateEventICalendar($event);
+        $filename = $this->iCalService->generateFilename($event);
+
+        return response($icalContent)
+            ->header('Content-Type', 'text/calendar; charset=utf-8')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
+    }
+
+    /**
+     * Export all upcoming events as iCalendar file
+     */
+    public function eventsExportAllICal(): \Symfony\Component\HttpFoundation\Response
+    {
+        $events = $this->eventService->getUpcomingPublishedEvents();
+
+        $icalContent = $this->iCalService->generateMultipleEventsICalendar($events);
+        $filename = $this->iCalService->generateMultipleEventsFilename();
+
+        return response($icalContent)
+            ->header('Content-Type', 'text/calendar; charset=utf-8')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
 
     // ========================================

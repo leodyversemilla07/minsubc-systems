@@ -3,7 +3,7 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
-use Database\Factories\Modules\USG\VMGOFactory;
+use Database\Factories\VMGOFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

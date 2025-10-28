@@ -4,10 +4,13 @@ use App\Modules\USG\Http\Controllers\Admin\AnnouncementController;
 use App\Modules\USG\Http\Controllers\Admin\DashboardController;
 use App\Modules\USG\Http\Controllers\Admin\DocumentController;
 use App\Modules\USG\Http\Controllers\Admin\EventController;
+use App\Modules\USG\Http\Controllers\Admin\FOIRequestAdminController;
 use App\Modules\USG\Http\Controllers\Admin\OfficerController;
 use App\Modules\USG\Http\Controllers\Admin\ResolutionController;
 use App\Modules\USG\Http\Controllers\Admin\VMGOController;
+use App\Modules\USG\Http\Controllers\FOIRequestController;
 use App\Modules\USG\Http\Controllers\PageController;
+use App\Modules\USG\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +43,9 @@ Route::prefix('usg')->name('usg.')->group(function () {
     // Events
     Route::get('/events', [PageController::class, 'events'])->name('events.index');
     Route::get('/events/calendar', [PageController::class, 'eventsCalendar'])->name('events.calendar');
+    Route::get('/events/export/all.ics', [PageController::class, 'eventsExportAllICal'])->name('events.export.all');
     Route::get('/events/{event:slug}', [PageController::class, 'eventShow'])->name('events.show');
+    Route::get('/events/{event:slug}/export.ics', [PageController::class, 'eventExportICal'])->name('events.export');
     Route::get('/events/calendar/data', [PageController::class, 'eventsCalendarData'])->name('events.calendar.data');
 
     // Resolutions
@@ -55,11 +60,20 @@ Route::prefix('usg')->name('usg.')->group(function () {
     Route::get('/transparency/{transparencyReport:slug}/download', [PageController::class, 'transparencyDownload'])->name('transparency.download');
 
     // Search
-    Route::get('/search', [PageController::class, 'search'])->name('search');
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
+    Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
 });
 
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    // FOI Request Routes - available to all authenticated users
+    Route::prefix('usg/foi')->name('usg.foi.')->group(function () {
+        Route::get('/', [FOIRequestController::class, 'index'])->name('index');
+        Route::get('/create', [FOIRequestController::class, 'create'])->name('create');
+        Route::post('/', [FOIRequestController::class, 'store'])->name('store');
+        Route::get('/{foiRequest}', [FOIRequestController::class, 'show'])->name('show');
+    });
 
     // USG Admin Routes - accessible to USG Officers and System Admins
     Route::prefix('usg/admin')->name('usg.admin.')->group(function () {
@@ -118,6 +132,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['role:usg-admin|super-admin'])->group(function () {
             Route::resource('documents', DocumentController::class);
             Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+        });
+
+        // FOI Request Management - restricted to USG Admins and System Admins
+        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
+            Route::get('foi', [FOIRequestAdminController::class, 'index'])->name('foi.index');
+            Route::get('foi/{foiRequest}', [FOIRequestAdminController::class, 'show'])->name('foi.show');
+            Route::patch('foi/{foiRequest}/status', [FOIRequestAdminController::class, 'updateStatus'])->name('foi.update-status');
+            Route::post('foi/{foiRequest}/responses', [FOIRequestAdminController::class, 'addResponse'])->name('foi.add-response');
+            Route::patch('foi/{foiRequest}/notes', [FOIRequestAdminController::class, 'updateNotes'])->name('foi.update-notes');
         });
     });
 });

@@ -3,16 +3,40 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
+use Database\Factories\TransparencyReportFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class TransparencyReport extends Model
 {
     use HasFactory;
 
     protected $table = 'usg_transparency_reports';
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TransparencyReportFactory::new();
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        // Delete file when model is deleted
+        static::deleted(function (TransparencyReport $report) {
+            if ($report->file_path && Storage::disk('public')->exists($report->file_path)) {
+                Storage::disk('public')->delete($report->file_path);
+            }
+        });
+    }
 
     protected $fillable = [
         'title',

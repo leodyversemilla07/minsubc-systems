@@ -1,0 +1,502 @@
+/**
+ * Print Styles for USG Module
+ * Optimized for printing announcements, resolutions, transparency reports, documents, and events
+ */
+
+@media print {
+    /* Reset and page setup */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    @page {
+        margin: 1.5cm;
+        size: A4 portrait;
+    }
+
+    /* Root elements */
+    html,
+    body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Hide non-printable elements */
+    nav,
+    header:not(.print-header),
+    footer:not(.print-footer),
+    aside,
+    .sidebar,
+    .navigation,
+    .menu,
+    button,
+    .no-print,
+    [data-print="hide"],
+    .print-hide {
+        display: none !important;
+    }
+
+    /* Hide interactive elements */
+    .btn,
+    .button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    .action-button,
+    .toolbar,
+    .pagination,
+    .breadcrumb,
+    .tabs,
+    .tab-navigation,
+    .dropdown,
+    .modal,
+    .tooltip,
+    .popover {
+        display: none !important;
+    }
+
+    /* Container and layout */
+    .container,
+    main,
+    article {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        float: none !important;
+    }
+
+    /* Typography */
+    h1 {
+        font-size: 24pt !important;
+        font-weight: bold !important;
+        margin-bottom: 12pt !important;
+        page-break-after: avoid !important;
+    }
+
+    h2 {
+        font-size: 18pt !important;
+        font-weight: bold !important;
+        margin-top: 12pt !important;
+        margin-bottom: 8pt !important;
+        page-break-after: avoid !important;
+    }
+
+    h3 {
+        font-size: 14pt !important;
+        font-weight: bold !important;
+        margin-top: 10pt !important;
+        margin-bottom: 6pt !important;
+        page-break-after: avoid !important;
+    }
+
+    h4,
+    h5,
+    h6 {
+        font-size: 12pt !important;
+        font-weight: bold !important;
+        margin-top: 8pt !important;
+        margin-bottom: 4pt !important;
+        page-break-after: avoid !important;
+    }
+
+    p {
+        margin-bottom: 6pt !important;
+        orphans: 3 !important;
+        widows: 3 !important;
+    }
+
+    /* Links */
+    a {
+        color: black !important;
+        text-decoration: underline !important;
+    }
+
+    a[href^="http"]::after {
+        content: " (" attr(href) ")" !important;
+        font-size: 9pt !important;
+        font-style: italic !important;
+    }
+
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after {
+        content: "" !important;
+    }
+
+    /* Lists */
+    ul,
+    ol {
+        margin-left: 20pt !important;
+        margin-bottom: 8pt !important;
+    }
+
+    li {
+        margin-bottom: 3pt !important;
+    }
+
+    /* Tables */
+    table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+        margin-bottom: 12pt !important;
+        page-break-inside: avoid !important;
+    }
+
+    th,
+    td {
+        border: 1px solid #ccc !important;
+        padding: 6pt !important;
+        text-align: left !important;
+    }
+
+    th {
+        background-color: #f0f0f0 !important;
+        font-weight: bold !important;
+    }
+
+    /* Images */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid !important;
+        display: block !important;
+        margin: 8pt auto !important;
+    }
+
+    /* Remove backgrounds and shadows */
+    * {
+        background: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    /* Page breaks */
+    .page-break-before {
+        page-break-before: always !important;
+    }
+
+    .page-break-after {
+        page-break-after: always !important;
+    }
+
+    .page-break-inside-avoid {
+        page-break-inside: avoid !important;
+    }
+
+    /* Prevent page breaks */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    blockquote,
+    pre,
+    figure {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    /* USG-specific styles */
+    
+    /* Document header */
+    .print-header,
+    .document-header {
+        display: block !important;
+        margin-bottom: 20pt !important;
+        border-bottom: 2pt solid black !important;
+        padding-bottom: 10pt !important;
+    }
+
+    .document-title {
+        font-size: 20pt !important;
+        font-weight: bold !important;
+        margin-bottom: 8pt !important;
+    }
+
+    .document-meta {
+        font-size: 10pt !important;
+        color: #666 !important;
+        margin-top: 4pt !important;
+    }
+
+    /* Announcements */
+    .announcement {
+        page-break-inside: avoid !important;
+        margin-bottom: 16pt !important;
+    }
+
+    .announcement-title {
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        margin-bottom: 6pt !important;
+    }
+
+    .announcement-date,
+    .announcement-category {
+        font-size: 10pt !important;
+        color: #666 !important;
+        margin-bottom: 8pt !important;
+    }
+
+    .announcement-content {
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Resolutions */
+    .resolution {
+        page-break-inside: avoid !important;
+        margin-bottom: 16pt !important;
+    }
+
+    .resolution-number {
+        font-size: 14pt !important;
+        font-weight: bold !important;
+        margin-bottom: 6pt !important;
+    }
+
+    .resolution-title {
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        margin-bottom: 8pt !important;
+    }
+
+    .resolution-content {
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Transparency Reports */
+    .transparency-report {
+        page-break-inside: avoid !important;
+        margin-bottom: 16pt !important;
+    }
+
+    .report-title {
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        margin-bottom: 6pt !important;
+    }
+
+    .report-period {
+        font-size: 10pt !important;
+        color: #666 !important;
+        margin-bottom: 8pt !important;
+    }
+
+    .report-section {
+        margin-bottom: 12pt !important;
+    }
+
+    .report-section-title {
+        font-size: 13pt !important;
+        font-weight: bold !important;
+        margin-bottom: 6pt !important;
+        border-bottom: 1pt solid #ccc !important;
+        padding-bottom: 3pt !important;
+    }
+
+    /* Events */
+    .event {
+        page-break-inside: avoid !important;
+        margin-bottom: 16pt !important;
+    }
+
+    .event-title {
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        margin-bottom: 6pt !important;
+    }
+
+    .event-date,
+    .event-location {
+        font-size: 10pt !important;
+        color: #666 !important;
+        margin-bottom: 4pt !important;
+    }
+
+    .event-description {
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Documents */
+    .document {
+        page-break-inside: avoid !important;
+        margin-bottom: 16pt !important;
+    }
+
+    .document-name {
+        font-size: 14pt !important;
+        font-weight: bold !important;
+        margin-bottom: 6pt !important;
+    }
+
+    .document-type,
+    .document-date {
+        font-size: 10pt !important;
+        color: #666 !important;
+        margin-bottom: 4pt !important;
+    }
+
+    /* Print footer */
+    .print-footer {
+        display: block !important;
+        margin-top: 20pt !important;
+        padding-top: 10pt !important;
+        border-top: 1pt solid #ccc !important;
+        font-size: 9pt !important;
+        color: #666 !important;
+        text-align: center !important;
+    }
+
+    /* Watermark/branding */
+    .print-watermark {
+        position: fixed !important;
+        bottom: 10pt !important;
+        right: 10pt !important;
+        font-size: 8pt !important;
+        color: #ccc !important;
+        opacity: 0.5 !important;
+    }
+
+    /* QR codes and barcodes */
+    .qr-code,
+    .barcode {
+        display: block !important;
+        max-width: 100pt !important;
+        height: auto !important;
+        margin: 10pt 0 !important;
+    }
+
+    /* Signatures */
+    .signature-section {
+        margin-top: 30pt !important;
+        page-break-inside: avoid !important;
+    }
+
+    .signature-line {
+        border-top: 1pt solid black !important;
+        width: 200pt !important;
+        margin: 20pt 0 5pt 0 !important;
+    }
+
+    .signature-label {
+        font-size: 10pt !important;
+        color: #666 !important;
+    }
+
+    /* Metadata display */
+    .metadata {
+        font-size: 9pt !important;
+        color: #666 !important;
+        margin-bottom: 12pt !important;
+        padding: 8pt !important;
+        border: 1pt solid #ccc !important;
+        background-color: #f9f9f9 !important;
+    }
+
+    .metadata-item {
+        margin-bottom: 3pt !important;
+    }
+
+    .metadata-label {
+        font-weight: bold !important;
+        margin-right: 5pt !important;
+    }
+
+    /* Code blocks */
+    pre,
+    code {
+        font-family: 'Courier New', monospace !important;
+        font-size: 9pt !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
+
+    pre {
+        border: 1pt solid #ccc !important;
+        padding: 8pt !important;
+        margin: 8pt 0 !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Blockquotes */
+    blockquote {
+        border-left: 3pt solid #ccc !important;
+        padding-left: 12pt !important;
+        margin: 12pt 0 !important;
+        font-style: italic !important;
+        color: #555 !important;
+    }
+
+    /* Utility classes */
+    .print-only {
+        display: block !important;
+    }
+
+    .print-text-left {
+        text-align: left !important;
+    }
+
+    .print-text-center {
+        text-align: center !important;
+    }
+
+    .print-text-right {
+        text-align: right !important;
+    }
+
+    .print-font-bold {
+        font-weight: bold !important;
+    }
+
+    .print-font-normal {
+        font-weight: normal !important;
+    }
+
+    /* Ensure proper text rendering */
+    .print-black-text,
+    .print-black-text * {
+        color: black !important;
+    }
+
+    .print-gray-text {
+        color: #666 !important;
+    }
+
+    /* Remove rounded corners */
+    * {
+        border-radius: 0 !important;
+    }
+
+    /* USG Logo/Header for official documents */
+    .usg-official-header {
+        text-align: center !important;
+        margin-bottom: 20pt !important;
+        padding-bottom: 10pt !important;
+        border-bottom: 2pt solid black !important;
+    }
+
+    .usg-logo-print {
+        max-width: 80pt !important;
+        height: auto !important;
+        margin: 0 auto 8pt auto !important;
+    }
+
+    .usg-org-name {
+        font-size: 16pt !important;
+        font-weight: bold !important;
+        margin-bottom: 4pt !important;
+    }
+
+    .usg-org-tagline {
+        font-size: 10pt !important;
+        color: #666 !important;
+    }
+}

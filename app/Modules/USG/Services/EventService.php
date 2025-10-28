@@ -24,6 +24,17 @@ class EventService
     }
 
     /**
+     * Get all upcoming published events (for iCal export)
+     */
+    public function getUpcomingPublishedEvents(): Collection
+    {
+        return Event::upcoming()
+            ->published()
+            ->orderBy('start_date')
+            ->get();
+    }
+
+    /**
      * Get events by month for calendar
      */
     public function getEventsByMonth(int $year, int $month): Collection

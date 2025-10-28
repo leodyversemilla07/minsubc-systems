@@ -153,7 +153,11 @@ class DocumentService
      */
     public function incrementDownloadCount(Document $document): void
     {
-        $document->increment('download_count');
+        $document->recordDownload(
+            userId: auth()->id(),
+            ipAddress: request()->ip(),
+            userAgent: request()->userAgent()
+        );
     }
 
     /**

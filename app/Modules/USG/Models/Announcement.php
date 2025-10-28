@@ -3,12 +3,13 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
-use Database\Factories\Modules\USG\AnnouncementFactory;
+use Database\Factories\AnnouncementFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Announcement extends Model
 {
@@ -22,6 +23,19 @@ class Announcement extends Model
     protected static function newFactory(): AnnouncementFactory
     {
         return AnnouncementFactory::new();
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        // Delete featured image when model is deleted
+        static::deleted(function (Announcement $announcement) {
+            if ($announcement->featured_image && Storage::disk('public')->exists($announcement->featured_image)) {
+                Storage::disk('public')->delete($announcement->featured_image);
+            }
+        });
     }
 
     protected $fillable = [
@@ -99,5 +113,50 @@ class Announcement extends Model
     {
         return $query->where('expiry_date', '<', now())
             ->where('status', 'published');
+    }
+
+    public function scopeSearch(Builder $query, ?string $searchTerm): Builder
+    {
+        if (! $searchTerm) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $q) use ($searchTerm) {
+            $q->where('title', 'like', "%{$searchTerm}%")
+                ->orWhere('excerpt', 'like', "%{$searchTerm}%")
+                ->orWhere('content', 'like', "%{$searchTerm}%")
+                ->orWhere('category', 'like', "%{$searchTerm}%");
+        });
+    }
+
+    public function scopeByCategory(Builder $query, ?string $category): Builder
+    {
+        if (! $category) {
+            return $query;
+        }
+
+        return $query->where('category', $category);
+    }
+
+    public function scopeByStatus(Builder $query, ?string $status): Builder
+    {
+        if (! $status) {
+            return $query;
+        }
+
+        return $query->where('status', $status);
+    }
+
+    public function scopeDateRange(Builder $query, ?string $dateFrom, ?string $dateTo): Builder
+    {
+        if ($dateFrom) {
+            $query->whereDate('publish_date', '>=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $query->whereDate('publish_date', '<=', $dateTo);
+        }
+
+        return $query;
     }
 }

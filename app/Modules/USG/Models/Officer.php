@@ -3,7 +3,7 @@
 namespace App\Modules\USG\Models;
 
 use App\Models\User;
-use Database\Factories\Modules\USG\OfficerFactory;
+use Database\Factories\OfficerFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

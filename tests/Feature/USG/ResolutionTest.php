@@ -280,7 +280,7 @@ test('resolution can be approved', function () {
     $usgAdmin = User::factory()->create();
     $usgAdmin->assignRole('usg-admin');
 
-    $resolution = Resolution::factory()->pending()->create([
+    $resolution = Resolution::factory()->review()->create([
         'submitted_by' => $usgAdmin->id,
     ]);
 
@@ -302,7 +302,7 @@ test('resolution can be rejected', function () {
     $usgAdmin = User::factory()->create();
     $usgAdmin->assignRole('usg-admin');
 
-    $resolution = Resolution::factory()->pending()->create([
+    $resolution = Resolution::factory()->review()->create([
         'submitted_by' => $usgAdmin->id,
     ]);
 
@@ -343,7 +343,7 @@ test('resolution can be archived', function () {
 test('published scope filters resolutions correctly', function () {
     Resolution::factory()->published()->count(3)->create();
     Resolution::factory()->draft()->count(2)->create();
-    Resolution::factory()->pending()->create();
+    Resolution::factory()->review()->create();
 
     $publishedResolutions = Resolution::published()->get();
 
@@ -367,7 +367,7 @@ test('draft scope filters resolutions correctly', function () {
 
 test('pending scope filters resolutions correctly', function () {
     Resolution::factory()->published()->create();
-    Resolution::factory()->pending()->count(2)->create();
+    Resolution::factory()->review()->count(2)->create();
     Resolution::factory()->draft()->create();
 
     $pendingResolutions = Resolution::pending()->get();
