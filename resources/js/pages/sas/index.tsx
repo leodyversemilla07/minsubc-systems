@@ -94,36 +94,40 @@ const SASHome = () => {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Button
-                                size="lg"
-                                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-blue-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-blue-800 hover:shadow-xl hover:shadow-blue-700/20"
-                            >
-                                <span className="relative z-10">
-                                    View Scholarships
-                                </span>
-                                <svg
-                                    className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                            <Link href="/sas/student/scholarships">
+                                <Button
+                                    size="lg"
+                                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-blue-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-blue-800 hover:shadow-xl hover:shadow-blue-700/20"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                    />
-                                </svg>
-                            </Button>
+                                    <span className="relative z-10">
+                                        View Scholarships
+                                    </span>
+                                    <svg
+                                        className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                        />
+                                    </svg>
+                                </Button>
+                            </Link>
 
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="group inline-flex items-center gap-2 rounded-lg border-2 border-blue-700 bg-white px-8 py-4 text-base font-semibold text-blue-900 shadow-lg transition-all hover:border-blue-800 hover:bg-blue-50 hover:shadow-xl dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-                            >
-                                <Users className="h-5 w-5 transition-transform group-hover:rotate-12" />
-                                <span>Browse Organizations</span>
-                            </Button>
+                            <Link href="/sas/organizations">
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="group inline-flex items-center gap-2 rounded-lg border-2 border-blue-700 bg-white px-8 py-4 text-base font-semibold text-blue-900 shadow-lg transition-all hover:border-blue-800 hover:bg-blue-50 hover:shadow-xl dark:border-blue-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                                >
+                                    <Users className="h-5 w-5 transition-transform group-hover:rotate-12" />
+                                    <span>Browse Organizations</span>
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -185,7 +189,7 @@ const SASHome = () => {
                                 including TES, TDP, and more.
                             </p>
                             <Link
-                                href="#"
+                                href="/sas/student/scholarships"
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Scholarships →
@@ -205,7 +209,7 @@ const SASHome = () => {
                                 and records.
                             </p>
                             <Link
-                                href="#"
+                                href="/sas/student/insurance"
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 Manage Insurance →
@@ -225,7 +229,7 @@ const SASHome = () => {
                                 their activities.
                             </p>
                             <Link
-                                href="#"
+                                href="/sas/organizations"
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Organizations →
@@ -245,7 +249,7 @@ const SASHome = () => {
                                 activities.
                             </p>
                             <Link
-                                href="#"
+                                href="/sas/activities/calendar"
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Calendar →
@@ -265,7 +269,7 @@ const SASHome = () => {
                                 affairs records.
                             </p>
                             <Link
-                                href="#"
+                                href="/sas/admin/documents"
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 Access Documents →
@@ -285,7 +289,7 @@ const SASHome = () => {
                                 organization, and activity data.
                             </p>
                             <Link
-                                href="#"
+                                href="/sas/admin/dashboard"
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Reports →

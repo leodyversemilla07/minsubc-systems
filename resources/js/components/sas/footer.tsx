@@ -86,22 +86,6 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href={sas.scholarships.index.url()}
-                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
-                                >
-                                    Scholarships
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href={sas.insurance.index.url()}
-                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
-                                >
-                                    Insurance
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
                                     href={sas.organizations.index.url()}
                                     className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
                                 >
@@ -110,10 +94,18 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href={sas.calendar.index.url()}
+                                    href={sas.activities.index.url()}
                                     className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
                                 >
-                                    Calendar
+                                    Activities
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/sas/about"
+                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
+                                >
+                                    About SAS
                                 </Link>
                             </li>
                         </ul>
@@ -125,30 +117,6 @@ export default function Footer() {
                             Resources
                         </h3>
                         <ul className="space-y-3">
-                            <li>
-                                <Link
-                                    href={sas.documents.index.url()}
-                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
-                                >
-                                    Documents
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href={sas.reports.index.url()}
-                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
-                                >
-                                    Reports
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/sas/about"
-                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
-                                >
-                                    About SAS
-                                </Link>
-                            </li>
                             <li>
                                 <Link
                                     href="/sas/contact"
@@ -163,6 +131,14 @@ export default function Footer() {
                                     className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
                                 >
                                     FAQ
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/sas/help"
+                                    className="text-sm text-gray-600 transition-colors hover:text-blue-700 dark:text-gray-300 dark:hover:text-blue-400"
+                                >
+                                    Help Center
                                 </Link>
                             </li>
                         </ul>

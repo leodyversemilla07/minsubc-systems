@@ -9,12 +9,8 @@ import { useState } from 'react';
 
 const navigationLinks = [
     { href: sas.index.url(), label: 'Home' },
-    { href: sas.scholarships.index.url(), label: 'Scholarships' },
-    { href: sas.insurance.index.url(), label: 'Insurance' },
     { href: sas.organizations.index.url(), label: 'Organizations' },
-    { href: sas.calendar.index.url(), label: 'Calendar' },
-    { href: sas.documents.index.url(), label: 'Documents' },
-    { href: sas.reports.index.url(), label: 'Reports' },
+    { href: sas.activities.index.url(), label: 'Activities' },
 ];
 
 export default function Header() {
