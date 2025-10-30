@@ -31,7 +31,7 @@ class OrganizationController extends Controller
             ->with(['currentOfficers.student', 'members'])
             ->firstOrFail();
 
-        return Inertia::render('SAS/adviser/organization/dashboard', [
+        return Inertia::render('sas/adviser/organization/dashboard', [
             'organization' => $organization,
         ]);
     }
@@ -45,7 +45,7 @@ class OrganizationController extends Controller
 
         $organization = Organization::where('adviser_id', $adviserId)->firstOrFail();
 
-        return Inertia::render('SAS/adviser/organization/edit', [
+        return Inertia::render('sas/adviser/organization/edit', [
             'organization' => $organization,
         ]);
     }
@@ -76,7 +76,7 @@ class OrganizationController extends Controller
 
         $officers = $this->organizationService->getOrganizationOfficers($organization->id);
 
-        return Inertia::render('SAS/adviser/organization/officers', [
+        return Inertia::render('sas/adviser/organization/officers', [
             'organization' => $organization,
             'officers' => $officers,
         ]);

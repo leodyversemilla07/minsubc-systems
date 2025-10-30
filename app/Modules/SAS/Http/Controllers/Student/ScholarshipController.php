@@ -27,7 +27,7 @@ class ScholarshipController extends Controller
             'status' => $request->input('status'),
         ]);
 
-        return Inertia::render('SAS/student/scholarships/index', [
+        return Inertia::render('sas/student/scholarships/index', [
             'scholarships' => [
                 'data' => $scholarships,
                 'total' => $scholarships->count(),
@@ -50,7 +50,7 @@ class ScholarshipController extends Controller
             abort(403, 'Unauthorized access to scholarship record.');
         }
 
-        return Inertia::render('SAS/student/scholarships/show', [
+        return Inertia::render('sas/student/scholarships/show', [
             'recipient' => $recipient->load(['scholarship', 'requirements']),
         ]);
     }

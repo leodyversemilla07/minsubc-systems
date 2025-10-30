@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
         $dashboardData = $this->dashboardService->getAdminDashboardData();
 
-        return Inertia::render('SAS/admin/dashboard', [
+        return Inertia::render('sas/admin/dashboard', [
             'dashboardData' => $dashboardData,
         ]);
     }
@@ -32,8 +32,13 @@ class DashboardController extends Controller
     public function statistics(Request $request)
     {
         $year = $request->input('year', now()->year);
+        $dashboardData = $this->dashboardService->getAdminDashboardData();
 
         return response()->json([
+            'scholarships' => $dashboardData['scholarships'],
+            'insurance' => $dashboardData['insurance'],
+            'organizations' => $dashboardData['organizations'],
+            'activities' => $dashboardData['activities'],
             'monthly_activities' => $this->dashboardService->getMonthlyActivityStatistics($year),
             'scholarship_distribution' => $this->dashboardService->getScholarshipDistribution(),
         ]);

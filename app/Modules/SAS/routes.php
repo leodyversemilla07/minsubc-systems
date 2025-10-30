@@ -8,12 +8,10 @@ use App\Modules\SAS\Http\Controllers\Admin\OrganizationController as AdminOrgani
 use App\Modules\SAS\Http\Controllers\Admin\ScholarshipController as AdminScholarshipController;
 use App\Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController;
 use App\Modules\SAS\Http\Controllers\Adviser\OrganizationController as AdviserOrganizationController;
-use App\Modules\SAS\Http\Controllers\Public\ActivityController as PublicActivityController;
-use App\Modules\SAS\Http\Controllers\Public\OrganizationController as PublicOrganizationController;
+use App\Modules\SAS\Http\Controllers\PageController;
 use App\Modules\SAS\Http\Controllers\Student\InsuranceController as StudentInsuranceController;
 use App\Modules\SAS\Http\Controllers\Student\ScholarshipController as StudentScholarshipController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,21 +23,23 @@ use Inertia\Inertia;
 |
 */
 
-// ==================== PUBLIC ROUTES ====================
+// ==================== PUBLIC ROUTES (No Authentication Required) ====================
 Route::prefix('sas')->name('sas.')->group(function () {
-    // Home/Landing Page
-    Route::get('/', function () {
-        return Inertia::render('SAS/index');
-    })->name('index');
+    // Homepage
+    Route::get('/', [PageController::class, 'index'])->name('index');
 
     // Organizations
-    Route::get('/organizations', [PublicOrganizationController::class, 'index'])->name('organizations.index');
-    Route::get('/organizations/{code}', [PublicOrganizationController::class, 'show'])->name('organizations.show');
+    Route::get('/organizations', [PageController::class, 'organizations'])->name('organizations.index');
+    Route::get('/organizations/{code}', [PageController::class, 'organizationShow'])->name('organizations.show');
 
     // Activities
-    Route::get('/activities', [PublicActivityController::class, 'index'])->name('activities.index');
-    Route::get('/activities/calendar', [PublicActivityController::class, 'calendar'])->name('activities.calendar');
-    Route::get('/activities/{slug}', [PublicActivityController::class, 'show'])->name('activities.show');
+    Route::get('/activities', [PageController::class, 'activities'])->name('activities.index');
+    Route::get('/activities/calendar', [PageController::class, 'activitiesCalendar'])->name('activities.calendar');
+    Route::get('/activities/{slug}', [PageController::class, 'activityShow'])->name('activities.show');
+
+    // Scholarships (Public View)
+    Route::get('/scholarships', [PageController::class, 'scholarships'])->name('scholarships.index');
+    Route::get('/scholarships/{id}', [PageController::class, 'scholarshipShow'])->name('scholarships.show');
 });
 
 // ==================== STUDENT ROUTES ====================

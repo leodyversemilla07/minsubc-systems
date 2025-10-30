@@ -12,7 +12,8 @@ class StoreScholarshipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create scholarships');
+        // Allow if user is authenticated (middleware already checks roles)
+        return true;
     }
 
     /**

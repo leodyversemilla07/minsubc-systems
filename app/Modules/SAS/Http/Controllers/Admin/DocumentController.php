@@ -31,7 +31,7 @@ class DocumentController extends Controller
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
-        return Inertia::render('SAS/admin/documents/index', [
+        return Inertia::render('sas/admin/documents/index', [
             'documents' => $documents,
             'filters' => $request->only(['document_category', 'document_type', 'academic_year', 'disposal_status', 'search']),
         ]);
@@ -42,7 +42,7 @@ class DocumentController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('SAS/admin/documents/upload');
+        return Inertia::render('sas/admin/documents/upload');
     }
 
     /**
@@ -66,7 +66,7 @@ class DocumentController extends Controller
     {
         $document = $this->documentService->getDocumentById($id);
 
-        return Inertia::render('SAS/admin/documents/show', [
+        return Inertia::render('sas/admin/documents/show', [
             'document' => $document,
         ]);
     }
@@ -78,7 +78,7 @@ class DocumentController extends Controller
     {
         $document = $this->documentService->getDocumentById($id);
 
-        return Inertia::render('SAS/admin/documents/edit', [
+        return Inertia::render('sas/admin/documents/edit', [
             'document' => $document,
         ]);
     }
@@ -116,7 +116,7 @@ class DocumentController extends Controller
     {
         $documents = $this->documentService->getDocumentsPendingDisposal();
 
-        return Inertia::render('SAS/admin/documents/manage-disposal', [
+        return Inertia::render('sas/admin/documents/manage-disposal', [
             'documents' => $documents,
         ]);
     }

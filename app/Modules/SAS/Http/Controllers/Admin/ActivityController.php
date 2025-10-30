@@ -31,7 +31,7 @@ class ActivityController extends Controller
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
-        return Inertia::render('SAS/admin/activities/index', [
+        return Inertia::render('sas/admin/activities/index', [
             'activities' => $activities,
             'filters' => $request->only(['category', 'status', 'organization_id', 'search']),
         ]);
@@ -44,7 +44,7 @@ class ActivityController extends Controller
     {
         $organizations = \App\Modules\SAS\Models\Organization::where('status', 'Active')->get();
 
-        return Inertia::render('SAS/admin/activities/create', [
+        return Inertia::render('sas/admin/activities/create', [
             'organizations' => $organizations,
         ]);
     }
@@ -72,7 +72,7 @@ class ActivityController extends Controller
     {
         $activity = $this->activityService->getActivityById($id);
 
-        return Inertia::render('SAS/admin/activities/show', [
+        return Inertia::render('sas/admin/activities/show', [
             'activity' => $activity,
         ]);
     }
@@ -85,7 +85,7 @@ class ActivityController extends Controller
         $activity = $this->activityService->getActivityById($id);
         $organizations = \App\Modules\SAS\Models\Organization::where('status', 'Active')->get();
 
-        return Inertia::render('SAS/admin/activities/edit', [
+        return Inertia::render('sas/admin/activities/edit', [
             'activity' => $activity,
             'organizations' => $organizations,
         ]);

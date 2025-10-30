@@ -4,7 +4,7 @@ namespace App\Modules\SAS\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Modules\SAS\Http\Requests\UpdateInsuranceRequest;
-use App\Modules\SAS\Models\Insurance;
+use App\Modules\SAS\Models\InsuranceRecord;
 use App\Modules\SAS\Services\InsuranceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class InsuranceController extends Controller
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
-        return Inertia::render('SAS/admin/insurance/index', [
+        return Inertia::render('sas/admin/insurance/index', [
             'insuranceRecords' => $insuranceRecords,
             'filters' => $request->only(['status', 'policy_type', 'search']),
         ]);
@@ -41,7 +41,7 @@ class InsuranceController extends Controller
     {
         $insurance = $this->insuranceService->getInsuranceById($id);
 
-        return Inertia::render('SAS/admin/insurance/show', [
+        return Inertia::render('sas/admin/insurance/show', [
             'insurance' => $insurance,
         ]);
     }
@@ -53,7 +53,7 @@ class InsuranceController extends Controller
     {
         $insurance = $this->insuranceService->getInsuranceById($id);
 
-        return Inertia::render('SAS/admin/insurance/edit', [
+        return Inertia::render('sas/admin/insurance/edit', [
             'insurance' => $insurance,
         ]);
     }
@@ -63,7 +63,7 @@ class InsuranceController extends Controller
      */
     public function update(UpdateInsuranceRequest $request, int $id): RedirectResponse
     {
-        $insurance = Insurance::findOrFail($id);
+        $insurance = InsuranceRecord::findOrFail($id);
 
         $this->insuranceService->updateInsurance($insurance, $request->validated());
 
@@ -76,7 +76,7 @@ class InsuranceController extends Controller
      */
     public function approve(Request $request, int $id): RedirectResponse
     {
-        $insurance = Insurance::findOrFail($id);
+        $insurance = InsuranceRecord::findOrFail($id);
 
         $this->insuranceService->updateInsurance($insurance, [
             'status' => 'Approved',
@@ -96,7 +96,7 @@ class InsuranceController extends Controller
             'review_notes' => 'required|string',
         ]);
 
-        $insurance = Insurance::findOrFail($id);
+        $insurance = InsuranceRecord::findOrFail($id);
 
         $this->insuranceService->updateInsurance($insurance, [
             'status' => 'Rejected',
@@ -113,7 +113,7 @@ class InsuranceController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $insurance = Insurance::findOrFail($id);
+        $insurance = InsuranceRecord::findOrFail($id);
 
         $this->insuranceService->deleteInsurance($insurance);
 

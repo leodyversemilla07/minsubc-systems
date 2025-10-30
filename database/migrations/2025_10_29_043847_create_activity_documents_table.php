@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('activity_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained('sas_activities')->onDelete('cascade');
+            $table->foreignId('activity_id')->constrained('organization_activities')->onDelete('cascade');
             $table->string('document_name');
             $table->string('file_path');
             $table->unsignedBigInteger('file_size')->nullable();

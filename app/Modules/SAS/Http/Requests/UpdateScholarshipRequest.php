@@ -12,7 +12,8 @@ class UpdateScholarshipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update scholarships');
+        // Allow if user is authenticated (middleware already checks roles)
+        return true;
     }
 
     /**

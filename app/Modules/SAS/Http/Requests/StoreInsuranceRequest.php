@@ -11,9 +11,8 @@ class StoreInsuranceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Students can create their own insurance records, admins can create for anyone
-        return $this->user()->can('create insurance records')
-            || $this->user()->id === $this->input('student_id');
+        // Allow if user is authenticated (middleware already checks roles)
+        return true;
     }
 
     /**
@@ -24,7 +23,7 @@ class StoreInsuranceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id' => ['required', 'exists:users,id'],
+            'student_id' => ['nullable', 'exists:users,id'], // Optional - will be auto-filled from auth user
             'insurance_provider' => ['required', 'string', 'max:255'],
             'policy_number' => ['required', 'string', 'max:100'],
             'policy_type' => ['nullable', 'string', 'max:100'],

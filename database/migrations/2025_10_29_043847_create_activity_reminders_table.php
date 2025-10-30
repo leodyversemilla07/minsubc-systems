@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('activity_reminders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained('sas_activities')->onDelete('cascade');
+            $table->foreignId('activity_id')->constrained('organization_activities')->onDelete('cascade');
             $table->dateTime('reminder_date');
             $table->enum('reminder_type', ['Email', 'SMS', 'Both'])->default('Email');
             $table->boolean('sent')->default(false);

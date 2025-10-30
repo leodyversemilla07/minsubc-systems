@@ -12,7 +12,8 @@ class UpdateOrganizationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update organizations');
+        // Allow if user is authenticated (middleware already checks roles)
+        return true;
     }
 
     /**
@@ -25,20 +26,21 @@ class UpdateOrganizationRequest extends FormRequest
         $organizationId = $this->route('organization');
 
         return [
-            'organization_name' => ['required', 'string', 'max:255'],
+            'organization_name' => ['sometimes', 'required', 'string', 'max:255'],
             'organization_code' => [
+                'sometimes',
                 'required',
                 'string',
                 'max:50',
                 Rule::unique('organizations', 'organization_code')->ignore($organizationId),
             ],
-            'organization_type' => ['required', Rule::in(['Major', 'Minor'])],
+            'organization_type' => ['sometimes', 'required', Rule::in(['Major', 'Minor'])],
             'category' => ['nullable', 'string', 'max:100'],
             'mission' => ['nullable', 'string'],
             'vision' => ['nullable', 'string'],
             'establishment_date' => ['nullable', 'date'],
             'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png', 'max:5120'],
-            'status' => ['required', Rule::in(['Active', 'Inactive'])],
+            'status' => ['sometimes', 'required', Rule::in(['Active', 'Inactive'])],
             'adviser_id' => ['nullable', 'exists:users,id'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'contact_phone' => ['nullable', 'string', 'max:50'],

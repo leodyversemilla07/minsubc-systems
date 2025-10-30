@@ -118,6 +118,9 @@ class DashboardService
             'scheduled' => SASActivity::where('status', 'Scheduled')->count(),
             'ongoing' => SASActivity::where('status', 'Ongoing')->count(),
             'completed' => SASActivity::where('status', 'Completed')->count(),
+            'upcoming' => SASActivity::where('start_date', '>=', now())
+                ->where('status', 'Scheduled')
+                ->count(),
             'this_month' => SASActivity::whereYear('start_date', now()->year)
                 ->whereMonth('start_date', now()->month)
                 ->count(),
@@ -142,7 +145,7 @@ class DashboardService
     /**
      * Get recent activities.
      */
-    protected function getRecentActivities(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    protected function getRecentActivities(int $limit = 10): \Illuminate\Database\Eloquent\Collection
     {
         return SASActivity::with('organization')
             ->orderBy('start_date', 'desc')

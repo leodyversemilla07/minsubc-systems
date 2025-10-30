@@ -69,7 +69,7 @@ class InsuranceRecord extends Model
 
     public function daysUntilExpiration(): int
     {
-        return now()->diffInDays($this->expiration_date, false);
+        return (int) now()->startOfDay()->diffInDays($this->expiration_date->startOfDay(), false);
     }
 
     public function scopeExpiringSoon($query, int $days = 30)
