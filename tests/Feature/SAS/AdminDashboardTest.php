@@ -26,7 +26,7 @@ describe('Admin Dashboard Access', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/dashboard')
+            ->component('sas/admin/dashboard')
             ->has('dashboardData')
         );
     });

@@ -28,7 +28,7 @@ describe('Scholarship Listing', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/scholarships/index')
+            ->component('sas/admin/scholarships/index')
             ->has('scholarships')
         );
     });
@@ -77,7 +77,7 @@ describe('Scholarship Creation', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/scholarships/create')
+            ->component('sas/admin/scholarships/create')
         );
     });
 
@@ -149,7 +149,7 @@ describe('Scholarship Viewing', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/scholarships/show')
+            ->component('sas/admin/scholarships/show')
             ->has('scholarship')
         );
     });
@@ -173,7 +173,7 @@ describe('Scholarship Update', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/scholarships/edit')
+            ->component('sas/admin/scholarships/edit')
             ->has('scholarship')
         );
     });

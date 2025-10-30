@@ -68,6 +68,7 @@ test('public can access specific activity without authentication', function () {
         'slug' => 'test-activity',
         'organization_id' => $organization->id,
         'created_by' => $user->id,
+        'status' => 'Scheduled',
     ]);
 
     $response = $this->get(route('sas.activities.show', $activity->slug));

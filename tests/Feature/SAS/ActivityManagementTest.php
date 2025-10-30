@@ -25,7 +25,7 @@ describe('Public Activity Viewing', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/public/activities/index')
+            ->component('sas/activities/index')
             ->has('activities')
         );
     });
@@ -40,7 +40,7 @@ describe('Public Activity Viewing', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/public/activities/calendar')
+            ->component('sas/activities/calendar')
         );
     });
 
@@ -54,7 +54,7 @@ describe('Public Activity Viewing', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/public/activities/show')
+            ->component('sas/activities/show')
             ->has('activity')
         );
     });
@@ -79,7 +79,7 @@ describe('Admin Activity Management', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/activities/index')
+            ->component('sas/admin/activities/index')
             ->has('activities')
         );
     });
@@ -91,7 +91,7 @@ describe('Admin Activity Management', function () {
 
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
-            ->component('SAS/admin/activities/create')
+            ->component('sas/admin/activities/create')
         );
     });
 
