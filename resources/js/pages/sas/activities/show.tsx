@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import type { SASActivity } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
@@ -33,7 +34,7 @@ export default function ActivityShow({ activity }: Props) {
                         <p className="mb-4 text-gray-600">
                             The activity you're looking for doesn't exist.
                         </p>
-                        <Link href="/sas/activities">
+                        <Link href={sas.activities.index.url()}>
                             <Button>Back to Activities</Button>
                         </Link>
                     </div>
@@ -123,7 +124,7 @@ export default function ActivityShow({ activity }: Props) {
             {/* Header */}
             <section className="border-b bg-white px-4 py-6 dark:bg-gray-900">
                 <div className="mx-auto max-w-5xl">
-                    <Link href="/sas/activities">
+                    <Link href={sas.activities.index.url()}>
                         <Button variant="ghost" size="sm" className="mb-4">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Activities

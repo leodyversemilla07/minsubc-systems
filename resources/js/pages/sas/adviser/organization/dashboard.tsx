@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
     Building2,
@@ -99,7 +100,7 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Link href="/sas/adviser/organization/edit">
+                        <Link href={sas.adviser.organization.edit.url()}>
                             <Button>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit Organization
@@ -338,7 +339,7 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                         </CardHeader>
                         <CardContent>
                             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                                <Link href="/sas/adviser/organization/officers">
+                                <Link href={sas.adviser.organization.officers.url()}>
                                     <Button variant="outline" className="w-full">
                                         <Users className="mr-2 h-4 w-4" />
                                         Manage Officers
@@ -371,7 +372,7 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                                     Organization officers for the current term
                                 </CardDescription>
                             </div>
-                            <Link href="/sas/adviser/organization/officers">
+                            <Link href={sas.adviser.organization.officers.url()}>
                                 <Button>
                                     <Edit className="mr-2 h-4 w-4" />
                                     Manage Officers
@@ -437,7 +438,7 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                                         No officers assigned yet
                                     </p>
                                     <Link
-                                        href="/sas/adviser/organization/officers"
+                                        href={sas.adviser.organization.officers.url()}
                                         className="mt-4 inline-block"
                                     >
                                         <Button>Add Officers</Button>

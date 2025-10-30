@@ -1,4 +1,5 @@
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
 import { GraduationCap, FileText, ArrowLeft } from 'lucide-react';
 
@@ -29,7 +30,7 @@ export default function ScholarshipShow({
             <section className="bg-gradient-to-br from-green-700 to-green-900 px-4 py-12 text-white sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-7xl">
                     <Link
-                        href="/sas/scholarships"
+                        href={sas.scholarships.index.url()}
                         className="mb-6 inline-flex items-center gap-2 text-green-100 transition-colors hover:text-white"
                     >
                         <ArrowLeft className="h-4 w-4" />

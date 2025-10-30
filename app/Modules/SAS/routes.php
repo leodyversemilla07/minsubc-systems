@@ -45,7 +45,7 @@ Route::prefix('sas')->name('sas.')->group(function () {
 });
 
 // ==================== STUDENT ROUTES ====================
-Route::prefix('sas/student')->name('sas.student.')->middleware(['auth', 'role:student|admin'])->group(function () {
+Route::prefix('sas/student')->name('sas.student.')->middleware(['auth', 'role:student|sas-admin|super-admin'])->group(function () {
     // My Scholarships
     Route::get('/scholarships', [StudentScholarshipController::class, 'index'])->name('scholarships.index');
     Route::get('/scholarships/{id}', [StudentScholarshipController::class, 'show'])->name('scholarships.show');
@@ -60,7 +60,7 @@ Route::prefix('sas/student')->name('sas.student.')->middleware(['auth', 'role:st
 });
 
 // ==================== ORGANIZATION ADVISER ROUTES ====================
-Route::prefix('sas/adviser')->name('sas.adviser.')->middleware(['auth', 'role:org_adviser|admin'])->group(function () {
+Route::prefix('sas/adviser')->name('sas.adviser.')->middleware(['auth', 'role:org_adviser|sas-admin|super-admin'])->group(function () {
     Route::get('/organization', [AdviserOrganizationController::class, 'dashboard'])->name('organization.dashboard');
     Route::get('/organization/edit', [AdviserOrganizationController::class, 'edit'])->name('organization.edit');
     Route::put('/organization', [AdviserOrganizationController::class, 'update'])->name('organization.update');
@@ -71,7 +71,7 @@ Route::prefix('sas/adviser')->name('sas.adviser.')->middleware(['auth', 'role:or
 });
 
 // ==================== SAS ADMIN ROUTES ====================
-Route::prefix('sas/admin')->name('sas.admin.')->middleware(['auth', 'role:sas_officer|sas_admin|admin'])->group(function () {
+Route::prefix('sas/admin')->name('sas.admin.')->middleware(['auth', 'role:sas-staff|sas-admin|super-admin'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistics', [DashboardController::class, 'statistics'])->name('statistics');

@@ -2,6 +2,12 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\SAS\DigitalizedDocumentSeeder;
+use Database\Seeders\SAS\InsuranceSeeder;
+use Database\Seeders\SAS\OrganizationActivitySeeder;
+use Database\Seeders\SAS\OrganizationSeeder;
+use Database\Seeders\SAS\SASActivitySeeder;
+use Database\Seeders\SAS\ScholarshipSeeder;
 use Database\Seeders\USG\AnnouncementSeeder;
 use Database\Seeders\USG\DocumentSeeder;
 use Database\Seeders\USG\EventSeeder;
@@ -33,6 +39,16 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             DocumentSeeder::class,
             TransparencyReportSeeder::class,
+        ]);
+
+        // Seed SAS module data
+        $this->call([
+            ScholarshipSeeder::class,
+            InsuranceSeeder::class,
+            OrganizationSeeder::class,
+            OrganizationActivitySeeder::class,
+            SASActivitySeeder::class,
+            DigitalizedDocumentSeeder::class,
         ]);
     }
 }

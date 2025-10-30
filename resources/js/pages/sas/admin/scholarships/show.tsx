@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Edit } from 'lucide-react';
 
@@ -35,7 +36,7 @@ export default function ScholarshipShow({ scholarship }: Props) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <Link href="/sas/admin/scholarships">
+                            <Link href={sas.admin.scholarships.index.url()}>
                                 <Button variant="ghost" size="sm">
                                     <ArrowLeft className="mr-2 h-4 w-4" />
                                     Back

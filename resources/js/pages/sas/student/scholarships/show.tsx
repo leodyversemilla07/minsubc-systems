@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { ScholarshipRecipient } from '@/types/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import {
@@ -63,7 +64,7 @@ export default function Show({ recipient }: Props) {
         e.preventDefault();
         if (!data.file || !selectedRequirement) return;
 
-        post(`/sas/student/scholarships/${recipient.id}/upload-requirement`, {
+        post(sas.student.scholarships.uploadRequirement.url({ id: recipient.id }), {
             onSuccess: () => {
                 setIsDialogOpen(false);
                 reset();
@@ -91,7 +92,7 @@ export default function Show({ recipient }: Props) {
             {/* Hero Section */}
             <section className="bg-gradient-to-b from-blue-50 to-white px-4 py-12 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
                 <div className="mx-auto max-w-5xl">
-                    <Link href="/sas/student/scholarships">
+                    <Link href={sas.student.scholarships.index.url()}>
                         <Button variant="ghost" className="mb-4">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Scholarships
@@ -197,7 +198,7 @@ export default function Show({ recipient }: Props) {
                                                 <CardTitle>
                                                     Required Documents
                                                 </CardTitle>
-                                                <Link href={`/sas/student/scholarships/${recipient.id}/requirements`}>
+                                                <Link href={sas.student.scholarships.requirements.url({ id: recipient.id })}>
                                                     <Button variant="outline" size="sm">
                                                         <FileText className="mr-2 h-4 w-4" />
                                                         View Full Requirements

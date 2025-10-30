@@ -23,6 +23,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Eye,
@@ -102,7 +103,7 @@ export default function DocumentsIndex({ documents, filters }: Props) {
         setCategory('');
         setDisposalStatus('');
         setAcademicYear('');
-        router.get('/sas/admin/documents', {}, { preserveState: true });
+        router.get(sas.admin.documents.index.url(), {}, { preserveState: true });
     }
 
     function handleDelete(id: number, title: string) {
@@ -180,13 +181,13 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" asChild>
-                            <Link href="/sas/admin/documents/manage-disposal">
+                            <Link href={sas.admin.documents.manageDisposal.url()}>
                                 <AlertCircle className="mr-2 h-4 w-4" />
                                 Manage Disposal
                             </Link>
                         </Button>
                         <Button asChild>
-                            <Link href="/sas/admin/documents/upload">
+                            <Link href={sas.admin.documents.create.url()}>
                                 <Upload className="mr-2 h-4 w-4" />
                                 Upload Document
                             </Link>
@@ -406,7 +407,7 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 No documents found
                             </p>
                             <Button className="mt-4" asChild>
-                                <Link href="/sas/admin/documents/upload">
+                                <Link href={sas.admin.documents.create.url()}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Upload First Document
                                 </Link>

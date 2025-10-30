@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save } from 'lucide-react';
 
@@ -68,7 +69,7 @@ export default function EditOrganization({ organization }: Props) {
             {/* Header */}
             <div className="mb-6">
                 <Link
-                    href="/sas/adviser/organization"
+                    href={sas.adviser.organization.dashboard.url()}
                     className="mb-4 inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -379,7 +380,7 @@ export default function EditOrganization({ organization }: Props) {
 
                 {/* Action Buttons */}
                 <div className="flex justify-end gap-4">
-                    <Link href="/sas/adviser/organization">
+                    <Link href={sas.adviser.organization.dashboard.url()}>
                         <Button type="button" variant="outline">
                             Cancel
                         </Button>

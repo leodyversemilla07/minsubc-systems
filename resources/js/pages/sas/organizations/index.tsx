@@ -9,6 +9,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import type { Organization, PaginatedData } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import { Search, SlidersHorizontal, Users } from 'lucide-react';
@@ -48,7 +49,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         router.get(
-            '/sas/organizations',
+            sas.organizations.index.url(),
             {
                 search,
                 type: filters?.type,
@@ -61,7 +62,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
     const handleFilterChange = (key: string, value: string) => {
         router.get(
-            '/sas/organizations',
+            sas.organizations.index.url(),
             { ...filters, [key]: value === 'all' ? undefined : value },
             { preserveState: true },
         );
@@ -69,7 +70,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
     const clearFilters = () => {
         setSearch('');
-        router.get('/sas/organizations', {}, { preserveState: true });
+        router.get(sas.organizations.index.url(), {}, { preserveState: true });
     };
 
     const hasActiveFilters =

@@ -3,6 +3,7 @@
 namespace App\Modules\SAS\Models;
 
 use App\Models\User;
+use Database\Factories\DigitalizedDocumentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,14 @@ use Illuminate\Support\Facades\Storage;
 class DigitalizedDocument extends Model
 {
     use HasFactory;
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): DigitalizedDocumentFactory
+    {
+        return DigitalizedDocumentFactory::new();
+    }
 
     protected $fillable = [
         'document_title',

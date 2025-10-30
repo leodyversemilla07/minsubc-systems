@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import type { SASActivity } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
@@ -167,7 +168,7 @@ export default function ActivitiesCalendar({ activities, startDate }: Props) {
             {/* Header */}
             <section className="border-b bg-white px-4 py-6 dark:bg-gray-900">
                 <div className="mx-auto max-w-7xl">
-                    <Link href="/sas/activities">
+                    <Link href={sas.activities.index.url()}>
                         <Button variant="ghost" size="sm" className="mb-4">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to List View

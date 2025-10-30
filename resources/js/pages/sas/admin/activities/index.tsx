@@ -18,6 +18,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Calendar,
@@ -77,7 +78,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
         setSearch('');
         setStatus('');
         setCategory('');
-        router.get('/sas/admin/activities', {}, { preserveState: true });
+        router.get(sas.admin.activities.index.url(), {}, { preserveState: true });
     }
 
     function handleDelete(id: number, title: string) {
@@ -131,9 +132,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                         </p>
                     </div>
                     <Button asChild>
-                        <Link href="/sas/admin/activities/create">
+                        <Link href={sas.admin.activities.create.url()}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Activity
+                            Create Activity
                         </Link>
                     </Button>
                 </div>
@@ -337,7 +338,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 No activities found
                             </p>
                             <Button className="mt-4" asChild>
-                                <Link href="/sas/admin/activities/create">
+                                <Link href={sas.admin.activities.create.url()}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create First Activity
                                 </Link>

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { InsuranceRecord } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
@@ -63,7 +64,7 @@ export default function Show({ insurance }: Props) {
             {/* Hero Section */}
             <section className="bg-gradient-to-b from-purple-50 to-white px-4 py-12 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
                 <div className="mx-auto max-w-5xl">
-                    <Link href="/sas/student/insurance">
+                    <Link href={sas.student.insurance.index.url()}>
                         <Button variant="ghost" className="mb-4">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Insurance

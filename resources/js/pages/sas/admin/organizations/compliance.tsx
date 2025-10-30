@@ -9,6 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
     AlertCircle,
@@ -107,7 +108,7 @@ export default function OrganizationsCompliance({ organizations }: Props) {
             {/* Header */}
             <div className="mb-6">
                 <Link
-                    href="/sas/admin/organizations"
+                    href={sas.admin.organizations.index.url()}
                     className="mb-4 inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />

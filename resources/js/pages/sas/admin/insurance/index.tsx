@@ -18,6 +18,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     AlertCircle,
@@ -91,7 +92,7 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
         setSearch('');
         setStatus('');
         setPolicyType('');
-        router.get('/sas/admin/insurance', {}, { preserveState: true });
+        router.get(sas.admin.insurance.index.url(), {}, { preserveState: true });
     }
 
     const stats = {

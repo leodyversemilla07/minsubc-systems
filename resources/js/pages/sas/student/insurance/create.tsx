@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save, ShieldCheck } from 'lucide-react';
 
@@ -27,7 +28,7 @@ export default function Create() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/sas/student/insurance');
+        post(sas.student.insurance.store.url());
     };
 
     return (
@@ -37,7 +38,7 @@ export default function Create() {
             {/* Hero Section */}
             <section className="bg-gradient-to-b from-purple-50 to-white px-4 py-12 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
                 <div className="mx-auto max-w-3xl">
-                    <Link href="/sas/student/insurance">
+                    <Link href={sas.student.insurance.index.url()}>
                         <Button variant="ghost" className="mb-4">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Insurance
@@ -271,7 +272,7 @@ export default function Create() {
                                 {/* Form Actions */}
                                 <div className="flex gap-4 pt-4">
                                     <Link
-                                        href="/sas/student/insurance"
+                                        href={sas.student.insurance.index.url()}
                                         className="flex-1"
                                     >
                                         <Button

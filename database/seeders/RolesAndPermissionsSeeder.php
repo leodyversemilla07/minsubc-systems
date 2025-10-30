@@ -84,6 +84,26 @@ class RolesAndPermissionsSeeder extends Seeder
             'system_wide_reports',
             'security_administration',
             'password_reset_admin',
+
+            // SAS Staff permissions
+            'sas_view_dashboard',
+            'sas_view_scholarships',
+            'sas_view_insurance',
+            'sas_view_organizations',
+            'sas_view_activities',
+            'sas_process_scholarships',
+            'sas_process_insurance',
+
+            // SAS Admin permissions (additional to staff permissions)
+            'sas_manage_scholarships',
+            'sas_manage_insurance',
+            'sas_manage_organizations',
+            'sas_manage_activities',
+            'sas_manage_documents',
+            'sas_approve_applications',
+            'sas_reject_applications',
+            'sas_view_analytics',
+            'sas_manage_settings',
         ];
 
         // Create permissions
@@ -181,6 +201,41 @@ class RolesAndPermissionsSeeder extends Seeder
             'usg_manage_settings',
         ]);
 
+        // Create SAS Staff role
+        $sasStaffRole = Role::create(['name' => 'sas-staff']);
+        $sasStaffRole->givePermissionTo([
+            'sas_view_dashboard',
+            'sas_view_scholarships',
+            'sas_view_insurance',
+            'sas_view_organizations',
+            'sas_view_activities',
+            'sas_process_scholarships',
+            'sas_process_insurance',
+        ]);
+
+        // Create SAS Admin role (has all staff permissions plus admin-specific ones)
+        $sasAdminRole = Role::create(['name' => 'sas-admin']);
+        $sasAdminRole->givePermissionTo([
+            // All staff permissions
+            'sas_view_dashboard',
+            'sas_view_scholarships',
+            'sas_view_insurance',
+            'sas_view_organizations',
+            'sas_view_activities',
+            'sas_process_scholarships',
+            'sas_process_insurance',
+            // Plus admin permissions
+            'sas_manage_scholarships',
+            'sas_manage_insurance',
+            'sas_manage_organizations',
+            'sas_manage_activities',
+            'sas_manage_documents',
+            'sas_approve_applications',
+            'sas_reject_applications',
+            'sas_view_analytics',
+            'sas_manage_settings',
+        ]);
+
         // Create Super Admin role (highest authority - can manage everything)
         $superAdminRole = Role::create(['name' => 'super-admin']);
         $superAdminRole->givePermissionTo([
@@ -225,6 +280,23 @@ class RolesAndPermissionsSeeder extends Seeder
             'usg_archive_content',
             'usg_view_analytics',
             'usg_manage_settings',
+            // SAS permissions
+            'sas_view_dashboard',
+            'sas_view_scholarships',
+            'sas_view_insurance',
+            'sas_view_organizations',
+            'sas_view_activities',
+            'sas_process_scholarships',
+            'sas_process_insurance',
+            'sas_manage_scholarships',
+            'sas_manage_insurance',
+            'sas_manage_organizations',
+            'sas_manage_activities',
+            'sas_manage_documents',
+            'sas_approve_applications',
+            'sas_reject_applications',
+            'sas_view_analytics',
+            'sas_manage_settings',
             // Plus super admin specific permissions
             'super_admin_access',
             'manage_all_users',

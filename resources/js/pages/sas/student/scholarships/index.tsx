@@ -9,6 +9,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { PaginatedData, ScholarshipRecipient } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
@@ -35,6 +36,7 @@ const statusColors = {
     Suspended:
         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
     Revoked: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+    Cancelled: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300',
 };
 
 export default function Index({ scholarships, filters }: Props) {
@@ -42,7 +44,7 @@ export default function Index({ scholarships, filters }: Props) {
 
     const handleFilter = (key: string, value: string) => {
         router.get(
-            '/sas/student/scholarships',
+            sas.student.scholarships.index.url(),
             {
                 ...filters,
                 [key]: value || undefined,
@@ -251,7 +253,7 @@ export default function Index({ scholarships, filters }: Props) {
                                             )}
 
                                             <Link
-                                                href={`/sas/student/scholarships/${recipient.id}`}
+                                                href={sas.student.scholarships.show.url({ id: recipient.id })}
                                             >
                                                 <Button
                                                     variant="outline"

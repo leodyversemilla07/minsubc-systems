@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
     Award,
@@ -94,7 +95,7 @@ const SASHome = () => {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Link href="/sas/student/scholarships">
+                            <Link href={sas.student.scholarships.index.url()}>
                                 <Button
                                     size="lg"
                                     className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-blue-700 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-blue-800 hover:shadow-xl hover:shadow-blue-700/20"
@@ -118,7 +119,7 @@ const SASHome = () => {
                                 </Button>
                             </Link>
 
-                            <Link href="/sas/organizations">
+                            <Link href={sas.organizations.index.url()}>
                                 <Button
                                     size="lg"
                                     variant="outline"
@@ -189,7 +190,7 @@ const SASHome = () => {
                                 including TES, TDP, and more.
                             </p>
                             <Link
-                                href="/sas/student/scholarships"
+                                href={sas.student.scholarships.index.url()}
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Scholarships →
@@ -209,7 +210,7 @@ const SASHome = () => {
                                 and records.
                             </p>
                             <Link
-                                href="/sas/student/insurance"
+                                href={sas.student.insurance.index.url()}
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 Manage Insurance →
@@ -229,7 +230,7 @@ const SASHome = () => {
                                 their activities.
                             </p>
                             <Link
-                                href="/sas/organizations"
+                                href={sas.organizations.index.url()}
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Organizations →
@@ -249,7 +250,7 @@ const SASHome = () => {
                                 activities.
                             </p>
                             <Link
-                                href="/sas/activities/calendar"
+                                href={sas.activities.calendar.url()}
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Calendar →
@@ -269,7 +270,7 @@ const SASHome = () => {
                                 affairs records.
                             </p>
                             <Link
-                                href="/sas/admin/documents"
+                                href={sas.admin.documents.index.url()}
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 Access Documents →
@@ -289,7 +290,7 @@ const SASHome = () => {
                                 organization, and activity data.
                             </p>
                             <Link
-                                href="/sas/admin/dashboard"
+                                href={sas.admin.dashboard.url()}
                                 className="font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400"
                             >
                                 View Reports →

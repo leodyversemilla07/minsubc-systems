@@ -18,6 +18,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
@@ -78,7 +79,7 @@ export default function EditActivity({ activity, organizations }: Props) {
             <div className="mb-6">
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" size="sm" asChild>
-                        <Link href="/sas/admin/activities">
+                        <Link href={sas.admin.activities.index.url()}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back
                         </Link>
@@ -393,7 +394,7 @@ export default function EditActivity({ activity, organizations }: Props) {
                 {/* Form Actions */}
                 <div className="flex justify-end gap-4">
                     <Button type="button" variant="outline" asChild>
-                        <Link href="/sas/admin/activities">Cancel</Link>
+                        <Link href={sas.admin.activities.index.url()}>Cancel</Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Updating...' : 'Update Activity'}

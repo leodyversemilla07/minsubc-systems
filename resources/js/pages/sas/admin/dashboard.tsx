@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
     AlertCircle,
@@ -95,7 +96,7 @@ export default function Dashboard({
             icon: GraduationCap,
             color: 'text-blue-600 dark:text-blue-400',
             bgColor: 'bg-blue-100 dark:bg-blue-900/20',
-            link: '/sas/admin/scholarships',
+            link: sas.admin.scholarships.index.url(),
         },
         {
             title: 'Insurance',
@@ -106,7 +107,7 @@ export default function Dashboard({
             icon: Shield,
             color: 'text-green-600 dark:text-green-400',
             bgColor: 'bg-green-100 dark:bg-green-900/20',
-            link: '/sas/admin/insurance',
+            link: sas.admin.insurance.index.url(),
         },
         {
             title: 'Organizations',
@@ -117,7 +118,7 @@ export default function Dashboard({
             icon: Users,
             color: 'text-purple-600 dark:text-purple-400',
             bgColor: 'bg-purple-100 dark:bg-purple-900/20',
-            link: '/sas/admin/organizations',
+            link: sas.admin.organizations.index.url(),
         },
         {
             title: 'Activities',
@@ -128,7 +129,7 @@ export default function Dashboard({
             icon: Calendar,
             color: 'text-orange-600 dark:text-orange-400',
             bgColor: 'bg-orange-100 dark:bg-orange-900/20',
-            link: '/sas/admin/activities',
+            link: sas.admin.activities.index.url(),
         },
         {
             title: 'Documents',
@@ -139,7 +140,7 @@ export default function Dashboard({
             icon: FileText,
             color: 'text-indigo-600 dark:text-indigo-400',
             bgColor: 'bg-indigo-100 dark:bg-indigo-900/20',
-            link: '/sas/admin/documents',
+            link: sas.admin.documents.index.url(),
         },
     ];
 
@@ -176,8 +177,8 @@ export default function Dashboard({
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'SAS Admin', href: '/sas/admin/dashboard' },
-                { title: 'Dashboard', href: '/sas/admin/dashboard' },
+                { title: 'SAS Admin', href: sas.admin.dashboard.url() },
+                { title: 'Dashboard', href: sas.admin.dashboard.url() },
             ]}
         >
             <Head title="SAS Dashboard" />
@@ -278,7 +279,7 @@ export default function Dashboard({
                                             {statistics.scholarships.total_amount.toLocaleString()}
                                         </span>
                                     </div>
-                                    <Link href="/sas/admin/scholarships">
+                                    <Link href={sas.admin.scholarships.index.url()}>
                                         <Button
                                             variant="outline"
                                             className="w-full"
@@ -327,7 +328,7 @@ export default function Dashboard({
                                             {statistics.insurance.expiring_soon}
                                         </Badge>
                                     </div>
-                                    <Link href="/sas/admin/insurance">
+                                    <Link href={sas.admin.insurance.index.url()}>
                                         <Button
                                             variant="outline"
                                             className="w-full"
@@ -371,7 +372,7 @@ export default function Dashboard({
                                             {statistics.organizations.active}
                                         </Badge>
                                     </div>
-                                    <Link href="/sas/admin/organizations">
+                                    <Link href={sas.admin.organizations.index.url()}>
                                         <Button
                                             variant="outline"
                                             className="w-full"
@@ -421,7 +422,7 @@ export default function Dashboard({
                                     </div>
                                     <div className="flex gap-2">
                                         <Link
-                                            href="/sas/admin/activities"
+                                            href={sas.admin.activities.index.url()}
                                             className="flex-1"
                                         >
                                             <Button
@@ -433,7 +434,7 @@ export default function Dashboard({
                                             </Button>
                                         </Link>
                                         <Link
-                                            href="/sas/admin/documents"
+                                            href={sas.admin.documents.index.url()}
                                             className="flex-1"
                                         >
                                             <Button

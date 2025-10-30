@@ -25,6 +25,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Edit,
@@ -101,7 +102,7 @@ export default function RecipientsIndex({ recipients, filters }: Props) {
                             Manage scholarship recipients and requirements
                         </p>
                     </div>
-                    <Link href="/sas/admin/scholarship-recipients/create">
+                    <Link href={sas.admin.scholarshipRecipients.create.url()}>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Recipient

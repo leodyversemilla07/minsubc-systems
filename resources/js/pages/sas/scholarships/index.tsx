@@ -8,6 +8,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import type { PaginatedData } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
@@ -64,7 +65,7 @@ export default function ScholarshipsIndex({
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         router.get(
-            '/sas/scholarships',
+            sas.scholarships.index.url(),
             {
                 search,
                 type: filters?.type,
@@ -75,7 +76,7 @@ export default function ScholarshipsIndex({
 
     const handleFilterChange = (key: string, value: string) => {
         router.get(
-            '/sas/scholarships',
+            sas.scholarships.index.url(),
             { ...filters, [key]: value === 'all' ? undefined : value },
             { preserveState: true },
         );
@@ -83,7 +84,7 @@ export default function ScholarshipsIndex({
 
     const clearFilters = () => {
         setSearch('');
-        router.get('/sas/scholarships', {}, { preserveState: true });
+        router.get(sas.scholarships.index.url(), {}, { preserveState: true });
     };
 
     const hasActiveFilters = filters?.search || filters?.type;
@@ -258,7 +259,7 @@ export default function ScholarshipsIndex({
                             {scholarships.data.map((scholarship) => (
                                 <Link
                                     key={scholarship.id}
-                                    href={`/sas/scholarships/${scholarship.id}`}
+                                    href={sas.scholarships.show.url({ id: scholarship.id })}
                                     className="group block"
                                 >
                                     <div className="h-full rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">

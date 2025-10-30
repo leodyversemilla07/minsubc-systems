@@ -12,18 +12,22 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import registrar from '@/routes/registrar';
+import sas from '@/routes/sas';
 import superAdmin from '@/routes/super-admin';
 import usg from '@/routes/usg';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
+    Building2,
     Calendar,
     ClipboardList,
     FileText,
     Folder,
+    GraduationCap,
     LayoutGrid,
     Megaphone,
+    Shield,
     Target,
     Users,
 } from 'lucide-react';
@@ -129,6 +133,42 @@ export function AppSidebar() {
                     title: 'VMGO',
                     href: usg.admin.vmgo.edit.url(),
                     icon: Target,
+                },
+            );
+        }
+
+        // SAS Admin/Staff Navigation
+        else if (hasAnyRole(['sas-admin', 'sas-staff'])) {
+            items.push(
+                {
+                    title: 'SAS Dashboard',
+                    href: sas.admin.dashboard.url(),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Scholarships',
+                    href: sas.admin.scholarships.index.url(),
+                    icon: GraduationCap,
+                },
+                {
+                    title: 'Insurance',
+                    href: sas.admin.insurance.index.url(),
+                    icon: Shield,
+                },
+                {
+                    title: 'Organizations',
+                    href: sas.admin.organizations.index.url(),
+                    icon: Building2,
+                },
+                {
+                    title: 'Activities',
+                    href: sas.admin.activities.index.url(),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Documents',
+                    href: sas.admin.documents.index.url(),
+                    icon: FileText,
                 },
             );
         }

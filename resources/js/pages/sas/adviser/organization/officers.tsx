@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Edit, Plus, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -127,7 +128,7 @@ export default function ManageOfficers({ organization, officers }: Props) {
             {/* Header */}
             <div className="mb-6">
                 <Link
-                    href="/sas/adviser/organization"
+                    href={sas.adviser.organization.dashboard.url()}
                     className="mb-4 inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />

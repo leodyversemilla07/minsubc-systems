@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Ensure required roles exist
-        $requiredRoles = ['student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'super-admin'];
+        $requiredRoles = ['student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'sas-staff', 'sas-admin', 'super-admin'];
 
         foreach ($requiredRoles as $roleName) {
             if (! Role::where('name', $roleName)->exists()) {
@@ -166,6 +166,37 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('USGAdmin@2024'),
                 'email_verified_at' => now(),
                 'role' => 'usg-admin',
+            ],
+
+            // SAS Staff
+            [
+                'first_name' => 'Sophia',
+                'middle_name' => 'Mae',
+                'last_name' => 'Villanueva',
+                'email' => 'sophia.villanueva@minsu.edu.ph',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'sas-staff',
+            ],
+            [
+                'first_name' => 'Marco',
+                'middle_name' => 'Luis',
+                'last_name' => 'Ramos',
+                'email' => 'marco.ramos@minsu.edu.ph',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'sas-staff',
+            ],
+
+            // SAS Admin
+            [
+                'first_name' => 'SAS',
+                'middle_name' => null,
+                'last_name' => 'Administrator',
+                'email' => 'sas-admin@minsu.edu.ph',
+                'password' => Hash::make('SASAdmin@2024'),
+                'email_verified_at' => now(),
+                'role' => 'sas-admin',
             ],
 
             // Super Admin

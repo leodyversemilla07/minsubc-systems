@@ -19,6 +19,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import {
     ArrowLeft,
@@ -136,7 +137,7 @@ export default function InsuranceShow({ insurance }: Props) {
             {/* Header */}
             <div className="mb-6">
                 <Link
-                    href="/sas/admin/insurance"
+                    href={sas.admin.insurance.index.url()}
                     className="mb-4 inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />

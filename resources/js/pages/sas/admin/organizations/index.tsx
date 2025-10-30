@@ -18,6 +18,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Building2,
@@ -79,7 +80,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
         setSearch('');
         setOrgType('');
         setStatus('');
-        router.get('/sas/admin/organizations', {}, { preserveState: true });
+        router.get(sas.admin.organizations.index.url(), {}, { preserveState: true });
     }
 
     function handleDelete(id: number, name: string) {
@@ -145,7 +146,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                         </p>
                     </div>
                     <Button asChild>
-                        <Link href="/sas/admin/organizations/create">
+                        <Link href={sas.admin.organizations.create.url()}>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Organization
                         </Link>
@@ -342,7 +343,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 No organizations found
                             </p>
                             <Button className="mt-4" asChild>
-                                <Link href="/sas/admin/organizations/create">
+                                <Link href={sas.admin.organizations.create.url()}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create First Organization
                                 </Link>

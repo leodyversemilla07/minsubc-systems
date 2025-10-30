@@ -9,6 +9,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import type { PaginatedData, SASActivity } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import { Calendar, Download, Search, SlidersHorizontal } from 'lucide-react';
@@ -47,7 +48,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         router.get(
-            '/sas/activities',
+            sas.activities.index.url(),
             { search, type: filters?.type, status: filters?.status },
             { preserveState: true },
         );
@@ -55,7 +56,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
 
     const handleFilterChange = (key: string, value: string) => {
         router.get(
-            '/sas/activities',
+            sas.activities.index.url(),
             { ...filters, [key]: value === 'all' ? undefined : value },
             { preserveState: true },
         );
@@ -63,7 +64,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
 
     const clearFilters = () => {
         setSearch('');
-        router.get('/sas/activities', {}, { preserveState: true });
+        router.get(sas.activities.index.url(), {}, { preserveState: true });
     };
 
     const hasActiveFilters =
@@ -126,7 +127,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
 
                         {/* Quick Links */}
                         <div className="mb-8 flex justify-center gap-4">
-                            <Link href="/sas/activities/calendar">
+                            <Link href={sas.activities.calendar.url()}>
                                 <Button
                                     size="lg"
                                     className="bg-white text-purple-700 hover:bg-purple-50"
@@ -136,7 +137,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 </Button>
                             </Link>
                             <a
-                                href="/sas/activities/export"
+                                href={sas.activities.export.url()}
                                 download
                                 className="inline-flex"
                             >

@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import SASLayout from '@/layouts/sas-layout';
+import sas from '@/routes/sas';
 import { InsuranceRecord } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
 import { Calendar, ChevronRight, Clock, Plus, ShieldCheck } from 'lucide-react';
@@ -49,7 +50,7 @@ export default function Index({ insuranceRecords }: Props) {
                             </div>
                         </div>
 
-                        <Link href="/sas/student/insurance/create">
+                        <Link href={sas.student.insurance.create.url()}>
                             <Button className="bg-purple-700 hover:bg-purple-800">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Submit New Insurance
@@ -206,7 +207,7 @@ export default function Index({ insuranceRecords }: Props) {
                                             )}
 
                                             <Link
-                                                href={`/sas/student/insurance/${insurance.id}`}
+                                                href={sas.student.insurance.show.url({ id: insurance.id })}
                                             >
                                                 <Button
                                                     variant="outline"
@@ -234,7 +235,7 @@ export default function Index({ insuranceRecords }: Props) {
                                     Submit your first insurance policy to get
                                     started.
                                 </p>
-                                <Link href="/sas/student/insurance/create">
+                                <Link href={sas.student.insurance.create.url()}>
                                     <Button className="bg-purple-700 hover:bg-purple-800">
                                         <Plus className="mr-2 h-4 w-4" />
                                         Submit New Insurance

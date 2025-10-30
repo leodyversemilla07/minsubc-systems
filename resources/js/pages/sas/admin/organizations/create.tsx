@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
@@ -60,7 +61,7 @@ export default function OrganizationsCreate({ advisers }: Props) {
             {/* Header */}
             <div className="mb-6">
                 <Link
-                    href="/sas/admin/organizations"
+                    href={sas.admin.organizations.index.url()}
                     className="mb-4 inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -388,7 +389,7 @@ export default function OrganizationsCreate({ advisers }: Props) {
                 {/* Submit Actions */}
                 <div className="flex justify-end gap-4">
                     <Button variant="outline" type="button" asChild>
-                        <Link href="/sas/admin/organizations">Cancel</Link>
+                        <Link href={sas.admin.organizations.index.url()}>Cancel</Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Creating...' : 'Create Organization'}

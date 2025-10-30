@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import sas from '@/routes/sas';
 import { 
     CheckCircle2, 
     XCircle, 
@@ -46,7 +47,7 @@ export default function Requirements({ recipient, requirements, stats }: Props) 
             file: file,
         });
 
-        post(`/sas/student/scholarships/${recipient.id}/upload-requirement`, {
+        post(sas.student.scholarships.uploadRequirement.url({ id: recipient.id }), {
             preserveScroll: true,
             onSuccess: () => {
                 reset();
@@ -94,7 +95,7 @@ export default function Requirements({ recipient, requirements, stats }: Props) 
                 {/* Back Button */}
                 <div className="mb-6">
                     <Link
-                        href={`/sas/student/scholarships/${recipient.id}`}
+                        href={sas.student.scholarships.show.url({ id: recipient.id })}
                         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
                     >
                         <ArrowLeft className="h-4 w-4" />

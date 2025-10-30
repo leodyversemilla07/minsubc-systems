@@ -169,7 +169,5 @@ class TransparencyReportSeeder extends Seeder
         foreach ($reports as $reportData) {
             TransparencyReport::create($reportData);
         }
-
-        $this->command->info('Transparency reports seeded successfully!');
     }
 }

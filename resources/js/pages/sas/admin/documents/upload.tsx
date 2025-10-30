@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Upload } from 'lucide-react';
 import { useState } from 'react';
@@ -58,7 +59,7 @@ export default function UploadDocument() {
             <div className="mb-6">
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" size="sm" asChild>
-                        <Link href="/sas/admin/documents">
+                        <Link href={sas.admin.documents.index.url()}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back
                         </Link>
@@ -389,7 +390,7 @@ export default function UploadDocument() {
                 {/* Form Actions */}
                 <div className="flex justify-end gap-4">
                     <Button type="button" variant="outline" asChild>
-                        <Link href="/sas/admin/documents">Cancel</Link>
+                        <Link href={sas.admin.documents.index.url()}>Cancel</Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Uploading...' : 'Upload Document'}

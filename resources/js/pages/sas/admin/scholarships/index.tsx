@@ -32,6 +32,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Edit,
@@ -130,7 +131,7 @@ export default function ScholarshipsIndex({
                             Manage all scholarship programs and their recipients
                         </p>
                     </div>
-                    <Link href="/sas/admin/scholarships/create">
+                    <Link href={sas.admin.scholarships.create.url()}>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Scholarship
@@ -287,7 +288,7 @@ export default function ScholarshipsIndex({
                                     Get started by creating your first
                                     scholarship program.
                                 </p>
-                                <Link href="/sas/admin/scholarships/create">
+                                <Link href={sas.admin.scholarships.create.url()}>
                                     <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add Scholarship

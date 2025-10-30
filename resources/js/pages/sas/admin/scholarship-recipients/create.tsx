@@ -16,6 +16,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
+import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
@@ -58,7 +59,7 @@ export default function CreateRecipient({ scholarships, students }: Props) {
 
             <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 <div className="flex items-center gap-4">
-                    <Link href="/sas/admin/scholarship-recipients">
+                    <Link href={sas.admin.scholarshipRecipients.index.url()}>
                         <Button variant="ghost" size="sm">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back
@@ -248,7 +249,7 @@ export default function CreateRecipient({ scholarships, students }: Props) {
                             </div>
 
                             <div className="flex justify-end gap-4">
-                                <Link href="/sas/admin/scholarship-recipients">
+                                <Link href={sas.admin.scholarshipRecipients.index.url()}>
                                     <Button type="button" variant="outline">
                                         Cancel
                                     </Button>
