@@ -9,6 +9,7 @@ import {
     Building2,
     Calendar,
     Clock,
+    Download,
     MapPin,
     Share2,
     User,
@@ -163,14 +164,26 @@ export default function ActivityShow({ activity }: Props) {
                             )}
                         </div>
 
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={shareActivity}
-                        >
-                            <Share2 className="mr-2 h-4 w-4" />
-                            Share
-                        </Button>
+                        <div className="flex gap-2">
+                            <a
+                                href={`/sas/activities/${activity.slug}/export`}
+                                download
+                            >
+                                <Button variant="outline" size="sm">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Add to Calendar
+                                </Button>
+                            </a>
+
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={shareActivity}
+                            >
+                                <Share2 className="mr-2 h-4 w-4" />
+                                Share
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </section>

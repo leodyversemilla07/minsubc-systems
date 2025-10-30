@@ -1,5 +1,5 @@
-# Task Delegation: Student Affairs System (SAS)
-**Module:** Student Affairs System (SAS)  
+# Task Delegation: Student Affairs and Services (SAS)
+**Module:** Student Affairs and Services (SAS)  
 **Developer:** John Paul Leido  
 **Start Date:** October 28, 2025  
 **Target Completion:** 12 weeks (January 20, 2026)
@@ -7,7 +7,7 @@
 ---
 
 ## Overview
-The Student Affairs System (SAS) is a comprehensive full-stack system for managing all student affairs operations at MinSUBC. You will build the complete system from database migrations through backend services to frontend interfaces, including:
+The Student Affairs and Services (SAS) is a comprehensive full-stack system for managing all student affairs operations at MinSUBC. You will build the complete system from database migrations through backend services to frontend interfaces, including:
 - ✅ **Scholarship Management** - Track TES, TDP, and various scholarship programs
 - ✅ **Insurance Management** - Digitalize student insurance forms and records
 - ✅ **Organizational Records** - Manage 11 minor and 12 major student organizations
@@ -40,7 +40,7 @@ The Student Affairs System (SAS) is a comprehensive full-stack system for managi
 
 ## System Components
 
-You will build the complete Student Affairs System covering:
+You will build the complete Student Affairs and Services covering:
 
 ### Part A: Scholarship Management
 - ✅ Track multiple scholarship types (TES, TDP, CHED Merit, Private, University)
@@ -1315,4 +1315,4 @@ The SAS module will be considered complete when:
 
 **Good luck! 🚀**
 
-Remember: You're building the complete Student Affairs System - a mission-critical system for managing scholarships, insurance, organizations, activities, and documents. Take it one phase at a time, test thoroughly, follow the SRS specifications, and create something amazing!
+Remember: You're building the complete Student Affairs and Services - a mission-critical system for managing scholarships, insurance, organizations, activities, and documents. Take it one phase at a time, test thoroughly, follow the SRS specifications, and create something amazing!

@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Icon } from '@/components/icon';
+import { NotificationBell } from '@/components/notification-bell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -242,6 +243,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     </TooltipProvider>
                                 ))}
                             </div>
+                            <NotificationBell />
                         </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

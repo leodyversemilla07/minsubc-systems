@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 
 class InsuranceService
 {
+    public function __construct(
+        protected NotificationService $notificationService
+    ) {}
+
     /**
      * Get all insurance records with optional filters and pagination.
      */
@@ -58,7 +62,13 @@ class InsuranceService
             $data['policy_document_path'] = $data['policy_document']->store('insurance/policies', 'public');
         }
 
-        return InsuranceRecord::create($data);
+        $insurance = InsuranceRecord::create($data);
+        $insurance->load('student');
+
+        // Send notification to student
+        $this->notificationService->notifyInsuranceSubmitted($insurance);
+
+        return $insurance;
     }
 
     /**

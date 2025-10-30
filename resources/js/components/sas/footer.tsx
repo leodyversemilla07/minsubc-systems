@@ -32,7 +32,7 @@ export default function Footer() {
                             />
                         </div>
                         <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                            Student Affairs System
+                            Student Affairs and Services
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-300">
                             Managing student services, scholarships, insurance,
@@ -188,7 +188,7 @@ export default function Footer() {
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-                            © {currentYear} Student Affairs System - Mindoro
+                            © {currentYear} Student Affairs and Services - Mindoro
                             State University, Bongabong Campus. All rights
                             reserved.
                         </p>

@@ -11,7 +11,7 @@ import {
 import SASLayout from '@/layouts/sas-layout';
 import type { PaginatedData, SASActivity } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Search, SlidersHorizontal } from 'lucide-react';
+import { Calendar, Download, Search, SlidersHorizontal } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
@@ -135,6 +135,20 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     Calendar View
                                 </Button>
                             </Link>
+                            <a
+                                href="/sas/activities/export"
+                                download
+                                className="inline-flex"
+                            >
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="border-white/30 bg-white/10 text-white hover:bg-white/20"
+                                >
+                                    <Download className="mr-2 h-5 w-5" />
+                                    Download Calendar
+                                </Button>
+                            </a>
                         </div>
 
                         {/* Search Bar */}

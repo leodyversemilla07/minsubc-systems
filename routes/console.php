@@ -14,3 +14,10 @@ Schedule::command('usg:archive-expired')
     ->at('00:00')
     ->timezone('Asia/Manila')
     ->description('Archive expired USG announcements and past events');
+
+// SAS Module Scheduled Tasks
+Schedule::command('sas:send-reminders')
+    ->daily()
+    ->at('08:00')
+    ->timezone('Asia/Manila')
+    ->description('Send SAS reminders for scholarships, insurance, and requirements');

@@ -1,5 +1,5 @@
 # Software Requirements Specification (SRS)
-## Student Affairs System (SAS)
+## Student Affairs and Services (SAS)
 
 **Version:** 1.0  
 **Date:** October 19, 2025  
@@ -25,10 +25,10 @@
 ## 1. System Overview
 
 ### 1.1 Purpose
-This Software Requirements Specification (SRS) document describes the functional and non-functional requirements for the Student Affairs System (SAS). The system aims to digitalize and streamline student affairs operations including scholarship management, insurance tracking, organizational records, calendar of activities, and document digitalization.
+This Software Requirements Specification (SRS) document describes the functional and non-functional requirements for the Student Affairs and Services (SAS). The system aims to digitalize and streamline student affairs operations including scholarship management, insurance tracking, organizational records, calendar of activities, and document digitalization.
 
 ### 1.2 Scope
-The Student Affairs System (SAS) is a comprehensive web-based management system that provides:
+The Student Affairs and Services (SAS) is a comprehensive web-based management system that provides:
 - **Scholarship Management:** Track students with various scholarships (TES, TDP, etc.)
 - **Insurance Management:** Digitalize and manage student insurance forms and records
 - **Organizational Records:** Manage 11 minor and 12 major student organizations
@@ -52,7 +52,7 @@ The Student Affairs System (SAS) is a comprehensive web-based management system 
 ## 2. Overall Description
 
 ### 2.1 Product Perspective
-The Student Affairs System (SAS) is a module within the MinSUBC Systems platform. It integrates with the existing authentication system and follows the modular architecture of the parent application.
+The Student Affairs and Services (SAS) is a module within the MinSUBC Systems platform. It integrates with the existing authentication system and follows the modular architecture of the parent application.
 
 ### 2.2 Product Functions
 The system provides the following core functions:

@@ -108,6 +108,14 @@ Route::middleware(['auth', 'verified', 'permission:super_admin_access'])->prefix
     Route::get('/system-config', [SuperAdminController::class, 'systemConfig'])->name('system-config');
 });
 
+// Notification Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/api/notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+    Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+});
+
 // Registrar Module Routes
 require __DIR__.'/../app/Modules/Registrar/routes.php';
 

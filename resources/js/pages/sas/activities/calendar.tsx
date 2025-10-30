@@ -9,6 +9,7 @@ import {
     Calendar as CalendarIcon,
     ChevronLeft,
     ChevronRight,
+    Download,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -206,6 +207,15 @@ export default function ActivitiesCalendar({ activities, startDate }: Props) {
                             >
                                 <ChevronRight className="h-4 w-4" />
                             </Button>
+                            <a
+                                href={`/sas/activities/export?year=${currentDate.getFullYear()}&month=${currentDate.getMonth() + 1}`}
+                                download
+                            >
+                                <Button variant="outline" size="sm">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Export Month
+                                </Button>
+                            </a>
                         </div>
                     </div>
                 </div>

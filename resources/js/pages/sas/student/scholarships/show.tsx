@@ -22,7 +22,6 @@ import {
     Clock,
     FileText,
     Upload,
-    XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -37,15 +36,6 @@ interface Props {
             amount?: number;
             status: string;
         };
-        requirements?: Array<{
-            id: number;
-            requirement_name: string;
-            description?: string;
-            is_required: boolean;
-            is_submitted: boolean;
-            submitted_at?: string;
-            file_path?: string;
-        }>;
     };
 }
 
@@ -55,6 +45,7 @@ const statusColors = {
     Suspended:
         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
     Revoked: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+    Cancelled: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300',
 };
 
 export default function Show({ recipient }: Props) {
@@ -206,10 +197,16 @@ export default function Show({ recipient }: Props) {
                                                 <CardTitle>
                                                     Required Documents
                                                 </CardTitle>
-                                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                    {completedRequirements} of{' '}
-                                                    {totalRequirements}{' '}
-                                                    completed
+                                                <Link href={`/sas/student/scholarships/${recipient.id}/requirements`}>
+                                                    <Button variant="outline" size="sm">
+                                                        <FileText className="mr-2 h-4 w-4" />
+                                                        View Full Requirements
+                                                    </Button>
+                                                </Link>
+                                            </div>
+                                            <div className="mt-2">
+                                                <span className="text-sm text-muted-foreground">
+                                                    {completedRequirements} of {totalRequirements} completed
                                                 </span>
                                             </div>
                                         </CardHeader>
@@ -224,8 +221,8 @@ export default function Show({ recipient }: Props) {
                                                             <div className="flex-shrink-0">
                                                                 {req.is_submitted ? (
                                                                     <CheckCircle2 className="h-6 w-6 text-green-600" />
-                                                                ) : req.is_required ? (
-                                                                    <XCircle className="h-6 w-6 text-red-600" />
+                                                                ) : req.deadline ? (
+                                                                    <Clock className="h-6 w-6 text-orange-600" />
                                                                 ) : (
                                                                     <Clock className="h-6 w-6 text-gray-400" />
                                                                 )}
@@ -236,17 +233,11 @@ export default function Show({ recipient }: Props) {
                                                                     {
                                                                         req.requirement_name
                                                                     }
-                                                                    {req.is_required && (
-                                                                        <span className="ml-2 text-xs text-red-600">
-                                                                            *
-                                                                            Required
-                                                                        </span>
-                                                                    )}
                                                                 </h4>
-                                                                {req.description && (
+                                                                {req.remarks && (
                                                                     <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                                                         {
-                                                                            req.description
+                                                                            req.remarks
                                                                         }
                                                                     </p>
                                                                 )}
@@ -259,10 +250,12 @@ export default function Show({ recipient }: Props) {
                                                                         >
                                                                             <CheckCircle2 className="mr-1 h-3 w-3" />
                                                                             Submitted
-                                                                            on{' '}
-                                                                            {new Date(
-                                                                                req.submitted_at!,
-                                                                            ).toLocaleDateString()}
+                                                                            {req.submission_date && (
+                                                                                <> on{' '}
+                                                                                {new Date(
+                                                                                    req.submission_date,
+                                                                                ).toLocaleDateString()}</>
+                                                                            )}
                                                                         </Badge>
                                                                     </div>
                                                                 ) : (

@@ -6,16 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Modules\SAS\Models\Organization;
 use App\Modules\SAS\Models\SASActivity;
 use App\Modules\SAS\Services\ActivityService;
+use App\Modules\SAS\Services\CalendarService;
 use App\Modules\SAS\Services\OrganizationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class PageController extends Controller
 {
     public function __construct(
         private OrganizationService $organizationService,
         private ActivityService $activityService,
+        private CalendarService $calendarService,
     ) {}
 
     // ========================================
@@ -231,6 +234,67 @@ class PageController extends Controller
             'activity' => $activity,
             'relatedActivities' => $relatedActivities,
         ]);
+    }
+
+    /**
+     * Export a single activity as .ics file.
+     */
+    public function exportActivity(string $slug): HttpResponse
+    {
+        $activity = SASActivity::where('slug', $slug)
+            ->whereIn('status', ['Scheduled', 'Ongoing'])
+            ->with('organization')
+            ->firstOrFail();
+
+        return $this->calendarService->exportActivity($activity);
+    }
+
+    /**
+     * Export multiple activities as .ics file based on filters.
+     */
+    public function exportCalendar(Request $request): HttpResponse
+    {
+        $query = SASActivity::query();
+
+        // Apply filters
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('organization')) {
+            $query->where('organization_id', $request->organization);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->where('start_date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->where('start_date', '<=', $request->date_to);
+        }
+
+        if ($request->filled('month') && $request->filled('year')) {
+            $query->whereYear('start_date', $request->year)
+                ->whereMonth('start_date', $request->month);
+        }
+
+        // Only export scheduled and ongoing activities
+        $query->whereIn('status', ['Scheduled', 'Ongoing'])
+            ->with('organization')
+            ->orderBy('start_date');
+
+        $activities = $query->get();
+
+        // Generate filename based on filters
+        $filename = 'sas-activities';
+        if ($request->filled('category')) {
+            $filename .= '-'.$request->category;
+        }
+        if ($request->filled('month') && $request->filled('year')) {
+            $filename .= '-'.$request->year.'-'.str_pad($request->month, 2, '0', STR_PAD_LEFT);
+        }
+
+        return $this->calendarService->exportActivities($activities, $filename);
     }
 
     // ========================================

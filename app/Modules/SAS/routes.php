@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Student Affairs System (SAS) Routes
+| Student Affairs and Services (SAS) Routes
 |--------------------------------------------------------------------------
 |
-| This file contains all routes for the Student Affairs System module.
+| This file contains all routes for the Student Affairs and Services module.
 | Routes are organized by access level: Public, Student, Adviser, Admin.
 |
 */
@@ -35,7 +35,9 @@ Route::prefix('sas')->name('sas.')->group(function () {
     // Activities
     Route::get('/activities', [PageController::class, 'activities'])->name('activities.index');
     Route::get('/activities/calendar', [PageController::class, 'activitiesCalendar'])->name('activities.calendar');
+    Route::get('/activities/export', [PageController::class, 'exportCalendar'])->name('activities.export');
     Route::get('/activities/{slug}', [PageController::class, 'activityShow'])->name('activities.show');
+    Route::get('/activities/{slug}/export', [PageController::class, 'exportActivity'])->name('activities.export-single');
 
     // Scholarships (Public View)
     Route::get('/scholarships', [PageController::class, 'scholarships'])->name('scholarships.index');
@@ -47,6 +49,7 @@ Route::prefix('sas/student')->name('sas.student.')->middleware(['auth', 'role:st
     // My Scholarships
     Route::get('/scholarships', [StudentScholarshipController::class, 'index'])->name('scholarships.index');
     Route::get('/scholarships/{id}', [StudentScholarshipController::class, 'show'])->name('scholarships.show');
+    Route::get('/scholarships/{id}/requirements', [StudentScholarshipController::class, 'requirements'])->name('scholarships.requirements');
     Route::post('/scholarships/{id}/upload-requirement', [StudentScholarshipController::class, 'uploadRequirement'])->name('scholarships.upload-requirement');
 
     // My Insurance

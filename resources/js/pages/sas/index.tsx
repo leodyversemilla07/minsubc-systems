@@ -14,10 +14,10 @@ const SASHome = () => {
     return (
         <SASLayout>
             <Head>
-                <title>Student Affairs System - MinSU Bongabong Campus</title>
+                <title>Student Affairs and Services - MinSU Bongabong Campus</title>
                 <meta
                     name="description"
-                    content="Student Affairs System (SAS) - Managing student services, scholarships, insurance, and organizational records"
+                    content="Student Affairs and Services (SAS) - Managing student services, scholarships, insurance, and organizational records"
                 />
             </Head>
 

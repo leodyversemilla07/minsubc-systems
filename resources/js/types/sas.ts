@@ -123,9 +123,31 @@ export interface ScholarshipRecipient {
     student_id?: string;
     email?: string;
     phone?: string;
+    academic_year: string;
+    semester: '1st' | '2nd' | 'Summer';
+    amount?: number;
     award_date: string;
-    status: 'Active' | 'Completed' | 'Suspended' | 'Revoked';
+    date_awarded?: string;
+    expiration_date?: string;
+    status: 'Active' | 'Completed' | 'Suspended' | 'Revoked' | 'Cancelled';
+    renewal_status?: 'Not Applicable' | 'Pending' | 'Approved' | 'Denied';
+    remarks?: string;
+    requirements_complete?: boolean;
     scholarship?: Scholarship;
+    requirements?: ScholarshipRequirement[];
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ScholarshipRequirement {
+    id: number;
+    recipient_id: number;
+    requirement_name: string;
+    is_submitted: boolean;
+    submission_date?: string;
+    file_path?: string;
+    deadline?: string;
+    remarks?: string;
     created_at: string;
     updated_at: string;
 }

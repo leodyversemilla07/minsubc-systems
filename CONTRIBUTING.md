@@ -8,7 +8,7 @@ The MinSU Systems Platform is a comprehensive web-based platform built with Lara
 
 - **📄 Document Request System (Registrar)**: Automates document request processing for the Registrar's Office
 - **🎓 Guidance System**: Student guidance and counseling management
-- **📊 Student Affairs System (SAS)**: Student affairs and services management
+- **📊 Student Affairs and Services (SAS)**: Student affairs and services management
 - **🏛️ University Student Government (USG)**: Student government operations and management
 
 ## How to Contribute

@@ -4,11 +4,15 @@ namespace App\Modules\SAS\Services;
 
 use App\Modules\SAS\Models\Scholarship;
 use App\Modules\SAS\Models\ScholarshipRecipient;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ScholarshipService
 {
+    public function __construct(
+        protected NotificationService $notificationService
+    ) {}
+
     /**
      * Get all scholarships with optional filters and pagination.
      */
@@ -120,7 +124,15 @@ class ScholarshipService
      */
     public function createRecipient(array $data): ScholarshipRecipient
     {
-        return ScholarshipRecipient::create($data);
+        $recipient = ScholarshipRecipient::create($data);
+
+        // Load relationships for notification
+        $recipient->load(['student', 'scholarship']);
+
+        // Send notification to student
+        $this->notificationService->notifyScholarshipAssigned($recipient);
+
+        return $recipient;
     }
 
     /**
@@ -128,7 +140,15 @@ class ScholarshipService
      */
     public function updateRecipient(ScholarshipRecipient $recipient, array $data): ScholarshipRecipient
     {
+        $oldStatus = $recipient->status;
+
         $recipient->update($data);
+        $recipient->load(['student', 'scholarship']);
+
+        // Send notification if status changed
+        if (isset($data['status']) && $data['status'] !== $oldStatus) {
+            $this->notificationService->notifyScholarshipStatusChange($recipient, $oldStatus, $data['status']);
+        }
 
         return $recipient->fresh();
     }

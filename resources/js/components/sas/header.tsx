@@ -59,7 +59,7 @@ export default function Header() {
                                 Mindoro State University — Bongabong Campus
                             </span>
                             <span className="text-xs leading-tight font-semibold text-blue-900 lg:text-sm dark:text-white">
-                                Student Affairs System
+                                Student Affairs and Services
                             </span>
                             <span className="text-xs font-semibold text-blue-900 lg:hidden dark:text-white">
                                 MinSU Bongabong | SAS

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\SAS\Http\Requests\UpdateInsuranceRequest;
 use App\Modules\SAS\Models\InsuranceRecord;
 use App\Modules\SAS\Services\InsuranceService;
+use App\Modules\SAS\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,7 +15,8 @@ use Inertia\Response;
 class InsuranceController extends Controller
 {
     public function __construct(
-        protected InsuranceService $insuranceService
+        protected InsuranceService $insuranceService,
+        protected NotificationService $notificationService
     ) {}
 
     /**
@@ -76,13 +78,16 @@ class InsuranceController extends Controller
      */
     public function approve(Request $request, int $id): RedirectResponse
     {
-        $insurance = InsuranceRecord::findOrFail($id);
+        $insurance = InsuranceRecord::with('student')->findOrFail($id);
 
         $this->insuranceService->updateInsurance($insurance, [
             'status' => 'Approved',
             'reviewed_by' => $request->user()->id,
             'reviewed_at' => now(),
         ]);
+
+        // Send approval notification
+        $this->notificationService->notifyInsuranceApproved($insurance->fresh(['student']));
 
         return redirect()->back()->with('success', 'Insurance record approved.');
     }
@@ -96,14 +101,19 @@ class InsuranceController extends Controller
             'review_notes' => 'required|string',
         ]);
 
-        $insurance = InsuranceRecord::findOrFail($id);
+        $insurance = InsuranceRecord::with('student')->findOrFail($id);
+
+        $reviewNotes = $request->input('review_notes');
 
         $this->insuranceService->updateInsurance($insurance, [
             'status' => 'Rejected',
-            'review_notes' => $request->input('review_notes'),
+            'review_notes' => $reviewNotes,
             'reviewed_by' => $request->user()->id,
             'reviewed_at' => now(),
         ]);
+
+        // Send rejection notification
+        $this->notificationService->notifyInsuranceRejected($insurance->fresh(['student']), $reviewNotes);
 
         return redirect()->back()->with('success', 'Insurance record rejected.');
     }
