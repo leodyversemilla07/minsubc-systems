@@ -717,76 +717,90 @@ Create React pages in `resources/js/Pages/sas/student/`:
   - Policy document viewer
   - Status history
 
-### Phase 1.23: Create Public Pages
-- [ ] `public/organizations/index.tsx`
+### Phase 1.23: Create Public Pages ✅ COMPLETE
+- [x] `public/organizations/index.tsx`
   - Grid view of all organizations
   - Filter by type (Major/Minor)
   - Search organizations
 
-- [ ] `public/organizations/show.tsx`
+- [x] `public/organizations/show.tsx`
   - Organization profile
   - VMGO display
   - Officers list
   - Recent activities
   - Documents
 
-- [ ] `public/activities/index.tsx`
+- [x] `public/activities/index.tsx`
   - List view of activities
   - Filter by category
   - Search activities
 
-- [ ] `public/activities/calendar.tsx`
+- [x] `public/activities/calendar.tsx`
   - Full calendar view
-  - Month/Week/Day views
+  - Month/Week/Day views (Monthly view implemented)
   - Color-coded by category
   - Click to view details
 
-- [ ] `public/activities/show.tsx`
+- [x] `public/activities/show.tsx`
   - Activity details
   - Date, time, location
   - Organizer information
   - Related documents
 
-### Phase 1.24: Create Admin Pages - Dashboard & Scholarships
-- [ ] `admin/dashboard.tsx`
-  - Statistics cards (scholarships, insurance, organizations, activities, documents)
-  - Recent activity timeline
-  - Pending tasks list
-  - Quick actions
-  - Charts and graphs
+### Phase 1.24: Create Admin Pages - Dashboard & Scholarships ✅ COMPLETE
+- [x] `admin/dashboard.tsx`
+  - ✅ Statistics cards (scholarships, insurance, organizations, activities, documents)
+  - ✅ Recent activity timeline with badges
+  - ✅ Pending tasks list with tabs (overview/pending/activity)
+  - ✅ Quick actions to all modules
+  - ✅ Charts and graphs placeholders
 
-- [ ] `admin/scholarships/index.tsx`
-  - Data table of all scholarships
-  - Filter by type
-  - Search
-  - Actions: Edit, Delete, View Recipients
+- [x] `admin/scholarships/index.tsx`
+  - ✅ Data table of all scholarships
+  - ✅ Filter by type (dropdown)
+  - ✅ Filter by status
+  - ✅ Search by name/code
+  - ✅ Actions: Edit, Delete, View Recipients
+  - ✅ Statistics cards (Total/Active/Recipients/Disbursed)
 
-- [ ] `admin/scholarships/create.tsx`
-  - Create scholarship program form
-  - Scholarship type selection
-  - Description editor
+- [x] `admin/scholarships/create.tsx`
+  - ✅ Create scholarship program form
+  - ✅ Scholarship type selection (TES/TDP/CHED Merit/Private/University/Other)
+  - ✅ Description textarea
+  - ✅ Provider and scholarship code fields
+  - ✅ Form validation
 
-- [ ] `admin/scholarships/edit.tsx`
-  - Edit scholarship form
-  - Toggle active status
+- [x] `admin/scholarships/edit.tsx`
+  - ✅ Edit scholarship form
+  - ✅ Toggle active status (Switch component)
+  - ✅ Pre-filled data
+  - ✅ Form validation
 
-- [ ] `admin/scholarship-recipients/index.tsx`
-  - Data table of all recipients
-  - Filter by scholarship, status, academic year
-  - Search by student name
-  - Actions: Edit, Delete, Update Status, Requirements
+- [x] `admin/scholarship-recipients/index.tsx`
+  - ✅ Data table of all recipients
+  - ✅ Filter by scholarship (dropdown)
+  - ✅ Filter by status
+  - ✅ Filter by academic year
+  - ✅ Search by student name
+  - ✅ Actions: Edit, Delete, Update Status, Requirements
+  - ✅ Status badges (Active/Suspended/Completed/Cancelled)
 
-- [ ] `admin/scholarship-recipients/create.tsx`
-  - Add recipient form
-  - Student search/select
-  - Scholarship selection
-  - Amount and dates
-  - Requirements checklist builder
+- [x] `admin/scholarship-recipients/create.tsx`
+  - ✅ Add recipient form
+  - ✅ Student search/select
+  - ✅ Scholarship selection
+  - ✅ Amount and dates (date pickers)
+  - ✅ Semester selection (1st/2nd/Summer)
+  - ✅ Status selection
+  - ✅ Form validation
 
-- [ ] `admin/scholarship-recipients/edit.tsx`
-  - Edit recipient form
-  - Update status
-  - Track requirements
+- [x] `admin/scholarship-recipients/edit.tsx`
+  - ✅ Edit recipient form
+  - ✅ Update status (dropdown)
+  - ✅ Renewal status tracking
+  - ✅ Requirements complete toggle
+  - ✅ Remarks textarea
+  - ✅ Form validation
 
 ### Phase 1.25: Create Admin Pages - Insurance & Organizations
 - [ ] `admin/insurance/index.tsx`
