@@ -19,15 +19,38 @@ class OrganizationController extends Controller
      */
     public function index(Request $request): Response
     {
-        $organizations = $this->organizationService->getOrganizations([
-            'organization_type' => $request->input('organization_type'),
-            'status' => 'Active',
+        $filters = [
+            'organization_type' => $request->input('type'),
+            'status' => $request->input('status') ?: 'Active',
+            'category' => $request->input('category'),
             'search' => $request->input('search'),
-        ], $request->input('per_page', 24));
+        ];
 
-        return Inertia::render('sas/public/organizations/index', [
-            'organizations' => $organizations,
-            'filters' => $request->only(['organization_type', 'search']),
+        $organizations = $this->organizationService->getOrganizations(
+            $filters,
+            $request->input('per_page', 24)
+        );
+
+        return Inertia::render('SAS/public/organizations/index', [
+            'organizations' => [
+                'data' => $organizations->items(),
+                'links' => [
+                    'first' => $organizations->url(1),
+                    'last' => $organizations->url($organizations->lastPage()),
+                    'prev' => $organizations->previousPageUrl(),
+                    'next' => $organizations->nextPageUrl(),
+                ],
+                'meta' => [
+                    'current_page' => $organizations->currentPage(),
+                    'from' => $organizations->firstItem(),
+                    'last_page' => $organizations->lastPage(),
+                    'path' => $organizations->path(),
+                    'per_page' => $organizations->perPage(),
+                    'to' => $organizations->lastItem(),
+                    'total' => $organizations->total(),
+                ],
+            ],
+            'filters' => $request->only(['type', 'status', 'category', 'search']),
         ]);
     }
 
@@ -38,10 +61,22 @@ class OrganizationController extends Controller
     {
         $organization = \App\Modules\SAS\Models\Organization::where('organization_code', $code)
             ->where('status', 'Active')
-            ->with(['adviser', 'currentOfficers.student'])
+            ->with([
+                'adviser',
+                'officers' => function ($query) {
+                    $query->orderByDesc('is_current')->orderBy('position');
+                },
+                'members' => function ($query) {
+                    $query->where('status', 'Active')->orderBy('member_name');
+                },
+                'activities' => function ($query) {
+                    $query->latest('start_date')->limit(10);
+                },
+            ])
+            ->withCount(['officers', 'members', 'activities'])
             ->firstOrFail();
 
-        return Inertia::render('sas/public/organizations/show', [
+        return Inertia::render('SAS/public/organizations/show', [
             'organization' => $organization,
         ]);
     }

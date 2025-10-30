@@ -717,31 +717,31 @@ Create React pages in `resources/js/Pages/sas/student/`:
   - Policy document viewer
   - Status history
 
-### Phase 1.23: Create Public Pages
-- [ ] `public/organizations/index.tsx`
+### Phase 1.23: Create Public Pages ✅ COMPLETE
+- [x] `public/organizations/index.tsx`
   - Grid view of all organizations
   - Filter by type (Major/Minor)
   - Search organizations
 
-- [ ] `public/organizations/show.tsx`
+- [x] `public/organizations/show.tsx`
   - Organization profile
   - VMGO display
   - Officers list
   - Recent activities
   - Documents
 
-- [ ] `public/activities/index.tsx`
+- [x] `public/activities/index.tsx`
   - List view of activities
   - Filter by category
   - Search activities
 
-- [ ] `public/activities/calendar.tsx`
+- [x] `public/activities/calendar.tsx`
   - Full calendar view
-  - Month/Week/Day views
+  - Month/Week/Day views (Monthly view implemented)
   - Color-coded by category
   - Click to view details
 
-- [ ] `public/activities/show.tsx`
+- [x] `public/activities/show.tsx`
   - Activity details
   - Date, time, location
   - Organizer information

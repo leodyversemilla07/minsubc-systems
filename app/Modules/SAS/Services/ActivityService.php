@@ -13,33 +13,30 @@ class ActivityService
      */
     public function getActivities(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = SASActivity::with('organization');
+        $query = SASActivity::query()->with('organization');
 
-        if (isset($filters['category'])) {
-            $query->where('category', $filters['category']);
+        if (isset($filters['activity_type'])) {
+            $query->where('category', $filters['activity_type']);
         }
 
         if (isset($filters['status'])) {
-            $query->where('status', $filters['status']);
+            $query->where('activity_status', $filters['status']);
         }
 
         if (isset($filters['organization_id'])) {
             $query->where('organization_id', $filters['organization_id']);
         }
 
-        if (isset($filters['start_date'])) {
-            $query->whereDate('start_date', '>=', $filters['start_date']);
-        }
-
-        if (isset($filters['end_date'])) {
-            $query->whereDate('end_date', '<=', $filters['end_date']);
+        if (isset($filters['activity_date'])) {
+            $query->whereDate('start_date', '>=', $filters['activity_date']);
         }
 
         if (isset($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('activity_title', 'like', "%{$filters['search']}%")
                     ->orWhere('description', 'like', "%{$filters['search']}%")
-                    ->orWhere('location', 'like', "%{$filters['search']}%");
+                    ->orWhere('location', 'like', "%{$filters['search']}%")
+                    ->orWhere('organizer', 'like', "%{$filters['search']}%");
             });
         }
 
@@ -105,7 +102,7 @@ class ActivityService
     {
         return SASActivity::with('organization')
             ->where('start_date', '>=', now())
-            ->where('status', 'Scheduled')
+            ->where('activity_status', 'upcoming')
             ->orderBy('start_date')
             ->limit($limit)
             ->get();
@@ -118,10 +115,10 @@ class ActivityService
     {
         return [
             'total_activities' => SASActivity::count(),
-            'scheduled_activities' => SASActivity::where('status', 'Scheduled')->count(),
-            'ongoing_activities' => SASActivity::where('status', 'Ongoing')->count(),
-            'completed_activities' => SASActivity::where('status', 'Completed')->count(),
-            'cancelled_activities' => SASActivity::where('status', 'Cancelled')->count(),
+            'upcoming_activities' => SASActivity::where('activity_status', 'upcoming')->count(),
+            'ongoing_activities' => SASActivity::where('activity_status', 'ongoing')->count(),
+            'completed_activities' => SASActivity::where('activity_status', 'completed')->count(),
+            'cancelled_activities' => SASActivity::where('activity_status', 'cancelled')->count(),
             'total_target_participants' => SASActivity::sum('target_participants'),
             'total_actual_participants' => SASActivity::sum('actual_participants'),
             'by_category' => SASActivity::selectRaw('category, COUNT(*) as count')

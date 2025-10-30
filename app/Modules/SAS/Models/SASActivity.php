@@ -3,6 +3,7 @@
 namespace App\Modules\SAS\Models;
 
 use App\Models\User;
+use Database\Factories\SASActivityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +15,14 @@ class SASActivity extends Model
     use HasFactory;
 
     protected $table = 'sas_activities';
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): SASActivityFactory
+    {
+        return SASActivityFactory::new();
+    }
 
     protected $fillable = [
         'activity_title',

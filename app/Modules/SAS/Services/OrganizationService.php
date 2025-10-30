@@ -15,7 +15,8 @@ class OrganizationService
      */
     public function getOrganizations(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Organization::with(['adviser', 'currentOfficers']);
+        $query = Organization::with(['adviser'])
+            ->withCount(['officers', 'members', 'activities']);
 
         if (isset($filters['organization_type'])) {
             $query->where('organization_type', $filters['organization_type']);
@@ -23,6 +24,10 @@ class OrganizationService
 
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['category'])) {
+            $query->where('category', $filters['category']);
         }
 
         if (isset($filters['search'])) {

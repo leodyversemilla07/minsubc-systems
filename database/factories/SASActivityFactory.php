@@ -76,7 +76,7 @@ class SASActivityFactory extends Factory
             'color' => fake()->hexColor(),
             'is_recurring' => fake()->boolean(20),
             'recurrence_rule' => null,
-            'status' => fake()->randomElement(['Scheduled', 'Ongoing', 'Completed', 'Cancelled']),
+            'activity_status' => fake()->randomElement(['upcoming', 'ongoing', 'completed', 'cancelled']),
             'target_participants' => fake()->numberBetween(50, 500),
             'actual_participants' => fake()->boolean(40) ? fake()->numberBetween(30, 450) : null,
             'completion_report' => fake()->boolean(30) ? fake()->paragraphs(2, true) : null,
@@ -87,7 +87,7 @@ class SASActivityFactory extends Factory
     public function scheduled(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'Scheduled',
+            'activity_status' => 'upcoming',
             'start_date' => fake()->dateTimeBetween('+1 week', '+2 months'),
             'actual_participants' => null,
             'completion_report' => null,
@@ -97,7 +97,7 @@ class SASActivityFactory extends Factory
     public function completed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'Completed',
+            'activity_status' => 'completed',
             'start_date' => fake()->dateTimeBetween('-3 months', '-1 week'),
             'actual_participants' => fake()->numberBetween(30, 450),
             'completion_report' => fake()->paragraphs(2, true),
@@ -107,7 +107,7 @@ class SASActivityFactory extends Factory
     public function ongoing(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'Ongoing',
+            'activity_status' => 'ongoing',
             'start_date' => now()->subDays(1),
             'end_date' => now()->addDays(2),
         ]);

@@ -19,15 +19,37 @@ class ActivityController extends Controller
      */
     public function index(Request $request): Response
     {
-        $activities = $this->activityService->getActivities([
-            'category' => $request->input('category'),
+        $filters = [
+            'activity_type' => $request->input('type'),
             'status' => $request->input('status'),
             'search' => $request->input('search'),
-        ], $request->input('per_page', 15));
+        ];
 
-        return Inertia::render('sas/public/activities/index', [
-            'activities' => $activities,
-            'filters' => $request->only(['category', 'status', 'search']),
+        $activities = $this->activityService->getActivities(
+            $filters,
+            $request->input('per_page', 24)
+        );
+
+        return Inertia::render('SAS/public/activities/index', [
+            'activities' => [
+                'data' => $activities->items(),
+                'links' => [
+                    'first' => $activities->url(1),
+                    'last' => $activities->url($activities->lastPage()),
+                    'prev' => $activities->previousPageUrl(),
+                    'next' => $activities->nextPageUrl(),
+                ],
+                'meta' => [
+                    'current_page' => $activities->currentPage(),
+                    'from' => $activities->firstItem(),
+                    'last_page' => $activities->lastPage(),
+                    'path' => $activities->path(),
+                    'per_page' => $activities->perPage(),
+                    'to' => $activities->lastItem(),
+                    'total' => $activities->total(),
+                ],
+            ],
+            'filters' => $request->only(['type', 'status', 'search']),
         ]);
     }
 
@@ -41,7 +63,7 @@ class ActivityController extends Controller
 
         $activities = $this->activityService->getActivitiesByDateRange($startDate, $endDate);
 
-        return Inertia::render('sas/public/activities/calendar', [
+        return Inertia::render('SAS/public/activities/calendar', [
             'activities' => $activities,
             'startDate' => $startDate,
             'endDate' => $endDate,
@@ -57,7 +79,7 @@ class ActivityController extends Controller
             ->with('organization')
             ->firstOrFail();
 
-        return Inertia::render('sas/public/activities/show', [
+        return Inertia::render('SAS/public/activities/show', [
             'activity' => $activity,
         ]);
     }
