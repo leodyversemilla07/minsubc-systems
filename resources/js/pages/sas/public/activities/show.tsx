@@ -6,13 +6,12 @@ import type { SASActivity } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
 import {
     ArrowLeft,
+    Building2,
     Calendar,
     Clock,
     MapPin,
-    User,
-    Users,
     Share2,
-    Building2,
+    User,
 } from 'lucide-react';
 
 interface Props {
@@ -57,8 +56,9 @@ export default function ActivityShow({ activity }: Props) {
     };
 
     const getCategoryColor = (category: string | null) => {
-        if (!category) return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
-        
+        if (!category)
+            return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
+
         const lower = category.toLowerCase();
         if (lower.includes('workshop') || lower.includes('training')) {
             return 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300';
@@ -200,18 +200,21 @@ export default function ActivityShow({ activity }: Props) {
                             </Card>
 
                             {/* Completion Report */}
-                            {activity.completion_report && activity.activity_status === 'completed' && (
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>Completion Report</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
-                                            {activity.completion_report}
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            )}
+                            {activity.completion_report &&
+                                activity.activity_status === 'completed' && (
+                                    <Card>
+                                        <CardHeader>
+                                            <CardTitle>
+                                                Completion Report
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
+                                                {activity.completion_report}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                )}
                         </div>
 
                         {/* Sidebar */}
@@ -230,7 +233,9 @@ export default function ActivityShow({ activity }: Props) {
                                                 Date
                                             </div>
                                             <div className="text-sm text-gray-600 dark:text-gray-400">
-                                                {formatDate(activity.start_date)}
+                                                {formatDate(
+                                                    activity.start_date,
+                                                )}
                                                 {activity.end_date &&
                                                     activity.start_date !==
                                                         activity.end_date &&
@@ -327,7 +332,9 @@ export default function ActivityShow({ activity }: Props) {
                                                     Actual Participants
                                                 </div>
                                                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                                                    {activity.actual_participants}
+                                                    {
+                                                        activity.actual_participants
+                                                    }
                                                 </div>
                                             </div>
                                         )}

@@ -1,11 +1,6 @@
+import { OrganizationCard } from '@/components/sas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { OrganizationCard } from '@/components/sas';
-import SASLayout from '@/layouts/sas-layout';
-import type { Organization, PaginatedData } from '@/types/sas';
-import { Head, Link, router } from '@inertiajs/react';
-import { Search, SlidersHorizontal, Users } from 'lucide-react';
-import { useState } from 'react';
 import {
     Select,
     SelectContent,
@@ -13,6 +8,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import SASLayout from '@/layouts/sas-layout';
+import type { Organization, PaginatedData } from '@/types/sas';
+import { Head, Link, router } from '@inertiajs/react';
+import { Search, SlidersHorizontal, Users } from 'lucide-react';
+import { useState } from 'react';
 
 interface Props {
     organizations: PaginatedData<Organization>;
@@ -36,7 +36,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                 <div className="flex min-h-screen items-center justify-center">
                     <div className="text-center">
                         <h2 className="text-2xl font-bold">Loading...</h2>
-                        <p className="text-gray-600">Please wait while we load the organizations.</p>
+                        <p className="text-gray-600">
+                            Please wait while we load the organizations.
+                        </p>
                     </div>
                 </div>
             </SASLayout>
@@ -47,7 +49,12 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
         e.preventDefault();
         router.get(
             '/sas/organizations',
-            { search, type: filters?.type, status: filters?.status, category: filters?.category },
+            {
+                search,
+                type: filters?.type,
+                status: filters?.status,
+                category: filters?.category,
+            },
             { preserveState: true },
         );
     };
@@ -66,7 +73,10 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
     };
 
     const hasActiveFilters =
-        filters?.search || filters?.type || filters?.status || filters?.category;
+        filters?.search ||
+        filters?.type ||
+        filters?.status ||
+        filters?.category;
 
     return (
         <SASLayout>
@@ -130,7 +140,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                         >
                             <div className="flex gap-2">
                                 <div className="relative flex-1">
-                                    <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                     <Input
                                         type="text"
                                         placeholder="Search organizations..."
@@ -330,8 +340,10 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                     )}
 
                     {/* Pagination */}
-                    {organizations?.data && organizations.data.length > 0 &&
-                        organizations?.meta?.last_page && organizations.meta.last_page > 1 && (
+                    {organizations?.data &&
+                        organizations.data.length > 0 &&
+                        organizations?.meta?.last_page &&
+                        organizations.meta.last_page > 1 && (
                             <div className="mt-8 flex items-center justify-center gap-2">
                                 {organizations?.links?.prev && (
                                     <Link href={organizations.links.prev}>
@@ -342,7 +354,8 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 )}
 
                                 <span className="px-4 text-sm text-gray-600 dark:text-gray-400">
-                                    Page {organizations?.meta?.current_page || 1} of{' '}
+                                    Page{' '}
+                                    {organizations?.meta?.current_page || 1} of{' '}
                                     {organizations?.meta?.last_page || 1}
                                 </span>
 

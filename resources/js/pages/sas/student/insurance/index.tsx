@@ -4,13 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import SASLayout from '@/layouts/sas-layout';
 import { InsuranceRecord } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
-import {
-    Calendar,
-    ChevronRight,
-    Clock,
-    Plus,
-    ShieldCheck,
-} from 'lucide-react';
+import { Calendar, ChevronRight, Clock, Plus, ShieldCheck } from 'lucide-react';
 
 interface Props {
     insuranceRecords: InsuranceRecord[];
@@ -172,7 +166,9 @@ export default function Index({ insuranceRecords }: Props) {
                                                         Coverage Type:
                                                     </span>
                                                     <span className="text-gray-600 dark:text-gray-400">
-                                                        {insurance.coverage_type}
+                                                        {
+                                                            insurance.coverage_type
+                                                        }
                                                     </span>
                                                 </div>
                                             )}

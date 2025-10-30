@@ -5,15 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SASLayout from '@/layouts/sas-layout';
 import type { Organization, OrganizationOfficer } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    Calendar,
-    Mail,
-    MapPin,
-    Phone,
-    Target,
-    Users,
-} from 'lucide-react';
+import { ArrowLeft, Calendar, Mail, Phone, Target, Users } from 'lucide-react';
 
 interface Props {
     organization: Organization & {
@@ -151,7 +143,8 @@ export default function OrganizationShow({ organization }: Props) {
                             )}
                             {organization.activities && (
                                 <TabsTrigger value="activities">
-                                    Activities ({organization.activities.length})
+                                    Activities ({organization.activities.length}
+                                    )
                                 </TabsTrigger>
                             )}
                         </TabsList>
@@ -160,7 +153,7 @@ export default function OrganizationShow({ organization }: Props) {
                         <TabsContent value="about" className="space-y-6">
                             <div className="grid gap-6 lg:grid-cols-3">
                                 {/* Main Info */}
-                                <div className="lg:col-span-2 space-y-6">
+                                <div className="space-y-6 lg:col-span-2">
                                     {/* Mission */}
                                     {organization.mission && (
                                         <Card>
@@ -211,7 +204,9 @@ export default function OrganizationShow({ organization }: Props) {
                                                         href={`mailto:${organization.contact_email}`}
                                                         className="text-sm text-blue-700 hover:underline dark:text-blue-400"
                                                     >
-                                                        {organization.contact_email}
+                                                        {
+                                                            organization.contact_email
+                                                        }
                                                     </a>
                                                 </div>
                                             )}
@@ -223,7 +218,9 @@ export default function OrganizationShow({ organization }: Props) {
                                                         href={`tel:${organization.contact_phone}`}
                                                         className="text-sm text-blue-700 hover:underline dark:text-blue-400"
                                                     >
-                                                        {organization.contact_phone}
+                                                        {
+                                                            organization.contact_phone
+                                                        }
                                                     </a>
                                                 </div>
                                             )}
@@ -266,10 +263,18 @@ export default function OrganizationShow({ organization }: Props) {
                                                     </div>
                                                     <div>
                                                         <div className="font-semibold text-gray-900 dark:text-white">
-                                                            {organization.adviser.name}
+                                                            {
+                                                                organization
+                                                                    .adviser
+                                                                    .name
+                                                            }
                                                         </div>
                                                         <div className="text-xs text-gray-600 dark:text-gray-400">
-                                                            {organization.adviser.email}
+                                                            {
+                                                                organization
+                                                                    .adviser
+                                                                    .email
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
@@ -305,7 +310,9 @@ export default function OrganizationShow({ organization }: Props) {
                                                     </p>
                                                     {officer.contact_email && (
                                                         <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                                                            {officer.contact_email}
+                                                            {
+                                                                officer.contact_email
+                                                            }
                                                         </p>
                                                     )}
                                                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">

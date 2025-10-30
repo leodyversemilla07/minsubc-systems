@@ -1,11 +1,6 @@
+import { ActivityCard } from '@/components/sas';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ActivityCard } from '@/components/sas';
-import SASLayout from '@/layouts/sas-layout';
-import type { SASActivity, PaginatedData } from '@/types/sas';
-import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Search, SlidersHorizontal } from 'lucide-react';
-import { useState } from 'react';
 import {
     Select,
     SelectContent,
@@ -13,6 +8,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import SASLayout from '@/layouts/sas-layout';
+import type { PaginatedData, SASActivity } from '@/types/sas';
+import { Head, Link, router } from '@inertiajs/react';
+import { Calendar, Search, SlidersHorizontal } from 'lucide-react';
+import { useState } from 'react';
 
 interface Props {
     activities: PaginatedData<SASActivity>;
@@ -35,7 +35,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                 <div className="flex min-h-screen items-center justify-center">
                     <div className="text-center">
                         <h2 className="text-2xl font-bold">Loading...</h2>
-                        <p className="text-gray-600">Please wait while we load the activities.</p>
+                        <p className="text-gray-600">
+                            Please wait while we load the activities.
+                        </p>
                     </div>
                 </div>
             </SASLayout>
@@ -64,7 +66,8 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
         router.get('/sas/activities', {}, { preserveState: true });
     };
 
-    const hasActiveFilters = filters?.search || filters?.type || filters?.status;
+    const hasActiveFilters =
+        filters?.search || filters?.type || filters?.status;
 
     return (
         <SASLayout>
@@ -141,7 +144,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                         >
                             <div className="flex gap-2">
                                 <div className="relative flex-1">
-                                    <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                                    <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                                     <Input
                                         type="text"
                                         placeholder="Search activities..."
@@ -314,8 +317,10 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                     )}
 
                     {/* Pagination */}
-                    {activities?.data && activities.data.length > 0 &&
-                        activities?.meta?.last_page && activities.meta.last_page > 1 && (
+                    {activities?.data &&
+                        activities.data.length > 0 &&
+                        activities?.meta?.last_page &&
+                        activities.meta.last_page > 1 && (
                             <div className="mt-8 flex items-center justify-center gap-2">
                                 {activities?.links?.prev && (
                                     <Link href={activities.links.prev}>
@@ -326,8 +331,8 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 )}
 
                                 <span className="px-4 text-sm text-gray-600 dark:text-gray-400">
-                                    Page {activities?.meta?.current_page || 1} of{' '}
-                                    {activities?.meta?.last_page || 1}
+                                    Page {activities?.meta?.current_page || 1}{' '}
+                                    of {activities?.meta?.last_page || 1}
                                 </span>
 
                                 {activities?.links?.next && (

@@ -124,7 +124,7 @@ export default function Show({ insurance }: Props) {
                 <div className="mx-auto max-w-5xl">
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                         {/* Main Info - Left Column */}
-                        <div className="lg:col-span-2 space-y-6">
+                        <div className="space-y-6 lg:col-span-2">
                             {/* Policy Details */}
                             <Card>
                                 <CardHeader>
@@ -250,7 +250,9 @@ export default function Show({ insurance }: Props) {
                             {insurance.reviewed_at && (
                                 <Card>
                                     <CardHeader>
-                                        <CardTitle>Review Information</CardTitle>
+                                        <CardTitle>
+                                            Review Information
+                                        </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-3">
                                         <div>

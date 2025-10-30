@@ -8,7 +8,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -52,8 +51,7 @@ interface Props {
 
 const statusColors = {
     Active: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-    Completed:
-        'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+    Completed: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
     Suspended:
         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
     Revoked: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
@@ -74,16 +72,13 @@ export default function Show({ recipient }: Props) {
         e.preventDefault();
         if (!data.file || !selectedRequirement) return;
 
-        post(
-            `/sas/student/scholarships/${recipient.id}/upload-requirement`,
-            {
-                onSuccess: () => {
-                    setIsDialogOpen(false);
-                    reset();
-                    setSelectedRequirement(null);
-                },
+        post(`/sas/student/scholarships/${recipient.id}/upload-requirement`, {
+            onSuccess: () => {
+                setIsDialogOpen(false);
+                reset();
+                setSelectedRequirement(null);
             },
-        );
+        });
     };
 
     const openUploadDialog = (requirementId: number) => {
@@ -124,7 +119,9 @@ export default function Show({ recipient }: Props) {
                                 <Badge variant="outline">
                                     {recipient.scholarship.scholarship_type}
                                 </Badge>
-                                <Badge className={statusColors[recipient.status]}>
+                                <Badge
+                                    className={statusColors[recipient.status]}
+                                >
                                     {recipient.status}
                                 </Badge>
                             </div>
@@ -138,7 +135,7 @@ export default function Show({ recipient }: Props) {
                 <div className="mx-auto max-w-5xl">
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                         {/* Main Info - Left Column */}
-                        <div className="lg:col-span-2 space-y-6">
+                        <div className="space-y-6 lg:col-span-2">
                             {/* Scholarship Details */}
                             <Card>
                                 <CardHeader>
@@ -189,7 +186,7 @@ export default function Show({ recipient }: Props) {
                                             <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                                 General Requirements
                                             </Label>
-                                            <p className="mt-1 whitespace-pre-line text-sm text-gray-600 dark:text-gray-400">
+                                            <p className="mt-1 text-sm whitespace-pre-line text-gray-600 dark:text-gray-400">
                                                 {
                                                     recipient.scholarship
                                                         .requirements
@@ -211,7 +208,8 @@ export default function Show({ recipient }: Props) {
                                                 </CardTitle>
                                                 <span className="text-sm text-gray-600 dark:text-gray-400">
                                                     {completedRequirements} of{' '}
-                                                    {totalRequirements} completed
+                                                    {totalRequirements}{' '}
+                                                    completed
                                                 </span>
                                             </div>
                                         </CardHeader>
@@ -421,10 +419,7 @@ export default function Show({ recipient }: Props) {
                                 type="file"
                                 accept=".pdf,.jpg,.jpeg,.png"
                                 onChange={(e) =>
-                                    setData(
-                                        'file',
-                                        e.target.files?.[0] || null,
-                                    )
+                                    setData('file', e.target.files?.[0] || null)
                                 }
                                 className="mt-2"
                             />

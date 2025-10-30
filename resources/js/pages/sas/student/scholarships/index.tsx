@@ -16,7 +16,6 @@ import {
     Calendar,
     ChevronRight,
     Filter,
-    Search,
     TrendingUp,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -32,15 +31,13 @@ interface Props {
 
 const statusColors = {
     Active: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-    Completed:
-        'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+    Completed: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
     Suspended:
         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
     Revoked: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
 };
 
 export default function Index({ scholarships, filters }: Props) {
-    const [search, setSearch] = useState('');
     const [selectedStatus, setSelectedStatus] = useState(filters.status || '');
 
     const handleFilter = (key: string, value: string) => {
@@ -71,7 +68,7 @@ export default function Index({ scholarships, filters }: Props) {
             {/* Hero Section */}
             <section className="bg-gradient-to-b from-blue-50 to-white px-4 py-12 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
                 <div className="mx-auto max-w-7xl">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
                             <Award className="h-6 w-6 text-blue-700 dark:text-blue-400" />
                         </div>
@@ -157,7 +154,8 @@ export default function Index({ scholarships, filters }: Props) {
                             <Select
                                 value={selectedStatus || 'all'}
                                 onValueChange={(value) => {
-                                    const filterValue = value === 'all' ? '' : value;
+                                    const filterValue =
+                                        value === 'all' ? '' : value;
                                     setSelectedStatus(filterValue);
                                     handleFilter('status', filterValue);
                                 }}
@@ -166,7 +164,9 @@ export default function Index({ scholarships, filters }: Props) {
                                     <SelectValue placeholder="All Status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Status</SelectItem>
+                                    <SelectItem value="all">
+                                        All Status
+                                    </SelectItem>
                                     <SelectItem value="Active">
                                         Active
                                     </SelectItem>

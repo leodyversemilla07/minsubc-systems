@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import type { SASActivity } from '@/types/sas';
 import { Link } from '@inertiajs/react';
 import { Calendar, Clock, MapPin } from 'lucide-react';
@@ -25,8 +25,9 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
     };
 
     const getCategoryColor = (category: string | null) => {
-        if (!category) return 'border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-400';
-        
+        if (!category)
+            return 'border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-400';
+
         const lower = category.toLowerCase();
         if (lower.includes('workshop') || lower.includes('training')) {
             return 'border-purple-300 text-purple-700 dark:border-purple-600 dark:text-purple-400';
@@ -84,7 +85,9 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
                                 {activity.category}
                             </Badge>
                         )}
-                        <Badge className={`text-xs ${getStatusColor(activity.activity_status)}`}>
+                        <Badge
+                            className={`text-xs ${getStatusColor(activity.activity_status)}`}
+                        >
                             {activity.activity_status}
                         </Badge>
                     </div>
@@ -113,7 +116,8 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
                                 <Clock className="h-4 w-4 shrink-0 text-blue-500" />
                                 <span>
                                     {formatTime(activity.start_date)}
-                                    {activity.end_date && ` - ${formatTime(activity.end_date)}`}
+                                    {activity.end_date &&
+                                        ` - ${formatTime(activity.end_date)}`}
                                 </span>
                             </div>
                         )}
@@ -121,7 +125,9 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
                         {activity.location && (
                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <MapPin className="h-4 w-4 shrink-0 text-blue-500" />
-                                <span className="truncate">{activity.location}</span>
+                                <span className="truncate">
+                                    {activity.location}
+                                </span>
                             </div>
                         )}
                     </div>

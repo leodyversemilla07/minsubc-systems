@@ -96,7 +96,14 @@ export interface SASActivity {
 export interface Scholarship {
     id: number;
     scholarship_name: string;
-    scholarship_type: 'TES' | 'TDP' | 'Merit-Based' | 'Sports' | 'Academic' | 'Financial Aid' | 'Other';
+    scholarship_type:
+        | 'TES'
+        | 'TDP'
+        | 'Merit-Based'
+        | 'Sports'
+        | 'Academic'
+        | 'Financial Aid'
+        | 'Other';
     description?: string;
     requirements?: string;
     amount?: number;
