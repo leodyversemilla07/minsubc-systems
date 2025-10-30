@@ -30,7 +30,7 @@ class OrganizationController extends Controller
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
-        return Inertia::render('sas/admin/organizations/index', [
+        return Inertia::render('SAS/admin/organizations/index', [
             'organizations' => $organizations,
             'filters' => $request->only(['organization_type', 'status', 'search']),
         ]);
@@ -43,7 +43,7 @@ class OrganizationController extends Controller
     {
         $advisers = User::permission('advise organization')->get();
 
-        return Inertia::render('sas/admin/organizations/create', [
+        return Inertia::render('SAS/admin/organizations/create', [
             'advisers' => $advisers,
         ]);
     }
@@ -66,7 +66,7 @@ class OrganizationController extends Controller
     {
         $organization = $this->organizationService->getOrganizationById($id);
 
-        return Inertia::render('sas/admin/organizations/show', [
+        return Inertia::render('SAS/admin/organizations/show', [
             'organization' => $organization,
         ]);
     }
@@ -79,7 +79,7 @@ class OrganizationController extends Controller
         $organization = $this->organizationService->getOrganizationById($id);
         $advisers = User::permission('advise organization')->get();
 
-        return Inertia::render('sas/admin/organizations/edit', [
+        return Inertia::render('SAS/admin/organizations/edit', [
             'organization' => $organization,
             'advisers' => $advisers,
         ]);
@@ -120,7 +120,7 @@ class OrganizationController extends Controller
             ->where('status', 'Active')
             ->get();
 
-        return Inertia::render('sas/admin/organizations/compliance', [
+        return Inertia::render('SAS/admin/organizations/compliance', [
             'organizations' => $organizations,
         ]);
     }

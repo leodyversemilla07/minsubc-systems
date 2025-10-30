@@ -155,17 +155,18 @@ export default function Index({ scholarships, filters }: Props) {
                                 Filter:
                             </span>
                             <Select
-                                value={selectedStatus}
+                                value={selectedStatus || 'all'}
                                 onValueChange={(value) => {
-                                    setSelectedStatus(value);
-                                    handleFilter('status', value);
+                                    const filterValue = value === 'all' ? '' : value;
+                                    setSelectedStatus(filterValue);
+                                    handleFilter('status', filterValue);
                                 }}
                             >
                                 <SelectTrigger className="w-[180px]">
                                     <SelectValue placeholder="All Status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">All Status</SelectItem>
+                                    <SelectItem value="all">All Status</SelectItem>
                                     <SelectItem value="Active">
                                         Active
                                     </SelectItem>

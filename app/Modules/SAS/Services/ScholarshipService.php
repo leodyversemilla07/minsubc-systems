@@ -93,6 +93,29 @@ class ScholarshipService
     }
 
     /**
+     * Get all scholarships for a specific student.
+     */
+    public function getStudentScholarships(int $studentId, array $filters = []): Collection
+    {
+        $query = ScholarshipRecipient::where('student_id', $studentId)
+            ->with(['scholarship']);
+
+        if (isset($filters['academic_year'])) {
+            $query->where('academic_year', $filters['academic_year']);
+        }
+
+        if (isset($filters['semester'])) {
+            $query->where('semester', $filters['semester']);
+        }
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        return $query->orderBy('award_date', 'desc')->get();
+    }
+
+    /**
      * Create a scholarship recipient record.
      */
     public function createRecipient(array $data): ScholarshipRecipient

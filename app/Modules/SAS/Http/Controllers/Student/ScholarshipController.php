@@ -21,14 +21,17 @@ class ScholarshipController extends Controller
     {
         $studentId = $request->user()->id;
 
-        $scholarships = $this->scholarshipService->getScholarshipRecipients($studentId, [
+        $scholarships = $this->scholarshipService->getStudentScholarships($studentId, [
             'academic_year' => $request->input('academic_year'),
             'semester' => $request->input('semester'),
             'status' => $request->input('status'),
         ]);
 
-        return Inertia::render('sas/student/scholarships/index', [
-            'scholarships' => $scholarships,
+        return Inertia::render('SAS/student/scholarships/index', [
+            'scholarships' => [
+                'data' => $scholarships,
+                'total' => $scholarships->count(),
+            ],
             'filters' => $request->only(['academic_year', 'semester', 'status']),
         ]);
     }
@@ -47,7 +50,7 @@ class ScholarshipController extends Controller
             abort(403, 'Unauthorized access to scholarship record.');
         }
 
-        return Inertia::render('sas/student/scholarships/show', [
+        return Inertia::render('SAS/student/scholarships/show', [
             'recipient' => $recipient->load(['scholarship', 'requirements']),
         ]);
     }

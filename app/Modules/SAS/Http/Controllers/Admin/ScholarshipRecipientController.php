@@ -36,7 +36,7 @@ class ScholarshipRecipientController extends Controller
 
         $scholarships = Scholarship::where('is_active', true)->get();
 
-        return Inertia::render('sas/admin/scholarship-recipients/index', [
+        return Inertia::render('SAS/admin/scholarship-recipients/index', [
             'recipients' => $recipients,
             'scholarships' => $scholarships,
             'filters' => $request->only(['scholarship_id', 'academic_year', 'semester', 'status']),
@@ -50,7 +50,7 @@ class ScholarshipRecipientController extends Controller
     {
         $scholarships = Scholarship::where('is_active', true)->get();
 
-        return Inertia::render('sas/admin/scholarship-recipients/create', [
+        return Inertia::render('SAS/admin/scholarship-recipients/create', [
             'scholarships' => $scholarships,
         ]);
     }
@@ -74,7 +74,7 @@ class ScholarshipRecipientController extends Controller
         $recipient = ScholarshipRecipient::with(['student', 'scholarship', 'requirements'])
             ->findOrFail($id);
 
-        return Inertia::render('sas/admin/scholarship-recipients/show', [
+        return Inertia::render('SAS/admin/scholarship-recipients/show', [
             'recipient' => $recipient,
         ]);
     }
@@ -87,7 +87,7 @@ class ScholarshipRecipientController extends Controller
         $recipient = ScholarshipRecipient::with(['student', 'scholarship'])->findOrFail($id);
         $scholarships = Scholarship::where('is_active', true)->get();
 
-        return Inertia::render('sas/admin/scholarship-recipients/edit', [
+        return Inertia::render('SAS/admin/scholarship-recipients/edit', [
             'recipient' => $recipient,
             'scholarships' => $scholarships,
         ]);

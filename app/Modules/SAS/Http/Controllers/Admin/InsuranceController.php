@@ -28,7 +28,7 @@ class InsuranceController extends Controller
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
-        return Inertia::render('sas/admin/insurance/index', [
+        return Inertia::render('SAS/admin/insurance/index', [
             'insuranceRecords' => $insuranceRecords,
             'filters' => $request->only(['status', 'policy_type', 'search']),
         ]);
@@ -41,7 +41,7 @@ class InsuranceController extends Controller
     {
         $insurance = $this->insuranceService->getInsuranceById($id);
 
-        return Inertia::render('sas/admin/insurance/show', [
+        return Inertia::render('SAS/admin/insurance/show', [
             'insurance' => $insurance,
         ]);
     }
@@ -53,7 +53,7 @@ class InsuranceController extends Controller
     {
         $insurance = $this->insuranceService->getInsuranceById($id);
 
-        return Inertia::render('sas/admin/insurance/edit', [
+        return Inertia::render('SAS/admin/insurance/edit', [
             'insurance' => $insurance,
         ]);
     }

@@ -29,7 +29,7 @@ class ScholarshipController extends Controller
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
-        return Inertia::render('sas/admin/scholarships/index', [
+        return Inertia::render('SAS/admin/scholarships/index', [
             'scholarships' => $scholarships,
             'filters' => $request->only(['scholarship_type', 'is_active', 'search']),
         ]);
@@ -40,7 +40,7 @@ class ScholarshipController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('sas/admin/scholarships/create');
+        return Inertia::render('SAS/admin/scholarships/create');
     }
 
     /**
@@ -61,7 +61,7 @@ class ScholarshipController extends Controller
     {
         $scholarship = $this->scholarshipService->getScholarshipById($id);
 
-        return Inertia::render('sas/admin/scholarships/show', [
+        return Inertia::render('SAS/admin/scholarships/show', [
             'scholarship' => $scholarship,
         ]);
     }
@@ -73,7 +73,7 @@ class ScholarshipController extends Controller
     {
         $scholarship = $this->scholarshipService->getScholarshipById($id);
 
-        return Inertia::render('sas/admin/scholarships/edit', [
+        return Inertia::render('SAS/admin/scholarships/edit', [
             'scholarship' => $scholarship,
         ]);
     }

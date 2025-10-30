@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
         $dashboardData = $this->dashboardService->getAdminDashboardData();
 
-        return Inertia::render('sas/admin/dashboard', [
+        return Inertia::render('SAS/admin/dashboard', [
             'dashboardData' => $dashboardData,
         ]);
     }

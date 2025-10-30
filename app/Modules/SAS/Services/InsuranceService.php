@@ -2,7 +2,7 @@
 
 namespace App\Modules\SAS\Services;
 
-use App\Modules\SAS\Models\Insurance;
+use App\Modules\SAS\Models\InsuranceRecord;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +14,7 @@ class InsuranceService
      */
     public function getInsuranceRecords(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Insurance::with('student');
+        $query = InsuranceRecord::with('student');
 
         if (isset($filters['student_id'])) {
             $query->where('student_id', $filters['student_id']);
@@ -44,27 +44,27 @@ class InsuranceService
     /**
      * Get a single insurance record by ID.
      */
-    public function getInsuranceById(int $id): Insurance
+    public function getInsuranceById(int $id): InsuranceRecord
     {
-        return Insurance::with('student')->findOrFail($id);
+        return InsuranceRecord::with('student')->findOrFail($id);
     }
 
     /**
      * Create a new insurance record with file upload.
      */
-    public function createInsurance(array $data): Insurance
+    public function createInsurance(array $data): InsuranceRecord
     {
         if (isset($data['policy_document'])) {
             $data['policy_document_path'] = $data['policy_document']->store('insurance/policies', 'public');
         }
 
-        return Insurance::create($data);
+        return InsuranceRecord::create($data);
     }
 
     /**
      * Update an existing insurance record.
      */
-    public function updateInsurance(Insurance $insurance, array $data): Insurance
+    public function updateInsurance(InsuranceRecord $insurance, array $data): InsuranceRecord
     {
         if (isset($data['policy_document'])) {
             // Delete old document if exists
@@ -83,7 +83,7 @@ class InsuranceService
     /**
      * Delete an insurance record and its associated file.
      */
-    public function deleteInsurance(Insurance $insurance): bool
+    public function deleteInsurance(InsuranceRecord $insurance): bool
     {
         if ($insurance->policy_document_path) {
             Storage::disk('public')->delete($insurance->policy_document_path);
@@ -97,7 +97,7 @@ class InsuranceService
      */
     public function getStudentInsurance(int $studentId): Collection
     {
-        return Insurance::where('student_id', $studentId)
+        return InsuranceRecord::where('student_id', $studentId)
             ->orderBy('effective_date', 'desc')
             ->get();
     }
@@ -109,7 +109,7 @@ class InsuranceService
     {
         $expirationDate = now()->addDays($daysAhead);
 
-        return Insurance::with('student')
+        return InsuranceRecord::with('student')
             ->where('status', 'Approved')
             ->whereBetween('expiration_date', [now(), $expirationDate])
             ->orderBy('expiration_date')
@@ -122,12 +122,12 @@ class InsuranceService
     public function getInsuranceStatistics(): array
     {
         return [
-            'total_policies' => Insurance::count(),
-            'active_policies' => Insurance::where('status', 'Approved')->count(),
-            'pending_review' => Insurance::where('status', 'Pending Review')->count(),
-            'expired_policies' => Insurance::where('status', 'Expired')->count(),
-            'total_coverage_amount' => Insurance::where('status', 'Approved')->sum('coverage_amount'),
-            'by_policy_type' => Insurance::selectRaw('policy_type, COUNT(*) as count')
+            'total_policies' => InsuranceRecord::count(),
+            'active_policies' => InsuranceRecord::where('status', 'Approved')->count(),
+            'pending_review' => InsuranceRecord::where('status', 'Pending Review')->count(),
+            'expired_policies' => InsuranceRecord::where('status', 'Expired')->count(),
+            'total_coverage_amount' => InsuranceRecord::where('status', 'Approved')->sum('coverage_amount'),
+            'by_policy_type' => InsuranceRecord::selectRaw('policy_type, COUNT(*) as count')
                 ->groupBy('policy_type')
                 ->pluck('count', 'policy_type'),
         ];

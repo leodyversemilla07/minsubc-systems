@@ -25,7 +25,7 @@ class InsuranceController extends Controller
 
         $insuranceRecords = $this->insuranceService->getStudentInsurance($studentId);
 
-        return Inertia::render('sas/student/insurance/index', [
+        return Inertia::render('SAS/student/insurance/index', [
             'insuranceRecords' => $insuranceRecords,
         ]);
     }
@@ -35,7 +35,7 @@ class InsuranceController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('sas/student/insurance/create');
+        return Inertia::render('SAS/student/insurance/create');
     }
 
     /**
@@ -65,7 +65,7 @@ class InsuranceController extends Controller
             abort(403, 'Unauthorized access to insurance record.');
         }
 
-        return Inertia::render('sas/student/insurance/show', [
+        return Inertia::render('SAS/student/insurance/show', [
             'insurance' => $insurance,
         ]);
     }

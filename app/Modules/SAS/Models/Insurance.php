@@ -14,7 +14,7 @@ class Insurance extends Model
     /**
      * The table associated with the model.
      */
-    protected $table = 'insurance';
+    protected $table = 'insurance_records';
 
     /**
      * The attributes that are mass assignable.
