@@ -11,13 +11,17 @@ class SASDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            ScholarshipSeeder::class,
-            InsuranceSeeder::class,
-            OrganizationSeeder::class,
-            OrganizationActivitySeeder::class,
-            SASActivitySeeder::class,
-            DigitalizedDocumentSeeder::class,
-        ]);
+        // Only seed SAS demo data in development environments
+        // Production will have real data entered by SAS staff
+        if (! app()->environment('production')) {
+            $this->call([
+                ScholarshipSeeder::class,
+                InsuranceSeeder::class,
+                OrganizationSeeder::class,
+                OrganizationActivitySeeder::class,
+                SASActivitySeeder::class,
+                DigitalizedDocumentSeeder::class,
+            ]);
+        }
     }
 }
