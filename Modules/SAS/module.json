@@ -1,0 +1,11 @@
+{
+    "name": "SAS",
+    "alias": "sas",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\SAS\\Providers\\SASServiceProvider"
+    ],
+    "files": []
+}

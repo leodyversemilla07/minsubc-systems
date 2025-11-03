@@ -1,4 +1,4 @@
-import EventController from '@/actions/App/Modules/USG/Http/Controllers/Admin/EventController';
+import EventController from '@/actions/Modules/USG/Http/Controllers/Admin/EventController';
 import { DatePicker } from '@/components/date-picker';
 import { TimePicker } from '@/components/time-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';

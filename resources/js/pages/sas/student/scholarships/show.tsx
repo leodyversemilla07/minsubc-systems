@@ -64,13 +64,18 @@ export default function Show({ recipient }: Props) {
         e.preventDefault();
         if (!data.file || !selectedRequirement) return;
 
-        post(sas.student.scholarships.uploadRequirement.url({ id: recipient.id }), {
-            onSuccess: () => {
-                setIsDialogOpen(false);
-                reset();
-                setSelectedRequirement(null);
+        post(
+            sas.student.scholarships.uploadRequirement.url({
+                id: recipient.id,
+            }),
+            {
+                onSuccess: () => {
+                    setIsDialogOpen(false);
+                    reset();
+                    setSelectedRequirement(null);
+                },
             },
-        });
+        );
     };
 
     const openUploadDialog = (requirementId: number) => {
@@ -198,8 +203,15 @@ export default function Show({ recipient }: Props) {
                                                 <CardTitle>
                                                     Required Documents
                                                 </CardTitle>
-                                                <Link href={sas.student.scholarships.requirements.url({ id: recipient.id })}>
-                                                    <Button variant="outline" size="sm">
+                                                <Link
+                                                    href={sas.student.scholarships.requirements.url(
+                                                        { id: recipient.id },
+                                                    )}
+                                                >
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                    >
                                                         <FileText className="mr-2 h-4 w-4" />
                                                         View Full Requirements
                                                     </Button>
@@ -207,7 +219,9 @@ export default function Show({ recipient }: Props) {
                                             </div>
                                             <div className="mt-2">
                                                 <span className="text-sm text-muted-foreground">
-                                                    {completedRequirements} of {totalRequirements} completed
+                                                    {completedRequirements} of{' '}
+                                                    {totalRequirements}{' '}
+                                                    completed
                                                 </span>
                                             </div>
                                         </CardHeader>
@@ -252,10 +266,13 @@ export default function Show({ recipient }: Props) {
                                                                             <CheckCircle2 className="mr-1 h-3 w-3" />
                                                                             Submitted
                                                                             {req.submission_date && (
-                                                                                <> on{' '}
-                                                                                {new Date(
-                                                                                    req.submission_date,
-                                                                                ).toLocaleDateString()}</>
+                                                                                <>
+                                                                                    {' '}
+                                                                                    on{' '}
+                                                                                    {new Date(
+                                                                                        req.submission_date,
+                                                                                    ).toLocaleDateString()}
+                                                                                </>
                                                                             )}
                                                                         </Badge>
                                                                     </div>

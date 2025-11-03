@@ -207,7 +207,9 @@ export default function Index({ insuranceRecords }: Props) {
                                             )}
 
                                             <Link
-                                                href={sas.student.insurance.show.url({ id: insurance.id })}
+                                                href={sas.student.insurance.show.url(
+                                                    { id: insurance.id },
+                                                )}
                                             >
                                                 <Button
                                                     variant="outline"

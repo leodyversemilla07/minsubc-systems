@@ -1,0 +1,117 @@
+<?php
+
+namespace Modules\SAS\Http\Controllers\Student;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+use Modules\SAS\Services\ScholarshipService;
+
+class ScholarshipController extends Controller
+{
+    public function __construct(
+        protected ScholarshipService $scholarshipService
+    ) {}
+
+    /**
+     * Display a listing of the student's scholarships.
+     */
+    public function index(Request $request): Response
+    {
+        $studentId = $request->user()->id;
+
+        $scholarships = $this->scholarshipService->getStudentScholarships($studentId, [
+            'academic_year' => $request->input('academic_year'),
+            'semester' => $request->input('semester'),
+            'status' => $request->input('status'),
+        ]);
+
+        return Inertia::render('sas/student/scholarships/index', [
+            'scholarships' => [
+                'data' => $scholarships,
+                'total' => $scholarships->count(),
+            ],
+            'filters' => $request->only(['academic_year', 'semester', 'status']),
+        ]);
+    }
+
+    /**
+     * Display the specified scholarship.
+     */
+    public function show(Request $request, int $id): Response
+    {
+        $studentId = $request->user()->id;
+
+        $recipient = $this->scholarshipService->getRecipientById($id);
+
+        // Ensure the scholarship belongs to the authenticated student
+        if ($recipient->student_id !== $studentId) {
+            abort(403, 'Unauthorized access to scholarship record.');
+        }
+
+        return Inertia::render('sas/student/scholarships/show', [
+            'recipient' => $recipient->load(['scholarship', 'requirements']),
+        ]);
+    }
+
+    /**
+     * Display the requirements checklist for a scholarship.
+     */
+    public function requirements(Request $request, int $id): Response
+    {
+        $studentId = $request->user()->id;
+
+        $recipient = $this->scholarshipService->getRecipientById($id);
+
+        // Ensure the scholarship belongs to the authenticated student
+        if ($recipient->student_id !== $studentId) {
+            abort(403, 'Unauthorized access to scholarship record.');
+        }
+
+        $requirements = $recipient->load(['scholarship', 'requirements'])->requirements;
+
+        // Calculate completion stats
+        $totalRequirements = $requirements->count();
+        $submittedRequirements = $requirements->where('is_submitted', true)->count();
+        $completionPercentage = $totalRequirements > 0
+            ? round(($submittedRequirements / $totalRequirements) * 100)
+            : 0;
+
+        return Inertia::render('sas/student/scholarships/requirements', [
+            'recipient' => $recipient,
+            'requirements' => $requirements,
+            'stats' => [
+                'total' => $totalRequirements,
+                'submitted' => $submittedRequirements,
+                'pending' => $totalRequirements - $submittedRequirements,
+                'completion_percentage' => $completionPercentage,
+            ],
+        ]);
+    }
+
+    /**
+     * Upload a requirement document for a scholarship.
+     */
+    public function uploadRequirement(Request $request, int $id)
+    {
+        $request->validate([
+            'requirement_id' => 'required|exists:scholarship_requirements,id',
+            'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+        ]);
+
+        $recipient = $this->scholarshipService->getRecipientById($id);
+
+        // Ensure the scholarship belongs to the authenticated student
+        if ($recipient->student_id !== $request->user()->id) {
+            abort(403, 'Unauthorized access to scholarship record.');
+        }
+
+        $this->scholarshipService->uploadRequirement(
+            $request->input('requirement_id'),
+            $request->file('file')
+        );
+
+        return redirect()->back()->with('success', 'Requirement uploaded successfully.');
+    }
+}

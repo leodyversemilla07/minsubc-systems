@@ -11,11 +11,7 @@ import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
 import type { PaginatedData } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    GraduationCap,
-    Search,
-    SlidersHorizontal,
-} from 'lucide-react';
+import { GraduationCap, Search, SlidersHorizontal } from 'lucide-react';
 import { useState } from 'react';
 
 interface Scholarship {
@@ -259,7 +255,9 @@ export default function ScholarshipsIndex({
                             {scholarships.data.map((scholarship) => (
                                 <Link
                                     key={scholarship.id}
-                                    href={sas.scholarships.show.url({ id: scholarship.id })}
+                                    href={sas.scholarships.show.url({
+                                        id: scholarship.id,
+                                    })}
                                     className="group block"
                                 >
                                     <div className="h-full rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
@@ -330,9 +328,8 @@ export default function ScholarshipsIndex({
                                 )}
 
                                 <span className="px-4 text-sm text-gray-600 dark:text-gray-400">
-                                    Page{' '}
-                                    {scholarships?.meta?.current_page || 1} of{' '}
-                                    {scholarships?.meta?.last_page || 1}
+                                    Page {scholarships?.meta?.current_page || 1}{' '}
+                                    of {scholarships?.meta?.last_page || 1}
                                 </span>
 
                                 {scholarships?.links?.next && (

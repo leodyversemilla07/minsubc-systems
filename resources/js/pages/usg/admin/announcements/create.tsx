@@ -1,4 +1,4 @@
-import AnnouncementController from '@/actions/App/Modules/USG/Http/Controllers/Admin/AnnouncementController';
+import AnnouncementController from '@/actions/Modules/USG/Http/Controllers/Admin/AnnouncementController';
 import { DatePicker } from '@/components/date-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';

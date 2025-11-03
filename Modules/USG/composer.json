@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/usg",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\USG\\": "app/",
+            "Modules\\USG\\Database\\Factories\\": "database/factories/",
+            "Modules\\USG\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\USG\\Tests\\": "tests/"
+        }
+    }
+}

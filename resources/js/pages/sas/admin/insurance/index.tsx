@@ -92,16 +92,20 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
         setSearch('');
         setStatus('');
         setPolicyType('');
-        router.get(sas.admin.insurance.index.url(), {}, { preserveState: true });
+        router.get(
+            sas.admin.insurance.index.url(),
+            {},
+            { preserveState: true },
+        );
     }
 
     const stats = {
-        pending:
-            insuranceRecords.data.filter((i) => i.status === 'Pending').length,
-        approved:
-            insuranceRecords.data.filter((i) => i.status === 'Approved').length,
-        rejected:
-            insuranceRecords.data.filter((i) => i.status === 'Rejected').length,
+        pending: insuranceRecords.data.filter((i) => i.status === 'Pending')
+            .length,
+        approved: insuranceRecords.data.filter((i) => i.status === 'Approved')
+            .length,
+        rejected: insuranceRecords.data.filter((i) => i.status === 'Rejected')
+            .length,
         total: insuranceRecords.total,
     };
 
@@ -216,7 +220,7 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                     <div className="flex flex-col gap-4 md:flex-row">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                                 <Input
                                     placeholder="Search by policy number, provider, or student name..."
                                     value={search}

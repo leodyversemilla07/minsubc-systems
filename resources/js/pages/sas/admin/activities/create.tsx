@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -16,7 +17,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -372,7 +372,9 @@ export default function CreateActivity({ organizations }: Props) {
                 {/* Form Actions */}
                 <div className="flex justify-end gap-4">
                     <Button type="button" variant="outline" asChild>
-                        <Link href={sas.admin.activities.index.url()}>Cancel</Link>
+                        <Link href={sas.admin.activities.index.url()}>
+                            Cancel
+                        </Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Creating...' : 'Create Activity'}

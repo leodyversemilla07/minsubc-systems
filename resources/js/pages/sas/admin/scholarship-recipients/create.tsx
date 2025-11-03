@@ -249,7 +249,9 @@ export default function CreateRecipient({ scholarships, students }: Props) {
                             </div>
 
                             <div className="flex justify-end gap-4">
-                                <Link href={sas.admin.scholarshipRecipients.index.url()}>
+                                <Link
+                                    href={sas.admin.scholarshipRecipients.index.url()}
+                                >
                                     <Button type="button" variant="outline">
                                         Cancel
                                     </Button>

@@ -1,0 +1,11 @@
+{
+    "name": "USG",
+    "alias": "usg",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\USG\\Providers\\USGServiceProvider"
+    ],
+    "files": []
+}

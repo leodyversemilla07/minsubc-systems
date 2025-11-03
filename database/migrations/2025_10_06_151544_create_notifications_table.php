@@ -12,22 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('request_id');
-            $table->string('student_id', 20);
-            $table->enum('type', ['sms', 'email', 'both']);
-            $table->text('message');
-            $table->enum('status', ['pending', 'sent', 'failed'])->default('pending');
-            $table->timestamp('sent_at')->nullable();
-            $table->text('error_message')->nullable();
+            $table->uuid('id')->primary();
+            $table->string('type'); // Notification class name
+            $table->morphs('notifiable'); // Polymorphic relation to any model (User, etc.)
+            $table->json('data'); // Notification data (flexible for all modules)
+            $table->timestamp('read_at')->nullable(); // When notification was read
             $table->timestamps();
 
-            $table->foreign('request_id')->references('id')->on('document_requests');
-            $table->foreign('student_id')->references('student_id')->on('students');
-
-            // Performance indexes
-            $table->index('status');
-            $table->index(['student_id', 'status']);
+            // Indexes for performance
+            $table->index(['notifiable_type', 'notifiable_id', 'read_at']);
         });
     }
 

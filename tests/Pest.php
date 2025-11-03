@@ -21,6 +21,23 @@ pest()->extend(Tests\TestCase::class)
 
 /*
 |--------------------------------------------------------------------------
+| Module Tests
+|--------------------------------------------------------------------------
+|
+| Configure Pest for module tests located in Modules directory.
+| This ensures module tests have access to TestCase and RefreshDatabase.
+|
+*/
+
+pest()->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('../Modules/*/tests/Feature');
+
+pest()->extend(Tests\TestCase::class)
+    ->in('../Modules/*/tests/Unit');
+
+/*
+|--------------------------------------------------------------------------
 | Expectations
 |--------------------------------------------------------------------------
 |

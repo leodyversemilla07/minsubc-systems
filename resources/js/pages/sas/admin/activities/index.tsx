@@ -78,7 +78,11 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
         setSearch('');
         setStatus('');
         setCategory('');
-        router.get(sas.admin.activities.index.url(), {}, { preserveState: true });
+        router.get(
+            sas.admin.activities.index.url(),
+            {},
+            { preserveState: true },
+        );
     }
 
     function handleDelete(id: number, title: string) {
@@ -95,12 +99,12 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
 
     const stats = {
         total: activities.total,
-        scheduled:
-            activities.data.filter((a) => a.status === 'Scheduled').length,
-        completed:
-            activities.data.filter((a) => a.status === 'Completed').length,
-        cancelled:
-            activities.data.filter((a) => a.status === 'Cancelled').length,
+        scheduled: activities.data.filter((a) => a.status === 'Scheduled')
+            .length,
+        completed: activities.data.filter((a) => a.status === 'Completed')
+            .length,
+        cancelled: activities.data.filter((a) => a.status === 'Cancelled')
+            .length,
     };
 
     function getStatusBadge(status: string) {
@@ -203,7 +207,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                     <div className="flex flex-col gap-4 md:flex-row">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                                 <Input
                                     placeholder="Search activities..."
                                     value={search}
@@ -378,8 +382,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             variant="outline"
                             size="sm"
                             disabled={
-                                activities.current_page ===
-                                activities.last_page
+                                activities.current_page === activities.last_page
                             }
                             onClick={() =>
                                 router.get(

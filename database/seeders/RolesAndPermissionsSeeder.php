@@ -115,24 +115,24 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create roles and assign permissions exactly as specified in DRS.md
-        $studentRole = Role::create(['name' => 'student']);
-        $studentRole->givePermissionTo([
+        $studentRole = Role::firstOrCreate(['name' => 'student']);
+        $studentRole->syncPermissions([
             'submit_requests',
             'view_own_requests',
             'make_payments',
             'track_status',
         ]);
 
-        $cashierRole = Role::create(['name' => 'cashier']);
-        $cashierRole->givePermissionTo([
+        $cashierRole = Role::firstOrCreate(['name' => 'cashier']);
+        $cashierRole->syncPermissions([
             'view_pending_cash_payments',
             'confirm_cash_payments',
             'issue_official_receipts',
             'verify_payment_references',
         ]);
 
-        $registrarStaffRole = Role::create(['name' => 'registrar-staff']);
-        $registrarStaffRole->givePermissionTo([
+        $registrarStaffRole = Role::firstOrCreate(['name' => 'registrar-staff']);
+        $registrarStaffRole->syncPermissions([
             'view_all_requests',
             'process_documents',
             'approve_requests',
@@ -141,8 +141,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'release_documents',
         ]);
 
-        $registrarAdminRole = Role::create(['name' => 'registrar-admin']);
-        $registrarAdminRole->givePermissionTo([
+        $registrarAdminRole = Role::firstOrCreate(['name' => 'registrar-admin']);
+        $registrarAdminRole->syncPermissions([
             // All staff permissions
             'view_all_requests',
             'process_documents',
@@ -156,8 +156,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Create USG Officer role
-        $usgOfficerRole = Role::create(['name' => 'usg-officer']);
-        $usgOfficerRole->givePermissionTo([
+        $usgOfficerRole = Role::firstOrCreate(['name' => 'usg-officer']);
+        $usgOfficerRole->syncPermissions([
             'usg_view_dashboard',
             'usg_create_announcements',
             'usg_edit_announcements',
@@ -174,8 +174,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Create USG Admin role (has all officer permissions plus admin-specific ones)
-        $usgAdminRole = Role::create(['name' => 'usg-admin']);
-        $usgAdminRole->givePermissionTo([
+        $usgAdminRole = Role::firstOrCreate(['name' => 'usg-admin']);
+        $usgAdminRole->syncPermissions([
             // All officer permissions
             'usg_view_dashboard',
             'usg_create_announcements',
@@ -202,8 +202,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Create SAS Staff role
-        $sasStaffRole = Role::create(['name' => 'sas-staff']);
-        $sasStaffRole->givePermissionTo([
+        $sasStaffRole = Role::firstOrCreate(['name' => 'sas-staff']);
+        $sasStaffRole->syncPermissions([
             'sas_view_dashboard',
             'sas_view_scholarships',
             'sas_view_insurance',
@@ -214,8 +214,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Create SAS Admin role (has all staff permissions plus admin-specific ones)
-        $sasAdminRole = Role::create(['name' => 'sas-admin']);
-        $sasAdminRole->givePermissionTo([
+        $sasAdminRole = Role::firstOrCreate(['name' => 'sas-admin']);
+        $sasAdminRole->syncPermissions([
             // All staff permissions
             'sas_view_dashboard',
             'sas_view_scholarships',
@@ -237,8 +237,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Create Super Admin role (highest authority - can manage everything)
-        $superAdminRole = Role::create(['name' => 'super-admin']);
-        $superAdminRole->givePermissionTo([
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdminRole->syncPermissions([
             // All existing permissions for complete system access
             'submit_requests',
             'view_own_requests',

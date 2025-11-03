@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
 import { show } from '@/routes/registrar/document-requests';
-import { cash, cashReference, initiate } from '@/routes/registrar/payments';
+import { cash, cashReference } from '@/routes/registrar/payments';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link } from '@inertiajs/react';
 import { Banknote, CheckCircle, CreditCard, InfoIcon } from 'lucide-react';
@@ -246,41 +246,14 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                     ).toFixed(2)}
                                 </p>
                             </div>
-                            <Form {...initiate.form(request.request_number)}>
-                                {({ processing, errors }) => (
-                                    <>
-                                        <Button
-                                            className="w-full"
-                                            type="submit"
-                                            disabled={processing}
-                                            size="lg"
-                                        >
-                                            {processing ? (
-                                                <>
-                                                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                                                    Processing Payment...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <CreditCard className="mr-2 h-4 w-4" />
-                                                    Pay Online Now
-                                                </>
-                                            )}
-                                        </Button>
-
-                                        {errors.payment && (
-                                            <Alert
-                                                variant="destructive"
-                                                className="mt-4"
-                                            >
-                                                <AlertDescription>
-                                                    {errors.payment}
-                                                </AlertDescription>
-                                            </Alert>
-                                        )}
-                                    </>
-                                )}
-                            </Form>
+                            <Button
+                                className="w-full"
+                                size="lg"
+                                disabled
+                            >
+                                <CreditCard className="mr-2 h-4 w-4" />
+                                Online Payment Coming Soon
+                            </Button>
                         </CardContent>
                     </Card>
 

@@ -22,4 +22,17 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    server: {
+        hmr: {
+            overlay: true,
+        },
+        watch: {
+            // Ignore wayfinder generated directories to prevent infinite loops
+            ignored: [
+                '**/resources/js/actions/**',
+                '**/resources/js/routes/**',
+                '**/resources/js/wayfinder/**',
+            ],
+        },
+    },
 });

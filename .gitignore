@@ -32,5 +32,11 @@ _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
 
+# Backup and temporary files
+*.backup
+*.bak
+*.tmp
+*.old
+
 # Browser test screenshots
 /tests/Browser/Screenshots

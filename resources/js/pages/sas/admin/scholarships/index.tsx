@@ -288,7 +288,9 @@ export default function ScholarshipsIndex({
                                     Get started by creating your first
                                     scholarship program.
                                 </p>
-                                <Link href={sas.admin.scholarships.create.url()}>
+                                <Link
+                                    href={sas.admin.scholarships.create.url()}
+                                >
                                     <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add Scholarship

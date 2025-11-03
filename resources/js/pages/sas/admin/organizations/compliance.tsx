@@ -92,12 +92,14 @@ export default function OrganizationsCompliance({ organizations }: Props) {
         ).length,
         partial: organizations.filter(
             (o) =>
-                (o.adviser && (!o.current_officers || !o.current_officers.length)) ||
+                (o.adviser &&
+                    (!o.current_officers || !o.current_officers.length)) ||
                 (!o.adviser && o.current_officers && o.current_officers.length),
         ).length,
         nonCompliant: organizations.filter(
             (o) =>
-                !o.adviser && (!o.current_officers || !o.current_officers.length),
+                !o.adviser &&
+                (!o.current_officers || !o.current_officers.length),
         ).length,
     };
 
@@ -166,7 +168,9 @@ export default function OrganizationsCompliance({ organizations }: Props) {
                         <AlertCircle className="h-4 w-4 text-yellow-600" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{stats.partial}</div>
+                        <div className="text-2xl font-bold">
+                            {stats.partial}
+                        </div>
                     </CardContent>
                 </Card>
 

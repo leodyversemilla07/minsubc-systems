@@ -339,8 +339,13 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                         </CardHeader>
                         <CardContent>
                             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                                <Link href={sas.adviser.organization.officers.url()}>
-                                    <Button variant="outline" className="w-full">
+                                <Link
+                                    href={sas.adviser.organization.officers.url()}
+                                >
+                                    <Button
+                                        variant="outline"
+                                        className="w-full"
+                                    >
                                         <Users className="mr-2 h-4 w-4" />
                                         Manage Officers
                                     </Button>
@@ -372,7 +377,9 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                                     Organization officers for the current term
                                 </CardDescription>
                             </div>
-                            <Link href={sas.adviser.organization.officers.url()}>
+                            <Link
+                                href={sas.adviser.organization.officers.url()}
+                            >
                                 <Button>
                                     <Edit className="mr-2 h-4 w-4" />
                                     Manage Officers
@@ -399,8 +406,10 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                                                         {officer.position}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {officer.student
-                                                            .first_name}{' '}
+                                                        {
+                                                            officer.student
+                                                                .first_name
+                                                        }{' '}
                                                         {officer.student
                                                             .middle_name &&
                                                             officer.student
@@ -469,7 +478,8 @@ export default function AdviserOrganizationDashboard({ organization }: Props) {
                             organization.members.length > 0 ? (
                                 <div className="space-y-2">
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        Total Members: {organization.members.length}
+                                        Total Members:{' '}
+                                        {organization.members.length}
                                     </p>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
                                         Active Members: {activeMembers}

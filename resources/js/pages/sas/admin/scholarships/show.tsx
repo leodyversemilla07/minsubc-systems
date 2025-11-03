@@ -1,11 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
@@ -51,7 +46,9 @@ export default function ScholarshipShow({ scholarship }: Props) {
                                 </p>
                             </div>
                         </div>
-                        <Link href={`/sas/admin/scholarships/${scholarship.id}/edit`}>
+                        <Link
+                            href={`/sas/admin/scholarships/${scholarship.id}/edit`}
+                        >
                             <Button>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
@@ -66,20 +63,38 @@ export default function ScholarshipShow({ scholarship }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Type</p>
-                                    <p className="font-medium">{scholarship.scholarship_type}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Type
+                                    </p>
+                                    <p className="font-medium">
+                                        {scholarship.scholarship_type}
+                                    </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Provider</p>
-                                    <p className="font-medium">{scholarship.provider}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Provider
+                                    </p>
+                                    <p className="font-medium">
+                                        {scholarship.provider}
+                                    </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Amount</p>
-                                    <p className="font-medium">₱{scholarship.amount?.toLocaleString()}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Amount
+                                    </p>
+                                    <p className="font-medium">
+                                        ₱{scholarship.amount?.toLocaleString()}
+                                    </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Status</p>
-                                    <Badge>{scholarship.is_active ? 'Active' : 'Inactive'}</Badge>
+                                    <p className="text-sm text-muted-foreground">
+                                        Status
+                                    </p>
+                                    <Badge>
+                                        {scholarship.is_active
+                                            ? 'Active'
+                                            : 'Inactive'}
+                                    </Badge>
                                 </div>
                             </CardContent>
                         </Card>
@@ -89,7 +104,9 @@ export default function ScholarshipShow({ scholarship }: Props) {
                                 <CardTitle>Description</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm">{scholarship.description}</p>
+                                <p className="text-sm">
+                                    {scholarship.description}
+                                </p>
                             </CardContent>
                         </Card>
                     </div>

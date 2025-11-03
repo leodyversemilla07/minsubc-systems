@@ -1,11 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -26,15 +21,15 @@ import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
+    AlertCircle,
+    Clock,
     Eye,
+    FileCheck,
     FileText,
     Plus,
     Search,
     Trash2,
     Upload,
-    FileCheck,
-    AlertCircle,
-    Clock,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -103,7 +98,11 @@ export default function DocumentsIndex({ documents, filters }: Props) {
         setCategory('');
         setDisposalStatus('');
         setAcademicYear('');
-        router.get(sas.admin.documents.index.url(), {}, { preserveState: true });
+        router.get(
+            sas.admin.documents.index.url(),
+            {},
+            { preserveState: true },
+        );
     }
 
     function handleDelete(id: number, title: string) {
@@ -120,32 +119,35 @@ export default function DocumentsIndex({ documents, filters }: Props) {
 
     const stats = {
         total: documents.total,
-        physical:
-            documents.data.filter(
-                (d) => d.disposal_status === 'Physical Copy Exists',
-            ).length,
-        pending:
-            documents.data.filter(
-                (d) => d.disposal_status === 'Pending Disposal Approval',
-            ).length,
-        disposed:
-            documents.data.filter((d) => d.disposal_status === 'Disposed')
-                .length,
+        physical: documents.data.filter(
+            (d) => d.disposal_status === 'Physical Copy Exists',
+        ).length,
+        pending: documents.data.filter(
+            (d) => d.disposal_status === 'Pending Disposal Approval',
+        ).length,
+        disposed: documents.data.filter((d) => d.disposal_status === 'Disposed')
+            .length,
     };
 
     function getDisposalBadge(status: string) {
         type IconComponent = typeof FileCheck;
         const variants: Record<
             string,
-            { variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: IconComponent }
+            {
+                variant: 'default' | 'secondary' | 'destructive' | 'outline';
+                icon: IconComponent;
+            }
         > = {
             'Physical Copy Exists': { variant: 'default', icon: FileCheck },
             'Pending Disposal Approval': { variant: 'secondary', icon: Clock },
             'Approved for Disposal': { variant: 'outline', icon: AlertCircle },
-            'Disposed': { variant: 'destructive', icon: Trash2 },
+            Disposed: { variant: 'destructive', icon: Trash2 },
         };
 
-        const config = variants[status] || { variant: 'outline' as const, icon: FileText };
+        const config = variants[status] || {
+            variant: 'outline' as const,
+            icon: FileText,
+        };
         const Icon = config.icon;
 
         return (
@@ -161,7 +163,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        return (
+            Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
+        );
     }
 
     return (
@@ -181,7 +185,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" asChild>
-                            <Link href={sas.admin.documents.manageDisposal.url()}>
+                            <Link
+                                href={sas.admin.documents.manageDisposal.url()}
+                            >
                                 <AlertCircle className="mr-2 h-4 w-4" />
                                 Manage Disposal
                             </Link>
@@ -259,7 +265,7 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                     <div className="flex flex-col gap-4 md:flex-row">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                                 <Input
                                     placeholder="Search documents..."
                                     value={search}
@@ -313,7 +319,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 <SelectItem value="Approved for Disposal">
                                     Approved
                                 </SelectItem>
-                                <SelectItem value="Disposed">Disposed</SelectItem>
+                                <SelectItem value="Disposed">
+                                    Disposed
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                         <div className="flex gap-2">
@@ -433,10 +441,12 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 router.get(
                                     `/sas/admin/documents?page=${documents.current_page - 1}`,
                                     {
-                                        document_category: category || undefined,
+                                        document_category:
+                                            category || undefined,
                                         disposal_status:
                                             disposalStatus || undefined,
-                                        academic_year: academicYear || undefined,
+                                        academic_year:
+                                            academicYear || undefined,
                                         search: search || undefined,
                                     },
                                     { preserveState: true },
@@ -455,10 +465,12 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 router.get(
                                     `/sas/admin/documents?page=${documents.current_page + 1}`,
                                     {
-                                        document_category: category || undefined,
+                                        document_category:
+                                            category || undefined,
                                         disposal_status:
                                             disposalStatus || undefined,
-                                        academic_year: academicYear || undefined,
+                                        academic_year:
+                                            academicYear || undefined,
                                         search: search || undefined,
                                     },
                                     { preserveState: true },

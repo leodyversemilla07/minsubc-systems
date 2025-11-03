@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\User;
-use App\Modules\Registrar\Models\DocumentRequest;
-use App\Modules\Registrar\Models\Payment;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Support\Facades\Event;
+use Modules\Registrar\Models\DocumentRequest;
+use Modules\Registrar\Models\Payment;
 
 use function Pest\Laravel\actingAs;
 

@@ -38,15 +38,15 @@ import sas from '@/routes/sas';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import {
     ArrowLeft,
+    Calendar,
+    Clock,
     Download,
     Edit,
     FileText,
-    Calendar,
-    User,
-    MapPin,
     Hash,
+    MapPin,
     Trash2,
-    Clock,
+    User,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -127,7 +127,9 @@ export default function ShowDocument({ document }: Props) {
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+        return (
+            Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
+        );
     }
 
     function getDisposalBadge(status: string) {
@@ -167,7 +169,9 @@ export default function ShowDocument({ document }: Props) {
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" asChild>
-                            <Link href={`/sas/admin/documents/${document.id}/edit`}>
+                            <Link
+                                href={`/sas/admin/documents/${document.id}/edit`}
+                            >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Link>
@@ -334,9 +338,7 @@ export default function ShowDocument({ document }: Props) {
                                     onOpenChange={setIsDisposalDialogOpen}
                                 >
                                     <DialogTrigger asChild>
-                                        <Button size="sm">
-                                            Update Status
-                                        </Button>
+                                        <Button size="sm">Update Status</Button>
                                     </DialogTrigger>
                                     <DialogContent>
                                         <form onSubmit={handleDisposalUpdate}>
@@ -358,7 +360,9 @@ export default function ShowDocument({ document }: Props) {
                                                         value={
                                                             data.disposal_status
                                                         }
-                                                        onValueChange={(value) =>
+                                                        onValueChange={(
+                                                            value,
+                                                        ) =>
                                                             setData(
                                                                 'disposal_status',
                                                                 value,
@@ -589,38 +593,44 @@ export default function ShowDocument({ document }: Props) {
                     </Card>
 
                     {/* Permissions */}
-                    {document.permissions && document.permissions.length > 0 && (
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-base">
-                                    Access Permissions
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-3">
-                                    {document.permissions.map((permission) => (
-                                        <div
-                                            key={permission.id}
-                                            className="flex items-center justify-between"
-                                        >
-                                            <div>
-                                                <p className="text-sm font-medium">
-                                                    {permission.user?.name ||
-                                                        'Unknown'}
-                                                </p>
-                                                <p className="text-xs text-gray-500">
-                                                    {permission.permission_type}
-                                                </p>
-                                            </div>
-                                            <Badge variant="outline">
-                                                Active
-                                            </Badge>
-                                        </div>
-                                    ))}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    )}
+                    {document.permissions &&
+                        document.permissions.length > 0 && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-base">
+                                        Access Permissions
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-3">
+                                        {document.permissions.map(
+                                            (permission) => (
+                                                <div
+                                                    key={permission.id}
+                                                    className="flex items-center justify-between"
+                                                >
+                                                    <div>
+                                                        <p className="text-sm font-medium">
+                                                            {permission.user
+                                                                ?.name ||
+                                                                'Unknown'}
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">
+                                                            {
+                                                                permission.permission_type
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                    <Badge variant="outline">
+                                                        Active
+                                                    </Badge>
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
 
                     {/* Actions */}
                     <Card>
@@ -630,7 +640,11 @@ export default function ShowDocument({ document }: Props) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            <Button className="w-full" variant="outline" asChild>
+                            <Button
+                                className="w-full"
+                                variant="outline"
+                                asChild
+                            >
                                 <Link
                                     href={`/sas/admin/documents/${document.id}/edit`}
                                 >

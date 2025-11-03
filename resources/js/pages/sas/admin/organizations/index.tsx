@@ -80,7 +80,11 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
         setSearch('');
         setOrgType('');
         setStatus('');
-        router.get(sas.admin.organizations.index.url(), {}, { preserveState: true });
+        router.get(
+            sas.admin.organizations.index.url(),
+            {},
+            { preserveState: true },
+        );
     }
 
     function handleDelete(id: number, name: string) {
@@ -97,14 +101,11 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
     const stats = {
         total: organizations.total,
-        active:
-            organizations.data.filter((o) => o.status === 'Active').length,
-        major:
-            organizations.data.filter((o) => o.organization_type === 'Major')
-                .length,
-        minor:
-            organizations.data.filter((o) => o.organization_type === 'Minor')
-                .length,
+        active: organizations.data.filter((o) => o.status === 'Active').length,
+        major: organizations.data.filter((o) => o.organization_type === 'Major')
+            .length,
+        minor: organizations.data.filter((o) => o.organization_type === 'Minor')
+            .length,
     };
 
     function getStatusBadge(status: string) {
@@ -117,9 +118,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
             Suspended: 'destructive',
         };
 
-        return (
-            <Badge variant={variants[status] || 'outline'}>{status}</Badge>
-        );
+        return <Badge variant={variants[status] || 'outline'}>{status}</Badge>;
     }
 
     function getTypeBadge(type: string) {
@@ -211,7 +210,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                     <div className="flex flex-col gap-4 md:flex-row">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                                 <Input
                                     placeholder="Search by organization name or code..."
                                     value={search}
@@ -343,7 +342,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 No organizations found
                             </p>
                             <Button className="mt-4" asChild>
-                                <Link href={sas.admin.organizations.create.url()}>
+                                <Link
+                                    href={sas.admin.organizations.create.url()}
+                                >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create First Organization
                                 </Link>

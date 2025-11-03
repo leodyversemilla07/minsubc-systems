@@ -97,7 +97,11 @@ export default function NotificationsIndex({
     filter,
 }: NotificationsIndexProps) {
     const handleTabChange = (value: string) => {
-        router.get('/notifications', { filter: value }, { preserveState: true });
+        router.get(
+            '/notifications',
+            { filter: value },
+            { preserveState: true },
+        );
     };
 
     const handleMarkAsRead = async (id: string) => {
@@ -293,7 +297,8 @@ export default function NotificationsIndex({
                                                 {notification.data.url && (
                                                     <Link
                                                         href={
-                                                            notification.data.url
+                                                            notification.data
+                                                                .url
                                                         }
                                                     >
                                                         <Button

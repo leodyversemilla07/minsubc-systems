@@ -1,7 +1,7 @@
 import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
 import { Head, Link } from '@inertiajs/react';
-import { GraduationCap, FileText, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FileText, GraduationCap } from 'lucide-react';
 
 interface Scholarship {
     id: number;

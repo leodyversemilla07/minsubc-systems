@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -15,7 +16,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -270,9 +270,7 @@ export default function UploadDocument() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="academic_year">
-                                Academic Year
-                            </Label>
+                            <Label htmlFor="academic_year">Academic Year</Label>
                             <Input
                                 id="academic_year"
                                 value={data.academic_year}
@@ -390,7 +388,9 @@ export default function UploadDocument() {
                 {/* Form Actions */}
                 <div className="flex justify-end gap-4">
                     <Button type="button" variant="outline" asChild>
-                        <Link href={sas.admin.documents.index.url()}>Cancel</Link>
+                        <Link href={sas.admin.documents.index.url()}>
+                            Cancel
+                        </Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Uploading...' : 'Upload Document'}

@@ -279,7 +279,9 @@ export default function Dashboard({
                                             {statistics.scholarships.total_amount.toLocaleString()}
                                         </span>
                                     </div>
-                                    <Link href={sas.admin.scholarships.index.url()}>
+                                    <Link
+                                        href={sas.admin.scholarships.index.url()}
+                                    >
                                         <Button
                                             variant="outline"
                                             className="w-full"
@@ -328,7 +330,9 @@ export default function Dashboard({
                                             {statistics.insurance.expiring_soon}
                                         </Badge>
                                     </div>
-                                    <Link href={sas.admin.insurance.index.url()}>
+                                    <Link
+                                        href={sas.admin.insurance.index.url()}
+                                    >
                                         <Button
                                             variant="outline"
                                             className="w-full"
@@ -372,7 +376,9 @@ export default function Dashboard({
                                             {statistics.organizations.active}
                                         </Badge>
                                     </div>
-                                    <Link href={sas.admin.organizations.index.url()}>
+                                    <Link
+                                        href={sas.admin.organizations.index.url()}
+                                    >
                                         <Button
                                             variant="outline"
                                             className="w-full"

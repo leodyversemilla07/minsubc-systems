@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\User;
-use App\Modules\Registrar\Models\DocumentRequest;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Support\Facades\Event;
+use Modules\Registrar\Models\DocumentRequest;
 
 use function Pest\Laravel\actingAs;
 

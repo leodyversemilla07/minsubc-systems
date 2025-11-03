@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\User;
-use App\Modules\USG\Models\Announcement;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Modules\USG\Models\Announcement;
 
 use function Pest\Laravel\actingAs;
 

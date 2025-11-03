@@ -253,7 +253,9 @@ export default function Index({ scholarships, filters }: Props) {
                                             )}
 
                                             <Link
-                                                href={sas.student.scholarships.show.url({ id: recipient.id })}
+                                                href={sas.student.scholarships.show.url(
+                                                    { id: recipient.id },
+                                                )}
                                             >
                                                 <Button
                                                     variant="outline"

@@ -192,7 +192,9 @@ export default function InsuranceShow({ insurance }: Props) {
                                                     </Label>
                                                     <Textarea
                                                         id="review_notes"
-                                                        value={data.review_notes}
+                                                        value={
+                                                            data.review_notes
+                                                        }
                                                         onChange={(e) =>
                                                             setData(
                                                                 'review_notes',
@@ -205,7 +207,9 @@ export default function InsuranceShow({ insurance }: Props) {
                                                     />
                                                     {errors.review_notes && (
                                                         <p className="text-sm text-red-500">
-                                                            {errors.review_notes}
+                                                            {
+                                                                errors.review_notes
+                                                            }
                                                         </p>
                                                     )}
                                                 </div>
@@ -474,7 +478,8 @@ export default function InsuranceShow({ insurance }: Props) {
                                 <p className="font-medium">
                                     {insurance.student.first_name}{' '}
                                     {insurance.student.middle_name &&
-                                        insurance.student.middle_name[0] + '.'}{' '}
+                                        insurance.student.middle_name[0] +
+                                            '.'}{' '}
                                     {insurance.student.last_name}
                                 </p>
                             </div>

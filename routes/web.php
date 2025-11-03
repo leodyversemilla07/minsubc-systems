@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\SuperAdminController;
-use App\Modules\Registrar\Models\DocumentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Modules\Registrar\Models\DocumentRequest;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -116,11 +116,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 });
 
-// Registrar Module Routes
-require __DIR__.'/../app/Modules/Registrar/routes.php';
-
-// USG Module Routes
-require __DIR__.'/../app/Modules/USG/routes.php';
-
-// SAS Module Routes
-require __DIR__.'/../app/Modules/SAS/routes.php';
+// Module routes are auto-loaded via their Service Providers
+// See Modules/*/app/Providers/*ServiceProvider.php

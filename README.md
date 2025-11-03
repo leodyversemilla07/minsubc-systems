@@ -76,30 +76,38 @@ The **MinSU BC Systems Platform** is a modern, modular monorepo application buil
 - Physical claim with ID verification
 - SMS/Email notifications at every status change
 
-#### 🏛️ USG Module (Planned)
+#### 🏛️ USG Module (Active)
 - University Student Government transparency portal
-- Financial transparency (budgets, transactions)
-- Document repository and meeting records
-- Project tracking and public engagement
-- FOI (Freedom of Information) requests
-- Performance analytics dashboard
-- Event calendar and announcements
+- Vision, Mission, Goals, and Objectives (VMGO) management
+- Student government officers directory
+- Announcements and news publishing system
+- Events calendar with registration system
+- Resolutions and official documents repository
+- FOI (Freedom of Information) request system
+- Transparency reports (financial, activity, and performance)
+- Document downloads tracking
+- Public and authenticated access control
 
-#### 🎓 Guidance Module (Pending)
+#### 📊 SAS Module (Active)
+- Student Affairs Services management
+- Comprehensive scholarship management system
+- Scholarship recipients tracking and renewal
+- Student organization management and directory
+- Organization officers and member management
+- Organization activities and event tracking
+- Student insurance records management
+- Document digitalization and archive system
+- Activity calendar and event planning
+- Activity documents and reports
+- Student notifications system
+
+#### 🎓 Guidance Module (Planned)
 - Student guidance and counseling services
 - Appointment scheduling system
 - Confidential counseling records
 - Career guidance resources
 - Psychological assessments
 - Referral system
-
-#### 📊 SAS Module (Pending)
-- Student Affairs Services management
-- Student organization management
-- Event management and registration
-- Scholarship applications
-- Student conduct records
-- Campus life resources
 
 ---
 
@@ -116,29 +124,38 @@ This project uses a **Monorepo Modular Monolith** architecture, combining the be
 ```
 minsubc-systems/
 ├── app/
-│   ├── Models/              # Shared models (User, AuditLog, etc.)
+│   ├── Models/              # Shared models (User, AuditLog, SystemSetting, etc.)
 │   ├── Providers/           # Service providers
 │   ├── Services/            # Shared business logic
-│   └── Modules/             # 🎯 MODULE BOUNDARY
-│       ├── Registrar/       # Document Request System
-│       ├── USG/             # Student Government Portal
-│       ├── Guidance/        # Student Guidance Services
-│       └── SAS/             # Student Affairs Services
+│   ├── Http/                # Shared HTTP layer
+│   └── Observers/           # Model observers
+├── Modules/                 # 🎯 BACKEND MODULE BOUNDARY
+│   ├── Registrar/           # Document Request System (7 tables)
+│   ├── USG/                 # Student Government Portal (11 tables)
+│   └── SAS/                 # Student Affairs Services (15 tables)
 ├── resources/js/
 │   ├── components/          # Shared UI components
+│   │   ├── ui/              # shadcn/ui components
+│   │   ├── sas/             # SAS-specific components
+│   │   └── usg/             # USG-specific components
 │   ├── layouts/             # Shared layouts
 │   ├── lib/                 # Utilities and helpers
 │   └── pages/               # 🎯 FRONTEND MODULE BOUNDARY
-│       ├── registrar/
-│       ├── usg/
-│       ├── guidance/
-│       └── sas/
+│       ├── registrar/       # Registrar pages
+│       ├── usg/             # USG pages (public & admin)
+│       └── sas/             # SAS pages (student, adviser & admin)
 ├── database/
-│   ├── migrations/          # Shared migrations
+│   ├── migrations/          # Shared core migrations
 │   ├── factories/           # Model factories
 │   └── seeders/             # Database seeders
-└── routes/
-    └── web.php              # Includes all module routes
+├── routes/
+│   ├── web.php              # Main routes file
+│   ├── auth.php             # Authentication routes
+│   └── settings.php         # Settings routes
+└── tests/
+    ├── Feature/             # Feature tests (212 tests)
+    ├── Unit/                # Unit tests (1 test)
+    └── Browser/             # Browser tests (30 ready)
 ```
 
 ### Benefits
@@ -157,8 +174,8 @@ minsubc-systems/
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| **PHP** | 8.2.29 | Server-side language |
-| **Laravel** | 12.32.5 | PHP framework |
+| **PHP** | 8.3.27 | Server-side language |
+| **Laravel** | 12.34.0 | PHP framework |
 | **Inertia.js (Server)** | 2.0.10 | Modern monolith SPA adapter |
 | **Laravel Fortify** | 1.31.1 | Authentication backend |
 | **Spatie Permission** | 6.21 | Role-based access control |
@@ -168,7 +185,7 @@ minsubc-systems/
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| **React** | 19.0.0 | UI library |
+| **React** | 19.1.1 | UI library |
 | **TypeScript** | 5.7.2 | Type-safe JavaScript |
 | **Inertia.js (Client)** | 2.1.4 | SPA without API complexity |
 | **Tailwind CSS** | 4.1.12 | Utility-first CSS framework |
@@ -186,9 +203,12 @@ minsubc-systems/
 | **Laravel Pint** | 1.25.1 | PHP code formatter |
 | **ESLint** | 9.33.0 | JavaScript linter |
 | **Prettier** | 3.6.2 | Code formatter |
-| **Pest** | 3.8.4 | Testing framework |
+| **Pest** | 4.1.2 | Testing framework |
+| **PHPUnit** | 12.4.0 | Testing foundation |
 | **Laravel Boost** | 1.3 | Development productivity MCP server |
 | **Laravel Wayfinder** | 0.1.12 | Type-safe routing |
+| **Laravel MCP** | 0.3.0 | Model Context Protocol integration |
+| **Laravel Sail** | 1.46.0 | Docker development environment |
 
 ---
 
@@ -199,23 +219,39 @@ minsubc-systems/
 | Module | Status | Routes | Database Tables | Purpose |
 |--------|--------|--------|-----------------|---------|
 | **Registrar** | ✅ Active | 35+ | 7 | Document request system |
-| **USG** | 📋 Planned | - | - | Student government transparency |
-| **Guidance** | 🔜 Pending | - | - | Student counseling services |
-| **SAS** | 🔜 Pending | - | - | Student affairs management |
+| **USG** | ✅ Active | 50+ | 11 | Student government transparency |
+| **SAS** | ✅ Active | 40+ | 15 | Student affairs management |
+| **Guidance** | 🔜 Planned | - | - | Student counseling services |
 
 ### Module Anatomy
 
-Each module follows a consistent structure:
+Each module follows a consistent structure using **nwidart/laravel-modules**:
 
 ```
-app/Modules/{ModuleName}/
-├── Http/
-│   ├── Controllers/         # Module controllers
-│   ├── Middleware/          # Module middleware
-│   └── Requests/            # Form validation
-├── Models/                  # Module-specific models
-├── Services/                # Business logic
-└── routes.php               # Module routes
+Modules/{ModuleName}/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/     # Module controllers
+│   │   ├── Middleware/      # Module middleware
+│   │   └── Requests/        # Form validation
+│   ├── Models/              # Module-specific models
+│   └── Services/            # Business logic
+├── database/
+│   ├── migrations/          # Module migrations
+│   ├── factories/           # Module factories
+│   └── seeders/             # Module seeders
+├── routes/
+│   ├── web.php              # Web routes
+│   └── api.php              # API routes
+├── resources/
+│   └── views/               # Blade views (if any)
+├── tests/
+│   ├── Feature/             # Feature tests
+│   └── Unit/                # Unit tests
+├── composer.json            # Module dependencies
+├── module.json              # Module metadata
+├── vite.config.js           # Module build config
+└── package.json             # Frontend dependencies
 
 resources/js/pages/{modulename}/
 ├── index.tsx                # Module landing page
@@ -225,7 +261,8 @@ resources/js/pages/{modulename}/
 │   ├── create.tsx
 │   ├── edit.tsx
 │   └── show.tsx
-└── components/              # Module components
+└── admin/                   # Admin pages
+    └── {feature}/
 ```
 
 ---
@@ -422,21 +459,76 @@ php artisan boost:logs --lines=50
 - **audit_logs** - Complete activity tracking
 - **system_settings** - Application configuration
 
-### Registrar Module Tables
+### Module Tables
 
+**Registrar Module (7 tables):**
 - **document_requests** - Document request records
 - **payments** - Payment transactions
 - **payment_webhooks** - PayMongo webhook logs
 - **notifications** - SMS/Email notifications
 
+**USG Module (11 tables):**
+- **usg_vmgo** - Vision, Mission, Goals, Objectives
+- **usg_officers** - Student government officers
+- **usg_announcements** - News and announcements
+- **usg_events** - Events calendar
+- **usg_event_registrations** - Event registrations
+- **usg_resolutions** - Official resolutions
+- **usg_documents** - Document repository
+- **usg_document_downloads** - Download tracking
+- **usg_transparency_reports** - Transparency reports
+- **usg_foi_requests** - Freedom of Information requests
+- **usg_foi_responses** - FOI request responses
+
+**SAS Module (15 tables):**
+- **scholarships** - Scholarship programs
+- **scholarship_recipients** - Scholarship recipients
+- **scholarship_requirements** - Scholarship requirements
+- **insurance_records** - Student insurance records
+- **insurance_documents** - Insurance related documents
+- **organizations** - Student organizations
+- **organization_officers** - Organization officers
+- **organization_members** - Organization members
+- **organization_activities** - Organization activities
+- **organization_documents** - Organization documents
+- **sas_activities** - SAS events and activities
+- **activity_documents** - Activity related documents
+- **digitalized_documents** - Digitalized document archive
+- **sas_user_notifications** - SAS notifications
+
 ### Key Relationships
 
+**Registrar:**
 ```
 users (1) ─────── (*) students
 users (1) ─────── (*) document_requests (as processor)
 students (1) ───── (*) document_requests
 document_requests (1) ─ (*) payments
 document_requests (1) ─ (*) notifications
+```
+
+**USG:**
+```
+users (1) ─────── (*) usg_officers
+users (1) ─────── (*) usg_announcements (as author)
+users (1) ─────── (*) usg_events (as creator)
+users (1) ─────── (*) usg_event_registrations
+usg_events (1) ─── (*) usg_event_registrations
+users (1) ─────── (*) usg_foi_requests
+usg_foi_requests (1) ─ (*) usg_foi_responses
+```
+
+**SAS:**
+```
+users (1) ─────── (*) scholarship_recipients (as student)
+scholarships (1) ─ (*) scholarship_recipients
+scholarship_recipients (1) ─ (*) scholarship_requirements
+users (1) ─────── (*) organizations (as adviser)
+organizations (1) ─ (*) organization_officers
+organizations (1) ─ (*) organization_members
+organizations (1) ─ (*) organization_activities
+organizations (1) ─ (*) sas_activities
+users (1) ─────── (*) insurance_records (as student)
 ```
 
 ### Running Migrations
@@ -804,16 +896,40 @@ CACHE_DRIVER=redis
 
 ### Project Documentation
 
-- **[MODULAR_ARCHITECTURE.md](MODULAR_ARCHITECTURE.md)** - Complete architecture guide
-- **[DRS.md](DRS.md)** - Document Request System specifications
-- **[USG_INFORMATION_PORTAL_SRS.md](USG_INFORMATION_PORTAL_SRS.md)** - USG module requirements
-- **[DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)** - File organization guide
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines
-- **[req-type.md](req-type.md)** - Document types and fees
+All comprehensive documentation is located in the **[`/docs`](docs/)** directory.
+
+**📖 [Browse All Documentation](docs/README.md)** - Complete documentation index with quick navigation
+
+#### Quick Links by Role
+
+- **New Developers**: Start with [Laravel Modules Guide](docs/LARAVEL_MODULES_GUIDE.md) and [Quick Reference](docs/LARAVEL_MODULES_QUICK_REFERENCE.md)
+- **Module Developers**: See [Tutorial](docs/LARAVEL_MODULES_TUTORIAL.md) and [Architecture](docs/MODULAR_ARCHITECTURE.md)
+- **Project Managers**: Review [Module Specifications](docs/)
+- **System Architects**: Check [Directory Structure](docs/DIRECTORY_STRUCTURE.md) and [Migration Complete](docs/MIGRATION_COMPLETE.md)
+
+#### Key Documents
+
+| Document | Description |
+|----------|-------------|
+| **[Laravel Modules Guide](docs/LARAVEL_MODULES_GUIDE.md)** | Complete guide to modular development |
+| **[Architecture Overview](docs/MODULAR_ARCHITECTURE.md)** | System architecture and design patterns |
+| **[Registrar (DRS) Specs](docs/DRS.md)** | Document Request System specifications |
+| **[USG Portal Specs](docs/USG_INFORMATION_PORTAL_SRS.md)** | Student Government portal requirements |
+| **[Directory Structure](docs/DIRECTORY_STRUCTURE.md)** | File organization and conventions |
+| **[Contributing](CONTRIBUTING.md)** | Contribution guidelines |
+
+#### How Do I...?
+
+- **Create a new module?** → [Tutorial](docs/LARAVEL_MODULES_TUTORIAL.md) + [Quick Reference](docs/LARAVEL_MODULES_QUICK_REFERENCE.md)
+- **Understand the architecture?** → [Modular Architecture](docs/MODULAR_ARCHITECTURE.md)
+- **Work with Registrar module?** → [DRS Specifications](docs/DRS.md)
+- **Work with USG module?** → [USG SRS](docs/USG_INFORMATION_PORTAL_SRS.md)
+- **Find specific files?** → [Directory Structure](docs/DIRECTORY_STRUCTURE.md)
 
 ### External Resources
 
 - [Laravel 12 Documentation](https://laravel.com/docs/12.x)
+- [Laravel Modules Package](https://nwidart.com/laravel-modules)
 - [Inertia.js Documentation](https://inertiajs.com/)
 - [React Documentation](https://react.dev/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/)

@@ -36,10 +36,10 @@ class AuditLogFactory extends Factory
         $modelTypes = [
             'App\Models\User',
             'App\Models\SystemSetting',
-            'App\Modules\Registrar\Models\DocumentRequest',
-            'App\Modules\Registrar\Models\Payment',
-            'App\Modules\USG\Models\Announcement',
-            'App\Modules\USG\Models\Event',
+            'Modules\Registrar\Models\DocumentRequest',
+            'Modules\Registrar\Models\Payment',
+            'Modules\USG\Models\Announcement',
+            'Modules\USG\Models\Event',
         ];
 
         return [

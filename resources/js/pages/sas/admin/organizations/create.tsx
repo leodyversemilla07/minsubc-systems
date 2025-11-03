@@ -389,7 +389,9 @@ export default function OrganizationsCreate({ advisers }: Props) {
                 {/* Submit Actions */}
                 <div className="flex justify-end gap-4">
                     <Button variant="outline" type="button" asChild>
-                        <Link href={sas.admin.organizations.index.url()}>Cancel</Link>
+                        <Link href={sas.admin.organizations.index.url()}>
+                            Cancel
+                        </Link>
                     </Button>
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Creating...' : 'Create Organization'}

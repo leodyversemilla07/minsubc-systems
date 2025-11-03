@@ -123,7 +123,9 @@ export default function ManageOfficers({ organization, officers }: Props) {
 
     return (
         <AppLayout>
-            <Head title={`Manage Officers - ${organization.organization_name}`} />
+            <Head
+                title={`Manage Officers - ${organization.organization_name}`}
+            />
 
             {/* Header */}
             <div className="mb-6">
