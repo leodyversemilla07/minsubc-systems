@@ -235,34 +235,36 @@ class UserSeeder extends Seeder
             }
         }
 
-        // Create additional random students using factories
-        User::factory(15)->create()->each(function ($user) {
-            $user->assignRole('student');
+        // Create additional random students using factories (only in development)
+        if (app()->environment('local', 'development', 'testing')) {
+            User::factory(15)->create()->each(function ($user) {
+                $user->assignRole('student');
 
-            // Generate a unique student ID that doesn't conflict with predefined ones
-            $studentId = 'MBC2025-'.str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
-            while (Student::where('student_id', $studentId)->exists()) {
+                // Generate a unique student ID that doesn't conflict with predefined ones
                 $studentId = 'MBC2025-'.str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
-            }
+                while (Student::where('student_id', $studentId)->exists()) {
+                    $studentId = 'MBC2025-'.str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
+                }
 
-            Student::create([
-                'user_id' => $user->id,
-                'student_id' => $studentId,
-                'phone' => fake()->phoneNumber(),
-                'course' => fake()->randomElement([
-                    'Bachelor of Science in Computer Science',
-                    'Bachelor of Science in Information Technology',
-                    'Bachelor of Science in Business Administration',
-                    'Bachelor of Science in Accountancy',
-                    'Bachelor of Science in Nursing',
-                    'Bachelor of Arts in Communication',
-                    'Bachelor of Science in Engineering',
-                    'Bachelor of Science in Education',
-                ]),
-                'year_level' => fake()->numberBetween(1, 4),
-                'campus' => 'Bongabong Campus',
-                'status' => fake()->randomElement(['active', 'inactive', 'graduated']),
-            ]);
-        });
+                Student::create([
+                    'user_id' => $user->id,
+                    'student_id' => $studentId,
+                    'phone' => fake()->phoneNumber(),
+                    'course' => fake()->randomElement([
+                        'Bachelor of Science in Computer Science',
+                        'Bachelor of Science in Information Technology',
+                        'Bachelor of Science in Business Administration',
+                        'Bachelor of Science in Accountancy',
+                        'Bachelor of Science in Nursing',
+                        'Bachelor of Arts in Communication',
+                        'Bachelor of Science in Engineering',
+                        'Bachelor of Science in Education',
+                    ]),
+                    'year_level' => fake()->numberBetween(1, 4),
+                    'campus' => 'Bongabong Campus',
+                    'status' => fake()->randomElement(['active', 'inactive', 'graduated']),
+                ]);
+            });
+        }
     }
 }
