@@ -524,8 +524,14 @@ export default function ResolutionsManagement({
                                                         resolution.resolution_number
                                                     }
                                                 </Badge>
-                                                <Badge className={getStatusColor(resolution.status)}>
-                                                    {formatStatus(resolution.status)}
+                                                <Badge
+                                                    className={getStatusColor(
+                                                        resolution.status,
+                                                    )}
+                                                >
+                                                    {formatStatus(
+                                                        resolution.status,
+                                                    )}
                                                 </Badge>
                                                 {resolution.category && (
                                                     <Badge

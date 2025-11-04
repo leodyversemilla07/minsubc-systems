@@ -37,7 +37,7 @@ class PageController extends Controller
         $vmgo = $this->vmgoService->getCurrent();
 
         // Get data for homepage
-        $announcements = $this->announcementService->getPublishedAnnouncements(5);
+        $recentAnnouncements = $this->announcementService->getRecentAnnouncements(3);
         $upcomingEvents = $this->eventService->getUpcomingEvents(5);
 
         $stats = [
@@ -57,10 +57,10 @@ class PageController extends Controller
 
         return Inertia::render('usg/home', [
             'vmgo' => $vmgo,
-            'announcements' => $announcements,
+            'recentAnnouncements' => $recentAnnouncements,
             'upcomingEvents' => $upcomingEvents,
             'stats' => $stats,
-            '_featuredOfficers' => $featuredOfficers,
+            'featuredOfficers' => $featuredOfficers,
         ]);
     }
 

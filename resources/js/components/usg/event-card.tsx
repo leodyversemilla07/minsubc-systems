@@ -113,14 +113,14 @@ export default function EventCard({ event }: EventCardProps) {
     };
 
     return (
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col bg-white dark:bg-gray-900">
+        <Card className="flex flex-col overflow-hidden bg-white transition-shadow duration-300 hover:shadow-lg dark:bg-gray-900">
             {/* Event Image */}
             {event.image_path && (
-                <div className="relative w-full h-48 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
                     <img
                         src={event.image_path}
                         alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                     />
                     <div className="absolute top-3 right-3">
                         <Badge className={getStatusColor(event.status)}>
@@ -133,13 +133,16 @@ export default function EventCard({ event }: EventCardProps) {
             <CardHeader className="pb-3">
                 {/* Status badge - only show if no image */}
                 {!event.image_path && (
-                    <Badge variant="outline" className={`w-fit ${getStatusColor(event.status)}`}>
+                    <Badge
+                        variant="outline"
+                        className={`w-fit ${getStatusColor(event.status)}`}
+                    >
                         {formatStatus(event.status)}
                     </Badge>
                 )}
 
                 <Link href={getEventUrl()} className="group/title">
-                    <CardTitle className="line-clamp-2 group-hover/title:text-primary transition-colors">
+                    <CardTitle className="line-clamp-2 transition-colors group-hover/title:text-primary">
                         {event.title}
                     </CardTitle>
                 </Link>
@@ -166,12 +169,12 @@ export default function EventCard({ event }: EventCardProps) {
             </CardHeader>
 
             <CardContent className="flex-grow space-y-3">
-                <p className="text-sm leading-relaxed line-clamp-3">
+                <p className="line-clamp-3 text-sm leading-relaxed">
                     {event.description}
                 </p>
 
                 {/* Event Details */}
-                <div className="space-y-2 pt-3 border-t border-border">
+                <div className="space-y-2 border-t border-border pt-3">
                     {event.max_participants && (
                         <div className="flex items-center justify-between text-xs">
                             <span className="text-muted-foreground">
@@ -198,12 +201,7 @@ export default function EventCard({ event }: EventCardProps) {
             </CardContent>
 
             <CardFooter className="flex gap-2">
-                <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                >
+                <Button asChild variant="outline" size="sm" className="flex-1">
                     <Link href={getEventUrl()}>View Details</Link>
                 </Button>
 

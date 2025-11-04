@@ -4,13 +4,7 @@ import FilterCard from '@/components/usg/filter-card';
 import ResolutionCard from '@/components/usg/resolution-card';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
-import {
-    Calendar,
-    Download,
-    ExternalLink,
-    FileText,
-    User,
-} from 'lucide-react';
+import { Calendar, Download, ExternalLink, FileText, User } from 'lucide-react';
 import { useState } from 'react';
 
 interface Resolution {
@@ -39,10 +33,7 @@ interface Props {
     authors?: string[];
 }
 
-export default function ResolutionsIndex({
-    resolutions,
-    authors = [],
-}: Props) {
+export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
     const [activeFilters, setActiveFilters] = useState<{
         categories?: string[];
         authors?: string[];
@@ -74,12 +65,7 @@ export default function ResolutionsIndex({
                 new Date(resolution.date_passed).getFullYear().toString(),
             );
 
-        return (
-            matchesCategory &&
-            matchesAuthor &&
-            matchesStatus &&
-            matchesYear
-        );
+        return matchesCategory && matchesAuthor && matchesStatus && matchesYear;
     });
 
     // Get available years from resolutions
@@ -131,9 +117,9 @@ export default function ResolutionsIndex({
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -156,21 +142,29 @@ export default function ResolutionsIndex({
                         <FilterCard
                             title="Filter Resolutions"
                             description="Filter resolutions by author, year, and status"
-                            hasActiveFilters={Object.values(activeFilters).some((f) => f?.length)}
+                            hasActiveFilters={Object.values(activeFilters).some(
+                                (f) => f?.length,
+                            )}
                             onClearFilters={() => setActiveFilters({})}
                             filters={[
                                 ...(authors.length > 0
                                     ? [
                                           {
                                               label: 'Author',
-                                              icon: <User className="h-4 w-4" />,
+                                              icon: (
+                                                  <User className="h-4 w-4" />
+                                              ),
                                               value: activeFilters.authors?.[0],
                                               placeholder: `All Authors (${authors.length})`,
                                               options: authors,
-                                              onChange: (value: string | undefined) => {
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
                                                   setActiveFilters({
                                                       ...activeFilters,
-                                                      authors: value ? [value] : [],
+                                                      authors: value
+                                                          ? [value]
+                                                          : [],
                                                   });
                                               },
                                           },
@@ -180,14 +174,20 @@ export default function ResolutionsIndex({
                                     ? [
                                           {
                                               label: 'Year',
-                                              icon: <Calendar className="h-4 w-4" />,
+                                              icon: (
+                                                  <Calendar className="h-4 w-4" />
+                                              ),
                                               value: activeFilters.years?.[0],
                                               placeholder: `All Years (${availableYears.length})`,
                                               options: availableYears,
-                                              onChange: (value: string | undefined) => {
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
                                                   setActiveFilters({
                                                       ...activeFilters,
-                                                      years: value ? [value] : [],
+                                                      years: value
+                                                          ? [value]
+                                                          : [],
                                                   });
                                               },
                                           },
@@ -199,11 +199,23 @@ export default function ResolutionsIndex({
                                     value: activeFilters.statuses?.[0],
                                     placeholder: 'All Statuses',
                                     options: [
-                                        { value: 'published', label: 'Published' },
+                                        {
+                                            value: 'published',
+                                            label: 'Published',
+                                        },
                                         { value: 'draft', label: 'Draft' },
-                                        { value: 'review', label: 'Under Review' },
-                                        { value: 'rejected', label: 'Rejected' },
-                                        { value: 'archived', label: 'Archived' },
+                                        {
+                                            value: 'review',
+                                            label: 'Under Review',
+                                        },
+                                        {
+                                            value: 'rejected',
+                                            label: 'Rejected',
+                                        },
+                                        {
+                                            value: 'archived',
+                                            label: 'Archived',
+                                        },
                                     ],
                                     onChange: (value: string | undefined) => {
                                         setActiveFilters({
@@ -354,14 +366,12 @@ export default function ResolutionsIndex({
                                         </h3>
                                     </div>
                                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                                        {reviewResolutions.map(
-                                            (resolution) => (
-                                                <ResolutionCard
-                                                    key={resolution.id}
-                                                    resolution={resolution}
-                                                />
-                                            ),
-                                        )}
+                                        {reviewResolutions.map((resolution) => (
+                                            <ResolutionCard
+                                                key={resolution.id}
+                                                resolution={resolution}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -379,7 +389,9 @@ export default function ResolutionsIndex({
                                 Stay Informed
                             </h2>
                             <p className="mb-8 text-xl text-[var(--usg-hero-text)]">
-                                Keep track of the latest USG resolutions and policy decisions that affect our university community
+                                Keep track of the latest USG resolutions and
+                                policy decisions that affect our university
+                                community
                             </p>
                             <div className="flex flex-col justify-center gap-4 sm:flex-row">
                                 <Button

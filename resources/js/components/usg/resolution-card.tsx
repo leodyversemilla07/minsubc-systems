@@ -81,13 +81,15 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
     };
 
     return (
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col bg-white dark:bg-gray-900">
+        <Card className="flex flex-col overflow-hidden bg-white transition-shadow duration-300 hover:shadow-lg dark:bg-gray-900">
             <CardHeader className="pb-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                    <Badge variant="outline" className="font-mono w-fit">
+                <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="outline" className="w-fit font-mono">
                         {resolution.resolution_number}
                     </Badge>
-                    <Badge className={`${getStatusColor(resolution.status)} w-fit`}>
+                    <Badge
+                        className={`${getStatusColor(resolution.status)} w-fit`}
+                    >
                         {formatStatus(resolution.status)}
                     </Badge>
                     {resolution.category && (
@@ -97,8 +99,11 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
                     )}
                 </div>
 
-                <Link href={`/usg/resolutions/${resolution.id}`} className="group/title">
-                    <CardTitle className="line-clamp-2 group-hover/title:text-primary transition-colors">
+                <Link
+                    href={`/usg/resolutions/${resolution.id}`}
+                    className="group/title"
+                >
+                    <CardTitle className="line-clamp-2 transition-colors group-hover/title:text-primary">
                         {resolution.title}
                     </CardTitle>
                 </Link>
@@ -106,7 +111,9 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
                 <CardDescription className="space-y-1">
                     <div className="flex items-center gap-1 text-xs">
                         <Calendar className="h-3 w-3" />
-                        <span>Passed on {formatDate(resolution.date_passed)}</span>
+                        <span>
+                            Passed on {formatDate(resolution.date_passed)}
+                        </span>
                     </div>
                     <div className="flex items-center gap-1 text-xs">
                         <User className="h-3 w-3" />
@@ -122,14 +129,18 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
             </CardHeader>
 
             <CardContent className="flex-grow space-y-3">
-                <p className="text-sm leading-relaxed line-clamp-3">
+                <p className="line-clamp-3 text-sm leading-relaxed">
                     {resolution.description}
                 </p>
 
                 {resolution.tags && resolution.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 pt-3 border-t border-border">
+                    <div className="flex flex-wrap gap-1 border-t border-border pt-3">
                         {resolution.tags.map((tag, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
+                            <Badge
+                                key={index}
+                                variant="outline"
+                                className="text-xs"
+                            >
                                 {tag}
                             </Badge>
                         ))}
@@ -138,12 +149,7 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
             </CardContent>
 
             <CardFooter className="flex gap-2">
-                <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                >
+                <Button asChild variant="outline" size="sm" className="flex-1">
                     <Link href={`/usg/resolutions/${resolution.id}`}>
                         <Eye className="mr-2 h-4 w-4" />
                         View Details

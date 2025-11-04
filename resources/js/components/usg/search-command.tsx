@@ -170,29 +170,31 @@ export default function SearchCommand({
         }
 
         setIsSearching(true);
-        
+
         // Debounce search
         const timer = setTimeout(async () => {
             try {
                 const response = await fetch(
                     `/usg/search/quick?q=${encodeURIComponent(searchQuery)}`,
                 );
-                
+
                 if (response.ok) {
-                    const data = await response.json() as SearchApiResponse;
+                    const data = (await response.json()) as SearchApiResponse;
                     const results: SearchResult[] = [];
 
                     // Add announcements
-                    data.announcements?.data?.forEach((item: AnnouncementItem) => {
-                        results.push({
-                            type: 'announcement',
-                            title: item.title,
-                            description: item.excerpt,
-                            href: usg.announcements.show.url(item.slug),
-                            icon: <Megaphone className="h-4 w-4" />,
-                            date: item.publish_date,
-                        });
-                    });
+                    data.announcements?.data?.forEach(
+                        (item: AnnouncementItem) => {
+                            results.push({
+                                type: 'announcement',
+                                title: item.title,
+                                description: item.excerpt,
+                                href: usg.announcements.show.url(item.slug),
+                                icon: <Megaphone className="h-4 w-4" />,
+                                date: item.publish_date,
+                            });
+                        },
+                    );
 
                     // Add events
                     data.events?.data?.forEach((item: EventItem) => {
@@ -232,15 +234,17 @@ export default function SearchCommand({
                     // Note: Documents are admin-only and not included in public search
 
                     // Add transparency reports
-                    data.transparency_reports?.data?.forEach((item: TransparencyReportItem) => {
-                        results.push({
-                            type: 'resolution',
-                            title: item.title,
-                            description: item.description,
-                            href: usg.transparency.show.url(item.slug),
-                            icon: <FileText className="h-4 w-4" />,
-                        });
-                    });
+                    data.transparency_reports?.data?.forEach(
+                        (item: TransparencyReportItem) => {
+                            results.push({
+                                type: 'resolution',
+                                title: item.title,
+                                description: item.description,
+                                href: usg.transparency.show.url(item.slug),
+                                icon: <FileText className="h-4 w-4" />,
+                            });
+                        },
+                    );
 
                     setSearchResults(results);
                 }
@@ -303,7 +307,10 @@ export default function SearchCommand({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="gap-0 p-0 sm:max-w-2xl overflow-hidden" showCloseButton={false}>
+            <DialogContent
+                className="gap-0 overflow-hidden p-0 sm:max-w-2xl"
+                showCloseButton={false}
+            >
                 <DialogHeader className="sr-only">
                     <DialogTitle>Search</DialogTitle>
                 </DialogHeader>
@@ -345,7 +352,8 @@ export default function SearchCommand({
                                     No results found for "{searchQuery}"
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    Try different keywords or check your spelling
+                                    Try different keywords or check your
+                                    spelling
                                 </p>
                             </div>
                         ) : (
@@ -357,64 +365,86 @@ export default function SearchCommand({
                                         </p>
                                     </div>
                                 )}
-                                
-                                {searchQuery.trim() && filteredQuickLinks.length > 0 && (
-                                    <div className="mb-4">
-                                        <div className="mb-2 px-2 py-1.5">
-                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                                                Pages
-                                            </p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            {filteredQuickLinks.map((result, index) => (
-                                                <button
-                                                    key={result.href}
-                                                    onClick={() => handleSelect(result.href)}
-                                                    onMouseEnter={() => setSelectedIndex(index)}
-                                                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
-                                                        index === selectedIndex
-                                                            ? 'bg-[var(--usg-primary)] text-white'
-                                                            : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800'
-                                                    }`}
-                                                >
-                                                    <div
-                                                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
-                                                            index === selectedIndex
-                                                                ? 'bg-white/20'
-                                                                : 'bg-gray-100 dark:bg-gray-800'
-                                                        }`}
-                                                    >
-                                                        {result.icon}
-                                                    </div>
-                                                    <div className="min-w-0 flex-1">
-                                                        <div className="truncate font-medium">
-                                                            {result.title}
-                                                        </div>
-                                                        {result.description && (
+
+                                {searchQuery.trim() &&
+                                    filteredQuickLinks.length > 0 && (
+                                        <div className="mb-4">
+                                            <div className="mb-2 px-2 py-1.5">
+                                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                                    Pages
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                {filteredQuickLinks.map(
+                                                    (result, index) => (
+                                                        <button
+                                                            key={result.href}
+                                                            onClick={() =>
+                                                                handleSelect(
+                                                                    result.href,
+                                                                )
+                                                            }
+                                                            onMouseEnter={() =>
+                                                                setSelectedIndex(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
+                                                                index ===
+                                                                selectedIndex
+                                                                    ? 'bg-[var(--usg-primary)] text-white'
+                                                                    : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800'
+                                                            }`}
+                                                        >
                                                             <div
-                                                                className={`truncate text-xs ${
-                                                                    index === selectedIndex
-                                                                        ? 'text-white/80'
-                                                                        : 'text-gray-500 dark:text-gray-400'
+                                                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
+                                                                    index ===
+                                                                    selectedIndex
+                                                                        ? 'bg-white/20'
+                                                                        : 'bg-gray-100 dark:bg-gray-800'
                                                                 }`}
                                                             >
-                                                                {result.description}
+                                                                {result.icon}
                                                             </div>
-                                                        )}
-                                                    </div>
-                                                </button>
-                                            ))}
+                                                            <div className="min-w-0 flex-1">
+                                                                <div className="truncate font-medium">
+                                                                    {
+                                                                        result.title
+                                                                    }
+                                                                </div>
+                                                                {result.description && (
+                                                                    <div
+                                                                        className={`truncate text-xs ${
+                                                                            index ===
+                                                                            selectedIndex
+                                                                                ? 'text-white/80'
+                                                                                : 'text-gray-500 dark:text-gray-400'
+                                                                        }`}
+                                                                    >
+                                                                        {
+                                                                            result.description
+                                                                        }
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </button>
+                                                    ),
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
                                 {!searchQuery.trim() && (
                                     <div className="space-y-1">
                                         {quickLinks.map((result, index) => (
                                             <button
                                                 key={result.href}
-                                                onClick={() => handleSelect(result.href)}
-                                                onMouseEnter={() => setSelectedIndex(index)}
+                                                onClick={() =>
+                                                    handleSelect(result.href)
+                                                }
+                                                onMouseEnter={() =>
+                                                    setSelectedIndex(index)
+                                                }
                                                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
                                                     index === selectedIndex
                                                         ? 'bg-[var(--usg-primary)] text-white'
@@ -437,7 +467,8 @@ export default function SearchCommand({
                                                     {result.description && (
                                                         <div
                                                             className={`truncate text-xs ${
-                                                                index === selectedIndex
+                                                                index ===
+                                                                selectedIndex
                                                                     ? 'text-white/80'
                                                                     : 'text-gray-500 dark:text-gray-400'
                                                             }`}
@@ -451,69 +482,95 @@ export default function SearchCommand({
                                     </div>
                                 )}
 
-                                {searchQuery.trim() && searchResults.length > 0 && (
-                                    <div>
-                                        <div className="mb-2 px-2 py-1.5">
-                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                                                Content ({searchResults.length})
-                                            </p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            {searchResults.map((result, index) => {
-                                                const actualIndex = filteredQuickLinks.length + index;
-                                                return (
-                                                    <button
-                                                        key={`${result.type}-${result.href}`}
-                                                        onClick={() => handleSelect(result.href)}
-                                                        onMouseEnter={() => setSelectedIndex(actualIndex)}
-                                                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
-                                                            actualIndex === selectedIndex
-                                                                ? 'bg-[var(--usg-primary)] text-white'
-                                                                : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800'
-                                                        }`}
-                                                    >
-                                                        <div
-                                                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
-                                                                actualIndex === selectedIndex
-                                                                    ? 'bg-white/20'
-                                                                    : 'bg-gray-100 dark:bg-gray-800'
-                                                            }`}
-                                                        >
-                                                            {result.icon}
-                                                        </div>
-                                                        <div className="min-w-0 flex-1">
-                                                            <div className="truncate font-medium text-sm">
-                                                                {result.title}
-                                                            </div>
-                                                            {result.description && (
-                                                                <div
-                                                                    className={`line-clamp-1 text-xs ${
-                                                                        actualIndex === selectedIndex
-                                                                            ? 'text-white/80'
-                                                                            : 'text-gray-500 dark:text-gray-400'
-                                                                    }`}
-                                                                >
-                                                                    {result.description}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        {result.date && (
-                                                            <div
-                                                                className={`shrink-0 text-xs ${
-                                                                    actualIndex === selectedIndex
-                                                                        ? 'text-white/60'
-                                                                        : 'text-gray-400'
+                                {searchQuery.trim() &&
+                                    searchResults.length > 0 && (
+                                        <div>
+                                            <div className="mb-2 px-2 py-1.5">
+                                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                                    Content (
+                                                    {searchResults.length})
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                {searchResults.map(
+                                                    (result, index) => {
+                                                        const actualIndex =
+                                                            filteredQuickLinks.length +
+                                                            index;
+                                                        return (
+                                                            <button
+                                                                key={`${result.type}-${result.href}`}
+                                                                onClick={() =>
+                                                                    handleSelect(
+                                                                        result.href,
+                                                                    )
+                                                                }
+                                                                onMouseEnter={() =>
+                                                                    setSelectedIndex(
+                                                                        actualIndex,
+                                                                    )
+                                                                }
+                                                                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
+                                                                    actualIndex ===
+                                                                    selectedIndex
+                                                                        ? 'bg-[var(--usg-primary)] text-white'
+                                                                        : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800'
                                                                 }`}
                                                             >
-                                                                {new Date(result.date).toLocaleDateString()}
-                                                            </div>
-                                                        )}
-                                                    </button>
-                                                );
-                                            })}
+                                                                <div
+                                                                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
+                                                                        actualIndex ===
+                                                                        selectedIndex
+                                                                            ? 'bg-white/20'
+                                                                            : 'bg-gray-100 dark:bg-gray-800'
+                                                                    }`}
+                                                                >
+                                                                    {
+                                                                        result.icon
+                                                                    }
+                                                                </div>
+                                                                <div className="min-w-0 flex-1">
+                                                                    <div className="truncate text-sm font-medium">
+                                                                        {
+                                                                            result.title
+                                                                        }
+                                                                    </div>
+                                                                    {result.description && (
+                                                                        <div
+                                                                            className={`line-clamp-1 text-xs ${
+                                                                                actualIndex ===
+                                                                                selectedIndex
+                                                                                    ? 'text-white/80'
+                                                                                    : 'text-gray-500 dark:text-gray-400'
+                                                                            }`}
+                                                                        >
+                                                                            {
+                                                                                result.description
+                                                                            }
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                {result.date && (
+                                                                    <div
+                                                                        className={`shrink-0 text-xs ${
+                                                                            actualIndex ===
+                                                                            selectedIndex
+                                                                                ? 'text-white/60'
+                                                                                : 'text-gray-400'
+                                                                        }`}
+                                                                    >
+                                                                        {new Date(
+                                                                            result.date,
+                                                                        ).toLocaleDateString()}
+                                                                    </div>
+                                                                )}
+                                                            </button>
+                                                        );
+                                                    },
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
                             </>
                         )}
                     </div>

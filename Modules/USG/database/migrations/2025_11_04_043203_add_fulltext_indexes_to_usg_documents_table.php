@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('documents', function (Blueprint $table) {
-            $table->fullText(['title', 'description', 'file_name'], 'documents_search_fulltext');
-        });
+        // Skip fulltext indexes on SQLite as it doesn't support them
+        if (config('database.default') !== 'sqlite') {
+            Schema::table('documents', function (Blueprint $table) {
+                $table->fullText(['title', 'description', 'file_name'], 'documents_search_fulltext');
+            });
+        }
     }
 
     /**
@@ -21,8 +24,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('documents', function (Blueprint $table) {
-            $table->dropFullText('documents_search_fulltext');
-        });
+        if (config('database.default') !== 'sqlite') {
+            Schema::table('documents', function (Blueprint $table) {
+                $table->dropFullText('documents_search_fulltext');
+            });
+        }
     }
 };

@@ -38,10 +38,7 @@ interface Props {
     relatedEvents?: Event[];
 }
 
-export default function EventShow({
-    event,
-    relatedEvents = [],
-}: Props) {
+export default function EventShow({ event, relatedEvents = [] }: Props) {
     const handleBack = () => {
         router.visit('/usg/events');
     };
@@ -138,9 +135,9 @@ export default function EventShow({
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto max-w-4xl px-4">
                     <Button
                         variant="ghost"
@@ -157,17 +154,22 @@ export default function EventShow({
                         </div>
                         <div className="flex-1">
                             <div className="mb-4 flex flex-wrap gap-2">
-                                <Badge className={`${getStatusColor(event.status)} border-white/30 backdrop-blur-sm`}>
+                                <Badge
+                                    className={`${getStatusColor(event.status)} border-white/30 backdrop-blur-sm`}
+                                >
                                     {formatStatus(event.status)}
                                 </Badge>
                                 {event.category && (
-                                    <Badge variant="outline" className="border-white/30 bg-white/10 text-white backdrop-blur-sm">
+                                    <Badge
+                                        variant="outline"
+                                        className="border-white/30 bg-white/10 text-white backdrop-blur-sm"
+                                    >
                                         {event.category}
                                     </Badge>
                                 )}
                             </div>
 
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 {event.title}
                             </h1>
 
@@ -191,7 +193,9 @@ export default function EventShow({
                                     <div className="flex items-center gap-2">
                                         <Users className="h-4 w-4" />
                                         <span>
-                                            {event.current_participants || 0} / {event.max_participants} participants
+                                            {event.current_participants || 0} /{' '}
+                                            {event.max_participants}{' '}
+                                            participants
                                         </span>
                                     </div>
                                 )}
@@ -233,7 +237,8 @@ export default function EventShow({
                                                     Event Archived
                                                 </p>
                                                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                                                    This event has been archived.
+                                                    This event has been
+                                                    archived.
                                                 </p>
                                             </div>
                                         </>
@@ -269,8 +274,6 @@ export default function EventShow({
                                             </div>
                                         </>
                                     )}
-
-
                                 </div>
                             </div>
                         )}
@@ -298,8 +301,6 @@ export default function EventShow({
                                 }}
                             />
                         </div>
-
-
 
                         {/* Requirements */}
                         {event.requirements && (
@@ -366,7 +367,11 @@ export default function EventShow({
                                         }
                                     >
                                         <div className="mb-3 flex items-center gap-2">
-                                            <Badge className={getStatusColor(related.status)}>
+                                            <Badge
+                                                className={getStatusColor(
+                                                    related.status,
+                                                )}
+                                            >
                                                 {formatStatus(related.status)}
                                             </Badge>
                                             {related.category && (

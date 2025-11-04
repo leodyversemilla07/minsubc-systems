@@ -24,9 +24,7 @@ interface Props {
     departments?: string[];
 }
 
-export default function OfficersIndex({
-    officers = [],
-}: Props) {
+export default function OfficersIndex({ officers = [] }: Props) {
     const filteredOfficers = officers;
 
     const activeOfficers = filteredOfficers.filter(
@@ -45,9 +43,9 @@ export default function OfficersIndex({
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">

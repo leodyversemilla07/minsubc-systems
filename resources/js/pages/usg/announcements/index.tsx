@@ -31,9 +31,7 @@ interface Props {
     categories?: string[];
 }
 
-export default function AnnouncementsIndex({
-    announcements
-}: Props) {
+export default function AnnouncementsIndex({ announcements }: Props) {
     const [activeFilters, setActiveFilters] = useState<{
         categories?: string[];
         years?: string[];
@@ -41,7 +39,10 @@ export default function AnnouncementsIndex({
 
     const filteredAnnouncements = announcements.data.filter((announcement) => {
         // Only show published announcements to public
-        if (announcement.status === 'draft' || announcement.status === 'archived') {
+        if (
+            announcement.status === 'draft' ||
+            announcement.status === 'archived'
+        ) {
             return false;
         }
 
@@ -110,9 +111,9 @@ export default function AnnouncementsIndex({
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -142,13 +143,18 @@ export default function AnnouncementsIndex({
                                           {
                                               label: 'Category',
                                               icon: <Tag className="h-4 w-4" />,
-                                              value: activeFilters.categories?.[0],
+                                              value: activeFilters
+                                                  .categories?.[0],
                                               placeholder: 'All Categories',
                                               options: availableCategories,
-                                              onChange: (value: string | undefined) => {
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
                                                   setActiveFilters({
                                                       ...activeFilters,
-                                                      categories: value ? [value] : undefined,
+                                                      categories: value
+                                                          ? [value]
+                                                          : undefined,
                                                   });
                                               },
                                           },
@@ -158,14 +164,20 @@ export default function AnnouncementsIndex({
                                     ? [
                                           {
                                               label: 'Year',
-                                              icon: <Calendar className="h-4 w-4" />,
+                                              icon: (
+                                                  <Calendar className="h-4 w-4" />
+                                              ),
                                               value: activeFilters.years?.[0],
                                               placeholder: 'All Years',
                                               options: availableYears,
-                                              onChange: (value: string | undefined) => {
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
                                                   setActiveFilters({
                                                       ...activeFilters,
-                                                      years: value ? [value] : undefined,
+                                                      years: value
+                                                          ? [value]
+                                                          : undefined,
                                                   });
                                               },
                                           },
@@ -184,7 +196,10 @@ export default function AnnouncementsIndex({
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                        <CountUp end={publishedAnnouncements.length} duration={1500} />{' '}
+                                        <CountUp
+                                            end={publishedAnnouncements.length}
+                                            duration={1500}
+                                        />{' '}
                                         Announcement
                                         {publishedAnnouncements.length !== 1
                                             ? 's'

@@ -246,11 +246,7 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                     ).toFixed(2)}
                                 </p>
                             </div>
-                            <Button
-                                className="w-full"
-                                size="lg"
-                                disabled
-                            >
+                            <Button className="w-full" size="lg" disabled>
                                 <CreditCard className="mr-2 h-4 w-4" />
                                 Online Payment Coming Soon
                             </Button>

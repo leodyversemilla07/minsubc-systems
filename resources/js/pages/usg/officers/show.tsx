@@ -47,12 +47,16 @@ export default function OfficerShow({ officer }: Props) {
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mx-auto max-w-4xl">
-                        <Button asChild variant="ghost" className="mb-6 text-white hover:bg-white/10">
+                        <Button
+                            asChild
+                            variant="ghost"
+                            className="mb-6 text-white hover:bg-white/10"
+                        >
                             <Link href="/usg/officers">
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Back to Officers
@@ -86,14 +90,20 @@ export default function OfficerShow({ officer }: Props) {
                             <div className="flex-1">
                                 <div className="mb-4">
                                     <Badge
-                                        variant={officer.is_active ? 'default' : 'secondary'}
+                                        variant={
+                                            officer.is_active
+                                                ? 'default'
+                                                : 'secondary'
+                                        }
                                         className="bg-white/10 text-white backdrop-blur-sm"
                                     >
-                                        {officer.is_active ? 'Active' : 'Inactive'}
+                                        {officer.is_active
+                                            ? 'Active'
+                                            : 'Inactive'}
                                     </Badge>
                                 </div>
 
-                                <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                                <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                     {officer.name}
                                 </h1>
 

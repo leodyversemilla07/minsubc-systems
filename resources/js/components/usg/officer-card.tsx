@@ -1,6 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
 import { Mail, Phone, User } from 'lucide-react';
 
@@ -39,21 +44,21 @@ export default function OfficerCard({ officer }: OfficerCardProps) {
     };
 
     return (
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col bg-white dark:bg-gray-900">
-            <div className="w-full h-64 overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <Card className="flex flex-col overflow-hidden bg-white transition-shadow duration-300 hover:shadow-lg dark:bg-gray-900">
+            <div className="h-64 w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
                 <img
                     src={officer.photo || '/placeholder.svg'}
                     alt={officer.name}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                 />
             </div>
 
-            <CardHeader className="pb-3 bg-white dark:bg-gray-900">
+            <CardHeader className="bg-white pb-3 dark:bg-gray-900">
                 <div className="text-center">
                     <h3 className="text-lg font-bold text-foreground">
                         {officer.name}
                     </h3>
-                    <p className="text-primary font-semibold text-sm mt-1">
+                    <p className="mt-1 text-sm font-semibold text-primary">
                         {officer.position}
                     </p>
                     {officer.department && (
@@ -70,36 +75,38 @@ export default function OfficerCard({ officer }: OfficerCardProps) {
                             {officer.is_active ? 'Active' : 'Inactive'}
                         </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="mt-2 text-xs text-muted-foreground">
                         Term: {formatTermPeriod()}
                     </p>
                 </div>
             </CardHeader>
 
-            <CardContent className="space-y-3 flex-grow flex flex-col bg-white dark:bg-gray-900">
+            <CardContent className="flex flex-grow flex-col space-y-3 bg-white dark:bg-gray-900">
                 {officer.bio && (
-                    <p className="text-sm text-foreground leading-relaxed text-center flex-grow">
+                    <p className="flex-grow text-center text-sm leading-relaxed text-foreground">
                         {officer.bio}
                     </p>
                 )}
 
                 {(officer.email || officer.phone) && (
-                    <div className="space-y-2 pt-3 border-t border-border">
+                    <div className="space-y-2 border-t border-border pt-3">
                         {officer.email && (
                             <a
                                 href={`mailto:${officer.email}`}
-                                className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                                className="flex items-center gap-2 text-xs text-blue-600 hover:underline dark:text-blue-400"
                             >
-                                <Mail className="w-3 h-3 flex-shrink-0" />
-                                <span className="break-all">{officer.email}</span>
+                                <Mail className="h-3 w-3 flex-shrink-0" />
+                                <span className="break-all">
+                                    {officer.email}
+                                </span>
                             </a>
                         )}
                         {officer.phone && (
                             <a
                                 href={`tel:${officer.phone}`}
-                                className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                                className="flex items-center gap-2 text-xs text-blue-600 hover:underline dark:text-blue-400"
                             >
-                                <Phone className="w-3 h-3 flex-shrink-0" />
+                                <Phone className="h-3 w-3 flex-shrink-0" />
                                 <span>{officer.phone}</span>
                             </a>
                         )}
@@ -107,13 +114,8 @@ export default function OfficerCard({ officer }: OfficerCardProps) {
                 )}
             </CardContent>
 
-            <CardFooter className="bg-white dark:bg-gray-900 pt-0">
-                <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                >
+            <CardFooter className="bg-white pt-0 dark:bg-gray-900">
+                <Button asChild variant="outline" size="sm" className="w-full">
                     <Link href={`/usg/officers/${officer.id}`}>
                         <User className="mr-2 h-4 w-4" />
                         View Profile

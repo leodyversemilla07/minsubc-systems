@@ -163,9 +163,9 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <Button
                         asChild
@@ -321,7 +321,8 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                                 Explore More Transparency Reports
                             </h2>
                             <p className="mb-6 text-lg text-white/90">
-                                Access our complete archive of financial reports, meeting minutes, and budget documents.
+                                Access our complete archive of financial
+                                reports, meeting minutes, and budget documents.
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
                                 <Button

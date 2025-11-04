@@ -12,13 +12,7 @@ import FilterCard from '@/components/usg/filter-card';
 import USGLayout from '@/layouts/usg-layout';
 import usg from '@/routes/usg';
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Calendar,
-    Download,
-    Eye,
-    FileText,
-    User,
-} from 'lucide-react';
+import { Calendar, Download, Eye, FileText, User } from 'lucide-react';
 import { useState } from 'react';
 
 interface TransparencyReport {
@@ -116,9 +110,9 @@ export default function TransparencyIndex({
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -136,233 +130,278 @@ export default function TransparencyIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
-                {/* Filters Section */}
-                <div className="mb-8">
-                    <FilterCard
-                        title="Filter Reports"
-                        description="Filter transparency reports by type and year"
-                        hasActiveFilters={
-                            !!(activeFilters.type || activeFilters.year)
-                        }
-                        onClearFilters={clearFilters}
-                        filters={[
-                            ...(types.length > 0
-                                ? [
-                                      {
-                                          label: 'Report Type',
-                                          icon: <FileText className="h-4 w-4" />,
-                                          value: activeFilters.type,
-                                          placeholder: `All Types (${types.length})`,
-                                          options: types,
-                                          formatLabel: formatTypeLabel,
-                                          onChange: (value: string | undefined) => {
-                                              const params = new URLSearchParams();
-                                              if (value) params.set('type', value);
-                                              if (activeFilters.year)
-                                                  params.set('year', activeFilters.year);
+                    {/* Filters Section */}
+                    <div className="mb-8">
+                        <FilterCard
+                            title="Filter Reports"
+                            description="Filter transparency reports by type and year"
+                            hasActiveFilters={
+                                !!(activeFilters.type || activeFilters.year)
+                            }
+                            onClearFilters={clearFilters}
+                            filters={[
+                                ...(types.length > 0
+                                    ? [
+                                          {
+                                              label: 'Report Type',
+                                              icon: (
+                                                  <FileText className="h-4 w-4" />
+                                              ),
+                                              value: activeFilters.type,
+                                              placeholder: `All Types (${types.length})`,
+                                              options: types,
+                                              formatLabel: formatTypeLabel,
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
+                                                  const params =
+                                                      new URLSearchParams();
+                                                  if (value)
+                                                      params.set('type', value);
+                                                  if (activeFilters.year)
+                                                      params.set(
+                                                          'year',
+                                                          activeFilters.year,
+                                                      );
 
-                                              const queryString = params.toString();
-                                              router.get(
-                                                  `${usg.transparency.index.url()}${queryString ? `?${queryString}` : ''}`,
-                                              );
+                                                  const queryString =
+                                                      params.toString();
+                                                  router.get(
+                                                      `${usg.transparency.index.url()}${queryString ? `?${queryString}` : ''}`,
+                                                  );
+                                              },
                                           },
-                                      },
-                                  ]
-                                : []),
-                            ...(years.length > 0
-                                ? [
-                                      {
-                                          label: 'Year',
-                                          icon: <Calendar className="h-4 w-4" />,
-                                          value: activeFilters.year,
-                                          placeholder: `All Years (${years.length})`,
-                                          options: years.map((year) => year.toString()),
-                                          onChange: (value: string | undefined) => {
-                                              const params = new URLSearchParams();
-                                              if (activeFilters.type)
-                                                  params.set('type', activeFilters.type);
-                                              if (value) params.set('year', value);
+                                      ]
+                                    : []),
+                                ...(years.length > 0
+                                    ? [
+                                          {
+                                              label: 'Year',
+                                              icon: (
+                                                  <Calendar className="h-4 w-4" />
+                                              ),
+                                              value: activeFilters.year,
+                                              placeholder: `All Years (${years.length})`,
+                                              options: years.map((year) =>
+                                                  year.toString(),
+                                              ),
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
+                                                  const params =
+                                                      new URLSearchParams();
+                                                  if (activeFilters.type)
+                                                      params.set(
+                                                          'type',
+                                                          activeFilters.type,
+                                                      );
+                                                  if (value)
+                                                      params.set('year', value);
 
-                                              const queryString = params.toString();
-                                              router.get(
-                                                  `${usg.transparency.index.url()}${queryString ? `?${queryString}` : ''}`,
-                                              );
+                                                  const queryString =
+                                                      params.toString();
+                                                  router.get(
+                                                      `${usg.transparency.index.url()}${queryString ? `?${queryString}` : ''}`,
+                                                  );
+                                              },
                                           },
-                                      },
-                                  ]
-                                : []),
-                        ]}
-                    />
-                </div>
-
-                {/* Results */}
-                {reports.data.length === 0 ? (
-                    <div className="rounded-xl bg-white p-12 text-center shadow-sm dark:bg-gray-900">
-                        <FileText className="mx-auto mb-4 h-16 w-16 text-gray-400 dark:text-gray-600" />
-                        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                            No reports found
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            {Object.values(filters).some((f) => f)
-                                ? 'Try adjusting your filters'
-                                : 'No transparency reports have been published yet'}
-                        </p>
+                                      ]
+                                    : []),
+                            ]}
+                        />
                     </div>
-                ) : (
-                    <>
-                        <div className="mb-6 flex items-center justify-between">
-                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                {reports.total} Report
-                                {reports.total !== 1 ? 's' : ''} Found
-                            </h2>
+
+                    {/* Results */}
+                    {reports.data.length === 0 ? (
+                        <div className="rounded-xl bg-white p-12 text-center shadow-sm dark:bg-gray-900">
+                            <FileText className="mx-auto mb-4 h-16 w-16 text-gray-400 dark:text-gray-600" />
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                                No reports found
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                {Object.values(filters).some((f) => f)
+                                    ? 'Try adjusting your filters'
+                                    : 'No transparency reports have been published yet'}
+                            </p>
                         </div>
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            {reports.data.map((report) => (
-                                <Card
-                                    key={report.id}
-                                    className="bg-white dark:bg-gray-900"
-                                >
-                                    <CardHeader className="bg-white dark:bg-gray-900">
-                                        <div className="mb-3 flex items-start justify-between">
-                                            <Badge
-                                                className={getTypeColor(
-                                                    report.type,
-                                                )}
-                                            >
-                                                {formatTypeLabel(report.type)}
-                                            </Badge>
-                                            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                                                <span className="flex items-center gap-1">
-                                                    <Eye className="h-4 w-4" />
-                                                    {report.view_count}
-                                                </span>
-                                                <span className="flex items-center gap-1">
-                                                    <Download className="h-4 w-4" />
-                                                    {report.download_count}
-                                                </span>
+                    ) : (
+                        <>
+                            <div className="mb-6 flex items-center justify-between">
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                    {reports.total} Report
+                                    {reports.total !== 1 ? 's' : ''} Found
+                                </h2>
+                            </div>
+                            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                                {reports.data.map((report) => (
+                                    <Card
+                                        key={report.id}
+                                        className="bg-white dark:bg-gray-900"
+                                    >
+                                        <CardHeader className="bg-white dark:bg-gray-900">
+                                            <div className="mb-3 flex items-start justify-between">
+                                                <Badge
+                                                    className={getTypeColor(
+                                                        report.type,
+                                                    )}
+                                                >
+                                                    {formatTypeLabel(
+                                                        report.type,
+                                                    )}
+                                                </Badge>
+                                                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                    <span className="flex items-center gap-1">
+                                                        <Eye className="h-4 w-4" />
+                                                        {report.view_count}
+                                                    </span>
+                                                    <span className="flex items-center gap-1">
+                                                        <Download className="h-4 w-4" />
+                                                        {report.download_count}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <CardTitle className="line-clamp-2">
-                                            <Link
-                                                href={usg.transparency.show.url({ slug: report.slug })}
-                                                className="hover:text-[var(--usg-primary)] dark:hover:text-[var(--usg-accent)]"
-                                            >
-                                                {report.title}
-                                            </Link>
-                                        </CardTitle>
-                                        <CardDescription className="space-y-1.5">
-                                            <div className="flex items-center gap-2">
-                                                <Calendar className="h-4 w-4" />
-                                                <span>
-                                                    Period: {report.formatted_period}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <Calendar className="h-4 w-4" />
-                                                <span>
-                                                    Published: {formatDate(report.published_at)}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <User className="h-4 w-4" />
-                                                <span>
-                                                    {report.created_by.first_name}{' '}
-                                                    {report.created_by.last_name}
-                                                </span>
-                                            </div>
-                                        </CardDescription>
-                                    </CardHeader>
+                                            <CardTitle className="line-clamp-2">
+                                                <Link
+                                                    href={usg.transparency.show.url(
+                                                        { slug: report.slug },
+                                                    )}
+                                                    className="hover:text-[var(--usg-primary)] dark:hover:text-[var(--usg-accent)]"
+                                                >
+                                                    {report.title}
+                                                </Link>
+                                            </CardTitle>
+                                            <CardDescription className="space-y-1.5">
+                                                <div className="flex items-center gap-2">
+                                                    <Calendar className="h-4 w-4" />
+                                                    <span>
+                                                        Period:{' '}
+                                                        {
+                                                            report.formatted_period
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Calendar className="h-4 w-4" />
+                                                    <span>
+                                                        Published:{' '}
+                                                        {formatDate(
+                                                            report.published_at,
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <User className="h-4 w-4" />
+                                                    <span>
+                                                        {
+                                                            report.created_by
+                                                                .first_name
+                                                        }{' '}
+                                                        {
+                                                            report.created_by
+                                                                .last_name
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </CardDescription>
+                                        </CardHeader>
 
-                                    {report.description && (
-                                        <CardContent className="bg-white dark:bg-gray-900">
-                                            <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
-                                                {report.description}
-                                            </p>
-                                        </CardContent>
-                                    )}
+                                        {report.description && (
+                                            <CardContent className="bg-white dark:bg-gray-900">
+                                                <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
+                                                    {report.description}
+                                                </p>
+                                            </CardContent>
+                                        )}
 
-                                    <CardFooter className="flex gap-2 bg-white dark:bg-gray-900">
-                                        <Button
-                                            asChild
-                                            variant="outline"
-                                            size="sm"
-                                            className="flex-1"
-                                        >
-                                            <Link
-                                                href={usg.transparency.show.url({ slug: report.slug })}
-                                            >
-                                                <Eye className="mr-2 h-4 w-4" />
-                                                View Details
-                                            </Link>
-                                        </Button>
-                                        {report.file_path && (
+                                        <CardFooter className="flex gap-2 bg-white dark:bg-gray-900">
                                             <Button
                                                 asChild
+                                                variant="outline"
                                                 size="sm"
-                                                variant="default"
                                                 className="flex-1"
                                             >
                                                 <Link
-                                                    href={usg.transparency.download.url({ slug: report.slug })}
+                                                    href={usg.transparency.show.url(
+                                                        { slug: report.slug },
+                                                    )}
                                                 >
-                                                    <Download className="mr-2 h-4 w-4" />
-                                                    {report.formatted_file_size
-                                                        ? `Download (${report.formatted_file_size})`
-                                                        : 'Download'}
+                                                    <Eye className="mr-2 h-4 w-4" />
+                                                    View Details
                                                 </Link>
                                             </Button>
-                                        )}
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>{' '}
-                        {/* Pagination */}
-                        {reports.last_page > 1 && (
-                            <div className="mt-8 flex justify-center">
-                                <div className="flex gap-2">
-                                    {Array.from(
-                                        { length: reports.last_page },
-                                        (_, i) => i + 1,
-                                    ).map((page) => (
-                                        <Button
-                                            key={page}
-                                            variant={
-                                                page === reports.current_page
-                                                    ? 'default'
-                                                    : 'outline'
-                                            }
-                                            size="sm"
-                                            onClick={() => {
-                                                const params =
-                                                    new URLSearchParams();
-                                                if (activeFilters.type)
+                                            {report.file_path && (
+                                                <Button
+                                                    asChild
+                                                    size="sm"
+                                                    variant="default"
+                                                    className="flex-1"
+                                                >
+                                                    <Link
+                                                        href={usg.transparency.download.url(
+                                                            {
+                                                                slug: report.slug,
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Download className="mr-2 h-4 w-4" />
+                                                        {report.formatted_file_size
+                                                            ? `Download (${report.formatted_file_size})`
+                                                            : 'Download'}
+                                                    </Link>
+                                                </Button>
+                                            )}
+                                        </CardFooter>
+                                    </Card>
+                                ))}
+                            </div>{' '}
+                            {/* Pagination */}
+                            {reports.last_page > 1 && (
+                                <div className="mt-8 flex justify-center">
+                                    <div className="flex gap-2">
+                                        {Array.from(
+                                            { length: reports.last_page },
+                                            (_, i) => i + 1,
+                                        ).map((page) => (
+                                            <Button
+                                                key={page}
+                                                variant={
+                                                    page ===
+                                                    reports.current_page
+                                                        ? 'default'
+                                                        : 'outline'
+                                                }
+                                                size="sm"
+                                                onClick={() => {
+                                                    const params =
+                                                        new URLSearchParams();
+                                                    if (activeFilters.type)
+                                                        params.set(
+                                                            'type',
+                                                            activeFilters.type,
+                                                        );
+                                                    if (activeFilters.year)
+                                                        params.set(
+                                                            'year',
+                                                            activeFilters.year,
+                                                        );
                                                     params.set(
-                                                        'type',
-                                                        activeFilters.type,
+                                                        'page',
+                                                        page.toString(),
                                                     );
-                                                if (activeFilters.year)
-                                                    params.set(
-                                                        'year',
-                                                        activeFilters.year,
-                                                    );
-                                                params.set(
-                                                    'page',
-                                                    page.toString(),
-                                                );
 
-                                                router.get(
-                                                    `${usg.transparency.index.url()}?${params.toString()}`,
-                                                );
-                                            }}
-                                        >
-                                            {page}
-                                        </Button>
-                                    ))}
+                                                    router.get(
+                                                        `${usg.transparency.index.url()}?${params.toString()}`,
+                                                    );
+                                                }}
+                                            >
+                                                {page}
+                                            </Button>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </>
-                )}
+                            )}
+                        </>
+                    )}
                 </div>
             </section>
 
@@ -375,7 +414,10 @@ export default function TransparencyIndex({
                                 Promoting Transparency & Accountability
                             </h2>
                             <p className="mb-8 text-xl text-[var(--usg-hero-text)]">
-                                We believe in open governance. All financial reports and meeting minutes are publicly accessible to ensure accountability to the student body.
+                                We believe in open governance. All financial
+                                reports and meeting minutes are publicly
+                                accessible to ensure accountability to the
+                                student body.
                             </p>
                             <div className="flex flex-col justify-center gap-4 sm:flex-row">
                                 <Button

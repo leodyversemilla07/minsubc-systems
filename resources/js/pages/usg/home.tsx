@@ -22,8 +22,19 @@ interface Officer {
     photo?: string;
 }
 
+interface Announcement {
+    id: number;
+    title: string;
+    slug: string;
+    excerpt: string;
+    category: string;
+    featured_image?: string;
+    publish_date: string;
+}
+
 interface Props {
-    _featuredOfficers?: Officer[];
+    featuredOfficers: Officer[];
+    recentAnnouncements: Announcement[];
     stats: {
         totalOfficers: number;
         totalResolutions: number;
@@ -36,7 +47,11 @@ interface Props {
     };
 }
 
-export default function USGHomepage({ stats, _featuredOfficers }: Props) {
+export default function USGHomepage({
+    stats,
+    featuredOfficers,
+    recentAnnouncements,
+}: Props) {
     return (
         <USGLayout>
             <Head title="USG Information Portal" />
@@ -46,9 +61,9 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <div className="mb-6 inline-flex items-center rounded-full bg-white/20 px-6 py-2 text-sm font-semibold backdrop-blur-sm">
@@ -127,7 +142,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                             <div className="text-center">
                                 <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
                                     <CountUp
-                                        end={stats.eventsThisYear || stats.upcomingEvents}
+                                        end={
+                                            stats.eventsThisYear ||
+                                            stats.upcomingEvents
+                                        }
                                         duration={2000}
                                     />
                                 </div>
@@ -138,7 +156,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                             <div className="text-center">
                                 <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
                                     <CountUp
-                                        end={stats.volunteersActive || stats.totalOfficers}
+                                        end={
+                                            stats.volunteersActive ||
+                                            stats.totalOfficers
+                                        }
                                         duration={2000}
                                     />
                                 </div>
@@ -238,7 +259,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                     <div className="grid grid-cols-2 gap-8 text-center text-white md:grid-cols-4">
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp end={stats.totalOfficers} duration={2000} />
+                                <CountUp
+                                    end={stats.totalOfficers}
+                                    duration={2000}
+                                />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Dedicated Officers
@@ -246,7 +270,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp end={stats.totalResolutions} duration={2000} />
+                                <CountUp
+                                    end={stats.totalResolutions}
+                                    duration={2000}
+                                />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Resolutions Passed
@@ -254,7 +281,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp end={stats.upcomingEvents} duration={2000} />
+                                <CountUp
+                                    end={stats.upcomingEvents}
+                                    duration={2000}
+                                />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Upcoming Events
@@ -262,7 +292,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp end={stats.recentAnnouncements} duration={2000} />
+                                <CountUp
+                                    end={stats.recentAnnouncements}
+                                    duration={2000}
+                                />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Recent Updates
@@ -327,9 +360,9 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                     </div>
 
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        {_featuredOfficers && _featuredOfficers.length > 0 ? (
+                        {featuredOfficers && featuredOfficers.length > 0 ? (
                             <Carousel
-                                items={_featuredOfficers.map((officer) => (
+                                items={featuredOfficers.map((officer) => (
                                     <Card
                                         key={officer.id}
                                         className="group mx-2 border-0 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900"
@@ -400,69 +433,67 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                     </div>
 
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        {/* Placeholder for recent announcements - you can replace with actual data */}
-                        <Card className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800">
-                            <CardContent className="p-6">
-                                <div className="mb-4 inline-block rounded-full bg-[var(--usg-primary)] p-3">
-                                    <Megaphone className="h-6 w-6 text-white" />
-                                </div>
-                                <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                                    New Student Council Elections
-                                </h3>
-                                <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                    Important dates and guidelines for the
-                                    upcoming student council elections.
-                                </p>
-                                <Link
-                                    href={usg.announcements.index.url()}
-                                    className="text-sm font-medium text-[var(--usg-primary)] hover:underline"
-                                >
-                                    Read More →
-                                </Link>
-                            </CardContent>
-                        </Card>
+                        {recentAnnouncements.map((announcement) => {
+                            // Map category to appropriate icon and color
+                            const categoryConfig: Record<
+                                string,
+                                { icon: React.ElementType; color: string }
+                            > = {
+                                Academic: {
+                                    icon: Megaphone,
+                                    color: 'bg-[var(--usg-primary)]',
+                                },
+                                Welfare: {
+                                    icon: Calendar,
+                                    color: 'bg-purple-700 dark:bg-purple-600',
+                                },
+                                Scholarship: {
+                                    icon: FileText,
+                                    color: 'bg-blue-700 dark:bg-blue-600',
+                                },
+                                Events: {
+                                    icon: Calendar,
+                                    color: 'bg-orange-700 dark:bg-orange-600',
+                                },
+                            };
 
-                        <Card className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800">
-                            <CardContent className="p-6">
-                                <div className="mb-4 inline-block rounded-full bg-purple-700 p-3">
-                                    <Calendar className="h-6 w-6 text-white" />
-                                </div>
-                                <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                                    Cultural Festival 2025
-                                </h3>
-                                <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                    Join us for an exciting celebration of our
-                                    diverse campus culture.
-                                </p>
-                                <Link
-                                    href={usg.events.index.url()}
-                                    className="text-sm font-medium text-[var(--usg-primary)] hover:underline"
-                                >
-                                    Learn More →
-                                </Link>
-                            </CardContent>
-                        </Card>
+                            const config = categoryConfig[
+                                announcement.category
+                            ] || {
+                                icon: Megaphone,
+                                color: 'bg-[var(--usg-primary)]',
+                            };
+                            const IconComponent = config.icon;
 
-                        <Card className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800">
-                            <CardContent className="p-6">
-                                <div className="mb-4 inline-block rounded-full bg-blue-700 p-3">
-                                    <FileText className="h-6 w-6 text-white" />
-                                </div>
-                                <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                                    New Campus Policy Updates
-                                </h3>
-                                <p className="mb-4 text-gray-600 dark:text-gray-300">
-                                    Review the latest resolutions and policy
-                                    changes affecting students.
-                                </p>
-                                <Link
-                                    href={usg.resolutions.index.url()}
-                                    className="text-sm font-medium text-[var(--usg-primary)] hover:underline"
+                            return (
+                                <Card
+                                    key={announcement.id}
+                                    className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
                                 >
-                                    View Resolutions →
-                                </Link>
-                            </CardContent>
-                        </Card>
+                                    <CardContent className="p-6">
+                                        <div
+                                            className={`mb-4 inline-block rounded-full ${config.color} p-3`}
+                                        >
+                                            <IconComponent className="h-6 w-6 text-white" />
+                                        </div>
+                                        <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                                            {announcement.title}
+                                        </h3>
+                                        <p className="mb-4 text-gray-600 dark:text-gray-300">
+                                            {announcement.excerpt}
+                                        </p>
+                                        <Link
+                                            href={usg.announcements.show.url(
+                                                announcement.slug,
+                                            )}
+                                            className="text-sm font-medium text-[var(--usg-primary)] hover:underline"
+                                        >
+                                            Read More →
+                                        </Link>
+                                    </CardContent>
+                                </Card>
+                            );
+                        })}
                     </div>
 
                     <div className="mt-12 text-center">

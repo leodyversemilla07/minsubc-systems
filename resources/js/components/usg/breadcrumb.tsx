@@ -18,7 +18,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
         >
             <Link
                 href="/"
-                className="flex items-center gap-1 text-gray-600 transition-colors hover:text-[var(--usg-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 dark:text-gray-400 dark:hover:text-green-400"
+                className="flex items-center gap-1 text-gray-600 transition-colors hover:text-[var(--usg-primary)] focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:outline-none dark:text-gray-400 dark:hover:text-green-400"
                 aria-label="Home"
             >
                 <Home className="h-4 w-4" />
@@ -40,7 +40,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
                         ) : (
                             <Link
                                 href={item.href}
-                                className="text-gray-600 transition-colors hover:text-[var(--usg-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 dark:text-gray-400 dark:hover:text-green-400"
+                                className="text-gray-600 transition-colors hover:text-[var(--usg-primary)] focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:outline-none dark:text-gray-400 dark:hover:text-green-400"
                             >
                                 {item.label}
                             </Link>

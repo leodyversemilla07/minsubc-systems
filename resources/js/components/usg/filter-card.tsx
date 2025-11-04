@@ -19,10 +19,10 @@ import { ReactNode } from 'react';
 
 /**
  * FilterCard Component
- * 
+ *
  * A reusable card component for filtering content across USG public index pages.
  * Uses shadcn Card components to maintain design consistency.
- * 
+ *
  * @example
  * ```tsx
  * <FilterCard
@@ -107,7 +107,9 @@ export default function FilterCard({
             </CardHeader>
 
             <CardContent className="bg-white dark:bg-gray-900">
-                <div className={`grid grid-cols-1 gap-4 ${filters.length === 2 ? 'md:grid-cols-2' : filters.length >= 3 ? 'md:grid-cols-2 lg:grid-cols-3' : ''}`}>
+                <div
+                    className={`grid grid-cols-1 gap-4 ${filters.length === 2 ? 'md:grid-cols-2' : filters.length >= 3 ? 'md:grid-cols-2 lg:grid-cols-3' : ''}`}
+                >
                     {filters.map((filter, index) => (
                         <div key={index} className="space-y-2">
                             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -125,17 +127,28 @@ export default function FilterCard({
                                 }}
                             >
                                 <SelectTrigger className="w-full">
-                                    <SelectValue placeholder={filter.placeholder} />
+                                    <SelectValue
+                                        placeholder={filter.placeholder}
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {filter.options.map((option) => {
-                                        const optionValue = typeof option === 'string' ? option : option.value;
-                                        const optionLabel = typeof option === 'string' 
-                                            ? (filter.formatLabel ? filter.formatLabel(option) : option)
-                                            : option.label;
-                                        
+                                        const optionValue =
+                                            typeof option === 'string'
+                                                ? option
+                                                : option.value;
+                                        const optionLabel =
+                                            typeof option === 'string'
+                                                ? filter.formatLabel
+                                                    ? filter.formatLabel(option)
+                                                    : option
+                                                : option.label;
+
                                         return (
-                                            <SelectItem key={optionValue} value={optionValue}>
+                                            <SelectItem
+                                                key={optionValue}
+                                                value={optionValue}
+                                            >
                                                 {optionLabel}
                                             </SelectItem>
                                         );
@@ -154,11 +167,11 @@ export default function FilterCard({
                         </span>
                         {filters.map((filter, index) => {
                             if (!filter.value) return null;
-                            
-                            const displayValue = filter.formatLabel 
+
+                            const displayValue = filter.formatLabel
                                 ? filter.formatLabel(filter.value)
                                 : filter.value;
-                            
+
                             return (
                                 <Badge
                                     key={index}
@@ -172,7 +185,9 @@ export default function FilterCard({
                                     )}
                                     {displayValue}
                                     <button
-                                        onClick={() => filter.onChange(undefined)}
+                                        onClick={() =>
+                                            filter.onChange(undefined)
+                                        }
                                         className="ml-1 hover:text-gray-900 dark:hover:text-white"
                                     >
                                         <X className="h-3 w-3" />

@@ -96,12 +96,7 @@ export default function CalendarWidget({
 
         // Empty cells for days before the first day of the month
         for (let i = 0; i < firstDay; i++) {
-            days.push(
-                <div
-                    key={`empty-${i}`}
-                    className="aspect-square"
-                ></div>
-            );
+            days.push(<div key={`empty-${i}`} className="aspect-square"></div>);
         }
 
         // Days of the month
@@ -130,7 +125,9 @@ export default function CalendarWidget({
                     onClick={() => handleDateClick(day)}
                 >
                     <div className="flex h-full flex-col">
-                        <div className={`text-sm font-semibold ${isToday ? 'text-[var(--usg-primary)] dark:text-[var(--usg-accent)]' : 'text-gray-900 dark:text-white'}`}>
+                        <div
+                            className={`text-sm font-semibold ${isToday ? 'text-[var(--usg-primary)] dark:text-[var(--usg-accent)]' : 'text-gray-900 dark:text-white'}`}
+                        >
                             {day}
                         </div>
                         {dayEvents.length > 0 && (
@@ -141,7 +138,8 @@ export default function CalendarWidget({
                                         className="cursor-pointer truncate rounded px-1.5 py-0.5 text-xs font-medium"
                                         style={{
                                             backgroundColor:
-                                                event.color || 'var(--usg-primary)',
+                                                event.color ||
+                                                'var(--usg-primary)',
                                             color: 'white',
                                         }}
                                         onClick={(e) => {
@@ -265,7 +263,8 @@ export default function CalendarWidget({
                                         className="h-3 w-3 rounded-full"
                                         style={{
                                             backgroundColor:
-                                                event.color || 'var(--usg-primary)',
+                                                event.color ||
+                                                'var(--usg-primary)',
                                         }}
                                     />
                                     <div className="flex-1">

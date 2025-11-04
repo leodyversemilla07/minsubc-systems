@@ -13,7 +13,14 @@ import FilterCard from '@/components/usg/filter-card';
 import USGLayout from '@/layouts/usg-layout';
 import usg from '@/routes/usg';
 import { Head, router } from '@inertiajs/react';
-import { Calendar as CalendarIcon, Filter, Grid, List, Tag, X } from 'lucide-react';
+import {
+    Calendar as CalendarIcon,
+    Filter,
+    Grid,
+    List,
+    Tag,
+    X,
+} from 'lucide-react';
 import { useState } from 'react';
 
 interface Event {
@@ -114,22 +121,27 @@ export default function EventsCalendar({ events, categories }: Props) {
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             Events Calendar
                         </h1>
                         <p className="mb-8 text-xl text-[var(--usg-hero-text)] md:text-2xl">
-                            Discover and participate in USG events, activities, and programs. 
-                            Choose between calendar and list views.
+                            Discover and participate in USG events, activities,
+                            and programs. Choose between calendar and list
+                            views.
                         </p>
 
                         <div className="flex flex-wrap justify-center gap-3">
                             <Button
-                                variant={viewMode === 'calendar' ? 'secondary' : 'outline'}
+                                variant={
+                                    viewMode === 'calendar'
+                                        ? 'secondary'
+                                        : 'outline'
+                                }
                                 size="lg"
                                 onClick={() => setViewMode('calendar')}
                                 className={
@@ -142,7 +154,11 @@ export default function EventsCalendar({ events, categories }: Props) {
                                 Calendar View
                             </Button>
                             <Button
-                                variant={viewMode === 'list' ? 'secondary' : 'outline'}
+                                variant={
+                                    viewMode === 'list'
+                                        ? 'secondary'
+                                        : 'outline'
+                                }
                                 size="lg"
                                 onClick={() => setViewMode('list')}
                                 className={
@@ -180,13 +196,18 @@ export default function EventsCalendar({ events, categories }: Props) {
                                           {
                                               label: 'Category',
                                               icon: <Tag className="h-4 w-4" />,
-                                              value: activeFilters.categories?.[0],
+                                              value: activeFilters
+                                                  .categories?.[0],
                                               placeholder: `All Categories (${categories.length})`,
                                               options: categories,
-                                              onChange: (value: string | undefined) => {
+                                              onChange: (
+                                                  value: string | undefined,
+                                              ) => {
                                                   setActiveFilters({
                                                       ...activeFilters,
-                                                      categories: value ? [value] : [],
+                                                      categories: value
+                                                          ? [value]
+                                                          : [],
                                                   });
                                               },
                                           },
@@ -198,9 +219,18 @@ export default function EventsCalendar({ events, categories }: Props) {
                                     value: activeFilters.statuses?.[0],
                                     placeholder: 'All Statuses',
                                     options: [
-                                        { value: 'published', label: 'Published' },
-                                        { value: 'cancelled', label: 'Cancelled' },
-                                        { value: 'archived', label: 'Archived' },
+                                        {
+                                            value: 'published',
+                                            label: 'Published',
+                                        },
+                                        {
+                                            value: 'cancelled',
+                                            label: 'Cancelled',
+                                        },
+                                        {
+                                            value: 'archived',
+                                            label: 'Archived',
+                                        },
                                     ],
                                     onChange: (value: string | undefined) => {
                                         setActiveFilters({
@@ -226,21 +256,29 @@ export default function EventsCalendar({ events, categories }: Props) {
                                     </CardHeader>
                                     <CardContent>
                                         <CalendarWidget
-                                            events={filteredEvents.map((event) => ({
-                                                id: event.id,
-                                                title: event.title,
-                                                event_date: event.event_date,
-                                                event_time: event.event_time,
-                                                status: event.status,
-                                                category: event.category,
-                                                color: event.color,
-                                            }))}
+                                            events={filteredEvents.map(
+                                                (event) => ({
+                                                    id: event.id,
+                                                    title: event.title,
+                                                    event_date:
+                                                        event.event_date,
+                                                    event_time:
+                                                        event.event_time,
+                                                    status: event.status,
+                                                    category: event.category,
+                                                    color: event.color,
+                                                }),
+                                            )}
                                             onDateSelect={handleDateSelect}
                                             onEventClick={(calendarEvent) => {
-                                                const fullEvent = filteredEvents.find(
-                                                    (e) => e.id === calendarEvent.id,
-                                                );
-                                                if (fullEvent) handleEventClick(fullEvent);
+                                                const fullEvent =
+                                                    filteredEvents.find(
+                                                        (e) =>
+                                                            e.id ===
+                                                            calendarEvent.id,
+                                                    );
+                                                if (fullEvent)
+                                                    handleEventClick(fullEvent);
                                             }}
                                         />
                                     </CardContent>
@@ -251,16 +289,20 @@ export default function EventsCalendar({ events, categories }: Props) {
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <CardTitle>
-                                                    All Events ({filteredEvents.length})
+                                                    All Events (
+                                                    {filteredEvents.length})
                                                 </CardTitle>
                                                 <CardDescription>
-                                                    Browse all events in list format
+                                                    Browse all events in list
+                                                    format
                                                 </CardDescription>
                                             </div>
                                             <Button
                                                 variant="outline"
                                                 onClick={() =>
-                                                    router.visit(usg.events.index.url())
+                                                    router.visit(
+                                                        usg.events.index.url(),
+                                                    )
                                                 }
                                             >
                                                 <Grid className="mr-2 h-4 w-4" />
@@ -277,8 +319,8 @@ export default function EventsCalendar({ events, categories }: Props) {
                                                     No events found
                                                 </h3>
                                                 <p className="text-gray-600 dark:text-gray-400">
-                                                    Try adjusting your search or filter
-                                                    criteria.
+                                                    Try adjusting your search or
+                                                    filter criteria.
                                                 </p>
                                             </div>
                                         ) : (
@@ -314,12 +356,15 @@ export default function EventsCalendar({ events, categories }: Props) {
                                     <CardHeader>
                                         <CardTitle className="text-lg">
                                             Events on{' '}
-                                            {selectedDate.toLocaleDateString('en-US', {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                            })}
+                                            {selectedDate.toLocaleDateString(
+                                                'en-US',
+                                                {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                },
+                                            )}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
@@ -421,7 +466,9 @@ export default function EventsCalendar({ events, categories }: Props) {
                                         variant="outline"
                                         size="sm"
                                         className="w-full justify-start"
-                                        onClick={() => router.visit(usg.events.index.url())}
+                                        onClick={() =>
+                                            router.visit(usg.events.index.url())
+                                        }
                                     >
                                         <Grid className="mr-2 h-4 w-4" />
                                         Browse All Events

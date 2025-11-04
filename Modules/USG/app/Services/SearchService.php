@@ -157,7 +157,7 @@ class SearchService
     }
 
     /**
-     * Global search across all USG content using Laravel Scout
+     * Global search across all USG content using Laravel Scout or fallback to LIKE queries
      */
     public function globalSearch(
         string $query,
@@ -165,68 +165,112 @@ class SearchService
         int $perPage = 15
     ): array {
         $results = [];
+        $limit = $type ? $perPage : 5;
 
-        // Search announcements using Scout (Scout handles relevance ordering automatically)
+        // Use LIKE queries on SQLite, Scout on other databases
+        $useLike = config('database.default') === 'sqlite';
+
+        // Search announcements
         if (! $type || $type === 'announcements') {
-            $announcements = Announcement::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $announcements = Announcement::where(function (Builder $q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('excerpt', 'like', "%{$query}%")
+                        ->orWhere('content', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $announcements = Announcement::search($query)->paginate($limit);
+            }
 
-            $results['announcements'] = ['data' => $announcements];
+            $results['announcements'] = $announcements;
         }
 
-        // Search resolutions using Scout
+        // Search resolutions
         if (! $type || $type === 'resolutions') {
-            $resolutions = Resolution::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $resolutions = Resolution::where(function (Builder $q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%")
+                        ->orWhere('content', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $resolutions = Resolution::search($query)->paginate($limit);
+            }
 
-            $results['resolutions'] = ['data' => $resolutions];
+            $results['resolutions'] = $resolutions;
         }
 
-        // Search events using Scout
+        // Search events
         if (! $type || $type === 'events') {
-            $events = Event::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $events = Event::where(function (Builder $q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%")
+                        ->orWhere('location', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $events = Event::search($query)->paginate($limit);
+            }
 
-            $results['events'] = ['data' => $events];
+            $results['events'] = $events;
         }
 
-        // Search documents using Scout
+        // Search documents
         if (! $type || $type === 'documents') {
-            $documents = Document::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $documents = Document::where(function (Builder $q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%")
+                        ->orWhere('file_name', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $documents = Document::search($query)->paginate($limit);
+            }
 
-            $results['documents'] = ['data' => $documents];
+            $results['documents'] = $documents;
         }
 
-        // Search officers using Scout
+        // Search officers
         if (! $type || $type === 'officers') {
-            $officers = Officer::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $officers = Officer::where(function (Builder $q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%")
+                        ->orWhere('position', 'like', "%{$query}%")
+                        ->orWhere('department', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $officers = Officer::search($query)->paginate($limit);
+            }
 
-            $results['officers'] = ['data' => $officers];
+            $results['officers'] = $officers;
         }
 
-        // Search VMGO using Scout
+        // Search VMGO
         if (! $type || $type === 'vmgo') {
-            $vmgo = VMGO::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $vmgo = VMGO::where(function (Builder $q) use ($query) {
+                    $q->where('vision', 'like', "%{$query}%")
+                        ->orWhere('mission', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $vmgo = VMGO::search($query)->paginate($limit);
+            }
 
-            $results['vmgo'] = ['data' => $vmgo];
+            $results['vmgo'] = $vmgo;
         }
 
-        // Search transparency reports using Scout
+        // Search transparency reports
         if (! $type || $type === 'transparency_reports') {
-            $transparencyReports = TransparencyReport::search($query)
-                ->take($type ? $perPage : 5)
-                ->get();
+            if ($useLike) {
+                $transparencyReports = TransparencyReport::where(function (Builder $q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%");
+                })->paginate($limit);
+            } else {
+                $transparencyReports = TransparencyReport::search($query)->paginate($limit);
+            }
 
-            $results['transparency_reports'] = ['data' => $transparencyReports];
+            $results['transparency_reports'] = $transparencyReports;
         }
 
         return $results;

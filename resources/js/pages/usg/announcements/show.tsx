@@ -73,9 +73,9 @@ export default function AnnouncementShow({
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 container mx-auto max-w-4xl px-4">
                     <Button
                         variant="ghost"
@@ -102,7 +102,7 @@ export default function AnnouncementShow({
                                 </div>
                             )}
 
-                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                            <h1 className="mb-4 text-4xl leading-tight font-bold md:text-5xl">
                                 {announcement.title}
                             </h1>
 
@@ -123,7 +123,9 @@ export default function AnnouncementShow({
                                 {announcement.views_count !== undefined && (
                                     <div className="flex items-center gap-2">
                                         <Eye className="h-4 w-4" />
-                                        <span>{announcement.views_count} views</span>
+                                        <span>
+                                            {announcement.views_count} views
+                                        </span>
                                     </div>
                                 )}
                             </div>

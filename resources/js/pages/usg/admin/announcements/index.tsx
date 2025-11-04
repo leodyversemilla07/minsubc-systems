@@ -441,8 +441,14 @@ export default function AnnouncementsManagement({
                                                 <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
                                                     {announcement.title}
                                                 </h3>
-                                                <Badge className={getStatusColor(announcement.status)}>
-                                                    {formatStatus(announcement.status)}
+                                                <Badge
+                                                    className={getStatusColor(
+                                                        announcement.status,
+                                                    )}
+                                                >
+                                                    {formatStatus(
+                                                        announcement.status,
+                                                    )}
                                                 </Badge>
                                                 <Badge
                                                     variant="secondary"

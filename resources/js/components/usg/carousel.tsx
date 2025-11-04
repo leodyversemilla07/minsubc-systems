@@ -70,7 +70,7 @@ export default function Carousel({
                         variant="ghost"
                         size="icon"
                         onClick={goToPrevious}
-                        className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-white/90 opacity-0 shadow-lg backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 dark:bg-gray-900/90 dark:hover:bg-gray-900"
+                        className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-white/90 opacity-0 shadow-lg backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:outline-none dark:bg-gray-900/90 dark:hover:bg-gray-900"
                         aria-label="Previous slide"
                     >
                         <ChevronLeft className="h-5 w-5" />
@@ -80,7 +80,7 @@ export default function Carousel({
                         variant="ghost"
                         size="icon"
                         onClick={goToNext}
-                        className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-white/90 opacity-0 shadow-lg backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 dark:bg-gray-900/90 dark:hover:bg-gray-900"
+                        className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-white/90 opacity-0 shadow-lg backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:outline-none dark:bg-gray-900/90 dark:hover:bg-gray-900"
                         aria-label="Next slide"
                     >
                         <ChevronRight className="h-5 w-5" />
@@ -97,7 +97,7 @@ export default function Carousel({
                             <button
                                 key={index}
                                 onClick={() => goToSlide(index)}
-                                className={`h-2 w-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 ${
+                                className={`h-2 w-2 rounded-full transition-all focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:outline-none ${
                                     index === currentIndex
                                         ? 'w-6 bg-[var(--usg-primary)]'
                                         : 'bg-gray-400 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-400'
@@ -114,8 +114,10 @@ export default function Carousel({
                     {autoplay && (
                         <button
                             onClick={() => setIsPaused(!isPaused)}
-                            className="rounded-full p-1 text-gray-700 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 dark:text-gray-300 dark:hover:bg-gray-800"
-                            aria-label={isPaused ? 'Play carousel' : 'Pause carousel'}
+                            className="rounded-full p-1 text-gray-700 transition-colors hover:bg-gray-200 focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800"
+                            aria-label={
+                                isPaused ? 'Play carousel' : 'Pause carousel'
+                            }
                         >
                             {isPaused ? (
                                 <Play className="h-3 w-3" />

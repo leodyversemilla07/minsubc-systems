@@ -31,14 +31,14 @@ export default function AnnouncementCard({
     announcement,
 }: AnnouncementCardProps) {
     return (
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col bg-white dark:bg-gray-900">
+        <Card className="flex flex-col overflow-hidden bg-white transition-shadow duration-300 hover:shadow-lg dark:bg-gray-900">
             {/* Featured Image */}
             {announcement.featured_image && (
-                <div className="relative w-full h-48 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
                     <img
                         src={announcement.featured_image}
                         alt={announcement.title}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                     />
                     {announcement.category && (
                         <div className="absolute top-3 right-3">
@@ -62,7 +62,7 @@ export default function AnnouncementCard({
                     href={publicShow.url(announcement.slug)}
                     className="group/title"
                 >
-                    <CardTitle className="line-clamp-2 group-hover/title:text-primary transition-colors">
+                    <CardTitle className="line-clamp-2 transition-colors group-hover/title:text-primary">
                         {announcement.title}
                     </CardTitle>
                 </Link>
@@ -70,7 +70,9 @@ export default function AnnouncementCard({
                 <CardDescription className="flex items-center gap-4 text-xs">
                     <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        {new Date(announcement.publish_date).toLocaleDateString()}
+                        {new Date(
+                            announcement.publish_date,
+                        ).toLocaleDateString()}
                     </span>
                     {announcement.views_count !== undefined && (
                         <span className="flex items-center gap-1">
@@ -82,18 +84,13 @@ export default function AnnouncementCard({
             </CardHeader>
 
             <CardContent className="flex-grow">
-                <p className="text-sm leading-relaxed line-clamp-3">
+                <p className="line-clamp-3 text-sm leading-relaxed">
                     {announcement.excerpt}
                 </p>
             </CardContent>
 
             <CardFooter>
-                <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                >
+                <Button asChild variant="outline" size="sm" className="w-full">
                     <Link href={publicShow.url(announcement.slug)}>
                         Read More
                         <ArrowRight className="ml-2 h-4 w-4" />

@@ -166,7 +166,7 @@
 
     /* Enhanced focus states for accessibility */
     *:focus-visible {
-        @apply outline-none ring-2 ring-[var(--usg-primary)] ring-offset-2;
+        @apply ring-2 ring-[var(--usg-primary)] ring-offset-2 outline-none;
     }
 
     /* Smooth transitions for all interactive elements */
