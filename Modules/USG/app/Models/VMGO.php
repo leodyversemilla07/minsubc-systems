@@ -6,11 +6,13 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\VMGOFactory;
 
 class VMGO extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'vmgo';
 
@@ -37,6 +39,24 @@ class VMGO extends Model
             'goals' => 'array',
             'objectives' => 'array',
             'effective_date' => 'datetime',
+        ];
+    }
+
+    // Scout configuration
+    public function shouldBeSearchable(): bool
+    {
+        return true;
+    }
+
+    #[SearchUsingFullText(['vision', 'mission'])]
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'vision' => $this->vision,
+            'mission' => $this->mission,
+            'goals' => $this->goals,
+            'objectives' => $this->objectives,
         ];
     }
 

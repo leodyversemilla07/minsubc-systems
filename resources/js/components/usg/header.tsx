@@ -1,11 +1,13 @@
 import AppearanceToggleDropdown from '@/components/appearance-dropdown';
 import { Button } from '@/components/ui/button';
+import { Kbd } from '@/components/ui/kbd';
+import SearchCommand from '@/components/usg/search-command';
 import { dashboard, login, register } from '@/routes';
 import usg from '@/routes/usg';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, Search, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const navigationLinks = [
     { href: usg.index.url(), label: 'Home' },
@@ -21,6 +23,7 @@ export default function Header() {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const currentUrl = page.url;
 
     const isActive = (href: string) => {
@@ -36,14 +39,33 @@ export default function Header() {
         return currentUrl.startsWith(href);
     };
 
+    // Handle Ctrl+K / Cmd+K to open search
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                setIsSearchOpen(true);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     return (
-        <nav className="fixed top-0 right-0 left-0 z-50 border-b border-green-200 bg-white shadow-sm backdrop-blur-md dark:border-gray-800 dark:bg-gray-900">
+        <>
+            <SearchCommand
+                open={isSearchOpen}
+                onOpenChange={setIsSearchOpen}
+            />
+
+            <nav className="fixed top-0 right-0 left-0 z-50 border-b border-green-200 bg-white shadow-sm backdrop-blur-md dark:border-gray-800 dark:bg-gray-900">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Top row: Logo, Name, and Auth buttons */}
                 <div className="flex h-16 items-center justify-between">
                     <Link
                         href={usg.index.url()}
-                        className="flex items-center gap-3 transition-opacity hover:opacity-80"
+                        className="flex items-center gap-3 transition-all hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[var(--usg-primary)] focus:ring-offset-2 focus:rounded-md"
                     >
                         <img
                             src="/minsu-logo.png"
@@ -69,12 +91,28 @@ export default function Header() {
                     </Link>
 
                     <div className="flex items-center gap-3">
+                        {/* Search Button with Kbd Shortcut */}
+                        <Button
+                            variant="ghost"
+                            className="group relative h-10 w-10 text-gray-600 hover:bg-green-50 hover:text-green-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white sm:h-10 sm:w-auto sm:min-w-[180px] sm:justify-start sm:px-4 sm:pr-12"
+                            onClick={() => setIsSearchOpen(true)}
+                            title="Search (Ctrl+K)"
+                        >
+                            <Search className="h-5 w-5 sm:h-4 sm:w-4" />
+                            <span className="ml-2 hidden text-sm sm:inline">
+                                Search...
+                            </span>
+                            <Kbd className="absolute right-2.5 top-1/2 hidden -translate-y-1/2 sm:flex">
+                                <span className="text-xs">⌘</span>K
+                            </Kbd>
+                        </Button>
+
                         <AppearanceToggleDropdown />
 
                         {auth.user ? (
                             <Link
                                 href={dashboard()}
-                                className="hidden rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-md transition-colors hover:bg-green-800 sm:block"
+                                className="hidden rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-green-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:block"
                             >
                                 Dashboard
                             </Link>
@@ -82,13 +120,13 @@ export default function Header() {
                             <>
                                 <Link
                                     href={login()}
-                                    className="hidden px-4 py-2 text-sm font-medium text-green-900 transition-colors hover:text-green-800 sm:block dark:text-gray-300 dark:hover:text-white"
+                                    className="hidden px-4 py-2 text-sm font-medium text-green-900 transition-all hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:rounded-md sm:block dark:text-gray-300 dark:hover:text-white"
                                 >
                                     Log in
                                 </Link>
                                 <Link
                                     href={register()}
-                                    className="hidden rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-md transition-colors hover:bg-green-800 sm:block"
+                                    className="hidden rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-green-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:block"
                                 >
                                     Register
                                 </Link>
@@ -120,7 +158,7 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`rounded-md px-4 py-2 text-sm font-medium transition-all ${
+                                    className={`rounded-md px-4 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
                                         active
                                             ? 'bg-green-700 text-white shadow-sm'
                                             : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
@@ -189,5 +227,6 @@ export default function Header() {
                 </div>
             )}
         </nav>
+        </>
     );
 }

@@ -11,6 +11,7 @@ export { default as PriorityBadge } from './priority-badge';
 export { default as ResolutionCard } from './resolution-card';
 export { RichTextEditor } from './rich-text-editor';
 export { default as SearchBar } from './search-bar';
+export { default as SearchCommand } from './search-command';
 export { default as StatsCard } from './stats-card';
 export { default as StatusBadge } from './status-badge';
 

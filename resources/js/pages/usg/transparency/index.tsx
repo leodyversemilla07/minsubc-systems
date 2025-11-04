@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import CountUp from '@/components/usg/count-up';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import { Calendar, Download, Eye, FileText, TrendingUp } from 'lucide-react';
@@ -112,7 +113,13 @@ export default function TransparencyIndex({
             <Head title="Transparency Reports - USG" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-[var(--usg-primary)] py-20 text-white">
+            <section className="relative overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -136,7 +143,7 @@ export default function TransparencyIndex({
                                 <FileText className="h-5 w-5 text-[var(--usg-primary)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                {stats.total_reports}
+                                <CountUp end={stats.total_reports} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Total Reports
@@ -147,7 +154,7 @@ export default function TransparencyIndex({
                                 <TrendingUp className="h-5 w-5 text-[var(--usg-secondary)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                {stats.financial_reports}
+                                <CountUp end={stats.financial_reports} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Financial Reports
@@ -158,7 +165,7 @@ export default function TransparencyIndex({
                                 <Calendar className="h-5 w-5 text-[var(--usg-accent)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                {stats.meeting_minutes}
+                                <CountUp end={stats.meeting_minutes} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Meeting Minutes
@@ -169,7 +176,7 @@ export default function TransparencyIndex({
                                 <Download className="h-5 w-5 rounded-sm bg-[var(--usg-text)] p-0.5 text-[var(--usg-neutral)]" />
                             </div>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                {stats.total_downloads}
+                                <CountUp end={stats.total_downloads} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Total Downloads

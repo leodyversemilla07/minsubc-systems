@@ -58,4 +58,25 @@ class SearchController extends Controller
 
         return response()->json($suggestions);
     }
+
+    /**
+     * Quick search for command palette (returns full objects)
+     */
+    public function quickSearch(Request $request): JsonResponse
+    {
+        $query = $request->input('q');
+
+        if (! $query || strlen($query) < 2) {
+            return response()->json([
+                'announcements' => [],
+                'events' => [],
+                'resolutions' => [],
+                'documents' => [],
+            ]);
+        }
+
+        $results = $this->searchService->globalSearch($query, null, 5);
+
+        return response()->json($results);
+    }
 }

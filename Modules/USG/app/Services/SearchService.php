@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\USG\Models\Announcement;
 use Modules\USG\Models\Document;
+use Modules\USG\Models\Event;
+use Modules\USG\Models\Officer;
 use Modules\USG\Models\Resolution;
+use Modules\USG\Models\TransparencyReport;
+use Modules\USG\Models\VMGO;
 
 class SearchService
 {
@@ -153,7 +157,7 @@ class SearchService
     }
 
     /**
-     * Global search across all USG content
+     * Global search across all USG content using Laravel Scout
      */
     public function globalSearch(
         string $query,
@@ -162,29 +166,67 @@ class SearchService
     ): array {
         $results = [];
 
-        // Search announcements
+        // Search announcements using Scout (Scout handles relevance ordering automatically)
         if (! $type || $type === 'announcements') {
-            $results['announcements'] = $this->searchAnnouncements(
-                query: $query,
-                perPage: $type ? $perPage : 5
-            );
+            $announcements = Announcement::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['announcements'] = ['data' => $announcements];
         }
 
-        // Search resolutions
+        // Search resolutions using Scout
         if (! $type || $type === 'resolutions') {
-            $results['resolutions'] = $this->searchResolutions(
-                query: $query,
-                perPage: $type ? $perPage : 5
-            );
+            $resolutions = Resolution::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['resolutions'] = ['data' => $resolutions];
         }
 
-        // Search documents
+        // Search events using Scout
+        if (! $type || $type === 'events') {
+            $events = Event::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['events'] = ['data' => $events];
+        }
+
+        // Search documents using Scout
         if (! $type || $type === 'documents') {
-            $results['documents'] = $this->searchDocuments(
-                query: $query,
-                isPublic: true, // Only public documents in global search
-                perPage: $type ? $perPage : 5
-            );
+            $documents = Document::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['documents'] = ['data' => $documents];
+        }
+
+        // Search officers using Scout
+        if (! $type || $type === 'officers') {
+            $officers = Officer::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['officers'] = ['data' => $officers];
+        }
+
+        // Search VMGO using Scout
+        if (! $type || $type === 'vmgo') {
+            $vmgo = VMGO::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['vmgo'] = ['data' => $vmgo];
+        }
+
+        // Search transparency reports using Scout
+        if (! $type || $type === 'transparency_reports') {
+            $transparencyReports = TransparencyReport::search($query)
+                ->take($type ? $perPage : 5)
+                ->get();
+
+            $results['transparency_reports'] = ['data' => $transparencyReports];
         }
 
         return $results;

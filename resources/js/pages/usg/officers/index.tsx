@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import CountUp from '@/components/usg/count-up';
 import OfficerCard from '@/components/usg/officer-card';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
@@ -51,7 +52,13 @@ export default function OfficersIndex({
             <Head title="USG Officers" />
 
             {/* Hero Section */}
-            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
+            <section className="relative bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -71,7 +78,7 @@ export default function OfficersIndex({
                     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
                         <div className="text-center">
                             <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
-                                {stats.total_officers}
+                                <CountUp end={stats.total_officers} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Total Officers
@@ -79,7 +86,7 @@ export default function OfficersIndex({
                         </div>
                         <div className="text-center">
                             <div className="mb-2 text-4xl font-bold text-[var(--usg-secondary)]">
-                                {stats.active_officers}
+                                <CountUp end={stats.active_officers} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Active Officers
@@ -87,7 +94,7 @@ export default function OfficersIndex({
                         </div>
                         <div className="text-center">
                             <div className="mb-2 text-4xl font-bold text-[var(--usg-accent)]">
-                                {stats.departments_count}
+                                <CountUp end={stats.departments_count} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Departments

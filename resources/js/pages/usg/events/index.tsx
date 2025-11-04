@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import CountUp from '@/components/usg/count-up';
 import EventCard from '@/components/usg/event-card';
-import SearchBar from '@/components/usg/search-bar';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -155,7 +155,13 @@ export default function EventsIndex({
             <Head title="Events - USG Portal" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-[var(--usg-primary)] py-20 text-white">
+            <section className="relative overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -185,7 +191,7 @@ export default function EventsIndex({
                     <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                         <div>
                             <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)] md:text-4xl">
-                                {events.length}
+                                <CountUp end={events.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Total Events
@@ -193,7 +199,7 @@ export default function EventsIndex({
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)] md:text-4xl">
-                                {upcomingEvents.length}
+                                <CountUp end={upcomingEvents.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Upcoming
@@ -201,7 +207,7 @@ export default function EventsIndex({
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)] md:text-4xl">
-                                {pastEvents.length}
+                                <CountUp end={pastEvents.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Past Events
@@ -209,7 +215,7 @@ export default function EventsIndex({
                         </div>
                         <div>
                             <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] md:text-4xl">
-                                {categories.length}
+                                <CountUp end={categories.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Categories
@@ -222,45 +228,6 @@ export default function EventsIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
-                    {/* Search and Filters */}
-                    <div className="mb-12">
-                        <SearchBar
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder="Search events by title, description, location, or organizer..."
-                            showFilters
-                            filters={{
-                                categories: categories,
-                                statuses: [
-                                    'published',
-                                    'draft',
-                                    'cancelled',
-                                    'completed',
-                                ],
-                                dateRanges: [
-                                    'Today',
-                                    'Tomorrow',
-                                    'This Week',
-                                    'This Month',
-                                    'Upcoming',
-                                    'Past',
-                                ],
-                            }}
-                            activeFilters={{
-                                categories: activeFilters.categories,
-                                statuses: activeFilters.statuses,
-                                dateRange: activeFilters.dateRange,
-                            }}
-                            onFiltersChange={(filters) => {
-                                setActiveFilters({
-                                    categories: filters.categories,
-                                    statuses: filters.statuses,
-                                    dateRange: filters.dateRange,
-                                });
-                            }}
-                        />
-                    </div>
-
                     {/* Featured Events */}
                     {featured_events.length > 0 &&
                         !searchQuery &&
@@ -286,7 +253,7 @@ export default function EventsIndex({
                     {/* Results Summary */}
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            {filteredEvents.length} Event
+                            <CountUp end={filteredEvents.length} duration={1500} /> Event
                             {filteredEvents.length !== 1 ? 's' : ''}
                         </h2>
                         <div className="flex flex-wrap gap-2">

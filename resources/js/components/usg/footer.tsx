@@ -41,29 +41,29 @@ export default function Footer() {
                         {/* Social Media Links */}
                         <div className="flex gap-3">
                             <a
-                                href="https://facebook.com"
+                                href="https://www.facebook.com/profile.php?id=100077318689390"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="rounded-full bg-green-100 p-2 text-green-700 transition-colors hover:bg-green-700 hover:text-white dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-700"
-                                aria-label="Facebook"
+                                className="rounded-full bg-green-100 p-2 text-green-700 transition-all duration-300 hover:scale-110 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-700"
+                                aria-label="Follow us on Facebook"
                             >
                                 <Facebook className="h-4 w-4" />
                             </a>
                             <a
-                                href="https://twitter.com"
+                                href="https://twitter.com/MinSUBC_USG"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="rounded-full bg-green-100 p-2 text-green-700 transition-colors hover:bg-green-700 hover:text-white dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-700"
-                                aria-label="Twitter"
+                                className="rounded-full bg-green-100 p-2 text-green-700 transition-all duration-300 hover:scale-110 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-700"
+                                aria-label="Follow us on Twitter"
                             >
                                 <Twitter className="h-4 w-4" />
                             </a>
                             <a
-                                href="https://instagram.com"
+                                href="https://www.instagram.com/minsubc.usg"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="rounded-full bg-green-100 p-2 text-green-700 transition-colors hover:bg-green-700 hover:text-white dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-700"
-                                aria-label="Instagram"
+                                className="rounded-full bg-green-100 p-2 text-green-700 transition-all duration-300 hover:scale-110 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-700"
+                                aria-label="Follow us on Instagram"
                             >
                                 <Instagram className="h-4 w-4" />
                             </a>

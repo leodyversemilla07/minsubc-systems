@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\AnnouncementFactory;
 
 class Announcement extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'announcements';
 
@@ -63,6 +65,26 @@ class Announcement extends Model
             'publish_date' => 'datetime',
             'expiry_date' => 'datetime',
             'views_count' => 'integer',
+        ];
+    }
+
+    // Scout configuration
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published'
+            && ($this->publish_date === null || $this->publish_date <= now())
+            && ($this->expiry_date === null || $this->expiry_date >= now());
+    }
+
+    #[SearchUsingFullText(['title', 'excerpt', 'content'])]
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'excerpt' => $this->excerpt,
+            'content' => $this->content,
+            'category' => $this->category,
         ];
     }
 

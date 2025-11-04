@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\TransparencyReportFactory;
 
 class TransparencyReport extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'transparency_reports';
 
@@ -67,6 +69,23 @@ class TransparencyReport extends Model
             'file_size' => 'integer',
             'download_count' => 'integer',
             'view_count' => 'integer',
+        ];
+    }
+
+    // Scout configuration
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published';
+    }
+
+    #[SearchUsingFullText(['title', 'description'])]
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'type' => $this->type,
         ];
     }
 

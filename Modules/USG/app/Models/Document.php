@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\DocumentFactory;
 
 class Document extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     /**
      * Create a new factory instance for the model.
@@ -58,6 +60,24 @@ class Document extends Model
             'file_size' => 'integer',
             'is_public' => 'boolean',
             'download_count' => 'integer',
+        ];
+    }
+
+    // Scout configuration
+    public function shouldBeSearchable(): bool
+    {
+        return $this->is_public === true;
+    }
+
+    #[SearchUsingFullText(['title', 'description', 'file_name'])]
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'file_name' => $this->file_name,
+            'category' => $this->category,
         ];
     }
 

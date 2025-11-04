@@ -61,7 +61,13 @@ export default function VMGOPage({ vmgo }: Props) {
             <Head title="Vision, Mission, Goals & Objectives - USG" />
 
             {/* Hero Section */}
-            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
+            <section className="relative bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">

@@ -1,8 +1,8 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AnnouncementCard from '@/components/usg/announcement-card';
+import CountUp from '@/components/usg/count-up';
 import PriorityBadge from '@/components/usg/priority-badge';
-import SearchBar from '@/components/usg/search-bar';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
 import { Bell, Calendar, Filter, Sparkles } from 'lucide-react';
@@ -36,44 +36,17 @@ export default function AnnouncementsIndex({
     announcements,
     categories = [],
 }: Props) {
-    const [searchQuery, setSearchQuery] = useState('');
     const [activeFilters, setActiveFilters] = useState<{
-        categories?: string[];
         priorities?: string[];
-        statuses?: string[];
     }>({});
 
     const filteredAnnouncements = announcements.data.filter((announcement) => {
-        // Search filter
-        const matchesSearch =
-            searchQuery === '' ||
-            announcement.title
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            announcement.excerpt
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase());
-
-        // Category filter
-        const matchesCategory =
-            !activeFilters.categories?.length ||
-            (announcement.category &&
-                activeFilters.categories.includes(announcement.category));
-
         // Priority filter
         const matchesPriority =
             !activeFilters.priorities?.length ||
             activeFilters.priorities.includes(announcement.priority);
 
-        // Status filter
-        const matchesStatus =
-            !activeFilters.statuses?.length ||
-            (announcement.status &&
-                activeFilters.statuses.includes(announcement.status));
-
-        return (
-            matchesSearch && matchesCategory && matchesPriority && matchesStatus
-        );
+        return matchesPriority;
     });
 
     // Separate by status - show all as published for public view
@@ -103,7 +76,13 @@ export default function AnnouncementsIndex({
             <Head title="Announcements - USG" />
 
             {/* Hero Section */}
-            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
+            <section className="relative bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -123,7 +102,7 @@ export default function AnnouncementsIndex({
                     <div className="mx-auto flex max-w-2xl justify-center gap-12">
                         <div className="text-center">
                             <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
-                                {announcements.total}
+                                <CountUp end={announcements.total} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Total Announcements
@@ -131,7 +110,7 @@ export default function AnnouncementsIndex({
                         </div>
                         <div className="text-center">
                             <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
-                                {publishedAnnouncements.length}
+                                <CountUp end={publishedAnnouncements.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Published
@@ -144,95 +123,66 @@ export default function AnnouncementsIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
-                    {/* Search and Filters */}
+                    {/* Priority Filters */}
                     <div className="mb-8">
-                        <div className="group relative">
-                            <SearchBar
-                                value={searchQuery}
-                                onChange={setSearchQuery}
-                                placeholder="Search announcements by title, content, or tags..."
-                                showFilters
-                                filters={{
-                                    categories: categories,
-                                    statuses: [
-                                        'published',
-                                        'draft',
-                                        'archived',
-                                    ],
-                                }}
-                                activeFilters={{
-                                    categories: activeFilters.categories,
-                                    statuses: activeFilters.statuses,
-                                }}
-                                onFiltersChange={(filters) => {
-                                    setActiveFilters({
-                                        categories: filters.categories,
-                                        statuses: filters.statuses,
-                                        priorities: activeFilters.priorities,
-                                    });
-                                }}
-                            />
-
-                            {/* Enhanced Priority Filters */}
-                            <div className="mt-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                                <div className="flex flex-wrap items-center gap-3">
-                                    <div className="flex items-center gap-2">
-                                        <Sparkles className="h-4 w-4 text-[var(--usg-primary)]" />
-                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Filter by priority:
-                                        </span>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        {['high', 'normal', 'low'].map(
-                                            (priority) => (
-                                                <Badge
-                                                    key={priority}
-                                                    variant={
-                                                        activeFilters.priorities?.includes(
+                        <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <div className="flex items-center gap-2">
+                                    <Sparkles className="h-4 w-4 text-[var(--usg-primary)]" />
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Filter by priority:
+                                    </span>
+                                </div>
+                                <div className="flex gap-2">
+                                    {['high', 'normal', 'low'].map(
+                                        (priority) => (
+                                            <Badge
+                                                key={priority}
+                                                variant={
+                                                    activeFilters.priorities?.includes(
+                                                        priority,
+                                                    )
+                                                        ? 'default'
+                                                        : 'outline'
+                                                }
+                                                className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                                onClick={() => {
+                                                    const currentPriorities =
+                                                        activeFilters.priorities ||
+                                                        [];
+                                                    const newPriorities =
+                                                        currentPriorities.includes(
                                                             priority,
                                                         )
-                                                            ? 'default'
-                                                            : 'outline'
-                                                    }
-                                                    className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                                                    onClick={() => {
-                                                        const currentPriorities =
-                                                            activeFilters.priorities ||
-                                                            [];
-                                                        const newPriorities =
-                                                            currentPriorities.includes(
-                                                                priority,
-                                                            )
-                                                                ? currentPriorities.filter(
-                                                                      (p) =>
-                                                                          p !==
-                                                                          priority,
-                                                                  )
-                                                                : [
-                                                                      ...currentPriorities,
+                                                            ? currentPriorities.filter(
+                                                                  (p) =>
+                                                                      p !==
                                                                       priority,
-                                                                  ];
-                                                        setActiveFilters({
-                                                            ...activeFilters,
-                                                            priorities:
-                                                                newPriorities,
-                                                        });
-                                                    }}
-                                                >
-                                                    <PriorityBadge
-                                                        priority={
-                                                            priority as
-                                                                | 'low'
-                                                                | 'normal'
-                                                                | 'high'
-                                                        }
-                                                        className="mr-1"
-                                                    />
-                                                    {priority}
-                                                </Badge>
-                                            ),
-                                        )}
-                                    </div>
+                                                              )
+                                                            : [
+                                                                  ...currentPriorities,
+                                                                  priority,
+                                                              ];
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        priorities:
+                                                            newPriorities,
+                                                    });
+                                                }}
+                                            >
+                                                <PriorityBadge
+                                                    priority={
+                                                        priority as
+                                                            | 'low'
+                                                            | 'normal'
+                                                            | 'high'
+                                                    }
+                                                    className="mr-1"
+                                                />
+                                                {priority}
+                                            </Badge>
+                                        ),
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -247,7 +197,7 @@ export default function AnnouncementsIndex({
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                        {filteredAnnouncements.length}{' '}
+                                        <CountUp end={filteredAnnouncements.length} duration={1500} />{' '}
                                         Announcement
                                         {filteredAnnouncements.length !== 1
                                             ? 's'
@@ -298,25 +248,22 @@ export default function AnnouncementsIndex({
                                 No announcements found
                             </h3>
                             <p className="mx-auto mb-6 max-w-md text-lg text-gray-600 dark:text-gray-300">
-                                {searchQuery ||
-                                Object.values(activeFilters).some(
+                                {Object.values(activeFilters).some(
                                     (f) => f?.length,
                                 )
-                                    ? "Try adjusting your search terms or filters to find what you're looking for."
+                                    ? "Try adjusting your filters to find what you're looking for."
                                     : 'Stay tuned! New announcements will appear here soon.'}
                             </p>
-                            {(searchQuery ||
-                                Object.values(activeFilters).some(
-                                    (f) => f?.length,
-                                )) && (
+                            {Object.values(activeFilters).some(
+                                (f) => f?.length,
+                            ) && (
                                 <Button
                                     variant="outline"
                                     onClick={() => {
-                                        setSearchQuery('');
                                         setActiveFilters({});
                                     }}
                                 >
-                                    Clear search and filters
+                                    Clear filters
                                 </Button>
                             )}
                         </div>

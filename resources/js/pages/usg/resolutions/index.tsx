@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import CountUp from '@/components/usg/count-up';
 import ResolutionCard from '@/components/usg/resolution-card';
-import SearchBar from '@/components/usg/search-bar';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
 import {
@@ -151,7 +151,13 @@ export default function ResolutionsIndex({
             <Head title="Resolutions - USG Portal" />
 
             {/* Hero Section */}
-            <section className="relative bg-[var(--usg-primary)] py-20 text-white">
+            <section className="relative bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
@@ -172,7 +178,7 @@ export default function ResolutionsIndex({
                     <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                         <div>
                             <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)] md:text-4xl">
-                                {resolutions.total}
+                                <CountUp end={resolutions.total} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Total Resolutions
@@ -180,7 +186,7 @@ export default function ResolutionsIndex({
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)] md:text-4xl">
-                                {publishedResolutions.length}
+                                <CountUp end={publishedResolutions.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Published
@@ -188,7 +194,7 @@ export default function ResolutionsIndex({
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)] md:text-4xl">
-                                {availableYears.length}
+                                <CountUp end={availableYears.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Years Active
@@ -196,7 +202,7 @@ export default function ResolutionsIndex({
                         </div>
                         <div>
                             <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] md:text-4xl">
-                                {authors.length}
+                                <CountUp end={authors.length} duration={2000} />
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Authors
@@ -209,37 +215,9 @@ export default function ResolutionsIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
-                    {/* Enhanced Search and Filters */}
+                    {/* Additional Filters */}
                     <div className="mb-12">
-                        <SearchBar
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder="Search resolutions by title, number, author, or content..."
-                            showFilters
-                            filters={{
-                                categories: categories,
-                                statuses: [
-                                    'published',
-                                    'draft',
-                                    'pending',
-                                    'archived',
-                                ],
-                            }}
-                            activeFilters={{
-                                categories: activeFilters.categories,
-                                statuses: activeFilters.statuses,
-                            }}
-                            onFiltersChange={(filters) => {
-                                setActiveFilters({
-                                    ...activeFilters,
-                                    categories: filters.categories,
-                                    statuses: filters.statuses,
-                                });
-                            }}
-                        />
-
-                        {/* Additional Filters */}
-                        <div className="mt-4 flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-4">
                             {/* Author Filter */}
                             {authors.length > 0 && (
                                 <div className="flex items-center gap-2">

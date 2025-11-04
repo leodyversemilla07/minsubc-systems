@@ -60,6 +60,7 @@ Route::prefix('usg')->name('usg.')->group(function () {
     // Search
     Route::get('/search', [SearchController::class, 'index'])->name('search');
     Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
+    Route::get('/search/quick', [SearchController::class, 'quickSearch'])->name('search.quick');
 });
 
 // Authenticated Routes

@@ -130,7 +130,7 @@ class PageController extends Controller
 
         return Inertia::render('usg/announcements/index', [
             'announcements' => $announcements,
-            'categories' => $categories,
+            'categories' => $categories ?? [],
             'featured' => $featured,
             'filters' => [
                 'search' => $search,
@@ -183,7 +183,14 @@ class PageController extends Controller
 
     public function events(Request $request): Response
     {
-        $events = $this->eventService->getUpcomingEvents(50);
+        $search = $request->get('search');
+
+        if ($search) {
+            $events = $this->eventService->searchEvents($search);
+        } else {
+            $events = $this->eventService->getUpcomingEvents(50);
+        }
+
         $categories = $this->eventService->getCategories();
         $featuredEvents = $this->eventService->getUpcomingEvents(3);
 
@@ -191,6 +198,9 @@ class PageController extends Controller
             'events' => $events,
             'categories' => $categories,
             'featured_events' => $featuredEvents,
+            'filters' => [
+                'search' => $search,
+            ],
         ]);
     }
 
@@ -223,8 +233,6 @@ class PageController extends Controller
         return Inertia::render('usg/events/show', [
             'event' => $event,
             'relatedEvents' => $relatedEvents,
-            'isRegistered' => $event->isUserRegistered(auth()->id()),
-            'canRegister' => auth()->check(),
         ]);
     }
 

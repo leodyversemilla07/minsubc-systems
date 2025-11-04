@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\ResolutionFactory;
 
 class Resolution extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'resolutions';
 
@@ -63,6 +65,25 @@ class Resolution extends Model
             'resolution_date' => 'datetime',
             'approved_at' => 'datetime',
             'published_at' => 'datetime',
+        ];
+    }
+
+    // Scout configuration
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === 'published';
+    }
+
+    #[SearchUsingFullText(['title', 'description', 'content'])]
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'resolution_number' => $this->resolution_number,
+            'title' => $this->title,
+            'description' => $this->description,
+            'content' => $this->content,
+            'category' => $this->category,
         ];
     }
 

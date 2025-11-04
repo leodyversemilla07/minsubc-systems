@@ -1,5 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import Carousel from '@/components/usg/carousel';
+import CountUp from '@/components/usg/count-up';
+import { OfficerCardSkeleton } from '@/components/usg/skeleton';
 import USGLayout from '@/layouts/usg-layout';
 import usg from '@/routes/usg';
 import { Head, Link } from '@inertiajs/react';
@@ -39,7 +42,13 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
             <Head title="USG Information Portal" />
 
             {/* Hero Section - Clear Value Proposition */}
-            <section className="relative -mt-28 overflow-hidden bg-[var(--usg-primary)] pt-36 pb-20 text-white sm:pt-48">
+            <section className="relative -mt-28 overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] pt-36 pb-20 text-white sm:pt-48">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <div className="mb-6 inline-flex items-center rounded-full bg-white/20 px-6 py-2 text-sm font-semibold backdrop-blur-sm">
@@ -94,9 +103,11 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 border-t border-white/20 pt-10 md:grid-cols-4">
                             <div className="text-center">
                                 <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    {stats.totalStudents
-                                        ? stats.totalStudents.toLocaleString()
-                                        : '2,500+'}
+                                    <CountUp
+                                        end={stats.totalStudents || 2500}
+                                        suffix="+"
+                                        duration={2000}
+                                    />
                                 </div>
                                 <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                     Students Represented
@@ -104,7 +115,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                             </div>
                             <div className="text-center">
                                 <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    {stats.activeProjects || '12'}
+                                    <CountUp
+                                        end={stats.activeProjects || 12}
+                                        duration={2000}
+                                    />
                                 </div>
                                 <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                     Active Projects
@@ -112,8 +126,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                             </div>
                             <div className="text-center">
                                 <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    {stats.eventsThisYear ||
-                                        stats.upcomingEvents}
+                                    <CountUp
+                                        end={stats.eventsThisYear || stats.upcomingEvents}
+                                        duration={2000}
+                                    />
                                 </div>
                                 <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                     Events This Year
@@ -121,8 +137,10 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                             </div>
                             <div className="text-center">
                                 <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    {stats.volunteersActive ||
-                                        stats.totalOfficers}
+                                    <CountUp
+                                        end={stats.volunteersActive || stats.totalOfficers}
+                                        duration={2000}
+                                    />
                                 </div>
                                 <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                     Active Volunteers
@@ -220,7 +238,7 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                     <div className="grid grid-cols-2 gap-8 text-center text-white md:grid-cols-4">
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                {stats.totalOfficers}
+                                <CountUp end={stats.totalOfficers} duration={2000} />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Dedicated Officers
@@ -228,7 +246,7 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                {stats.totalResolutions}
+                                <CountUp end={stats.totalResolutions} duration={2000} />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Resolutions Passed
@@ -236,7 +254,7 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                {stats.upcomingEvents}
+                                <CountUp end={stats.upcomingEvents} duration={2000} />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Upcoming Events
@@ -244,7 +262,7 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
                         </div>
                         <div>
                             <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                {stats.recentAnnouncements}
+                                <CountUp end={stats.recentAnnouncements} duration={2000} />
                             </div>
                             <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
                                 Recent Updates
@@ -310,38 +328,45 @@ export default function USGHomepage({ stats, _featuredOfficers }: Props) {
 
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         {_featuredOfficers && _featuredOfficers.length > 0 ? (
-                            _featuredOfficers.map((officer) => (
-                                <Card
-                                    key={officer.id}
-                                    className="group border-0 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900"
-                                >
-                                    <CardContent className="p-6 text-center">
-                                        <div className="mb-4">
-                                            {officer.photo ? (
-                                                <img
-                                                    src={officer.photo}
-                                                    alt={officer.name}
-                                                    className="mx-auto h-24 w-24 rounded-full object-cover shadow-md"
-                                                />
-                                            ) : (
-                                                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[var(--usg-primary)] text-white shadow-md">
-                                                    <Users className="h-12 w-12" />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
-                                            {officer.name}
-                                        </h3>
-                                        <p className="text-sm font-medium text-[var(--usg-primary)]">
-                                            {officer.position}
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            ))
+                            <Carousel
+                                items={_featuredOfficers.map((officer) => (
+                                    <Card
+                                        key={officer.id}
+                                        className="group mx-2 border-0 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900"
+                                    >
+                                        <CardContent className="p-6 text-center">
+                                            <div className="mb-4">
+                                                {officer.photo ? (
+                                                    <img
+                                                        src={officer.photo}
+                                                        alt={officer.name}
+                                                        className="mx-auto h-24 w-24 rounded-full object-cover shadow-md"
+                                                    />
+                                                ) : (
+                                                    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[var(--usg-primary)] text-white shadow-md">
+                                                        <Users className="h-12 w-12" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
+                                                {officer.name}
+                                            </h3>
+                                            <p className="text-sm font-medium text-[var(--usg-primary)]">
+                                                {officer.position}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                                autoplay
+                                interval={5000}
+                                className="col-span-full"
+                            />
                         ) : (
-                            <div className="col-span-full text-center text-gray-500 dark:text-gray-400">
-                                Officers data is loading...
-                            </div>
+                            <>
+                                <OfficerCardSkeleton />
+                                <OfficerCardSkeleton />
+                                <OfficerCardSkeleton />
+                            </>
                         )}
                     </div>
 

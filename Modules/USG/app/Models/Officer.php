@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\OfficerFactory;
 
 class Officer extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'officers';
 
@@ -45,6 +47,25 @@ class Officer extends Model
             'term_end' => 'datetime',
             'order' => 'integer',
             'is_active' => 'boolean',
+        ];
+    }
+
+    // Scout configuration
+    public function shouldBeSearchable(): bool
+    {
+        return $this->is_active === true;
+    }
+
+    #[SearchUsingFullText(['name', 'position', 'department', 'bio'])]
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'position' => $this->position,
+            'department' => $this->department,
+            'bio' => $this->bio,
+            'email' => $this->email,
         ];
     }
 

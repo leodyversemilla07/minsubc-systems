@@ -2,7 +2,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import CalendarWidget from '@/components/usg/calendar-widget';
 import EventCard from '@/components/usg/event-card';
-import SearchBar from '@/components/usg/search-bar';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import { Calendar as CalendarIcon, Filter, Grid, List } from 'lucide-react';
@@ -158,30 +157,6 @@ export default function EventsCalendar({ events, categories }: Props) {
 
             {/* Main Content */}
             <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                {/* Search and Filters */}
-                <div className="mb-8">
-                    <SearchBar
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                        placeholder="Search events by title, description, or location..."
-                        showFilters
-                        filters={{
-                            categories: categories,
-                            statuses: ['published', 'cancelled', 'completed'],
-                        }}
-                        activeFilters={{
-                            categories: activeFilters.categories,
-                            statuses: activeFilters.statuses,
-                        }}
-                        onFiltersChange={(filters) => {
-                            setActiveFilters({
-                                categories: filters.categories,
-                                statuses: filters.statuses,
-                            });
-                        }}
-                    />
-                </div>
-
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     {/* Main Calendar/List View */}
                     <div className="lg:col-span-2">

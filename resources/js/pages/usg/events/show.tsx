@@ -26,7 +26,6 @@ interface Event {
     organizer: string;
     max_participants: number | null;
     current_participants?: number;
-    registration_deadline: string | null;
     image_path: string | null;
     status: 'draft' | 'published' | 'cancelled' | 'completed';
     category?: string;
@@ -39,28 +38,14 @@ interface Event {
 interface Props {
     event: Event;
     relatedEvents?: Event[];
-    isRegistered?: boolean;
-    canRegister?: boolean;
 }
 
 export default function EventShow({
     event,
     relatedEvents = [],
-    isRegistered = false,
-    canRegister = true,
 }: Props) {
     const handleBack = () => {
         router.visit('/usg/events');
-    };
-
-    const handleRegister = () => {
-        // This would typically make an API call to register the user
-        router.post(`/usg/events/${event.id}/register`);
-    };
-
-    const handleUnregister = () => {
-        // This would typically make an API call to unregister the user
-        router.delete(`/usg/events/${event.id}/register`);
     };
 
     const handleShare = async () => {
@@ -107,12 +92,7 @@ export default function EventShow({
     };
 
     const isRegistrationOpen = () => {
-        if (!event.registration_deadline) return isEventUpcoming();
-        const deadline = new Date(event.registration_deadline);
-        const now = new Date();
-        return (
-            now < deadline && event.status === 'published' && isEventUpcoming()
-        );
+        return event.status === 'published' && isEventUpcoming();
     };
 
     const isEventFull = () => {
@@ -288,22 +268,7 @@ export default function EventShow({
                                         </>
                                     )}
 
-                                    {registrationStatus === 'closed' && (
-                                        <>
-                                            <Clock className="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-600" />
-                                            <div>
-                                                <p className="font-medium text-yellow-900 dark:text-yellow-100">
-                                                    Registration Closed
-                                                </p>
-                                                <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                                                    The registration deadline
-                                                    has passed.
-                                                    {event.registration_deadline &&
-                                                        ` Deadline was ${formatDate(event.registration_deadline)}.`}
-                                                </p>
-                                            </div>
-                                        </>
-                                    )}
+
                                 </div>
                             </div>
                         )}
@@ -332,64 +297,7 @@ export default function EventShow({
                             />
                         </div>
 
-                        {/* Registration Section */}
-                        {registrationStatus === 'open' && (
-                            <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
-                                <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
-                                    Registration
-                                </h2>
 
-                                {isRegistered ? (
-                                    <div className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
-                                        <div className="flex items-center gap-2">
-                                            <CheckCircle className="h-5 w-5 text-green-600" />
-                                            <div>
-                                                <p className="font-medium text-green-900 dark:text-green-100">
-                                                    You're registered!
-                                                </p>
-                                                <p className="text-sm text-green-700 dark:text-green-300">
-                                                    We look forward to seeing
-                                                    you at the event.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <Button
-                                            variant="outline"
-                                            onClick={handleUnregister}
-                                            className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
-                                        >
-                                            Unregister
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-4">
-                                        {event.registration_deadline && (
-                                            <p className="text-gray-600 dark:text-gray-400">
-                                                Registration deadline:{' '}
-                                                {formatDate(
-                                                    event.registration_deadline,
-                                                )}
-                                            </p>
-                                        )}
-
-                                        {canRegister ? (
-                                            <Button
-                                                onClick={handleRegister}
-                                                className="w-full bg-green-600 hover:bg-green-700 sm:w-auto"
-                                                size="lg"
-                                            >
-                                                Register for This Event
-                                            </Button>
-                                        ) : (
-                                            <p className="text-gray-600 dark:text-gray-400">
-                                                Please log in to register for
-                                                this event.
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        )}
 
                         {/* Requirements */}
                         {event.requirements && (
