@@ -57,7 +57,7 @@ export default function OfficerCard({
     };
 
     return (
-        <Card className="group m-2">
+        <Card className="group m-2 dark:bg-gray-900 dark:border-gray-700">
             <CardContent className={`p-${compact ? '4' : '8'} text-center`}>
                 {/* Avatar */}
                 <div className="mb-4">

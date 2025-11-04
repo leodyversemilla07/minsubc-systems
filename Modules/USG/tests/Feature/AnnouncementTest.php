@@ -428,27 +428,6 @@ test('published scope filters announcements correctly', function () {
     expect($publishedAnnouncements)->toHaveCount(1);
 });
 
-test('featured scope filters announcements correctly', function () {
-    $this->seed(RolesAndPermissionsSeeder::class);
-
-    $usgAdmin = User::factory()->create();
-    $usgAdmin->assignRole('usg-admin');
-
-    Announcement::factory()->create([
-        'priority' => 'high',
-        'author_id' => $usgAdmin->id,
-    ]);
-
-    Announcement::factory()->create([
-        'priority' => 'normal',
-        'author_id' => $usgAdmin->id,
-    ]);
-
-    $featuredAnnouncements = Announcement::featured()->get();
-
-    expect($featuredAnnouncements)->toHaveCount(1);
-});
-
 // Announcement Preview Test
 test('admin can preview announcement before publishing', function () {
     $this->seed(RolesAndPermissionsSeeder::class);

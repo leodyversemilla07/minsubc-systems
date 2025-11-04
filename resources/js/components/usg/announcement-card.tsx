@@ -9,7 +9,6 @@ interface Announcement {
     title: string;
     excerpt: string;
     slug: string;
-    priority: 'low' | 'normal' | 'high';
     publish_date: string;
     views_count?: number;
     featured_image?: string;
@@ -27,14 +26,8 @@ export default function AnnouncementCard({
     showImage = true,
     compact = false,
 }: AnnouncementCardProps) {
-    const priorityVariant = {
-        low: 'secondary',
-        normal: 'default',
-        high: 'destructive',
-    } as const;
-
     return (
-        <Card className="group transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+        <Card className="group transition-all duration-200 hover:-translate-y-1 hover:shadow-md dark:bg-gray-900 dark:border-gray-700">
             <CardContent className={`p-0 ${compact ? '' : ''}`}>
                 {/* Featured Image */}
                 {showImage && announcement.featured_image && (
@@ -44,33 +37,27 @@ export default function AnnouncementCard({
                             alt={announcement.title}
                             className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute top-3 left-3">
-                            <Badge
-                                variant={priorityVariant[announcement.priority]}
-                            >
-                                {announcement.priority}
-                            </Badge>
-                        </div>
+                        {announcement.category && (
+                            <div className="absolute top-3 left-3">
+                                <Badge variant="secondary">
+                                    {announcement.category}
+                                </Badge>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {/* Content */}
                 <div className={`p-${compact ? '4' : '6'}`}>
-                    {/* Badges and Meta - only show if no image or compact */}
-                    {(!showImage || !announcement.featured_image) && (
-                        <div className="mb-3 flex items-center gap-2">
-                            <Badge
-                                variant={priorityVariant[announcement.priority]}
-                            >
-                                {announcement.priority}
-                            </Badge>
-                            {announcement.category && (
+                    {/* Category badge - only show if no image */}
+                    {(!showImage || !announcement.featured_image) &&
+                        announcement.category && (
+                            <div className="mb-3">
                                 <Badge variant="outline">
                                     {announcement.category}
                                 </Badge>
-                            )}
-                        </div>
-                    )}
+                            </div>
+                        )}
 
                     {/* Title */}
                     <Link

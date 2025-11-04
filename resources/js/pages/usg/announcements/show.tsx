@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import PriorityBadge from '@/components/usg/priority-badge';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -19,7 +18,6 @@ interface Announcement {
     content: string;
     excerpt: string;
     slug: string;
-    priority: 'low' | 'normal' | 'high';
     publish_date: string;
     views_count?: number;
     featured_image?: string;
@@ -111,16 +109,11 @@ export default function AnnouncementShow({
                         {/* Header */}
                         <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                                <div className="flex items-center gap-2">
-                                    <PriorityBadge
-                                        priority={announcement.priority}
-                                    />
-                                    {announcement.category && (
-                                        <Badge variant="outline">
-                                            {announcement.category}
-                                        </Badge>
-                                    )}
-                                </div>
+                                {announcement.category && (
+                                    <Badge variant="outline">
+                                        {announcement.category}
+                                    </Badge>
+                                )}
 
                                 <Button
                                     variant="ghost"
@@ -266,9 +259,11 @@ export default function AnnouncementShow({
                                             }
                                         >
                                             <div className="mb-3 flex items-start justify-between">
-                                                <PriorityBadge
-                                                    priority={related.priority}
-                                                />
+                                                {related.category && (
+                                                    <Badge variant="outline">
+                                                        {related.category}
+                                                    </Badge>
+                                                )}
                                                 <div className="text-sm text-gray-600 dark:text-gray-400">
                                                     {new Date(
                                                         related.publish_date,
@@ -281,14 +276,6 @@ export default function AnnouncementShow({
                                             <p className="mb-3 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
                                                 {related.excerpt}
                                             </p>
-                                            {related.category && (
-                                                <Badge
-                                                    variant="outline"
-                                                    className="text-xs"
-                                                >
-                                                    {related.category}
-                                                </Badge>
-                                            )}
                                         </div>
                                     ))}
                             </div>

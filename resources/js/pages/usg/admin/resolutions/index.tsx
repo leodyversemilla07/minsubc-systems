@@ -17,7 +17,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import SearchBar from '@/components/usg/search-bar';
-import StatusBadge from '@/components/usg/status-badge';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -186,6 +185,40 @@ export default function ResolutionsManagement({
 
     const getVotePercentage = (votes: number, total: number) => {
         return total > 0 ? Math.round((votes / total) * 100) : 0;
+    };
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+            case 'draft':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            case 'review':
+                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
+            case 'rejected':
+                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+            case 'archived':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            default:
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+        }
+    };
+
+    const formatStatus = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'Published';
+            case 'draft':
+                return 'draft';
+            case 'review':
+                return 'Under Review';
+            case 'rejected':
+                return 'Rejected';
+            case 'archived':
+                return 'Archived';
+            default:
+                return status.charAt(0).toUpperCase() + status.slice(1);
+        }
     };
 
     const getStatsData = () => {
@@ -491,10 +524,9 @@ export default function ResolutionsManagement({
                                                         resolution.resolution_number
                                                     }
                                                 </Badge>
-                                                <StatusBadge
-                                                    status={resolution.status}
-                                                    showIcon
-                                                />
+                                                <Badge className={getStatusColor(resolution.status)}>
+                                                    {formatStatus(resolution.status)}
+                                                </Badge>
                                                 {resolution.category && (
                                                     <Badge
                                                         variant="secondary"

@@ -1,10 +1,24 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import CountUp from '@/components/usg/count-up';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Download, Eye, FileText, TrendingUp } from 'lucide-react';
+import {
+    Calendar,
+    Download,
+    Eye,
+    FileText,
+    Filter,
+    TrendingUp,
+    X,
+} from 'lucide-react';
 import { useState } from 'react';
 
 interface TransparencyReport {
@@ -46,7 +60,6 @@ interface Props {
     filters: {
         type?: string;
         year?: string;
-        search?: string;
     };
 }
 
@@ -57,23 +70,25 @@ export default function TransparencyIndex({
     stats,
     filters,
 }: Props) {
-    const [searchQuery, setSearchQuery] = useState(filters.search || '');
-    const [selectedType, setSelectedType] = useState(filters.type || '');
-    const [selectedYear, setSelectedYear] = useState(filters.year || '');
+    const [activeFilters, setActiveFilters] = useState<{
+        type?: string;
+        year?: string;
+    }>({
+        type: filters.type,
+        year: filters.year,
+    });
 
-    const handleFilter = () => {
+    const applyFilters = () => {
         const params = new URLSearchParams();
-        if (searchQuery.trim()) params.set('search', searchQuery.trim());
-        if (selectedType) params.set('type', selectedType);
-        if (selectedYear) params.set('year', selectedYear);
+        if (activeFilters.type) params.set('type', activeFilters.type);
+        if (activeFilters.year) params.set('year', activeFilters.year);
 
-        router.get(`/usg/transparency?${params.toString()}`);
+        const queryString = params.toString();
+        router.get(`/usg/transparency${queryString ? `?${queryString}` : ''}`);
     };
 
     const clearFilters = () => {
-        setSearchQuery('');
-        setSelectedType('');
-        setSelectedYear('');
+        setActiveFilters({});
         router.get('/usg/transparency');
     };
 
@@ -135,7 +150,7 @@ export default function TransparencyIndex({
             </section>
 
             {/* Stats Bar */}
-            <div className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-800">
+            <div className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
                         <div className="text-center">
@@ -187,87 +202,165 @@ export default function TransparencyIndex({
             </div>
 
             {/* Main Content */}
-            <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                {/* Search and Filters */}
-                <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                    <div className="mb-4 flex items-center gap-2">
-                        <div className="rounded-lg bg-[var(--usg-primary)] p-2">
-                            <FileText className="h-5 w-5 text-white" />
+            <div className="bg-gray-50 py-12 dark:bg-gray-800">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                {/* Filters Section */}
+                <div className="mb-8">
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                        <div className="mb-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
+                                <h3 className="font-semibold text-gray-900 dark:text-white">
+                                    Filter Reports
+                                </h3>
+                            </div>
+                            {(activeFilters.type || activeFilters.year) && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={clearFilters}
+                                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                >
+                                    <X className="mr-1 h-4 w-4" />
+                                    Clear All
+                                </Button>
+                            )}
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            Search & Filter Reports
-                        </h2>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                        <div>
-                            <Input
-                                placeholder="Search reports..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleFilter();
-                                    }
-                                }}
-                            />
+
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            {/* Type Filter */}
+                            {types.length > 0 && (
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <FileText className="h-4 w-4 text-gray-400" />
+                                        Report Type
+                                    </label>
+                                    <Select
+                                        value={activeFilters.type}
+                                        onValueChange={(value) => {
+                                            const newFilters = {
+                                                ...activeFilters,
+                                                type: value || undefined,
+                                            };
+                                            setActiveFilters(newFilters);
+                                        }}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder={`All Types (${types.length})`} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {types.map((type) => (
+                                                <SelectItem key={type} value={type}>
+                                                    {formatTypeLabel(type)}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )}
+
+                            {/* Year Filter */}
+                            {years.length > 0 && (
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <Calendar className="h-4 w-4 text-gray-400" />
+                                        Year
+                                    </label>
+                                    <Select
+                                        value={activeFilters.year}
+                                        onValueChange={(value) => {
+                                            const newFilters = {
+                                                ...activeFilters,
+                                                year: value || undefined,
+                                            };
+                                            setActiveFilters(newFilters);
+                                        }}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder={`All Years (${years.length})`} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {years.map((year) => (
+                                                <SelectItem key={year} value={year.toString()}>
+                                                    {year}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )}
                         </div>
-                        <div>
-                            <select
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                                value={selectedType}
-                                onChange={(e) =>
-                                    setSelectedType(e.target.value)
-                                }
-                            >
-                                <option value="">All Types</option>
-                                {types.map((type) => (
-                                    <option key={type} value={type}>
-                                        {formatTypeLabel(type)}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <select
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                                value={selectedYear}
-                                onChange={(e) =>
-                                    setSelectedYear(e.target.value)
-                                }
-                            >
-                                <option value="">All Years</option>
-                                {years.map((year) => (
-                                    <option key={year} value={year}>
-                                        {year}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="flex gap-2">
-                            <Button onClick={handleFilter} size="sm">
-                                Filter
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={clearFilters}
-                                size="sm"
-                            >
-                                Clear
-                            </Button>
-                        </div>
+
+                        {/* Apply Button */}
+                        {(activeFilters.type !== filters.type || activeFilters.year !== filters.year) && (
+                            <div className="mt-4 flex justify-end border-t border-gray-200 pt-4 dark:border-gray-700">
+                                <Button onClick={applyFilters} size="sm">
+                                    Apply Filters
+                                </Button>
+                            </div>
+                        )}
+
+                        {/* Active Filters Display */}
+                        {(activeFilters.type || activeFilters.year) && (
+                            <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+                                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                    Active filters:
+                                </span>
+                                {activeFilters.type && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="flex items-center gap-1"
+                                    >
+                                        <FileText className="h-3 w-3" />
+                                        {formatTypeLabel(activeFilters.type)}
+                                        <button
+                                            onClick={() => {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    type: undefined,
+                                                });
+                                            }}
+                                            className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </Badge>
+                                )}
+                                {activeFilters.year && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="flex items-center gap-1"
+                                    >
+                                        <Calendar className="h-3 w-3" />
+                                        {activeFilters.year}
+                                        <button
+                                            onClick={() => {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    year: undefined,
+                                                });
+                                            }}
+                                            className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </Badge>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Results */}
                 {reports.data.length === 0 ? (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                    <div className="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
                         <FileText className="mx-auto mb-4 h-16 w-16 text-gray-400 dark:text-gray-600" />
                         <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                             No reports found
                         </h3>
                         <p className="text-gray-600 dark:text-gray-400">
                             {Object.values(filters).some((f) => f)
-                                ? 'Try adjusting your search filters'
+                                ? 'Try adjusting your filters'
                                 : 'No transparency reports have been published yet'}
                         </p>
                     </div>
@@ -283,7 +376,7 @@ export default function TransparencyIndex({
                             {reports.data.map((report) => (
                                 <div
                                     key={report.id}
-                                    className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-800"
+                                    className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                                 >
                                     <div className="mb-4">
                                         <div className="mb-3 flex items-start justify-between">
@@ -396,20 +489,15 @@ export default function TransparencyIndex({
                                             onClick={() => {
                                                 const params =
                                                     new URLSearchParams();
-                                                if (searchQuery.trim())
-                                                    params.set(
-                                                        'search',
-                                                        searchQuery.trim(),
-                                                    );
-                                                if (selectedType)
+                                                if (activeFilters.type)
                                                     params.set(
                                                         'type',
-                                                        selectedType,
+                                                        activeFilters.type,
                                                     );
-                                                if (selectedYear)
+                                                if (activeFilters.year)
                                                     params.set(
                                                         'year',
-                                                        selectedYear,
+                                                        activeFilters.year,
                                                     );
                                                 params.set(
                                                     'page',
@@ -429,6 +517,7 @@ export default function TransparencyIndex({
                         )}
                     </>
                 )}
+                </div>
             </div>
         </USGLayout>
     );

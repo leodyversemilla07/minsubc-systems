@@ -46,7 +46,6 @@ class Announcement extends Model
         'content',
         'excerpt',
         'category',
-        'priority',
         'featured_image',
         'status',
         'publish_date',
@@ -124,11 +123,6 @@ class Announcement extends Model
     public function scopeArchived(Builder $query): Builder
     {
         return $query->where('status', 'archived');
-    }
-
-    public function scopeFeatured(Builder $query): Builder
-    {
-        return $query->where('priority', 'high');
     }
 
     public function scopeExpired(Builder $query): Builder

@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import PriorityBadge from '@/components/usg/priority-badge';
 import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/usg/admin/announcements';
 import { show as publicShow } from '@/routes/usg/announcements';
@@ -21,7 +20,6 @@ interface Announcement {
     excerpt: string;
     slug: string;
     status: string;
-    priority: 'low' | 'normal' | 'high';
     publish_date: string | null;
     views_count?: number;
     featured_image?: string;
@@ -98,16 +96,11 @@ export default function AnnouncementPreview({
                         {/* Header */}
                         <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                                <div className="flex items-center gap-2">
-                                    <PriorityBadge
-                                        priority={announcement.priority}
-                                    />
-                                    {announcement.category && (
-                                        <Badge variant="outline">
-                                            {announcement.category}
-                                        </Badge>
-                                    )}
-                                </div>
+                                {announcement.category && (
+                                    <Badge variant="outline">
+                                        {announcement.category}
+                                    </Badge>
+                                )}
                             </div>
 
                             <h1 className="mb-4 text-3xl font-bold text-card-foreground">
@@ -247,9 +240,11 @@ export default function AnnouncementPreview({
                                     className="block rounded-lg bg-card p-6 text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
                                 >
                                     <div className="mb-3 flex items-start justify-between">
-                                        <PriorityBadge
-                                            priority={related.priority}
-                                        />
+                                        {related.category && (
+                                            <Badge variant="outline">
+                                                {related.category}
+                                            </Badge>
+                                        )}
                                         <div className="text-sm text-muted-foreground">
                                             {related.publish_date &&
                                                 new Date(
@@ -263,14 +258,6 @@ export default function AnnouncementPreview({
                                     <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">
                                         {related.excerpt}
                                     </p>
-                                    {related.category && (
-                                        <Badge
-                                            variant="outline"
-                                            className="text-xs"
-                                        >
-                                            {related.category}
-                                        </Badge>
-                                    )}
                                 </Link>
                             ))}
                         </div>

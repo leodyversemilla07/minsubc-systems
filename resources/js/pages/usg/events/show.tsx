@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import StatusBadge from '@/components/usg/status-badge';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -27,7 +26,7 @@ interface Event {
     max_participants: number | null;
     current_participants?: number;
     image_path: string | null;
-    status: 'draft' | 'published' | 'cancelled' | 'completed';
+    status: 'draft' | 'published' | 'cancelled' | 'archived';
     category?: string;
     requirements?: string;
     contact_info?: string;
@@ -104,11 +103,41 @@ export default function EventShow({
 
     const getRegistrationStatus = () => {
         if (event.status === 'cancelled') return 'cancelled';
-        if (event.status === 'completed') return 'completed';
+        if (event.status === 'archived') return 'archived';
         if (!isEventUpcoming()) return 'past';
         if (isEventFull()) return 'full';
         if (!isRegistrationOpen()) return 'closed';
         return 'open';
+    };
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+            case 'draft':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            case 'cancelled':
+                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+            case 'archived':
+                return 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
+            default:
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+        }
+    };
+
+    const formatStatus = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'Published';
+            case 'draft':
+                return 'draft';
+            case 'cancelled':
+                return 'Cancelled';
+            case 'archived':
+                return 'Archived';
+            default:
+                return status.charAt(0).toUpperCase() + status.slice(1);
+        }
     };
 
     const registrationStatus = getRegistrationStatus();
@@ -149,10 +178,9 @@ export default function EventShow({
                         <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
                                 <div className="flex items-center gap-2">
-                                    <StatusBadge
-                                        status={event.status}
-                                        showIcon
-                                    />
+                                    <Badge className={getStatusColor(event.status)}>
+                                        {formatStatus(event.status)}
+                                    </Badge>
                                     {event.category && (
                                         <Badge variant="outline">
                                             {event.category}
@@ -222,16 +250,15 @@ export default function EventShow({
                                         </>
                                     )}
 
-                                    {registrationStatus === 'completed' && (
+                                    {registrationStatus === 'archived' && (
                                         <>
                                             <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
                                             <div>
                                                 <p className="font-medium text-blue-900 dark:text-blue-100">
-                                                    Event Completed
+                                                    Event Archived
                                                 </p>
                                                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                                                    This event has already taken
-                                                    place.
+                                                    This event has been archived.
                                                 </p>
                                             </div>
                                         </>
@@ -364,9 +391,9 @@ export default function EventShow({
                                         }
                                     >
                                         <div className="mb-3 flex items-center gap-2">
-                                            <StatusBadge
-                                                status={related.status}
-                                            />
+                                            <Badge className={getStatusColor(related.status)}>
+                                                {formatStatus(related.status)}
+                                            </Badge>
                                             {related.category && (
                                                 <Badge
                                                     variant="outline"

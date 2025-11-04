@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import PriorityBadge from '@/components/usg/priority-badge';
 import AppLayout from '@/layouts/app-layout';
 import { edit, index } from '@/routes/usg/admin/announcements';
 import { Head, router } from '@inertiajs/react';
@@ -21,7 +20,6 @@ interface Announcement {
     excerpt: string;
     slug: string;
     status: string;
-    priority: 'low' | 'normal' | 'high';
     publish_date: string | null;
     views_count?: number;
     featured_image?: string;
@@ -96,9 +94,6 @@ export default function AnnouncementShow({ announcement }: Props) {
                         <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
                                 <div className="flex items-center gap-2">
-                                    <PriorityBadge
-                                        priority={announcement.priority}
-                                    />
                                     {announcement.category && (
                                         <Badge variant="outline">
                                             {announcement.category}

@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import StatusBadge from '@/components/usg/status-badge';
 import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -114,6 +113,40 @@ export default function ResolutionShow({
         return total > 0 ? Math.round((votes / total) * 100) : 0;
     };
 
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+            case 'draft':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            case 'review':
+                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
+            case 'rejected':
+                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+            case 'archived':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            default:
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+        }
+    };
+
+    const formatStatus = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'Published';
+            case 'draft':
+                return 'draft';
+            case 'review':
+                return 'Under Review';
+            case 'rejected':
+                return 'Rejected';
+            case 'archived':
+                return 'Archived';
+            default:
+                return status.charAt(0).toUpperCase() + status.slice(1);
+        }
+    };
+
     return (
         <USGLayout>
             <Head
@@ -144,12 +177,9 @@ export default function ResolutionShow({
                                 >
                                     {resolution.resolution_number}
                                 </Badge>
-                                <div className="rounded-full bg-white/10 px-3 py-1 text-sm backdrop-blur-sm">
-                                    <StatusBadge
-                                        status={resolution.status}
-                                        showIcon
-                                    />
-                                </div>
+                                <Badge className={`${getStatusColor(resolution.status)} backdrop-blur-sm`}>
+                                    {formatStatus(resolution.status)}
+                                </Badge>
                                 {resolution.category && (
                                     <Badge
                                         variant="secondary"
@@ -423,7 +453,9 @@ export default function ResolutionShow({
                                         >
                                             {related.resolution_number}
                                         </Badge>
-                                        <StatusBadge status={related.status} />
+                                        <Badge className={getStatusColor(related.status)}>
+                                            {formatStatus(related.status)}
+                                        </Badge>
                                     </div>
                                     <h4 className="mb-2 line-clamp-2 text-lg font-semibold text-gray-900 dark:text-white">
                                         {related.title}

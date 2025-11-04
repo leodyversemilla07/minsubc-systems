@@ -31,7 +31,6 @@ class AnnouncementFactory extends Factory
             'content' => $this->faker->paragraphs(5, true),
             'excerpt' => $this->faker->paragraph(),
             'category' => $this->faker->randomElement(['general', 'academic', 'events', 'urgent']),
-            'priority' => $this->faker->randomElement(['low', 'normal', 'high']),
             'status' => 'published',
             'publish_date' => now(),
             'expiry_date' => now()->addMonths(3),

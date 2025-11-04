@@ -1,5 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import CountUp from '@/components/usg/count-up';
 import EventCard from '@/components/usg/event-card';
 import USGLayout from '@/layouts/usg-layout';
@@ -8,9 +15,12 @@ import {
     Calendar as CalendarIcon,
     Clock,
     ExternalLink,
+    FileText,
+    Filter,
     MapPin,
-    Search,
+    Tag,
     Users,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -26,7 +36,7 @@ interface Event {
     current_participants?: number;
     registration_deadline: string | null;
     image_path: string | null;
-    status: 'draft' | 'published' | 'cancelled' | 'completed';
+    status: 'draft' | 'published' | 'cancelled' | 'archived';
     category?: string;
     created_at: string;
 }
@@ -42,7 +52,6 @@ export default function EventsIndex({
     categories = [],
     featured_events = [],
 }: Props) {
-    const [searchQuery, setSearchQuery] = useState('');
     const [activeFilters, setActiveFilters] = useState<{
         categories?: string[];
         statuses?: string[];
@@ -50,16 +59,6 @@ export default function EventsIndex({
     }>({});
 
     const filteredEvents = events.filter((event) => {
-        // Search filter
-        const matchesSearch =
-            searchQuery === '' ||
-            event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.description
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.organizer.toLowerCase().includes(searchQuery.toLowerCase());
-
         // Category filter
         const matchesCategory =
             !activeFilters.categories?.length ||
@@ -77,7 +76,6 @@ export default function EventsIndex({
             filterByDateRange(event, activeFilters.dateRange);
 
         return (
-            matchesSearch &&
             matchesCategory &&
             matchesStatus &&
             matchesDateRange
@@ -135,7 +133,7 @@ export default function EventsIndex({
         .filter((event) => {
             const eventDate = new Date(event.event_date);
             const now = new Date();
-            return eventDate < now || event.status === 'completed';
+            return eventDate < now || event.status === 'archived';
         })
         .sort(
             (a, b) =>
@@ -228,9 +226,194 @@ export default function EventsIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
+                    {/* Filters Section */}
+                    <div className="mb-8">
+                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                            <div className="mb-4 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                                        Filter Events
+                                    </h3>
+                                </div>
+                                {Object.values(activeFilters).some((f) => f?.length || f) && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => {
+                                            setActiveFilters({});
+                                        }}
+                                        className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                    >
+                                        <X className="mr-1 h-4 w-4" />
+                                        Clear All
+                                    </Button>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                {/* Category Filter */}
+                                {categories.length > 0 && (
+                                    <div className="space-y-2">
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            <Tag className="h-4 w-4 text-gray-400" />
+                                            Category
+                                        </label>
+                                        <Select
+                                            value={activeFilters.categories?.[0]}
+                                            onValueChange={(value) => {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    categories: value ? [value] : [],
+                                                });
+                                            }}
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder={`All Categories (${categories.length})`} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {categories.map((category) => (
+                                                    <SelectItem key={category} value={category}>
+                                                        {category}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
+
+                                {/* Status Filter */}
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <FileText className="h-4 w-4 text-gray-400" />
+                                        Status
+                                    </label>
+                                    <Select
+                                        value={activeFilters.statuses?.[0]}
+                                        onValueChange={(value) => {
+                                            setActiveFilters({
+                                                ...activeFilters,
+                                                statuses: value ? [value] : [],
+                                            });
+                                        }}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="All Statuses" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="published">Published</SelectItem>
+                                            <SelectItem value="draft">Draft</SelectItem>
+                                            <SelectItem value="cancelled">Cancelled</SelectItem>
+                                            <SelectItem value="archived">Archived</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                {/* Date Range Filter */}
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <CalendarIcon className="h-4 w-4 text-gray-400" />
+                                        Date Range
+                                    </label>
+                                    <Select
+                                        value={activeFilters.dateRange}
+                                        onValueChange={(value) => {
+                                            setActiveFilters({
+                                                ...activeFilters,
+                                                dateRange: value || undefined,
+                                            });
+                                        }}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="All Dates" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Today">Today</SelectItem>
+                                            <SelectItem value="Tomorrow">Tomorrow</SelectItem>
+                                            <SelectItem value="This Week">This Week</SelectItem>
+                                            <SelectItem value="This Month">This Month</SelectItem>
+                                            <SelectItem value="Upcoming">Upcoming</SelectItem>
+                                            <SelectItem value="Past">Past</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            {/* Active Filters Display */}
+                            {Object.values(activeFilters).some((f) => f?.length || f) && (
+                                <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+                                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                        Active filters:
+                                    </span>
+                                    {activeFilters.categories?.map((category) => (
+                                        <Badge
+                                            key={category}
+                                            variant="secondary"
+                                            className="flex items-center gap-1"
+                                        >
+                                            <Tag className="h-3 w-3" />
+                                            {category}
+                                            <button
+                                                onClick={() => {
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        categories: [],
+                                                    });
+                                                }}
+                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                    {activeFilters.statuses?.map((status) => (
+                                        <Badge
+                                            key={status}
+                                            variant="secondary"
+                                            className="flex items-center gap-1"
+                                        >
+                                            <FileText className="h-3 w-3" />
+                                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                                            <button
+                                                onClick={() => {
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        statuses: [],
+                                                    });
+                                                }}
+                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                    {activeFilters.dateRange && (
+                                        <Badge
+                                            variant="secondary"
+                                            className="flex items-center gap-1"
+                                        >
+                                            <CalendarIcon className="h-3 w-3" />
+                                            {activeFilters.dateRange}
+                                            <button
+                                                onClick={() => {
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        dateRange: undefined,
+                                                    });
+                                                }}
+                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Featured Events */}
                     {featured_events.length > 0 &&
-                        !searchQuery &&
                         Object.keys(activeFilters).length === 0 && (
                             <div className="mb-12">
                                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
@@ -281,30 +464,27 @@ export default function EventsIndex({
 
                     {filteredEvents.length === 0 ? (
                         <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
-                            <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                            <CalendarIcon className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No events found
                             </h3>
                             <p className="mx-auto mb-6 max-w-md text-gray-600 dark:text-gray-400">
-                                {searchQuery ||
-                                Object.values(activeFilters).some(
+                                {Object.values(activeFilters).some(
                                     (f) => f?.length || f,
                                 )
-                                    ? "Try adjusting your search terms or filters to find what you're looking for."
+                                    ? "Try adjusting your filters to find what you're looking for."
                                     : 'No events are currently scheduled.'}
                             </p>
-                            {(searchQuery ||
-                                Object.values(activeFilters).some(
-                                    (f) => f?.length || f,
-                                )) && (
+                            {Object.values(activeFilters).some(
+                                (f) => f?.length || f,
+                            ) && (
                                 <Button
                                     variant="outline"
                                     onClick={() => {
-                                        setSearchQuery('');
                                         setActiveFilters({});
                                     }}
                                 >
-                                    Clear search and filters
+                                    Clear filters
                                 </Button>
                             )}
                         </div>

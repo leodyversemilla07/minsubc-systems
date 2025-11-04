@@ -32,10 +32,8 @@ class StoreAnnouncementRequest extends FormRequest
             'publish_at' => ['required', 'date'],
             'expires_at' => ['nullable', 'date', 'after:publish_at'],
             'is_published' => ['required', 'boolean'],
-            'is_pinned' => ['required', 'boolean'],
             // These fields are added by prepareForValidation()
             'status' => ['sometimes', 'string', 'in:draft,published,archived'],
-            'priority' => ['sometimes', 'string', 'in:normal,high'],
             'publish_date' => ['sometimes', 'date'],
             'expiry_date' => ['sometimes', 'nullable', 'date'],
         ];
@@ -48,15 +46,11 @@ class StoreAnnouncementRequest extends FormRequest
     {
         // Convert string boolean values to actual booleans
         $isPublished = filter_var($this->is_published, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        $isPinned = filter_var($this->is_pinned, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         $this->merge([
             'is_published' => $isPublished,
-            'is_pinned' => $isPinned,
             // Convert is_published boolean to status enum
             'status' => $isPublished ? 'published' : 'draft',
-            // Convert is_pinned boolean to priority enum
-            'priority' => $isPinned ? 'high' : 'normal',
             // Map frontend field names to database field names
             'publish_date' => $this->publish_at,
             'expiry_date' => $this->expires_at,
@@ -74,7 +68,6 @@ class StoreAnnouncementRequest extends FormRequest
             'publish_at' => 'publish date',
             'expires_at' => 'expiration date',
             'is_published' => 'publication status',
-            'is_pinned' => 'priority status',
             'featured_image' => 'featured image',
         ];
     }

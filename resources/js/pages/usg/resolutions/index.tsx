@@ -1,5 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import CountUp from '@/components/usg/count-up';
 import ResolutionCard from '@/components/usg/resolution-card';
 import USGLayout from '@/layouts/usg-layout';
@@ -9,8 +16,9 @@ import {
     Download,
     ExternalLink,
     FileText,
-    Search,
+    Filter,
     User,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,13 +30,7 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path: string | null;
-    status:
-        | 'draft'
-        | 'pending'
-        | 'review'
-        | 'published'
-        | 'rejected'
-        | 'archived';
+    status: 'draft' | 'review' | 'published' | 'rejected' | 'archived';
     category?: string;
     tags?: string[];
     created_at: string;
@@ -48,10 +50,8 @@ interface Props {
 
 export default function ResolutionsIndex({
     resolutions,
-    categories = [],
     authors = [],
 }: Props) {
-    const [searchQuery, setSearchQuery] = useState('');
     const [activeFilters, setActiveFilters] = useState<{
         categories?: string[];
         authors?: string[];
@@ -60,20 +60,6 @@ export default function ResolutionsIndex({
     }>({});
 
     const filteredResolutions = resolutions.data.filter((resolution) => {
-        // Search filter
-        const matchesSearch =
-            searchQuery === '' ||
-            resolution.title
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            resolution.description
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            resolution.resolution_number
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            resolution.author.toLowerCase().includes(searchQuery.toLowerCase());
-
         // Category filter
         const matchesCategory =
             !activeFilters.categories?.length ||
@@ -98,7 +84,6 @@ export default function ResolutionsIndex({
             );
 
         return (
-            matchesSearch &&
             matchesCategory &&
             matchesAuthor &&
             matchesStatus &&
@@ -127,8 +112,8 @@ export default function ResolutionsIndex({
     const draftResolutions = filteredResolutions.filter(
         (resolution) => resolution.status === 'draft',
     );
-    const pendingResolutions = filteredResolutions.filter(
-        (resolution) => resolution.status === 'pending',
+    const reviewResolutions = filteredResolutions.filter(
+        (resolution) => resolution.status === 'review',
     );
 
     const currentYear = new Date().getFullYear();
@@ -215,62 +200,190 @@ export default function ResolutionsIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
-                    {/* Additional Filters */}
-                    <div className="mb-12">
-                        <div className="flex flex-wrap gap-4">
-                            {/* Author Filter */}
-                            {authors.length > 0 && (
+                    {/* Filters Section */}
+                    <div className="mb-8">
+                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                            <div className="mb-4 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm text-muted-foreground">
-                                        Author:
-                                    </span>
-                                    <select
-                                        value={activeFilters.authors?.[0] || ''}
-                                        onChange={(e) => {
-                                            setActiveFilters({
-                                                ...activeFilters,
-                                                authors: e.target.value
-                                                    ? [e.target.value]
-                                                    : [],
-                                            });
-                                        }}
-                                        className="rounded border border-gray-300 bg-white px-2 py-1 text-sm dark:bg-gray-800"
-                                    >
-                                        <option value="">All Authors</option>
-                                        {authors.map((author) => (
-                                            <option key={author} value={author}>
-                                                {author}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                                        Filter Resolutions
+                                    </h3>
                                 </div>
-                            )}
+                                {Object.values(activeFilters).some((f) => f?.length) && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => {
+                                            setActiveFilters({});
+                                        }}
+                                        className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                    >
+                                        <X className="mr-1 h-4 w-4" />
+                                        Clear All
+                                    </Button>
+                                )}
+                            </div>
 
-                            {/* Year Filter */}
-                            {availableYears.length > 0 && (
-                                <div className="flex items-center gap-2">
-                                    <span className="text-sm text-muted-foreground">
-                                        Year:
-                                    </span>
-                                    <select
-                                        value={activeFilters.years?.[0] || ''}
-                                        onChange={(e) => {
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                {/* Author Filter */}
+                                {authors.length > 0 && (
+                                    <div className="space-y-2">
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            <User className="h-4 w-4 text-gray-400" />
+                                            Author
+                                        </label>
+                                        <Select
+                                            value={activeFilters.authors?.[0]}
+                                            onValueChange={(value) => {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    authors: value ? [value] : [],
+                                                });
+                                            }}
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder={`All Authors (${authors.length})`} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {authors.map((author) => (
+                                                    <SelectItem key={author} value={author}>
+                                                        {author}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
+
+                                {/* Year Filter */}
+                                {availableYears.length > 0 && (
+                                    <div className="space-y-2">
+                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            <Calendar className="h-4 w-4 text-gray-400" />
+                                            Year
+                                        </label>
+                                        <Select
+                                            value={activeFilters.years?.[0]}
+                                            onValueChange={(value) => {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    years: value ? [value] : [],
+                                                });
+                                            }}
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder={`All Years (${availableYears.length})`} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {availableYears.map((year) => (
+                                                    <SelectItem key={year} value={year}>
+                                                        {year}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
+
+                                {/* Status Filter */}
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <FileText className="h-4 w-4 text-gray-400" />
+                                        Status
+                                    </label>
+                                    <Select
+                                        value={activeFilters.statuses?.[0]}
+                                        onValueChange={(value) => {
                                             setActiveFilters({
                                                 ...activeFilters,
-                                                years: e.target.value
-                                                    ? [e.target.value]
-                                                    : [],
+                                                statuses: value ? [value] : [],
                                             });
                                         }}
-                                        className="rounded border border-gray-300 bg-white px-2 py-1 text-sm dark:bg-gray-800"
                                     >
-                                        <option value="">All Years</option>
-                                        {availableYears.map((year) => (
-                                            <option key={year} value={year}>
-                                                {year}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="All Statuses" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="published">Published</SelectItem>
+                                            <SelectItem value="draft">Draft</SelectItem>
+                                            <SelectItem value="review">Under Review</SelectItem>
+                                            <SelectItem value="rejected">Rejected</SelectItem>
+                                            <SelectItem value="archived">Archived</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            {/* Active Filters Display */}
+                            {Object.values(activeFilters).some((f) => f?.length) && (
+                                <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+                                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                        Active filters:
+                                    </span>
+                                    {activeFilters.authors?.map((author) => (
+                                        <Badge
+                                            key={author}
+                                            variant="secondary"
+                                            className="flex items-center gap-1"
+                                        >
+                                            <User className="h-3 w-3" />
+                                            {author}
+                                            <button
+                                                onClick={() => {
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        authors: [],
+                                                    });
+                                                }}
+                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                    {activeFilters.years?.map((year) => (
+                                        <Badge
+                                            key={year}
+                                            variant="secondary"
+                                            className="flex items-center gap-1"
+                                        >
+                                            <Calendar className="h-3 w-3" />
+                                            {year}
+                                            <button
+                                                onClick={() => {
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        years: [],
+                                                    });
+                                                }}
+                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                    {activeFilters.statuses?.map((status) => (
+                                        <Badge
+                                            key={status}
+                                            variant="secondary"
+                                            className="flex items-center gap-1"
+                                        >
+                                            <FileText className="h-3 w-3" />
+                                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                                            <button
+                                                onClick={() => {
+                                                    setActiveFilters({
+                                                        ...activeFilters,
+                                                        statuses: [],
+                                                    });
+                                                }}
+                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
                                 </div>
                             )}
                         </div>
@@ -290,9 +403,9 @@ export default function ResolutionsIndex({
                                 >
                                     {publishedResolutions.length} Published
                                 </Badge>
-                                {pendingResolutions.length > 0 && (
+                                {reviewResolutions.length > 0 && (
                                     <Badge variant="secondary">
-                                        {pendingResolutions.length} Pending
+                                        {reviewResolutions.length} Under Review
                                     </Badge>
                                 )}
                                 {draftResolutions.length > 0 && (
@@ -305,31 +418,28 @@ export default function ResolutionsIndex({
                     </div>
 
                     {filteredResolutions.length === 0 ? (
-                        <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
-                            <Search className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                        <div className="rounded-xl bg-white p-12 text-center shadow-sm dark:bg-gray-900">
+                            <FileText className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No resolutions found
                             </h3>
                             <p className="mx-auto mb-6 max-w-md text-gray-600 dark:text-gray-400">
-                                {searchQuery ||
-                                Object.values(activeFilters).some(
+                                {Object.values(activeFilters).some(
                                     (f) => f?.length,
                                 )
-                                    ? "Try adjusting your search terms or filters to find what you're looking for."
+                                    ? "Try adjusting your filters to find what you're looking for."
                                     : 'No resolutions are currently available.'}
                             </p>
-                            {(searchQuery ||
-                                Object.values(activeFilters).some(
-                                    (f) => f?.length,
-                                )) && (
+                            {Object.values(activeFilters).some(
+                                (f) => f?.length,
+                            ) && (
                                 <Button
                                     variant="outline"
                                     onClick={() => {
-                                        setSearchQuery('');
                                         setActiveFilters({});
                                     }}
                                 >
-                                    Clear search and filters
+                                    Clear filters
                                 </Button>
                             )}
                         </div>
@@ -411,16 +521,16 @@ export default function ResolutionsIndex({
                             )}
 
                             {/* Pending Resolutions */}
-                            {pendingResolutions.length > 0 && (
+                            {reviewResolutions.length > 0 && (
                                 <div>
                                     <div className="mb-6 flex items-center gap-2">
                                         <User className="h-5 w-5 text-orange-600" />
                                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                            Pending Resolutions
+                                            Under Review
                                         </h3>
                                     </div>
                                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                                        {pendingResolutions.map(
+                                        {reviewResolutions.map(
                                             (resolution) => (
                                                 <ResolutionCard
                                                     key={resolution.id}
@@ -437,7 +547,7 @@ export default function ResolutionsIndex({
 
                     {/* Statistics Card */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12 rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
+                        <div className="mt-12 rounded-xl bg-white p-8 shadow-sm dark:bg-gray-900">
                             <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
                                 Resolution Statistics
                             </h3>
@@ -484,7 +594,7 @@ export default function ResolutionsIndex({
 
                     {/* Call to Action */}
                     {publishedResolutions.length > 0 && (
-                        <div className="mt-12 rounded-lg bg-[var(--usg-primary)] p-12 text-center text-white shadow-lg">
+                        <div className="mt-12 rounded-xl bg-[var(--usg-primary)] p-12 text-center text-white shadow-lg">
                             <h3 className="mb-2 text-3xl font-bold">
                                 Stay Informed
                             </h3>

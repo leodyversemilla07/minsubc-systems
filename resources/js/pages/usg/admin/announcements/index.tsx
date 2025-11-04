@@ -24,7 +24,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import SearchBar from '@/components/usg/search-bar';
-import StatusBadge from '@/components/usg/status-badge';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import {
@@ -182,6 +181,32 @@ export default function AnnouncementsManagement({
                 return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
             default:
                 return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+        }
+    };
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+            case 'draft':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            case 'pending':
+                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
+            default:
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+        }
+    };
+
+    const formatStatus = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'Published';
+            case 'draft':
+                return 'draft';
+            case 'pending':
+                return 'Pending';
+            default:
+                return status.charAt(0).toUpperCase() + status.slice(1);
         }
     };
 
@@ -416,10 +441,9 @@ export default function AnnouncementsManagement({
                                                 <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
                                                     {announcement.title}
                                                 </h3>
-                                                <StatusBadge
-                                                    status={announcement.status}
-                                                    showIcon
-                                                />
+                                                <Badge className={getStatusColor(announcement.status)}>
+                                                    {formatStatus(announcement.status)}
+                                                </Badge>
                                                 <Badge
                                                     variant="secondary"
                                                     className={getPriorityColor(

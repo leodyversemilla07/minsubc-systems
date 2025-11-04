@@ -10,7 +10,6 @@ import {
     FileText,
     User,
 } from 'lucide-react';
-import StatusBadge from './status-badge';
 
 interface Resolution {
     id: number;
@@ -20,13 +19,7 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path: string | null;
-    status:
-        | 'draft'
-        | 'pending'
-        | 'review'
-        | 'published'
-        | 'rejected'
-        | 'archived';
+    status: 'draft' | 'review' | 'published' | 'rejected' | 'archived';
     category?: string;
     tags?: string[];
     created_at: string;
@@ -62,10 +55,44 @@ export default function ResolutionCard({
         });
     };
 
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+            case 'draft':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            case 'review':
+                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
+            case 'rejected':
+                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+            case 'archived':
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            default:
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+        }
+    };
+
+    const formatStatus = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'Published';
+            case 'draft':
+                return 'draft';
+            case 'review':
+                return 'Under Review';
+            case 'rejected':
+                return 'Rejected';
+            case 'archived':
+                return 'Archived';
+            default:
+                return status.charAt(0).toUpperCase() + status.slice(1);
+        }
+    };
+
     if (variant === 'compact') {
         return (
             <Card
-                className="cursor-pointer transition-shadow hover:shadow-md"
+                className="cursor-pointer transition-shadow hover:shadow-md dark:bg-gray-900 dark:border-gray-700"
                 onClick={handleViewResolution}
             >
                 <CardContent className="p-4">
@@ -78,7 +105,9 @@ export default function ResolutionCard({
                                 >
                                     {resolution.resolution_number}
                                 </Badge>
-                                <StatusBadge status={resolution.status} />
+                                <Badge className={getStatusColor(resolution.status)}>
+                                    {formatStatus(resolution.status)}
+                                </Badge>
                             </div>
 
                             <h3 className="mb-2 line-clamp-2 text-sm font-semibold">
@@ -120,14 +149,16 @@ export default function ResolutionCard({
     }
 
     return (
-        <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+        <Card className="overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-900 dark:border-gray-700">
             <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
                         <Badge variant="outline" className="font-mono">
                             {resolution.resolution_number}
                         </Badge>
-                        <StatusBadge status={resolution.status} showIcon />
+                        <Badge className={getStatusColor(resolution.status)}>
+                            {formatStatus(resolution.status)}
+                        </Badge>
                     </div>
 
                     {resolution.file_path && (

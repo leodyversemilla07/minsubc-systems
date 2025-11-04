@@ -16,7 +16,7 @@ interface Event {
     current_participants?: number;
     registration_deadline: string | null;
     image_path: string | null;
-    status: 'draft' | 'published' | 'cancelled' | 'completed';
+    status: 'draft' | 'published' | 'cancelled' | 'archived';
     created_at: string;
 }
 
@@ -43,7 +43,7 @@ export default function EventCard({
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
             case 'cancelled':
                 return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
-            case 'completed':
+            case 'archived':
                 return 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
             default:
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
@@ -69,6 +69,21 @@ export default function EventCard({
         );
     };
 
+    const formatStatus = (status: string) => {
+        switch (status) {
+            case 'published':
+                return 'Published';
+            case 'draft':
+                return 'draft';
+            case 'cancelled':
+                return 'Cancelled';
+            case 'archived':
+                return 'Archived';
+            default:
+                return status.charAt(0).toUpperCase() + status.slice(1);
+        }
+    };
+
     const isRegistrationOpen = () => {
         if (!event.registration_deadline) return false;
         const deadline = new Date(event.registration_deadline);
@@ -87,7 +102,7 @@ export default function EventCard({
     if (variant === 'compact') {
         return (
             <Card
-                className="cursor-pointer transition-shadow hover:shadow-md"
+                className="cursor-pointer transition-shadow hover:shadow-md dark:bg-gray-900 dark:border-gray-700"
                 onClick={handleViewEvent}
             >
                 <CardContent className="p-4">
@@ -101,7 +116,7 @@ export default function EventCard({
                                     className={getStatusColor(event.status)}
                                     variant="secondary"
                                 >
-                                    {event.status}
+                                    {formatStatus(event.status)}
                                 </Badge>
                             </div>
 
@@ -138,7 +153,7 @@ export default function EventCard({
     }
 
     return (
-        <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+        <Card className="overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-900 dark:border-gray-700">
             {event.image_path && (
                 <div className="relative aspect-video overflow-hidden">
                     <img
@@ -150,7 +165,7 @@ export default function EventCard({
                         className={`absolute top-3 right-3 ${getStatusColor(event.status)}`}
                         variant="secondary"
                     >
-                        {event.status}
+                        {formatStatus(event.status)}
                     </Badge>
                 </div>
             )}
@@ -165,7 +180,7 @@ export default function EventCard({
                             className={getStatusColor(event.status)}
                             variant="secondary"
                         >
-                            {event.status}
+                            {formatStatus(event.status)}
                         </Badge>
                     )}
                 </div>

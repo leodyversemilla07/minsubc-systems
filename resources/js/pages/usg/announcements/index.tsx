@@ -1,11 +1,17 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AnnouncementCard from '@/components/usg/announcement-card';
 import CountUp from '@/components/usg/count-up';
-import PriorityBadge from '@/components/usg/priority-badge';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
-import { Bell, Calendar, Filter, Sparkles } from 'lucide-react';
+import { Bell, Calendar, Filter, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface Announcement {
@@ -13,7 +19,6 @@ interface Announcement {
     title: string;
     excerpt: string;
     slug: string;
-    priority: 'low' | 'normal' | 'high';
     publish_date: string;
     views_count?: number;
     featured_image?: string;
@@ -37,38 +42,85 @@ export default function AnnouncementsIndex({
     categories = [],
 }: Props) {
     const [activeFilters, setActiveFilters] = useState<{
-        priorities?: string[];
+        categories?: string[];
+        years?: string[];
     }>({});
 
     const filteredAnnouncements = announcements.data.filter((announcement) => {
-        // Priority filter
-        const matchesPriority =
-            !activeFilters.priorities?.length ||
-            activeFilters.priorities.includes(announcement.priority);
+        // Only show published announcements to public
+        if (announcement.status === 'draft' || announcement.status === 'archived') {
+            return false;
+        }
 
-        return matchesPriority;
+        // Category filter
+        const matchesCategory =
+            !activeFilters.categories?.length ||
+            (announcement.category &&
+                activeFilters.categories.includes(announcement.category));
+
+        // Year filter
+        const matchesYear =
+            !activeFilters.years?.length ||
+            activeFilters.years.includes(
+                new Date(announcement.publish_date).getFullYear().toString(),
+            );
+
+        return matchesCategory && matchesYear;
     });
 
-    // Separate by status - show all as published for public view
+    // Sort announcements by published date (newest first)
     const publishedAnnouncements = filteredAnnouncements.sort((a, b) => {
-        // Sort by priority first (high > medium > low)
-        const priorityOrder = { high: 3, normal: 2, low: 1 };
-        const priorityDiff =
-            priorityOrder[b.priority] - priorityOrder[a.priority];
-
-        if (priorityDiff !== 0) return priorityDiff;
-
-        // Then by published date (newest first)
         const dateA = new Date(a.publish_date).getTime();
         const dateB = new Date(b.publish_date).getTime();
         return dateB - dateA;
     });
 
-    const draftAnnouncements = filteredAnnouncements.filter(
+    // Get available years from announcements
+    const availableYears = Array.from(
+        new Set(
+            announcements.data.map((announcement) =>
+                new Date(announcement.publish_date).getFullYear().toString(),
+            ),
+        ),
+    ).sort((a, b) => parseInt(b) - parseInt(a));
+
+    // Get available categories
+    const availableCategories = Array.from(
+        new Set(
+            announcements.data
+                .map((a) => a.category)
+                .filter((c): c is string => !!c),
+        ),
+    ).sort();
+
+    const draftAnnouncements = announcements.data.filter(
         (announcement) => announcement.status === 'draft',
     );
-    const archivedAnnouncements = filteredAnnouncements.filter(
+    const archivedAnnouncements = announcements.data.filter(
         (announcement) => announcement.status === 'archived',
+    );
+
+    const toggleFilter = (
+        filterType: 'categories' | 'years',
+        value: string,
+    ) => {
+        const currentValues = activeFilters[filterType] || [];
+        const newValues = currentValues.includes(value)
+            ? currentValues.filter((v) => v !== value)
+            : [...currentValues, value];
+
+        setActiveFilters({
+            ...activeFilters,
+            [filterType]: newValues.length > 0 ? newValues : undefined,
+        });
+    };
+
+    const clearFilters = () => {
+        setActiveFilters({});
+    };
+
+    const hasActiveFilters = Object.values(activeFilters).some(
+        (filter) => filter && filter.length > 0,
     );
 
     return (
@@ -123,69 +175,149 @@ export default function AnnouncementsIndex({
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
-                    {/* Priority Filters */}
-                    <div className="mb-8">
-                        <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                            <div className="flex flex-wrap items-center gap-3">
-                                <div className="flex items-center gap-2">
-                                    <Sparkles className="h-4 w-4 text-[var(--usg-primary)]" />
-                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Filter by priority:
-                                    </span>
-                                </div>
-                                <div className="flex gap-2">
-                                    {['high', 'normal', 'low'].map(
-                                        (priority) => (
-                                            <Badge
-                                                key={priority}
-                                                variant={
-                                                    activeFilters.priorities?.includes(
-                                                        priority,
-                                                    )
-                                                        ? 'default'
-                                                        : 'outline'
-                                                }
-                                                className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                                                onClick={() => {
-                                                    const currentPriorities =
-                                                        activeFilters.priorities ||
-                                                        [];
-                                                    const newPriorities =
-                                                        currentPriorities.includes(
-                                                            priority,
-                                                        )
-                                                            ? currentPriorities.filter(
-                                                                  (p) =>
-                                                                      p !==
-                                                                      priority,
-                                                              )
-                                                            : [
-                                                                  ...currentPriorities,
-                                                                  priority,
-                                                              ];
-                                                    setActiveFilters({
-                                                        ...activeFilters,
-                                                        priorities:
-                                                            newPriorities,
-                                                    });
-                                                }}
-                                            >
-                                                <PriorityBadge
-                                                    priority={
-                                                        priority as
-                                                            | 'low'
-                                                            | 'normal'
-                                                            | 'high'
-                                                    }
-                                                    className="mr-1"
-                                                />
-                                                {priority}
-                                            </Badge>
-                                        ),
-                                    )}
-                                </div>
+                    {/* Filter Section */}
+                    <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                        <div className="mb-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Filter Announcements
+                                </h3>
                             </div>
+                            {hasActiveFilters && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={clearFilters}
+                                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                                >
+                                    <X className="mr-1 h-4 w-4" />
+                                    Clear filters
+                                </Button>
+                            )}
                         </div>
+
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {/* Category Filter */}
+                            {availableCategories.length > 0 && (
+                                <div>
+                                    <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Category
+                                    </label>
+                                    <Select
+                                        value={
+                                            activeFilters.categories?.[0] || 'all'
+                                        }
+                                        onValueChange={(value) => {
+                                            if (value && value !== 'all') {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    categories: [value],
+                                                });
+                                            } else {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    categories: undefined,
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="All Categories" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">
+                                                All Categories
+                                            </SelectItem>
+                                            {availableCategories.map(
+                                                (category) => (
+                                                    <SelectItem
+                                                        key={category}
+                                                        value={category}
+                                                    >
+                                                        {category}
+                                                    </SelectItem>
+                                                ),
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )}
+
+                            {/* Year Filter */}
+                            {availableYears.length > 0 && (
+                                <div>
+                                    <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Year
+                                    </label>
+                                    <Select
+                                        value={activeFilters.years?.[0] || 'all'}
+                                        onValueChange={(value) => {
+                                            if (value && value !== 'all') {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    years: [value],
+                                                });
+                                            } else {
+                                                setActiveFilters({
+                                                    ...activeFilters,
+                                                    years: undefined,
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="All Years" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">
+                                                All Years
+                                            </SelectItem>
+                                            {availableYears.map((year) => (
+                                                <SelectItem
+                                                    key={year}
+                                                    value={year}
+                                                >
+                                                    {year}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Active Filters Display */}
+                        {hasActiveFilters && (
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {activeFilters.categories?.map((category) => (
+                                    <Badge
+                                        key={category}
+                                        variant="secondary"
+                                        className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
+                                        onClick={() =>
+                                            toggleFilter('categories', category)
+                                        }
+                                    >
+                                        {category}
+                                        <X className="ml-1 h-3 w-3" />
+                                    </Badge>
+                                ))}
+                                {activeFilters.years?.map((year) => (
+                                    <Badge
+                                        key={year}
+                                        variant="secondary"
+                                        className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
+                                        onClick={() =>
+                                            toggleFilter('years', year)
+                                        }
+                                    >
+                                        {year}
+                                        <X className="ml-1 h-3 w-3" />
+                                    </Badge>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Results Summary */}
@@ -197,14 +329,16 @@ export default function AnnouncementsIndex({
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                        <CountUp end={filteredAnnouncements.length} duration={1500} />{' '}
+                                        <CountUp end={publishedAnnouncements.length} duration={1500} />{' '}
                                         Announcement
-                                        {filteredAnnouncements.length !== 1
+                                        {publishedAnnouncements.length !== 1
                                             ? 's'
                                             : ''}
                                     </h2>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        Stay informed with our latest updates
+                                        {hasActiveFilters
+                                            ? 'Filtered results'
+                                            : 'Stay informed with our latest updates'}
                                     </p>
                                 </div>
                             </div>
@@ -239,7 +373,7 @@ export default function AnnouncementsIndex({
                         </div>
                     </div>
 
-                    {filteredAnnouncements.length === 0 ? (
+                    {publishedAnnouncements.length === 0 ? (
                         <div className="rounded-lg bg-white p-16 text-center shadow-sm dark:bg-gray-900">
                             <div className="mb-6 inline-flex items-center justify-center rounded-full bg-[var(--usg-light)] p-6">
                                 <Bell className="h-12 w-12 text-[var(--usg-primary)]" />
@@ -248,21 +382,16 @@ export default function AnnouncementsIndex({
                                 No announcements found
                             </h3>
                             <p className="mx-auto mb-6 max-w-md text-lg text-gray-600 dark:text-gray-300">
-                                {Object.values(activeFilters).some(
-                                    (f) => f?.length,
-                                )
+                                {hasActiveFilters
                                     ? "Try adjusting your filters to find what you're looking for."
                                     : 'Stay tuned! New announcements will appear here soon.'}
                             </p>
-                            {Object.values(activeFilters).some(
-                                (f) => f?.length,
-                            ) && (
+                            {hasActiveFilters && (
                                 <Button
                                     variant="outline"
-                                    onClick={() => {
-                                        setActiveFilters({});
-                                    }}
+                                    onClick={clearFilters}
                                 >
+                                    <X className="mr-2 h-4 w-4" />
                                     Clear filters
                                 </Button>
                             )}
@@ -297,7 +426,7 @@ export default function AnnouncementsIndex({
                             {draftAnnouncements.length > 0 && (
                                 <div>
                                     <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                        <Filter className="h-5 w-5" />
+                                        <Bell className="h-5 w-5" />
                                         Draft Announcements
                                     </h3>
                                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

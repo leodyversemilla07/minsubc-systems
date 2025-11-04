@@ -28,7 +28,6 @@ class AnnouncementService
     public function getFeaturedAnnouncements(int $limit = 5): Collection
     {
         return Announcement::published()
-            ->where('priority', 'high')
             ->with('author')
             ->latest('publish_date')
             ->limit($limit)
@@ -64,10 +63,6 @@ class AnnouncementService
 
         if (isset($filters['category']) && ! empty($filters['category'])) {
             $announcements->where('category', $filters['category']);
-        }
-
-        if (isset($filters['priority']) && ! empty($filters['priority'])) {
-            $announcements->where('priority', $filters['priority']);
         }
 
         if (isset($filters['date_from']) && ! empty($filters['date_from'])) {
