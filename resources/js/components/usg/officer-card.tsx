@@ -1,9 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
-import { Building, Mail, Phone, User } from 'lucide-react';
+import { Mail, Phone, User } from 'lucide-react';
 
 interface Officer {
     id: number;
@@ -21,26 +20,9 @@ interface Officer {
 
 interface OfficerCardProps {
     officer: Officer;
-    showContactInfo?: boolean;
-    showBio?: boolean;
-    compact?: boolean;
 }
 
-export default function OfficerCard({
-    officer,
-    showContactInfo = true,
-    showBio = false,
-    compact = false,
-}: OfficerCardProps) {
-    const getInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map((word) => word[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    };
-
+export default function OfficerCard({ officer }: OfficerCardProps) {
     const formatTermPeriod = () => {
         if (!officer.term_start || !officer.term_end) {
             return 'Current Term';
@@ -57,28 +39,29 @@ export default function OfficerCard({
     };
 
     return (
-        <Card className="group m-2 dark:bg-gray-900 dark:border-gray-700">
-            <CardContent className={`p-${compact ? '4' : '8'} text-center`}>
-                {/* Avatar */}
-                <div className="mb-4">
-                    <Avatar
-                        className={`mx-auto ${compact ? 'h-16 w-16' : 'h-20 w-20'}`}
-                    >
-                        <AvatarImage src={officer.photo} alt={officer.name} />
-                        <AvatarFallback className="bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
-                            {getInitials(officer.name)}
-                        </AvatarFallback>
-                    </Avatar>
-                </div>
+        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col bg-white dark:bg-gray-900">
+            <div className="w-full h-64 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                <img
+                    src={officer.photo || '/placeholder.svg'}
+                    alt={officer.name}
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
-                {/* Name and Status */}
-                <div className="mb-3">
-                    <h3
-                        className={`mb-1 font-semibold ${compact ? 'text-base' : 'text-lg'}`}
-                    >
+            <CardHeader className="pb-3 bg-white dark:bg-gray-900">
+                <div className="text-center">
+                    <h3 className="text-lg font-bold text-foreground">
                         {officer.name}
                     </h3>
-                    <div className="mb-2 flex items-center justify-center gap-2">
+                    <p className="text-primary font-semibold text-sm mt-1">
+                        {officer.position}
+                    </p>
+                    {officer.department && (
+                        <p className="text-xs text-muted-foreground">
+                            {officer.department}
+                        </p>
+                    )}
+                    <div className="mt-2 flex items-center justify-center gap-2">
                         <Badge
                             variant={
                                 officer.is_active ? 'default' : 'secondary'
@@ -87,86 +70,56 @@ export default function OfficerCard({
                             {officer.is_active ? 'Active' : 'Inactive'}
                         </Badge>
                     </div>
-                </div>
-
-                {/* Position */}
-                <div className="mb-3">
-                    <p
-                        className={`font-medium text-blue-600 dark:text-blue-400 ${
-                            compact ? 'text-sm' : 'text-base'
-                        }`}
-                    >
-                        {officer.position}
-                    </p>
-                    {officer.department && (
-                        <div className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                            <Building className="h-3 w-3" />
-                            <span>{officer.department}</span>
-                        </div>
-                    )}
-                </div>
-
-                {/* Term Period */}
-                <div className="mb-4">
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground mt-2">
                         Term: {formatTermPeriod()}
                     </p>
                 </div>
+            </CardHeader>
 
-                {/* Bio */}
-                {showBio && officer.bio && !compact && (
-                    <div className="mb-4">
-                        <p className="line-clamp-3 text-left text-sm text-muted-foreground">
-                            {officer.bio}
-                        </p>
+            <CardContent className="space-y-3 flex-grow flex flex-col bg-white dark:bg-gray-900">
+                {officer.bio && (
+                    <p className="text-sm text-foreground leading-relaxed text-center flex-grow">
+                        {officer.bio}
+                    </p>
+                )}
+
+                {(officer.email || officer.phone) && (
+                    <div className="space-y-2 pt-3 border-t border-border">
+                        {officer.email && (
+                            <a
+                                href={`mailto:${officer.email}`}
+                                className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                                <Mail className="w-3 h-3 flex-shrink-0" />
+                                <span className="break-all">{officer.email}</span>
+                            </a>
+                        )}
+                        {officer.phone && (
+                            <a
+                                href={`tel:${officer.phone}`}
+                                className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                                <Phone className="w-3 h-3 flex-shrink-0" />
+                                <span>{officer.phone}</span>
+                            </a>
+                        )}
                     </div>
                 )}
-
-                {/* Contact Information */}
-                {showContactInfo &&
-                    (officer.email || officer.phone) &&
-                    !compact && (
-                        <div className="mb-4 space-y-2">
-                            {officer.email && (
-                                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                                    <Mail className="h-3 w-3" />
-                                    <a
-                                        href={`mailto:${officer.email}`}
-                                        className="transition-colors hover:text-blue-600"
-                                    >
-                                        {officer.email}
-                                    </a>
-                                </div>
-                            )}
-                            {officer.phone && (
-                                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                                    <Phone className="h-3 w-3" />
-                                    <a
-                                        href={`tel:${officer.phone}`}
-                                        className="transition-colors hover:text-blue-600"
-                                    >
-                                        {officer.phone}
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                {/* Action Button */}
-                {!compact && (
-                    <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                    >
-                        <Link href={`/usg/officers/${officer.id}`}>
-                            <User className="mr-2 h-4 w-4" />
-                            View Profile
-                        </Link>
-                    </Button>
-                )}
             </CardContent>
+
+            <CardFooter className="bg-white dark:bg-gray-900 pt-0">
+                <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                >
+                    <Link href={`/usg/officers/${officer.id}`}>
+                        <User className="mr-2 h-4 w-4" />
+                        View Profile
+                    </Link>
+                </Button>
+            </CardFooter>
         </Card>
     );
 }

@@ -4,10 +4,10 @@ import USGLayout from '@/layouts/usg-layout';
 import { Head, router } from '@inertiajs/react';
 import {
     ArrowLeft,
+    Bell,
     Calendar,
     ExternalLink,
     Eye,
-    Share2,
     Tag,
     User,
 } from 'lucide-react';
@@ -45,25 +45,6 @@ export default function AnnouncementShow({
         router.visit('/usg/announcements');
     };
 
-    const handleShare = async () => {
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: announcement.title,
-                    text: announcement.excerpt,
-                    url: window.location.href,
-                });
-            } catch {
-                // User cancelled sharing or error occurred
-                console.log('Sharing cancelled');
-            }
-        } else {
-            // Fallback to copying URL to clipboard
-            navigator.clipboard.writeText(window.location.href);
-            // You could show a toast notification here
-        }
-    };
-
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -88,17 +69,66 @@ export default function AnnouncementShow({
             <Head title={`${announcement.title} - USG Announcements`} />
 
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-orange-700 via-orange-600 to-red-600 py-12 text-white">
-                <div className="absolute inset-0 bg-black/10"></div>
-                <div className="relative z-10 container mx-auto px-4">
+            <section className="relative bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
+                <div className="relative z-10 container mx-auto max-w-4xl px-4">
                     <Button
                         variant="ghost"
                         onClick={handleBack}
-                        className="mb-6 text-white hover:bg-white/20"
+                        className="mb-6 text-white hover:bg-white/10"
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Announcements
                     </Button>
+
+                    <div className="flex items-start gap-4">
+                        <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
+                            <Bell className="h-8 w-8" />
+                        </div>
+                        <div className="flex-1">
+                            {announcement.category && (
+                                <div className="mb-4">
+                                    <Badge
+                                        variant="outline"
+                                        className="border-white/30 bg-white/10 text-white backdrop-blur-sm"
+                                    >
+                                        {announcement.category}
+                                    </Badge>
+                                </div>
+                            )}
+
+                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                                {announcement.title}
+                            </h1>
+
+                            <div className="flex flex-wrap gap-4 text-sm text-white/90">
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="h-4 w-4" />
+                                    <span>
+                                        Published on{' '}
+                                        {formatDate(announcement.publish_date)}
+                                    </span>
+                                </div>
+                                {announcement.author_name && (
+                                    <div className="flex items-center gap-2">
+                                        <User className="h-4 w-4" />
+                                        <span>{announcement.author_name}</span>
+                                    </div>
+                                )}
+                                {announcement.views_count !== undefined && (
+                                    <div className="flex items-center gap-2">
+                                        <Eye className="h-4 w-4" />
+                                        <span>{announcement.views_count} views</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -106,55 +136,9 @@ export default function AnnouncementShow({
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-4xl px-4">
                     <article className="space-y-8">
-                        {/* Header */}
-                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
-                            <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                                {announcement.category && (
-                                    <Badge variant="outline">
-                                        {announcement.category}
-                                    </Badge>
-                                )}
-
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={handleShare}
-                                >
-                                    <Share2 className="mr-2 h-4 w-4" />
-                                    Share
-                                </Button>
-                            </div>
-
-                            <h1 className="mb-6 text-4xl font-bold text-gray-900 dark:text-white">
-                                {announcement.title}
-                            </h1>
-
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                                <div className="flex items-center gap-1">
-                                    <Calendar className="h-4 w-4" />
-                                    Published on{' '}
-                                    {formatDate(announcement.publish_date)}
-                                </div>
-
-                                {announcement.author_name && (
-                                    <div className="flex items-center gap-1">
-                                        <User className="h-4 w-4" />
-                                        {announcement.author_name}
-                                    </div>
-                                )}
-
-                                {announcement.views_count !== undefined && (
-                                    <div className="flex items-center gap-1">
-                                        <Eye className="h-4 w-4" />
-                                        {announcement.views_count} views
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
                         {/* Featured Image */}
                         {announcement.featured_image && (
-                            <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-900">
+                            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <img
                                     src={announcement.featured_image}
                                     alt={announcement.title}
@@ -164,7 +148,7 @@ export default function AnnouncementShow({
                         )}
 
                         {/* Content */}
-                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
+                        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                             <div
                                 className="prose prose-gray dark:prose-invert max-w-none"
                                 dangerouslySetInnerHTML={{
@@ -175,7 +159,7 @@ export default function AnnouncementShow({
 
                         {/* Tags */}
                         {announcement.tags && announcement.tags.length > 0 && (
-                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <div className="mb-3 flex items-center gap-2">
                                     <Tag className="h-4 w-4" />
                                     <span className="font-medium">Tags</span>
@@ -193,7 +177,7 @@ export default function AnnouncementShow({
                         {/* Attachments */}
                         {announcement.attachments &&
                             announcement.attachments.length > 0 && (
-                                <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                                <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                     <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">
                                         Attachments
                                     </h3>
@@ -251,7 +235,7 @@ export default function AnnouncementShow({
                                     .map((related) => (
                                         <div
                                             key={related.id}
-                                            className="cursor-pointer rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:bg-gray-900"
+                                            className="cursor-pointer rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
                                             onClick={() =>
                                                 router.visit(
                                                     `/usg/announcements/${related.slug}`,
@@ -283,7 +267,7 @@ export default function AnnouncementShow({
                     )}
 
                     {/* CTA Section */}
-                    <div className="mt-12 rounded-lg bg-gradient-to-br from-orange-600 to-red-600 p-12 text-center text-white shadow-lg">
+                    <div className="mt-12 rounded-xl bg-gradient-to-br from-[var(--usg-primary)] to-[var(--usg-dark)] p-12 text-center text-white shadow-lg">
                         <h2 className="mb-4 text-3xl font-bold">
                             Stay Updated with USG
                         </h2>
@@ -301,7 +285,7 @@ export default function AnnouncementShow({
                                         '_blank',
                                     )
                                 }
-                                className="bg-white text-orange-600 hover:bg-gray-100"
+                                className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
                             >
                                 <ExternalLink className="mr-2 h-5 w-5" />
                                 Follow on Facebook

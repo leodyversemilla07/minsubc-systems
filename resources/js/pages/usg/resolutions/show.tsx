@@ -10,7 +10,6 @@ import {
     Eye,
     FileText,
     Gavel,
-    Share2,
     Tag,
     User,
 } from 'lucide-react';
@@ -63,22 +62,6 @@ export default function ResolutionShow({
     const handleDownload = () => {
         if (resolution.file_path) {
             window.open(resolution.file_path, '_blank');
-        }
-    };
-
-    const handleShare = async () => {
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: `${resolution.resolution_number}: ${resolution.title}`,
-                    text: resolution.description,
-                    url: window.location.href,
-                });
-            } catch {
-                console.log('Sharing cancelled');
-            }
-        } else {
-            navigator.clipboard.writeText(window.location.href);
         }
     };
 
@@ -154,7 +137,13 @@ export default function ResolutionShow({
             />
 
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 py-16 text-white">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <Button
                         variant="ghost"
@@ -177,7 +166,7 @@ export default function ResolutionShow({
                                 >
                                     {resolution.resolution_number}
                                 </Badge>
-                                <Badge className={`${getStatusColor(resolution.status)} backdrop-blur-sm`}>
+                                                                <Badge className={`${getStatusColor(resolution.status)} backdrop-blur-sm`}>
                                     {formatStatus(resolution.status)}
                                 </Badge>
                                 {resolution.category && (
@@ -194,7 +183,7 @@ export default function ResolutionShow({
                                 {resolution.title}
                             </h1>
 
-                            <div className="mb-6 grid grid-cols-1 gap-3 text-sm text-blue-100 sm:grid-cols-2">
+                            <div className="mb-6 grid grid-cols-1 gap-3 text-sm text-white/90 sm:grid-cols-2">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="h-4 w-4" />
                                     Date Passed:{' '}
@@ -219,65 +208,54 @@ export default function ResolutionShow({
                                 </div>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-3">
+                            {resolution.file_path && (
                                 <Button
                                     variant="secondary"
                                     size="sm"
-                                    onClick={handleShare}
-                                    className="bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+                                    onClick={handleDownload}
+                                    className="bg-white text-blue-600 hover:bg-blue-50"
                                 >
-                                    <Share2 className="mr-2 h-4 w-4" />
-                                    Share
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download
                                 </Button>
-
-                                {resolution.file_path && (
-                                    <Button
-                                        variant="secondary"
-                                        size="sm"
-                                        onClick={handleDownload}
-                                        className="bg-white text-blue-600 hover:bg-blue-50"
-                                    >
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Download
-                                    </Button>
-                                )}
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-                <article className="space-y-8">
-                    {/* Description */}
-                    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                        <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                            Summary
-                        </h2>
-                        <p className="leading-relaxed text-gray-700 dark:text-gray-300">
-                            {resolution.description}
-                        </p>
-                    </div>
-
-                    {/* Full Content */}
-                    {resolution.content && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+            <div className="bg-gray-50 py-12 dark:bg-gray-800">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                    <article className="space-y-8">
+                        {/* Description */}
+                        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                             <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                                Full Text
+                                Summary
                             </h2>
-                            <div
-                                className="prose prose-gray dark:prose-invert max-w-none"
-                                dangerouslySetInnerHTML={{
-                                    __html: resolution.content,
-                                }}
-                            />
+                            <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+                                {resolution.description}
+                            </p>
+                        </div>
+
+                        {/* Full Content */}
+                        {resolution.content && (
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
+                                    Full Text
+                                </h2>
+                                <div
+                                    className="prose prose-gray dark:prose-invert max-w-none"
+                                    dangerouslySetInnerHTML={{
+                                        __html: resolution.content,
+                                    }}
+                                />
                         </div>
                     )}
 
                     {/* Vote Results */}
                     {resolution.vote_results && getTotalVotes() > 0 && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                             <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                                 Voting Results
                             </h2>
@@ -356,7 +334,7 @@ export default function ResolutionShow({
 
                     {/* Tags */}
                     {resolution.tags && resolution.tags.length > 0 && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                             <div className="mb-4 flex items-center gap-2">
                                 <Tag className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -380,7 +358,7 @@ export default function ResolutionShow({
                     {/* Attachments */}
                     {resolution.attachments &&
                         resolution.attachments.length > 0 && (
-                            <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                                 <h3 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                                     Additional Documents
                                 </h3>
@@ -439,7 +417,7 @@ export default function ResolutionShow({
                             {relatedResolutions.slice(0, 4).map((related) => (
                                 <div
                                     key={related.id}
-                                    className="cursor-pointer rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-800 dark:bg-gray-800"
+                                    className="cursor-pointer rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
                                     onClick={() =>
                                         router.visit(
                                             `/usg/resolutions/${related.id}`,
@@ -473,35 +451,36 @@ export default function ResolutionShow({
                     </div>
                 )}
 
-                {/* Call to Action */}
-                <div className="mt-12">
-                    <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-purple-700 p-8 text-center text-white shadow-lg">
-                        <h3 className="mb-3 text-2xl font-bold">
-                            Explore More Resolutions
-                        </h3>
-                        <p className="mb-6 text-blue-100">
-                            Browse our complete archive of USG resolutions and
-                            legislative documents.
-                        </p>
-                        <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                {/* CTA Section */}
+                <div className="mt-12 rounded-xl bg-gradient-to-br from-[var(--usg-primary)] to-[var(--usg-dark)] p-12 text-center text-white shadow-lg">
+                    <h2 className="mb-4 text-3xl font-bold">
+                        Explore More Resolutions
+                    </h2>
+                    <p className="mb-6 text-lg text-white/90">
+                        Browse our complete archive of USG resolutions and
+                        legislative documents.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <Button
+                            size="lg"
+                            onClick={() => router.visit('/usg/resolutions')}
+                            className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
+                        >
+                            View All Resolutions
+                        </Button>
+                        {resolution.file_path && (
                             <Button
-                                onClick={() => router.visit('/usg/resolutions')}
-                                className="bg-white text-blue-600 hover:bg-blue-50"
+                                size="lg"
+                                variant="secondary"
+                                onClick={handleDownload}
+                                className="border-white/20 bg-white/10 text-white hover:bg-white/20"
                             >
-                                View All Resolutions
+                                <Download className="mr-2 h-5 w-5" />
+                                Download Document
                             </Button>
-                            {resolution.file_path && (
-                                <Button
-                                    variant="outline"
-                                    onClick={handleDownload}
-                                    className="border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
-                                >
-                                    <Download className="mr-2 h-4 w-4" />
-                                    Download Document
-                                </Button>
-                            )}
-                        </div>
+                        )}
                     </div>
+                </div>
                 </div>
             </div>
         </USGLayout>

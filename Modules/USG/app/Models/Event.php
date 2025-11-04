@@ -45,6 +45,14 @@ class Event extends Model
         'created_by',
     ];
 
+    protected $appends = [
+        'event_date',
+        'event_time',
+        'max_participants',
+        'current_participants',
+        'image_path',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -53,6 +61,42 @@ class Event extends Model
             'all_day' => 'boolean',
             'is_recurring' => 'boolean',
         ];
+    }
+
+    // Accessors for frontend compatibility
+    protected function eventDate(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => $this->start_date?->format('Y-m-d'),
+        );
+    }
+
+    protected function eventTime(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => $this->start_date?->format('H:i:s'),
+        );
+    }
+
+    protected function maxParticipants(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => null, // No participant limit in current schema
+        );
+    }
+
+    protected function currentParticipants(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => 0, // No registrations in current schema
+        );
+    }
+
+    protected function imagePath(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => null, // No image in current schema
+        );
     }
 
     // Scout configuration

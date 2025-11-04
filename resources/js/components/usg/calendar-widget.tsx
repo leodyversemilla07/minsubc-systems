@@ -5,7 +5,6 @@ import {
     Calendar as CalendarIcon,
     ChevronLeft,
     ChevronRight,
-    Filter,
     Plus,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -15,7 +14,7 @@ interface Event {
     title: string;
     event_date: string;
     event_time: string;
-    status: 'draft' | 'published' | 'cancelled' | 'completed';
+    status: 'draft' | 'published' | 'cancelled' | 'archived';
     category?: string;
     color?: string;
 }
@@ -97,7 +96,12 @@ export default function CalendarWidget({
 
         // Empty cells for days before the first day of the month
         for (let i = 0; i < firstDay; i++) {
-            days.push(<div key={`empty-${i}`} className="p-2"></div>);
+            days.push(
+                <div
+                    key={`empty-${i}`}
+                    className="aspect-square"
+                ></div>
+            );
         }
 
         // Days of the month
@@ -118,38 +122,44 @@ export default function CalendarWidget({
             days.push(
                 <div
                     key={day}
-                    className={`min-h-[2.5rem] cursor-pointer rounded p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                        isSelected ? 'bg-blue-100 dark:bg-blue-900' : ''
-                    } ${isToday ? 'ring-2 ring-blue-500' : ''}`}
+                    className={`aspect-square cursor-pointer rounded-lg border border-gray-200 p-2 transition-all hover:border-[var(--usg-primary)] hover:shadow-sm dark:border-gray-700 dark:hover:border-[var(--usg-accent)] ${
+                        isSelected
+                            ? 'border-[var(--usg-primary)] bg-[var(--usg-light)] dark:border-[var(--usg-accent)] dark:bg-[var(--usg-dark)]'
+                            : 'bg-white dark:bg-gray-900'
+                    } ${isToday ? 'ring-2 ring-[var(--usg-primary)] dark:ring-[var(--usg-accent)]' : ''}`}
                     onClick={() => handleDateClick(day)}
                 >
-                    <div className="text-sm font-medium">{day}</div>
-                    {dayEvents.length > 0 && (
-                        <div className="mt-1 space-y-1">
-                            {dayEvents.slice(0, 2).map((event) => (
-                                <div
-                                    key={event.id}
-                                    className="cursor-pointer truncate rounded px-1 py-0.5 text-xs"
-                                    style={{
-                                        backgroundColor:
-                                            event.color || '#3b82f6',
-                                        color: 'white',
-                                    }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onEventClick?.(event);
-                                    }}
-                                >
-                                    {event.title}
-                                </div>
-                            ))}
-                            {dayEvents.length > 2 && (
-                                <div className="px-1 text-xs text-muted-foreground">
-                                    +{dayEvents.length - 2} more
-                                </div>
-                            )}
+                    <div className="flex h-full flex-col">
+                        <div className={`text-sm font-semibold ${isToday ? 'text-[var(--usg-primary)] dark:text-[var(--usg-accent)]' : 'text-gray-900 dark:text-white'}`}>
+                            {day}
                         </div>
-                    )}
+                        {dayEvents.length > 0 && (
+                            <div className="mt-1 flex-1 space-y-1 overflow-hidden">
+                                {dayEvents.slice(0, 2).map((event) => (
+                                    <div
+                                        key={event.id}
+                                        className="cursor-pointer truncate rounded px-1.5 py-0.5 text-xs font-medium"
+                                        style={{
+                                            backgroundColor:
+                                                event.color || 'var(--usg-primary)',
+                                            color: 'white',
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onEventClick?.(event);
+                                        }}
+                                    >
+                                        {event.title}
+                                    </div>
+                                ))}
+                                {dayEvents.length > 2 && (
+                                    <div className="px-1 text-xs text-gray-600 dark:text-gray-400">
+                                        +{dayEvents.length - 2} more
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>,
             );
         }
@@ -162,13 +172,15 @@ export default function CalendarWidget({
         : [];
 
     return (
-        <Card className="w-full">
-            <CardContent className="p-4">
+        <Card className="w-full bg-white dark:bg-gray-900">
+            <CardContent className="p-6">
                 {/* Header */}
-                <div className="mb-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <CalendarIcon className="h-5 w-5" />
-                        <h3 className="font-semibold">
+                <div className="mb-6 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="rounded-lg bg-[var(--usg-light)] p-2 dark:bg-[var(--usg-dark)]">
+                            <CalendarIcon className="h-5 w-5 text-[var(--usg-primary)] dark:text-[var(--usg-accent)]" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                             {monthNames[currentDate.getMonth()]}{' '}
                             {currentDate.getFullYear()}
                         </h3>
@@ -180,24 +192,28 @@ export default function CalendarWidget({
                                 variant="outline"
                                 size="sm"
                                 onClick={onAddEvent}
+                                className="border-[var(--usg-primary)] text-[var(--usg-primary)] hover:bg-[var(--usg-light)] dark:border-[var(--usg-accent)] dark:text-[var(--usg-accent)] dark:hover:bg-[var(--usg-dark)]"
                             >
                                 <Plus className="mr-1 h-4 w-4" />
-                                Add
+                                Add Event
                             </Button>
                         )}
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center rounded-lg border border-gray-200 dark:border-gray-700">
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={handlePrevMonth}
+                                className="rounded-r-none hover:bg-[var(--usg-light)] hover:text-[var(--usg-primary)] dark:hover:bg-[var(--usg-dark)] dark:hover:text-[var(--usg-accent)]"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                             </Button>
+                            <div className="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={handleNextMonth}
+                                className="rounded-l-none hover:bg-[var(--usg-light)] hover:text-[var(--usg-primary)] dark:hover:bg-[var(--usg-dark)] dark:hover:text-[var(--usg-accent)]"
                             >
                                 <ChevronRight className="h-4 w-4" />
                             </Button>
@@ -206,25 +222,29 @@ export default function CalendarWidget({
                 </div>
 
                 {/* Calendar Grid */}
-                <div className="mb-4 grid grid-cols-7 gap-1">
+                <div className="mb-6">
                     {/* Day headers */}
-                    {dayNames.map((day) => (
-                        <div
-                            key={day}
-                            className="p-2 text-center text-sm font-medium text-muted-foreground"
-                        >
-                            {day}
-                        </div>
-                    ))}
+                    <div className="mb-2 grid grid-cols-7 gap-2">
+                        {dayNames.map((day) => (
+                            <div
+                                key={day}
+                                className="text-center text-sm font-bold text-gray-700 dark:text-gray-300"
+                            >
+                                {day}
+                            </div>
+                        ))}
+                    </div>
 
                     {/* Calendar days */}
-                    {renderCalendarDays()}
+                    <div className="grid grid-cols-7 gap-2">
+                        {renderCalendarDays()}
+                    </div>
                 </div>
 
                 {/* Selected date events */}
                 {selectedDate && selectedDateEvents.length > 0 && (
-                    <div className="border-t pt-4">
-                        <h4 className="mb-2 font-medium">
+                    <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+                        <h4 className="mb-3 font-semibold text-gray-900 dark:text-white">
                             Events on{' '}
                             {selectedDate.toLocaleDateString('en-US', {
                                 weekday: 'long',
@@ -238,21 +258,21 @@ export default function CalendarWidget({
                             {selectedDateEvents.map((event) => (
                                 <div
                                     key={event.id}
-                                    className="flex cursor-pointer items-center gap-2 rounded p-2 hover:bg-gray-50 dark:hover:bg-gray-800"
+                                    className="flex cursor-pointer items-center gap-3 rounded-lg bg-white p-3 transition-all hover:shadow-md dark:bg-gray-900 dark:hover:bg-gray-700"
                                     onClick={() => onEventClick?.(event)}
                                 >
                                     <div
                                         className="h-3 w-3 rounded-full"
                                         style={{
                                             backgroundColor:
-                                                event.color || '#3b82f6',
+                                                event.color || 'var(--usg-primary)',
                                         }}
                                     />
                                     <div className="flex-1">
-                                        <div className="text-sm font-medium">
+                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                                             {event.title}
                                         </div>
-                                        <div className="text-xs text-muted-foreground">
+                                        <div className="text-xs text-gray-600 dark:text-gray-400">
                                             {event.event_time}
                                         </div>
                                     </div>
@@ -269,10 +289,10 @@ export default function CalendarWidget({
                 )}
 
                 {/* Event summary */}
-                <div className="mt-4 border-t pt-4">
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>
-                            Total events this month:{' '}
+                <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+                    <div className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4 text-[var(--usg-primary)] dark:text-[var(--usg-accent)]" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
                             {
                                 events.filter((event) => {
                                     const eventDate = new Date(
@@ -285,13 +305,9 @@ export default function CalendarWidget({
                                             currentDate.getFullYear()
                                     );
                                 }).length
-                            }
+                            }{' '}
+                            events this month
                         </span>
-
-                        <Button variant="ghost" size="sm">
-                            <Filter className="mr-1 h-4 w-4" />
-                            Filter
-                        </Button>
                     </div>
                 </div>
             </CardContent>

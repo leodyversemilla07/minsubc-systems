@@ -1,23 +1,23 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import CountUp from '@/components/usg/count-up';
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import FilterCard from '@/components/usg/filter-card';
 import USGLayout from '@/layouts/usg-layout';
+import usg from '@/routes/usg';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Calendar,
     Download,
     Eye,
     FileText,
-    Filter,
-    TrendingUp,
-    X,
+    User,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -51,12 +51,6 @@ interface Props {
     };
     types?: string[];
     years?: number[];
-    stats: {
-        total_reports: number;
-        financial_reports: number;
-        meeting_minutes: number;
-        total_downloads: number;
-    };
     filters: {
         type?: string;
         year?: string;
@@ -67,7 +61,6 @@ export default function TransparencyIndex({
     reports,
     types = [],
     years = [],
-    stats,
     filters,
 }: Props) {
     const [activeFilters, setActiveFilters] = useState<{
@@ -78,18 +71,9 @@ export default function TransparencyIndex({
         year: filters.year,
     });
 
-    const applyFilters = () => {
-        const params = new URLSearchParams();
-        if (activeFilters.type) params.set('type', activeFilters.type);
-        if (activeFilters.year) params.set('year', activeFilters.year);
-
-        const queryString = params.toString();
-        router.get(`/usg/transparency${queryString ? `?${queryString}` : ''}`);
-    };
-
     const clearFilters = () => {
         setActiveFilters({});
-        router.get('/usg/transparency');
+        router.get(usg.transparency.index.url());
     };
 
     const formatDate = (dateString: string) => {
@@ -135,7 +119,7 @@ export default function TransparencyIndex({
                     <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
                 
-                <div className="relative container mx-auto px-4">
+                <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             Transparency Reports
@@ -149,211 +133,71 @@ export default function TransparencyIndex({
                 </div>
             </section>
 
-            {/* Stats Bar */}
-            <div className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-                        <div className="text-center">
-                            <div className="mb-2 flex items-center justify-center">
-                                <FileText className="h-5 w-5 text-[var(--usg-primary)]" />
-                            </div>
-                            <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                <CountUp end={stats.total_reports} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Total Reports
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="mb-2 flex items-center justify-center">
-                                <TrendingUp className="h-5 w-5 text-[var(--usg-secondary)]" />
-                            </div>
-                            <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                <CountUp end={stats.financial_reports} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Financial Reports
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="mb-2 flex items-center justify-center">
-                                <Calendar className="h-5 w-5 text-[var(--usg-accent)]" />
-                            </div>
-                            <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                <CountUp end={stats.meeting_minutes} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Meeting Minutes
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="mb-2 flex items-center justify-center">
-                                <Download className="h-5 w-5 rounded-sm bg-[var(--usg-text)] p-0.5 text-[var(--usg-neutral)]" />
-                            </div>
-                            <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                                <CountUp end={stats.total_downloads} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Total Downloads
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* Main Content */}
-            <div className="bg-gray-50 py-12 dark:bg-gray-800">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <section className="bg-gray-50 py-16 dark:bg-gray-800">
+                <div className="container mx-auto max-w-7xl px-4">
                 {/* Filters Section */}
                 <div className="mb-8">
-                    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
-                                <h3 className="font-semibold text-gray-900 dark:text-white">
-                                    Filter Reports
-                                </h3>
-                            </div>
-                            {(activeFilters.type || activeFilters.year) && (
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={clearFilters}
-                                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                >
-                                    <X className="mr-1 h-4 w-4" />
-                                    Clear All
-                                </Button>
-                            )}
-                        </div>
+                    <FilterCard
+                        title="Filter Reports"
+                        description="Filter transparency reports by type and year"
+                        hasActiveFilters={
+                            !!(activeFilters.type || activeFilters.year)
+                        }
+                        onClearFilters={clearFilters}
+                        filters={[
+                            ...(types.length > 0
+                                ? [
+                                      {
+                                          label: 'Report Type',
+                                          icon: <FileText className="h-4 w-4" />,
+                                          value: activeFilters.type,
+                                          placeholder: `All Types (${types.length})`,
+                                          options: types,
+                                          formatLabel: formatTypeLabel,
+                                          onChange: (value: string | undefined) => {
+                                              const params = new URLSearchParams();
+                                              if (value) params.set('type', value);
+                                              if (activeFilters.year)
+                                                  params.set('year', activeFilters.year);
 
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            {/* Type Filter */}
-                            {types.length > 0 && (
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        <FileText className="h-4 w-4 text-gray-400" />
-                                        Report Type
-                                    </label>
-                                    <Select
-                                        value={activeFilters.type}
-                                        onValueChange={(value) => {
-                                            const newFilters = {
-                                                ...activeFilters,
-                                                type: value || undefined,
-                                            };
-                                            setActiveFilters(newFilters);
-                                        }}
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder={`All Types (${types.length})`} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {types.map((type) => (
-                                                <SelectItem key={type} value={type}>
-                                                    {formatTypeLabel(type)}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            )}
+                                              const queryString = params.toString();
+                                              router.get(
+                                                  `${usg.transparency.index.url()}${queryString ? `?${queryString}` : ''}`,
+                                              );
+                                          },
+                                      },
+                                  ]
+                                : []),
+                            ...(years.length > 0
+                                ? [
+                                      {
+                                          label: 'Year',
+                                          icon: <Calendar className="h-4 w-4" />,
+                                          value: activeFilters.year,
+                                          placeholder: `All Years (${years.length})`,
+                                          options: years.map((year) => year.toString()),
+                                          onChange: (value: string | undefined) => {
+                                              const params = new URLSearchParams();
+                                              if (activeFilters.type)
+                                                  params.set('type', activeFilters.type);
+                                              if (value) params.set('year', value);
 
-                            {/* Year Filter */}
-                            {years.length > 0 && (
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        <Calendar className="h-4 w-4 text-gray-400" />
-                                        Year
-                                    </label>
-                                    <Select
-                                        value={activeFilters.year}
-                                        onValueChange={(value) => {
-                                            const newFilters = {
-                                                ...activeFilters,
-                                                year: value || undefined,
-                                            };
-                                            setActiveFilters(newFilters);
-                                        }}
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder={`All Years (${years.length})`} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {years.map((year) => (
-                                                <SelectItem key={year} value={year.toString()}>
-                                                    {year}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Apply Button */}
-                        {(activeFilters.type !== filters.type || activeFilters.year !== filters.year) && (
-                            <div className="mt-4 flex justify-end border-t border-gray-200 pt-4 dark:border-gray-700">
-                                <Button onClick={applyFilters} size="sm">
-                                    Apply Filters
-                                </Button>
-                            </div>
-                        )}
-
-                        {/* Active Filters Display */}
-                        {(activeFilters.type || activeFilters.year) && (
-                            <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
-                                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Active filters:
-                                </span>
-                                {activeFilters.type && (
-                                    <Badge
-                                        variant="secondary"
-                                        className="flex items-center gap-1"
-                                    >
-                                        <FileText className="h-3 w-3" />
-                                        {formatTypeLabel(activeFilters.type)}
-                                        <button
-                                            onClick={() => {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    type: undefined,
-                                                });
-                                            }}
-                                            className="ml-1 hover:text-gray-900 dark:hover:text-white"
-                                        >
-                                            <X className="h-3 w-3" />
-                                        </button>
-                                    </Badge>
-                                )}
-                                {activeFilters.year && (
-                                    <Badge
-                                        variant="secondary"
-                                        className="flex items-center gap-1"
-                                    >
-                                        <Calendar className="h-3 w-3" />
-                                        {activeFilters.year}
-                                        <button
-                                            onClick={() => {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    year: undefined,
-                                                });
-                                            }}
-                                            className="ml-1 hover:text-gray-900 dark:hover:text-white"
-                                        >
-                                            <X className="h-3 w-3" />
-                                        </button>
-                                    </Badge>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                                              const queryString = params.toString();
+                                              router.get(
+                                                  `${usg.transparency.index.url()}${queryString ? `?${queryString}` : ''}`,
+                                              );
+                                          },
+                                      },
+                                  ]
+                                : []),
+                        ]}
+                    />
                 </div>
 
                 {/* Results */}
                 {reports.data.length === 0 ? (
-                    <div className="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                    <div className="rounded-xl bg-white p-12 text-center shadow-sm dark:bg-gray-900">
                         <FileText className="mx-auto mb-4 h-16 w-16 text-gray-400 dark:text-gray-600" />
                         <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                             No reports found
@@ -374,11 +218,11 @@ export default function TransparencyIndex({
                         </div>
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                             {reports.data.map((report) => (
-                                <div
+                                <Card
                                     key={report.id}
-                                    className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+                                    className="bg-white dark:bg-gray-900"
                                 >
-                                    <div className="mb-4">
+                                    <CardHeader className="bg-white dark:bg-gray-900">
                                         <div className="mb-3 flex items-start justify-between">
                                             <Badge
                                                 className={getTypeColor(
@@ -398,53 +242,54 @@ export default function TransparencyIndex({
                                                 </span>
                                             </div>
                                         </div>
-                                        <h3 className="mb-2 line-clamp-2 text-lg font-semibold text-gray-900 dark:text-white">
+                                        <CardTitle className="line-clamp-2">
                                             <Link
-                                                href={`/usg/transparency/${report.slug}`}
+                                                href={usg.transparency.show.url({ slug: report.slug })}
                                                 className="hover:text-[var(--usg-primary)] dark:hover:text-[var(--usg-accent)]"
                                             >
                                                 {report.title}
                                             </Link>
-                                        </h3>
-                                    </div>
+                                        </CardTitle>
+                                        <CardDescription className="space-y-1.5">
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-4 w-4" />
+                                                <span>
+                                                    Period: {report.formatted_period}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-4 w-4" />
+                                                <span>
+                                                    Published: {formatDate(report.published_at)}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <User className="h-4 w-4" />
+                                                <span>
+                                                    {report.created_by.first_name}{' '}
+                                                    {report.created_by.last_name}
+                                                </span>
+                                            </div>
+                                        </CardDescription>
+                                    </CardHeader>
 
                                     {report.description && (
-                                        <p className="mb-4 line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
-                                            {report.description}
-                                        </p>
+                                        <CardContent className="bg-white dark:bg-gray-900">
+                                            <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
+                                                {report.description}
+                                            </p>
+                                        </CardContent>
                                     )}
 
-                                    <div className="mb-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-4 w-4" />
-                                            <span>
-                                                Period:{' '}
-                                                {report.formatted_period}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="text-gray-500 dark:text-gray-500">
-                                                Published:{' '}
-                                            </span>
-                                            {formatDate(report.published_at)}
-                                        </div>
-                                        <div>
-                                            <span className="text-gray-500 dark:text-gray-500">
-                                                By:{' '}
-                                            </span>
-                                            {report.created_by.first_name}{' '}
-                                            {report.created_by.last_name}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex gap-2">
+                                    <CardFooter className="flex gap-2 bg-white dark:bg-gray-900">
                                         <Button
                                             asChild
                                             variant="outline"
                                             size="sm"
+                                            className="flex-1"
                                         >
                                             <Link
-                                                href={`/usg/transparency/${report.slug}`}
+                                                href={usg.transparency.show.url({ slug: report.slug })}
                                             >
                                                 <Eye className="mr-2 h-4 w-4" />
                                                 View Details
@@ -455,19 +300,20 @@ export default function TransparencyIndex({
                                                 asChild
                                                 size="sm"
                                                 variant="default"
+                                                className="flex-1"
                                             >
                                                 <Link
-                                                    href={`/usg/transparency/${report.slug}/download`}
+                                                    href={usg.transparency.download.url({ slug: report.slug })}
                                                 >
                                                     <Download className="mr-2 h-4 w-4" />
-                                                    Download{' '}
-                                                    {report.formatted_file_size &&
-                                                        `(${report.formatted_file_size})`}
+                                                    {report.formatted_file_size
+                                                        ? `Download (${report.formatted_file_size})`
+                                                        : 'Download'}
                                                 </Link>
                                             </Button>
                                         )}
-                                    </div>
-                                </div>
+                                    </CardFooter>
+                                </Card>
                             ))}
                         </div>{' '}
                         {/* Pagination */}
@@ -505,7 +351,7 @@ export default function TransparencyIndex({
                                                 );
 
                                                 router.get(
-                                                    `/usg/transparency?${params.toString()}`,
+                                                    `${usg.transparency.index.url()}?${params.toString()}`,
                                                 );
                                             }}
                                         >
@@ -518,7 +364,41 @@ export default function TransparencyIndex({
                     </>
                 )}
                 </div>
-            </div>
+            </section>
+
+            {/* Call to Action */}
+            {reports.data.length > 0 && (
+                <section className="bg-[var(--usg-primary)] py-20 text-white">
+                    <div className="container mx-auto px-4">
+                        <div className="mx-auto max-w-3xl text-center">
+                            <h2 className="mb-6 text-4xl font-bold">
+                                Promoting Transparency & Accountability
+                            </h2>
+                            <p className="mb-8 text-xl text-[var(--usg-hero-text)]">
+                                We believe in open governance. All financial reports and meeting minutes are publicly accessible to ensure accountability to the student body.
+                            </p>
+                            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="border-0 bg-white text-[var(--usg-primary)] hover:bg-[var(--usg-light)]"
+                                >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download All Reports
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="border-white text-white hover:bg-white/10"
+                                >
+                                    <FileText className="mr-2 h-4 w-4" />
+                                    Request Information
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
         </USGLayout>
     );
 }

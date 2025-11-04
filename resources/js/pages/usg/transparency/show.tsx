@@ -106,7 +106,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                     value as Record<string, unknown>,
                 );
                 return (
-                    <div className="mt-2 space-y-2 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+                    <div className="mt-2 space-y-2 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
                         {entries.map(([key, val]) => (
                             <div
                                 key={key}
@@ -133,7 +133,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
         };
 
         return (
-            <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                     Report Details
                 </h2>
@@ -159,7 +159,13 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
             <Head title={`${report.title} - Transparency Reports`} />
 
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 py-16 text-white">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
                 <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <Button
                         asChild
@@ -183,7 +189,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                                 >
                                     {formatTypeLabel(report.type)}
                                 </Badge>
-                                <div className="flex items-center gap-4 text-sm text-cyan-100">
+                                <div className="flex items-center gap-4 text-sm text-white/90">
                                     <span className="flex items-center gap-1">
                                         <Eye className="h-4 w-4" />
                                         {report.view_count} views
@@ -199,7 +205,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                                 {report.title}
                             </h1>
 
-                            <div className="mb-6 flex flex-wrap gap-4 text-sm text-cyan-100">
+                            <div className="mb-6 flex flex-wrap gap-4 text-sm text-white/90">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="h-4 w-4" />
                                     <span>
@@ -225,7 +231,7 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                                 <Button
                                     asChild
                                     size="lg"
-                                    className="bg-white text-cyan-600 hover:bg-cyan-50"
+                                    className="bg-white text-[var(--usg-primary)] hover:bg-gray-50"
                                 >
                                     <Link
                                         href={`/usg/transparency/${report.slug}/download`}
@@ -243,69 +249,109 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
             </div>
 
             {/* Main Content */}
-            <div className="mx-auto max-w-4xl px-4 pt-8 pb-16 sm:px-6 lg:px-8">
-                {/* Report Description */}
-                {report.description && (
-                    <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                        <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                            Report Summary
-                        </h2>
-                        <div
-                            className="prose dark:prose-invert max-w-none"
-                            dangerouslySetInnerHTML={{
-                                __html: report.description.replace(
-                                    /\n/g,
-                                    '<br />',
-                                ),
-                            }}
-                        />
-                    </div>
-                )}
+            <div className="bg-gray-50 py-12 dark:bg-gray-800">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                    <article className="space-y-8">
+                        {/* Report Description */}
+                        {report.description && (
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                                <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                                    Report Summary
+                                </h2>
+                                <div
+                                    className="prose dark:prose-invert max-w-none"
+                                    dangerouslySetInnerHTML={{
+                                        __html: report.description.replace(
+                                            /\n/g,
+                                            '<br />',
+                                        ),
+                                    }}
+                                />
+                            </div>
+                        )}
 
-                {/* Report Data */}
-                {renderReportData()}
+                        {/* Report Data */}
+                        {renderReportData()}
 
-                {/* Related Reports */}
-                {relatedReports.length > 0 && (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                        <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                            Related Reports
-                        </h2>
-                        <div className="grid gap-6 sm:grid-cols-2">
-                            {relatedReports.map((relatedReport) => (
-                                <Link
-                                    key={relatedReport.id}
-                                    href={`/usg/transparency/${relatedReport.slug}`}
-                                    className="group block rounded-xl border border-gray-200 bg-gray-50 p-6 transition-all hover:border-cyan-300 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-cyan-700 dark:hover:bg-gray-800"
-                                >
-                                    <div className="mb-3 flex items-start justify-between gap-4">
-                                        <Badge
-                                            className={`${getTypeColor(relatedReport.type)} shrink-0`}
+                        {/* Related Reports */}
+                        {relatedReports.length > 0 && (
+                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                                <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                                    Related Reports
+                                </h2>
+                                <div className="grid gap-6 sm:grid-cols-2">
+                                    {relatedReports.map((relatedReport) => (
+                                        <Link
+                                            key={relatedReport.id}
+                                            href={`/usg/transparency/${relatedReport.slug}`}
+                                            className="group block rounded-xl border border-gray-200 bg-gray-50 p-6 transition-all hover:border-[var(--usg-primary)] hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-[var(--usg-accent)] dark:hover:bg-gray-800"
                                         >
-                                            {formatTypeLabel(
-                                                relatedReport.type,
-                                            )}
-                                        </Badge>
-                                        <div className="text-right text-xs text-gray-600 dark:text-gray-400">
-                                            {formatDate(
-                                                relatedReport.published_at,
-                                            )}
-                                        </div>
-                                    </div>
+                                            <div className="mb-3 flex items-start justify-between gap-4">
+                                                <Badge
+                                                    className={`${getTypeColor(relatedReport.type)} shrink-0`}
+                                                >
+                                                    {formatTypeLabel(
+                                                        relatedReport.type,
+                                                    )}
+                                                </Badge>
+                                                <div className="text-right text-xs text-gray-600 dark:text-gray-400">
+                                                    {formatDate(
+                                                        relatedReport.published_at,
+                                                    )}
+                                                </div>
+                                            </div>
 
-                                    <h3 className="mb-3 line-clamp-2 text-lg font-semibold text-gray-900 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-400">
-                                        {relatedReport.title}
-                                    </h3>
+                                            <h3 className="mb-3 line-clamp-2 text-lg font-semibold text-gray-900 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-400">
+                                                {relatedReport.title}
+                                            </h3>
 
-                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                        <FileText className="h-4 w-4 text-cyan-500" />
-                                        <span>View Report</span>
-                                    </div>
-                                </Link>
-                            ))}
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                                <FileText className="h-4 w-4 text-cyan-500" />
+                                                <span>View Report</span>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* CTA Section */}
+                        <div className="mt-12 rounded-xl bg-gradient-to-br from-[var(--usg-primary)] to-[var(--usg-dark)] p-12 text-center text-white shadow-lg">
+                            <h2 className="mb-4 text-3xl font-bold">
+                                Explore More Transparency Reports
+                            </h2>
+                            <p className="mb-6 text-lg text-white/90">
+                                Access our complete archive of financial reports, meeting minutes, and budget documents.
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-4">
+                                <Button
+                                    asChild
+                                    size="lg"
+                                    className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
+                                >
+                                    <Link href={usg.transparency.index.url()}>
+                                        View All Reports
+                                    </Link>
+                                </Button>
+                                {report.file_path && (
+                                    <Button
+                                        asChild
+                                        size="lg"
+                                        variant="secondary"
+                                        className="border-white/20 bg-white/10 text-white hover:bg-white/20"
+                                    >
+                                        <Link
+                                            href={`/usg/transparency/${report.slug}/download`}
+                                        >
+                                            <Download className="mr-2 h-5 w-5" />
+                                            Download This Report
+                                        </Link>
+                                    </Button>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    </article>
+                </div>
             </div>
         </USGLayout>
     );

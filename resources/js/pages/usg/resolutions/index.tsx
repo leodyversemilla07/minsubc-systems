@@ -1,13 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import CountUp from '@/components/usg/count-up';
+import FilterCard from '@/components/usg/filter-card';
 import ResolutionCard from '@/components/usg/resolution-card';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
@@ -16,9 +9,7 @@ import {
     Download,
     ExternalLink,
     FileText,
-    Filter,
     User,
-    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -157,236 +148,72 @@ export default function ResolutionsIndex({
                 </div>
             </section>
 
-            {/* Stats Bar */}
-            <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-                        <div>
-                            <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)] md:text-4xl">
-                                <CountUp end={resolutions.total} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Total Resolutions
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)] md:text-4xl">
-                                <CountUp end={publishedResolutions.length} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Published
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)] md:text-4xl">
-                                <CountUp end={availableYears.length} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Years Active
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)] md:text-4xl">
-                                <CountUp end={authors.length} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Authors
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
                     {/* Filters Section */}
                     <div className="mb-8">
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                            <div className="mb-4 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
-                                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                                        Filter Resolutions
-                                    </h3>
-                                </div>
-                                {Object.values(activeFilters).some((f) => f?.length) && (
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => {
-                                            setActiveFilters({});
-                                        }}
-                                        className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                    >
-                                        <X className="mr-1 h-4 w-4" />
-                                        Clear All
-                                    </Button>
-                                )}
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                {/* Author Filter */}
-                                {authors.length > 0 && (
-                                    <div className="space-y-2">
-                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            <User className="h-4 w-4 text-gray-400" />
-                                            Author
-                                        </label>
-                                        <Select
-                                            value={activeFilters.authors?.[0]}
-                                            onValueChange={(value) => {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    authors: value ? [value] : [],
-                                                });
-                                            }}
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder={`All Authors (${authors.length})`} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {authors.map((author) => (
-                                                    <SelectItem key={author} value={author}>
-                                                        {author}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                )}
-
-                                {/* Year Filter */}
-                                {availableYears.length > 0 && (
-                                    <div className="space-y-2">
-                                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            <Calendar className="h-4 w-4 text-gray-400" />
-                                            Year
-                                        </label>
-                                        <Select
-                                            value={activeFilters.years?.[0]}
-                                            onValueChange={(value) => {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    years: value ? [value] : [],
-                                                });
-                                            }}
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder={`All Years (${availableYears.length})`} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {availableYears.map((year) => (
-                                                    <SelectItem key={year} value={year}>
-                                                        {year}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                )}
-
-                                {/* Status Filter */}
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        <FileText className="h-4 w-4 text-gray-400" />
-                                        Status
-                                    </label>
-                                    <Select
-                                        value={activeFilters.statuses?.[0]}
-                                        onValueChange={(value) => {
-                                            setActiveFilters({
-                                                ...activeFilters,
-                                                statuses: value ? [value] : [],
-                                            });
-                                        }}
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="All Statuses" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="published">Published</SelectItem>
-                                            <SelectItem value="draft">Draft</SelectItem>
-                                            <SelectItem value="review">Under Review</SelectItem>
-                                            <SelectItem value="rejected">Rejected</SelectItem>
-                                            <SelectItem value="archived">Archived</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-
-                            {/* Active Filters Display */}
-                            {Object.values(activeFilters).some((f) => f?.length) && (
-                                <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
-                                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                        Active filters:
-                                    </span>
-                                    {activeFilters.authors?.map((author) => (
-                                        <Badge
-                                            key={author}
-                                            variant="secondary"
-                                            className="flex items-center gap-1"
-                                        >
-                                            <User className="h-3 w-3" />
-                                            {author}
-                                            <button
-                                                onClick={() => {
-                                                    setActiveFilters({
-                                                        ...activeFilters,
-                                                        authors: [],
-                                                    });
-                                                }}
-                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
-                                            >
-                                                <X className="h-3 w-3" />
-                                            </button>
-                                        </Badge>
-                                    ))}
-                                    {activeFilters.years?.map((year) => (
-                                        <Badge
-                                            key={year}
-                                            variant="secondary"
-                                            className="flex items-center gap-1"
-                                        >
-                                            <Calendar className="h-3 w-3" />
-                                            {year}
-                                            <button
-                                                onClick={() => {
-                                                    setActiveFilters({
-                                                        ...activeFilters,
-                                                        years: [],
-                                                    });
-                                                }}
-                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
-                                            >
-                                                <X className="h-3 w-3" />
-                                            </button>
-                                        </Badge>
-                                    ))}
-                                    {activeFilters.statuses?.map((status) => (
-                                        <Badge
-                                            key={status}
-                                            variant="secondary"
-                                            className="flex items-center gap-1"
-                                        >
-                                            <FileText className="h-3 w-3" />
-                                            {status.charAt(0).toUpperCase() + status.slice(1)}
-                                            <button
-                                                onClick={() => {
-                                                    setActiveFilters({
-                                                        ...activeFilters,
-                                                        statuses: [],
-                                                    });
-                                                }}
-                                                className="ml-1 hover:text-gray-900 dark:hover:text-white"
-                                            >
-                                                <X className="h-3 w-3" />
-                                            </button>
-                                        </Badge>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                        <FilterCard
+                            title="Filter Resolutions"
+                            description="Filter resolutions by author, year, and status"
+                            hasActiveFilters={Object.values(activeFilters).some((f) => f?.length)}
+                            onClearFilters={() => setActiveFilters({})}
+                            filters={[
+                                ...(authors.length > 0
+                                    ? [
+                                          {
+                                              label: 'Author',
+                                              icon: <User className="h-4 w-4" />,
+                                              value: activeFilters.authors?.[0],
+                                              placeholder: `All Authors (${authors.length})`,
+                                              options: authors,
+                                              onChange: (value: string | undefined) => {
+                                                  setActiveFilters({
+                                                      ...activeFilters,
+                                                      authors: value ? [value] : [],
+                                                  });
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                                ...(availableYears.length > 0
+                                    ? [
+                                          {
+                                              label: 'Year',
+                                              icon: <Calendar className="h-4 w-4" />,
+                                              value: activeFilters.years?.[0],
+                                              placeholder: `All Years (${availableYears.length})`,
+                                              options: availableYears,
+                                              onChange: (value: string | undefined) => {
+                                                  setActiveFilters({
+                                                      ...activeFilters,
+                                                      years: value ? [value] : [],
+                                                  });
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                                {
+                                    label: 'Status',
+                                    icon: <FileText className="h-4 w-4" />,
+                                    value: activeFilters.statuses?.[0],
+                                    placeholder: 'All Statuses',
+                                    options: [
+                                        { value: 'published', label: 'Published' },
+                                        { value: 'draft', label: 'Draft' },
+                                        { value: 'review', label: 'Under Review' },
+                                        { value: 'rejected', label: 'Rejected' },
+                                        { value: 'archived', label: 'Archived' },
+                                    ],
+                                    onChange: (value: string | undefined) => {
+                                        setActiveFilters({
+                                            ...activeFilters,
+                                            statuses: value ? [value] : [],
+                                        });
+                                    },
+                                },
+                            ]}
+                        />
                     </div>
 
                     {/* Results Summary */}
@@ -461,7 +288,6 @@ export default function ResolutionsIndex({
                                                     <ResolutionCard
                                                         key={resolution.id}
                                                         resolution={resolution}
-                                                        variant="full"
                                                     />
                                                 ),
                                             )}
@@ -491,7 +317,6 @@ export default function ResolutionsIndex({
                                                     <ResolutionCard
                                                         key={resolution.id}
                                                         resolution={resolution}
-                                                        variant="compact"
                                                     />
                                                 ),
                                             )}
@@ -513,7 +338,6 @@ export default function ResolutionsIndex({
                                             <ResolutionCard
                                                 key={resolution.id}
                                                 resolution={resolution}
-                                                variant="full"
                                             />
                                         ))}
                                     </div>
@@ -535,7 +359,6 @@ export default function ResolutionsIndex({
                                                 <ResolutionCard
                                                     key={resolution.id}
                                                     resolution={resolution}
-                                                    variant="full"
                                                 />
                                             ),
                                         )}
@@ -544,87 +367,42 @@ export default function ResolutionsIndex({
                             )}
                         </div>
                     )}
+                </div>
+            </section>
 
-                    {/* Statistics Card */}
-                    {publishedResolutions.length > 0 && (
-                        <div className="mt-12 rounded-xl bg-white p-8 shadow-sm dark:bg-gray-900">
-                            <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
-                                Resolution Statistics
-                            </h3>
-                            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-                                <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-[var(--usg-primary)]">
-                                        {publishedResolutions.length}
-                                    </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                                        Published
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-[var(--usg-secondary)]">
-                                        {availableYears.length}
-                                    </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                                        Years Active
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="mb-2 text-3xl font-bold text-[var(--usg-accent)]">
-                                        {authors.length}
-                                    </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                                        Authors
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="mb-2 inline-block rounded bg-[var(--usg-text)] px-2 py-1 text-3xl font-bold text-[var(--usg-neutral)]">
-                                        {
-                                            resolutions.data.filter(
-                                                (r) => r.file_path,
-                                            ).length
-                                        }
-                                    </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                                        With Documents
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Call to Action */}
-                    {publishedResolutions.length > 0 && (
-                        <div className="mt-12 rounded-xl bg-[var(--usg-primary)] p-12 text-center text-white shadow-lg">
-                            <h3 className="mb-2 text-3xl font-bold">
+            {/* Call to Action */}
+            {publishedResolutions.length > 0 && (
+                <section className="bg-[var(--usg-primary)] py-20 text-white">
+                    <div className="container mx-auto px-4">
+                        <div className="mx-auto max-w-3xl text-center">
+                            <h2 className="mb-6 text-4xl font-bold">
                                 Stay Informed
-                            </h3>
-                            <p className="mb-6 text-lg text-white/90">
-                                Keep track of the latest USG resolutions and
-                                policy decisions that affect our university
-                                community
+                            </h2>
+                            <p className="mb-8 text-xl text-[var(--usg-hero-text)]">
+                                Keep track of the latest USG resolutions and policy decisions that affect our university community
                             </p>
-                            <div className="flex flex-wrap justify-center gap-4">
+                            <div className="flex flex-col justify-center gap-4 sm:flex-row">
                                 <Button
                                     size="lg"
-                                    variant="secondary"
-                                    className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
+                                    variant="outline"
+                                    className="border-0 bg-white text-[var(--usg-primary)] hover:bg-[var(--usg-light)]"
                                 >
-                                    <Download className="mr-2 h-5 w-5" />
+                                    <Download className="mr-2 h-4 w-4" />
                                     Download Archive
                                 </Button>
                                 <Button
                                     size="lg"
-                                    variant="secondary"
-                                    className="border-white/20 bg-white/10 text-white hover:bg-white/20"
+                                    variant="outline"
+                                    className="border-white text-white hover:bg-white/10"
                                 >
-                                    <ExternalLink className="mr-2 h-5 w-5" />
+                                    <ExternalLink className="mr-2 h-4 w-4" />
                                     Subscribe to Updates
                                 </Button>
                             </div>
                         </div>
-                    )}
-                </div>
-            </section>
+                    </div>
+                </section>
+            )}
         </USGLayout>
     );
 }

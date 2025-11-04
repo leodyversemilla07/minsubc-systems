@@ -1,17 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AnnouncementCard from '@/components/usg/announcement-card';
 import CountUp from '@/components/usg/count-up';
+import FilterCard from '@/components/usg/filter-card';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
-import { Bell, Calendar, Filter, Sparkles, X } from 'lucide-react';
+import { Bell, Calendar, Sparkles, Tag, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface Announcement {
@@ -38,8 +32,7 @@ interface Props {
 }
 
 export default function AnnouncementsIndex({
-    announcements,
-    categories = [],
+    announcements
 }: Props) {
     const [activeFilters, setActiveFilters] = useState<{
         categories?: string[];
@@ -100,21 +93,6 @@ export default function AnnouncementsIndex({
         (announcement) => announcement.status === 'archived',
     );
 
-    const toggleFilter = (
-        filterType: 'categories' | 'years',
-        value: string,
-    ) => {
-        const currentValues = activeFilters[filterType] || [];
-        const newValues = currentValues.includes(value)
-            ? currentValues.filter((v) => v !== value)
-            : [...currentValues, value];
-
-        setActiveFilters({
-            ...activeFilters,
-            [filterType]: newValues.length > 0 ? newValues : undefined,
-        });
-    };
-
     const clearFilters = () => {
         setActiveFilters({});
     };
@@ -148,176 +126,53 @@ export default function AnnouncementsIndex({
                 </div>
             </section>
 
-            {/* Stats Bar */}
-            <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="mx-auto flex max-w-2xl justify-center gap-12">
-                        <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
-                                <CountUp end={announcements.total} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Total Announcements
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
-                                <CountUp end={publishedAnnouncements.length} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Published
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-7xl px-4">
                     {/* Filter Section */}
-                    <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Filter className="h-5 w-5 text-[var(--usg-primary)]" />
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Filter Announcements
-                                </h3>
-                            </div>
-                            {hasActiveFilters && (
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={clearFilters}
-                                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                >
-                                    <X className="mr-1 h-4 w-4" />
-                                    Clear filters
-                                </Button>
-                            )}
-                        </div>
-
-                        <div className="grid gap-4 md:grid-cols-2">
-                            {/* Category Filter */}
-                            {availableCategories.length > 0 && (
-                                <div>
-                                    <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Category
-                                    </label>
-                                    <Select
-                                        value={
-                                            activeFilters.categories?.[0] || 'all'
-                                        }
-                                        onValueChange={(value) => {
-                                            if (value && value !== 'all') {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    categories: [value],
-                                                });
-                                            } else {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    categories: undefined,
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="All Categories" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">
-                                                All Categories
-                                            </SelectItem>
-                                            {availableCategories.map(
-                                                (category) => (
-                                                    <SelectItem
-                                                        key={category}
-                                                        value={category}
-                                                    >
-                                                        {category}
-                                                    </SelectItem>
-                                                ),
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            )}
-
-                            {/* Year Filter */}
-                            {availableYears.length > 0 && (
-                                <div>
-                                    <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Year
-                                    </label>
-                                    <Select
-                                        value={activeFilters.years?.[0] || 'all'}
-                                        onValueChange={(value) => {
-                                            if (value && value !== 'all') {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    years: [value],
-                                                });
-                                            } else {
-                                                setActiveFilters({
-                                                    ...activeFilters,
-                                                    years: undefined,
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="All Years" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">
-                                                All Years
-                                            </SelectItem>
-                                            {availableYears.map((year) => (
-                                                <SelectItem
-                                                    key={year}
-                                                    value={year}
-                                                >
-                                                    {year}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Active Filters Display */}
-                        {hasActiveFilters && (
-                            <div className="mt-4 flex flex-wrap gap-2">
-                                {activeFilters.categories?.map((category) => (
-                                    <Badge
-                                        key={category}
-                                        variant="secondary"
-                                        className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
-                                        onClick={() =>
-                                            toggleFilter('categories', category)
-                                        }
-                                    >
-                                        {category}
-                                        <X className="ml-1 h-3 w-3" />
-                                    </Badge>
-                                ))}
-                                {activeFilters.years?.map((year) => (
-                                    <Badge
-                                        key={year}
-                                        variant="secondary"
-                                        className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
-                                        onClick={() =>
-                                            toggleFilter('years', year)
-                                        }
-                                    >
-                                        {year}
-                                        <X className="ml-1 h-3 w-3" />
-                                    </Badge>
-                                ))}
-                            </div>
-                        )}
+                    <div className="mb-8">
+                        <FilterCard
+                            title="Filter Announcements"
+                            description="Filter announcements by category and year"
+                            hasActiveFilters={hasActiveFilters}
+                            onClearFilters={clearFilters}
+                            filters={[
+                                ...(availableCategories.length > 0
+                                    ? [
+                                          {
+                                              label: 'Category',
+                                              icon: <Tag className="h-4 w-4" />,
+                                              value: activeFilters.categories?.[0],
+                                              placeholder: 'All Categories',
+                                              options: availableCategories,
+                                              onChange: (value: string | undefined) => {
+                                                  setActiveFilters({
+                                                      ...activeFilters,
+                                                      categories: value ? [value] : undefined,
+                                                  });
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                                ...(availableYears.length > 0
+                                    ? [
+                                          {
+                                              label: 'Year',
+                                              icon: <Calendar className="h-4 w-4" />,
+                                              value: activeFilters.years?.[0],
+                                              placeholder: 'All Years',
+                                              options: availableYears,
+                                              onChange: (value: string | undefined) => {
+                                                  setActiveFilters({
+                                                      ...activeFilters,
+                                                      years: value ? [value] : undefined,
+                                                  });
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                            ]}
+                        />
                     </div>
 
                     {/* Results Summary */}
@@ -374,7 +229,7 @@ export default function AnnouncementsIndex({
                     </div>
 
                     {publishedAnnouncements.length === 0 ? (
-                        <div className="rounded-lg bg-white p-16 text-center shadow-sm dark:bg-gray-900">
+                        <div className="rounded-xl bg-white p-12 text-center shadow-sm dark:bg-gray-900">
                             <div className="mb-6 inline-flex items-center justify-center rounded-full bg-[var(--usg-light)] p-6">
                                 <Bell className="h-12 w-12 text-[var(--usg-primary)]" />
                             </div>

@@ -10,7 +10,6 @@ import {
     Clock,
     MapPin,
     PartyPopper,
-    Share2,
     User,
     Users,
 } from 'lucide-react';
@@ -47,24 +46,11 @@ export default function EventShow({
         router.visit('/usg/events');
     };
 
-    const handleShare = async () => {
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: event.title,
-                    text: `Join us for ${event.title} on ${formatDate(event.event_date)}`,
-                    url: window.location.href,
-                });
-            } catch {
-                console.log('Sharing cancelled');
-            }
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-        }
-    };
-
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
+        if (!dateString) return 'Date TBA';
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'Invalid Date';
+        return date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -72,14 +58,15 @@ export default function EventShow({
     };
 
     const formatTime = (timeString: string) => {
-        return new Date(`2000-01-01T${timeString}`).toLocaleTimeString(
-            'en-US',
-            {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-            },
-        );
+        if (!timeString) return 'Time TBA';
+        // Handle both HH:MM:SS and HH:MM formats
+        const time = new Date(`2000-01-01T${timeString}`);
+        if (isNaN(time.getTime())) return 'Invalid Time';
+        return time.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        });
     };
 
     const isEventUpcoming = () => {
@@ -147,26 +134,70 @@ export default function EventShow({
             <Head title={`${event.title} - USG Events`} />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 text-white">
-                <div className="relative container mx-auto px-4 py-12">
+            <section className="relative overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] py-20 text-white">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
+                </div>
+                
+                <div className="relative z-10 container mx-auto max-w-4xl px-4">
                     <Button
                         variant="ghost"
                         onClick={handleBack}
-                        className="mb-4 text-white hover:bg-white/10"
+                        className="mb-8 text-white hover:bg-white/10"
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Events
                     </Button>
 
-                    <div className="mb-6 flex items-center justify-center">
-                        <div className="inline-flex items-center justify-center rounded-full bg-white/10 p-3 backdrop-blur-sm">
+                    <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+                        <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
                             <PartyPopper className="h-8 w-8" />
                         </div>
-                    </div>
+                        <div className="flex-1">
+                            <div className="mb-4 flex flex-wrap gap-2">
+                                <Badge className={`${getStatusColor(event.status)} border-white/30 backdrop-blur-sm`}>
+                                    {formatStatus(event.status)}
+                                </Badge>
+                                {event.category && (
+                                    <Badge variant="outline" className="border-white/30 bg-white/10 text-white backdrop-blur-sm">
+                                        {event.category}
+                                    </Badge>
+                                )}
+                            </div>
 
-                    <h1 className="mb-4 text-center text-4xl font-bold md:text-5xl">
-                        {event.title}
-                    </h1>
+                            <h1 className="mb-4 text-4xl font-bold leading-tight md:text-5xl">
+                                {event.title}
+                            </h1>
+
+                            <div className="flex flex-wrap gap-4 text-sm text-white/90">
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="h-4 w-4" />
+                                    <span>
+                                        {formatDate(event.event_date)} at{' '}
+                                        {formatTime(event.event_time)}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <MapPin className="h-4 w-4" />
+                                    <span>{event.location}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <User className="h-4 w-4" />
+                                    <span>{event.organizer}</span>
+                                </div>
+                                {event.max_participants && (
+                                    <div className="flex items-center gap-2">
+                                        <Users className="h-4 w-4" />
+                                        <span>
+                                            {event.current_participants || 0} / {event.max_participants} participants
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -174,65 +205,9 @@ export default function EventShow({
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
                 <div className="container mx-auto max-w-4xl px-4">
                     <article className="space-y-8">
-                        {/* Header */}
-                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
-                            <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                                <div className="flex items-center gap-2">
-                                    <Badge className={getStatusColor(event.status)}>
-                                        {formatStatus(event.status)}
-                                    </Badge>
-                                    {event.category && (
-                                        <Badge variant="outline">
-                                            {event.category}
-                                        </Badge>
-                                    )}
-                                </div>
-
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={handleShare}
-                                >
-                                    <Share2 className="mr-2 h-4 w-4" />
-                                    Share
-                                </Button>
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-6 text-gray-600 md:grid-cols-2 dark:text-gray-400">
-                                <div className="flex items-center gap-2">
-                                    <Calendar className="h-5 w-5" />
-                                    <span>
-                                        {formatDate(event.event_date)} at{' '}
-                                        {formatTime(event.event_time)}
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <MapPin className="h-5 w-5" />
-                                    <span>{event.location}</span>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <User className="h-5 w-5" />
-                                    <span>Organized by {event.organizer}</span>
-                                </div>
-
-                                {event.max_participants && (
-                                    <div className="flex items-center gap-2">
-                                        <Users className="h-5 w-5" />
-                                        <span>
-                                            {event.current_participants || 0} /{' '}
-                                            {event.max_participants}{' '}
-                                            participants
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
                         {/* Registration Status Alert */}
                         {registrationStatus !== 'open' && (
-                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <div className="flex items-start gap-3">
                                     {registrationStatus === 'cancelled' && (
                                         <>
@@ -302,7 +277,7 @@ export default function EventShow({
 
                         {/* Event Image */}
                         {event.image_path && (
-                            <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-900">
+                            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <img
                                     src={event.image_path}
                                     alt={event.title}
@@ -312,7 +287,7 @@ export default function EventShow({
                         )}
 
                         {/* Event Description */}
-                        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-900">
+                        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                             <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
                                 About This Event
                             </h2>
@@ -328,7 +303,7 @@ export default function EventShow({
 
                         {/* Requirements */}
                         {event.requirements && (
-                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
                                     Requirements
                                 </h3>
@@ -343,7 +318,7 @@ export default function EventShow({
 
                         {/* Contact Information */}
                         {event.contact_info && (
-                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
                                     Contact Information
                                 </h3>
@@ -358,7 +333,7 @@ export default function EventShow({
 
                         {/* Tags */}
                         {event.tags && event.tags.length > 0 && (
-                            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
+                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                                 <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
                                     Tags
                                 </h3>
@@ -423,7 +398,7 @@ export default function EventShow({
                     )}
 
                     {/* CTA Section */}
-                    <div className="mt-12 rounded-lg bg-gradient-to-br from-green-600 to-teal-600 p-12 text-center text-white shadow-lg">
+                    <div className="mt-12 rounded-xl bg-gradient-to-br from-[var(--usg-primary)] to-[var(--usg-dark)] p-12 text-center text-white shadow-lg">
                         <h2 className="mb-4 text-3xl font-bold">
                             Explore More Events
                         </h2>
@@ -436,7 +411,7 @@ export default function EventShow({
                                 size="lg"
                                 variant="secondary"
                                 onClick={() => router.visit('/usg/events')}
-                                className="bg-white text-green-600 hover:bg-gray-100"
+                                className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
                             >
                                 View All Events
                             </Button>

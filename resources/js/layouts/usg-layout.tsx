@@ -10,8 +10,8 @@ export default function USGLayout({ children }: USGLayoutProps) {
         <div className="flex min-h-screen flex-col bg-background">
             <Header />
 
-            {/* Main content - updated padding for taller header */}
-            <main className="flex-1 pt-28">{children}</main>
+            {/* Main content - responsive padding for header height */}
+            <main className="flex-1 pt-16 md:pt-28">{children}</main>
 
             <Footer />
         </div>

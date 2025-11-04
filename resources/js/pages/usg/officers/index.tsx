@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/badge';
-import CountUp from '@/components/usg/count-up';
 import OfficerCard from '@/components/usg/officer-card';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
@@ -23,20 +22,10 @@ interface Officer {
 interface Props {
     officers?: Officer[];
     departments?: string[];
-    stats?: {
-        total_officers: number;
-        active_officers: number;
-        departments_count: number;
-    };
 }
 
 export default function OfficersIndex({
     officers = [],
-    stats = {
-        total_officers: 0,
-        active_officers: 0,
-        departments_count: 0,
-    },
 }: Props) {
     const filteredOfficers = officers;
 
@@ -59,7 +48,7 @@ export default function OfficersIndex({
                     <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
                 
-                <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="relative z-10 container mx-auto px-4">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold md:text-6xl">
                             USG Officers
@@ -72,41 +61,9 @@ export default function OfficersIndex({
                 </div>
             </section>
 
-            {/* Stats Bar */}
-            <section className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                    <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
-                        <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-[var(--usg-primary)]">
-                                <CountUp end={stats.total_officers} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Total Officers
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-[var(--usg-secondary)]">
-                                <CountUp end={stats.active_officers} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Active Officers
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-[var(--usg-accent)]">
-                                <CountUp end={stats.departments_count} duration={2000} />
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                Departments
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Main Content */}
             <section className="bg-gray-50 py-16 dark:bg-gray-800">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="container mx-auto max-w-7xl px-4">
                     {/* Results Summary */}
                     <div className="mb-6 flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -131,7 +88,7 @@ export default function OfficersIndex({
                     </div>
 
                     {filteredOfficers.length === 0 ? (
-                        <div className="rounded-lg bg-white p-12 text-center shadow-sm dark:bg-gray-900">
+                        <div className="rounded-xl bg-white p-12 text-center shadow-sm dark:bg-gray-900">
                             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                                 No officers found
                             </h3>
@@ -199,8 +156,8 @@ export default function OfficersIndex({
 
             {/* Contact Section */}
             {activeOfficers.length > 0 && (
-                <section className="bg-[var(--usg-primary)] py-16 text-white">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <section className="bg-[var(--usg-primary)] py-20 text-white">
+                    <div className="container mx-auto px-4">
                         <div className="mx-auto max-w-3xl text-center">
                             <h2 className="mb-4 text-3xl font-bold">
                                 Get in Touch
