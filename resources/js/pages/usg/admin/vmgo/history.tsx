@@ -7,6 +7,13 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -88,51 +95,57 @@ export default function VMGOHistory({ history }: Props) {
         >
             <Head title="VMGO History - USG Admin" />
 
-            <div className="space-y-6 py-6">
+            <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-foreground">
-                            VMGO Version History
-                        </h1>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            View all versions of the Vision, Mission, Goals, and
-                            Objectives
-                        </p>
-                    </div>
+                <div className="mb-8">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                                VMGO Version History
+                            </h1>
+                            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                                View all versions of the Vision, Mission, Goals, and
+                                Objectives
+                            </p>
+                        </div>
 
-                    <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            onClick={() => router.visit('/usg/admin/vmgo/edit')}
-                        >
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit Current
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => router.visit('/usg/vmgo')}
-                        >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Public View
-                        </Button>
+                        <div className="hidden gap-2 sm:flex">
+                            <Button
+                                variant="outline"
+                                onClick={() => router.visit('/usg/admin/vmgo/edit')}
+                            >
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit Current
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() => router.visit('/usg/vmgo')}
+                            >
+                                <Eye className="mr-2 h-4 w-4" />
+                                Public View
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
                 {/* History List */}
-                <div className="space-y-4">
+                <div className="space-y-8">
                     {history.data.length === 0 ? (
                         <Card>
-                            <CardContent className="p-12 text-center">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                                    <Calendar className="h-8 w-8 text-muted-foreground" />
-                                </div>
-                                <h3 className="mb-2 text-lg font-semibold">
-                                    No History Available
-                                </h3>
-                                <p className="text-sm text-muted-foreground">
-                                    No VMGO versions have been created yet.
-                                </p>
+                            <CardContent className="p-12">
+                                <Empty>
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon">
+                                            <Calendar className="h-6 w-6" />
+                                        </EmptyMedia>
+                                        <EmptyTitle>
+                                            No History Available
+                                        </EmptyTitle>
+                                        <EmptyDescription>
+                                            No VMGO versions have been created yet.
+                                        </EmptyDescription>
+                                    </EmptyHeader>
+                                </Empty>
                             </CardContent>
                         </Card>
                     ) : (

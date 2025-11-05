@@ -5,7 +5,6 @@ namespace Modules\USG\Services;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class FileUploadService
@@ -176,31 +175,13 @@ class FileUploadService
     }
 
     /**
-     * Store file with unique name
+     * Store file with unique name using Laravel's secure hashName method
      */
     private function storeFile(UploadedFile $file, string $directory): string
     {
-        $filename = $this->generateUniqueFilename($file, $directory);
-
-        return $file->storeAs($directory, $filename, 'public');
-    }
-
-    /**
-     * Generate unique filename
-     */
-    private function generateUniqueFilename(UploadedFile $file, string $directory): string
-    {
-        $extension = $file->getClientOriginalExtension();
-        $basename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-        $filename = $basename.'.'.$extension;
-
-        $counter = 1;
-        while (Storage::disk('public')->exists($directory.'/'.$filename)) {
-            $filename = $basename.'-'.$counter.'.'.$extension;
-            $counter++;
-        }
-
-        return $filename;
+        // Use Laravel's store() method which automatically uses hashName() for security
+        // This prevents filename tampering and ensures unique filenames
+        return $file->store($directory, 'public');
     }
 
     /**

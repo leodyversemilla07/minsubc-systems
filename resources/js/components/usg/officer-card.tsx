@@ -17,6 +17,7 @@ interface Officer {
     email?: string;
     phone?: string;
     photo?: string;
+    photo_url?: string;
     bio?: string;
     term_start?: string;
     term_end?: string;
@@ -47,7 +48,9 @@ export default function OfficerCard({ officer }: OfficerCardProps) {
         <Card className="flex flex-col overflow-hidden bg-white transition-shadow duration-300 hover:shadow-lg dark:bg-gray-900">
             <div className="h-64 w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
                 <img
-                    src={officer.photo || '/placeholder.svg'}
+                    src={
+                        officer.photo_url || officer.photo || '/placeholder.svg'
+                    }
                     alt={officer.name}
                     className="h-full w-full object-cover"
                 />

@@ -4,6 +4,7 @@ namespace Modules\USG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class UpdateResolutionRequest extends FormRequest
 {
@@ -22,19 +23,21 @@ class UpdateResolutionRequest extends FormRequest
      */
     public function rules(): array
     {
-        $resolutionId = $this->route('id');
+        // Get the resolution ID from route - try multiple possible parameter names
+        $resolutionId = $this->route('resolution') ?? $this->route('id') ?? $this->route('resolution_id');
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'resolution_number' => ['nullable', 'string', 'max:50', Rule::unique('usg_resolutions', 'resolution_number')->ignore($resolutionId)],
-            'description' => ['nullable', 'string'],
-            'content' => ['required', 'string'],
+            'resolution_number' => ['nullable', 'string', 'max:50', Rule::unique('resolutions', 'resolution_number')->ignore($resolutionId)],
+            'description' => ['required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],
-            'type' => ['nullable', 'string', 'max:100'],
-            'author' => ['nullable', 'string', 'max:255'],
-            'resolution_date' => ['required', 'date'],
-            'file_path' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
-            'status' => ['nullable', 'string', 'in:draft,pending,published,archived'],
+            'status' => ['nullable', 'string', 'in:published,archived'],
+            'date_passed' => ['required', 'date'],
+            'file' => [
+                'nullable',
+                File::types(['pdf'])
+                    ->max('10mb'),
+            ],
         ];
     }
 
@@ -48,12 +51,12 @@ class UpdateResolutionRequest extends FormRequest
         return [
             'title.required' => 'Resolution title is required.',
             'resolution_number.unique' => 'This resolution number already exists.',
-            'content.required' => 'Resolution content is required.',
-            'resolution_date.required' => 'Resolution date is required.',
-            'resolution_date.date' => 'Invalid date format.',
-            'file_path.file' => 'Invalid file.',
-            'file_path.mimes' => 'File must be PDF or Word document.',
-            'file_path.max' => 'File size cannot exceed 10MB.',
+            'description.required' => 'Resolution description is required.',
+            'date_passed.required' => 'Date passed is required.',
+            'date_passed.date' => 'Invalid date format.',
+            'file.file' => 'Invalid file.',
+            'file.mimes' => 'File must be a PDF document.',
+            'file.max' => 'File size cannot exceed 10MB.',
             'status.in' => 'Invalid resolution status.',
         ];
     }

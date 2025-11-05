@@ -3,6 +3,7 @@
 namespace Modules\USG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class StoreResolutionRequest extends FormRequest
 {
@@ -24,13 +25,15 @@ class StoreResolutionRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'resolution_number' => ['nullable', 'string', 'max:50', 'unique:resolutions,resolution_number'],
-            'description' => ['nullable', 'string'],
-            'content' => ['required', 'string'],
+            'description' => ['required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],
-            'type' => ['nullable', 'string', 'max:100'],
-            'author' => ['nullable', 'string', 'max:255'],
-            'resolution_date' => ['required', 'date'],
-            'file_path' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'status' => ['nullable', 'string', 'in:published,archived'],
+            'date_passed' => ['required', 'date'],
+            'file' => [
+                'required',
+                File::types(['pdf'])
+                    ->max('10mb'),
+            ],
         ];
     }
 
@@ -44,12 +47,14 @@ class StoreResolutionRequest extends FormRequest
         return [
             'title.required' => 'Resolution title is required.',
             'resolution_number.unique' => 'This resolution number already exists.',
-            'content.required' => 'Resolution content is required.',
-            'resolution_date.required' => 'Resolution date is required.',
-            'resolution_date.date' => 'Invalid date format.',
-            'file_path.file' => 'Invalid file.',
-            'file_path.mimes' => 'File must be PDF or Word document.',
-            'file_path.max' => 'File size cannot exceed 10MB.',
+            'description.required' => 'Resolution description is required.',
+            'date_passed.required' => 'Date passed is required.',
+            'date_passed.date' => 'Invalid date format.',
+            'file.required' => 'Resolution PDF document is required.',
+            'file.file' => 'Invalid file.',
+            'file.mimes' => 'File must be a PDF document.',
+            'file.max' => 'File size cannot exceed 10MB.',
+            'status.in' => 'Invalid status value.',
         ];
     }
 }

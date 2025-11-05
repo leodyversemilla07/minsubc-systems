@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
-import { Calendar, Download, Eye, FileText, User } from 'lucide-react';
+import { Calendar, Download, Eye, FileText } from 'lucide-react';
 
 interface Resolution {
     id: number;
@@ -17,11 +17,9 @@ interface Resolution {
     description: string;
     resolution_number: string;
     date_passed: string;
-    author: string;
     file_path: string | null;
-    status: 'draft' | 'review' | 'published' | 'rejected' | 'archived';
+    status: 'published' | 'archived';
     category?: string;
-    tags?: string[];
     created_at: string;
 }
 
@@ -50,14 +48,8 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
         switch (status) {
             case 'published':
                 return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
-            case 'draft':
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
-            case 'review':
-                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
-            case 'rejected':
-                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
             case 'archived':
-                return 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
+                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
             default:
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
         }
@@ -67,12 +59,6 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
         switch (status) {
             case 'published':
                 return 'Published';
-            case 'draft':
-                return 'Draft';
-            case 'review':
-                return 'Under Review';
-            case 'rejected':
-                return 'Rejected';
             case 'archived':
                 return 'Archived';
             default:
@@ -115,10 +101,6 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
                             Passed on {formatDate(resolution.date_passed)}
                         </span>
                     </div>
-                    <div className="flex items-center gap-1 text-xs">
-                        <User className="h-3 w-3" />
-                        <span>by {resolution.author}</span>
-                    </div>
                     {resolution.file_path && (
                         <div className="flex items-center gap-1 text-xs">
                             <FileText className="h-3 w-3" />
@@ -132,20 +114,6 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
                 <p className="line-clamp-3 text-sm leading-relaxed">
                     {resolution.description}
                 </p>
-
-                {resolution.tags && resolution.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 border-t border-border pt-3">
-                        {resolution.tags.map((tag, index) => (
-                            <Badge
-                                key={index}
-                                variant="outline"
-                                className="text-xs"
-                            >
-                                {tag}
-                            </Badge>
-                        ))}
-                    </div>
-                )}
             </CardContent>
 
             <CardFooter className="flex gap-2">

@@ -20,6 +20,15 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -35,6 +44,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import SearchBar from '@/components/usg/search-bar';
+import { ViewToggle } from '@/components/view-toggle';
 import AppLayout from '@/layouts/app-layout';
 import {
     create,
@@ -71,14 +81,9 @@ interface Event {
     end_time?: string;
     location: string;
     category: string;
-    max_attendees?: number;
-    registration_required: boolean;
-    registration_deadline?: string;
     status: 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
-    organizer: string;
     created_at: string;
     updated_at: string;
-    attendees_count?: number;
 }
 
 interface PaginatedEvents {
@@ -106,6 +111,96 @@ interface Props {
     };
     categories?: string[];
     canManage?: boolean;
+}
+
+// Skeleton Loaders
+function EventsGridSkeleton() {
+    return (
+        <div className="divide-y">
+            {[...Array(5)].map((_, i) => (
+                <div key={i} className="space-y-3 p-4">
+                    <div className="flex items-start justify-between">
+                        <div className="min-w-0 flex-1 space-y-2">
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-3 w-full" />
+                            <Skeleton className="h-3 w-2/3" />
+                        </div>
+                        <Skeleton className="ml-2 h-5 w-20 shrink-0" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Skeleton className="h-3 w-24" />
+                            <Skeleton className="h-3 w-20" />
+                        </div>
+                        <div className="space-y-2">
+                            <Skeleton className="h-3 w-32" />
+                            <Skeleton className="h-5 w-16" />
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between pt-2">
+                        <Skeleton className="h-8 w-20" />
+                        <Skeleton className="h-8 w-8" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function EventsTableSkeleton() {
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="w-[50px]">
+                        <Skeleton className="h-4 w-4" />
+                    </TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead className="w-[100px]">
+                        <Skeleton className="h-4 w-16" />
+                    </TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {[...Array(10)].map((_, i) => (
+                    <TableRow key={i}>
+                        <TableCell>
+                            <Skeleton className="h-4 w-4" />
+                        </TableCell>
+                        <TableCell>
+                            <div className="space-y-1">
+                                <Skeleton className="h-4 w-48" />
+                                <Skeleton className="h-3 w-32" />
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-5 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-16" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-5 w-24" />
+                        </TableCell>
+                        <TableCell>
+                            <div className="flex items-center justify-end gap-2">
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
 }
 
 export default function EventsManagement({
@@ -147,6 +242,7 @@ export default function EventsManagement({
         new Set(),
     );
     const [isBulkActionLoading, setIsBulkActionLoading] = useState(false);
+    const [view, setView] = useState<'grid' | 'table'>('table');
 
     // Alert dialog state
     const [alertDialogOpen, setAlertDialogOpen] = useState(false);
@@ -656,6 +752,8 @@ export default function EventsManagement({
                             <span className="sm:hidden">Calendar</span>
                         </Button>
 
+                        <ViewToggle view={view} onViewChange={setView} />
+
                         {canManage && (
                             <Button
                                 onClick={() => router.visit(create())}
@@ -851,9 +949,12 @@ export default function EventsManagement({
                 {/* Events List */}
                 <Card>
                     <CardContent className="p-0">
-                        {/* Mobile Card View */}
-                        <div className="block md:hidden">
-                            {safeEvents.length > 0 ? (
+                        {view === 'grid' ? (
+                            /* Card View */
+                            <div>
+                                {events === undefined ? (
+                                    <EventsGridSkeleton />
+                                ) : safeEvents.length > 0 ? (
                                 <div className="divide-y">
                                     {safeEvents.map((event) => (
                                         <div
@@ -913,15 +1014,6 @@ export default function EventsManagement({
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            {event.registration_required && (
-                                                <div className="text-xs text-muted-foreground">
-                                                    Attendees:{' '}
-                                                    {event.attendees_count || 0}{' '}
-                                                    /{' '}
-                                                    {event.max_attendees || '∞'}
-                                                </div>
-                                            )}
 
                                             {/* Action Error Display */}
                                             {actionErrors[event.id] && (
@@ -1119,36 +1211,50 @@ export default function EventsManagement({
                                     ))}
                                 </div>
                             ) : (
-                                <div className="p-12 text-center">
-                                    <Calendar className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                    <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-                                        No events found
-                                    </h3>
-                                    <p className="mb-6 text-gray-500 dark:text-gray-400">
-                                        {searchQuery ||
-                                        selectedCategory !== 'all' ||
-                                        selectedStatus !== 'all' ||
-                                        selectedMonth !== 'all'
-                                            ? 'Try adjusting your search filters'
-                                            : 'Get started by creating your first event'}
-                                    </p>
+                                <Empty>
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon">
+                                            <Calendar className="h-6 w-6" />
+                                        </EmptyMedia>
+                                        <EmptyTitle>
+                                            {searchQuery ||
+                                            selectedCategory !== 'all' ||
+                                            selectedStatus !== 'all' ||
+                                            selectedMonth !== 'all'
+                                                ? 'No events found'
+                                                : 'No events yet'}
+                                        </EmptyTitle>
+                                        <EmptyDescription>
+                                            {searchQuery ||
+                                            selectedCategory !== 'all' ||
+                                            selectedStatus !== 'all' ||
+                                            selectedMonth !== 'all'
+                                                ? 'Try adjusting your search filters to see more results.'
+                                                : 'Get started by creating your first event to keep everyone informed about upcoming activities.'}
+                                        </EmptyDescription>
+                                    </EmptyHeader>
                                     {canManage && (
-                                        <Button
-                                            onClick={() =>
-                                                router.visit(create())
-                                            }
-                                        >
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            Create Event
-                                        </Button>
+                                        <EmptyContent>
+                                            <Button
+                                                onClick={() =>
+                                                    router.visit(create())
+                                                }
+                                            >
+                                                <Plus className="mr-2 h-4 w-4" />
+                                                Create Event
+                                            </Button>
+                                        </EmptyContent>
                                     )}
-                                </div>
+                                </Empty>
                             )}
                         </div>
-
-                        {/* Desktop Table View */}
-                        <div className="hidden overflow-x-auto md:block">
-                            <Table>
+                        ) : (
+                            /* Table View */
+                            <div className="overflow-x-auto">
+                                {events === undefined ? (
+                                    <EventsTableSkeleton />
+                                ) : (
+                                <Table>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className="w-[50px]">
@@ -1227,7 +1333,6 @@ export default function EventsManagement({
                                                 )}
                                             </Button>
                                         </TableHead>
-                                        <TableHead>Attendees</TableHead>
                                         <TableHead className="w-[100px]">
                                             Actions
                                         </TableHead>
@@ -1283,19 +1388,6 @@ export default function EventsManagement({
                                                     >
                                                         {event.status.toUpperCase()}
                                                     </Badge>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {event.registration_required ? (
-                                                        <span>
-                                                            {event.attendees_count ||
-                                                                0}{' '}
-                                                            /{' '}
-                                                            {event.max_attendees ||
-                                                                '∞'}
-                                                        </span>
-                                                    ) : (
-                                                        <span>N/A</span>
-                                                    )}
                                                 </TableCell>
                                                 <TableCell>
                                                     <div className="flex items-center gap-2">
@@ -1491,39 +1583,54 @@ export default function EventsManagement({
                                     ) : (
                                         <TableRow>
                                             <TableCell
-                                                colSpan={9}
-                                                className="py-12 text-center"
+                                                colSpan={8}
+                                                className="h-96"
                                             >
-                                                <Calendar className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                                <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-                                                    No events found
-                                                </h3>
-                                                <p className="mb-6 text-gray-500 dark:text-gray-400">
-                                                    {searchQuery ||
-                                                    selectedCategory ||
-                                                    selectedStatus ||
-                                                    selectedMonth
-                                                        ? 'Try adjusting your search filters'
-                                                        : 'Get started by creating your first event'}
-                                                </p>
-                                                {canManage && (
-                                                    <Button
-                                                        onClick={() =>
-                                                            router.visit(
-                                                                create(),
-                                                            )
-                                                        }
-                                                    >
-                                                        <Plus className="mr-2 h-4 w-4" />
-                                                        Create Event
-                                                    </Button>
-                                                )}
+                                                <Empty>
+                                                    <EmptyHeader>
+                                                        <EmptyMedia variant="icon">
+                                                            <Calendar className="h-6 w-6" />
+                                                        </EmptyMedia>
+                                                        <EmptyTitle>
+                                                            {searchQuery ||
+                                                            selectedCategory !== 'all' ||
+                                                            selectedStatus !== 'all' ||
+                                                            selectedMonth !== 'all'
+                                                                ? 'No events found'
+                                                                : 'No events yet'}
+                                                        </EmptyTitle>
+                                                        <EmptyDescription>
+                                                            {searchQuery ||
+                                                            selectedCategory !== 'all' ||
+                                                            selectedStatus !== 'all' ||
+                                                            selectedMonth !== 'all'
+                                                                ? 'Try adjusting your search filters to see more results.'
+                                                                : 'Get started by creating your first event to keep everyone informed about upcoming activities.'}
+                                                        </EmptyDescription>
+                                                    </EmptyHeader>
+                                                    {canManage && (
+                                                        <EmptyContent>
+                                                            <Button
+                                                                onClick={() =>
+                                                                    router.visit(
+                                                                        create(),
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Plus className="mr-2 h-4 w-4" />
+                                                                Create Event
+                                                            </Button>
+                                                        </EmptyContent>
+                                                    )}
+                                                </Empty>
                                             </TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
                             </Table>
+                            )}
                         </div>
+                        )}
                     </CardContent>
                 </Card>
 

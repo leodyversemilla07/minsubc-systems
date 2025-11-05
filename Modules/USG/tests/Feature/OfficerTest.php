@@ -192,12 +192,44 @@ it('officer can be updated with valid data', function () {
     $response = $this->actingAs($usgAdmin)
         ->put(route('usg.admin.officers.update', $officer->id), $updateData);
 
-    $response->assertRedirect(route('usg.admin.officers.index'));
+    $response->assertRedirect(route('usg.admin.officers.edit', $officer->id));
     $response->assertSessionHas('success');
 
     $officer->refresh();
     expect($officer->name)->toBe('Updated Name');
     expect($officer->position)->toBe('Treasurer');
+});
+
+it('officer can be updated with photo', function () {
+    $this->seed(RolesAndPermissionsSeeder::class);
+
+    Storage::fake('public');
+
+    $usgAdmin = User::factory()->create();
+    $usgAdmin->assignRole('usg-admin');
+
+    $officer = Officer::factory()->create();
+
+    $photo = UploadedFile::fake()->image('officer-photo.jpg', 800, 600);
+
+    $updateData = [
+        'name' => $officer->name,
+        'position' => $officer->position,
+        'email' => $officer->email,
+        'is_active' => '1',
+        'photo' => $photo,
+        '_method' => 'PUT',
+    ];
+
+    $response = $this->actingAs($usgAdmin)
+        ->post(route('usg.admin.officers.update', $officer->id), $updateData);
+
+    $response->assertRedirect(route('usg.admin.officers.edit', $officer->id));
+    $response->assertSessionHas('success');
+
+    $officer->refresh();
+    expect($officer->photo)->not->toBeNull();
+    Storage::disk('public')->assertExists($officer->photo);
 });
 
 // ==================== Deletion Tests ====================

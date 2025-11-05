@@ -155,7 +155,7 @@ test('resolution can be created with file attachment', function () {
         'title' => 'Resolution with File',
         'content' => 'Test content',
         'resolution_date' => now()->format('Y-m-d'),
-        'file_path' => UploadedFile::fake()->create('resolution.pdf', 1000),
+        'file' => UploadedFile::fake()->create('resolution.pdf', 1000),
     ];
 
     $response = $this->actingAs($usgAdmin)

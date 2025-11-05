@@ -1,10 +1,11 @@
+import VMGOController from '@/actions/Modules/USG/Http/Controllers/Admin/VMGOController';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Form, Head, router } from '@inertiajs/react';
 import {
     AlertCircle,
     CheckCircle,
@@ -18,10 +19,10 @@ import {
     Trash2,
     Trophy,
 } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { useState } from 'react';
 
 interface VMGOData {
-    id?: number;
+    id: number;
     vision: string;
     mission: string;
     goals: string[];
@@ -31,77 +32,52 @@ interface VMGOData {
 }
 
 interface Props {
-    vmgo?: VMGOData | null;
+    vmgo: VMGOData;
     canEdit?: boolean;
 }
 
 export default function EditVMGO({ vmgo, canEdit = true }: Props) {
-    const {
-        data,
-        setData,
-        put,
-        processing,
-        errors,
-        wasSuccessful,
-        recentlySuccessful,
-    } = useForm({
-        vision: vmgo?.vision || '',
-        mission: vmgo?.mission || '',
-        goals: vmgo?.goals?.length ? vmgo.goals : [''],
-        objectives: vmgo?.objectives?.length ? vmgo.objectives : [''],
-    });
-
-    const handleSubmit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        // Filter out empty goals and objectives
-        const filteredData = {
-            ...data,
-            goals: data.goals.filter((goal) => goal.trim() !== ''),
-            objectives: data.objectives.filter((obj) => obj.trim() !== ''),
-        };
-
-        // Update form data with filtered values first
-        setData(filteredData);
-
-        put('/usg/admin/vmgo', {
-            onSuccess: () => {
-                console.log('VMGO updated successfully');
-            },
-        });
-    };
+    // Individual state for each form field
+    const [vision, setVision] = useState(vmgo.vision || '');
+    const [mission, setMission] = useState(vmgo.mission || '');
+    const [goals, setGoals] = useState<string[]>(
+        vmgo.goals?.length ? vmgo.goals : ['']
+    );
+    const [objectives, setObjectives] = useState<string[]>(
+        vmgo.objectives?.length ? vmgo.objectives : ['']
+    );
 
     const handleGoalChange = (index: number, value: string) => {
-        const newGoals = [...data.goals];
+        const newGoals = [...goals];
         newGoals[index] = value;
-        setData('goals', newGoals);
+        setGoals(newGoals);
     };
 
     const addGoal = () => {
-        setData('goals', [...data.goals, '']);
+        setGoals([...goals, '']);
     };
 
     const removeGoal = (index: number) => {
-        if (data.goals.length > 1) {
-            const newGoals = data.goals.filter((_, i) => i !== index);
-            setData('goals', newGoals);
+        if (goals.length > 1) {
+            const newGoals = goals.filter((_, i) => i !== index);
+            setGoals(newGoals);
         }
     };
 
     const handleObjectiveChange = (index: number, value: string) => {
-        const newObjectives = [...data.objectives];
+        const newObjectives = [...objectives];
         newObjectives[index] = value;
-        setData('objectives', newObjectives);
+        setObjectives(newObjectives);
     };
 
     const addObjective = () => {
-        setData('objectives', [...data.objectives, '']);
+        setObjectives([...objectives, '']);
     };
 
     const removeObjective = (index: number) => {
-        if (data.objectives.length > 1) {
-            const newObjectives = data.objectives.filter((_, i) => i !== index);
-            setData('objectives', newObjectives);
+        if (objectives.length > 1) {
+            const newObjectives = objectives.filter((_, i) => i !== index);
+            setObjectives(newObjectives);
         }
     };
 
@@ -125,61 +101,46 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
         >
             <Head title="Edit VMGO - USG Admin" />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
-                {/* Header with action buttons */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Edit VMGO
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Update Vision, Mission, Goals & Objectives
-                        </p>
-                    </div>
+            <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+                {/* Header */}
+                <div className="mb-8">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                                Edit VMGO
+                            </h1>
+                            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                                Update Vision, Mission, Goals & Objectives
+                            </p>
+                        </div>
 
-                    <div className="flex items-center gap-3">
-                        <Button
-                            variant="outline"
-                            onClick={() => router.visit('/usg/vmgo')}
-                        >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Preview
-                        </Button>
+                        <div className="flex items-center gap-3">
+                            <Button
+                                variant="outline"
+                                onClick={() => router.visit('/usg/vmgo')}
+                                className="hidden sm:flex"
+                            >
+                                <Eye className="mr-2 h-4 w-4" />
+                                Preview
+                            </Button>
 
-                        <Button
-                            variant="ghost"
-                            onClick={() =>
-                                router.visit('/usg/admin/vmgo/history')
-                            }
-                        >
-                            <History className="mr-2 h-4 w-4" />
-                            History
-                        </Button>
+                            <Button
+                                variant="ghost"
+                                onClick={() =>
+                                    router.visit('/usg/admin/vmgo/history')
+                                }
+                                className="hidden sm:flex"
+                            >
+                                <History className="mr-2 h-4 w-4" />
+                                History
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Success/Error Messages */}
-                {(wasSuccessful || recentlySuccessful) && (
-                    <Alert className="mb-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <AlertDescription className="text-green-800 dark:text-green-200">
-                            VMGO information has been updated successfully!
-                        </AlertDescription>
-                    </Alert>
-                )}
-
-                {Object.keys(errors).length > 0 && (
-                    <Alert variant="destructive" className="mb-6">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>
-                            Please fix the errors below before saving.
-                        </AlertDescription>
-                    </Alert>
-                )}
-
                 {/* Last Updated Info */}
-                {vmgo?.updated_at && (
-                    <Card>
+                {vmgo.updated_at && (
+                    <Card className="mb-8">
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <div className="flex items-center gap-2">
@@ -194,7 +155,37 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                     </Card>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <Form 
+                    {...VMGOController.update.form()}
+                    className="space-y-8"
+                >
+                    {({ processing, errors, hasErrors, wasSuccessful, recentlySuccessful }) => (
+                        <div className="space-y-8">
+                            {/* Hidden inputs for arrays */}
+                            <input type="hidden" name="vision" value={vision} />
+                            <input type="hidden" name="mission" value={mission} />
+                            <input type="hidden" name="goals" value={JSON.stringify(goals.filter(g => g.trim() !== ''))} />
+                            <input type="hidden" name="objectives" value={JSON.stringify(objectives.filter(o => o.trim() !== ''))} />
+
+                            {/* Success/Error Messages */}
+                            {(wasSuccessful || recentlySuccessful) && (
+                                <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
+                                    <CheckCircle className="h-4 w-4 text-green-600" />
+                                    <AlertDescription className="text-green-800 dark:text-green-200">
+                                        VMGO information has been updated successfully!
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+
+                            {hasErrors && Object.keys(errors).length > 0 && (
+                                <Alert variant="destructive">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertDescription>
+                                        Please fix the errors below before saving.
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+
                     {/* Vision Section */}
                     <Card>
                         <CardHeader>
@@ -207,10 +198,8 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                             <div>
                                 <Textarea
                                     placeholder="Enter the organization's vision statement..."
-                                    value={data.vision}
-                                    onChange={(e) =>
-                                        setData('vision', e.target.value)
-                                    }
+                                    value={vision}
+                                    onChange={(e) => setVision(e.target.value)}
                                     rows={4}
                                     className={
                                         errors.vision ? 'border-red-500' : ''
@@ -243,10 +232,8 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                             <div>
                                 <Textarea
                                     placeholder="Enter the organization's mission statement..."
-                                    value={data.mission}
-                                    onChange={(e) =>
-                                        setData('mission', e.target.value)
-                                    }
+                                    value={mission}
+                                    onChange={(e) => setMission(e.target.value)}
                                     rows={4}
                                     className={
                                         errors.mission ? 'border-red-500' : ''
@@ -274,13 +261,13 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                                 <Trophy className="h-5 w-5 text-purple-600" />
                                 Goals
                                 <Badge variant="secondary">
-                                    {data.goals.length} item
-                                    {data.goals.length !== 1 ? 's' : ''}
+                                    {goals.length} item
+                                    {goals.length !== 1 ? 's' : ''}
                                 </Badge>
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {data.goals.map((goal, index) => (
+                            {goals.map((goal, index) => (
                                 <div key={index} className="flex gap-3">
                                     <div className="flex-1">
                                         <Textarea
@@ -326,7 +313,7 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                                                 }
                                                 disabled={
                                                     processing ||
-                                                    data.goals.length <= 1
+                                                    goals.length <= 1
                                                 }
                                             >
                                                 <Trash2 className="h-4 w-4" />
@@ -361,13 +348,13 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                                 <Flag className="h-5 w-5 text-orange-600" />
                                 Objectives
                                 <Badge variant="secondary">
-                                    {data.objectives.length} item
-                                    {data.objectives.length !== 1 ? 's' : ''}
+                                    {objectives.length} item
+                                    {objectives.length !== 1 ? 's' : ''}
                                 </Badge>
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {data.objectives.map((objective, index) => (
+                            {objectives.map((objective, index) => (
                                 <div key={index} className="flex gap-3">
                                     <div className="flex-1">
                                         <Textarea
@@ -413,7 +400,7 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                                                 }
                                                 disabled={
                                                     processing ||
-                                                    data.objectives.length <= 1
+                                                    objectives.length <= 1
                                                 }
                                             >
                                                 <Trash2 className="h-4 w-4" />
@@ -444,19 +431,20 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
 
                     {/* Action Buttons */}
                     {canEdit && (
-                        <div className="flex items-center justify-end gap-4 pt-6">
+                        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => router.visit('/usg/admin')}
                                 disabled={processing}
+                                className="w-full sm:w-auto"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={processing}
-                                className="min-w-[120px]"
+                                className="w-full sm:w-auto sm:min-w-[120px]"
                             >
                                 {processing ? (
                                     <>
@@ -487,8 +475,11 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                             </CardContent>
                         </Card>
                     )}
-                </form>
+                </div>
+            )}
+        </Form>
             </div>
         </AppLayout>
     );
 }
+

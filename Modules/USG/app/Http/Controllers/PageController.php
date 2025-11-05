@@ -53,7 +53,10 @@ class PageController extends Controller
             ->select(['id', 'name', 'position', 'photo'])
             ->orderBy('order')
             ->limit(6)
-            ->get();
+            ->get()
+            ->each(function ($officer) {
+                $officer->append('photo_url');
+            });
 
         return Inertia::render('usg/home', [
             'vmgo' => $vmgo,
@@ -80,6 +83,12 @@ class PageController extends Controller
     public function officers(): Response
     {
         $officers = $this->officerService->getActiveOfficers();
+
+        // Append photo_url to each officer
+        $officers->each(function ($officer) {
+            $officer->append('photo_url');
+        });
+
         $departments = $this->officerService->getDepartments();
 
         $stats = [
@@ -102,6 +111,8 @@ class PageController extends Controller
         if (! $officer) {
             abort(404, 'Officer not found');
         }
+
+        $officer->append('photo_url');
 
         return Inertia::render('usg/officers/show', [
             'officer' => $officer,

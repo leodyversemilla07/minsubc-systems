@@ -19,7 +19,7 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->string('category')->nullable();
             $table->string('file_path')->nullable();
-            $table->enum('status', ['draft', 'review', 'published', 'archived', 'rejected'])->default('draft');
+            $table->enum('status', ['published', 'archived'])->default('published');
             $table->date('resolution_date')->nullable();
             $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');

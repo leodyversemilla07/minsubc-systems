@@ -4,8 +4,6 @@ import { TimePicker } from '@/components/time-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -16,21 +14,20 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { PageHeader } from '@/components/page-header';
+import { Spinner } from '@/components/ui/spinner';
+import { FileUpload } from '@/components/file-upload';
 import AppLayout from '@/layouts/app-layout';
-import { Form, Head, router } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import {
     AlertCircle,
     Calendar,
     Clock,
-    DollarSign,
     FileImage,
-    Image as ImageIcon,
     MapPin,
     Save,
-    Users,
-    X,
 } from 'lucide-react';
-import { useState } from 'react';
+import { format } from 'date-fns';
 
 interface Props {
     categories: string[];
@@ -38,67 +35,24 @@ interface Props {
 }
 
 export default function CreateEvent({ categories, canManage = true }: Props) {
-    // Form state for components that need custom handling
-    const [eventDate, setEventDate] = useState<Date | undefined>();
-    const [endDate, setEndDate] = useState<Date | undefined>();
-    const [eventTime, setEventTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [isPublished, setIsPublished] = useState(true);
-    const [isFeatured, setIsFeatured] = useState(false);
-    const [requiresRegistration, setRequiresRegistration] = useState(false);
-    const [isFree, setIsFree] = useState(true);
-    const [isDragging, setIsDragging] = useState(false);
-    const [featuredImagePreview, setFeaturedImagePreview] = useState<
-        string | null
-    >(null);
+    const { data, setData, post, processing, errors, progress } = useForm({
+        title: '',
+        description: '',
+        category: '',
+        event_date: '',
+        event_time: '',
+        end_date: '',
+        end_time: '',
+        location: '',
+        venue_details: '',
+        featured_image: null as File | null,
+    });
 
-    const processImageFile = (file: File) => {
-        if (file.size > 5 * 1024 * 1024) {
-            alert('File size must be less than 5MB');
-            return;
-        }
-
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setFeaturedImagePreview(e.target?.result as string);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleDragOver = (e: React.DragEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-    };
-
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-
-        const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) {
-            processImageFile(files[0]);
-        }
-    };
-
-    const removeFeaturedImage = () => {
-        setFeaturedImagePreview(null);
-        const fileInput = document.getElementById(
-            'featured-image',
-        ) as HTMLInputElement;
-        if (fileInput) {
-            fileInput.value = '';
-        }
+        post(EventController.store().url, {
+            preserveScroll: false,
+        });
     };
 
     return (
@@ -112,17 +66,17 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
             <Head title="Create Event - USG Admin" />
 
             <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-                <Form
-                    {...EventController.store.form()}
-                    options={{
-                        preserveScroll: false,
-                    }}
-                    className="space-y-8"
-                >
-                    {({ errors, processing }) => (
-                        <div className="space-y-8">
-                            {/* Error Messages */}
-                            {Object.keys(errors).length > 0 && (
+                {/* Page Header */}
+                <PageHeader
+                    title="Create New Event"
+                    description="Schedule and manage upcoming USG events"
+                    icon={Calendar}
+                />
+
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="space-y-8">
+                        {/* Error Messages */}
+                        {Object.keys(errors).length > 0 && (
                                 <Alert variant="destructive" className="mb-6">
                                     <AlertCircle className="h-4 w-4" />
                                     <AlertDescription>
@@ -158,6 +112,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="title"
                                             type="text"
                                             placeholder="Enter event title"
+                                            value={data.title}
+                                            onChange={(e) => setData('title', e.target.value)}
                                             className={
                                                 errors.title
                                                     ? 'border-red-500'
@@ -174,41 +130,16 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="short_description">
-                                            Short Description
-                                        </Label>
-                                        <Textarea
-                                            id="short_description"
-                                            name="short_description"
-                                            placeholder="Brief summary of the event..."
-                                            rows={2}
-                                            className={
-                                                errors.short_description
-                                                    ? 'border-red-500'
-                                                    : ''
-                                            }
-                                            disabled={!canManage}
-                                        />
-                                        {errors.short_description && (
-                                            <p className="text-sm text-red-600">
-                                                {errors.short_description}
-                                            </p>
-                                        )}
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            This will be shown in event previews
-                                            and calendar
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-2">
                                         <Label htmlFor="description">
-                                            Full Description *
+                                            Description *
                                         </Label>
                                         <Textarea
                                             id="description"
                                             name="description"
-                                            placeholder="Enter the full event description..."
+                                            placeholder="Enter the event description..."
                                             rows={6}
+                                            value={data.description}
+                                            onChange={(e) => setData('description', e.target.value)}
                                             className={
                                                 errors.description
                                                     ? 'border-red-500'
@@ -230,8 +161,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                         </Label>
                                         <Select
                                             name="category"
-                                            value={selectedCategory}
-                                            onValueChange={setSelectedCategory}
+                                            value={data.category}
+                                            onValueChange={(value) => setData('category', value)}
                                             disabled={!canManage}
                                         >
                                             <SelectTrigger
@@ -278,8 +209,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                                 Event Date *
                                             </Label>
                                             <DatePicker
-                                                date={eventDate}
-                                                onDateChange={setEventDate}
+                                                date={data.event_date ? new Date(data.event_date) : undefined}
+                                                onDateChange={(date) => setData('event_date', date ? format(date, 'yyyy-MM-dd') : '')}
                                                 name="event_date"
                                                 placeholder="Select event date"
                                                 disabled={!canManage}
@@ -299,8 +230,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             <TimePicker
                                                 id="event_time"
                                                 label=""
-                                                value={eventTime}
-                                                onChange={setEventTime}
+                                                value={data.event_time}
+                                                onChange={(value) => setData('event_time', value ? value.substring(0, 5) : '')}
                                                 error={errors.event_time}
                                                 disabled={!canManage}
                                                 required
@@ -312,12 +243,12 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                                 End Date
                                             </Label>
                                             <DatePicker
-                                                date={endDate}
-                                                onDateChange={setEndDate}
+                                                date={data.end_date ? new Date(data.end_date) : undefined}
+                                                onDateChange={(date) => setData('end_date', date ? format(date, 'yyyy-MM-dd') : '')}
                                                 name="end_date"
                                                 placeholder="Select end date (optional)"
                                                 disabled={!canManage}
-                                                minDate={eventDate}
+                                                minDate={data.event_date ? new Date(data.event_date) : undefined}
                                                 showClearButton={true}
                                             />
                                             {errors.end_date && (
@@ -338,8 +269,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             <TimePicker
                                                 id="end_time"
                                                 label=""
-                                                value={endTime}
-                                                onChange={setEndTime}
+                                                value={data.end_time}
+                                                onChange={(value) => setData('end_time', value ? value.substring(0, 5) : '')}
                                                 error={errors.end_time}
                                                 disabled={!canManage}
                                             />
@@ -366,6 +297,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="location"
                                             type="text"
                                             placeholder="e.g., MSU-Buug Campus Auditorium"
+                                            value={data.location}
+                                            onChange={(e) => setData('location', e.target.value)}
                                             className={
                                                 errors.location
                                                     ? 'border-red-500'
@@ -390,6 +323,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="venue_details"
                                             placeholder="Additional venue information, directions, parking details..."
                                             rows={3}
+                                            value={data.venue_details}
+                                            onChange={(e) => setData('venue_details', e.target.value)}
                                             className={
                                                 errors.venue_details
                                                     ? 'border-red-500'
@@ -406,226 +341,6 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                 </CardContent>
                             </Card>
 
-                            {/* Organizer & Contact */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2">
-                                        <Users className="h-5 w-5 text-purple-600" />
-                                        Organizer & Contact Information
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="organizer">
-                                            Organizer *
-                                        </Label>
-                                        <Input
-                                            id="organizer"
-                                            name="organizer"
-                                            type="text"
-                                            placeholder="e.g., USG Academic Committee"
-                                            className={
-                                                errors.organizer
-                                                    ? 'border-red-500'
-                                                    : ''
-                                            }
-                                            disabled={!canManage}
-                                            required
-                                        />
-                                        {errors.organizer && (
-                                            <p className="text-sm text-red-600">
-                                                {errors.organizer}
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="contact_email">
-                                                Contact Email
-                                            </Label>
-                                            <Input
-                                                id="contact_email"
-                                                name="contact_email"
-                                                type="email"
-                                                placeholder="contact@minsubc.edu.ph"
-                                                className={
-                                                    errors.contact_email
-                                                        ? 'border-red-500'
-                                                        : ''
-                                                }
-                                                disabled={!canManage}
-                                            />
-                                            {errors.contact_email && (
-                                                <p className="text-sm text-red-600">
-                                                    {errors.contact_email}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="contact_phone">
-                                                Contact Phone
-                                            </Label>
-                                            <Input
-                                                id="contact_phone"
-                                                name="contact_phone"
-                                                type="tel"
-                                                placeholder="+63 9XX XXX XXXX"
-                                                className={
-                                                    errors.contact_phone
-                                                        ? 'border-red-500'
-                                                        : ''
-                                                }
-                                                disabled={!canManage}
-                                            />
-                                            {errors.contact_phone && (
-                                                <p className="text-sm text-red-600">
-                                                    {errors.contact_phone}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Registration & Pricing */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2">
-                                        <DollarSign className="h-5 w-5 text-orange-600" />
-                                        Registration & Pricing
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id="requires_registration"
-                                                    name="requires_registration"
-                                                    checked={
-                                                        requiresRegistration
-                                                    }
-                                                    onCheckedChange={(
-                                                        checked,
-                                                    ) =>
-                                                        setRequiresRegistration(
-                                                            checked === true,
-                                                        )
-                                                    }
-                                                    disabled={!canManage}
-                                                />
-                                                <Label htmlFor="requires_registration">
-                                                    Requires Registration
-                                                </Label>
-                                            </div>
-
-                                            {requiresRegistration && (
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="registration_url">
-                                                        Registration URL
-                                                    </Label>
-                                                    <Input
-                                                        id="registration_url"
-                                                        name="registration_url"
-                                                        type="url"
-                                                        placeholder="https://forms.google.com/..."
-                                                        className={
-                                                            errors.registration_url
-                                                                ? 'border-red-500'
-                                                                : ''
-                                                        }
-                                                        disabled={!canManage}
-                                                    />
-                                                    {errors.registration_url && (
-                                                        <p className="text-sm text-red-600">
-                                                            {
-                                                                errors.registration_url
-                                                            }
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-4">
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id="is_free"
-                                                    name="is_free"
-                                                    checked={isFree}
-                                                    onCheckedChange={(
-                                                        checked,
-                                                    ) =>
-                                                        setIsFree(
-                                                            checked === true,
-                                                        )
-                                                    }
-                                                    disabled={!canManage}
-                                                />
-                                                <Label htmlFor="is_free">
-                                                    Free Event
-                                                </Label>
-                                            </div>
-
-                                            {!isFree && (
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="registration_fee">
-                                                        Registration Fee (₱)
-                                                    </Label>
-                                                    <Input
-                                                        id="registration_fee"
-                                                        name="registration_fee"
-                                                        type="number"
-                                                        placeholder="0.00"
-                                                        step="0.01"
-                                                        min="0"
-                                                        className={
-                                                            errors.registration_fee
-                                                                ? 'border-red-500'
-                                                                : ''
-                                                        }
-                                                        disabled={!canManage}
-                                                    />
-                                                    {errors.registration_fee && (
-                                                        <p className="text-sm text-red-600">
-                                                            {
-                                                                errors.registration_fee
-                                                            }
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="max_attendees">
-                                            Maximum Attendees
-                                        </Label>
-                                        <Input
-                                            id="max_attendees"
-                                            name="max_attendees"
-                                            type="number"
-                                            placeholder="Leave empty for unlimited"
-                                            min="1"
-                                            className={
-                                                errors.max_attendees
-                                                    ? 'border-red-500'
-                                                    : ''
-                                            }
-                                            disabled={!canManage}
-                                        />
-                                        {errors.max_attendees && (
-                                            <p className="text-sm text-red-600">
-                                                {errors.max_attendees}
-                                            </p>
-                                        )}
-                                    </div>
-                                </CardContent>
-                            </Card>
-
                             {/* Featured Image */}
                             <Card>
                                 <CardHeader>
@@ -635,201 +350,48 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                    {featuredImagePreview ? (
-                                        <div className="space-y-4">
-                                            <div className="relative w-full max-w-md">
-                                                <img
-                                                    src={featuredImagePreview}
-                                                    alt="Featured image preview"
-                                                    className="h-48 w-full rounded-md border object-cover"
+                                    <FileUpload
+                                        file={data.featured_image}
+                                        onFileChange={(file) => setData('featured_image', file)}
+                                        label="Upload Featured Image"
+                                        description="JPG, PNG up to 5MB. This image will be displayed prominently for the event."
+                                        error={errors.featured_image}
+                                        accept="image/*"
+                                        allowedTypes={['image/jpeg', 'image/png', 'image/jpg', 'image/webp']}
+                                        maxSizeMB={5}
+                                        required={false}
+                                        disabled={!canManage}
+                                        name="featured_image"
+                                        uploadText="Click to upload image"
+                                        hintText="JPG, PNG, or WebP (Max 5MB)"
+                                    />
+
+                                    {progress && (
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between text-sm">
+                                                <span className="text-muted-foreground">
+                                                    Uploading image...
+                                                </span>
+                                                <span className="font-medium">
+                                                    {progress.percentage}%
+                                                </span>
+                                            </div>
+                                            <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+                                                <div
+                                                    className="h-full bg-primary transition-all duration-300"
+                                                    style={{
+                                                        width: `${progress.percentage}%`,
+                                                    }}
                                                 />
-                                                {canManage && (
-                                                    <Button
-                                                        type="button"
-                                                        variant="destructive"
-                                                        size="sm"
-                                                        onClick={
-                                                            removeFeaturedImage
-                                                        }
-                                                        className="absolute top-2 right-2"
-                                                    >
-                                                        <X className="h-4 w-4" />
-                                                    </Button>
-                                                )}
                                             </div>
                                         </div>
-                                    ) : (
-                                        <Field>
-                                            <FieldLabel>
-                                                Upload Featured Image
-                                            </FieldLabel>
-                                            <div
-                                                className={`relative rounded-lg border-2 border-dashed transition-colors ${
-                                                    isDragging
-                                                        ? 'border-blue-400 bg-blue-50 dark:bg-blue-950/20'
-                                                        : 'border-gray-300 dark:border-gray-600'
-                                                }`}
-                                                onDragOver={handleDragOver}
-                                                onDragLeave={handleDragLeave}
-                                                onDrop={handleDrop}
-                                            >
-                                                <div className="flex flex-col items-center justify-center p-8 text-center">
-                                                    <div
-                                                        className={`mb-4 transition-colors ${
-                                                            isDragging
-                                                                ? 'text-blue-500'
-                                                                : 'text-gray-400'
-                                                        }`}
-                                                    >
-                                                        <ImageIcon className="mx-auto h-12 w-12" />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                            {isDragging
-                                                                ? 'Drop your image here'
-                                                                : 'Drag & drop your image here'}
-                                                        </p>
-                                                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                            or click to browse
-                                                            files
-                                                        </p>
-                                                    </div>
-                                                    <Input
-                                                        id="featured-image"
-                                                        name="featured_image"
-                                                        type="file"
-                                                        accept="image/*"
-                                                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                                                        disabled={!canManage}
-                                                        onChange={(e) => {
-                                                            const file =
-                                                                e.target
-                                                                    .files?.[0];
-                                                            if (file) {
-                                                                processImageFile(
-                                                                    file,
-                                                                );
-                                                            }
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <FieldDescription>
-                                                JPG, PNG up to 5MB. This image
-                                                will be displayed prominently
-                                                for the event.
-                                            </FieldDescription>
-                                        </Field>
                                     )}
-                                    {errors.featured_image && (
-                                        <p className="text-sm text-red-600">
-                                            {errors.featured_image}
-                                        </p>
-                                    )}
-                                </CardContent>
-                            </Card>
-
-                            {/* Publishing Options */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Publishing Options</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="is_published">
-                                                Status
-                                            </Label>
-                                            <Select
-                                                value={
-                                                    isPublished
-                                                        ? 'true'
-                                                        : 'false'
-                                                }
-                                                onValueChange={(value) =>
-                                                    setIsPublished(
-                                                        value === 'true',
-                                                    )
-                                                }
-                                                disabled={!canManage}
-                                            >
-                                                <SelectTrigger
-                                                    className={
-                                                        errors.is_published
-                                                            ? 'border-red-500'
-                                                            : ''
-                                                    }
-                                                >
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="true">
-                                                        Published
-                                                    </SelectItem>
-                                                    <SelectItem value="false">
-                                                        Draft
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            {errors.is_published && (
-                                                <p className="text-sm text-red-600">
-                                                    {errors.is_published}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="is_featured">
-                                                Featured Event
-                                            </Label>
-                                            <Select
-                                                value={
-                                                    isFeatured
-                                                        ? 'true'
-                                                        : 'false'
-                                                }
-                                                onValueChange={(value) =>
-                                                    setIsFeatured(
-                                                        value === 'true',
-                                                    )
-                                                }
-                                                disabled={!canManage}
-                                            >
-                                                <SelectTrigger
-                                                    className={
-                                                        errors.is_featured
-                                                            ? 'border-red-500'
-                                                            : ''
-                                                    }
-                                                >
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="false">
-                                                        Normal
-                                                    </SelectItem>
-                                                    <SelectItem value="true">
-                                                        Featured
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            {errors.is_featured && (
-                                                <p className="text-sm text-red-600">
-                                                    {errors.is_featured}
-                                                </p>
-                                            )}
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                Featured events appear
-                                                prominently on the homepage
-                                            </p>
-                                        </div>
-                                    </div>
                                 </CardContent>
                             </Card>
 
                             {/* Action Buttons */}
                             {canManage && (
-                                <div className="flex items-center justify-end gap-4 pt-6">
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
                                     <Button
                                         type="button"
                                         variant="outline"
@@ -837,17 +399,18 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             router.visit('/usg/admin/events')
                                         }
                                         disabled={processing}
+                                        className="w-full sm:w-auto"
                                     >
                                         Cancel
                                     </Button>
                                     <Button
                                         type="submit"
                                         disabled={processing}
-                                        className="min-w-[120px]"
+                                        className="w-full sm:w-auto sm:min-w-[120px]"
                                     >
                                         {processing ? (
                                             <>
-                                                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                                <Spinner className="mr-2" />
                                                 Creating...
                                             </>
                                         ) : (
@@ -860,8 +423,7 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                 </div>
                             )}
                         </div>
-                    )}
-                </Form>
+                </form>
             </div>
         </AppLayout>
     );

@@ -4,9 +4,11 @@ namespace Modules\USG\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Scout\Attributes\SearchUsingFullText;
 use Laravel\Scout\Searchable;
 use Modules\USG\Database\Factories\OfficerFactory;
@@ -48,6 +50,14 @@ class Officer extends Model
             'order' => 'integer',
             'is_active' => 'boolean',
         ];
+    }
+
+    // Accessors
+    protected function photoUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->photo ? Storage::disk('public')->url($this->photo) : null,
+        );
     }
 
     // Scout configuration

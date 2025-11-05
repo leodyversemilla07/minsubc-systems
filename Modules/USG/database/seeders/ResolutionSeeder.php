@@ -4,7 +4,6 @@ namespace Modules\USG\Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use Modules\USG\Models\Resolution;
 
 class ResolutionSeeder extends Seeder
@@ -26,68 +25,80 @@ class ResolutionSeeder extends Seeder
         $resolutions = [
             [
                 'title' => 'Resolution Establishing the Student Scholarship Program',
-                'description' => 'A resolution to establish a merit-based scholarship program for deserving students.',
+                'description' => 'A resolution to establish a merit-based scholarship program for deserving students of Mindanao State University at Buug Campus.',
                 'category' => 'Academic',
                 'status' => 'published',
+                'date_passed' => now()->subDays(45),
             ],
             [
                 'title' => 'Resolution on Campus Safety and Security Enhancement',
-                'description' => 'A resolution calling for improved campus safety measures and security protocols.',
+                'description' => 'A resolution calling for improved campus safety measures and security protocols to ensure student welfare.',
                 'category' => 'Welfare',
                 'status' => 'published',
+                'date_passed' => now()->subDays(60),
             ],
             [
                 'title' => 'Resolution Supporting Mental Health Services',
-                'description' => 'A resolution advocating for expanded mental health support services for students.',
+                'description' => 'A resolution advocating for expanded mental health support services and counseling programs for students.',
                 'category' => 'Welfare',
                 'status' => 'published',
+                'date_passed' => now()->subDays(30),
             ],
             [
                 'title' => 'Resolution on Sustainable Campus Initiatives',
-                'description' => 'A resolution promoting environmental sustainability and green campus practices.',
+                'description' => 'A resolution promoting environmental sustainability, waste reduction, and green campus practices.',
                 'category' => 'Environment',
-                'status' => 'review',
+                'status' => 'published',
+                'date_passed' => now()->subDays(20),
             ],
             [
                 'title' => 'Resolution Commending Outstanding Faculty Members',
-                'description' => 'A resolution recognizing faculty members for their exceptional service to students.',
+                'description' => 'A resolution recognizing and commending faculty members for their exceptional service and dedication to students.',
                 'category' => 'Recognition',
-                'status' => 'draft',
+                'status' => 'published',
+                'date_passed' => now()->subDays(15),
+            ],
+            [
+                'title' => 'Resolution on Student Activity Fee Allocation',
+                'description' => 'A resolution approving the allocation and disbursement of student activity fees for the current academic year.',
+                'category' => 'Budget',
+                'status' => 'published',
+                'date_passed' => now()->subDays(90),
+            ],
+            [
+                'title' => 'Resolution Supporting Student Organization Accreditation',
+                'description' => 'A resolution establishing guidelines and procedures for student organization recognition and accreditation.',
+                'category' => 'Governance',
+                'status' => 'published',
+                'date_passed' => now()->subDays(75),
+            ],
+            [
+                'title' => 'Resolution on Library Services Enhancement',
+                'description' => 'A resolution calling for extended library hours and improved digital resource access for students.',
+                'category' => 'Academic',
+                'status' => 'published',
+                'date_passed' => now()->subDays(50),
             ],
         ];
 
         foreach ($resolutions as $index => $resolution) {
             $resolutionNumber = 'USG-'.now()->year.'-'.str_pad($index + 1, 3, '0', STR_PAD_LEFT);
-            $slug = Str::slug($resolution['title']);
 
             Resolution::create([
                 'resolution_number' => $resolutionNumber,
                 'title' => $resolution['title'],
                 'description' => $resolution['description'],
-                'content' => 'WHEREAS, the University Student Government recognizes the importance of this matter;
-
-WHEREAS, there is a need to address the concerns of the student body;
-
-WHEREAS, the USG is committed to serving the best interests of all students;
-
-NOW, THEREFORE, BE IT RESOLVED that the University Student Government hereby:
-
-1. Approves and supports this initiative;
-2. Allocates necessary resources for implementation;
-3. Establishes a monitoring committee to ensure proper execution;
-4. Commits to transparent reporting of progress and outcomes.
-
-RESOLVED FURTHER that this resolution shall take effect immediately upon approval.',
+                'content' => $resolution['description'], // Content is same as description for approved resolutions
                 'category' => $resolution['category'],
-                'file_path' => null,
+                'file_path' => null, // In production, this would contain the PDF file path
                 'status' => $resolution['status'],
-                'resolution_date' => $resolution['status'] === 'published' ? now()->subDays(rand(10, 60)) : null,
+                'resolution_date' => $resolution['date_passed'],
                 'submitted_by' => $user->id,
                 'approved_by' => $resolution['status'] === 'published' ? $user->id : null,
-                'approved_at' => $resolution['status'] === 'published' ? now()->subDays(rand(5, 30)) : null,
-                'published_at' => $resolution['status'] === 'published' ? now()->subDays(rand(1, 20)) : null,
-                'created_at' => now()->subDays(rand(70, 100)),
-                'updated_at' => now()->subDays(rand(1, 10)),
+                'approved_at' => $resolution['status'] === 'published' ? $resolution['date_passed'] : null,
+                'published_at' => $resolution['status'] === 'published' ? $resolution['date_passed'] : null,
+                'created_at' => $resolution['date_passed']->subDays(rand(1, 5)),
+                'updated_at' => $resolution['date_passed'],
             ]);
         }
     }

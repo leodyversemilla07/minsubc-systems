@@ -3,7 +3,6 @@ export { default as AnnouncementCard } from './announcement-card';
 export { default as CalendarWidget } from './calendar-widget';
 export { CategoryFilter } from './category-filter';
 export { default as EventCard } from './event-card';
-export { FileUploader } from './file-uploader';
 export { default as Footer } from './footer';
 export { default as Header } from './header';
 export { default as OfficerCard } from './officer-card';

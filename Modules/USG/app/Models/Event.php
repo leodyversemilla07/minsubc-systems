@@ -33,6 +33,7 @@ class Event extends Model
         'slug',
         'description',
         'location',
+        'venue_details',
         'start_date',
         'end_date',
         'all_day',
@@ -43,6 +44,7 @@ class Event extends Model
         'recurrence_rule',
         'status',
         'created_by',
+        'featured_image',
     ];
 
     protected $appends = [
@@ -95,7 +97,7 @@ class Event extends Model
     protected function imagePath(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn () => null, // No image in current schema
+            get: fn () => $this->featured_image ? asset('storage/'.$this->featured_image) : null,
         );
     }
 

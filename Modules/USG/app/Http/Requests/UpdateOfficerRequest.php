@@ -3,6 +3,7 @@
 namespace Modules\USG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class UpdateOfficerRequest extends FormRequest
 {
@@ -27,7 +28,12 @@ class UpdateOfficerRequest extends FormRequest
             'department' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'photo' => [
+                'nullable',
+                File::image()
+                    ->max('2mb')
+                    ->types(['jpg', 'jpeg', 'png', 'webp']),
+            ],
             'bio' => ['nullable', 'string'],
             'term_start' => ['nullable', 'date'],
             'term_end' => ['nullable', 'date', 'after_or_equal:term_start'],

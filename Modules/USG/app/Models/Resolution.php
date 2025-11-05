@@ -115,24 +115,9 @@ class Resolution extends Model
         return $query->where('status', 'published');
     }
 
-    public function scopeDraft(Builder $query): Builder
-    {
-        return $query->where('status', 'draft');
-    }
-
-    public function scopePending(Builder $query): Builder
-    {
-        return $query->where('status', 'review');
-    }
-
     public function scopeArchived(Builder $query): Builder
     {
         return $query->where('status', 'archived');
-    }
-
-    public function scopeRejected(Builder $query): Builder
-    {
-        return $query->where('status', 'rejected');
     }
 
     public function scopeSearch(Builder $query, ?string $searchTerm): Builder

@@ -312,14 +312,14 @@ export default function EditAnnouncement({
         >
             <Head title={`Edit ${announcement.title} - USG Admin`} />
 
-            <div className="mx-auto max-w-5xl space-y-6 p-6 sm:space-y-8 md:p-8 lg:p-10">
-                {/* Header */}
-                <div className="space-y-2">
-                    <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+                {/* Page Header */}
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                         Edit Announcement
                     </h1>
-                    <p className="text-sm text-muted-foreground sm:text-base">
-                        Update announcement information
+                    <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                        Update your announcement details
                     </p>
                 </div>
 
@@ -351,7 +351,13 @@ export default function EditAnnouncement({
                     }}
                     className="space-y-8"
                 >
-                    {({ processing, errors, hasErrors, wasSuccessful }) => {
+                    {({
+                        processing,
+                        errors,
+                        hasErrors,
+                        wasSuccessful,
+                        progress,
+                    }) => {
                         // Handle success message
                         if (wasSuccessful && !showSuccess) {
                             setShowSuccess(true);
@@ -762,6 +768,32 @@ export default function EditAnnouncement({
                                                 {errors.featured_image}
                                             </p>
                                         )}
+
+                                        {/* Upload Progress */}
+                                        {progress && (
+                                            <div className="space-y-2">
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-gray-600 dark:text-gray-400">
+                                                        Uploading image...
+                                                    </span>
+                                                    <span className="font-medium text-blue-600">
+                                                        {Math.round(
+                                                            progress.percentage ||
+                                                                0,
+                                                        )}
+                                                        %
+                                                    </span>
+                                                </div>
+                                                <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                                                    <div
+                                                        className="h-full bg-blue-600 transition-all duration-300"
+                                                        style={{
+                                                            width: `${progress.percentage || 0}%`,
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
 
@@ -1135,7 +1167,7 @@ export default function EditAnnouncement({
 
                                 {/* Action Buttons */}
                                 {canManage && (
-                                    <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:items-center sm:justify-end sm:gap-4">
+                                    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
                                         <Button
                                             type="button"
                                             variant="outline"

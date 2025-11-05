@@ -14,13 +14,31 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import SearchBar from '@/components/usg/search-bar';
+import { ViewToggle } from '@/components/view-toggle';
 import AppLayout from '@/layouts/app-layout';
 import officerRoutes from '@/routes/usg/admin/officers';
 import { Head, router } from '@inertiajs/react';
@@ -46,11 +64,15 @@ interface Officer {
     email: string;
     phone?: string;
     bio?: string;
-    profile_image?: string;
+    photo?: string;
+    photo_url?: string;
     is_active: boolean;
     term_start: string;
     term_end?: string;
+    order: number;
+    user_id?: number;
     created_at: string;
+    updated_at: string;
 }
 
 interface Props {
@@ -62,6 +84,89 @@ interface Props {
     };
     departments?: string[];
     canManage?: boolean;
+}
+
+// Skeleton Loaders
+function OfficersGridSkeleton() {
+    return (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {[...Array(8)].map((_, i) => (
+                <Card key={i} className="overflow-hidden">
+                    <CardContent className="p-6">
+                        <div className="space-y-4">
+                            <div className="flex justify-center">
+                                <Skeleton className="h-24 w-24 rounded-full" />
+                            </div>
+                            <div className="space-y-2 text-center">
+                                <Skeleton className="mx-auto h-5 w-32" />
+                                <Skeleton className="mx-auto h-4 w-24" />
+                            </div>
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                            </div>
+                            <div className="flex items-center justify-center gap-2 pt-2">
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    );
+}
+
+function OfficersTableSkeleton() {
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead><Skeleton className="h-4 w-32" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead className="w-[100px]">
+                        <Skeleton className="h-4 w-16" />
+                    </TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {[...Array(8)].map((_, i) => (
+                    <TableRow key={i}>
+                        <TableCell>
+                            <div className="flex items-center gap-3">
+                                <Skeleton className="h-10 w-10 rounded-full" />
+                                <div className="space-y-1">
+                                    <Skeleton className="h-4 w-32" />
+                                    <Skeleton className="h-3 w-24" />
+                                </div>
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-32" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-5 w-16" />
+                        </TableCell>
+                        <TableCell>
+                            <div className="flex items-center justify-end gap-2">
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
 }
 
 export default function OfficersManagement({
@@ -90,6 +195,7 @@ export default function OfficersManagement({
     const [selectedStatus, setSelectedStatus] = useState(
         safeFilters.status || undefined,
     );
+    const [view, setView] = useState<'grid' | 'table'>('grid');
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -179,15 +285,18 @@ export default function OfficersManagement({
                         </p>
                     </div>
 
-                    {canManage && (
-                        <Button
-                            onClick={() => router.visit(officerRoutes.create())}
-                            className="w-full sm:w-auto"
-                        >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Officer
-                        </Button>
-                    )}
+                    <div className="flex items-center gap-3">
+                        <ViewToggle view={view} onViewChange={setView} />
+                        {canManage && (
+                            <Button
+                                onClick={() => router.visit(officerRoutes.create())}
+                                className="w-full sm:w-auto"
+                            >
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Officer
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Stats */}
@@ -382,9 +491,20 @@ export default function OfficersManagement({
                 </Card>
 
                 {/* Officers List */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    {safeOfficers.length > 0 ? (
-                        safeOfficers.map((officer) => (
+                {officers === undefined ? (
+                    view === 'grid' ? (
+                        <OfficersGridSkeleton />
+                    ) : (
+                        <Card>
+                            <CardContent className="p-0">
+                                <OfficersTableSkeleton />
+                            </CardContent>
+                        </Card>
+                    )
+                ) : safeOfficers.length > 0 ? (
+                    view === 'grid' ? (
+                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                            {safeOfficers.map((officer) => (
                             <Card
                                 key={officer.id}
                                 className="group relative overflow-hidden border-border/50 transition-all duration-200 hover:shadow-xl hover:shadow-primary/5"
@@ -423,7 +543,10 @@ export default function OfficersManagement({
                                     <div className="flex items-start gap-4 pr-20">
                                         <Avatar className="h-16 w-16 ring-2 ring-primary/10 transition-all group-hover:ring-primary/20">
                                             <AvatarImage
-                                                src={officer.profile_image}
+                                                src={
+                                                    officer.photo_url ||
+                                                    officer.photo
+                                                }
                                                 className="object-cover"
                                             />
                                             <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-lg font-semibold text-primary">
@@ -568,63 +691,259 @@ export default function OfficersManagement({
                                 </CardContent>
                             </Card>
                         ))
+                        }
+                        </div>
                     ) : (
-                        <div className="col-span-full">
-                            <Card className="border-dashed">
-                                <CardContent className="p-12 text-center">
-                                    <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5">
-                                        <Users className="h-12 w-12 text-primary/60" />
-                                    </div>
-                                    <h3 className="mb-2 text-xl font-semibold text-foreground">
+                        <Card>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Officer</TableHead>
+                                        <TableHead>Position</TableHead>
+                                        <TableHead>Department</TableHead>
+                                        <TableHead>Contact</TableHead>
+                                        <TableHead>Term</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {safeOfficers.map((officer) => (
+                                        <TableRow key={officer.id}>
+                                            <TableCell>
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar className="h-10 w-10">
+                                                        <AvatarImage
+                                                            src={
+                                                                officer.photo_url ||
+                                                                officer.photo
+                                                            }
+                                                        />
+                                                        <AvatarFallback>
+                                                            {getInitials(
+                                                                officer.name,
+                                                            )}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                    <div>
+                                                        <div className="font-medium">
+                                                            {officer.name}
+                                                        </div>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            {officer.email}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="font-medium">
+                                                {officer.position}
+                                            </TableCell>
+                                            <TableCell>
+                                                {officer.department || (
+                                                    <span className="text-muted-foreground">
+                                                        -
+                                                    </span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="space-y-1 text-sm">
+                                                    {officer.phone && (
+                                                        <div className="flex items-center gap-1">
+                                                            <Phone className="h-3 w-3" />
+                                                            {officer.phone}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="text-sm">
+                                                    {officer.term_start && (
+                                                        <div className="flex items-center gap-1">
+                                                            <Calendar className="h-3 w-3" />
+                                                            {formatDate(
+                                                                officer.term_start,
+                                                            )}{' '}
+                                                            -{' '}
+                                                            {officer.term_end
+                                                                ? formatDate(
+                                                                      officer.term_end,
+                                                                  )
+                                                                : 'Present'}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    variant="secondary"
+                                                    className={
+                                                        officer.is_active
+                                                            ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300'
+                                                            : 'border-gray-200 bg-gray-50 text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400'
+                                                    }
+                                                >
+                                                    {officer.is_active
+                                                        ? 'Active'
+                                                        : 'Inactive'}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        asChild
+                                                    >
+                                                        <a
+                                                            href={`mailto:${officer.email}`}
+                                                        >
+                                                            <Mail className="h-4 w-4" />
+                                                        </a>
+                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() =>
+                                                                    router.visit(
+                                                                        officerRoutes.edit(
+                                                                            {
+                                                                                officer:
+                                                                                    officer.id,
+                                                                            },
+                                                                        ),
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                            <AlertDialog>
+                                                                <AlertDialogTrigger
+                                                                    asChild
+                                                                >
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950"
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent>
+                                                                    <AlertDialogHeader>
+                                                                        <AlertDialogTitle>
+                                                                            Delete
+                                                                            Officer?
+                                                                        </AlertDialogTitle>
+                                                                        <AlertDialogDescription>
+                                                                            Are
+                                                                            you
+                                                                            sure
+                                                                            you
+                                                                            want
+                                                                            to
+                                                                            delete{' '}
+                                                                            <strong>
+                                                                                {
+                                                                                    officer.name
+                                                                                }
+                                                                            </strong>
+                                                                            ?
+                                                                            This
+                                                                            action
+                                                                            cannot
+                                                                            be
+                                                                            undone.
+                                                                        </AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel>
+                                                                            Cancel
+                                                                        </AlertDialogCancel>
+                                                                        <AlertDialogAction
+                                                                            onClick={() =>
+                                                                                router.delete(
+                                                                                    officerRoutes.destroy(
+                                                                                        officer.id,
+                                                                                    ),
+                                                                                )
+                                                                            }
+                                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                        >
+                                                                            Delete Officer
+                                                                        </AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Card>
+                    )
+                ) : (
+                    <Card className="border-dashed">
+                        <CardContent className="p-12">
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <Users className="h-6 w-6" />
+                                    </EmptyMedia>
+                                    <EmptyTitle>
                                         {searchQuery ||
                                         selectedDepartment ||
                                         selectedStatus
                                             ? 'No officers found'
                                             : 'No officers yet'}
-                                    </h3>
-                                    <p className="mx-auto mb-8 max-w-md text-muted-foreground">
+                                    </EmptyTitle>
+                                    <EmptyDescription>
                                         {searchQuery ||
                                         selectedDepartment ||
                                         selectedStatus
                                             ? 'Try adjusting your search criteria or clearing some filters to see more results.'
                                             : 'Get started by adding your first USG officer. Officers can manage student affairs and represent the student body.'}
-                                    </p>
-                                    <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                                        {hasActiveFilters && (
-                                            <Button
-                                                variant="outline"
-                                                onClick={handleClearAllFilters}
-                                                className="gap-2"
-                                            >
-                                                <X className="h-4 w-4" />
-                                                Clear Filters
-                                            </Button>
-                                        )}
-                                        {canManage && (
-                                            <Button
-                                                onClick={() =>
-                                                    router.visit(
-                                                        officerRoutes.create(),
-                                                    )
-                                                }
-                                                className="gap-2"
-                                            >
-                                                <Plus className="h-4 w-4" />
-                                                Add First Officer
-                                            </Button>
-                                        )}
-                                    </div>
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                                <EmptyContent>
+                                    {hasActiveFilters && (
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleClearAllFilters}
+                                        >
+                                            <X className="mr-2 h-4 w-4" />
+                                            Clear Filters
+                                        </Button>
+                                    )}
+                                    {canManage && (
+                                        <Button
+                                            onClick={() =>
+                                                router.visit(
+                                                    officerRoutes.create(),
+                                                )
+                                            }
+                                        >
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Add First Officer
+                                        </Button>
+                                    )}
                                     {!hasActiveFilters && !canManage && (
-                                        <p className="mt-4 text-sm text-muted-foreground">
+                                        <p className="text-sm text-muted-foreground">
                                             Contact your administrator to add
                                             officers.
                                         </p>
                                     )}
-                                </CardContent>
-                            </Card>
-                        </div>
+                                </EmptyContent>
+                            </Empty>
+                        </CardContent>
+                    </Card>
                     )}
-                </div>
 
                 {/* Pagination could go here if needed */}
             </div>

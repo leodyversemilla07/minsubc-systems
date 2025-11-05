@@ -12,6 +12,7 @@ interface Officer {
     email?: string;
     phone?: string;
     photo?: string;
+    photo_url?: string;
     bio?: string;
     term_start?: string;
     term_end?: string;
@@ -67,9 +68,12 @@ export default function OfficerShow({ officer }: Props) {
                             {/* Profile Picture */}
                             <div className="shrink-0">
                                 <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white/20 bg-white/10 shadow-xl backdrop-blur-sm md:h-40 md:w-40">
-                                    {officer.photo ? (
+                                    {officer.photo_url || officer.photo ? (
                                         <img
-                                            src={officer.photo}
+                                            src={
+                                                officer.photo_url ||
+                                                officer.photo
+                                            }
                                             alt={officer.name}
                                             className="h-full w-full object-cover"
                                         />

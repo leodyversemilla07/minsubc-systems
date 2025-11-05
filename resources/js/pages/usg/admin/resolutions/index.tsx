@@ -8,7 +8,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -16,7 +25,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import SearchBar from '@/components/usg/search-bar';
+import { ViewToggle } from '@/components/view-toggle';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -26,7 +44,6 @@ import {
     Edit,
     Eye,
     FileText,
-    Filter,
     MoreVertical,
     Plus,
     Trash2,
@@ -43,13 +60,7 @@ interface Resolution {
     date_passed: string;
     author: string;
     file_path?: string;
-    status:
-        | 'draft'
-        | 'pending'
-        | 'review'
-        | 'published'
-        | 'rejected'
-        | 'archived';
+    status: 'published' | 'archived';
     category?: string;
     vote_results?: {
         for: number;
@@ -71,6 +82,91 @@ interface Props {
     categories?: string[];
     years?: string[];
     canManage?: boolean;
+}
+
+// Skeleton Loaders
+function ResolutionsGridSkeleton() {
+    return (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => (
+                <Card key={i}>
+                    <CardContent className="p-6">
+                        <div className="space-y-4">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1 space-y-2">
+                                    <Skeleton className="h-6 w-3/4" />
+                                    <Skeleton className="h-4 w-24" />
+                                </div>
+                                <Skeleton className="h-6 w-20" />
+                            </div>
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-5/6" />
+                            </div>
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-32" />
+                                <Skeleton className="h-4 w-24" />
+                            </div>
+                            <div className="flex items-center justify-between pt-2">
+                                <Skeleton className="h-8 w-20" />
+                                <Skeleton className="h-8 w-8" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    );
+}
+
+function ResolutionsTableSkeleton() {
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead><Skeleton className="h-4 w-32" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead className="w-[100px]">
+                        <Skeleton className="h-4 w-16" />
+                    </TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {[...Array(8)].map((_, i) => (
+                    <TableRow key={i}>
+                        <TableCell>
+                            <div className="space-y-1">
+                                <Skeleton className="h-4 w-56" />
+                                <Skeleton className="h-3 w-24" />
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-5 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <div className="flex items-center justify-end gap-2">
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
 }
 
 export default function ResolutionsManagement({
@@ -102,6 +198,7 @@ export default function ResolutionsManagement({
     const [selectedYear, setSelectedYear] = useState(safeFilters.year || 'all');
     const [isLoading, setIsLoading] = useState(false);
     const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+    const [view, setView] = useState<'grid' | 'table'>('grid');
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -161,9 +258,17 @@ export default function ResolutionsManagement({
     };
 
     const handleDownload = (resolution: Resolution) => {
-        if (resolution.file_path) {
-            window.open(resolution.file_path, '_blank');
+        if (!resolution.file_path) {
+            return;
         }
+
+        // If file_path is already an absolute URL or starts with a slash, use it as-is.
+        // Otherwise, assume it's a storage path and prefix with /storage/ to match how
+        // the edit page builds download links (see EditResolution.handleDownload).
+        const path = resolution.file_path;
+        const url = path.startsWith('http') || path.startsWith('/') ? path : `/storage/${path}`;
+
+        window.open(url, '_blank');
     };
 
     const formatDate = (dateString: string) => {
@@ -191,12 +296,6 @@ export default function ResolutionsManagement({
         switch (status) {
             case 'published':
                 return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
-            case 'draft':
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
-            case 'review':
-                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
-            case 'rejected':
-                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
             case 'archived':
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
             default:
@@ -208,12 +307,6 @@ export default function ResolutionsManagement({
         switch (status) {
             case 'published':
                 return 'Published';
-            case 'draft':
-                return 'draft';
-            case 'review':
-                return 'Under Review';
-            case 'rejected':
-                return 'Rejected';
             case 'archived':
                 return 'Archived';
             default:
@@ -226,9 +319,8 @@ export default function ResolutionsManagement({
             total: safeResolutions.length,
             published: safeResolutions.filter((r) => r.status === 'published')
                 .length,
-            pending: safeResolutions.filter((r) => r.status === 'pending')
+            archived: safeResolutions.filter((r) => r.status === 'archived')
                 .length,
-            draft: safeResolutions.filter((r) => r.status === 'draft').length,
             withVotes: safeResolutions.filter(
                 (r) => r.vote_results && getTotalVotes(r.vote_results) > 0,
             ).length,
@@ -273,6 +365,8 @@ export default function ResolutionsManagement({
                             <span className="sm:hidden">Archive</span>
                         </Button>
 
+                        <ViewToggle view={view} onViewChange={setView} />
+
                         {canManage && (
                             <Button
                                 onClick={() =>
@@ -294,7 +388,7 @@ export default function ResolutionsManagement({
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <Card
                         className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
                         onClick={() => handleStatusFilter('all')}
@@ -339,40 +433,19 @@ export default function ResolutionsManagement({
 
                     <Card
                         className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
-                        onClick={() => handleStatusFilter('pending')}
+                        onClick={() => handleStatusFilter('archived')}
                     >
                         <CardContent className="p-4 md:p-6">
                             <div className="flex items-center gap-3 md:gap-4">
                                 <div className="rounded-lg bg-chart-3 p-2 transition-colors md:p-3">
-                                    <Filter className="h-5 w-5 text-foreground md:h-6 md:w-6" />
+                                    <Archive className="h-5 w-5 text-muted-foreground md:h-6 md:w-6" />
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <div className="text-xl font-bold md:text-2xl">
-                                        {stats.pending}
+                                        {stats.archived}
                                     </div>
                                     <div className="text-xs text-muted-foreground md:text-sm">
-                                        Pending
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card
-                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
-                        onClick={() => handleStatusFilter('draft')}
-                    >
-                        <CardContent className="p-4 md:p-6">
-                            <div className="flex items-center gap-3 md:gap-4">
-                                <div className="rounded-lg bg-chart-4 p-2 transition-colors md:p-3">
-                                    <Edit className="h-5 w-5 text-muted-foreground md:h-6 md:w-6" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xl font-bold md:text-2xl">
-                                        {stats.draft}
-                                    </div>
-                                    <div className="text-xs text-muted-foreground md:text-sm">
-                                        Drafts
+                                        Archived
                                     </div>
                                 </div>
                             </div>
@@ -439,15 +512,6 @@ export default function ResolutionsManagement({
                                         <SelectItem value="published">
                                             Published
                                         </SelectItem>
-                                        <SelectItem value="pending">
-                                            Pending
-                                        </SelectItem>
-                                        <SelectItem value="draft">
-                                            Draft
-                                        </SelectItem>
-                                        <SelectItem value="rejected">
-                                            Rejected
-                                        </SelectItem>
                                         <SelectItem value="archived">
                                             Archived
                                         </SelectItem>
@@ -504,9 +568,20 @@ export default function ResolutionsManagement({
                 </Card>
 
                 {/* Resolutions List */}
-                <div className="space-y-4">
-                    {safeResolutions.length > 0 ? (
-                        safeResolutions.map((resolution) => (
+                {resolutions === undefined ? (
+                    view === 'grid' ? (
+                        <ResolutionsGridSkeleton />
+                    ) : (
+                        <Card>
+                            <CardContent className="p-0">
+                                <ResolutionsTableSkeleton />
+                            </CardContent>
+                        </Card>
+                    )
+                ) : safeResolutions.length > 0 ? (
+                    view === 'grid' ? (
+                        <div className="space-y-4">
+                            {safeResolutions.map((resolution) => (
                             <Card
                                 key={resolution.id}
                                 className="transition-shadow hover:shadow-lg"
@@ -619,102 +694,6 @@ export default function ResolutionsManagement({
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             {resolution.status ===
-                                                                'draft' && (
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleStatusChange(
-                                                                            resolution,
-                                                                            'pending',
-                                                                        )
-                                                                    }
-                                                                    disabled={
-                                                                        updatingStatus ===
-                                                                        resolution.id.toString()
-                                                                    }
-                                                                >
-                                                                    {updatingStatus ===
-                                                                    resolution.id.toString() ? (
-                                                                        <>
-                                                                            <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
-                                                                            Updating...
-                                                                        </>
-                                                                    ) : (
-                                                                        'Submit for Review'
-                                                                    )}
-                                                                </DropdownMenuItem>
-                                                            )}
-                                                            {resolution.status ===
-                                                                'pending' && (
-                                                                <>
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                resolution,
-                                                                                'published',
-                                                                            )
-                                                                        }
-                                                                        disabled={
-                                                                            updatingStatus ===
-                                                                            resolution.id.toString()
-                                                                        }
-                                                                    >
-                                                                        {updatingStatus ===
-                                                                        resolution.id.toString() ? (
-                                                                            <>
-                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
-                                                                                Updating...
-                                                                            </>
-                                                                        ) : (
-                                                                            'Publish'
-                                                                        )}
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                resolution,
-                                                                                'rejected',
-                                                                            )
-                                                                        }
-                                                                        disabled={
-                                                                            updatingStatus ===
-                                                                            resolution.id.toString()
-                                                                        }
-                                                                    >
-                                                                        {updatingStatus ===
-                                                                        resolution.id.toString() ? (
-                                                                            <>
-                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
-                                                                                Updating...
-                                                                            </>
-                                                                        ) : (
-                                                                            'Reject'
-                                                                        )}
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                resolution,
-                                                                                'draft',
-                                                                            )
-                                                                        }
-                                                                        disabled={
-                                                                            updatingStatus ===
-                                                                            resolution.id.toString()
-                                                                        }
-                                                                    >
-                                                                        {updatingStatus ===
-                                                                        resolution.id.toString() ? (
-                                                                            <>
-                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
-                                                                                Updating...
-                                                                            </>
-                                                                        ) : (
-                                                                            'Return to Draft'
-                                                                        )}
-                                                                    </DropdownMenuItem>
-                                                                </>
-                                                            )}
-                                                            {resolution.status ===
                                                                 'published' && (
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
@@ -735,20 +714,42 @@ export default function ResolutionsManagement({
                                                                             Updating...
                                                                         </>
                                                                     ) : (
-                                                                        'Archive'
+                                                                        <>
+                                                                            <Archive className="mr-2 h-4 w-4" />
+                                                                            Archive
+                                                                        </>
+                                                                    )}
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {resolution.status ===
+                                                                'archived' && (
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            resolution,
+                                                                            'published',
+                                                                        )
+                                                                    }
+                                                                    disabled={
+                                                                        updatingStatus ===
+                                                                        resolution.id.toString()
+                                                                    }
+                                                                >
+                                                                    {updatingStatus ===
+                                                                    resolution.id.toString() ? (
+                                                                        <>
+                                                                            <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                            Updating...
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <Eye className="mr-2 h-4 w-4" />
+                                                                            Restore & Publish
+                                                                        </>
                                                                     )}
                                                                 </DropdownMenuItem>
                                                             )}
                                                             <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    router.visit(
-                                                                        `/usg/admin/resolutions/${resolution.id}/votes`,
-                                                                    )
-                                                                }
-                                                            >
-                                                                Manage Votes
-                                                            </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem
                                                                 onClick={() =>
@@ -923,30 +924,198 @@ export default function ResolutionsManagement({
                                         )}
                                 </CardContent>
                             </Card>
-                        ))
+                        ))}
+                        </div>
                     ) : (
                         <Card>
-                            <CardContent className="p-12 text-center">
-                                <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
-                                    <FileText className="h-12 w-12 text-muted-foreground" />
-                                </div>
-                                <h3 className="mb-2 text-xl font-semibold text-foreground">
-                                    {searchQuery ||
-                                    selectedStatus !== 'all' ||
-                                    selectedCategory !== 'all' ||
-                                    selectedYear !== 'all'
-                                        ? 'No resolutions match your filters'
-                                        : 'No resolutions yet'}
-                                </h3>
-                                <p className="mx-auto mb-8 max-w-md text-muted-foreground">
-                                    {searchQuery ||
-                                    selectedStatus !== 'all' ||
-                                    selectedCategory !== 'all' ||
-                                    selectedYear !== 'all'
-                                        ? 'Try adjusting your search criteria or clearing some filters to see more results.'
-                                        : 'Get started by creating your first resolution. Legislative documents and proposals can be managed here.'}
-                                </p>
-                                <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Number</TableHead>
+                                        <TableHead>Title</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Category</TableHead>
+                                        <TableHead>Author</TableHead>
+                                        <TableHead>Date Passed</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {safeResolutions.map((resolution) => (
+                                        <TableRow key={resolution.id}>
+                                            <TableCell className="font-mono text-xs">
+                                                {resolution.resolution_number}
+                                            </TableCell>
+                                            <TableCell className="font-medium">
+                                                <div className="flex items-center gap-2">
+                                                    {resolution.title}
+                                                    {resolution.file_path && (
+                                                        <FileText className="h-3 w-3 text-muted-foreground" />
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    className={getStatusColor(
+                                                        resolution.status,
+                                                    )}
+                                                >
+                                                    {formatStatus(
+                                                        resolution.status,
+                                                    )}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                {resolution.category ? (
+                                                    <Badge variant="secondary">
+                                                        {resolution.category}
+                                                    </Badge>
+                                                ) : (
+                                                    <span className="text-muted-foreground">
+                                                        -
+                                                    </span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {resolution.author}
+                                            </TableCell>
+                                            <TableCell className="text-sm">
+                                                {formatDate(resolution.date_passed)}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            router.visit(
+                                                                `/usg/resolutions/${resolution.id}`,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </Button>
+
+                                                    {resolution.file_path && (
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                handleDownload(
+                                                                    resolution,
+                                                                )
+                                                            }
+                                                        >
+                                                            <Download className="h-4 w-4" />
+                                                        </Button>
+                                                    )}
+
+                                                    {canManage && (
+                                                        <>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() =>
+                                                                    router.visit(
+                                                                        `/usg/admin/resolutions/${resolution.id}/edit`,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger
+                                                                    asChild
+                                                                >
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                    >
+                                                                        <MoreVertical className="h-4 w-4" />
+                                                                    </Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent align="end">
+                                                                    {resolution.status ===
+                                                                        'published' && (
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    resolution,
+                                                                                    'archived',
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <Archive className="mr-2 h-4 w-4" />
+                                                                            Archive
+                                                                        </DropdownMenuItem>
+                                                                    )}
+                                                                    {resolution.status ===
+                                                                        'archived' && (
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    resolution,
+                                                                                    'published',
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <Eye className="mr-2 h-4 w-4" />
+                                                                            Restore & Publish
+                                                                        </DropdownMenuItem>
+                                                                    )}
+                                                                    <DropdownMenuSeparator />
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleDelete(
+                                                                                resolution,
+                                                                            )
+                                                                        }
+                                                                        className="text-red-600 focus:text-red-600"
+                                                                    >
+                                                                        <Trash2 className="mr-2 h-4 w-4" />
+                                                                        Delete
+                                                                    </DropdownMenuItem>
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Card>
+                    )
+                ) : (
+                    <Card>
+                        <CardContent className="p-12">
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <FileText className="h-6 w-6" />
+                                    </EmptyMedia>
+                                    <EmptyTitle>
+                                        {searchQuery ||
+                                        selectedStatus !== 'all' ||
+                                        selectedCategory !== 'all' ||
+                                        selectedYear !== 'all'
+                                            ? 'No resolutions match your filters'
+                                            : 'No resolutions yet'}
+                                    </EmptyTitle>
+                                    <EmptyDescription>
+                                        {searchQuery ||
+                                        selectedStatus !== 'all' ||
+                                        selectedCategory !== 'all' ||
+                                        selectedYear !== 'all'
+                                            ? 'Try adjusting your search criteria or clearing some filters to see more results.'
+                                            : 'Get started by creating your first resolution. Legislative documents and proposals can be managed here.'}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                                <EmptyContent>
                                     {(searchQuery ||
                                         selectedStatus !== 'all' ||
                                         selectedCategory !== 'all' ||
@@ -965,7 +1134,6 @@ export default function ResolutionsManagement({
                                                     year: 'all',
                                                 });
                                             }}
-                                            className="w-full sm:w-auto"
                                         >
                                             Clear Filters
                                         </Button>
@@ -977,17 +1145,16 @@ export default function ResolutionsManagement({
                                                     '/usg/admin/resolutions/create',
                                                 )
                                             }
-                                            className="w-full sm:w-auto"
                                         >
                                             <Plus className="mr-2 h-4 w-4" />
                                             Create Resolution
                                         </Button>
                                     )}
-                                </div>
+                                </EmptyContent>
+                            </Empty>
                             </CardContent>
                         </Card>
-                    )}
-                </div>
+                )}
             </div>
         </AppLayout>
     );

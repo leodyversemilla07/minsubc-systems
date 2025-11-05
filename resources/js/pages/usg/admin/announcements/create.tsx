@@ -256,14 +256,14 @@ export default function CreateAnnouncement({
         >
             <Head title="Create Announcement - USG Admin" />
 
-            <div className="mx-auto max-w-5xl space-y-6 p-6 sm:space-y-8 md:p-8 lg:p-10">
-                {/* Header */}
-                <div className="space-y-2">
-                    <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+                {/* Page Header */}
+                <div className="mb-8">
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                         Create New Announcement
                     </h1>
-                    <p className="text-sm text-muted-foreground sm:text-base">
-                        Add a new announcement for the USG community
+                    <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                        Share important news and updates with your audience
                     </p>
                 </div>
 
@@ -927,7 +927,7 @@ export default function CreateAnnouncement({
 
                             {/* Action Buttons */}
                             {canManage && (
-                                <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:items-center sm:justify-end sm:gap-4">
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
                                     <Button
                                         type="button"
                                         variant="outline"

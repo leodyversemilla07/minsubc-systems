@@ -45,9 +45,11 @@ class ResolutionController extends Controller
     public function create(): Response
     {
         $categories = $this->resolutionService->getCategories();
+        $statuses = ['published', 'archived'];
 
         return Inertia::render('usg/admin/resolutions/create', [
             'categories' => $categories,
+            'statuses' => $statuses,
         ]);
     }
 
@@ -76,10 +78,12 @@ class ResolutionController extends Controller
     {
         $resolution = $this->resolutionService->getById($id);
         $categories = $this->resolutionService->getCategories();
+        $statuses = ['published', 'archived'];
 
         return Inertia::render('usg/admin/resolutions/edit', [
             'resolution' => $resolution,
             'categories' => $categories,
+            'statuses' => $statuses,
         ]);
     }
 
@@ -107,44 +111,19 @@ class ResolutionController extends Controller
             ->with('success', 'Resolution deleted successfully.');
     }
 
-    public function submit(int $id): RedirectResponse
-    {
-        $resolution = $this->resolutionService->getById($id);
-        $this->resolutionService->submit($resolution);
-
-        return back()->with('success', 'Resolution submitted for approval.');
-    }
-
-    public function pending(): Response
-    {
-        $resolutions = $this->resolutionService->getPendingResolutions();
-
-        return Inertia::render('usg/admin/resolutions/pending', [
-            'resolutions' => $resolutions,
-        ]);
-    }
-
-    public function approve(int $id, Request $request): RedirectResponse
-    {
-        $resolution = $this->resolutionService->getById($id);
-        $this->resolutionService->approve($resolution, $request->user()->id);
-
-        return back()->with('success', 'Resolution approved successfully.');
-    }
-
-    public function reject(int $id, Request $request): RedirectResponse
-    {
-        $resolution = $this->resolutionService->getById($id);
-        $this->resolutionService->reject($resolution, $request->user()->id);
-
-        return back()->with('success', 'Resolution rejected.');
-    }
-
     public function archive(int $id): RedirectResponse
     {
         $resolution = $this->resolutionService->getById($id);
         $this->resolutionService->archive($resolution);
 
         return back()->with('success', 'Resolution archived successfully.');
+    }
+
+    public function unarchive(int $id): RedirectResponse
+    {
+        $resolution = $this->resolutionService->getById($id);
+        $this->resolutionService->unarchive($resolution);
+
+        return back()->with('success', 'Resolution restored successfully.');
     }
 }

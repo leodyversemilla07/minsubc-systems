@@ -23,15 +23,15 @@ class UpdateEventRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'all_day' => ['boolean'],
+            'description' => ['required', 'string'],
             'category' => ['nullable', 'string', 'max:100'],
-            'color' => ['nullable', 'string', 'max:20'],
-            'organizer' => ['nullable', 'string', 'max:255'],
-            'is_recurring' => ['boolean'],
+            'event_date' => ['required', 'date'],
+            'event_time' => ['required', 'date_format:H:i'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:event_date'],
+            'end_time' => ['nullable', 'date_format:H:i'],
+            'location' => ['required', 'string', 'max:255'],
+            'venue_details' => ['nullable', 'string'],
+            'featured_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'], // 5MB max
             'status' => ['nullable', 'string', 'in:draft,published,cancelled,archived'],
         ];
     }
@@ -46,10 +46,18 @@ class UpdateEventRequest extends FormRequest
         return [
             'title.required' => 'Event title is required.',
             'title.max' => 'Event title cannot exceed 255 characters.',
-            'start_date.required' => 'Event start date is required.',
-            'start_date.date' => 'Invalid start date format.',
+            'description.required' => 'Event description is required.',
+            'event_date.required' => 'Event date is required.',
+            'event_date.date' => 'Invalid event date format.',
+            'event_time.required' => 'Event time is required.',
+            'event_time.date_format' => 'Invalid time format. Use HH:MM format.',
             'end_date.date' => 'Invalid end date format.',
-            'end_date.after_or_equal' => 'End date must be after or equal to start date.',
+            'end_date.after_or_equal' => 'End date must be after or equal to event date.',
+            'end_time.date_format' => 'Invalid time format. Use HH:MM format.',
+            'location.required' => 'Event location is required.',
+            'featured_image.image' => 'The file must be an image.',
+            'featured_image.mimes' => 'The image must be a JPEG, PNG, JPG, or WebP file.',
+            'featured_image.max' => 'The image must not be larger than 5MB.',
             'status.in' => 'Invalid event status.',
         ];
     }

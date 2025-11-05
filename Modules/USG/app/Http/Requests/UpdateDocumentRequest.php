@@ -3,6 +3,7 @@
 namespace Modules\USG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class UpdateDocumentRequest extends FormRequest
 {
@@ -24,7 +25,11 @@ class UpdateDocumentRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'file' => ['nullable', 'file', 'mimes:pdf,doc,docx,xlsx,xls,txt', 'max:10240'], // 10MB max
+            'file' => [
+                'nullable',
+                File::types(['pdf', 'doc', 'docx', 'xlsx', 'xls', 'txt'])
+                    ->max('10mb'),
+            ],
             'category' => ['nullable', 'string', 'max:100'],
             'is_public' => ['boolean'],
         ];

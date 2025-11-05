@@ -39,32 +39,6 @@ class ResolutionFactory extends Factory
     }
 
     /**
-     * Indicate that the resolution is a draft.
-     */
-    public function draft(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'draft',
-            'approved_at' => null,
-            'approved_by' => null,
-            'published_at' => null,
-        ]);
-    }
-
-    /**
-     * Indicate that the resolution is under review.
-     */
-    public function review(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'review',
-            'approved_at' => null,
-            'approved_by' => null,
-            'published_at' => null,
-        ]);
-    }
-
-    /**
      * Indicate that the resolution is archived.
      */
     public function archived(): static
@@ -84,19 +58,6 @@ class ResolutionFactory extends Factory
             'approved_at' => now(),
             'approved_by' => \App\Models\User::factory(),
             'published_at' => now(),
-        ]);
-    }
-
-    /**
-     * Indicate that the resolution is rejected.
-     */
-    public function rejected(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'rejected',
-            'approved_at' => null,
-            'approved_by' => null,
-            'published_at' => null,
         ]);
     }
 }

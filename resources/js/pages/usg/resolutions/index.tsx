@@ -4,20 +4,19 @@ import FilterCard from '@/components/usg/filter-card';
 import ResolutionCard from '@/components/usg/resolution-card';
 import USGLayout from '@/layouts/usg-layout';
 import { Head } from '@inertiajs/react';
-import { Calendar, Download, ExternalLink, FileText, User } from 'lucide-react';
+import { Calendar, Download, ExternalLink, FileText } from 'lucide-react';
 import { useState } from 'react';
 
+// Resolution interface for public pages - simplified to published/archived only
 interface Resolution {
     id: number;
     title: string;
     description: string;
     resolution_number: string;
     date_passed: string;
-    author: string;
     file_path: string | null;
-    status: 'draft' | 'review' | 'published' | 'rejected' | 'archived';
+    status: 'published' | 'archived';
     category?: string;
-    tags?: string[];
     created_at: string;
 }
 
@@ -30,13 +29,11 @@ interface Props {
         total: number;
     };
     categories?: string[];
-    authors?: string[];
 }
 
-export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
+export default function ResolutionsIndex({ resolutions }: Props) {
     const [activeFilters, setActiveFilters] = useState<{
         categories?: string[];
-        authors?: string[];
         statuses?: string[];
         years?: string[];
     }>({});
@@ -47,11 +44,6 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
             !activeFilters.categories?.length ||
             (resolution.category &&
                 activeFilters.categories.includes(resolution.category));
-
-        // Author filter
-        const matchesAuthor =
-            !activeFilters.authors?.length ||
-            activeFilters.authors.includes(resolution.author);
 
         // Status filter
         const matchesStatus =
@@ -65,7 +57,7 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
                 new Date(resolution.date_passed).getFullYear().toString(),
             );
 
-        return matchesCategory && matchesAuthor && matchesStatus && matchesYear;
+        return matchesCategory && matchesStatus && matchesYear;
     });
 
     // Get available years from resolutions
@@ -77,7 +69,7 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
         ),
     ).sort((a, b) => parseInt(b) - parseInt(a));
 
-    // Separate by status
+    // Separate by status - only show published resolutions to public
     const publishedResolutions = filteredResolutions
         .filter((resolution) => resolution.status === 'published')
         .sort(
@@ -85,13 +77,6 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
                 new Date(b.date_passed).getTime() -
                 new Date(a.date_passed).getTime(),
         );
-
-    const draftResolutions = filteredResolutions.filter(
-        (resolution) => resolution.status === 'draft',
-    );
-    const reviewResolutions = filteredResolutions.filter(
-        (resolution) => resolution.status === 'review',
-    );
 
     const currentYear = new Date().getFullYear();
 
@@ -141,35 +126,12 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
                     <div className="mb-8">
                         <FilterCard
                             title="Filter Resolutions"
-                            description="Filter resolutions by author, year, and status"
+                            description="Filter resolutions by year and status"
                             hasActiveFilters={Object.values(activeFilters).some(
                                 (f) => f?.length,
                             )}
                             onClearFilters={() => setActiveFilters({})}
                             filters={[
-                                ...(authors.length > 0
-                                    ? [
-                                          {
-                                              label: 'Author',
-                                              icon: (
-                                                  <User className="h-4 w-4" />
-                                              ),
-                                              value: activeFilters.authors?.[0],
-                                              placeholder: `All Authors (${authors.length})`,
-                                              options: authors,
-                                              onChange: (
-                                                  value: string | undefined,
-                                              ) => {
-                                                  setActiveFilters({
-                                                      ...activeFilters,
-                                                      authors: value
-                                                          ? [value]
-                                                          : [],
-                                                  });
-                                              },
-                                          },
-                                      ]
-                                    : []),
                                 ...(availableYears.length > 0
                                     ? [
                                           {
@@ -203,15 +165,6 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
                                             value: 'published',
                                             label: 'Published',
                                         },
-                                        { value: 'draft', label: 'Draft' },
-                                        {
-                                            value: 'review',
-                                            label: 'Under Review',
-                                        },
-                                        {
-                                            value: 'rejected',
-                                            label: 'Rejected',
-                                        },
                                         {
                                             value: 'archived',
                                             label: 'Archived',
@@ -235,24 +188,12 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
                                 {filteredResolutions.length} Resolution
                                 {filteredResolutions.length !== 1 ? 's' : ''}
                             </h2>
-                            <div className="flex gap-2">
-                                <Badge
-                                    variant="default"
-                                    className="border-[var(--usg-secondary)] bg-[var(--usg-light)] text-[var(--usg-primary)]"
-                                >
-                                    {publishedResolutions.length} Published
-                                </Badge>
-                                {reviewResolutions.length > 0 && (
-                                    <Badge variant="secondary">
-                                        {reviewResolutions.length} Under Review
-                                    </Badge>
-                                )}
-                                {draftResolutions.length > 0 && (
-                                    <Badge variant="outline">
-                                        {draftResolutions.length} Draft
-                                    </Badge>
-                                )}
-                            </div>
+                            <Badge
+                                variant="default"
+                                className="border-[var(--usg-secondary)] bg-[var(--usg-light)] text-[var(--usg-primary)]"
+                            >
+                                {publishedResolutions.length} Published
+                            </Badge>
                         </div>
                     </div>
 
@@ -336,45 +277,6 @@ export default function ResolutionsIndex({ resolutions, authors = [] }: Props) {
                                     </div>
                                 ))}
 
-                            {/* Draft Resolutions (if user has access) */}
-                            {draftResolutions.length > 0 && (
-                                <div>
-                                    <div className="mb-6 flex items-center gap-2">
-                                        <FileText className="h-5 w-5 text-yellow-600" />
-                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                            Draft Resolutions
-                                        </h3>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                                        {draftResolutions.map((resolution) => (
-                                            <ResolutionCard
-                                                key={resolution.id}
-                                                resolution={resolution}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Pending Resolutions */}
-                            {reviewResolutions.length > 0 && (
-                                <div>
-                                    <div className="mb-6 flex items-center gap-2">
-                                        <User className="h-5 w-5 text-orange-600" />
-                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                            Under Review
-                                        </h3>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                                        {reviewResolutions.map((resolution) => (
-                                            <ResolutionCard
-                                                key={resolution.id}
-                                                resolution={resolution}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     )}
                 </div>

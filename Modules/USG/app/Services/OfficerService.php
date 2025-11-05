@@ -5,11 +5,14 @@ namespace Modules\USG\Services;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 use Modules\USG\Models\Officer;
 
 class OfficerService
 {
+    public function __construct(
+        private FileUploadService $fileUploadService
+    ) {}
+
     /**
      * Get all active officers ordered by position order
      */
@@ -53,7 +56,8 @@ class OfficerService
     public function create(array $data): Officer
     {
         if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
-            $data['photo'] = $this->handlePhotoUpload($data['photo']);
+            $fileData = $this->fileUploadService->uploadImage($data['photo'], 'usg/officers');
+            $data['photo'] = $fileData['path'];
         }
 
         // Set default order if not provided
@@ -72,9 +76,10 @@ class OfficerService
         if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
             // Delete old photo if exists
             if ($officer->photo) {
-                $this->deletePhoto($officer->photo);
+                $this->fileUploadService->deleteFile($officer->photo);
             }
-            $data['photo'] = $this->handlePhotoUpload($data['photo']);
+            $fileData = $this->fileUploadService->uploadImage($data['photo'], 'usg/officers');
+            $data['photo'] = $fileData['path'];
         }
 
         $officer->update($data);
@@ -88,7 +93,7 @@ class OfficerService
     public function delete(Officer $officer): bool
     {
         if ($officer->photo) {
-            $this->deletePhoto($officer->photo);
+            $this->fileUploadService->deleteFile($officer->photo);
         }
 
         return $officer->delete();
@@ -142,22 +147,6 @@ class OfficerService
             ->with('user')
             ->orderBy('order')
             ->get();
-    }
-
-    /**
-     * Handle photo upload
-     */
-    private function handlePhotoUpload(UploadedFile $photo): string
-    {
-        return $photo->store('usg/officers', 'public');
-    }
-
-    /**
-     * Delete photo from storage
-     */
-    private function deletePhoto(string $photoPath): bool
-    {
-        return Storage::disk('public')->delete($photoPath);
     }
 
     /**

@@ -16,6 +16,7 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -23,7 +24,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import SearchBar from '@/components/usg/search-bar';
+import { ViewToggle } from '@/components/view-toggle';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import {
@@ -75,6 +85,91 @@ interface Props {
     canManage?: boolean;
 }
 
+// Skeleton Loaders
+function AnnouncementsGridSkeleton() {
+    return (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => (
+                <Card key={i} className="overflow-hidden">
+                    <CardContent className="p-0">
+                        <div className="space-y-4 p-6">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1 space-y-2">
+                                    <Skeleton className="h-5 w-3/4" />
+                                    <Skeleton className="h-4 w-20" />
+                                </div>
+                                <Skeleton className="h-6 w-20 shrink-0" />
+                            </div>
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-5/6" />
+                            </div>
+                            <div className="flex items-center justify-between pt-2">
+                                <Skeleton className="h-4 w-24" />
+                                <div className="flex gap-2">
+                                    <Skeleton className="h-8 w-8" />
+                                    <Skeleton className="h-8 w-8" />
+                                    <Skeleton className="h-8 w-8" />
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    );
+}
+
+function AnnouncementsTableSkeleton() {
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead><Skeleton className="h-4 w-32" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead className="w-[100px]">
+                        <Skeleton className="h-4 w-16" />
+                    </TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {[...Array(8)].map((_, i) => (
+                    <TableRow key={i}>
+                        <TableCell>
+                            <div className="space-y-1">
+                                <Skeleton className="h-4 w-64" />
+                                <Skeleton className="h-3 w-32" />
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-5 w-16" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-5 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="h-4 w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <div className="flex items-center justify-end gap-2">
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                                <Skeleton className="h-8 w-8" />
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
+}
+
 export default function AnnouncementsManagement({
     announcements,
     filters,
@@ -104,6 +199,7 @@ export default function AnnouncementsManagement({
     const [selectedCategory, setSelectedCategory] = useState(
         safeFilters.category || '',
     );
+    const [view, setView] = useState<'grid' | 'table'>('grid');
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -244,15 +340,18 @@ export default function AnnouncementsManagement({
                         </p>
                     </div>
 
-                    {canManage && (
-                        <Link
-                            href={create.url()}
-                            className={cn(buttonVariants())}
-                        >
-                            <Plus className="h-4 w-4" />
-                            New Announcement
-                        </Link>
-                    )}
+                    <div className="flex items-center gap-3">
+                        <ViewToggle view={view} onViewChange={setView} />
+                        {canManage && (
+                            <Link
+                                href={create.url()}
+                                className={cn(buttonVariants())}
+                            >
+                                <Plus className="h-4 w-4" />
+                                New Announcement
+                            </Link>
+                        )}
+                    </div>
                 </div>
 
                 {/* Stats */}
@@ -427,74 +526,87 @@ export default function AnnouncementsManagement({
                 </Card>
 
                 {/* Announcements List */}
-                <div className="space-y-4">
-                    {safeAnnouncements.length > 0 ? (
-                        safeAnnouncements.map((announcement) => (
-                            <Card
-                                key={announcement.id}
-                                className="transition-shadow hover:shadow-lg"
-                            >
-                                <CardContent className="p-6">
-                                    <div className="flex items-start justify-between">
-                                        <div className="min-w-0 flex-1">
-                                            <div className="mb-2 flex items-center gap-3">
-                                                <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
-                                                    {announcement.title}
-                                                </h3>
-                                                <Badge
-                                                    className={getStatusColor(
-                                                        announcement.status,
-                                                    )}
-                                                >
-                                                    {formatStatus(
-                                                        announcement.status,
-                                                    )}
-                                                </Badge>
-                                                <Badge
-                                                    variant="secondary"
-                                                    className={getPriorityColor(
-                                                        announcement.priority,
-                                                    )}
-                                                >
-                                                    {announcement.priority.toUpperCase()}
-                                                </Badge>
-                                                {announcement.category && (
-                                                    <Badge variant="outline">
-                                                        {announcement.category}
+                {announcements === undefined ? (
+                    view === 'grid' ? (
+                        <AnnouncementsGridSkeleton />
+                    ) : (
+                        <Card>
+                            <CardContent className="p-0">
+                                <AnnouncementsTableSkeleton />
+                            </CardContent>
+                        </Card>
+                    )
+                ) : safeAnnouncements.length > 0 ? (
+                    view === 'grid' ? (
+                        <div className="space-y-4">
+                            {safeAnnouncements.map((announcement) => (
+                                <Card
+                                    key={announcement.id}
+                                    className="transition-shadow hover:shadow-lg"
+                                >
+                                    <CardContent className="p-6">
+                                        <div className="flex items-start justify-between">
+                                            <div className="min-w-0 flex-1">
+                                                <div className="mb-2 flex items-center gap-3">
+                                                    <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
+                                                        {announcement.title}
+                                                    </h3>
+                                                    <Badge
+                                                        className={getStatusColor(
+                                                            announcement.status,
+                                                        )}
+                                                    >
+                                                        {formatStatus(
+                                                            announcement.status,
+                                                        )}
                                                     </Badge>
-                                                )}
-                                            </div>
-
-                                            <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
-                                                {announcement.excerpt ||
-                                                    announcement.content}
-                                            </p>
-
-                                            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                                                <div className="flex items-center gap-1">
-                                                    <User className="h-4 w-4" />
-                                                    {announcement.author_name}
+                                                    {announcement.priority && (
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className={getPriorityColor(
+                                                                announcement.priority,
+                                                            )}
+                                                        >
+                                                            {announcement.priority.toUpperCase()}
+                                                        </Badge>
+                                                    )}
+                                                    {announcement.category && (
+                                                        <Badge variant="outline">
+                                                            {announcement.category}
+                                                        </Badge>
+                                                    )}
                                                 </div>
-                                                <div className="flex items-center gap-1">
-                                                    <Calendar className="h-4 w-4" />
-                                                    {announcement.published_at
-                                                        ? `Published ${formatDate(announcement.published_at)}`
-                                                        : `Created ${formatDate(announcement.created_at)}`}
-                                                </div>
-                                                {announcement.views_count !==
-                                                    undefined && (
+
+                                                <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
+                                                    {announcement.excerpt ||
+                                                        announcement.content}
+                                                </p>
+
+                                                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                                                     <div className="flex items-center gap-1">
-                                                        <Eye className="h-4 w-4" />
-                                                        {
-                                                            announcement.views_count
-                                                        }{' '}
-                                                        views
+                                                        <User className="h-4 w-4" />
+                                                        {announcement.author_name}
                                                     </div>
-                                                )}
+                                                    <div className="flex items-center gap-1">
+                                                        <Calendar className="h-4 w-4" />
+                                                        {announcement.published_at
+                                                            ? `Published ${formatDate(announcement.published_at)}`
+                                                            : `Created ${formatDate(announcement.created_at)}`}
+                                                    </div>
+                                                    {announcement.views_count !==
+                                                        undefined && (
+                                                        <div className="flex items-center gap-1">
+                                                            <Eye className="h-4 w-4" />
+                                                            {
+                                                                announcement.views_count
+                                                            }{' '}
+                                                            views
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2">
                                             <Link
                                                 href={preview.url(
                                                     announcement.slug,
@@ -611,8 +723,210 @@ export default function AnnouncementsManagement({
                                     </div>
                                 </CardContent>
                             </Card>
-                        ))
+                        ))}
+                        </div>
                     ) : (
+                        <Card>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Title</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Priority</TableHead>
+                                        <TableHead>Category</TableHead>
+                                        <TableHead>Author</TableHead>
+                                        <TableHead>Date</TableHead>
+                                        <TableHead>Views</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {safeAnnouncements.map((announcement) => (
+                                        <TableRow key={announcement.id}>
+                                            <TableCell className="font-medium">
+                                                {announcement.title}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    className={getStatusColor(
+                                                        announcement.status,
+                                                    )}
+                                                >
+                                                    {formatStatus(
+                                                        announcement.status,
+                                                    )}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                {announcement.priority ? (
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className={getPriorityColor(
+                                                            announcement.priority,
+                                                        )}
+                                                    >
+                                                        {announcement.priority.toUpperCase()}
+                                                    </Badge>
+                                                ) : (
+                                                    <span className="text-muted-foreground">
+                                                        -
+                                                    </span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {announcement.category ? (
+                                                    <Badge variant="outline">
+                                                        {announcement.category}
+                                                    </Badge>
+                                                ) : (
+                                                    <span className="text-muted-foreground">
+                                                        -
+                                                    </span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {announcement.author_name}
+                                            </TableCell>
+                                            <TableCell className="text-sm">
+                                                {announcement.published_at
+                                                    ? formatDate(
+                                                          announcement.published_at,
+                                                      )
+                                                    : formatDate(
+                                                          announcement.created_at,
+                                                      )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {announcement.views_count ?? 0}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            router.visit(
+                                                                preview.url({
+                                                                    announcement:
+                                                                        announcement.id,
+                                                                }),
+                                                            )
+                                                        }
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() =>
+                                                                    router.visit(
+                                                                        edit.url(
+                                                                            {
+                                                                                announcement:
+                                                                                    announcement.id,
+                                                                            },
+                                                                        ),
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger
+                                                                    asChild
+                                                                >
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                    >
+                                                                        <MoreVertical className="h-4 w-4" />
+                                                                    </Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent align="end">
+                                                                    {announcement.status ===
+                                                                        'draft' && (
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    announcement,
+                                                                                    'pending',
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Submit
+                                                                            for
+                                                                            Review
+                                                                        </DropdownMenuItem>
+                                                                    )}
+                                                                    {announcement.status ===
+                                                                        'pending' && (
+                                                                        <>
+                                                                            <DropdownMenuItem
+                                                                                onClick={() =>
+                                                                                    handleStatusChange(
+                                                                                        announcement,
+                                                                                        'published',
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                Publish
+                                                                            </DropdownMenuItem>
+                                                                            <DropdownMenuItem
+                                                                                onClick={() =>
+                                                                                    handleStatusChange(
+                                                                                        announcement,
+                                                                                        'draft',
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                Return
+                                                                                to
+                                                                                Draft
+                                                                            </DropdownMenuItem>
+                                                                        </>
+                                                                    )}
+                                                                    {announcement.status ===
+                                                                        'published' && (
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    announcement,
+                                                                                    'archived',
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Archive
+                                                                        </DropdownMenuItem>
+                                                                    )}
+                                                                    <DropdownMenuSeparator />
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleDelete(
+                                                                                announcement,
+                                                                            )
+                                                                        }
+                                                                        className="text-red-600 focus:text-red-600"
+                                                                    >
+                                                                        <Trash2 className="mr-2 h-4 w-4" />
+                                                                        Delete
+                                                                    </DropdownMenuItem>
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Card>
+                    )
+                ) : (
                         <Card>
                             <CardContent className="p-12">
                                 <Empty>
@@ -647,7 +961,6 @@ export default function AnnouncementsManagement({
                             </CardContent>
                         </Card>
                     )}
-                </div>
             </div>
         </AppLayout>
     );

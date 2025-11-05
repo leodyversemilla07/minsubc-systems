@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 use Modules\USG\Models\Resolution;
 
 class ResolutionService
 {
+    public function __construct(
+        private FileUploadService $fileUploadService
+    ) {}
+
     /**
      * Get published resolutions query
      */
@@ -32,22 +35,11 @@ class ResolutionService
     }
 
     /**
-     * Get pending resolutions for approval
+     * Get archived resolutions
      */
-    public function getPendingResolutions(): Collection
+    public function getArchivedResolutions(): Collection
     {
-        return Resolution::pending()
-            ->with('submittedBy')
-            ->latest('created_at')
-            ->get();
-    }
-
-    /**
-     * Get draft resolutions
-     */
-    public function getDraftResolutions(): Collection
-    {
-        return Resolution::draft()
+        return Resolution::archived()
             ->with('submittedBy')
             ->latest('created_at')
             ->get();
@@ -90,7 +82,7 @@ class ResolutionService
     public function create(array $data, int $submittedBy): Resolution
     {
         if (isset($data['file']) && $data['file'] instanceof UploadedFile) {
-            $fileData = $this->handleFileUpload($data['file']);
+            $fileData = $this->fileUploadService->uploadDocument($data['file'], 'usg/resolutions');
             $data['file_path'] = $fileData['path'];
             unset($data['file']);
         }
@@ -100,10 +92,29 @@ class ResolutionService
             $data['resolution_number'] = $this->generateResolutionNumber();
         }
 
+        // Map date_passed to resolution_date for database
+        if (isset($data['date_passed'])) {
+            $data['resolution_date'] = $data['date_passed'];
+            unset($data['date_passed']);
+        }
+
+        // Set default status to published (approved resolutions only)
+        $status = $data['status'] ?? 'published';
+
+        // If status is published, set published_at timestamp
+        $publishedAt = $status === 'published' ? now() : null;
+
         return Resolution::create([
-            ...$data,
+            'resolution_number' => $data['resolution_number'],
+            'title' => $data['title'],
+            'description' => $data['description'] ?? '',
+            'content' => $data['description'] ?? '', // Use description as content for approved resolutions
+            'category' => $data['category'] ?? null,
+            'file_path' => $data['file_path'] ?? null,
+            'status' => $status,
+            'resolution_date' => $data['resolution_date'],
             'submitted_by' => $submittedBy,
-            'status' => $data['status'] ?? 'draft',
+            'published_at' => $publishedAt,
         ]);
     }
 
@@ -115,62 +126,26 @@ class ResolutionService
         if (isset($data['file']) && $data['file'] instanceof UploadedFile) {
             // Delete old file if exists
             if ($resolution->file_path) {
-                $this->deleteFile($resolution->file_path);
+                $this->fileUploadService->deleteFile($resolution->file_path);
             }
 
-            $fileData = $this->handleFileUpload($data['file']);
+            $fileData = $this->fileUploadService->uploadDocument($data['file'], 'usg/resolutions');
             $data['file_path'] = $fileData['path'];
             unset($data['file']);
         }
 
-        $resolution->update($data);
-
-        return $resolution;
-    }
-
-    /**
-     * Submit resolution for approval
-     */
-    public function submitForApproval(Resolution $resolution): Resolution
-    {
-        $resolution->update([
-            'status' => 'pending',
-        ]);
-
-        return $resolution;
-    }
-
-    /**
-     * Approve resolution
-     */
-    public function approve(Resolution $resolution, int $approvedBy): Resolution
-    {
-        $resolution->update([
-            'status' => 'published',
-            'approved_by' => $approvedBy,
-            'approved_at' => now(),
-            'published_at' => now(),
-        ]);
-
-        return $resolution;
-    }
-
-    /**
-     * Reject resolution
-     */
-    public function reject(Resolution $resolution, int $approvedBy, ?string $reason = null): Resolution
-    {
-        $updateData = [
-            'status' => 'rejected',
-            'approved_by' => $approvedBy,
-            'approved_at' => now(),
-        ];
-
-        if ($reason) {
-            $updateData['rejection_reason'] = $reason;
+        // Map date_passed to resolution_date for database
+        if (isset($data['date_passed'])) {
+            $data['resolution_date'] = $data['date_passed'];
+            unset($data['date_passed']);
         }
 
-        $resolution->update($updateData);
+        // Update published_at timestamp if status changes to published
+        if (isset($data['status']) && $data['status'] === 'published' && $resolution->status !== 'published') {
+            $data['published_at'] = now();
+        }
+
+        $resolution->update($data);
 
         return $resolution;
     }
@@ -186,12 +161,22 @@ class ResolutionService
     }
 
     /**
+     * Unarchive resolution (restore to published)
+     */
+    public function unarchive(Resolution $resolution): Resolution
+    {
+        $resolution->update(['status' => 'published']);
+
+        return $resolution;
+    }
+
+    /**
      * Delete resolution and associated file
      */
     public function delete(Resolution $resolution): bool
     {
         if ($resolution->file_path) {
-            $this->deleteFile($resolution->file_path);
+            $this->fileUploadService->deleteFile($resolution->file_path);
         }
 
         return $resolution->delete();
@@ -252,8 +237,7 @@ class ResolutionService
      * @return array{
      *     total: int,
      *     published: int,
-     *     pending: int,
-     *     draft: int,
+     *     archived: int,
      *     this_year: int
      * }
      */
@@ -262,41 +246,9 @@ class ResolutionService
         return [
             'total' => Resolution::count(),
             'published' => Resolution::published()->count(),
-            'pending' => Resolution::pending()->count(),
-            'draft' => Resolution::draft()->count(),
+            'archived' => Resolution::archived()->count(),
             'this_year' => Resolution::published()->whereYear('resolution_date', now()->year)->count(),
         ];
-    }
-
-    /**
-     * Handle file upload
-     *
-     * @param  UploadedFile  $file  File to upload
-     * @return array{
-     *     path: string,
-     *     original_name: string,
-     *     size: int,
-     *     mime_type: string
-     * }
-     */
-    private function handleFileUpload(UploadedFile $file): array
-    {
-        $path = $file->store('usg/resolutions', 'public');
-
-        return [
-            'path' => $path,
-            'original_name' => $file->getClientOriginalName(),
-            'size' => $file->getSize(),
-            'mime_type' => $file->getMimeType(),
-        ];
-    }
-
-    /**
-     * Delete file from storage
-     */
-    private function deleteFile(string $filePath): bool
-    {
-        return Storage::disk('public')->delete($filePath);
     }
 
     /**

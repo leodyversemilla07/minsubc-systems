@@ -19,6 +19,13 @@ class OfficerController extends Controller
     {
         $officers = $this->officerService->getPaginatedOfficers();
 
+        // Append photo_url to each officer
+        $officers->getCollection()->transform(function ($officer) {
+            $officer->append('photo_url');
+
+            return $officer;
+        });
+
         return Inertia::render('usg/admin/officers/index', [
             'officers' => $officers,
         ]);
@@ -44,6 +51,7 @@ class OfficerController extends Controller
     public function edit(int $id): Response
     {
         $officer = $this->officerService->getById($id);
+        $officer->append('photo_url');
 
         return Inertia::render('usg/admin/officers/edit', [
             'officer' => $officer,
@@ -57,8 +65,12 @@ class OfficerController extends Controller
         $officer = $this->officerService->getById($id);
         $this->officerService->update($officer, $request->validated());
 
+        // Refresh the officer to get updated data
+        $officer->refresh();
+        $officer->append('photo_url');
+
         return redirect()
-            ->route('usg.admin.officers.index')
+            ->route('usg.admin.officers.edit', $officer)
             ->with('success', 'Officer updated successfully.');
     }
 

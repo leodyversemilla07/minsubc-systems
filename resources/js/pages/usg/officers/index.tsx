@@ -12,6 +12,7 @@ interface Officer {
     email?: string;
     phone?: string;
     photo?: string;
+    photo_url?: string;
     bio?: string;
     is_active: boolean;
     term_start?: string;

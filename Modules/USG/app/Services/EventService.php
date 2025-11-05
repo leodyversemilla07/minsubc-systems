@@ -5,6 +5,7 @@ namespace Modules\USG\Services;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\USG\Models\Event;
 
@@ -106,20 +107,28 @@ class EventService
      */
     public function create(array $data, int $createdBy): Event
     {
-        $data['slug'] = $this->generateUniqueSlug($data['title']);
-        $data['created_by'] = $createdBy;
+        // Transform frontend field names to database field names
+        $transformedData = $this->transformFrontendData($data);
 
-        // Set end_date to start_date if not provided
-        if (! isset($data['end_date']) || empty($data['end_date'])) {
-            $data['end_date'] = $data['start_date'];
-        }
+        $transformedData['slug'] = $this->generateUniqueSlug($data['title']);
+        $transformedData['created_by'] = $createdBy;
 
         // Set default color if not provided
-        if (! isset($data['color']) || empty($data['color'])) {
-            $data['color'] = '#3b82f6'; // Default blue color
+        if (! isset($transformedData['color']) || empty($transformedData['color'])) {
+            $transformedData['color'] = '#3b82f6'; // Default blue color
         }
 
-        return Event::create($data);
+        // Set default status
+        if (! isset($transformedData['status']) || empty($transformedData['status'])) {
+            $transformedData['status'] = 'draft';
+        }
+
+        // Handle featured image upload
+        if (isset($data['featured_image']) && $data['featured_image']) {
+            $transformedData['featured_image'] = $data['featured_image']->store('events/images', 'public');
+        }
+
+        return Event::create($transformedData);
     }
 
     /**
@@ -127,16 +136,24 @@ class EventService
      */
     public function update(Event $event, array $data): Event
     {
+        // Transform frontend field names to database field names
+        $transformedData = $this->transformFrontendData($data);
+
         if (isset($data['title']) && $data['title'] !== $event->title) {
-            $data['slug'] = $this->generateUniqueSlug($data['title'], $event->id);
+            $transformedData['slug'] = $this->generateUniqueSlug($data['title'], $event->id);
         }
 
-        // Set end_date to start_date if not provided
-        if (! isset($data['end_date']) || empty($data['end_date'])) {
-            $data['end_date'] = $data['start_date'];
+        // Handle featured image upload
+        if (isset($data['featured_image']) && $data['featured_image']) {
+            // Delete old image if exists
+            if ($event->featured_image && Storage::disk('public')->exists($event->featured_image)) {
+                Storage::disk('public')->delete($event->featured_image);
+            }
+
+            $transformedData['featured_image'] = $data['featured_image']->store('events/images', 'public');
         }
 
-        $event->update($data);
+        $event->update($transformedData);
 
         return $event;
     }
@@ -290,6 +307,52 @@ class EventService
         }
 
         return $pastEvents->count();
+    }
+
+    /**
+     * Transform frontend data to database format
+     */
+    private function transformFrontendData(array $data): array
+    {
+        $transformed = [];
+
+        // Copy basic fields
+        $basicFields = ['title', 'description', 'category', 'location', 'venue_details', 'status'];
+        foreach ($basicFields as $field) {
+            if (isset($data[$field])) {
+                $transformed[$field] = $data[$field];
+            }
+        }
+
+        // Transform event_date + event_time to start_date
+        if (isset($data['event_date'])) {
+            // Extract date-only if it's a datetime string (contains 'T')
+            $eventDate = $data['event_date'];
+            if (strpos($eventDate, 'T') !== false) {
+                $eventDate = substr($eventDate, 0, 10); // Extract yyyy-mm-dd
+            }
+            $time = $data['event_time'] ?? '00:00';
+            $transformed['start_date'] = $eventDate.' '.$time;
+        }
+
+        // Transform end_date + end_time to end_date
+        if (isset($data['end_date']) && ! empty($data['end_date'])) {
+            // Extract date-only if it's a datetime string (contains 'T')
+            $endDate = $data['end_date'];
+            if (strpos($endDate, 'T') !== false) {
+                $endDate = substr($endDate, 0, 10); // Extract yyyy-mm-dd
+            }
+            $time = $data['end_time'] ?? '23:59';
+            $transformed['end_date'] = $endDate.' '.$time;
+        } elseif (isset($transformed['start_date'])) {
+            // If no end_date provided, use start_date
+            $transformed['end_date'] = $transformed['start_date'];
+        }
+
+        // Determine if event is all day (if no specific times provided)
+        $transformed['all_day'] = empty($data['event_time']) && empty($data['end_time']);
+
+        return $transformed;
     }
 
     /**

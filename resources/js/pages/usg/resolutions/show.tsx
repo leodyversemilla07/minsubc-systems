@@ -6,43 +6,25 @@ import {
     ArrowLeft,
     Calendar,
     Download,
-    ExternalLink,
     Eye,
     FileText,
     Gavel,
-    Tag,
-    User,
 } from 'lucide-react';
 
 interface Resolution {
     id: number;
     title: string;
     description: string;
-    content?: string;
     resolution_number: string;
     date_passed: string;
-    author: string;
     file_path: string | null;
-    status:
-        | 'draft'
-        | 'pending'
-        | 'review'
-        | 'published'
-        | 'rejected'
-        | 'archived';
+    status: 'published' | 'archived';
     category?: string;
-    tags?: string[];
     vote_results?: {
         for: number;
         against: number;
         abstain: number;
     };
-    attachments?: {
-        id: number;
-        filename: string;
-        file_path: string;
-        file_size: number;
-    }[];
     created_at: string;
 }
 
@@ -73,15 +55,6 @@ export default function ResolutionShow({
         });
     };
 
-    const formatFileSize = (bytes: number) => {
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        if (bytes === 0) return '0 Bytes';
-        const i = Math.floor(Math.log(bytes) / Math.log(1024));
-        return (
-            Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i]
-        );
-    };
-
     const getTotalVotes = () => {
         if (!resolution.vote_results) return 0;
         return (
@@ -100,12 +73,6 @@ export default function ResolutionShow({
         switch (status) {
             case 'published':
                 return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
-            case 'draft':
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
-            case 'review':
-                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
-            case 'rejected':
-                return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
             case 'archived':
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
             default:
@@ -117,12 +84,6 @@ export default function ResolutionShow({
         switch (status) {
             case 'published':
                 return 'Published';
-            case 'draft':
-                return 'draft';
-            case 'review':
-                return 'Under Review';
-            case 'rejected':
-                return 'Rejected';
             case 'archived':
                 return 'Archived';
             default:
@@ -192,11 +153,6 @@ export default function ResolutionShow({
                                     {formatDate(resolution.date_passed)}
                                 </div>
 
-                                <div className="flex items-center gap-2">
-                                    <User className="h-4 w-4" />
-                                    Author: {resolution.author}
-                                </div>
-
                                 {resolution.file_path && (
                                     <div className="flex items-center gap-2">
                                         <FileText className="h-4 w-4" />
@@ -240,18 +196,29 @@ export default function ResolutionShow({
                             </p>
                         </div>
 
-                        {/* Full Content */}
-                        {resolution.content && (
+                        {/* PDF Viewer */}
+                        {resolution.file_path && (
                             <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                                    Full Text
-                                </h2>
-                                <div
-                                    className="prose prose-gray dark:prose-invert max-w-none"
-                                    dangerouslySetInnerHTML={{
-                                        __html: resolution.content,
-                                    }}
-                                />
+                                <div className="mb-4 flex items-center justify-between">
+                                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                                        Resolution Document
+                                    </h2>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleDownload}
+                                    >
+                                        <Download className="mr-2 h-4 w-4" />
+                                        Download PDF
+                                    </Button>
+                                </div>
+                                <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <iframe
+                                        src={`/storage/${resolution.file_path}`}
+                                        className="h-[800px] w-full"
+                                        title="Resolution Document"
+                                    />
+                                </div>
                             </div>
                         )}
 
@@ -341,80 +308,6 @@ export default function ResolutionShow({
                                 </div>
                             </div>
                         )}
-
-                        {/* Tags */}
-                        {resolution.tags && resolution.tags.length > 0 && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                                <div className="mb-4 flex items-center gap-2">
-                                    <Tag className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                    <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                                        Tags
-                                    </span>
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {resolution.tags.map((tag, index) => (
-                                        <Badge
-                                            key={index}
-                                            variant="secondary"
-                                            className="text-sm"
-                                        >
-                                            {tag}
-                                        </Badge>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Attachments */}
-                        {resolution.attachments &&
-                            resolution.attachments.length > 0 && (
-                                <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                                    <h3 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                                        Additional Documents
-                                    </h3>
-                                    <div className="space-y-3">
-                                        {resolution.attachments.map(
-                                            (attachment) => (
-                                                <div
-                                                    key={attachment.id}
-                                                    className="flex items-center justify-between rounded-xl border border-gray-200 p-4 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700/50"
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="rounded-lg bg-indigo-50 p-2 dark:bg-indigo-950">
-                                                            <ExternalLink className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-medium text-gray-900 dark:text-white">
-                                                                {
-                                                                    attachment.filename
-                                                                }
-                                                            </div>
-                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                                                                {formatFileSize(
-                                                                    attachment.file_size,
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            window.open(
-                                                                attachment.file_path,
-                                                                '_blank',
-                                                            )
-                                                        }
-                                                    >
-                                                        <Download className="mr-2 h-4 w-4" />
-                                                        Download
-                                                    </Button>
-                                                </div>
-                                            ),
-                                        )}
-                                    </div>
-                                </div>
-                            )}
                     </article>
 
                     {/* Related Resolutions */}

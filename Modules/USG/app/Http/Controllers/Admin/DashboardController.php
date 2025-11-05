@@ -36,7 +36,6 @@ class DashboardController extends Controller
         $pending = [
             'announcements' => $this->announcementService->getPendingAnnouncements(5),
             'events' => $this->eventService->getPendingEvents(5),
-            'resolutions' => $this->resolutionService->getPendingResolutions()->take(5),
         ];
 
         return Inertia::render('usg/admin/dashboard', [
