@@ -1,16 +1,17 @@
 <?php
-// conn.php - Use Laravel's SQLite database
+// conn.php
 
 // Database configuration
-$db_path = realpath(__DIR__ . '/../../../database/database.sqlite');
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "votingsystem5";
 
-// Create PDO connection for SQLite
-try {
-    $conn = new PDO('sqlite:' . $db_path);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // Set timeout to avoid database locked errors
-    $conn->setAttribute(PDO::ATTR_TIMEOUT, 15);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 ?>

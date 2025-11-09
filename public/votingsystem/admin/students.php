@@ -21,18 +21,20 @@ $elections_sql = "
 $elections_result = $conn->query($elections_sql);
 
 // Get election filter from URL (name instead of ID)
-$election_filter_name = isset($_GET['election']) ? $_GET['election'] : '';
+$election_filter_name = isset($_GET['election']) ? trim($_GET['election']) : '';
 
 // If no election name filter is set, redirect to the first election
-if (empty($election_filter_name)) {
+if (!isset($_GET['election']) || $election_filter_name === '') {
     if ($elections_result->num_rows > 0) {
         $first_election = $elections_result->fetch_assoc();
-        header('Location: students.php?election=' . urlencode($first_election['name']));
-        exit();
-    } else {
-        // No elections available
-        $election_filter_name = '';
+        // Only redirect if we have a valid election name
+        if (!empty($first_election['name'])) {
+            header('Location: students.php?election=' . urlencode($first_election['name']));
+            exit();
+        }
     }
+    // If we reach here, no valid elections exist - set to empty and continue
+    $election_filter_name = '';
 }
 
 // Find the election ID for the given name
@@ -80,10 +82,11 @@ $total_pages = ceil($total_records / $limit); // Total number of pages
 
 // Fetch students data for the selected election with applied filters
 $sql = "
-    SELECT students.id, students.student_id, students.name, students.year_section, 
+    SELECT students.id, voters.voters_id AS student_id, students.name, students.year_section, 
            students.course, COALESCE(elections.name, students.election_name) AS election_name 
     FROM students 
     LEFT JOIN elections ON students.election_id = elections.id 
+    LEFT JOIN voters ON students.voters_id = voters.id
     $where_clause
     ORDER BY students.name ASC 
     LIMIT $limit OFFSET $offset";
