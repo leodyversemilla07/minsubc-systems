@@ -704,7 +704,7 @@ export default function EditOfficer({
 
                                 {/* Action Buttons */}
                                 {canManage && (
-                                    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between sm:gap-4 pt-6">
+                                    <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:justify-between sm:gap-4">
                                         <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                                             <Button
                                                 type="button"

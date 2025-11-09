@@ -17,7 +17,6 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty';
 import { Progress } from '@/components/ui/progress';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -25,6 +24,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -124,11 +124,21 @@ function ResolutionsTableSkeleton() {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead><Skeleton className="h-4 w-32" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-32" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-24" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-24" />
+                    </TableHead>
                     <TableHead className="w-[100px]">
                         <Skeleton className="h-4 w-16" />
                     </TableHead>
@@ -266,7 +276,10 @@ export default function ResolutionsManagement({
         // Otherwise, assume it's a storage path and prefix with /storage/ to match how
         // the edit page builds download links (see EditResolution.handleDownload).
         const path = resolution.file_path;
-        const url = path.startsWith('http') || path.startsWith('/') ? path : `/storage/${path}`;
+        const url =
+            path.startsWith('http') || path.startsWith('/')
+                ? path
+                : `/storage/${path}`;
 
         window.open(url, '_blank');
     };
@@ -582,251 +595,270 @@ export default function ResolutionsManagement({
                     view === 'grid' ? (
                         <div className="space-y-4">
                             {safeResolutions.map((resolution) => (
-                            <Card
-                                key={resolution.id}
-                                className="transition-shadow hover:shadow-lg"
-                            >
-                                <CardContent className="p-4 md:p-6">
-                                    {/* Compact Header */}
-                                    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                        <div className="min-w-0 flex-1">
-                                            <div className="mb-2 flex flex-wrap items-center gap-2">
-                                                <Badge
-                                                    variant="outline"
-                                                    className="shrink-0 font-mono text-xs"
-                                                >
-                                                    {
-                                                        resolution.resolution_number
-                                                    }
-                                                </Badge>
-                                                <Badge
-                                                    className={getStatusColor(
-                                                        resolution.status,
-                                                    )}
-                                                >
-                                                    {formatStatus(
-                                                        resolution.status,
-                                                    )}
-                                                </Badge>
-                                                {resolution.category && (
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className="text-xs"
-                                                    >
-                                                        {resolution.category}
-                                                    </Badge>
-                                                )}
-                                                {resolution.file_path && (
+                                <Card
+                                    key={resolution.id}
+                                    className="transition-shadow hover:shadow-lg"
+                                >
+                                    <CardContent className="p-4 md:p-6">
+                                        {/* Compact Header */}
+                                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                            <div className="min-w-0 flex-1">
+                                                <div className="mb-2 flex flex-wrap items-center gap-2">
                                                     <Badge
                                                         variant="outline"
-                                                        className="text-xs"
+                                                        className="shrink-0 font-mono text-xs"
                                                     >
-                                                        <FileText className="mr-1 h-3 w-3" />
-                                                        Document
+                                                        {
+                                                            resolution.resolution_number
+                                                        }
                                                     </Badge>
-                                                )}
+                                                    <Badge
+                                                        className={getStatusColor(
+                                                            resolution.status,
+                                                        )}
+                                                    >
+                                                        {formatStatus(
+                                                            resolution.status,
+                                                        )}
+                                                    </Badge>
+                                                    {resolution.category && (
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className="text-xs"
+                                                        >
+                                                            {
+                                                                resolution.category
+                                                            }
+                                                        </Badge>
+                                                    )}
+                                                    {resolution.file_path && (
+                                                        <Badge
+                                                            variant="outline"
+                                                            className="text-xs"
+                                                        >
+                                                            <FileText className="mr-1 h-3 w-3" />
+                                                            Document
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                                <h3 className="text-base leading-tight font-semibold text-foreground md:text-lg">
+                                                    {resolution.title}
+                                                </h3>
                                             </div>
-                                            <h3 className="text-base leading-tight font-semibold text-foreground md:text-lg">
-                                                {resolution.title}
-                                            </h3>
-                                        </div>
 
-                                        {/* Primary Actions */}
-                                        <div className="flex shrink-0 items-center gap-1">
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() =>
-                                                    router.visit(
-                                                        `/usg/resolutions/${resolution.id}`,
-                                                    )
-                                                }
-                                                className="h-8 w-8 touch-manipulation p-0"
-                                                title="View Resolution"
-                                            >
-                                                <Eye className="h-4 w-4" />
-                                            </Button>
-
-                                            {resolution.file_path && (
+                                            {/* Primary Actions */}
+                                            <div className="flex shrink-0 items-center gap-1">
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
                                                     onClick={() =>
-                                                        handleDownload(
-                                                            resolution,
+                                                        router.visit(
+                                                            `/usg/resolutions/${resolution.id}`,
                                                         )
                                                     }
                                                     className="h-8 w-8 touch-manipulation p-0"
-                                                    title="Download Document"
+                                                    title="View Resolution"
                                                 >
-                                                    <Download className="h-4 w-4" />
+                                                    <Eye className="h-4 w-4" />
                                                 </Button>
-                                            )}
 
-                                            {canManage && (
-                                                <>
+                                                {resolution.file_path && (
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() =>
-                                                            router.visit(
-                                                                `/usg/admin/resolutions/${resolution.id}/edit`,
+                                                            handleDownload(
+                                                                resolution,
                                                             )
                                                         }
                                                         className="h-8 w-8 touch-manipulation p-0"
-                                                        title="Edit Resolution"
+                                                        title="Download Document"
                                                     >
-                                                        <Edit className="h-4 w-4" />
+                                                        <Download className="h-4 w-4" />
                                                     </Button>
+                                                )}
 
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger
-                                                            asChild
+                                                {canManage && (
+                                                    <>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                router.visit(
+                                                                    `/usg/admin/resolutions/${resolution.id}/edit`,
+                                                                )
+                                                            }
+                                                            className="h-8 w-8 touch-manipulation p-0"
+                                                            title="Edit Resolution"
                                                         >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                className="h-8 w-8 touch-manipulation p-0"
-                                                                title="More Actions"
+                                                            <Edit className="h-4 w-4" />
+                                                        </Button>
+
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger
+                                                                asChild
                                                             >
-                                                                <MoreVertical className="h-4 w-4" />
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end">
-                                                            {resolution.status ===
-                                                                'published' && (
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="h-8 w-8 touch-manipulation p-0"
+                                                                    title="More Actions"
+                                                                >
+                                                                    <MoreVertical className="h-4 w-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                {resolution.status ===
+                                                                    'published' && (
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                resolution,
+                                                                                'archived',
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            updatingStatus ===
+                                                                            resolution.id.toString()
+                                                                        }
+                                                                    >
+                                                                        {updatingStatus ===
+                                                                        resolution.id.toString() ? (
+                                                                            <>
+                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                                Updating...
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Archive className="mr-2 h-4 w-4" />
+                                                                                Archive
+                                                                            </>
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                )}
+                                                                {resolution.status ===
+                                                                    'archived' && (
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                resolution,
+                                                                                'published',
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            updatingStatus ===
+                                                                            resolution.id.toString()
+                                                                        }
+                                                                    >
+                                                                        {updatingStatus ===
+                                                                        resolution.id.toString() ? (
+                                                                            <>
+                                                                                <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
+                                                                                Updating...
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Eye className="mr-2 h-4 w-4" />
+                                                                                Restore
+                                                                                &
+                                                                                Publish
+                                                                            </>
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                )}
+                                                                <DropdownMenuSeparator />
+                                                                <DropdownMenuSeparator />
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
-                                                                        handleStatusChange(
+                                                                        handleDelete(
                                                                             resolution,
-                                                                            'archived',
                                                                         )
                                                                     }
-                                                                    disabled={
-                                                                        updatingStatus ===
-                                                                        resolution.id.toString()
-                                                                    }
+                                                                    className="text-destructive focus:text-destructive"
                                                                 >
-                                                                    {updatingStatus ===
-                                                                    resolution.id.toString() ? (
-                                                                        <>
-                                                                            <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
-                                                                            Updating...
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <Archive className="mr-2 h-4 w-4" />
-                                                                            Archive
-                                                                        </>
-                                                                    )}
+                                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                                    Delete
                                                                 </DropdownMenuItem>
-                                                            )}
-                                                            {resolution.status ===
-                                                                'archived' && (
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleStatusChange(
-                                                                            resolution,
-                                                                            'published',
-                                                                        )
-                                                                    }
-                                                                    disabled={
-                                                                        updatingStatus ===
-                                                                        resolution.id.toString()
-                                                                    }
-                                                                >
-                                                                    {updatingStatus ===
-                                                                    resolution.id.toString() ? (
-                                                                        <>
-                                                                            <div className="mr-2 h-3 w-3 animate-spin rounded-full border-b border-current"></div>
-                                                                            Updating...
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <Eye className="mr-2 h-4 w-4" />
-                                                                            Restore & Publish
-                                                                        </>
-                                                                    )}
-                                                                </DropdownMenuItem>
-                                                            )}
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    handleDelete(
-                                                                        resolution,
-                                                                    )
-                                                                }
-                                                                className="text-destructive focus:text-destructive"
-                                                            >
-                                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                                Delete
-                                                            </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </>
-                                            )}
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Description */}
-                                    <p className="mb-3 line-clamp-2 text-sm text-muted-foreground md:mb-4 md:text-base">
-                                        {resolution.description}
-                                    </p>
+                                        {/* Description */}
+                                        <p className="mb-3 line-clamp-2 text-sm text-muted-foreground md:mb-4 md:text-base">
+                                            {resolution.description}
+                                        </p>
 
-                                    {/* Metadata */}
-                                    <div className="mb-3 flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 md:mb-4 md:text-sm">
-                                        <div className="flex min-w-0 items-center gap-1">
-                                            <User className="h-3 w-3 shrink-0 md:h-4 md:w-4" />
-                                            <span className="truncate">
-                                                {resolution.author}
-                                            </span>
+                                        {/* Metadata */}
+                                        <div className="mb-3 flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 md:mb-4 md:text-sm">
+                                            <div className="flex min-w-0 items-center gap-1">
+                                                <User className="h-3 w-3 shrink-0 md:h-4 md:w-4" />
+                                                <span className="truncate">
+                                                    {resolution.author}
+                                                </span>
+                                            </div>
+                                            <div className="flex shrink-0 items-center gap-1">
+                                                <Calendar className="h-3 w-3 md:h-4 md:w-4" />
+                                                {formatDate(
+                                                    resolution.date_passed,
+                                                )}
+                                            </div>
+                                            {resolution.vote_results &&
+                                                getTotalVotes(
+                                                    resolution.vote_results,
+                                                ) > 0 && (
+                                                    <div className="flex shrink-0 items-center gap-1">
+                                                        <Vote className="h-3 w-3 md:h-4 md:w-4" />
+                                                        {getTotalVotes(
+                                                            resolution.vote_results,
+                                                        )}{' '}
+                                                        votes
+                                                    </div>
+                                                )}
                                         </div>
-                                        <div className="flex shrink-0 items-center gap-1">
-                                            <Calendar className="h-3 w-3 md:h-4 md:w-4" />
-                                            {formatDate(resolution.date_passed)}
-                                        </div>
+
+                                        {/* Vote Results */}
                                         {resolution.vote_results &&
                                             getTotalVotes(
                                                 resolution.vote_results,
                                             ) > 0 && (
-                                                <div className="flex shrink-0 items-center gap-1">
-                                                    <Vote className="h-3 w-3 md:h-4 md:w-4" />
-                                                    {getTotalVotes(
-                                                        resolution.vote_results,
-                                                    )}{' '}
-                                                    votes
-                                                </div>
-                                            )}
-                                    </div>
-
-                                    {/* Vote Results */}
-                                    {resolution.vote_results &&
-                                        getTotalVotes(resolution.vote_results) >
-                                            0 && (
-                                            <div className="space-y-3 border-t border-border pt-3 md:pt-4">
-                                                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                                                    <Vote className="h-4 w-4" />
-                                                    Vote Results (
-                                                    {getTotalVotes(
-                                                        resolution.vote_results,
-                                                    )}{' '}
-                                                    total)
-                                                </div>
-                                                <div className="space-y-3">
-                                                    <div className="space-y-1">
-                                                        <div className="flex items-center justify-between text-xs md:text-sm">
-                                                            <span className="font-medium text-success">
-                                                                For
-                                                            </span>
-                                                            <span className="font-medium text-muted-foreground">
-                                                                {
-                                                                    resolution
-                                                                        .vote_results
-                                                                        .for
-                                                                }{' '}
-                                                                (
-                                                                {getVotePercentage(
+                                                <div className="space-y-3 border-t border-border pt-3 md:pt-4">
+                                                    <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                                                        <Vote className="h-4 w-4" />
+                                                        Vote Results (
+                                                        {getTotalVotes(
+                                                            resolution.vote_results,
+                                                        )}{' '}
+                                                        total)
+                                                    </div>
+                                                    <div className="space-y-3">
+                                                        <div className="space-y-1">
+                                                            <div className="flex items-center justify-between text-xs md:text-sm">
+                                                                <span className="font-medium text-success">
+                                                                    For
+                                                                </span>
+                                                                <span className="font-medium text-muted-foreground">
+                                                                    {
+                                                                        resolution
+                                                                            .vote_results
+                                                                            .for
+                                                                    }{' '}
+                                                                    (
+                                                                    {getVotePercentage(
+                                                                        resolution
+                                                                            .vote_results
+                                                                            .for,
+                                                                        getTotalVotes(
+                                                                            resolution.vote_results,
+                                                                        ),
+                                                                    )}
+                                                                    %)
+                                                                </span>
+                                                            </div>
+                                                            <Progress
+                                                                value={getVotePercentage(
                                                                     resolution
                                                                         .vote_results
                                                                         .for,
@@ -834,34 +866,34 @@ export default function ResolutionsManagement({
                                                                         resolution.vote_results,
                                                                     ),
                                                                 )}
-                                                                %)
-                                                            </span>
+                                                                className="h-2"
+                                                            />
                                                         </div>
-                                                        <Progress
-                                                            value={getVotePercentage(
-                                                                resolution
-                                                                    .vote_results
-                                                                    .for,
-                                                                getTotalVotes(
-                                                                    resolution.vote_results,
-                                                                ),
-                                                            )}
-                                                            className="h-2"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                        <div className="flex items-center justify-between text-xs md:text-sm">
-                                                            <span className="font-medium text-destructive">
-                                                                Against
-                                                            </span>
-                                                            <span className="font-medium text-muted-foreground">
-                                                                {
-                                                                    resolution
-                                                                        .vote_results
-                                                                        .against
-                                                                }{' '}
-                                                                (
-                                                                {getVotePercentage(
+                                                        <div className="space-y-1">
+                                                            <div className="flex items-center justify-between text-xs md:text-sm">
+                                                                <span className="font-medium text-destructive">
+                                                                    Against
+                                                                </span>
+                                                                <span className="font-medium text-muted-foreground">
+                                                                    {
+                                                                        resolution
+                                                                            .vote_results
+                                                                            .against
+                                                                    }{' '}
+                                                                    (
+                                                                    {getVotePercentage(
+                                                                        resolution
+                                                                            .vote_results
+                                                                            .against,
+                                                                        getTotalVotes(
+                                                                            resolution.vote_results,
+                                                                        ),
+                                                                    )}
+                                                                    %)
+                                                                </span>
+                                                            </div>
+                                                            <Progress
+                                                                value={getVotePercentage(
                                                                     resolution
                                                                         .vote_results
                                                                         .against,
@@ -869,34 +901,34 @@ export default function ResolutionsManagement({
                                                                         resolution.vote_results,
                                                                     ),
                                                                 )}
-                                                                %)
-                                                            </span>
+                                                                className="h-2"
+                                                            />
                                                         </div>
-                                                        <Progress
-                                                            value={getVotePercentage(
-                                                                resolution
-                                                                    .vote_results
-                                                                    .against,
-                                                                getTotalVotes(
-                                                                    resolution.vote_results,
-                                                                ),
-                                                            )}
-                                                            className="h-2"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                        <div className="flex items-center justify-between text-xs md:text-sm">
-                                                            <span className="font-medium text-muted-foreground">
-                                                                Abstain
-                                                            </span>
-                                                            <span className="font-medium text-muted-foreground">
-                                                                {
-                                                                    resolution
-                                                                        .vote_results
-                                                                        .abstain
-                                                                }{' '}
-                                                                (
-                                                                {getVotePercentage(
+                                                        <div className="space-y-1">
+                                                            <div className="flex items-center justify-between text-xs md:text-sm">
+                                                                <span className="font-medium text-muted-foreground">
+                                                                    Abstain
+                                                                </span>
+                                                                <span className="font-medium text-muted-foreground">
+                                                                    {
+                                                                        resolution
+                                                                            .vote_results
+                                                                            .abstain
+                                                                    }{' '}
+                                                                    (
+                                                                    {getVotePercentage(
+                                                                        resolution
+                                                                            .vote_results
+                                                                            .abstain,
+                                                                        getTotalVotes(
+                                                                            resolution.vote_results,
+                                                                        ),
+                                                                    )}
+                                                                    %)
+                                                                </span>
+                                                            </div>
+                                                            <Progress
+                                                                value={getVotePercentage(
                                                                     resolution
                                                                         .vote_results
                                                                         .abstain,
@@ -904,27 +936,15 @@ export default function ResolutionsManagement({
                                                                         resolution.vote_results,
                                                                     ),
                                                                 )}
-                                                                %)
-                                                            </span>
+                                                                className="h-2"
+                                                            />
                                                         </div>
-                                                        <Progress
-                                                            value={getVotePercentage(
-                                                                resolution
-                                                                    .vote_results
-                                                                    .abstain,
-                                                                getTotalVotes(
-                                                                    resolution.vote_results,
-                                                                ),
-                                                            )}
-                                                            className="h-2"
-                                                        />
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )}
-                                </CardContent>
-                            </Card>
-                        ))}
+                                            )}
+                                    </CardContent>
+                                </Card>
+                            ))}
                         </div>
                     ) : (
                         <Card>
@@ -982,7 +1002,9 @@ export default function ResolutionsManagement({
                                                 {resolution.author}
                                             </TableCell>
                                             <TableCell className="text-sm">
-                                                {formatDate(resolution.date_passed)}
+                                                {formatDate(
+                                                    resolution.date_passed,
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex items-center justify-end gap-2">
@@ -1063,7 +1085,9 @@ export default function ResolutionsManagement({
                                                                             }
                                                                         >
                                                                             <Eye className="mr-2 h-4 w-4" />
-                                                                            Restore & Publish
+                                                                            Restore
+                                                                            &
+                                                                            Publish
                                                                         </DropdownMenuItem>
                                                                     )}
                                                                     <DropdownMenuSeparator />
@@ -1152,8 +1176,8 @@ export default function ResolutionsManagement({
                                     )}
                                 </EmptyContent>
                             </Empty>
-                            </CardContent>
-                        </Card>
+                        </CardContent>
+                    </Card>
                 )}
             </div>
         </AppLayout>

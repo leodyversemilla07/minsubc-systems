@@ -104,15 +104,17 @@ export default function VMGOHistory({ history }: Props) {
                                 VMGO Version History
                             </h1>
                             <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                                View all versions of the Vision, Mission, Goals, and
-                                Objectives
+                                View all versions of the Vision, Mission, Goals,
+                                and Objectives
                             </p>
                         </div>
 
                         <div className="hidden gap-2 sm:flex">
                             <Button
                                 variant="outline"
-                                onClick={() => router.visit('/usg/admin/vmgo/edit')}
+                                onClick={() =>
+                                    router.visit('/usg/admin/vmgo/edit')
+                                }
                             >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit Current
@@ -142,7 +144,8 @@ export default function VMGOHistory({ history }: Props) {
                                             No History Available
                                         </EmptyTitle>
                                         <EmptyDescription>
-                                            No VMGO versions have been created yet.
+                                            No VMGO versions have been created
+                                            yet.
                                         </EmptyDescription>
                                     </EmptyHeader>
                                 </Empty>

@@ -16,7 +16,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -24,6 +23,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -125,11 +125,21 @@ function AnnouncementsTableSkeleton() {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead><Skeleton className="h-4 w-32" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-32" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-24" />
+                    </TableHead>
                     <TableHead className="w-[100px]">
                         <Skeleton className="h-4 w-16" />
                     </TableHead>
@@ -572,7 +582,9 @@ export default function AnnouncementsManagement({
                                                     )}
                                                     {announcement.category && (
                                                         <Badge variant="outline">
-                                                            {announcement.category}
+                                                            {
+                                                                announcement.category
+                                                            }
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -585,7 +597,9 @@ export default function AnnouncementsManagement({
                                                 <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                                                     <div className="flex items-center gap-1">
                                                         <User className="h-4 w-4" />
-                                                        {announcement.author_name}
+                                                        {
+                                                            announcement.author_name
+                                                        }
                                                     </div>
                                                     <div className="flex items-center gap-1">
                                                         <Calendar className="h-4 w-4" />
@@ -607,123 +621,125 @@ export default function AnnouncementsManagement({
                                             </div>
 
                                             <div className="flex items-center gap-2">
-                                            <Link
-                                                href={preview.url(
-                                                    announcement.slug,
-                                                )}
-                                                className={cn(
-                                                    buttonVariants({
-                                                        variant: 'ghost',
-                                                        size: 'sm',
-                                                    }),
-                                                )}
-                                            >
-                                                <Eye className="h-4 w-4" />
-                                            </Link>
+                                                <Link
+                                                    href={preview.url(
+                                                        announcement.slug,
+                                                    )}
+                                                    className={cn(
+                                                        buttonVariants({
+                                                            variant: 'ghost',
+                                                            size: 'sm',
+                                                        }),
+                                                    )}
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                </Link>
 
-                                            {canManage && (
-                                                <>
-                                                    <Link
-                                                        href={edit.url(
-                                                            announcement.id,
-                                                        )}
-                                                        className={cn(
-                                                            buttonVariants({
-                                                                variant:
-                                                                    'ghost',
-                                                                size: 'sm',
-                                                            }),
-                                                        )}
-                                                    >
-                                                        <Edit className="h-4 w-4" />
-                                                    </Link>
-
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger
-                                                            asChild
+                                                {canManage && (
+                                                    <>
+                                                        <Link
+                                                            href={edit.url(
+                                                                announcement.id,
+                                                            )}
+                                                            className={cn(
+                                                                buttonVariants({
+                                                                    variant:
+                                                                        'ghost',
+                                                                    size: 'sm',
+                                                                }),
+                                                            )}
                                                         >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
+                                                            <Edit className="h-4 w-4" />
+                                                        </Link>
+
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger
+                                                                asChild
                                                             >
-                                                                <MoreVertical className="h-4 w-4" />
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end">
-                                                            {announcement.status ===
-                                                                'draft' && (
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleStatusChange(
-                                                                            announcement,
-                                                                            'pending',
-                                                                        )
-                                                                    }
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
                                                                 >
-                                                                    Submit for
-                                                                    Review
-                                                                </DropdownMenuItem>
-                                                            )}
-                                                            {announcement.status ===
-                                                                'pending' && (
-                                                                <>
+                                                                    <MoreVertical className="h-4 w-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                {announcement.status ===
+                                                                    'draft' && (
                                                                     <DropdownMenuItem
                                                                         onClick={() =>
                                                                             handleStatusChange(
                                                                                 announcement,
-                                                                                'published',
+                                                                                'pending',
                                                                             )
                                                                         }
                                                                     >
-                                                                        Publish
+                                                                        Submit
+                                                                        for
+                                                                        Review
                                                                     </DropdownMenuItem>
+                                                                )}
+                                                                {announcement.status ===
+                                                                    'pending' && (
+                                                                    <>
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    announcement,
+                                                                                    'published',
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Publish
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    announcement,
+                                                                                    'draft',
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Return
+                                                                            to
+                                                                            Draft
+                                                                        </DropdownMenuItem>
+                                                                    </>
+                                                                )}
+                                                                {announcement.status ===
+                                                                    'published' && (
                                                                     <DropdownMenuItem
                                                                         onClick={() =>
                                                                             handleStatusChange(
                                                                                 announcement,
-                                                                                'draft',
+                                                                                'archived',
                                                                             )
                                                                         }
                                                                     >
-                                                                        Return
-                                                                        to Draft
+                                                                        Archive
                                                                     </DropdownMenuItem>
-                                                                </>
-                                                            )}
-                                                            {announcement.status ===
-                                                                'published' && (
+                                                                )}
+                                                                <DropdownMenuSeparator />
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
-                                                                        handleStatusChange(
+                                                                        handleDelete(
                                                                             announcement,
-                                                                            'archived',
                                                                         )
                                                                     }
+                                                                    className="text-red-600 focus:text-red-600"
                                                                 >
-                                                                    Archive
+                                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                                    Delete
                                                                 </DropdownMenuItem>
-                                                            )}
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    handleDelete(
-                                                                        announcement,
-                                                                    )
-                                                                }
-                                                                className="text-red-600 focus:text-red-600"
-                                                            >
-                                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                                Delete
-                                                            </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </>
-                                            )}
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                    </CardContent>
+                                </Card>
+                            ))}
                         </div>
                     ) : (
                         <Card>
@@ -927,40 +943,40 @@ export default function AnnouncementsManagement({
                         </Card>
                     )
                 ) : (
-                        <Card>
-                            <CardContent className="p-12">
-                                <Empty>
-                                    <EmptyHeader>
-                                        <EmptyMedia variant="icon">
-                                            <Megaphone className="h-12 w-12" />
-                                        </EmptyMedia>
-                                        <EmptyTitle>
-                                            No announcements found
-                                        </EmptyTitle>
-                                        <EmptyDescription>
-                                            {searchQuery ||
-                                            selectedStatus ||
-                                            selectedPriority ||
-                                            selectedCategory
-                                                ? 'Try adjusting your search filters to see more results.'
-                                                : 'Get started by creating your first announcement to keep everyone informed.'}
-                                        </EmptyDescription>
-                                    </EmptyHeader>
-                                    {canManage && (
-                                        <EmptyContent>
-                                            <Link
-                                                href={create.url()}
-                                                className={cn(buttonVariants())}
-                                            >
-                                                <Plus className="h-4 w-4" />
-                                                Create Announcement
-                                            </Link>
-                                        </EmptyContent>
-                                    )}
-                                </Empty>
-                            </CardContent>
-                        </Card>
-                    )}
+                    <Card>
+                        <CardContent className="p-12">
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <Megaphone className="h-12 w-12" />
+                                    </EmptyMedia>
+                                    <EmptyTitle>
+                                        No announcements found
+                                    </EmptyTitle>
+                                    <EmptyDescription>
+                                        {searchQuery ||
+                                        selectedStatus ||
+                                        selectedPriority ||
+                                        selectedCategory
+                                            ? 'Try adjusting your search filters to see more results.'
+                                            : 'Get started by creating your first announcement to keep everyone informed.'}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                                {canManage && (
+                                    <EmptyContent>
+                                        <Link
+                                            href={create.url()}
+                                            className={cn(buttonVariants())}
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                            Create Announcement
+                                        </Link>
+                                    </EmptyContent>
+                                )}
+                            </Empty>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
         </AppLayout>
     );

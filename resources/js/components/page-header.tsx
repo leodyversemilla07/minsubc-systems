@@ -1,4 +1,9 @@
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { type LucideIcon } from 'lucide-react';
 import { type ReactNode } from 'react';
@@ -51,9 +56,7 @@ export function PageHeader({
                         )}
                     </div>
                     {actions && (
-                        <div className="flex items-center gap-2">
-                            {actions}
-                        </div>
+                        <div className="flex items-center gap-2">{actions}</div>
                     )}
                 </div>
             </CardHeader>
