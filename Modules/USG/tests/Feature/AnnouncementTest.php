@@ -141,6 +141,10 @@ test('announcement creation validates required fields', function () {
 });
 
 test('announcement can be created with featured image', function () {
+    if (! function_exists('imagecreatetruecolor')) {
+        $this->markTestSkipped('GD extension is not installed');
+    }
+
     $this->seed(RolesAndPermissionsSeeder::class);
 
     Storage::fake('public');

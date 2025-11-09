@@ -9,7 +9,9 @@ interface ViewToggleProps {
 
 export function ViewToggle({ view, onViewChange, className }: ViewToggleProps) {
     return (
-        <div className={`inline-flex items-center rounded-lg border bg-background p-1 ${className || ''}`}>
+        <div
+            className={`inline-flex items-center rounded-lg border bg-background p-1 ${className || ''}`}
+        >
             <Button
                 variant={view === 'grid' ? 'secondary' : 'ghost'}
                 size="sm"

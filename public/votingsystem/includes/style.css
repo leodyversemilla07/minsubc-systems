@@ -1,0 +1,12 @@
+body {
+    background-image: url('slides_4.jpg');
+    /* Replace with your image path */
+    background-size: cover;
+    /* Adjusts the image to cover the entire background */
+    background-position: center;
+    /* Centers the image */
+    background-repeat: no-repeat;
+    /* Prevents repeating the image */
+    background-attachment: fixed;
+    /* Keeps the background fixed on scroll */
+}

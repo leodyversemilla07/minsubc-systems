@@ -276,7 +276,6 @@ export default function ResolutionsIndex({ resolutions }: Props) {
                                         </div>
                                     </div>
                                 ))}
-
                         </div>
                     )}
                 </div>
