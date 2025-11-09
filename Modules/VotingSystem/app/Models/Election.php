@@ -2,9 +2,10 @@
 
 namespace Modules\VotingSystem\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\VotingSystem\Database\Factories\ElectionFactory;
 
 class Election extends Model
 {
@@ -89,6 +90,14 @@ class Election extends Model
      */
     public function hasEnded(): bool
     {
-        return $this->end_time && $this->end_time->isPast();
+        return $this->end_time !== null && $this->end_time->isPast();
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): ElectionFactory
+    {
+        return ElectionFactory::new();
     }
 }

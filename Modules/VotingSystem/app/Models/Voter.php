@@ -2,7 +2,7 @@
 
 namespace Modules\VotingSystem\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -45,6 +45,14 @@ class Voter extends Authenticatable
     public function election(): BelongsTo
     {
         return $this->belongsTo(Election::class);
+    }
+
+    /**
+     * Get the student associated with this voter.
+     */
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class, 'voters_id', 'student_id');
     }
 
     /**

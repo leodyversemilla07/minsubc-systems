@@ -11,6 +11,8 @@ class VotingSystemDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            VotingSystemSeeder::class,
+        ]);
     }
 }

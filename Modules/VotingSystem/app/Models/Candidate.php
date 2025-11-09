@@ -26,6 +26,11 @@ class Candidate extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = ['fullname'];
+
+    /**
      * Get the election that owns the candidate.
      */
     public function election(): BelongsTo
