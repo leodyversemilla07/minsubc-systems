@@ -15,21 +15,25 @@ import registrar from '@/routes/registrar';
 import sas from '@/routes/sas';
 import superAdmin from '@/routes/super-admin';
 import usg from '@/routes/usg';
+import voting from '@/routes/voting';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
     Building2,
     Calendar,
+    CheckSquare,
     ClipboardList,
     FileText,
     Folder,
     GraduationCap,
     LayoutGrid,
+    ListChecks,
     Megaphone,
     Shield,
     Target,
     Users,
+    Vote,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -133,6 +137,47 @@ export function AppSidebar() {
                     title: 'VMGO',
                     href: usg.admin.vmgo.edit.url(),
                     icon: Target,
+                },
+            );
+        }
+
+        // Voting Admin/Manager Navigation
+        else if (hasAnyRole(['voting-admin', 'voting-manager'])) {
+            items.push(
+                {
+                    title: 'Elections',
+                    href: voting.admin.elections.index.url(),
+                    icon: Vote,
+                },
+                {
+                    title: 'Candidates',
+                    href: voting.admin.candidates.index.url(),
+                    icon: Users,
+                },
+                {
+                    title: 'Positions',
+                    href: voting.admin.positions.index.url(),
+                    icon: ListChecks,
+                },
+                {
+                    title: 'Partylists',
+                    href: voting.admin.partylists.index.url(),
+                    icon: Building2,
+                },
+                {
+                    title: 'Voters',
+                    href: voting.admin.voters.index.url(),
+                    icon: CheckSquare,
+                },
+                {
+                    title: 'Activity Logs',
+                    href: voting.admin.activityLogs.index.url(),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Feedback',
+                    href: voting.admin.feedback.index.url(),
+                    icon: FileText,
                 },
             );
         }

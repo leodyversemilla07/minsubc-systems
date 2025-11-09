@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@inertiajs/react';
 import { Edit, FileText, Users, Vote, UserCheck } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
 
 interface Election {
     id: number;
@@ -23,8 +24,14 @@ interface Props {
 }
 
 export default function Show({ election }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+        { title: 'Elections', href: voting.admin.elections.index.url() },
+        { title: election.name, href: voting.admin.elections.show.url({ election: election.id }) },
+    ];
+
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Election: ${election.name}`} />
 
             <div>

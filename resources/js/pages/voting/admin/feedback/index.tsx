@@ -22,6 +22,12 @@ import { Head, Link, router } from '@inertiajs/react';
 import { Eye, Star, MessageSquare, ThumbsUp, ThumbsDown } from 'lucide-react';
 import voting from '@/routes/voting';
 import { format } from 'date-fns';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Feedback', href: voting.admin.feedback.index.url() },
+];
 
 interface Election {
     id: number;
@@ -93,7 +99,7 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
             voting.admin.feedback.index.url(),
             {
                 ...filters,
-                [key]: value || undefined,
+                [key]: value !== 'all' ? value : undefined,
             },
             { preserveState: true }
         );
@@ -130,32 +136,31 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Voter Feedback" />
 
-            <div className="bg-white rounded-lg shadow-md">
+            <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="border-b p-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Voter Feedback</h1>
-                            <p className="text-sm text-gray-600 mt-1">
-                                View and analyze feedback from voters
-                            </p>
-                        </div>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Voter Feedback</h1>
+                        <p className="text-muted-foreground">
+                            View and analyze feedback from voters
+                        </p>
                     </div>
+                </div>
 
-                    {/* Filters */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {/* Filters */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <Select
-                            value={filters.election_id?.toString() || ''}
+                            value={filters.election_id?.toString() || 'all'}
                             onValueChange={(value) => handleFilterChange('election_id', value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="All Elections" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Elections</SelectItem>
+                                <SelectItem value="all">All Elections</SelectItem>
                                 {elections.map((election) => (
                                     <SelectItem key={election.id} value={election.id.toString()}>
                                         {election.name}
@@ -165,14 +170,14 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                         </Select>
 
                         <Select
-                            value={filters.rating?.toString() || ''}
+                            value={filters.rating?.toString() || 'all'}
                             onValueChange={(value) => handleFilterChange('rating', value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="All Ratings" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Ratings</SelectItem>
+                                <SelectItem value="all">All Ratings</SelectItem>
                                 {[5, 4, 3, 2, 1].map((rating) => (
                                     <SelectItem key={rating} value={rating.toString()}>
                                         {rating} Star{rating !== 1 ? 's' : ''}
@@ -182,14 +187,14 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                         </Select>
 
                         <Select
-                            value={filters.experience || ''}
+                            value={filters.experience || 'all'}
                             onValueChange={(value) => handleFilterChange('experience', value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="All Experiences" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Experiences</SelectItem>
+                                <SelectItem value="all">All Experiences</SelectItem>
                                 <SelectItem value="excellent">Excellent</SelectItem>
                                 <SelectItem value="good">Good</SelectItem>
                                 <SelectItem value="average">Average</SelectItem>
@@ -198,8 +203,8 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                         </Select>
                     </div>
 
-                    {(filters.election_id || filters.rating || filters.experience) && (
-                        <div className="mt-3">
+                {(filters.election_id || filters.rating || filters.experience) && (
+                    <div className="mt-3">
                             <Button
                                 variant="ghost"
                                 onClick={() =>
@@ -207,13 +212,12 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                 }
                             >
                                 Clear Filters
-                            </Button>
-                        </div>
-                    )}
-                </div>
+                        </Button>
+                    </div>
+                )}
 
                 {/* Statistics */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 border-b bg-gray-50">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card>
                         <CardHeader className="pb-2">
                             <CardTitle className="text-sm font-medium text-gray-600">
@@ -273,11 +277,11 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                 </CardContent>
                             </Card>
                         </>
-                    )}
+                )}
                 </div>
 
                 {/* Table */}
-                <div className="p-6">
+                <div>
                     {feedback.data.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
@@ -357,12 +361,12 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                             onClick={() => link.url && router.visit(link.url)}
                                             dangerouslySetInnerHTML={{ __html: link.label }}
                                         />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
             </div>
         </AppLayout>
     );

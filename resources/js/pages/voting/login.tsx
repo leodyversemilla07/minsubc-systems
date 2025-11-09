@@ -25,19 +25,28 @@ interface LoginPageProps {
 
 export default function Login({ elections, flash }: LoginPageProps) {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-50 to-white flex items-center justify-center px-4 py-12">
+        <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center px-4 py-12">
             <div className="max-w-md w-full">
                 {/* Login Card */}
-                <div className="bg-white rounded-xl shadow-2xl p-8 border border-gray-100">
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 border border-gray-100 dark:border-gray-800">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        {/* Logo */}
+                        <div className="mb-6 flex justify-center">
+                            <img 
+                                src="/votesys-logo.png" 
+                                alt="VoteSys Logo" 
+                                className="h-20 w-auto"
+                            />
+                        </div>
+                        
+                        <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                             <Lock className="w-8 h-8 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-2">
+                        <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent mb-2">
                             Voter Login
                         </h2>
-                        <p className="text-gray-600">
+                        <p className="text-gray-600 dark:text-gray-300">
                             Enter your credentials to cast your vote
                         </p>
                     </div>
@@ -49,8 +58,8 @@ export default function Login({ elections, flash }: LoginPageProps) {
 
                     {/* Display Success Message */}
                     {flash?.success && (
-                        <Alert className="mb-6 border-green-200 bg-green-50 text-green-800">
-                            <CircleCheck className="h-4 w-4 text-green-600" />
+                        <Alert className="mb-6 border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200">
+                            <CircleCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
                             <div>{flash.success}</div>
                         </Alert>
                     )}
@@ -84,7 +93,7 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                             id="election_id"
                                             name="election_id"
                                             required
-                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition bg-white text-gray-900"
+                                            className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 dark:focus:ring-green-600 focus:border-green-500 dark:focus:border-green-600 transition bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                                             aria-label="Select an election"
                                         >
                                             <option value="">Select an election</option>
@@ -101,7 +110,7 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                                 name="election_id"
                                                 value={elections[0].id}
                                             />
-                                            <div className="text-sm text-gray-700 font-medium p-3 border-2 border-green-200 rounded-lg bg-green-50">
+                                            <div className="text-sm text-gray-700 dark:text-gray-300 font-medium p-3 border-2 border-green-200 dark:border-green-800 rounded-lg bg-green-50 dark:bg-green-950">
                                                 {elections[0].name}
                                             </div>
                                         </>
@@ -157,7 +166,7 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                 <Button
                                     type="submit"
                                     disabled={processing || elections.length === 0}
-                                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-6 text-lg font-semibold shadow-lg"
+                                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 py-6 text-lg font-semibold shadow-lg"
                                 >
                                     {processing ? (
                                         <>
@@ -177,11 +186,11 @@ export default function Login({ elections, flash }: LoginPageProps) {
 
                     {/* Additional Links */}
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                             Not a voter yet?{' '}
                             <Link
                                 href={voting.index.url()}
-                                className="text-green-600 hover:underline font-semibold"
+                                className="text-green-600 dark:text-green-400 hover:underline font-semibold"
                             >
                                 Learn more
                             </Link>
@@ -190,12 +199,12 @@ export default function Login({ elections, flash }: LoginPageProps) {
                 </div>
 
                 {/* Info Card */}
-                <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 text-green-800 px-6 py-4 rounded-xl text-center shadow-lg">
+                <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 border-2 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-6 py-4 rounded-xl text-center shadow-lg">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                        <Info className="w-5 h-5 text-green-600" />
+                        <Info className="w-5 h-5 text-green-600 dark:text-green-400" />
                         <span className="font-bold text-lg">Secure Voting System</span>
                     </div>
-                    <p className="text-sm text-green-700">
+                    <p className="text-sm text-green-700 dark:text-green-300">
                         Your vote is encrypted, anonymous, and secure. Protected by industry-standard security protocols.
                     </p>
                 </div>

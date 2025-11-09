@@ -21,6 +21,12 @@ import { Head, Link, router } from '@inertiajs/react';
 import { Eye, Database } from 'lucide-react';
 import voting from '@/routes/voting';
 import { format } from 'date-fns';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Activity Logs', href: voting.admin.activityLogs.index.url() },
+];
 
 interface Election {
     id: number;
@@ -77,7 +83,7 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
             voting.admin.activityLogs.index.url(),
             {
                 ...filters,
-                [key]: value || undefined,
+                [key]: value !== 'all' ? value : undefined,
             },
             { preserveState: true }
         );
@@ -118,32 +124,31 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Voter Activity Logs" />
 
-            <div className="bg-white rounded-lg shadow-md">
+            <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="border-b p-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Voter Activity Logs</h1>
-                            <p className="text-sm text-gray-600 mt-1">
-                                Track and monitor all voter activities across elections
-                            </p>
-                        </div>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Voter Activity Logs</h1>
+                        <p className="text-muted-foreground">
+                            Track and monitor all voter activities across elections
+                        </p>
                     </div>
+                </div>
 
-                    {/* Filters */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {/* Filters */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <Select
-                            value={filters.election_id?.toString() || ''}
+                            value={filters.election_id?.toString() || 'all'}
                             onValueChange={(value) => handleFilterChange('election_id', value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="All Elections" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Elections</SelectItem>
+                                <SelectItem value="all">All Elections</SelectItem>
                                 {elections.map((election) => (
                                     <SelectItem key={election.id} value={election.id.toString()}>
                                         {election.name}
@@ -153,14 +158,14 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                         </Select>
 
                         <Select
-                            value={filters.action || ''}
+                            value={filters.action || 'all'}
                             onValueChange={(value) => handleFilterChange('action', value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="All Actions" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Actions</SelectItem>
+                                <SelectItem value="all">All Actions</SelectItem>
                                 {Object.entries(actions).map(([key, label]) => (
                                     <SelectItem key={key} value={key}>
                                         {label}
@@ -180,10 +185,9 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                             </Button>
                         )}
                     </div>
-                </div>
 
                 {/* Stats Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 border-b bg-gray-50">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="text-center">
                         <div className="text-2xl font-bold text-gray-800">{activityLogs.total}</div>
                         <div className="text-sm text-gray-600">Total Activities</div>
@@ -263,7 +267,7 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                                             <TableCell className="text-right">
                                                 <Link
                                                     href={voting.admin.activityLogs.show.url({
-                                                        activity_log: log.id,
+                                                        activityLog: log.id,
                                                     })}
                                                 >
                                                     <Button variant="ghost" size="sm">

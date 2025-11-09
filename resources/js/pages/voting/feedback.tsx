@@ -4,9 +4,9 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import AppLayout from '@/layouts/app-layout';
+import { Item, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/item';
 import { Head, router, useForm } from '@inertiajs/react';
-import { Star, CheckCircle, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Star, CheckCircle, ThumbsUp, ThumbsDown, Navigation, BookOpen, Zap, Users, Smartphone, Eye } from 'lucide-react';
 import { useState } from 'react';
 import voting from '@/routes/voting';
 
@@ -18,9 +18,10 @@ interface Election {
 interface Props {
     election: Election;
     hasSubmittedFeedback: boolean;
+    feedbackToken?: string;
 }
 
-export default function Feedback({ election, hasSubmittedFeedback }: Props) {
+export default function Feedback({ election, hasSubmittedFeedback, feedbackToken }: Props) {
     const [selectedRating, setSelectedRating] = useState(0);
     const [hoveredRating, setHoveredRating] = useState(0);
 
@@ -30,15 +31,16 @@ export default function Feedback({ election, hasSubmittedFeedback }: Props) {
         experience: '',
         would_recommend: null as boolean | null,
         improvements: [] as string[],
+        token: feedbackToken || '',
     });
 
     const improvementOptions = [
-        'Easier navigation',
-        'Better instructions',
-        'Faster loading times',
-        'More candidate information',
-        'Improved mobile experience',
-        'Better accessibility',
+        { label: 'Easier navigation', icon: Navigation },
+        { label: 'Better instructions', icon: BookOpen },
+        { label: 'Faster loading times', icon: Zap },
+        { label: 'More candidate information', icon: Users },
+        { label: 'Improved mobile experience', icon: Smartphone },
+        { label: 'Better accessibility', icon: Eye },
     ];
 
     const handleRatingClick = (rating: number) => {
@@ -72,23 +74,23 @@ export default function Feedback({ election, hasSubmittedFeedback }: Props) {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="Feedback" />
 
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-950 dark:to-gray-900 p-4">
                 <div className="w-full max-w-2xl">
-                    <Card>
+                    <Card className="dark:bg-gray-900 dark:border-gray-800">
                         <CardHeader className="text-center">
-                            <CardTitle className="text-2xl">We Value Your Feedback!</CardTitle>
-                            <CardDescription>
+                            <CardTitle className="text-2xl dark:text-gray-100">We Value Your Feedback!</CardTitle>
+                            <CardDescription className="dark:text-gray-400">
                                 Help us improve the voting experience for {election.name}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             {hasSubmittedFeedback ? (
-                                <Alert className="bg-green-50 border-green-200">
-                                    <CheckCircle className="h-4 w-4 text-green-600" />
-                                    <AlertDescription className="text-green-800">
+                                <Alert className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-500" />
+                                    <AlertDescription className="text-green-800 dark:text-green-200">
                                         Thank you! You have already submitted feedback for this election.
                                     </AlertDescription>
                                 </Alert>
@@ -169,23 +171,47 @@ export default function Feedback({ election, hasSubmittedFeedback }: Props) {
                                     <Field>
                                         <FieldLabel>What could we improve? (Select all that apply)</FieldLabel>
                                         <div className="space-y-2">
-                                            {improvementOptions.map((improvement) => (
-                                                <div key={improvement} className="flex items-center space-x-2">
-                                                    <Checkbox
-                                                        id={improvement}
-                                                        checked={data.improvements.includes(improvement)}
-                                                        onCheckedChange={() =>
-                                                            handleImprovementToggle(improvement)
-                                                        }
-                                                    />
-                                                    <label
-                                                        htmlFor={improvement}
-                                                        className="text-sm cursor-pointer"
+                                            {improvementOptions.map((improvement) => {
+                                                const Icon = improvement.icon;
+                                                const isChecked = data.improvements.includes(improvement.label);
+                                                
+                                                return (
+                                                    <Item 
+                                                        key={improvement.label}
+                                                        variant="outline"
+                                                        className={`cursor-pointer transition-all ${
+                                                            isChecked 
+                                                                ? 'border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-950' 
+                                                                : 'hover:border-gray-400 dark:hover:border-gray-600'
+                                                        }`}
+                                                        onClick={() => handleImprovementToggle(improvement.label)}
                                                     >
-                                                        {improvement}
-                                                    </label>
-                                                </div>
-                                            ))}
+                                                        <ItemMedia>
+                                                            <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
+                                                                isChecked 
+                                                                    ? 'bg-green-100 dark:bg-green-900' 
+                                                                    : 'bg-gray-100 dark:bg-gray-800'
+                                                            }`}>
+                                                                <Icon className={`h-4 w-4 ${
+                                                                    isChecked 
+                                                                        ? 'text-green-600 dark:text-green-400' 
+                                                                        : 'text-gray-600 dark:text-gray-400'
+                                                                }`} />
+                                                            </div>
+                                                        </ItemMedia>
+                                                        <ItemContent>
+                                                            <ItemTitle className="text-gray-900 dark:text-gray-100">
+                                                                {improvement.label}
+                                                            </ItemTitle>
+                                                        </ItemContent>
+                                                        <Checkbox
+                                                            checked={isChecked}
+                                                            onCheckedChange={() => handleImprovementToggle(improvement.label)}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    </Item>
+                                                );
+                                            })}
                                         </div>
                                     </Field>
 
@@ -232,6 +258,6 @@ export default function Feedback({ election, hasSubmittedFeedback }: Props) {
                     </Card>
                 </div>
             </div>
-        </AppLayout>
+        </>
     );
 }

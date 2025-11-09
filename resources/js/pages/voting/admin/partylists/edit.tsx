@@ -5,6 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
 
 interface Election {
     id: number;
@@ -24,6 +25,12 @@ interface Props {
 }
 
 export default function Edit({ partylist, errors = {} }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+        { title: 'Partylists', href: voting.admin.partylists.index.url() },
+        { title: partylist.name, href: voting.admin.partylists.show.url({ partylist: partylist.partylist_id }) },
+        { title: 'Edit', href: voting.admin.partylists.edit.url({ partylist: partylist.partylist_id }) },
+    ];
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -32,7 +39,7 @@ export default function Edit({ partylist, errors = {} }: Props) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Partylist" />
 
             <div className="max-w-3xl">

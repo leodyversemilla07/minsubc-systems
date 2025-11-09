@@ -7,6 +7,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { KeyRound, RotateCcw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
 
 interface Election {
     id: number;
@@ -53,6 +54,12 @@ interface Props {
 }
 
 export default function Show({ voter }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+        { title: 'Voters', href: voting.admin.voters.index.url() },
+        { title: voter.student?.user?.full_name || voter.voters_id, href: '#' },
+    ];
+
     const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
     const [newPassword, setNewPassword] = useState('');
 
@@ -76,7 +83,7 @@ export default function Show({ voter }: Props) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Voter: ${voter.voters_id}`} />
 
             <div className="max-w-4xl">

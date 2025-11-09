@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -131,6 +132,9 @@ class BallotController extends Controller
 
         DB::beginTransaction();
         try {
+            $timestamp = now();
+            $referenceId = 'REF-'.strtoupper(substr(md5($voter->id.$timestamp), 0, 8));
+
             // Save all votes
             foreach ($validated['votes'] as $positionId => $candidateIds) {
                 foreach ($candidateIds as $candidateId) {
@@ -139,7 +143,7 @@ class BallotController extends Controller
                         'voters_id' => $voter->id,
                         'candidate_id' => $candidateId,
                         'position_id' => $positionId,
-                        'timestamp' => now(),
+                        'timestamp' => $timestamp,
                     ]);
                 }
             }
@@ -158,14 +162,52 @@ class BallotController extends Controller
                 ]
             );
 
+            // Prepare vote summary for confirmation page
+            $voteSummary = [];
+            foreach ($validated['votes'] as $positionId => $candidateIds) {
+                $position = $positions->firstWhere('position_id', $positionId);
+                foreach ($candidateIds as $candidateId) {
+                    $candidate = $position->candidates->firstWhere('id', $candidateId);
+                    $voteSummary[] = [
+                        'position' => $position->description,
+                        'candidate' => $candidate->fullname,
+                        'partylist' => $candidate->partylist?->name,
+                    ];
+                }
+            }
+
             DB::commit();
+
+            // Prepare vote data for confirmation page
+            $confirmationKey = 'vote_confirmation_'.$referenceId;
+            $feedbackToken = 'feedback_token_'.bin2hex(random_bytes(16));
+
+            $confirmationData = [
+                'votes' => $voteSummary,
+                'election' => [
+                    'id' => $election->id,
+                    'name' => $election->name,
+                ],
+                'referenceId' => $referenceId,
+                'timestamp' => $timestamp->toISOString(),
+                'feedbackToken' => $feedbackToken,
+            ];
+
+            // Store in cache for 30 minutes (enough time to view confirmation and receipt)
+            Cache::put($confirmationKey, $confirmationData, now()->addMinutes(30));
+
+            // Store feedback token with voter ID for 30 minutes
+            Cache::put($feedbackToken, [
+                'voter_id' => $voter->id,
+                'election_id' => $election->id,
+            ], now()->addMinutes(30));
 
             // Log out the voter
             Auth::guard('voter')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('voting.confirmation')
+            return redirect()->route('voting.confirmation', ['ref' => $referenceId])
                 ->with('success', 'Your vote has been successfully recorded!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -177,8 +219,55 @@ class BallotController extends Controller
     /**
      * Show the confirmation page after voting.
      */
-    public function confirmation(): Response
+    public function confirmation(Request $request): Response
     {
-        return Inertia::render('voting/confirmation');
+        $referenceId = $request->query('ref');
+        $confirmationData = [];
+
+        if ($referenceId) {
+            $confirmationKey = 'vote_confirmation_'.$referenceId;
+            $confirmationData = Cache::get($confirmationKey, []);
+
+            // Delete the cache entry after retrieving it (one-time use)
+            if (! empty($confirmationData)) {
+                Cache::forget($confirmationKey);
+            }
+        }
+
+        return Inertia::render('voting/confirmation', [
+            'votes' => $confirmationData['votes'] ?? [],
+            'election' => $confirmationData['election'] ?? null,
+            'referenceId' => $confirmationData['referenceId'] ?? null,
+            'timestamp' => $confirmationData['timestamp'] ?? null,
+            'feedbackToken' => $confirmationData['feedbackToken'] ?? null,
+        ]);
+    }
+
+    /**
+     * Show the printable receipt for the vote.
+     */
+    public function receipt(Request $request)
+    {
+        $referenceId = $request->query('ref');
+
+        if (! $referenceId) {
+            return redirect()->route('voting.index')
+                ->with('error', 'Invalid receipt reference.');
+        }
+
+        $confirmationKey = 'vote_confirmation_'.$referenceId;
+        $confirmationData = Cache::get($confirmationKey);
+
+        if (! $confirmationData) {
+            return redirect()->route('voting.index')
+                ->with('error', 'Receipt has expired or does not exist.');
+        }
+
+        return view('VotingSystem::receipt', [
+            'votes' => $confirmationData['votes'] ?? [],
+            'election' => (object) ($confirmationData['election'] ?? []),
+            'referenceId' => $confirmationData['referenceId'] ?? $referenceId,
+            'timestamp' => $confirmationData['timestamp'] ?? now()->toISOString(),
+        ]);
     }
 }

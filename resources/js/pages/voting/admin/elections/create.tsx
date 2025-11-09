@@ -6,6 +6,13 @@ import { Head, Link } from '@inertiajs/react';
 import { Form } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Elections', href: voting.admin.elections.index.url() },
+    { title: 'Create', href: voting.admin.elections.create.url() },
+];
 
 interface Props {
     errors?: Record<string, string>;
@@ -13,7 +20,7 @@ interface Props {
 
 export default function Create({ errors = {} }: Props) {
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Election" />
 
             <div className="max-w-3xl">

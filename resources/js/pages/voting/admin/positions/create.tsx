@@ -6,6 +6,13 @@ import { Head, Link, router } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Positions', href: voting.admin.positions.index.url() },
+    { title: 'Create', href: voting.admin.positions.create.url() },
+];
 
 interface Election {
     id: number;
@@ -34,7 +41,7 @@ export default function Create({ elections, selectedElectionId, errors = {} }: P
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Add Position" />
 
             <div className="max-w-3xl">

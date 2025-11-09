@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Ensure required roles exist
-        $requiredRoles = ['student', 'cashier', 'registrar-staff', 'registrar-admin', 'usg-admin', 'sas-staff', 'sas-admin', 'super-admin'];
+        $requiredRoles = ['student', 'super-admin'];
 
         foreach ($requiredRoles as $roleName) {
             if (! Role::where('name', $roleName)->exists()) {
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             }
         }
 
-        // Create sample users for different roles based on RBAC system
+        // Create core users (Students and Super Admin)
         $users = [
             // Students
             [
@@ -115,90 +115,6 @@ class UserSeeder extends Seeder
                 ],
             ],
 
-            // Cashier
-            [
-                'first_name' => 'Elena',
-                'middle_name' => 'Cruz',
-                'last_name' => 'Martinez',
-                'email' => 'elena.martinez@minsu.edu.ph',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'cashier',
-            ],
-
-            // Registrar Staff
-            [
-                'first_name' => 'Roberto',
-                'middle_name' => 'Diaz',
-                'last_name' => 'Santiago',
-                'email' => 'roberto.santiago@minsu.edu.ph',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'registrar-staff',
-            ],
-            [
-                'first_name' => 'Patricia',
-                'middle_name' => 'Luna',
-                'last_name' => 'Fernandez',
-                'email' => 'patricia.fernandez@minsu.edu.ph',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'registrar-staff',
-            ],
-
-            // Registrar Admin
-            [
-                'first_name' => 'Miguel',
-                'middle_name' => 'Antonio',
-                'last_name' => 'Torres',
-                'email' => 'miguel.torres@minsu.edu.ph',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'registrar-admin',
-            ],
-
-            // USG Admin
-            [
-                'first_name' => 'USG',
-                'middle_name' => null,
-                'last_name' => 'Administrator',
-                'email' => 'usg-admin@minsu.edu.ph',
-                'password' => Hash::make('USGAdmin@2024'),
-                'email_verified_at' => now(),
-                'role' => 'usg-admin',
-            ],
-
-            // SAS Staff
-            [
-                'first_name' => 'Sophia',
-                'middle_name' => 'Mae',
-                'last_name' => 'Villanueva',
-                'email' => 'sophia.villanueva@minsu.edu.ph',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'sas-staff',
-            ],
-            [
-                'first_name' => 'Marco',
-                'middle_name' => 'Luis',
-                'last_name' => 'Ramos',
-                'email' => 'marco.ramos@minsu.edu.ph',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'sas-staff',
-            ],
-
-            // SAS Admin
-            [
-                'first_name' => 'SAS',
-                'middle_name' => null,
-                'last_name' => 'Administrator',
-                'email' => 'sas-admin@minsu.edu.ph',
-                'password' => Hash::make('SASAdmin@2024'),
-                'email_verified_at' => now(),
-                'role' => 'sas-admin',
-            ],
-
             // Super Admin
             [
                 'first_name' => 'Super',
@@ -266,5 +182,20 @@ class UserSeeder extends Seeder
                 ]);
             });
         }
+
+        $this->command->info('✓ Core users (Students & Super Admin) created successfully!');
+        $this->command->info('');
+        $this->command->info('Creating module-specific users...');
+
+        // Call module-specific user seeders
+        $this->call([
+            \Modules\Registrar\Database\Seeders\RegistrarUsersSeeder::class,
+            \Modules\USG\Database\Seeders\USGUsersSeeder::class,
+            \Modules\SAS\Database\Seeders\SASUsersSeeder::class,
+            \Modules\VotingSystem\Database\Seeders\VotingSystemUsersSeeder::class,
+        ]);
+
+        $this->command->info('');
+        $this->command->info('✅ All users have been seeded successfully!');
     }
 }

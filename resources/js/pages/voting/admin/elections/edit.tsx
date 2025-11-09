@@ -6,6 +6,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Form } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
 
 interface Election {
     id: number;
@@ -26,8 +27,15 @@ export default function Edit({ election, errors = {} }: Props) {
         ? new Date(election.end_time).toISOString().slice(0, 16)
         : '';
 
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+        { title: 'Elections', href: voting.admin.elections.index.url() },
+        { title: election.name, href: voting.admin.elections.show.url({ election: election.id }) },
+        { title: 'Edit', href: voting.admin.elections.edit.url({ election: election.id }) },
+    ];
+
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Election" />
 
             <div className="max-w-3xl">

@@ -6,6 +6,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, User, Calendar, MapPin, Monitor, Database } from 'lucide-react';
 import voting from '@/routes/voting';
 import { format } from 'date-fns';
+import { type BreadcrumbItem } from '@/types';
 
 interface Election {
     id: number;
@@ -35,6 +36,12 @@ interface Props {
 }
 
 export default function Show({ activityLog }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+        { title: 'Activity Logs', href: voting.admin.activityLogs.index.url() },
+        { title: `Log #${activityLog.id}`, href: voting.admin.activityLogs.show.url({ activityLog: activityLog.id }) },
+    ];
+
     const getActionColor = (action: string) => {
         switch (action) {
             case 'login':
@@ -61,7 +68,7 @@ export default function Show({ activityLog }: Props) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Activity Log #${activityLog.id}`} />
 
             <div className="max-w-4xl mx-auto">

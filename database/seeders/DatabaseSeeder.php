@@ -28,11 +28,5 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SASDatabaseSeeder::class,
         ]);
-
-        // Seed Voting System data
-        $this->call([
-            VotingAdminSeeder::class,
-            CourseSeeder::class,
-        ]);
     }
 }

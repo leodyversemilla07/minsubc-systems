@@ -20,6 +20,12 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Eye, Flag, Plus, Trash2 } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Partylists', href: voting.admin.partylists.index.url() },
+];
 
 interface Election {
     id: number;
@@ -47,39 +53,38 @@ export default function Index({ partylists, elections, selectedElectionId }: Pro
     };
 
     const handleElectionChange = (value: string) => {
-        router.get(voting.admin.partylists.index.url(), value ? { election_id: value } : {});
+        router.get(voting.admin.partylists.index.url(), value !== 'all' ? { election_id: value } : {});
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Partylists" />
 
-            <div className="bg-white rounded-lg shadow-md">
+            <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="border-b p-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Partylists</h1>
-                            <p className="text-sm text-gray-600 mt-1">Manage political parties and groups</p>
-                        </div>
-                        <Link
-                            href={voting.admin.partylists.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
-                        >
-                            <Button className="bg-blue-600 hover:bg-blue-700">
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add Partylist
-                            </Button>
-                        </Link>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Partylists</h1>
+                        <p className="text-muted-foreground">Manage political parties and groups</p>
                     </div>
+                    <Link
+                        href={voting.admin.partylists.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
+                    >
+                        <Button className="bg-blue-600 hover:bg-blue-700">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Partylist
+                        </Button>
+                    </Link>
+                </div>
 
-                    {/* Election Filter */}
-                    <div className="flex gap-3">
-                        <Select value={selectedElectionId?.toString() || ''} onValueChange={handleElectionChange}>
+                {/* Election Filter */}
+                <div className="flex gap-3">
+                        <Select value={selectedElectionId?.toString() || 'all'} onValueChange={handleElectionChange}>
                             <SelectTrigger className="w-64">
                                 <SelectValue placeholder="All Elections" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Elections</SelectItem>
+                                <SelectItem value="all">All Elections</SelectItem>
                                 {elections.map((election) => (
                                     <SelectItem key={election.id} value={election.id.toString()}>
                                         {election.name}
@@ -88,10 +93,9 @@ export default function Index({ partylists, elections, selectedElectionId }: Pro
                             </SelectContent>
                         </Select>
                     </div>
-                </div>
 
                 {/* Partylists List */}
-                <div className="p-6">
+                <div>
                     {partylists.length === 0 ? (
                         <Empty>
                             <EmptyMedia>

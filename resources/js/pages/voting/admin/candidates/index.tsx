@@ -20,6 +20,12 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Eye, Plus, Trash2, Users } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Candidates', href: voting.admin.candidates.index.url() },
+];
 
 interface Election {
     id: number;
@@ -62,39 +68,38 @@ export default function Index({ candidates, elections, selectedElectionId }: Pro
     };
 
     const handleElectionChange = (value: string) => {
-        router.get(voting.admin.candidates.index.url(), value ? { election_id: value } : {});
+        router.get(voting.admin.candidates.index.url(), value !== 'all' ? { election_id: value } : {});
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Candidates" />
 
-            <div className="bg-white rounded-lg shadow-md">
+            <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="border-b p-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800">Candidates</h1>
-                            <p className="text-sm text-gray-600 mt-1">Manage election candidates</p>
-                        </div>
-                        <Link
-                            href={voting.admin.candidates.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
-                        >
-                            <Button className="bg-blue-600 hover:bg-blue-700">
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add Candidate
-                            </Button>
-                        </Link>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Candidates</h1>
+                        <p className="text-muted-foreground">Manage election candidates</p>
                     </div>
+                    <Link
+                        href={voting.admin.candidates.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
+                    >
+                        <Button className="bg-blue-600 hover:bg-blue-700">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Candidate
+                        </Button>
+                    </Link>
+                </div>
 
-                    {/* Election Filter */}
-                    <div className="flex gap-3">
-                        <Select value={selectedElectionId?.toString() || ''} onValueChange={handleElectionChange}>
+                {/* Election Filter */}
+                <div className="flex gap-3">
+                        <Select value={selectedElectionId?.toString() || 'all'} onValueChange={handleElectionChange}>
                             <SelectTrigger className="w-64">
                                 <SelectValue placeholder="All Elections" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">All Elections</SelectItem>
+                                <SelectItem value="all">All Elections</SelectItem>
                                 {elections.map((election) => (
                                     <SelectItem key={election.id} value={election.id.toString()}>
                                         {election.name}
@@ -103,10 +108,9 @@ export default function Index({ candidates, elections, selectedElectionId }: Pro
                             </SelectContent>
                         </Select>
                     </div>
-                </div>
 
                 {/* Candidates List */}
-                <div className="p-6">
+                <div>
                     {candidates.length === 0 ? (
                         <Empty>
                             <EmptyMedia>

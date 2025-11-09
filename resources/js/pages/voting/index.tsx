@@ -16,20 +16,29 @@ interface IndexPageProps {
 
 export default function Index({ activeElection }: IndexPageProps) {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white">
+        <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
             {/* Hero Section */}
             <div className="container mx-auto px-4 py-16 lg:py-24">
                 <div className="text-center max-w-4xl mx-auto">
+                    {/* Logo */}
+                    <div className="mb-8 flex justify-center">
+                        <img 
+                            src="/votesys-logo.png" 
+                            alt="VoteSys Logo" 
+                            className="h-24 w-auto"
+                        />
+                    </div>
+
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-6 animate-pulse">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-300 rounded-full text-sm font-semibold mb-6 animate-pulse border border-green-200 dark:border-green-800">
                         <CheckCircle2 className="w-4 h-4" />
                         Secure • Transparent • Reliable
                     </div>
 
-                    <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6 leading-tight">
+                    <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent mb-6 leading-tight">
                         Electronic Voting System
                     </h1>
-                    <p className="text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
                         Participate in democratic decision-making with our secure, transparent, and efficient digital voting platform
                     </p>
 
@@ -37,7 +46,7 @@ export default function Index({ activeElection }: IndexPageProps) {
                         <Link
                             href={voting.login.url()}
                         >
-                            <Button className="px-8 py-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                            <Button className="px-8 py-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 text-white text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
                                 <Vote className="w-5 h-5 mr-2" />
                                 Cast Your Vote
                                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -47,7 +56,7 @@ export default function Index({ activeElection }: IndexPageProps) {
                             <Link
                                 href={voting.results.url({ election: activeElection.id })}
                             >
-                                <Button variant="outline" className="px-8 py-6 border-2 border-green-600 text-green-600 hover:bg-green-50 text-lg rounded-xl shadow-lg">
+                                <Button variant="outline" className="px-8 py-6 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950 text-lg rounded-xl shadow-lg">
                                     <BarChart3 className="w-5 h-5 mr-2" />
                                     View Results
                                 </Button>
@@ -57,12 +66,12 @@ export default function Index({ activeElection }: IndexPageProps) {
 
                     {/* Active Election Notice */}
                     {activeElection && (
-                        <Card className="mt-8 border-2 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 shadow-lg">
+                        <Card className="mt-8 border-2 border-green-200 dark:border-green-800 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 shadow-lg">
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-center gap-3">
-                                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                                    <p className="text-green-700 font-semibold">
-                                        <span className="text-green-900">Active Election:</span> {activeElection.name}
+                                    <div className="w-3 h-3 bg-green-500 dark:bg-green-400 rounded-full animate-pulse" />
+                                    <p className="text-green-700 dark:text-green-300 font-semibold">
+                                        <span className="text-green-900 dark:text-green-100">Active Election:</span> {activeElection.name}
                                     </p>
                                 </div>
                             </CardContent>
@@ -72,84 +81,84 @@ export default function Index({ activeElection }: IndexPageProps) {
             </div>
 
             {/* Features Section */}
-            <div className="container mx-auto px-4 py-16 bg-white/50 backdrop-blur-sm">
+            <div className="container mx-auto px-4 py-16 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
                         Why Choose Our Voting System?
                     </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                         Built with cutting-edge technology to ensure your vote counts
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 border border-gray-100">
-                        <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 border border-gray-100 dark:border-gray-800">
+                        <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-600 dark:from-green-500 dark:to-emerald-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                             <Shield className="w-8 h-8 text-white" />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Secure & Private</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">Secure & Private</h3>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                             Military-grade encryption and authentication ensure your vote is protected and anonymous
                         </p>
-                        <ul className="mt-4 space-y-2 text-sm text-gray-600">
+                        <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-600" />
+                                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-500" />
                                 End-to-end encryption
                             </li>
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-600" />
+                                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-500" />
                                 Anonymous voting
                             </li>
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-600" />
+                                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-500" />
                                 Secure authentication
                             </li>
                         </ul>
                     </div>
 
-                    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 border border-gray-100">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 border border-gray-100 dark:border-gray-800">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                             <Zap className="w-8 h-8 text-white" />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Fast & Efficient</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">Fast & Efficient</h3>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                             Real-time vote counting and instant results when the election concludes
                         </p>
-                        <ul className="mt-4 space-y-2 text-sm text-gray-600">
+                        <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                                <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-500" />
                                 Instant vote submission
                             </li>
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                                <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-500" />
                                 Real-time counting
                             </li>
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                                <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-500" />
                                 Immediate results
                             </li>
                         </ul>
                     </div>
 
-                    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 border border-gray-100">
-                        <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 border border-gray-100 dark:border-gray-800">
+                        <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 dark:from-purple-500 dark:to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                             <TrendingUp className="w-8 h-8 text-white" />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Transparent & Verifiable</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">Transparent & Verifiable</h3>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                             Complete audit trail and verifiable results for all stakeholders
                         </p>
-                        <ul className="mt-4 space-y-2 text-sm text-gray-600">
+                        <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-600" />
+                                <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-purple-500" />
                                 Full audit trail
                             </li>
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-600" />
+                                <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-purple-500" />
                                 Public results
                             </li>
                             <li className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-600" />
+                                <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-purple-500" />
                                 Verifiable votes
                             </li>
                         </ul>
@@ -160,10 +169,10 @@ export default function Index({ activeElection }: IndexPageProps) {
             {/* How It Works Section */}
             <div className="container mx-auto px-4 py-16">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
                         How It Works
                     </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                         Simple, secure, and straightforward voting process
                     </p>
                 </div>
@@ -178,15 +187,15 @@ export default function Index({ activeElection }: IndexPageProps) {
                         ].map((item) => (
                             <div key={item.step} className="text-center">
                                 <div className="relative mb-4">
-                                    <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-xl">
+                                    <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 dark:from-green-500 dark:to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-xl">
                                         <item.icon className="w-10 h-10 text-white" />
                                     </div>
-                                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-600 dark:bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
                                         {item.step}
                                     </div>
                                 </div>
-                                <h3 className="font-bold text-lg text-gray-900 mb-2">{item.title}</h3>
-                                <p className="text-sm text-gray-600">{item.desc}</p>
+                                <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-2">{item.title}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -195,7 +204,7 @@ export default function Index({ activeElection }: IndexPageProps) {
 
             {/* CTA Section */}
             <div className="container mx-auto px-4 py-16">
-                <div className="max-w-4xl mx-auto bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl shadow-2xl p-12 text-center text-white">
+                <div className="max-w-4xl mx-auto bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 rounded-3xl shadow-2xl p-12 text-center text-white">
                     <h2 className="text-3xl lg:text-4xl font-bold mb-4">
                         Ready to Make Your Voice Heard?
                     </h2>
@@ -203,7 +212,7 @@ export default function Index({ activeElection }: IndexPageProps) {
                         Join thousands of voters in shaping the future
                     </p>
                     <Link href={voting.login.url()}>
-                        <Button className="px-10 py-6 bg-white text-green-600 hover:bg-gray-100 text-lg font-bold rounded-xl shadow-xl transform hover:scale-105 transition-all">
+                        <Button className="px-10 py-6 bg-white text-green-600 dark:text-green-700 hover:bg-gray-100 dark:hover:bg-gray-200 text-lg font-bold rounded-xl shadow-xl transform hover:scale-105 transition-all">
                             Start Voting Now
                             <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>

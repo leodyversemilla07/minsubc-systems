@@ -25,14 +25,32 @@ class FortifyServiceProvider extends ServiceProvider
                 $user = auth()->user();
                 $userRoles = $user->roles->pluck('name')->toArray();
 
-                if (array_intersect($userRoles, ['usg-admin', 'usg-officer', 'super-admin'])) {
+                // Super Admin - highest priority
+                if (in_array('super-admin', $userRoles)) {
                     return redirect()->intended(route('usg.admin.dashboard'));
                 }
 
-                if (array_intersect($userRoles, ['registrar-admin', 'registrar-staff'])) {
+                // Voting System Admin/Manager
+                if (array_intersect($userRoles, ['voting-admin', 'voting-manager'])) {
+                    return redirect()->intended(route('voting.admin.elections.index'));
+                }
+
+                // USG Admin/Officer
+                if (array_intersect($userRoles, ['usg-admin', 'usg-officer'])) {
+                    return redirect()->intended(route('usg.admin.dashboard'));
+                }
+
+                // Registrar Admin/Staff
+                if (array_intersect($userRoles, ['registrar-admin', 'registrar-staff', 'cashier'])) {
                     return redirect()->intended(route('registrar.admin.dashboard'));
                 }
 
+                // SAS Admin/Staff
+                if (array_intersect($userRoles, ['sas-admin', 'sas-staff'])) {
+                    return redirect()->intended(route('dashboard'));
+                }
+
+                // Default - Student or no specific role
                 return redirect()->intended(route('dashboard'));
             }
         });

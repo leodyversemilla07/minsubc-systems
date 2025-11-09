@@ -20,6 +20,12 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import { Calendar, Edit, Eye, Plus, Trash2 } from 'lucide-react';
 import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Voting Admin', href: voting.admin.elections.index.url() },
+    { title: 'Elections', href: voting.admin.elections.index.url() },
+];
 
 interface Election {
     id: number;
@@ -47,15 +53,15 @@ export default function Index({ elections }: Props) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Elections" />
 
-            <div className="bg-white rounded-lg shadow-md">
+            <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="border-b p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">Elections</h1>
-                        <p className="text-sm text-gray-600 mt-1">Manage election cycles and settings</p>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Elections</h1>
+                        <p className="text-muted-foreground">Manage election cycles and settings</p>
                     </div>
                     <Link href={voting.admin.elections.create.url()}>
                         <Button className="bg-blue-600 hover:bg-blue-700">
@@ -66,7 +72,7 @@ export default function Index({ elections }: Props) {
                 </div>
 
                 {/* Elections Table */}
-                <div className="p-6">
+                <div>
                     {elections.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
