@@ -1,5 +1,6 @@
 {
     "Registrar": true,
     "USG": true,
-    "SAS": true
+    "SAS": true,
+    "VotingSystem": true
 }

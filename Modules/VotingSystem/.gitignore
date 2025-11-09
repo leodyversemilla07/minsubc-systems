@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build files
+/public/build/
+/public/hot/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vendor (if module has separate composer dependencies)
+/vendor/
+
+# Environment
+.env
+.env.backup
+.env.testing
+
+# Uploaded files (photos, documents)
+/public/pics/students/*
+!/public/pics/students/.gitkeep
+/public/images/uploads/*
+!/public/images/uploads/.gitkeep
+
+# Legacy backup files
+*.bak
+*.old
+*.tmp

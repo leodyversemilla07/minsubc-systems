@@ -1,0 +1,19 @@
+{
+    "name": "VotingSystem",
+    "alias": "votingsystem",
+    "description": "Electronic Voting System - A secure web-based platform for managing elections with real-time results, voter authentication, and comprehensive admin tools",
+    "keywords": [
+        "voting",
+        "election",
+        "ballot",
+        "democracy",
+        "poll",
+        "candidate",
+        "voter"
+    ],
+    "priority": 0,
+    "providers": [
+        "Modules\\VotingSystem\\Providers\\VotingSystemServiceProvider"
+    ],
+    "files": []
+}

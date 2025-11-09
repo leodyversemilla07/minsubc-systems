@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/votingsystem",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\VotingSystem\\": "app/",
+            "Modules\\VotingSystem\\Database\\Factories\\": "database/factories/",
+            "Modules\\VotingSystem\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\VotingSystem\\Tests\\": "tests/"
+        }
+    }
+}
