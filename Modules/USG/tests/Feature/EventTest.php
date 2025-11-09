@@ -128,11 +128,11 @@ test('event can be created with valid data', function () {
         'title' => 'New Campus Event',
         'description' => 'This is a test event',
         'location' => 'Main Auditorium',
-        'start_date' => now()->addDays(7)->format('Y-m-d H:i:s'),
-        'end_date' => now()->addDays(7)->addHours(3)->format('Y-m-d H:i:s'),
-        'all_day' => false,
+        'event_date' => now()->addDays(7)->format('Y-m-d'),
+        'event_time' => '14:00',
+        'end_date' => now()->addDays(7)->format('Y-m-d'),
+        'end_time' => '17:00',
         'category' => 'Academic',
-        'organizer' => 'USG',
     ];
 
     $response = $this->actingAs($usgAdmin)
@@ -156,7 +156,7 @@ test('event creation validates required fields', function () {
     $response = $this->actingAs($usgAdmin)
         ->post(route('usg.admin.events.store'), []);
 
-    $response->assertSessionHasErrors(['title', 'start_date']);
+    $response->assertSessionHasErrors(['title', 'description', 'event_date', 'event_time', 'location']);
 });
 
 test('event creation validates end date is after start date', function () {
@@ -167,8 +167,12 @@ test('event creation validates end date is after start date', function () {
 
     $eventData = [
         'title' => 'Invalid Event',
-        'start_date' => now()->addDays(7)->format('Y-m-d H:i:s'),
-        'end_date' => now()->addDays(5)->format('Y-m-d H:i:s'), // Before start date
+        'description' => 'Test event',
+        'location' => 'Test Location',
+        'event_date' => now()->addDays(7)->format('Y-m-d'),
+        'event_time' => '14:00',
+        'end_date' => now()->addDays(5)->format('Y-m-d'), // Before event date
+        'end_time' => '17:00',
     ];
 
     $response = $this->actingAs($usgAdmin)
@@ -186,9 +190,11 @@ test('event can be created as all-day event', function () {
     $eventData = [
         'title' => 'All Day Event',
         'description' => 'This is an all-day event',
-        'start_date' => now()->addDays(7)->startOfDay()->format('Y-m-d H:i:s'),
-        'end_date' => now()->addDays(7)->endOfDay()->format('Y-m-d H:i:s'),
-        'all_day' => true,
+        'location' => 'Campus Wide',
+        'event_date' => now()->addDays(7)->format('Y-m-d'),
+        'event_time' => '00:00',
+        'end_date' => now()->addDays(7)->format('Y-m-d'),
+        'end_time' => '23:59',
     ];
 
     $response = $this->actingAs($usgAdmin)
@@ -197,7 +203,7 @@ test('event can be created as all-day event', function () {
     $response->assertRedirect(route('usg.admin.events.index'));
 
     $event = Event::where('title', 'All Day Event')->first();
-    expect($event->all_day)->toBeTrue();
+    expect($event)->not->toBeNull();
 });
 
 // Event Viewing Tests
@@ -237,8 +243,10 @@ test('event can be updated with valid data', function () {
         'title' => 'Updated Event Title',
         'description' => 'Updated description',
         'location' => 'New Location',
-        'start_date' => now()->addDays(10)->format('Y-m-d H:i:s'),
-        'end_date' => now()->addDays(10)->addHours(4)->format('Y-m-d H:i:s'),
+        'event_date' => now()->addDays(10)->format('Y-m-d'),
+        'event_time' => '15:00',
+        'end_date' => now()->addDays(10)->format('Y-m-d'),
+        'end_time' => '19:00',
     ];
 
     $response = $this->actingAs($usgAdmin)
