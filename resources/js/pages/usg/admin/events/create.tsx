@@ -18,7 +18,9 @@ import { PageHeader } from '@/components/page-header';
 import { Spinner } from '@/components/ui/spinner';
 import { FileUpload } from '@/components/file-upload';
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { dashboard } from '@/routes/usg/admin';
+import { Form, Head, router } from '@inertiajs/react';
+import { useState } from 'react';
 import {
     AlertCircle,
     Calendar,
@@ -35,30 +37,21 @@ interface Props {
 }
 
 export default function CreateEvent({ categories, canManage = true }: Props) {
-    const { data, setData, post, processing, errors, progress } = useForm({
-        title: '',
-        description: '',
-        category: '',
-        event_date: '',
-        event_time: '',
-        end_date: '',
-        end_time: '',
-        location: '',
-        venue_details: '',
-        featured_image: null as File | null,
-    });
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        post(EventController.store().url, {
-            preserveScroll: false,
-        });
-    };
+    const [featuredImage, setFeaturedImage] = useState<File | null>(null);
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [category, setCategory] = useState<string>('');
+    const [eventDate, setEventDate] = useState<string>('');
+    const [eventTime, setEventTime] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
+    const [endTime, setEndTime] = useState<string>('');
+    const [location, setLocation] = useState<string>('');
+    const [venueDetails, setVenueDetails] = useState<string>('');
 
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'USG Admin', href: dashboard().url },
                 { title: 'Events', href: '/usg/admin/events' },
                 { title: 'Create Event', href: '/usg/admin/events/create' },
             ]}
@@ -73,10 +66,17 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                     icon={Calendar}
                 />
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <Form
+                    {...EventController.store.form()}
+                    options={{
+                        preserveScroll: false,
+                    }}
+                    className="space-y-8"
+                >
+                    {({ errors, hasErrors, processing, progress }) => (
                     <div className="space-y-8">
                         {/* Error Messages */}
-                        {Object.keys(errors).length > 0 && (
+                        {hasErrors && (
                                 <Alert variant="destructive" className="mb-6">
                                     <AlertCircle className="h-4 w-4" />
                                     <AlertDescription>
@@ -112,8 +112,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="title"
                                             type="text"
                                             placeholder="Enter event title"
-                                            value={data.title}
-                                            onChange={(e) => setData('title', e.target.value)}
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
                                             className={
                                                 errors.title
                                                     ? 'border-red-500'
@@ -138,8 +138,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="description"
                                             placeholder="Enter the event description..."
                                             rows={6}
-                                            value={data.description}
-                                            onChange={(e) => setData('description', e.target.value)}
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
                                             className={
                                                 errors.description
                                                     ? 'border-red-500'
@@ -160,9 +160,9 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             Category
                                         </Label>
                                         <Select
-                                            name="category"
-                                            value={data.category}
-                                            onValueChange={(value) => setData('category', value)}
+                                            // Select is a custom component; keep UI driven by state
+                                            value={category}
+                                            onValueChange={(value) => setCategory(value)}
                                             disabled={!canManage}
                                         >
                                             <SelectTrigger
@@ -185,6 +185,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                                 ))}
                                             </SelectContent>
                                         </Select>
+                                        {/* Hidden native input so Inertia's Form submits the value */}
+                                        <input type="hidden" name="category" value={category} />
                                         {errors.category && (
                                             <p className="text-sm text-red-600">
                                                 {errors.category}
@@ -209,13 +211,14 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                                 Event Date *
                                             </Label>
                                             <DatePicker
-                                                date={data.event_date ? new Date(data.event_date) : undefined}
-                                                onDateChange={(date) => setData('event_date', date ? format(date, 'yyyy-MM-dd') : '')}
-                                                name="event_date"
+                                                date={eventDate ? new Date(eventDate) : undefined}
+                                                onDateChange={(date) => setEventDate(date ? format(date, 'yyyy-MM-dd') : '')}
+                                                name="event_date_picker"
                                                 placeholder="Select event date"
                                                 disabled={!canManage}
                                                 showClearButton={false}
                                             />
+                                            <input type="hidden" name="event_date" value={eventDate} />
                                             {errors.event_date && (
                                                 <p className="text-sm text-red-600">
                                                     {errors.event_date}
@@ -230,12 +233,13 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             <TimePicker
                                                 id="event_time"
                                                 label=""
-                                                value={data.event_time}
-                                                onChange={(value) => setData('event_time', value ? value.substring(0, 5) : '')}
+                                                value={eventTime}
+                                                onChange={(value) => setEventTime(value ? value.substring(0, 5) : '')}
                                                 error={errors.event_time}
                                                 disabled={!canManage}
                                                 required
                                             />
+                                            <input type="hidden" name="event_time" value={eventTime} />
                                         </div>
 
                                         <div className="space-y-2">
@@ -243,14 +247,15 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                                 End Date
                                             </Label>
                                             <DatePicker
-                                                date={data.end_date ? new Date(data.end_date) : undefined}
-                                                onDateChange={(date) => setData('end_date', date ? format(date, 'yyyy-MM-dd') : '')}
-                                                name="end_date"
+                                                date={endDate ? new Date(endDate) : undefined}
+                                                onDateChange={(date) => setEndDate(date ? format(date, 'yyyy-MM-dd') : '')}
+                                                name="end_date_picker"
                                                 placeholder="Select end date (optional)"
                                                 disabled={!canManage}
-                                                minDate={data.event_date ? new Date(data.event_date) : undefined}
+                                                minDate={eventDate ? new Date(eventDate) : undefined}
                                                 showClearButton={true}
                                             />
+                                            <input type="hidden" name="end_date" value={endDate} />
                                             {errors.end_date && (
                                                 <p className="text-sm text-red-600">
                                                     {errors.end_date}
@@ -269,11 +274,12 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             <TimePicker
                                                 id="end_time"
                                                 label=""
-                                                value={data.end_time}
-                                                onChange={(value) => setData('end_time', value ? value.substring(0, 5) : '')}
+                                                value={endTime}
+                                                onChange={(value) => setEndTime(value ? value.substring(0, 5) : '')}
                                                 error={errors.end_time}
                                                 disabled={!canManage}
                                             />
+                                            <input type="hidden" name="end_time" value={endTime} />
                                         </div>
                                     </div>
                                 </CardContent>
@@ -297,8 +303,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="location"
                                             type="text"
                                             placeholder="e.g., MSU-Buug Campus Auditorium"
-                                            value={data.location}
-                                            onChange={(e) => setData('location', e.target.value)}
+                                            value={location}
+                                            onChange={(e) => setLocation(e.target.value)}
                                             className={
                                                 errors.location
                                                     ? 'border-red-500'
@@ -323,8 +329,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                             name="venue_details"
                                             placeholder="Additional venue information, directions, parking details..."
                                             rows={3}
-                                            value={data.venue_details}
-                                            onChange={(e) => setData('venue_details', e.target.value)}
+                                            value={venueDetails}
+                                            onChange={(e) => setVenueDetails(e.target.value)}
                                             className={
                                                 errors.venue_details
                                                     ? 'border-red-500'
@@ -351,8 +357,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <FileUpload
-                                        file={data.featured_image}
-                                        onFileChange={(file) => setData('featured_image', file)}
+                                        file={featuredImage}
+                                        onFileChange={setFeaturedImage}
                                         label="Upload Featured Image"
                                         description="JPG, PNG up to 5MB. This image will be displayed prominently for the event."
                                         error={errors.featured_image}
@@ -423,7 +429,8 @@ export default function CreateEvent({ categories, canManage = true }: Props) {
                                 </div>
                             )}
                         </div>
-                </form>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

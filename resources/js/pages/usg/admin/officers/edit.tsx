@@ -1,5 +1,6 @@
 import OfficerController from '@/actions/Modules/USG/Http/Controllers/Admin/OfficerController';
 import { DatePicker } from '@/components/date-picker';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { dashboard } from '@/routes/usg/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, router, usePage } from '@inertiajs/react';
 import {
@@ -133,7 +135,7 @@ export default function EditOfficer({
     };
 
     const defaultBreadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/usg/admin' },
+        { title: 'Dashboard', href: dashboard().url },
         { title: 'Officers', href: OfficerController.index().url },
         {
             title: `Edit ${officer.name}`,
@@ -148,6 +150,12 @@ export default function EditOfficer({
             <Head title={`Edit ${officer.name} - USG Admin`} />
             <div className="min-h-screen bg-background">
                 <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+                    <PageHeader
+                        title={`Edit ${officer.name}`}
+                        description="Update officer information and profile"
+                        icon={User}
+                    />
+
                     {!canManage && (
                         <Alert variant="destructive" className="mb-4 sm:mb-6">
                             <AlertCircle className="h-4 w-4" />

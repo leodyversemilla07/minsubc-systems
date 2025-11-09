@@ -1,5 +1,6 @@
 import OfficerController from '@/actions/Modules/USG/Http/Controllers/Admin/OfficerController';
 import { DatePicker } from '@/components/date-picker';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { dashboard } from '@/routes/usg/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, router } from '@inertiajs/react';
 import {
@@ -71,8 +73,8 @@ export default function CreateOfficer({
 
             // Create preview
             const reader = new FileReader();
-            reader.onload = (e) => {
-                setImagePreview(e.target?.result as string);
+            reader.onload = (event) => {
+                setImagePreview(event.target?.result as string);
             };
             reader.readAsDataURL(file);
         }
@@ -88,7 +90,7 @@ export default function CreateOfficer({
     };
 
     const defaultBreadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/usg/admin' },
+        { title: 'Dashboard', href: dashboard().url },
         { title: 'Officers', href: OfficerController.index().url },
         { title: 'Add New Officer', href: OfficerController.create().url },
     ];
@@ -100,9 +102,11 @@ export default function CreateOfficer({
             <Head title="Add Officer - USG Admin" />
             <div className="min-h-screen bg-background">
                 <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-                    <h1 className="mb-8 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                        Add New Officer
-                    </h1>
+                    <PageHeader
+                        title="Add New Officer"
+                        description="Add a new officer to the USG leadership team"
+                        icon={Users}
+                    />
 
                     {!canManage && (
                         <Alert variant="destructive" className="mb-4 sm:mb-6">
@@ -203,7 +207,7 @@ export default function CreateOfficer({
                                                     <Input
                                                         id="profile-image"
                                                         type="file"
-                                                        name="profile_image"
+                                                        name="photo"
                                                         accept="image/*"
                                                         onChange={
                                                             handleImageChange
@@ -220,6 +224,11 @@ export default function CreateOfficer({
                                         {errors.profile_image && (
                                             <p className="text-sm text-destructive">
                                                 {errors.profile_image}
+                                            </p>
+                                        )}
+                                        {errors.photo && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.photo}
                                             </p>
                                         )}
                                     </CardContent>
@@ -618,7 +627,7 @@ export default function CreateOfficer({
                                 </Card>
                                 {/* Action Buttons */}
                                 {canManage && (
-                                    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
+                                    <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:justify-end sm:gap-4">
                                         <Button
                                             type="button"
                                             variant="outline"

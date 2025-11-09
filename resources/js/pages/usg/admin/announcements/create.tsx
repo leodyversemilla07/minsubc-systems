@@ -1,5 +1,6 @@
 import AnnouncementController from '@/actions/Modules/USG/Http/Controllers/Admin/AnnouncementController';
 import { DatePicker } from '@/components/date-picker';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { dashboard } from '@/routes/usg/admin';
 import { index } from '@/routes/usg/admin/announcements';
 import { Form, Head, router } from '@inertiajs/react';
 import {
@@ -249,7 +251,7 @@ export default function CreateAnnouncement({
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'USG Admin', href: dashboard().url },
                 { title: 'Announcements', href: index().url },
                 { title: 'Create', href: '#' },
             ]}
@@ -257,15 +259,11 @@ export default function CreateAnnouncement({
             <Head title="Create Announcement - USG Admin" />
 
                         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-                {/* Page Header */}
-                <div className="mb-8">
-                    <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                        Create New Announcement
-                    </h1>
-                    <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                        Share important news and updates with your audience
-                    </p>
-                </div>
+                <PageHeader
+                    title="Create New Announcement"
+                    description="Share important news and updates with your audience"
+                    icon={FileText}
+                />
 
                 {!canManage && (
                     <Alert variant="destructive" className="mb-6">

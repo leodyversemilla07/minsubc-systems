@@ -1,5 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
+import {
+    Field,
+    FieldDescription,
+    FieldError,
+    FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Trash2, Upload } from 'lucide-react';
@@ -7,14 +12,14 @@ import { useId, useState } from 'react';
 
 /**
  * FileUpload Component
- * 
+ *
  * A reusable drag-and-drop file upload component with validation and preview.
- * 
+ *
  * @example
  * ```tsx
  * // Basic PDF upload
  * const [file, setFile] = useState<File | null>(null);
- * 
+ *
  * <FileUpload
  *   file={file}
  *   onFileChange={setFile}
@@ -23,7 +28,7 @@ import { useId, useState } from 'react';
  *   allowedTypes={['application/pdf']}
  *   required
  * />
- * 
+ *
  * // Image upload with custom settings
  * <FileUpload
  *   file={imageFile}
@@ -44,67 +49,67 @@ interface FileUploadProps {
      * The file that has been selected
      */
     file: File | null;
-    
+
     /**
      * Callback when file is selected or changed
      */
     onFileChange: (file: File | null) => void;
-    
+
     /**
      * Label for the upload field
      */
     label?: string;
-    
+
     /**
      * Description text shown below the upload area
      */
     description?: string;
-    
+
     /**
      * Error message to display
      */
     error?: string;
-    
+
     /**
      * Accept attribute for file input (e.g., ".pdf", "image/*")
      */
     accept?: string;
-    
+
     /**
      * Maximum file size in MB
      */
     maxSizeMB?: number;
-    
+
     /**
      * Whether the field is required
      */
     required?: boolean;
-    
+
     /**
      * Whether the field is disabled
      */
     disabled?: boolean;
-    
+
     /**
      * Name attribute for the hidden input
      */
     name?: string;
-    
+
     /**
      * Custom text for the upload area
      */
     uploadText?: string;
-    
+
     /**
      * Custom hint text for file type/size
      */
     hintText?: string;
-    
+
     /**
      * Allowed file types for validation (e.g., ['application/pdf'])
      */
     allowedTypes?: string[];
-    
+
     /**
      * Custom className for the container
      */
@@ -129,18 +134,24 @@ export function FileUpload({
 }: FileUploadProps) {
     const inputId = useId();
     const [dragActive, setDragActive] = useState(false);
+    const [validationError, setValidationError] = useState<string>('');
 
     const validateFile = (selectedFile: File): boolean => {
+        // Clear previous validation errors
+        setValidationError('');
+
         // Validate file type if allowedTypes specified
         if (allowedTypes && !allowedTypes.includes(selectedFile.type)) {
-            const typeNames = allowedTypes.map(type => type.split('/')[1].toUpperCase()).join(', ');
-            alert(`Please upload a ${typeNames} file only`);
+            const typeNames = allowedTypes
+                .map((type) => type.split('/')[1].toUpperCase())
+                .join(', ');
+            setValidationError(`Please upload a ${typeNames} file only`);
             return false;
         }
 
         // Validate file size
         if (maxSizeMB && selectedFile.size > maxSizeMB * 1024 * 1024) {
-            alert(`File size must be less than ${maxSizeMB}MB`);
+            setValidationError(`File size must be less than ${maxSizeMB}MB`);
             return false;
         }
 
@@ -151,13 +162,15 @@ export function FileUpload({
         const selectedFile = e.target.files?.[0];
         if (selectedFile && validateFile(selectedFile)) {
             onFileChange(selectedFile);
+        } else if (!selectedFile) {
+            setValidationError('');
         }
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setDragActive(false);
-        
+
         const droppedFile = e.dataTransfer.files[0];
         if (droppedFile && validateFile(droppedFile)) {
             onFileChange(droppedFile);
@@ -176,16 +189,17 @@ export function FileUpload({
 
     const removeFile = () => {
         onFileChange(null);
+        setValidationError('');
         // Reset the input
         const input = document.getElementById(inputId) as HTMLInputElement;
         if (input) input.value = '';
     };
 
-    const defaultHintText = hintText || (
-        accept === '.pdf' || allowedTypes?.includes('application/pdf')
+    const defaultHintText =
+        hintText ||
+        (accept === '.pdf' || allowedTypes?.includes('application/pdf')
             ? `PDF files only (Max ${maxSizeMB}MB)`
-            : `Max ${maxSizeMB}MB`
-    );
+            : `Max ${maxSizeMB}MB`);
 
     return (
         <Field className={className}>
@@ -193,7 +207,19 @@ export function FileUpload({
                 {label}
                 {required && ' *'}
             </FieldLabel>
-            
+
+            {/* Always keep the file input in the DOM for form submission */}
+            <Input
+                id={inputId}
+                type="file"
+                name={name}
+                onChange={handleFileChange}
+                disabled={disabled}
+                accept={accept}
+                {...(required && !file && { required: true })}
+                className={cn('hidden')}
+            />
+
             {!file ? (
                 <div
                     className={cn(
@@ -202,29 +228,32 @@ export function FileUpload({
                             ? 'border-destructive bg-destructive/5'
                             : dragActive
                               ? 'border-primary bg-primary/5'
-                              : 'border-muted-foreground/25 hover:border-muted-foreground/50'
+                              : 'border-muted-foreground/25 hover:border-muted-foreground/50',
                     )}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
+                    onClick={() => document.getElementById(inputId)?.click()}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            document.getElementById(inputId)?.click();
+                        }
+                    }}
                 >
-                    <Input
-                        id={inputId}
-                        type="file"
-                        name={name}
-                        onChange={handleFileChange}
-                        disabled={disabled}
-                        accept={accept}
-                        {...(required && { required: true })}
-                        className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
-                    />
-                    <div className="flex flex-col items-center justify-center px-6 py-10 text-center">
+                    <div className="pointer-events-none flex flex-col items-center justify-center px-6 py-10 text-center">
                         <div className="mb-4 rounded-lg bg-muted p-3">
                             <Upload className="h-6 w-6 text-muted-foreground" />
                         </div>
                         <div className="mb-2">
-                            <span className="font-medium text-primary">{uploadText}</span>
-                            <span className="text-sm text-muted-foreground"> or drag and drop</span>
+                            <span className="font-medium text-primary">
+                                {uploadText}
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                                {' '}
+                                or drag and drop
+                            </span>
                         </div>
                         <p className="text-xs text-muted-foreground">
                             {defaultHintText}
@@ -245,33 +274,46 @@ export function FileUpload({
                                 </svg>
                             </div>
                             <div>
-                                <p className="text-sm font-medium">{file.name}</p>
+                                <p className="text-sm font-medium">
+                                    {file.name}
+                                </p>
                                 <p className="text-xs text-muted-foreground">
                                     {(file.size / 1024 / 1024).toFixed(2)} MB
                                 </p>
                             </div>
                         </div>
                         {!disabled && (
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={removeFile}
-                                className="h-8 w-8 p-0"
-                            >
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() =>
+                                        document
+                                            .getElementById(inputId)
+                                            ?.click()
+                                    }
+                                >
+                                    Change
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={removeFile}
+                                    className="h-8 w-8 p-0"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
                         )}
                     </div>
                 </div>
             )}
-            
-            {description && (
-                <FieldDescription>{description}</FieldDescription>
-            )}
-            {error && (
-                <FieldError>{error}</FieldError>
-            )}
+
+            {description && <FieldDescription>{description}</FieldDescription>}
+            {error && <FieldError>{error}</FieldError>}
+            {validationError && <FieldError>{validationError}</FieldError>}
         </Field>
     );
 }

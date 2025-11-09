@@ -34,6 +34,10 @@ pest()->extend(Tests\TestCase::class)
     ->in('../Modules/*/tests/Feature');
 
 pest()->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('../Modules/*/tests/Browser');
+
+pest()->extend(Tests\TestCase::class)
     ->in('../Modules/*/tests/Unit');
 
 /*

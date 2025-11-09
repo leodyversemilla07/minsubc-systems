@@ -1,10 +1,12 @@
 import VMGOController from '@/actions/Modules/USG/Http/Controllers/Admin/VMGOController';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { dashboard } from '@/routes/usg/admin';
 import { Form, Head, router } from '@inertiajs/react';
 import {
     AlertCircle,
@@ -95,48 +97,38 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'USG Admin', href: '/usg/admin' },
+                { title: 'USG Admin', href: dashboard().url },
                 { title: 'VMGO', href: '/usg/admin/vmgo/edit' },
             ]}
         >
             <Head title="Edit VMGO - USG Admin" />
 
             <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                                Edit VMGO
-                            </h1>
-                            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                                Update Vision, Mission, Goals & Objectives
-                            </p>
-                        </div>
-
-                        <div className="flex items-center gap-3">
+                <PageHeader
+                    title="Edit VMGO"
+                    description="Update Vision, Mission, Goals & Objectives"
+                    icon={Compass}
+                    actions={
+                        <>
                             <Button
                                 variant="outline"
                                 onClick={() => router.visit('/usg/vmgo')}
-                                className="hidden sm:flex"
                             >
                                 <Eye className="mr-2 h-4 w-4" />
                                 Preview
                             </Button>
-
                             <Button
                                 variant="ghost"
                                 onClick={() =>
                                     router.visit('/usg/admin/vmgo/history')
                                 }
-                                className="hidden sm:flex"
                             >
                                 <History className="mr-2 h-4 w-4" />
                                 History
                             </Button>
-                        </div>
-                    </div>
-                </div>
+                        </>
+                    }
+                />
 
                 {/* Last Updated Info */}
                 {vmgo.updated_at && (
@@ -435,7 +427,7 @@ export default function EditVMGO({ vmgo, canEdit = true }: Props) {
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => router.visit('/usg/admin')}
+                                onClick={() => router.visit(dashboard().url)}
                                 disabled={processing}
                                 className="w-full sm:w-auto"
                             >

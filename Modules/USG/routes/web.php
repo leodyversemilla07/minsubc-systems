@@ -7,6 +7,7 @@ use Modules\USG\Http\Controllers\Admin\DocumentController;
 use Modules\USG\Http\Controllers\Admin\EventController;
 use Modules\USG\Http\Controllers\Admin\OfficerController;
 use Modules\USG\Http\Controllers\Admin\ResolutionController;
+use Modules\USG\Http\Controllers\Admin\TransparencyReportController;
 use Modules\USG\Http\Controllers\Admin\VMGOController;
 use Modules\USG\Http\Controllers\PageController;
 use Modules\USG\Http\Controllers\SearchController;
@@ -121,6 +122,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['role:usg-admin|super-admin'])->group(function () {
             Route::resource('documents', DocumentController::class);
             Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+        });
+
+        // Transparency Report Management - restricted to USG Admins and System Admins
+        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
+            Route::resource('transparency', TransparencyReportController::class)->parameters([
+                'transparency' => 'transparencyReport',
+            ]);
+            Route::get('transparency/{transparencyReport}/download', [TransparencyReportController::class, 'download'])->name('transparency.download');
+            Route::patch('transparency/{transparencyReport}/publish', [TransparencyReportController::class, 'publish'])->name('transparency.publish');
+            Route::patch('transparency/{transparencyReport}/unpublish', [TransparencyReportController::class, 'unpublish'])->name('transparency.unpublish');
         });
     });
 });
