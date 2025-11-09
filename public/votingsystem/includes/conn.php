@@ -1,8 +1,11 @@
 <?php
-	$conn = new mysqli('localhost', 'root', '', 'votingsystem5');
-
-	if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-	}
+	// Use Laravel's SQLite database
+	$db_path = realpath(__DIR__ . '/../../../database/database.sqlite');
 	
+	try {
+		$conn = new PDO('sqlite:' . $db_path);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch (PDOException $e) {
+		die("Connection failed: " . $e->getMessage());
+	}
 ?>
