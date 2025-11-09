@@ -8,7 +8,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, FileText, Users } from 'lucide-react';
+import { ArrowRight, FileText, Users, Vote } from 'lucide-react';
 
 export default function Welcome() {
     return (
@@ -58,7 +58,7 @@ export default function Welcome() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-4">
                         {/* USG Card */}
                         <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-gray-800 dark:shadow-gray-900/20">
                             <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-green-900/20" />
@@ -179,6 +179,46 @@ export default function Welcome() {
                                         </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+
+                        {/* Voting System Card */}
+                        <Card className="group relative overflow-hidden border-0 bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl dark:bg-gray-800 dark:shadow-gray-900/20">
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-amber-900/20" />
+                            <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-amber-100 opacity-20 dark:bg-amber-800/30" />
+                            <CardHeader className="relative pb-4">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 shadow-lg dark:from-amber-800 dark:to-amber-700">
+                                    <Vote className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+                                </div>
+                                <CardTitle className="text-xl font-bold text-amber-900 dark:text-white">
+                                    Voting System
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative pb-4">
+                                <CardDescription className="leading-relaxed text-gray-600 dark:text-gray-300">
+                                    Cast your vote in university elections,
+                                    view candidates, and participate in
+                                    democratic processes.
+                                </CardDescription>
+                            </CardContent>
+                            <CardFooter className="relative pt-4">
+                                <Button
+                                    asChild
+                                    className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-lg transition-all duration-200 hover:from-amber-700 hover:to-amber-800 hover:shadow-xl dark:from-amber-500 dark:to-amber-600 dark:hover:from-amber-600 dark:hover:to-amber-700"
+                                >
+                                    <a
+                                        href="/votingsystem/index.php"
+                                        className="flex items-center justify-center"
+                                    >
+                                        <span className="hidden sm:inline">
+                                            Access Voting System
+                                        </span>
+                                        <span className="sm:hidden">
+                                            Voting System
+                                        </span>
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </a>
                                 </Button>
                             </CardFooter>
                         </Card>

@@ -401,6 +401,14 @@ if (isset($_SESSION['admin'])) {
         <div id="particles-js"></div>
     </div>
     
+    <!-- Back to Dashboard Button -->
+    <div class="fixed top-6 left-6 z-50">
+        <a href="/" class="flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm text-brand-green-700 rounded-full shadow-lg hover:bg-brand-green-700 hover:text-white transition-all duration-300 border-2 border-brand-green-200 hover:border-brand-green-700 group">
+            <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+            <span class="font-semibold">Back to Dashboard</span>
+        </a>
+    </div>
+
     <!-- Login Section - Full Height First View -->
     <section class="min-h-screen w-full flex flex-col items-center justify-center px-6 py-12">
         <!-- Login Container -->
