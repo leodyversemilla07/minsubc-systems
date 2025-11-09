@@ -64331,7 +64331,7 @@ function isArray(input) {
 test('isArray recognizes Array objects', function (assert) {
     assert.ok(isArray([1,2,3]), 'array args');
     assert.ok(isArray([]), 'empty array');
-    assert.ok(isArray(new Array(1,2,3)), 'array constructor');
+    assert.ok(isArray([1,2,3]), 'array constructor');
 });
 
 test('isArray rejects non-Array objects', function (assert) {

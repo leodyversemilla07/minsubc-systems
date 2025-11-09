@@ -1,5 +1,8 @@
-import { update as updateResolution } from '@/actions/Modules/USG/Http/Controllers/Admin/ResolutionController';
-import ResolutionController from '@/actions/Modules/USG/Http/Controllers/Admin/ResolutionController';
+import ResolutionController, {
+    update as updateResolution,
+} from '@/actions/Modules/USG/Http/Controllers/Admin/ResolutionController';
+import { FileUpload } from '@/components/file-upload';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -24,15 +27,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { PageHeader } from '@/components/page-header';
-import { FileUpload } from '@/components/file-upload';
 import { Spinner } from '@/components/ui/spinner';
-import { cn } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
+import { Head, router, useForm } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Head, useForm, router } from '@inertiajs/react';
 import {
     AlertCircle,
     CalendarIcon,
@@ -94,7 +95,8 @@ export default function EditResolution({
                 // Don't reset on success to keep form values
             },
         });
-    };    const handleDownload = () => {
+    };
+    const handleDownload = () => {
         if (resolution.file_path) {
             window.open(`/storage/${resolution.file_path}`, '_blank');
         }
@@ -137,14 +139,10 @@ export default function EditResolution({
                     <div className="space-y-8">
                         {/* Error Messages */}
                         {Object.keys(errors).length > 0 && (
-                            <Alert
-                                variant="destructive"
-                                className="mb-6"
-                            >
+                            <Alert variant="destructive" className="mb-6">
                                 <AlertCircle className="h-4 w-4" />
                                 <AlertDescription>
-                                    Please fix the errors below before
-                                    saving.
+                                    Please fix the errors below before saving.
                                 </AlertDescription>
                             </Alert>
                         )}
@@ -198,7 +196,10 @@ export default function EditResolution({
                                             placeholder="e.g., USG-2024-001"
                                             value={data.resolution_number}
                                             onChange={(e) =>
-                                                setData('resolution_number', e.target.value)
+                                                setData(
+                                                    'resolution_number',
+                                                    e.target.value,
+                                                )
                                             }
                                             className={
                                                 errors.resolution_number
@@ -228,7 +229,10 @@ export default function EditResolution({
                                         placeholder="Brief summary of what this resolution addresses..."
                                         value={data.description}
                                         onChange={(e) =>
-                                            setData('description', e.target.value)
+                                            setData(
+                                                'description',
+                                                e.target.value,
+                                            )
                                         }
                                         rows={2}
                                         className={
@@ -257,28 +261,56 @@ export default function EditResolution({
                                                     variant="outline"
                                                     className={cn(
                                                         'w-full justify-start text-left font-normal',
-                                                        !data.date_passed && 'text-muted-foreground',
-                                                        errors.date_passed && 'border-destructive'
+                                                        !data.date_passed &&
+                                                            'text-muted-foreground',
+                                                        errors.date_passed &&
+                                                            'border-destructive',
                                                     )}
                                                     disabled={!canManage}
                                                 >
                                                     <CalendarIcon className="mr-2 h-4 w-4" />
                                                     {data.date_passed ? (
-                                                        format(new Date(data.date_passed), 'PPP')
+                                                        format(
+                                                            new Date(
+                                                                data.date_passed,
+                                                            ),
+                                                            'PPP',
+                                                        )
                                                     ) : (
                                                         <span>Pick a date</span>
                                                     )}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0" align="start">
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                align="start"
+                                            >
                                                 <Calendar
                                                     mode="single"
-                                                    selected={data.date_passed ? new Date(data.date_passed) : undefined}
+                                                    selected={
+                                                        data.date_passed
+                                                            ? new Date(
+                                                                  data.date_passed,
+                                                              )
+                                                            : undefined
+                                                    }
                                                     onSelect={(date) =>
-                                                        setData('date_passed', date ? format(date, 'yyyy-MM-dd') : '')
+                                                        setData(
+                                                            'date_passed',
+                                                            date
+                                                                ? format(
+                                                                      date,
+                                                                      'yyyy-MM-dd',
+                                                                  )
+                                                                : '',
+                                                        )
                                                     }
                                                     disabled={(date) =>
-                                                        date > new Date() || date < new Date('1900-01-01')
+                                                        date > new Date() ||
+                                                        date <
+                                                            new Date(
+                                                                '1900-01-01',
+                                                            )
                                                     }
                                                     initialFocus
                                                     captionLayout="dropdown-months"
@@ -291,7 +323,8 @@ export default function EditResolution({
                                             </FieldError>
                                         )}
                                         <FieldDescription>
-                                            Date when this resolution was officially passed
+                                            Date when this resolution was
+                                            officially passed
                                         </FieldDescription>
                                     </Field>
 
@@ -302,7 +335,9 @@ export default function EditResolution({
                                         <Select
                                             name="category"
                                             value={data.category}
-                                            onValueChange={(value) => setData('category', value)}
+                                            onValueChange={(value) =>
+                                                setData('category', value)
+                                            }
                                             disabled={!canManage}
                                         >
                                             <SelectTrigger
@@ -315,16 +350,14 @@ export default function EditResolution({
                                                 <SelectValue placeholder="Select Category" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {safeCategories.map(
-                                                    (cat) => (
-                                                        <SelectItem
-                                                            key={cat}
-                                                            value={cat}
-                                                        >
-                                                            {cat}
-                                                        </SelectItem>
-                                                    ),
-                                                )}
+                                                {safeCategories.map((cat) => (
+                                                    <SelectItem
+                                                        key={cat}
+                                                        value={cat}
+                                                    >
+                                                        {cat}
+                                                    </SelectItem>
+                                                ))}
                                             </SelectContent>
                                         </Select>
                                         {errors.category && (
@@ -341,7 +374,9 @@ export default function EditResolution({
                                         <Select
                                             name="status"
                                             value={data.status}
-                                            onValueChange={(value) => setData('status', value)}
+                                            onValueChange={(value) =>
+                                                setData('status', value)
+                                            }
                                             disabled={!canManage}
                                         >
                                             <SelectTrigger
@@ -359,7 +394,10 @@ export default function EditResolution({
                                                         key={stat}
                                                         value={stat}
                                                     >
-                                                        {stat.charAt(0).toUpperCase() + stat.slice(1)}
+                                                        {stat
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                            stat.slice(1)}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -419,7 +457,9 @@ export default function EditResolution({
 
                                 <FileUpload
                                     file={data.file}
-                                    onFileChange={(file) => setData('file', file)}
+                                    onFileChange={(file) =>
+                                        setData('file', file)
+                                    }
                                     label="Upload New Resolution Document (Optional)"
                                     description="Upload a new PDF to replace the existing document. The current file will be permanently deleted."
                                     error={errors.file}
@@ -456,14 +496,13 @@ export default function EditResolution({
 
                         {/* Action Buttons */}
                         {canManage && (
-                            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
+                            <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:justify-end sm:gap-4">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     onClick={() =>
                                         router.visit(
-                                            ResolutionController.index()
-                                                .url,
+                                            ResolutionController.index().url,
                                         )
                                     }
                                     disabled={processing}

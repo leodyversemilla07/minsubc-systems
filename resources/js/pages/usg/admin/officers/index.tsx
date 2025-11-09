@@ -21,7 +21,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -29,6 +28,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -122,11 +122,21 @@ function OfficersTableSkeleton() {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead><Skeleton className="h-4 w-32" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-24" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-32" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-24" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-24" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
                     <TableHead className="w-[100px]">
                         <Skeleton className="h-4 w-16" />
                     </TableHead>
@@ -289,7 +299,9 @@ export default function OfficersManagement({
                         <ViewToggle view={view} onViewChange={setView} />
                         {canManage && (
                             <Button
-                                onClick={() => router.visit(officerRoutes.create())}
+                                onClick={() =>
+                                    router.visit(officerRoutes.create())
+                                }
                                 className="w-full sm:w-auto"
                             >
                                 <Plus className="mr-2 h-4 w-4" />
@@ -505,85 +517,73 @@ export default function OfficersManagement({
                     view === 'grid' ? (
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                             {safeOfficers.map((officer) => (
-                            <Card
-                                key={officer.id}
-                                className="group relative overflow-hidden border-border/50 transition-all duration-200 hover:shadow-xl hover:shadow-primary/5"
-                            >
-                                <CardContent className="p-6">
-                                    {/* Status Indicator */}
-                                    <div className="absolute top-4 right-4">
-                                        <Badge
-                                            variant="secondary"
-                                            className={`${
-                                                officer.is_active
-                                                    ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300'
-                                                    : 'border-gray-200 bg-gray-50 text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400'
-                                            } text-xs font-medium sm:text-sm`}
-                                        >
-                                            <div
-                                                className={`mr-1.5 h-2 w-2 rounded-full ${
+                                <Card
+                                    key={officer.id}
+                                    className="group relative overflow-hidden border-border/50 transition-all duration-200 hover:shadow-xl hover:shadow-primary/5"
+                                >
+                                    <CardContent className="p-6">
+                                        {/* Status Indicator */}
+                                        <div className="absolute top-4 right-4">
+                                            <Badge
+                                                variant="secondary"
+                                                className={`${
                                                     officer.is_active
-                                                        ? 'bg-green-500'
-                                                        : 'bg-gray-400'
-                                                }`}
-                                            />
-                                            <span className="hidden sm:inline">
-                                                {officer.is_active
-                                                    ? 'Active'
-                                                    : 'Inactive'}
-                                            </span>
-                                            <span className="sm:hidden">
-                                                {officer.is_active
-                                                    ? 'Active'
-                                                    : 'Inactive'}
-                                            </span>
-                                        </Badge>
-                                    </div>
-
-                                    <div className="flex items-start gap-4 pr-20">
-                                        <Avatar className="h-16 w-16 ring-2 ring-primary/10 transition-all group-hover:ring-primary/20">
-                                            <AvatarImage
-                                                src={
-                                                    officer.photo_url ||
-                                                    officer.photo
-                                                }
-                                                className="object-cover"
-                                            />
-                                            <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-lg font-semibold text-primary">
-                                                {getInitials(officer.name)}
-                                            </AvatarFallback>
-                                        </Avatar>
-
-                                        <div className="min-w-0 flex-1 space-y-1">
-                                            <h3 className="text-lg leading-tight font-bold text-foreground">
-                                                {officer.name}
-                                            </h3>
-                                            <p className="text-sm font-semibold text-primary">
-                                                {officer.position}
-                                            </p>
-                                            {officer.department && (
-                                                <p className="flex items-center gap-1 text-sm text-muted-foreground">
-                                                    <MapPin className="h-3 w-3" />
-                                                    {officer.department}
-                                                </p>
-                                            )}
+                                                        ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300'
+                                                        : 'border-gray-200 bg-gray-50 text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400'
+                                                } text-xs font-medium sm:text-sm`}
+                                            >
+                                                <div
+                                                    className={`mr-1.5 h-2 w-2 rounded-full ${
+                                                        officer.is_active
+                                                            ? 'bg-green-500'
+                                                            : 'bg-gray-400'
+                                                    }`}
+                                                />
+                                                <span className="hidden sm:inline">
+                                                    {officer.is_active
+                                                        ? 'Active'
+                                                        : 'Inactive'}
+                                                </span>
+                                                <span className="sm:hidden">
+                                                    {officer.is_active
+                                                        ? 'Active'
+                                                        : 'Inactive'}
+                                                </span>
+                                            </Badge>
                                         </div>
-                                    </div>
 
-                                    {/* Contact Actions */}
-                                    <div className="mt-4 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-8 flex-1 text-xs"
-                                            asChild
-                                        >
-                                            <a href={`mailto:${officer.email}`}>
-                                                <Mail className="mr-1.5 h-3 w-3" />
-                                                Email
-                                            </a>
-                                        </Button>
-                                        {officer.phone && (
+                                        <div className="flex items-start gap-4 pr-20">
+                                            <Avatar className="h-16 w-16 ring-2 ring-primary/10 transition-all group-hover:ring-primary/20">
+                                                <AvatarImage
+                                                    src={
+                                                        officer.photo_url ||
+                                                        officer.photo
+                                                    }
+                                                    className="object-cover"
+                                                />
+                                                <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-lg font-semibold text-primary">
+                                                    {getInitials(officer.name)}
+                                                </AvatarFallback>
+                                            </Avatar>
+
+                                            <div className="min-w-0 flex-1 space-y-1">
+                                                <h3 className="text-lg leading-tight font-bold text-foreground">
+                                                    {officer.name}
+                                                </h3>
+                                                <p className="text-sm font-semibold text-primary">
+                                                    {officer.position}
+                                                </p>
+                                                {officer.department && (
+                                                    <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                                                        <MapPin className="h-3 w-3" />
+                                                        {officer.department}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Contact Actions */}
+                                        <div className="mt-4 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
                                             <Button
                                                 variant="outline"
                                                 size="sm"
@@ -591,107 +591,124 @@ export default function OfficersManagement({
                                                 asChild
                                             >
                                                 <a
-                                                    href={`tel:${officer.phone}`}
+                                                    href={`mailto:${officer.email}`}
                                                 >
-                                                    <Phone className="mr-1.5 h-3 w-3" />
-                                                    Call
+                                                    <Mail className="mr-1.5 h-3 w-3" />
+                                                    Email
                                                 </a>
                                             </Button>
-                                        )}
-                                    </div>
-
-                                    {/* Term Information */}
-                                    <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-                                        <Calendar className="h-3 w-3" />
-                                        <span>
-                                            Term:{' '}
-                                            {formatDate(officer.term_start)}
-                                            {officer.term_end &&
-                                                ` - ${formatDate(officer.term_end)}`}
-                                        </span>
-                                    </div>
-
-                                    {/* Bio */}
-                                    {officer.bio && (
-                                        <div className="mt-4 border-t border-border/50 pt-4">
-                                            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                                                {officer.bio}
-                                            </p>
-                                        </div>
-                                    )}
-
-                                    {/* Management Actions */}
-                                    {canManage && (
-                                        <div className="mt-4 flex items-center justify-end gap-2 border-t border-border/50 pt-4">
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() =>
-                                                    router.visit(
-                                                        officerRoutes.edit(
-                                                            officer.id,
-                                                        ),
-                                                    )
-                                                }
-                                                className="text-primary hover:bg-primary/10 hover:text-primary"
-                                            >
-                                                <Edit className="mr-1.5 h-3 w-3" />
-                                                Edit
-                                            </Button>
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                            {officer.phone && (
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="h-8 flex-1 text-xs"
+                                                    asChild
+                                                >
+                                                    <a
+                                                        href={`tel:${officer.phone}`}
                                                     >
-                                                        <Trash2 className="mr-1.5 h-3 w-3" />
-                                                        Delete
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>
-                                                            Delete Officer
-                                                        </AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            Are you sure you
-                                                            want to delete{' '}
-                                                            <strong>
-                                                                {officer.name}
-                                                            </strong>
-                                                            ? This action cannot
-                                                            be undone and will
-                                                            permanently remove
-                                                            the officer from the
-                                                            system.
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>
-                                                            Cancel
-                                                        </AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={() =>
-                                                                router.delete(
-                                                                    officerRoutes.destroy(
-                                                                        officer.id,
-                                                                    ),
-                                                                )
-                                                            }
-                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                        >
-                                                            Delete Officer
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
+                                                        <Phone className="mr-1.5 h-3 w-3" />
+                                                        Call
+                                                    </a>
+                                                </Button>
+                                            )}
                                         </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        ))
-                        }
+
+                                        {/* Term Information */}
+                                        <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                                            <Calendar className="h-3 w-3" />
+                                            <span>
+                                                Term:{' '}
+                                                {formatDate(officer.term_start)}
+                                                {officer.term_end &&
+                                                    ` - ${formatDate(officer.term_end)}`}
+                                            </span>
+                                        </div>
+
+                                        {/* Bio */}
+                                        {officer.bio && (
+                                            <div className="mt-4 border-t border-border/50 pt-4">
+                                                <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                                                    {officer.bio}
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        {/* Management Actions */}
+                                        {canManage && (
+                                            <div className="mt-4 flex items-center justify-end gap-2 border-t border-border/50 pt-4">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        router.visit(
+                                                            officerRoutes.edit(
+                                                                officer.id,
+                                                            ),
+                                                        )
+                                                    }
+                                                    className="text-primary hover:bg-primary/10 hover:text-primary"
+                                                >
+                                                    <Edit className="mr-1.5 h-3 w-3" />
+                                                    Edit
+                                                </Button>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                        >
+                                                            <Trash2 className="mr-1.5 h-3 w-3" />
+                                                            Delete
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>
+                                                                Delete Officer
+                                                            </AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                Are you sure you
+                                                                want to delete{' '}
+                                                                <strong>
+                                                                    {
+                                                                        officer.name
+                                                                    }
+                                                                </strong>
+                                                                ? This action
+                                                                cannot be undone
+                                                                and will
+                                                                permanently
+                                                                remove the
+                                                                officer from the
+                                                                system.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>
+                                                                Cancel
+                                                            </AlertDialogCancel>
+                                                            <AlertDialogAction
+                                                                onClick={() =>
+                                                                    router.delete(
+                                                                        officerRoutes.destroy(
+                                                                            officer.id,
+                                                                        ),
+                                                                    )
+                                                                }
+                                                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                            >
+                                                                Delete Officer
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            </div>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            ))}
                         </div>
                     ) : (
                         <Card>
@@ -873,7 +890,8 @@ export default function OfficersManagement({
                                                                             }
                                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                                                         >
-                                                                            Delete Officer
+                                                                            Delete
+                                                                            Officer
                                                                         </AlertDialogAction>
                                                                     </AlertDialogFooter>
                                                                 </AlertDialogContent>
@@ -943,7 +961,7 @@ export default function OfficersManagement({
                             </Empty>
                         </CardContent>
                     </Card>
-                    )}
+                )}
 
                 {/* Pagination could go here if needed */}
             </div>

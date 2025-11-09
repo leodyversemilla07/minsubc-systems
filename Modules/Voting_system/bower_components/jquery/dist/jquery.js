@@ -320,7 +320,7 @@ jQuery.extend( {
 
 	isEmptyObject: function( obj ) {
 
-		/* eslint-disable no-unused-vars */
+		 
 		// See https://github.com/eslint/eslint/issues/6125
 		var name;
 
@@ -5613,12 +5613,12 @@ jQuery.fn.extend( {
 
 var
 
-	/* eslint-disable max-len */
+	 
 
 	// See https://github.com/eslint/eslint/issues/3229
 	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
 
-	/* eslint-enable */
+	 
 
 	// Support: IE <=10 - 11, Edge 12 - 13
 	// In IE/Edge using regex groups here causes severe slowdowns.
@@ -6969,11 +6969,11 @@ function defaultPrefilter( elem, props, opts ) {
 				showHide( [ elem ], true );
 			}
 
-			/* eslint-disable no-loop-func */
+			 
 
 			anim.done( function() {
 
-			/* eslint-enable no-loop-func */
+			 
 
 				// The final step of a "hide" animation is actually hiding the element
 				if ( !hidden ) {

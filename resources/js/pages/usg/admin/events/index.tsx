@@ -27,7 +27,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -35,6 +34,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -155,11 +155,21 @@ function EventsTableSkeleton() {
                     <TableHead className="w-[50px]">
                         <Skeleton className="h-4 w-4" />
                     </TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
-                    <TableHead><Skeleton className="h-4 w-20" /></TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
+                    <TableHead>
+                        <Skeleton className="h-4 w-20" />
+                    </TableHead>
                     <TableHead className="w-[100px]">
                         <Skeleton className="h-4 w-16" />
                     </TableHead>
@@ -955,461 +965,122 @@ export default function EventsManagement({
                                 {events === undefined ? (
                                     <EventsGridSkeleton />
                                 ) : safeEvents.length > 0 ? (
-                                <div className="divide-y">
-                                    {safeEvents.map((event) => (
-                                        <div
-                                            key={event.id}
-                                            className="space-y-3 p-4"
-                                        >
-                                            <div className="flex items-start justify-between">
-                                                <div className="min-w-0 flex-1">
-                                                    <h3 className="truncate text-sm font-medium">
-                                                        {event.title}
-                                                    </h3>
-                                                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                                                        {event.description}
-                                                    </p>
-                                                </div>
-                                                <Badge
-                                                    variant="secondary"
-                                                    className={`ml-2 shrink-0 ${getStatusColor(event.status)}`}
-                                                >
-                                                    {event.status.toUpperCase()}
-                                                </Badge>
-                                            </div>
-
-                                            <div className="grid grid-cols-2 gap-4 text-xs">
-                                                <div>
-                                                    <div className="flex items-center gap-1 text-muted-foreground">
-                                                        <Calendar className="h-3 w-3" />
-                                                        <span>
-                                                            {formatRelativeDate(
-                                                                event.date,
-                                                            )}
-                                                        </span>
+                                    <div className="divide-y">
+                                        {safeEvents.map((event) => (
+                                            <div
+                                                key={event.id}
+                                                className="space-y-3 p-4"
+                                            >
+                                                <div className="flex items-start justify-between">
+                                                    <div className="min-w-0 flex-1">
+                                                        <h3 className="truncate text-sm font-medium">
+                                                            {event.title}
+                                                        </h3>
+                                                        <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                                                            {event.description}
+                                                        </p>
                                                     </div>
-                                                    <div className="mt-1 flex items-center gap-1 text-muted-foreground">
-                                                        <Clock className="h-3 w-3" />
-                                                        <span>
-                                                            {formatTime(
-                                                                event.time,
-                                                            )}
-                                                        </span>
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className={`ml-2 shrink-0 ${getStatusColor(event.status)}`}
+                                                    >
+                                                        {event.status.toUpperCase()}
+                                                    </Badge>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-4 text-xs">
+                                                    <div>
+                                                        <div className="flex items-center gap-1 text-muted-foreground">
+                                                            <Calendar className="h-3 w-3" />
+                                                            <span>
+                                                                {formatRelativeDate(
+                                                                    event.date,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                        <div className="mt-1 flex items-center gap-1 text-muted-foreground">
+                                                            <Clock className="h-3 w-3" />
+                                                            <span>
+                                                                {formatTime(
+                                                                    event.time,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-muted-foreground">
+                                                            <strong>
+                                                                Location:
+                                                            </strong>{' '}
+                                                            {event.location}
+                                                        </div>
+                                                        <div className="mt-1 text-muted-foreground">
+                                                            <Badge
+                                                                variant="outline"
+                                                                className="text-xs"
+                                                            >
+                                                                {event.category}
+                                                            </Badge>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <div className="text-muted-foreground">
-                                                        <strong>
-                                                            Location:
-                                                        </strong>{' '}
-                                                        {event.location}
+
+                                                {/* Action Error Display */}
+                                                {actionErrors[event.id] && (
+                                                    <div className="mt-2 rounded bg-red-50 p-2 text-xs text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                                                        {actionErrors[event.id]}
                                                     </div>
-                                                    <div className="mt-1 text-muted-foreground">
-                                                        <Badge
-                                                            variant="outline"
-                                                            className="text-xs"
-                                                        >
-                                                            {event.category}
-                                                        </Badge>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                )}
 
-                                            {/* Action Error Display */}
-                                            {actionErrors[event.id] && (
-                                                <div className="mt-2 rounded bg-red-50 p-2 text-xs text-red-600 dark:bg-red-900/20 dark:text-red-400">
-                                                    {actionErrors[event.id]}
-                                                </div>
-                                            )}
+                                                <div className="flex items-center justify-between pt-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            router.visit(
+                                                                publicShow(
+                                                                    event.id,
+                                                                ),
+                                                            )
+                                                        }
+                                                        className="h-8 px-2"
+                                                    >
+                                                        <Eye className="mr-1 h-3 w-3" />
+                                                        View
+                                                    </Button>
 
-                                            <div className="flex items-center justify-between pt-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() =>
-                                                        router.visit(
-                                                            publicShow(
-                                                                event.id,
-                                                            ),
-                                                        )
-                                                    }
-                                                    className="h-8 px-2"
-                                                >
-                                                    <Eye className="mr-1 h-3 w-3" />
-                                                    View
-                                                </Button>
-
-                                                {canManage && (
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger
-                                                            asChild
-                                                        >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                className="h-8 px-2"
-                                                                disabled={
-                                                                    updatingEvents.has(
+                                                    {canManage && (
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger
+                                                                asChild
+                                                            >
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="h-8 px-2"
+                                                                    disabled={
+                                                                        updatingEvents.has(
+                                                                            event.id,
+                                                                        ) ||
+                                                                        deletingEvents.has(
+                                                                            event.id,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {updatingEvents.has(
                                                                         event.id,
                                                                     ) ||
                                                                     deletingEvents.has(
                                                                         event.id,
-                                                                    )
-                                                                }
-                                                            >
-                                                                {updatingEvents.has(
-                                                                    event.id,
-                                                                ) ||
-                                                                deletingEvents.has(
-                                                                    event.id,
-                                                                ) ? (
-                                                                    <Loader2 className="h-3 w-3 animate-spin" />
-                                                                ) : (
-                                                                    <MoreVertical className="h-3 w-3" />
-                                                                )}
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    router.visit(
-                                                                        edit(
-                                                                            event.id,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            >
-                                                                <Edit className="mr-2 h-3 w-3" />
-                                                                Edit
-                                                            </DropdownMenuItem>
-                                                            {event.status ===
-                                                                'scheduled' &&
-                                                                isUpcoming(
-                                                                    event.date,
-                                                                ) && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                event,
-                                                                                'ongoing',
-                                                                            )
-                                                                        }
-                                                                        disabled={updatingEvents.has(
-                                                                            event.id,
-                                                                        )}
-                                                                    >
-                                                                        {updatingEvents.has(
-                                                                            event.id,
-                                                                        ) ? (
-                                                                            <>
-                                                                                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                                                                                Updating...
-                                                                            </>
-                                                                        ) : (
-                                                                            'Mark as Ongoing'
-                                                                        )}
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                            {(event.status ===
-                                                                'ongoing' ||
-                                                                isPast(
-                                                                    event.date,
-                                                                )) && (
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleStatusChange(
-                                                                            event,
-                                                                            'completed',
-                                                                        )
-                                                                    }
-                                                                    disabled={updatingEvents.has(
-                                                                        event.id,
-                                                                    )}
-                                                                >
-                                                                    {updatingEvents.has(
-                                                                        event.id,
                                                                     ) ? (
-                                                                        <>
-                                                                            <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                                                                            Updating...
-                                                                        </>
+                                                                        <Loader2 className="h-3 w-3 animate-spin" />
                                                                     ) : (
-                                                                        'Mark as Completed'
+                                                                        <MoreVertical className="h-3 w-3" />
                                                                     )}
-                                                                </DropdownMenuItem>
-                                                            )}
-                                                            {event.status !==
-                                                                'cancelled' &&
-                                                                event.status !==
-                                                                    'completed' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleStatusChange(
-                                                                                event,
-                                                                                'cancelled',
-                                                                            )
-                                                                        }
-                                                                        disabled={updatingEvents.has(
-                                                                            event.id,
-                                                                        )}
-                                                                    >
-                                                                        {updatingEvents.has(
-                                                                            event.id,
-                                                                        ) ? (
-                                                                            <>
-                                                                                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                                                                                Updating...
-                                                                            </>
-                                                                        ) : (
-                                                                            'Cancel Event'
-                                                                        )}
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    router.visit(
-                                                                        show(
-                                                                            event.id,
-                                                                        ),
-                                                                    )
-                                                                }
-                                                            >
-                                                                View Details
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    handleDelete(
-                                                                        event,
-                                                                    )
-                                                                }
-                                                                className="text-red-600 focus:text-red-600"
-                                                                disabled={deletingEvents.has(
-                                                                    event.id,
-                                                                )}
-                                                            >
-                                                                {deletingEvents.has(
-                                                                    event.id,
-                                                                ) ? (
-                                                                    <>
-                                                                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                                                                        Deleting...
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <Trash2 className="mr-2 h-3 w-3" />
-                                                                        Delete
-                                                                    </>
-                                                                )}
-                                                            </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <Empty>
-                                    <EmptyHeader>
-                                        <EmptyMedia variant="icon">
-                                            <Calendar className="h-6 w-6" />
-                                        </EmptyMedia>
-                                        <EmptyTitle>
-                                            {searchQuery ||
-                                            selectedCategory !== 'all' ||
-                                            selectedStatus !== 'all' ||
-                                            selectedMonth !== 'all'
-                                                ? 'No events found'
-                                                : 'No events yet'}
-                                        </EmptyTitle>
-                                        <EmptyDescription>
-                                            {searchQuery ||
-                                            selectedCategory !== 'all' ||
-                                            selectedStatus !== 'all' ||
-                                            selectedMonth !== 'all'
-                                                ? 'Try adjusting your search filters to see more results.'
-                                                : 'Get started by creating your first event to keep everyone informed about upcoming activities.'}
-                                        </EmptyDescription>
-                                    </EmptyHeader>
-                                    {canManage && (
-                                        <EmptyContent>
-                                            <Button
-                                                onClick={() =>
-                                                    router.visit(create())
-                                                }
-                                            >
-                                                <Plus className="mr-2 h-4 w-4" />
-                                                Create Event
-                                            </Button>
-                                        </EmptyContent>
-                                    )}
-                                </Empty>
-                            )}
-                        </div>
-                        ) : (
-                            /* Table View */
-                            <div className="overflow-x-auto">
-                                {events === undefined ? (
-                                    <EventsTableSkeleton />
-                                ) : (
-                                <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[50px]">
-                                            <Checkbox
-                                                checked={
-                                                    selectedEvents.size ===
-                                                        safeEvents.length &&
-                                                    safeEvents.length > 0
-                                                }
-                                                onCheckedChange={
-                                                    handleSelectAll
-                                                }
-                                                aria-label="Select all events"
-                                            />
-                                        </TableHead>
-                                        <TableHead>
-                                            <Button
-                                                variant="ghost"
-                                                onClick={() =>
-                                                    handleSort('title')
-                                                }
-                                                className="h-auto p-0 font-medium hover:bg-transparent"
-                                            >
-                                                Title
-                                                {sortField === 'title' ? (
-                                                    sortDirection === 'asc' ? (
-                                                        <ArrowUp className="ml-2 h-4 w-4" />
-                                                    ) : (
-                                                        <ArrowDown className="ml-2 h-4 w-4" />
-                                                    )
-                                                ) : (
-                                                    <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
-                                                )}
-                                            </Button>
-                                        </TableHead>
-                                        <TableHead>Category</TableHead>
-                                        <TableHead>
-                                            <Button
-                                                variant="ghost"
-                                                onClick={() =>
-                                                    handleSort('date')
-                                                }
-                                                className="h-auto p-0 font-medium hover:bg-transparent"
-                                            >
-                                                Date
-                                                {sortField === 'date' ? (
-                                                    sortDirection === 'asc' ? (
-                                                        <ArrowUp className="ml-2 h-4 w-4" />
-                                                    ) : (
-                                                        <ArrowDown className="ml-2 h-4 w-4" />
-                                                    )
-                                                ) : (
-                                                    <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
-                                                )}
-                                            </Button>
-                                        </TableHead>
-                                        <TableHead>Time</TableHead>
-                                        <TableHead>Location</TableHead>
-                                        <TableHead>
-                                            <Button
-                                                variant="ghost"
-                                                onClick={() =>
-                                                    handleSort('status')
-                                                }
-                                                className="h-auto p-0 font-medium hover:bg-transparent"
-                                            >
-                                                Status
-                                                {sortField === 'status' ? (
-                                                    sortDirection === 'asc' ? (
-                                                        <ArrowUp className="ml-2 h-4 w-4" />
-                                                    ) : (
-                                                        <ArrowDown className="ml-2 h-4 w-4" />
-                                                    )
-                                                ) : (
-                                                    <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
-                                                )}
-                                            </Button>
-                                        </TableHead>
-                                        <TableHead className="w-[100px]">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {safeEvents.length > 0 ? (
-                                        safeEvents.map((event) => (
-                                            <TableRow key={event.id}>
-                                                <TableCell>
-                                                    <Checkbox
-                                                        checked={selectedEvents.has(
-                                                            event.id,
-                                                        )}
-                                                        onCheckedChange={(
-                                                            checked,
-                                                        ) =>
-                                                            handleEventSelect(
-                                                                event.id,
-                                                                checked as boolean,
-                                                            )
-                                                        }
-                                                        aria-label={`Select event ${event.title}`}
-                                                    />
-                                                </TableCell>
-                                                <TableCell className="font-medium">
-                                                    {event.title}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Badge variant="outline">
-                                                        {event.category}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {formatRelativeDate(
-                                                        event.date,
-                                                    )}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {formatTime(event.time)}
-                                                    {event.end_time &&
-                                                        ` - ${formatTime(event.end_time)}`}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {event.location}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className={getStatusColor(
-                                                            event.status,
-                                                        )}
-                                                    >
-                                                        {event.status.toUpperCase()}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() =>
-                                                                router.visit(
-                                                                    publicShow(
-                                                                        event.id,
-                                                                    ),
-                                                                )
-                                                            }
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-
-                                                        {canManage && (
-                                                            <>
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem
                                                                     onClick={() =>
                                                                         router.visit(
                                                                             edit(
@@ -1418,218 +1089,573 @@ export default function EventsManagement({
                                                                         )
                                                                     }
                                                                 >
-                                                                    <Edit className="h-4 w-4" />
-                                                                </Button>
-
-                                                                <DropdownMenu>
-                                                                    <DropdownMenuTrigger
-                                                                        asChild
-                                                                    >
-                                                                        <Button
-                                                                            variant="ghost"
-                                                                            size="sm"
-                                                                            disabled={
-                                                                                updatingEvents.has(
-                                                                                    event.id,
-                                                                                ) ||
-                                                                                deletingEvents.has(
-                                                                                    event.id,
+                                                                    <Edit className="mr-2 h-3 w-3" />
+                                                                    Edit
+                                                                </DropdownMenuItem>
+                                                                {event.status ===
+                                                                    'scheduled' &&
+                                                                    isUpcoming(
+                                                                        event.date,
+                                                                    ) && (
+                                                                        <DropdownMenuItem
+                                                                            onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    event,
+                                                                                    'ongoing',
                                                                                 )
                                                                             }
+                                                                            disabled={updatingEvents.has(
+                                                                                event.id,
+                                                                            )}
                                                                         >
                                                                             {updatingEvents.has(
                                                                                 event.id,
-                                                                            ) ||
-                                                                            deletingEvents.has(
-                                                                                event.id,
                                                                             ) ? (
-                                                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                                                <>
+                                                                                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                                                                    Updating...
+                                                                                </>
                                                                             ) : (
-                                                                                <MoreVertical className="h-4 w-4" />
+                                                                                'Mark as Ongoing'
                                                                             )}
-                                                                        </Button>
-                                                                    </DropdownMenuTrigger>
-                                                                    <DropdownMenuContent align="end">
-                                                                        {event.status ===
-                                                                            'scheduled' &&
-                                                                            isUpcoming(
-                                                                                event.date,
-                                                                            ) && (
-                                                                                <DropdownMenuItem
-                                                                                    onClick={() =>
-                                                                                        handleStatusChange(
-                                                                                            event,
-                                                                                            'ongoing',
-                                                                                        )
-                                                                                    }
-                                                                                    disabled={updatingEvents.has(
-                                                                                        event.id,
-                                                                                    )}
-                                                                                >
-                                                                                    {updatingEvents.has(
-                                                                                        event.id,
-                                                                                    ) ? (
-                                                                                        <>
-                                                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                                                            Updating...
-                                                                                        </>
-                                                                                    ) : (
-                                                                                        'Mark as Ongoing'
-                                                                                    )}
-                                                                                </DropdownMenuItem>
-                                                                            )}
-                                                                        {(event.status ===
-                                                                            'ongoing' ||
-                                                                            isPast(
-                                                                                event.date,
-                                                                            )) && (
-                                                                            <DropdownMenuItem
-                                                                                onClick={() =>
-                                                                                    handleStatusChange(
-                                                                                        event,
-                                                                                        'completed',
-                                                                                    )
-                                                                                }
-                                                                                disabled={updatingEvents.has(
-                                                                                    event.id,
-                                                                                )}
-                                                                            >
-                                                                                {updatingEvents.has(
-                                                                                    event.id,
-                                                                                ) ? (
-                                                                                    <>
-                                                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                                                        Updating...
-                                                                                    </>
-                                                                                ) : (
-                                                                                    'Mark as Completed'
-                                                                                )}
-                                                                            </DropdownMenuItem>
+                                                                        </DropdownMenuItem>
+                                                                    )}
+                                                                {(event.status ===
+                                                                    'ongoing' ||
+                                                                    isPast(
+                                                                        event.date,
+                                                                    )) && (
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                event,
+                                                                                'completed',
+                                                                            )
+                                                                        }
+                                                                        disabled={updatingEvents.has(
+                                                                            event.id,
                                                                         )}
-                                                                        {event.status !==
-                                                                            'cancelled' &&
-                                                                            event.status !==
-                                                                                'completed' && (
-                                                                                <DropdownMenuItem
-                                                                                    onClick={() =>
-                                                                                        handleStatusChange(
-                                                                                            event,
-                                                                                            'cancelled',
-                                                                                        )
-                                                                                    }
-                                                                                    disabled={updatingEvents.has(
-                                                                                        event.id,
-                                                                                    )}
-                                                                                >
-                                                                                    {updatingEvents.has(
-                                                                                        event.id,
-                                                                                    ) ? (
-                                                                                        <>
-                                                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                                                            Updating...
-                                                                                        </>
-                                                                                    ) : (
-                                                                                        'Cancel Event'
-                                                                                    )}
-                                                                                </DropdownMenuItem>
-                                                                            )}
-                                                                        <DropdownMenuSeparator />
+                                                                    >
+                                                                        {updatingEvents.has(
+                                                                            event.id,
+                                                                        ) ? (
+                                                                            <>
+                                                                                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                                                                Updating...
+                                                                            </>
+                                                                        ) : (
+                                                                            'Mark as Completed'
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                )}
+                                                                {event.status !==
+                                                                    'cancelled' &&
+                                                                    event.status !==
+                                                                        'completed' && (
                                                                         <DropdownMenuItem
                                                                             onClick={() =>
+                                                                                handleStatusChange(
+                                                                                    event,
+                                                                                    'cancelled',
+                                                                                )
+                                                                            }
+                                                                            disabled={updatingEvents.has(
+                                                                                event.id,
+                                                                            )}
+                                                                        >
+                                                                            {updatingEvents.has(
+                                                                                event.id,
+                                                                            ) ? (
+                                                                                <>
+                                                                                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                                                                    Updating...
+                                                                                </>
+                                                                            ) : (
+                                                                                'Cancel Event'
+                                                                            )}
+                                                                        </DropdownMenuItem>
+                                                                    )}
+                                                                <DropdownMenuSeparator />
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        router.visit(
+                                                                            show(
+                                                                                event.id,
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    View Details
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuSeparator />
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        handleDelete(
+                                                                            event,
+                                                                        )
+                                                                    }
+                                                                    className="text-red-600 focus:text-red-600"
+                                                                    disabled={deletingEvents.has(
+                                                                        event.id,
+                                                                    )}
+                                                                >
+                                                                    {deletingEvents.has(
+                                                                        event.id,
+                                                                    ) ? (
+                                                                        <>
+                                                                            <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                                                                            Deleting...
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <Trash2 className="mr-2 h-3 w-3" />
+                                                                            Delete
+                                                                        </>
+                                                                    )}
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <Empty>
+                                        <EmptyHeader>
+                                            <EmptyMedia variant="icon">
+                                                <Calendar className="h-6 w-6" />
+                                            </EmptyMedia>
+                                            <EmptyTitle>
+                                                {searchQuery ||
+                                                selectedCategory !== 'all' ||
+                                                selectedStatus !== 'all' ||
+                                                selectedMonth !== 'all'
+                                                    ? 'No events found'
+                                                    : 'No events yet'}
+                                            </EmptyTitle>
+                                            <EmptyDescription>
+                                                {searchQuery ||
+                                                selectedCategory !== 'all' ||
+                                                selectedStatus !== 'all' ||
+                                                selectedMonth !== 'all'
+                                                    ? 'Try adjusting your search filters to see more results.'
+                                                    : 'Get started by creating your first event to keep everyone informed about upcoming activities.'}
+                                            </EmptyDescription>
+                                        </EmptyHeader>
+                                        {canManage && (
+                                            <EmptyContent>
+                                                <Button
+                                                    onClick={() =>
+                                                        router.visit(create())
+                                                    }
+                                                >
+                                                    <Plus className="mr-2 h-4 w-4" />
+                                                    Create Event
+                                                </Button>
+                                            </EmptyContent>
+                                        )}
+                                    </Empty>
+                                )}
+                            </div>
+                        ) : (
+                            /* Table View */
+                            <div className="overflow-x-auto">
+                                {events === undefined ? (
+                                    <EventsTableSkeleton />
+                                ) : (
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="w-[50px]">
+                                                    <Checkbox
+                                                        checked={
+                                                            selectedEvents.size ===
+                                                                safeEvents.length &&
+                                                            safeEvents.length >
+                                                                0
+                                                        }
+                                                        onCheckedChange={
+                                                            handleSelectAll
+                                                        }
+                                                        aria-label="Select all events"
+                                                    />
+                                                </TableHead>
+                                                <TableHead>
+                                                    <Button
+                                                        variant="ghost"
+                                                        onClick={() =>
+                                                            handleSort('title')
+                                                        }
+                                                        className="h-auto p-0 font-medium hover:bg-transparent"
+                                                    >
+                                                        Title
+                                                        {sortField ===
+                                                        'title' ? (
+                                                            sortDirection ===
+                                                            'asc' ? (
+                                                                <ArrowUp className="ml-2 h-4 w-4" />
+                                                            ) : (
+                                                                <ArrowDown className="ml-2 h-4 w-4" />
+                                                            )
+                                                        ) : (
+                                                            <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
+                                                        )}
+                                                    </Button>
+                                                </TableHead>
+                                                <TableHead>Category</TableHead>
+                                                <TableHead>
+                                                    <Button
+                                                        variant="ghost"
+                                                        onClick={() =>
+                                                            handleSort('date')
+                                                        }
+                                                        className="h-auto p-0 font-medium hover:bg-transparent"
+                                                    >
+                                                        Date
+                                                        {sortField ===
+                                                        'date' ? (
+                                                            sortDirection ===
+                                                            'asc' ? (
+                                                                <ArrowUp className="ml-2 h-4 w-4" />
+                                                            ) : (
+                                                                <ArrowDown className="ml-2 h-4 w-4" />
+                                                            )
+                                                        ) : (
+                                                            <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
+                                                        )}
+                                                    </Button>
+                                                </TableHead>
+                                                <TableHead>Time</TableHead>
+                                                <TableHead>Location</TableHead>
+                                                <TableHead>
+                                                    <Button
+                                                        variant="ghost"
+                                                        onClick={() =>
+                                                            handleSort('status')
+                                                        }
+                                                        className="h-auto p-0 font-medium hover:bg-transparent"
+                                                    >
+                                                        Status
+                                                        {sortField ===
+                                                        'status' ? (
+                                                            sortDirection ===
+                                                            'asc' ? (
+                                                                <ArrowUp className="ml-2 h-4 w-4" />
+                                                            ) : (
+                                                                <ArrowDown className="ml-2 h-4 w-4" />
+                                                            )
+                                                        ) : (
+                                                            <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
+                                                        )}
+                                                    </Button>
+                                                </TableHead>
+                                                <TableHead className="w-[100px]">
+                                                    Actions
+                                                </TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {safeEvents.length > 0 ? (
+                                                safeEvents.map((event) => (
+                                                    <TableRow key={event.id}>
+                                                        <TableCell>
+                                                            <Checkbox
+                                                                checked={selectedEvents.has(
+                                                                    event.id,
+                                                                )}
+                                                                onCheckedChange={(
+                                                                    checked,
+                                                                ) =>
+                                                                    handleEventSelect(
+                                                                        event.id,
+                                                                        checked as boolean,
+                                                                    )
+                                                                }
+                                                                aria-label={`Select event ${event.title}`}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell className="font-medium">
+                                                            {event.title}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Badge variant="outline">
+                                                                {event.category}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {formatRelativeDate(
+                                                                event.date,
+                                                            )}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {formatTime(
+                                                                event.time,
+                                                            )}
+                                                            {event.end_time &&
+                                                                ` - ${formatTime(event.end_time)}`}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {event.location}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Badge
+                                                                variant="secondary"
+                                                                className={getStatusColor(
+                                                                    event.status,
+                                                                )}
+                                                            >
+                                                                {event.status.toUpperCase()}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <div className="flex items-center gap-2">
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    onClick={() =>
+                                                                        router.visit(
+                                                                            publicShow(
+                                                                                event.id,
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Eye className="h-4 w-4" />
+                                                                </Button>
+
+                                                                {canManage && (
+                                                                    <>
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            onClick={() =>
                                                                                 router.visit(
-                                                                                    show(
+                                                                                    edit(
                                                                                         event.id,
                                                                                     ),
                                                                                 )
                                                                             }
                                                                         >
-                                                                            View
-                                                                            Details
-                                                                        </DropdownMenuItem>
-                                                                        <DropdownMenuSeparator />
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleDelete(
-                                                                                    event,
-                                                                                )
-                                                                            }
-                                                                            className="text-red-600 focus:text-red-600"
-                                                                            disabled={deletingEvents.has(
-                                                                                event.id,
-                                                                            )}
-                                                                        >
-                                                                            {deletingEvents.has(
-                                                                                event.id,
-                                                                            ) ? (
-                                                                                <>
-                                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                                                    Deleting...
-                                                                                </>
-                                                                            ) : (
-                                                                                <>
-                                                                                    <Trash2 className="mr-2 h-4 w-4" />
-                                                                                    Delete
-                                                                                </>
-                                                                            )}
-                                                                        </DropdownMenuItem>
-                                                                    </DropdownMenuContent>
-                                                                </DropdownMenu>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell
-                                                colSpan={8}
-                                                className="h-96"
-                                            >
-                                                <Empty>
-                                                    <EmptyHeader>
-                                                        <EmptyMedia variant="icon">
-                                                            <Calendar className="h-6 w-6" />
-                                                        </EmptyMedia>
-                                                        <EmptyTitle>
-                                                            {searchQuery ||
-                                                            selectedCategory !== 'all' ||
-                                                            selectedStatus !== 'all' ||
-                                                            selectedMonth !== 'all'
-                                                                ? 'No events found'
-                                                                : 'No events yet'}
-                                                        </EmptyTitle>
-                                                        <EmptyDescription>
-                                                            {searchQuery ||
-                                                            selectedCategory !== 'all' ||
-                                                            selectedStatus !== 'all' ||
-                                                            selectedMonth !== 'all'
-                                                                ? 'Try adjusting your search filters to see more results.'
-                                                                : 'Get started by creating your first event to keep everyone informed about upcoming activities.'}
-                                                        </EmptyDescription>
-                                                    </EmptyHeader>
-                                                    {canManage && (
-                                                        <EmptyContent>
-                                                            <Button
-                                                                onClick={() =>
-                                                                    router.visit(
-                                                                        create(),
-                                                                    )
-                                                                }
-                                                            >
-                                                                <Plus className="mr-2 h-4 w-4" />
-                                                                Create Event
-                                                            </Button>
-                                                        </EmptyContent>
-                                                    )}
-                                                </Empty>
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                            )}
-                        </div>
+                                                                            <Edit className="h-4 w-4" />
+                                                                        </Button>
+
+                                                                        <DropdownMenu>
+                                                                            <DropdownMenuTrigger
+                                                                                asChild
+                                                                            >
+                                                                                <Button
+                                                                                    variant="ghost"
+                                                                                    size="sm"
+                                                                                    disabled={
+                                                                                        updatingEvents.has(
+                                                                                            event.id,
+                                                                                        ) ||
+                                                                                        deletingEvents.has(
+                                                                                            event.id,
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    {updatingEvents.has(
+                                                                                        event.id,
+                                                                                    ) ||
+                                                                                    deletingEvents.has(
+                                                                                        event.id,
+                                                                                    ) ? (
+                                                                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                                                                    ) : (
+                                                                                        <MoreVertical className="h-4 w-4" />
+                                                                                    )}
+                                                                                </Button>
+                                                                            </DropdownMenuTrigger>
+                                                                            <DropdownMenuContent align="end">
+                                                                                {event.status ===
+                                                                                    'scheduled' &&
+                                                                                    isUpcoming(
+                                                                                        event.date,
+                                                                                    ) && (
+                                                                                        <DropdownMenuItem
+                                                                                            onClick={() =>
+                                                                                                handleStatusChange(
+                                                                                                    event,
+                                                                                                    'ongoing',
+                                                                                                )
+                                                                                            }
+                                                                                            disabled={updatingEvents.has(
+                                                                                                event.id,
+                                                                                            )}
+                                                                                        >
+                                                                                            {updatingEvents.has(
+                                                                                                event.id,
+                                                                                            ) ? (
+                                                                                                <>
+                                                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                                                    Updating...
+                                                                                                </>
+                                                                                            ) : (
+                                                                                                'Mark as Ongoing'
+                                                                                            )}
+                                                                                        </DropdownMenuItem>
+                                                                                    )}
+                                                                                {(event.status ===
+                                                                                    'ongoing' ||
+                                                                                    isPast(
+                                                                                        event.date,
+                                                                                    )) && (
+                                                                                    <DropdownMenuItem
+                                                                                        onClick={() =>
+                                                                                            handleStatusChange(
+                                                                                                event,
+                                                                                                'completed',
+                                                                                            )
+                                                                                        }
+                                                                                        disabled={updatingEvents.has(
+                                                                                            event.id,
+                                                                                        )}
+                                                                                    >
+                                                                                        {updatingEvents.has(
+                                                                                            event.id,
+                                                                                        ) ? (
+                                                                                            <>
+                                                                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                                                Updating...
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            'Mark as Completed'
+                                                                                        )}
+                                                                                    </DropdownMenuItem>
+                                                                                )}
+                                                                                {event.status !==
+                                                                                    'cancelled' &&
+                                                                                    event.status !==
+                                                                                        'completed' && (
+                                                                                        <DropdownMenuItem
+                                                                                            onClick={() =>
+                                                                                                handleStatusChange(
+                                                                                                    event,
+                                                                                                    'cancelled',
+                                                                                                )
+                                                                                            }
+                                                                                            disabled={updatingEvents.has(
+                                                                                                event.id,
+                                                                                            )}
+                                                                                        >
+                                                                                            {updatingEvents.has(
+                                                                                                event.id,
+                                                                                            ) ? (
+                                                                                                <>
+                                                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                                                    Updating...
+                                                                                                </>
+                                                                                            ) : (
+                                                                                                'Cancel Event'
+                                                                                            )}
+                                                                                        </DropdownMenuItem>
+                                                                                    )}
+                                                                                <DropdownMenuSeparator />
+                                                                                <DropdownMenuItem
+                                                                                    onClick={() =>
+                                                                                        router.visit(
+                                                                                            show(
+                                                                                                event.id,
+                                                                                            ),
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    View
+                                                                                    Details
+                                                                                </DropdownMenuItem>
+                                                                                <DropdownMenuSeparator />
+                                                                                <DropdownMenuItem
+                                                                                    onClick={() =>
+                                                                                        handleDelete(
+                                                                                            event,
+                                                                                        )
+                                                                                    }
+                                                                                    className="text-red-600 focus:text-red-600"
+                                                                                    disabled={deletingEvents.has(
+                                                                                        event.id,
+                                                                                    )}
+                                                                                >
+                                                                                    {deletingEvents.has(
+                                                                                        event.id,
+                                                                                    ) ? (
+                                                                                        <>
+                                                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                                            Deleting...
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        <>
+                                                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                                                            Delete
+                                                                                        </>
+                                                                                    )}
+                                                                                </DropdownMenuItem>
+                                                                            </DropdownMenuContent>
+                                                                        </DropdownMenu>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell
+                                                        colSpan={8}
+                                                        className="h-96"
+                                                    >
+                                                        <Empty>
+                                                            <EmptyHeader>
+                                                                <EmptyMedia variant="icon">
+                                                                    <Calendar className="h-6 w-6" />
+                                                                </EmptyMedia>
+                                                                <EmptyTitle>
+                                                                    {searchQuery ||
+                                                                    selectedCategory !==
+                                                                        'all' ||
+                                                                    selectedStatus !==
+                                                                        'all' ||
+                                                                    selectedMonth !==
+                                                                        'all'
+                                                                        ? 'No events found'
+                                                                        : 'No events yet'}
+                                                                </EmptyTitle>
+                                                                <EmptyDescription>
+                                                                    {searchQuery ||
+                                                                    selectedCategory !==
+                                                                        'all' ||
+                                                                    selectedStatus !==
+                                                                        'all' ||
+                                                                    selectedMonth !==
+                                                                        'all'
+                                                                        ? 'Try adjusting your search filters to see more results.'
+                                                                        : 'Get started by creating your first event to keep everyone informed about upcoming activities.'}
+                                                                </EmptyDescription>
+                                                            </EmptyHeader>
+                                                            {canManage && (
+                                                                <EmptyContent>
+                                                                    <Button
+                                                                        onClick={() =>
+                                                                            router.visit(
+                                                                                create(),
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Plus className="mr-2 h-4 w-4" />
+                                                                        Create
+                                                                        Event
+                                                                    </Button>
+                                                                </EmptyContent>
+                                                            )}
+                                                        </Empty>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                )}
+                            </div>
                         )}
                     </CardContent>
                 </Card>

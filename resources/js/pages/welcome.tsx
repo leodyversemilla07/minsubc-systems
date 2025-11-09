@@ -197,9 +197,9 @@ export default function Welcome() {
                             </CardHeader>
                             <CardContent className="relative pb-4">
                                 <CardDescription className="leading-relaxed text-gray-600 dark:text-gray-300">
-                                    Cast your vote in university elections,
-                                    view candidates, and participate in
-                                    democratic processes.
+                                    Cast your vote in university elections, view
+                                    candidates, and participate in democratic
+                                    processes.
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">

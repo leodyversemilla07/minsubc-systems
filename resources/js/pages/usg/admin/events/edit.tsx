@@ -1,5 +1,7 @@
 import EventController from '@/actions/Modules/USG/Http/Controllers/Admin/EventController';
 import { DatePicker } from '@/components/date-picker';
+import { FileUpload } from '@/components/file-upload';
+import { PageHeader } from '@/components/page-header';
 import { TimePicker } from '@/components/time-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -13,12 +15,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { PageHeader } from '@/components/page-header';
 import { Spinner } from '@/components/ui/spinner';
-import { FileUpload } from '@/components/file-upload';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
+import { format } from 'date-fns';
 import {
     AlertCircle,
     Calendar,
@@ -27,7 +28,6 @@ import {
     MapPin,
     Save,
 } from 'lucide-react';
-import { format } from 'date-fns';
 
 interface Event {
     id: number;
@@ -73,7 +73,7 @@ export default function EditEvent({
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         post(EventController.update(event.id).url, {
             preserveScroll: false,
         });
@@ -84,7 +84,10 @@ export default function EditEvent({
             breadcrumbs={[
                 { title: 'USG Admin', href: '/usg/admin' },
                 { title: 'Events', href: '/usg/admin/events' },
-                { title: 'Edit Event', href: `/usg/admin/events/${event.id}/edit` },
+                {
+                    title: 'Edit Event',
+                    href: `/usg/admin/events/${event.id}/edit`,
+                },
             ]}
         >
             <Head title={`Edit ${event.title} - USG Admin`} />
@@ -128,20 +131,18 @@ export default function EditEvent({
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="title">
-                                        Event Title *
-                                    </Label>
+                                    <Label htmlFor="title">Event Title *</Label>
                                     <Input
                                         id="title"
                                         name="title"
                                         type="text"
                                         placeholder="Enter event title"
                                         value={data.title}
-                                        onChange={(e) => setData('title', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('title', e.target.value)
+                                        }
                                         className={
-                                            errors.title
-                                                ? 'border-red-500'
-                                                : ''
+                                            errors.title ? 'border-red-500' : ''
                                         }
                                         disabled={!canManage}
                                         required
@@ -163,7 +164,12 @@ export default function EditEvent({
                                         placeholder="Enter the event description..."
                                         rows={6}
                                         value={data.description}
-                                        onChange={(e) => setData('description', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'description',
+                                                e.target.value,
+                                            )
+                                        }
                                         className={
                                             errors.description
                                                 ? 'border-red-500'
@@ -180,13 +186,13 @@ export default function EditEvent({
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="category">
-                                        Category
-                                    </Label>
+                                    <Label htmlFor="category">Category</Label>
                                     <Select
                                         name="category"
                                         value={data.category}
-                                        onValueChange={(value) => setData('category', value)}
+                                        onValueChange={(value) =>
+                                            setData('category', value)
+                                        }
                                         disabled={!canManage}
                                     >
                                         <SelectTrigger
@@ -233,8 +239,22 @@ export default function EditEvent({
                                             Event Date *
                                         </Label>
                                         <DatePicker
-                                            date={data.event_date ? new Date(data.event_date) : undefined}
-                                            onDateChange={(date) => setData('event_date', date ? format(date, 'yyyy-MM-dd') : '')}
+                                            date={
+                                                data.event_date
+                                                    ? new Date(data.event_date)
+                                                    : undefined
+                                            }
+                                            onDateChange={(date) =>
+                                                setData(
+                                                    'event_date',
+                                                    date
+                                                        ? format(
+                                                              date,
+                                                              'yyyy-MM-dd',
+                                                          )
+                                                        : '',
+                                                )
+                                            }
                                             name="event_date"
                                             placeholder="Select event date"
                                             disabled={!canManage}
@@ -255,7 +275,14 @@ export default function EditEvent({
                                             id="event_time"
                                             label=""
                                             value={data.event_time}
-                                            onChange={(value) => setData('event_time', value ? value.substring(0, 5) : '')}
+                                            onChange={(value) =>
+                                                setData(
+                                                    'event_time',
+                                                    value
+                                                        ? value.substring(0, 5)
+                                                        : '',
+                                                )
+                                            }
                                             error={errors.event_time}
                                             disabled={!canManage}
                                             required
@@ -267,12 +294,30 @@ export default function EditEvent({
                                             End Date
                                         </Label>
                                         <DatePicker
-                                            date={data.end_date ? new Date(data.end_date) : undefined}
-                                            onDateChange={(date) => setData('end_date', date ? format(date, 'yyyy-MM-dd') : '')}
+                                            date={
+                                                data.end_date
+                                                    ? new Date(data.end_date)
+                                                    : undefined
+                                            }
+                                            onDateChange={(date) =>
+                                                setData(
+                                                    'end_date',
+                                                    date
+                                                        ? format(
+                                                              date,
+                                                              'yyyy-MM-dd',
+                                                          )
+                                                        : '',
+                                                )
+                                            }
                                             name="end_date"
                                             placeholder="Select end date (optional)"
                                             disabled={!canManage}
-                                            minDate={data.event_date ? new Date(data.event_date) : undefined}
+                                            minDate={
+                                                data.event_date
+                                                    ? new Date(data.event_date)
+                                                    : undefined
+                                            }
                                             showClearButton={true}
                                         />
                                         {errors.end_date && (
@@ -293,7 +338,14 @@ export default function EditEvent({
                                             id="end_time"
                                             label=""
                                             value={data.end_time}
-                                            onChange={(value) => setData('end_time', value ? value.substring(0, 5) : '')}
+                                            onChange={(value) =>
+                                                setData(
+                                                    'end_time',
+                                                    value
+                                                        ? value.substring(0, 5)
+                                                        : '',
+                                                )
+                                            }
                                             error={errors.end_time}
                                             disabled={!canManage}
                                         />
@@ -312,16 +364,16 @@ export default function EditEvent({
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="location">
-                                        Location *
-                                    </Label>
+                                    <Label htmlFor="location">Location *</Label>
                                     <Input
                                         id="location"
                                         name="location"
                                         type="text"
                                         placeholder="e.g., MSU-Buug Campus Auditorium"
                                         value={data.location}
-                                        onChange={(e) => setData('location', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('location', e.target.value)
+                                        }
                                         className={
                                             errors.location
                                                 ? 'border-red-500'
@@ -347,7 +399,12 @@ export default function EditEvent({
                                         placeholder="Additional venue information, directions, parking details..."
                                         rows={3}
                                         value={data.venue_details}
-                                        onChange={(e) => setData('venue_details', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'venue_details',
+                                                e.target.value,
+                                            )
+                                        }
                                         className={
                                             errors.venue_details
                                                 ? 'border-red-500'
@@ -387,19 +444,31 @@ export default function EditEvent({
                                             </div>
                                         </div>
                                         <p className="text-sm text-muted-foreground">
-                                            Upload a new image to replace the current one
+                                            Upload a new image to replace the
+                                            current one
                                         </p>
                                     </div>
                                 )}
 
                                 <FileUpload
                                     file={data.featured_image}
-                                    onFileChange={(file) => setData('featured_image', file)}
-                                    label={data.featured_image || !event.image_path ? "Upload Featured Image" : "Replace Featured Image"}
+                                    onFileChange={(file) =>
+                                        setData('featured_image', file)
+                                    }
+                                    label={
+                                        data.featured_image || !event.image_path
+                                            ? 'Upload Featured Image'
+                                            : 'Replace Featured Image'
+                                    }
                                     description="JPG, PNG up to 5MB. This image will be displayed prominently for the event."
                                     error={errors.featured_image}
                                     accept="image/*"
-                                    allowedTypes={['image/jpeg', 'image/png', 'image/jpg', 'image/webp']}
+                                    allowedTypes={[
+                                        'image/jpeg',
+                                        'image/png',
+                                        'image/jpg',
+                                        'image/webp',
+                                    ]}
                                     maxSizeMB={5}
                                     required={false}
                                     disabled={!canManage}
@@ -433,7 +502,7 @@ export default function EditEvent({
 
                         {/* Action Buttons */}
                         {canManage && (
-                            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
+                            <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:justify-end sm:gap-4">
                                 <Button
                                     type="button"
                                     variant="outline"

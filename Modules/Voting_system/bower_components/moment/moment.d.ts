@@ -18,7 +18,7 @@ declare namespace moment {
     relativeTime(n: number, withoutSuffix: boolean,
                  key: RelativeTimeKey, isFuture: boolean): string;
     pastFuture(diff: number, absRelTime: string): string;
-    set(config: Object): void;
+    set(config: object): void;
 
     months(): string[];
     months(m: Moment, format?: string): string;
