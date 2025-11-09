@@ -123,6 +123,10 @@ it('officer creation validates required fields', function () {
 });
 
 it('officer can be created with photo', function () {
+    if (! function_exists('imagecreatetruecolor')) {
+        $this->markTestSkipped('GD extension is not installed');
+    }
+
     $this->seed(RolesAndPermissionsSeeder::class);
 
     Storage::fake('public');
@@ -201,6 +205,10 @@ it('officer can be updated with valid data', function () {
 });
 
 it('officer can be updated with photo', function () {
+    if (! function_exists('imagecreatetruecolor')) {
+        $this->markTestSkipped('GD extension is not installed');
+    }
+
     $this->seed(RolesAndPermissionsSeeder::class);
 
     Storage::fake('public');

@@ -115,6 +115,10 @@ describe('Resolution File Cleanup', function () {
 
 describe('Announcement File Cleanup', function () {
     it('deletes the featured image when announcement is deleted', function () {
+        if (! function_exists('imagecreatetruecolor')) {
+            $this->markTestSkipped('GD extension is not installed');
+        }
+
         $user = User::factory()->create();
         $user->assignRole('usg-admin');
 
