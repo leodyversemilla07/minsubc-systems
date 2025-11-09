@@ -1,8 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\VotingSystem\Http\Controllers\VotingSystemController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('votingsystems', VotingSystemController::class)->names('votingsystem');
-});
+/*
+|--------------------------------------------------------------------------
+| VotingSystem API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for the VotingSystem module.
+| These routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group.
+|
+*/
+
+// API routes for VotingSystem module (if needed)
+// All current functionality uses web routes with Inertia.js

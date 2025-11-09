@@ -1,7 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\VotingSystem\Http\Controllers\VotingSystemController;
+use Modules\VotingSystem\Http\Controllers\Admin\ActivityLogController;
+use Modules\VotingSystem\Http\Controllers\Admin\CandidateController;
+use Modules\VotingSystem\Http\Controllers\Admin\ElectionController;
+use Modules\VotingSystem\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
+use Modules\VotingSystem\Http\Controllers\Admin\PartylistController;
+use Modules\VotingSystem\Http\Controllers\Admin\PositionController;
+use Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController;
+use Modules\VotingSystem\Http\Controllers\BallotController;
+use Modules\VotingSystem\Http\Controllers\FeedbackController;
+use Modules\VotingSystem\Http\Controllers\ResultsController;
+use Modules\VotingSystem\Http\Controllers\VoterAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,83 +26,67 @@ use Modules\VotingSystem\Http\Controllers\VotingSystemController;
 
 // Public Routes (No Authentication Required)
 Route::prefix('voting')->name('voting.')->group(function () {
+    // Landing page
+    Route::get('/', function () {
+        $activeElection = \Modules\VotingSystem\Models\Election::where('status', true)
+            ->orWhere('end_time', '<', now())
+            ->latest()
+            ->first();
+
+        return \Inertia\Inertia::render('voting/index', [
+            'activeElection' => $activeElection,
+        ]);
+    })->name('index');
+
     // Voter Login & Authentication
-    Route::get('/', [VotingSystemController::class, 'index'])->name('index');
-    Route::get('/login', [VotingSystemController::class, 'login'])->name('login');
-    Route::post('/authenticate', [VotingSystemController::class, 'authenticate'])->name('authenticate');
-    
-    // Public Results (after election ends)
-    Route::get('/results', [VotingSystemController::class, 'results'])->name('results');
+    Route::get('/login', [VoterAuthController::class, 'showLogin'])->name('login');
+    Route::post('/authenticate', [VoterAuthController::class, 'login'])->name('authenticate');
+
+    // Vote Confirmation (accessible after logout)
+    Route::get('/confirmation', [BallotController::class, 'confirmation'])->name('confirmation');
+
+    // Public Results
+    Route::get('/results/{election}', [ResultsController::class, 'index'])->name('results');
 });
 
 // Voter Routes (Authenticated Voters)
 Route::middleware(['auth:voter'])->prefix('voting')->name('voting.')->group(function () {
-    Route::get('/ballot', [VotingSystemController::class, 'ballot'])->name('ballot');
-    Route::post('/vote', [VotingSystemController::class, 'vote'])->name('vote');
-    Route::get('/confirmation', [VotingSystemController::class, 'confirmation'])->name('confirmation');
-    Route::post('/logout', [VotingSystemController::class, 'logout'])->name('logout');
+    Route::get('/ballot', [BallotController::class, 'show'])->name('ballot');
+    Route::post('/preview', [BallotController::class, 'preview'])->name('preview');
+    Route::post('/vote', [BallotController::class, 'submit'])->name('submit');
+    Route::post('/logout', [VoterAuthController::class, 'logout'])->name('logout');
+
+    // Feedback
+    Route::get('/feedback', [FeedbackController::class, 'create'])->name('feedback.create');
+    Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 });
 
 // Admin Routes (Authenticated Admins)
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::prefix('voting/admin')->name('voting.admin.')->group(function () {
-        // Dashboard - accessible to voting admins and system admins
-        Route::middleware(['role:voting-admin|super-admin'])->group(function () {
-            Route::get('/', [VotingSystemController::class, 'dashboard'])->name('dashboard');
-            
-            // Voter Management
-            Route::get('/voters', [VotingSystemController::class, 'voters'])->name('voters.index');
-            Route::post('/voters', [VotingSystemController::class, 'storeVoter'])->name('voters.store');
-            Route::get('/voters/{voter}', [VotingSystemController::class, 'showVoter'])->name('voters.show');
-            Route::patch('/voters/{voter}', [VotingSystemController::class, 'updateVoter'])->name('voters.update');
-            Route::delete('/voters/{voter}', [VotingSystemController::class, 'destroyVoter'])->name('voters.destroy');
-            Route::get('/voters/export', [VotingSystemController::class, 'exportVoters'])->name('voters.export');
-            
-            // Candidate Management
-            Route::get('/candidates', [VotingSystemController::class, 'candidates'])->name('candidates.index');
-            Route::post('/candidates', [VotingSystemController::class, 'storeCandidate'])->name('candidates.store');
-            Route::get('/candidates/{candidate}', [VotingSystemController::class, 'showCandidate'])->name('candidates.show');
-            Route::patch('/candidates/{candidate}', [VotingSystemController::class, 'updateCandidate'])->name('candidates.update');
-            Route::delete('/candidates/{candidate}', [VotingSystemController::class, 'destroyCandidate'])->name('candidates.destroy');
-            
-            // Position Management
-            Route::get('/positions', [VotingSystemController::class, 'positions'])->name('positions.index');
-            Route::post('/positions', [VotingSystemController::class, 'storePosition'])->name('positions.store');
-            Route::patch('/positions/{position}', [VotingSystemController::class, 'updatePosition'])->name('positions.update');
-            Route::delete('/positions/{position}', [VotingSystemController::class, 'destroyPosition'])->name('positions.destroy');
-            Route::post('/positions/reorder', [VotingSystemController::class, 'reorderPositions'])->name('positions.reorder');
-            
-            // Party List Management
-            Route::get('/parties', [VotingSystemController::class, 'parties'])->name('parties.index');
-            Route::post('/parties', [VotingSystemController::class, 'storeParty'])->name('parties.store');
-            Route::patch('/parties/{party}', [VotingSystemController::class, 'updateParty'])->name('parties.update');
-            Route::delete('/parties/{party}', [VotingSystemController::class, 'destroyParty'])->name('parties.destroy');
-            
-            // Election Management
-            Route::get('/elections', [VotingSystemController::class, 'elections'])->name('elections.index');
-            Route::post('/elections', [VotingSystemController::class, 'storeElection'])->name('elections.store');
-            Route::patch('/elections/{election}', [VotingSystemController::class, 'updateElection'])->name('elections.update');
-            Route::post('/elections/{election}/start', [VotingSystemController::class, 'startElection'])->name('elections.start');
-            Route::post('/elections/{election}/stop', [VotingSystemController::class, 'stopElection'])->name('elections.stop');
-            Route::delete('/elections/{election}', [VotingSystemController::class, 'destroyElection'])->name('elections.destroy');
-            
-            // Results & Analytics
-            Route::get('/results', [VotingSystemController::class, 'adminResults'])->name('results');
-            Route::get('/results/{election}', [VotingSystemController::class, 'electionResults'])->name('results.election');
-            Route::get('/results/{election}/export', [VotingSystemController::class, 'exportResults'])->name('results.export');
-            
-            // Vote History & Audit
-            Route::get('/history', [VotingSystemController::class, 'history'])->name('history');
-            Route::get('/history/{voter}', [VotingSystemController::class, 'voterHistory'])->name('history.voter');
-            
-            // Settings
-            Route::get('/settings', [VotingSystemController::class, 'settings'])->name('settings');
-            Route::patch('/settings', [VotingSystemController::class, 'updateSettings'])->name('settings.update');
-            
-            // Votes Management (Super Admin only)
-            Route::middleware(['role:super-admin'])->group(function () {
-                Route::post('/votes/reset', [VotingSystemController::class, 'resetVotes'])->name('votes.reset');
-            });
-        });
-    });
+Route::middleware(['auth', 'verified'])->prefix('voting/admin')->name('voting.admin.')->group(function () {
+    // Elections
+    Route::resource('elections', ElectionController::class);
+    Route::post('elections/{election}/toggle-status', [ElectionController::class, 'toggleStatus'])->name('elections.toggle-status');
+
+    // Candidates
+    Route::resource('candidates', CandidateController::class);
+
+    // Positions
+    Route::resource('positions', PositionController::class);
+    Route::post('positions/{position}/move-up', [PositionController::class, 'moveUp'])->name('positions.move-up');
+    Route::post('positions/{position}/move-down', [PositionController::class, 'moveDown'])->name('positions.move-down');
+
+    // Partylists
+    Route::resource('partylists', PartylistController::class);
+
+    // Voters
+    Route::resource('voters', VoterManagementController::class)->except(['edit']);
+    Route::post('voters/{voter}/reset-password', [VoterManagementController::class, 'resetPassword'])->name('voters.reset-password');
+    Route::post('voters/{voter}/reset-vote', [VoterManagementController::class, 'resetVote'])->name('voters.reset-vote');
+    Route::get('voters/{election}/export', [VoterManagementController::class, 'export'])->name('voters.export');
+
+    // Activity Logs
+    Route::resource('activity-logs', ActivityLogController::class)->only(['index', 'show']);
+
+    // Feedback
+    Route::resource('feedback', AdminFeedbackController::class)->only(['index', 'show']);
 });

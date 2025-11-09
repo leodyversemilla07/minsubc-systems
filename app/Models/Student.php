@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\Registrar\Models;
+namespace App\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Registrar\Database\Factories\StudentFactory;
+use Modules\Registrar\Models\DocumentRequest;
 
 class Student extends Model
 {
@@ -59,6 +59,14 @@ class Student extends Model
     public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class, 'student_id', 'student_id');
+    }
+
+    /**
+     * Get the voter records for this student.
+     */
+    public function voters(): HasMany
+    {
+        return $this->hasMany(\Modules\VotingSystem\Models\Voter::class, 'voters_id', 'student_id');
     }
 
     /**

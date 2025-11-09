@@ -208,7 +208,7 @@ export default function Welcome() {
                                     className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-lg transition-all duration-200 hover:from-amber-700 hover:to-amber-800 hover:shadow-xl dark:from-amber-500 dark:to-amber-600 dark:hover:from-amber-600 dark:hover:to-amber-700"
                                 >
                                     <a
-                                        href="/votingsystem/index.php"
+                                        href="/voting"
                                         className="flex items-center justify-center"
                                     >
                                         <span className="hidden sm:inline">

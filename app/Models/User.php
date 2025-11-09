@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Modules\Registrar\Models\Student;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
