@@ -14,17 +14,15 @@
         <meta name="author" content="{{ $author ?? '' }}">
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-        {{-- Vite CSS --}}
-        {{-- {{ module_vite('build-votingsystem', 'resources/assets/sass/app.scss') }} --}}
+        {{-- Vite Assets --}}
+        @vite(['Modules/VotingSystem/resources/assets/css/app.css', 'Modules/VotingSystem/resources/assets/js/app.js'], 'build-votingsystem')
     </head>
 
     <body>
         {{ $slot }}
-
-        {{-- Vite JS --}}
-        {{-- {{ module_vite('build-votingsystem', 'resources/assets/js/app.js') }} --}}
     </body>
 </html>

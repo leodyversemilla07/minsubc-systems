@@ -16,6 +16,14 @@ class VotingSystemController extends Controller
     }
 
     /**
+     * Show the voter login form.
+     */
+    public function login()
+    {
+        return view('votingsystem::login');
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
