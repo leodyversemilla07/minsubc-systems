@@ -1,8 +1,10 @@
 import { router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Alert } from '@/components/ui/alert';
-import { CircleAlert, CircleCheck, ArrowLeft } from 'lucide-react';
+import { CircleAlert, CircleCheck, ArrowLeft, Lock } from 'lucide-react';
 import voting from '@/routes/voting';
+import { SecurityBadge } from '@/components/voting/security-badge';
+import { useState } from 'react';
 
 interface Partylist {
     id: number;
@@ -40,6 +42,8 @@ interface PreviewPageProps {
 }
 
 export default function Preview({ election, selections, votes }: PreviewPageProps) {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleEditVotes = () => {
         router.get(voting.ballot.url(), {}, {
             preserveState: true,
@@ -48,15 +52,23 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
     };
 
     const handleConfirmSubmit = () => {
-        router.post(voting.submit.url(), { votes });
+        setIsSubmitting(true);
+        router.post(voting.submit.url(), { votes }, {
+            onFinish: () => setIsSubmitting(false),
+        });
     };
 
+    const totalSelections = selections.reduce(
+        (sum, selection) => sum + selection.candidates.length,
+        0
+    );
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30">
             {/* Header */}
-            <div className="bg-green-600 text-white shadow-lg">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg">
                 <div className="container mx-auto px-4 py-6">
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h1 className="text-2xl font-bold">{election.name}</h1>
                             <p className="text-sm opacity-90">Review Your Selections</p>
@@ -65,24 +77,46 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
                             variant="ghost"
                             onClick={handleEditVotes}
                             className="bg-white/20 hover:bg-white/30 text-white"
+                            disabled={isSubmitting}
                         >
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             Edit Selections
                         </Button>
+                    </div>
+
+                    {/* Progress Indicator */}
+                    <div className="mt-4 flex items-center gap-3 text-sm">
+                        <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+                            <CircleCheck className="w-4 h-4" />
+                            <span className="font-semibold">
+                                {selections.length} position{selections.length !== 1 ? 's' : ''} filled
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+                            <span className="font-semibold">
+                                {totalSelections} candidate{totalSelections !== 1 ? 's' : ''} selected
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Preview Content */}
             <div className="container mx-auto px-4 py-8 max-w-5xl">
+                {/* Security Badge */}
+                <div className="mb-6">
+                    <SecurityBadge message="Your vote will be encrypted and submitted securely. This cannot be undone." />
+                </div>
+
                 {/* Warning Alert */}
-                <Alert className="mb-6 border-yellow-200 bg-yellow-50 text-yellow-800">
+                <Alert className="mb-6 border-yellow-200 bg-yellow-50 text-yellow-800 shadow-md">
                     <CircleAlert className="h-5 w-5 text-yellow-600" />
                     <div>
-                        <h3 className="font-semibold mb-1">Review Before Submitting</h3>
+                        <h3 className="font-semibold mb-1">⚠️ Final Confirmation Required</h3>
                         <p className="text-sm">
                             Please carefully review your selections below. Once you submit your vote, 
-                            <span className="font-semibold"> you cannot make any changes</span>.
+                            <span className="font-semibold"> it cannot be changed or withdrawn</span>.
+                            Make sure all selections are correct before proceeding.
                         </p>
                     </div>
                 </Alert>
@@ -181,22 +215,33 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
 
                 {/* Action Buttons */}
                 {selections.length > 0 && (
-                    <div className="bg-white rounded-lg shadow-md p-6">
+                    <div className="bg-white rounded-lg shadow-md p-6 sticky bottom-4">
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Button
                                 onClick={handleEditVotes}
                                 variant="outline"
-                                className="flex-1 py-6 text-lg"
+                                className="flex-1 py-6 text-lg border-2"
+                                disabled={isSubmitting}
                             >
                                 <ArrowLeft className="w-5 h-5 mr-2" />
                                 Edit My Selections
                             </Button>
                             <Button
                                 onClick={handleConfirmSubmit}
-                                className="flex-1 bg-green-600 hover:bg-green-700 py-6 text-lg font-bold"
+                                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-6 text-lg font-bold shadow-lg"
+                                disabled={isSubmitting}
                             >
-                                <CircleCheck className="w-5 h-5 mr-2" />
-                                Confirm & Submit Vote
+                                {isSubmitting ? (
+                                    <>
+                                        <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        Submitting Vote...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Lock className="w-5 h-5 mr-2" />
+                                        Confirm & Submit Vote
+                                    </>
+                                )}
                             </Button>
                         </div>
                         <p className="text-center text-sm text-gray-500 mt-4">
