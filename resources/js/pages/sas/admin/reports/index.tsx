@@ -57,7 +57,7 @@ export default function Reports({ scholarships }: Props) {
 
     const downloadScholarshipPDF = () => {
         const params = new URLSearchParams(
-            Object.entries(scholarshipFilters).filter(([_, v]) => v !== ''),
+            Object.entries(scholarshipFilters).filter(([, v]) => v !== ''),
         );
         window.open(
             `/sas/admin/reports/scholarships/recipients?${params}`,
@@ -68,7 +68,7 @@ export default function Reports({ scholarships }: Props) {
     const downloadScholarshipExcel = () => {
         const params = new URLSearchParams({
             ...Object.fromEntries(
-                Object.entries(scholarshipFilters).filter(([_, v]) => v !== ''),
+                Object.entries(scholarshipFilters).filter(([, v]) => v !== ''),
             ),
             format: 'excel',
         });
@@ -94,7 +94,7 @@ export default function Reports({ scholarships }: Props) {
 
     const downloadInsurancePDF = () => {
         const params = new URLSearchParams(
-            Object.entries(insuranceFilters).filter(([_, v]) => v !== ''),
+            Object.entries(insuranceFilters).filter(([, v]) => v !== ''),
         );
         window.open(`/sas/admin/reports/insurance/records?${params}`, '_blank');
     };
@@ -102,7 +102,7 @@ export default function Reports({ scholarships }: Props) {
     const downloadInsuranceExcel = () => {
         const params = new URLSearchParams({
             ...Object.fromEntries(
-                Object.entries(insuranceFilters).filter(([_, v]) => v !== ''),
+                Object.entries(insuranceFilters).filter(([, v]) => v !== ''),
             ),
             format: 'excel',
         });
