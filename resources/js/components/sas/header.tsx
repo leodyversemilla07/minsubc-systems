@@ -21,7 +21,6 @@ export default function Header() {
     const isSASStaff = userRoles.includes('sas-staff');
     const isSASAdmin = userRoles.includes('sas-admin');
     const isSuperAdmin = userRoles.includes('super-admin');
-    const isOrgAdviser = userRoles.includes('org_adviser');
     const hasAdminAccess = isSASStaff || isSASAdmin || isSuperAdmin;
 
     // Build navigation links based on user authentication and roles
