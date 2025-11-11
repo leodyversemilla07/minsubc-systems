@@ -14,7 +14,9 @@ export default function Header() {
     const currentUrl = page.url;
 
     // Check user roles
-    const userRoles = auth.user?.roles?.map((role) => role.name) ?? [];
+    const userRoles = Array.isArray(auth.user?.roles)
+        ? auth.user.roles.map((role: { name: string }) => role.name)
+        : [];
     const isStudent = userRoles.includes('student');
     const isSASStaff = userRoles.includes('sas-staff');
     const isSASAdmin = userRoles.includes('sas-admin');
@@ -90,10 +92,10 @@ export default function Header() {
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="hidden bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-xs font-bold leading-tight text-transparent transition-all lg:block dark:from-blue-100 dark:to-blue-300">
+                            <span className="hidden bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-xs leading-tight font-bold text-transparent transition-all lg:block dark:from-blue-100 dark:to-blue-300">
                                 Mindoro State University — Bongabong Campus
                             </span>
-                            <span className="bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-xs font-bold leading-tight text-transparent lg:text-sm dark:from-white dark:to-blue-200">
+                            <span className="bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-xs leading-tight font-bold text-transparent lg:text-sm dark:from-white dark:to-blue-200">
                                 Student Affairs and Services
                             </span>
                             <span className="bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-xs font-bold text-transparent lg:hidden dark:from-white dark:to-blue-300">
