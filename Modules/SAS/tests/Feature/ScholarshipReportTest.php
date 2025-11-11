@@ -4,8 +4,9 @@ use Modules\SAS\Models\Scholarship;
 use Modules\SAS\Models\ScholarshipRecipient;
 
 beforeEach(function () {
-    $this->user = \App\Models\User::factory()->create();
-    $this->actingAs($this->user);
+    $admin = \App\Models\User::factory()->create();
+    $admin->assignRole('admin');
+    $this->actingAs($admin);
 });
 
 test('scholarship recipients report generates PDF successfully', function () {

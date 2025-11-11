@@ -3,8 +3,9 @@
 use Modules\SAS\Models\InsuranceRecord;
 
 beforeEach(function () {
-    $this->user = \App\Models\User::factory()->create();
-    $this->actingAs($this->user);
+    $admin = \App\Models\User::factory()->create();
+    $admin->assignRole('admin');
+    $this->actingAs($admin);
 });
 
 test('insurance records report generates PDF successfully', function () {
