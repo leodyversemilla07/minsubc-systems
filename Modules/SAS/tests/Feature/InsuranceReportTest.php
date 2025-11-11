@@ -66,7 +66,7 @@ test('insurance records report can be filtered by date range', function () {
         'effective_date' => now()->subDays(5),
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?date_from='.now()->subDays(7)->toDateString());
+    $response = $this->get('/sas/admin/reports/insurance/records?date_from=' . now()->subDays(7)->toDateString());
 
     $response->assertSuccessful();
 });

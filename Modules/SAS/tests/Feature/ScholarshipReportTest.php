@@ -77,7 +77,7 @@ test('scholarship recipients report can be filtered by date range', function () 
         'date_awarded' => now()->subDays(5),
     ]);
 
-    $response = $this->get('/sas/admin/reports/scholarships/recipients?date_from='.now()->subDays(7)->toDateString());
+    $response = $this->get('/sas/admin/reports/scholarships/recipients?date_from=' . now()->subDays(7)->toDateString());
 
     $response->assertSuccessful();
 });
@@ -127,5 +127,5 @@ test('reports index page loads successfully', function () {
     $response = $this->get('/sas/admin/reports');
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page->component('sas/admin/reports/index'));
+    $response->assertInertia(fn($page) => $page->component('sas/admin/reports/index'));
 });
