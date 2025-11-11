@@ -110,4 +110,18 @@ Route::prefix('sas/admin')->name('sas.admin.')->middleware(['auth', 'role:sas-st
     Route::delete('documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
     Route::get('documents-manage-disposal', [DocumentController::class, 'manageDisposal'])->name('documents.manage-disposal');
     Route::post('documents/{id}/disposal-status', [DocumentController::class, 'updateDisposalStatus'])->name('documents.update-disposal-status');
+
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [\Modules\SAS\Http\Controllers\ReportController::class, 'index'])->name('index');
+
+        // Scholarship Reports
+        Route::get('scholarships/recipients', [\Modules\SAS\Http\Controllers\ReportController::class, 'scholarshipRecipients'])->name('scholarships.recipients');
+        Route::get('scholarships/approved/{semester}/{academicYear}', [\Modules\SAS\Http\Controllers\ReportController::class, 'approvedScholars'])->name('scholarships.approved');
+        Route::get('scholarships/statistics/{academicYear}', [\Modules\SAS\Http\Controllers\ReportController::class, 'scholarshipStatistics'])->name('scholarships.statistics');
+
+        // Insurance Reports
+        Route::get('insurance/records', [\Modules\SAS\Http\Controllers\ReportController::class, 'insuranceRecords'])->name('insurance.records');
+        Route::get('insurance/statistics/{academicYear}', [\Modules\SAS\Http\Controllers\ReportController::class, 'insuranceStatistics'])->name('insurance.statistics');
+    });
 });
