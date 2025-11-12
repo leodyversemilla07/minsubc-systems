@@ -1,12 +1,5 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import {
     Empty,
     EmptyContent,
@@ -15,12 +8,19 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Badge } from '@/components/ui/badge';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Edit, Eye, Plus, Trash2 } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { Calendar, Edit, Eye, Plus, Trash2 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -48,7 +48,9 @@ interface Props {
 export default function Index({ elections }: Props) {
     const handleDelete = (election: Election) => {
         if (confirm('Are you sure you want to delete this election?')) {
-            router.delete(voting.admin.elections.destroy.url({ election: election.id }));
+            router.delete(
+                voting.admin.elections.destroy.url({ election: election.id }),
+            );
         }
     };
 
@@ -58,14 +60,18 @@ export default function Index({ elections }: Props) {
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Elections</h1>
-                        <p className="text-muted-foreground">Manage election cycles and settings</p>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Elections
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Manage election cycles and settings
+                        </p>
                     </div>
                     <Link href={voting.admin.elections.create.url()}>
                         <Button className="bg-blue-600 hover:bg-blue-700">
-                            <Plus className="w-4 h-4 mr-2" />
+                            <Plus className="mr-2 h-4 w-4" />
                             Create Election
                         </Button>
                     </Link>
@@ -76,7 +82,7 @@ export default function Index({ elections }: Props) {
                     {elections.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
-                                <Calendar className="w-16 h-16" />
+                                <Calendar className="h-16 w-16" />
                             </EmptyMedia>
                             <EmptyHeader>
                                 <EmptyTitle>No elections yet</EmptyTitle>
@@ -85,9 +91,11 @@ export default function Index({ elections }: Props) {
                                 </EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
-                                <Link href={voting.admin.elections.create.url()}>
+                                <Link
+                                    href={voting.admin.elections.create.url()}
+                                >
                                     <Button className="bg-blue-600 hover:bg-blue-700">
-                                        <Plus className="w-4 h-4 mr-2" />
+                                        <Plus className="mr-2 h-4 w-4" />
                                         Create Election
                                     </Button>
                                 </Link>
@@ -102,22 +110,27 @@ export default function Index({ elections }: Props) {
                                         <TableHead>Code</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead>End Time</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {elections.map((election) => (
                                         <TableRow key={election.id}>
                                             <TableCell>
-                                                <div className="font-medium text-gray-800">{election.name}</div>
+                                                <div className="font-medium text-gray-800">
+                                                    {election.name}
+                                                </div>
                                             </TableCell>
                                             <TableCell>
-                                                <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                                                <code className="rounded bg-gray-100 px-2 py-1 text-sm">
                                                     {election.election_code}
                                                 </code>
                                             </TableCell>
                                             <TableCell>
-                                                {election.status === 'active' ? (
+                                                {election.status ===
+                                                'active' ? (
                                                     <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
                                                         Active
                                                     </Badge>
@@ -129,34 +142,63 @@ export default function Index({ elections }: Props) {
                                             </TableCell>
                                             <TableCell className="text-sm text-gray-600">
                                                 {election.end_time
-                                                    ? new Date(election.end_time).toLocaleDateString('en-US', {
-                                                          month: 'short',
-                                                          day: 'numeric',
-                                                          year: 'numeric',
-                                                          hour: 'numeric',
-                                                          minute: '2-digit',
-                                                      })
+                                                    ? new Date(
+                                                          election.end_time,
+                                                      ).toLocaleDateString(
+                                                          'en-US',
+                                                          {
+                                                              month: 'short',
+                                                              day: 'numeric',
+                                                              year: 'numeric',
+                                                              hour: 'numeric',
+                                                              minute: '2-digit',
+                                                          },
+                                                      )
                                                     : 'N/A'}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Link href={voting.admin.elections.show.url({ election: election.id })}>
-                                                        <Button variant="ghost" size="sm">
-                                                            <Eye className="w-4 h-4" />
+                                                    <Link
+                                                        href={voting.admin.elections.show.url(
+                                                            {
+                                                                election:
+                                                                    election.id,
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
-                                                    <Link href={voting.admin.elections.edit.url({ election: election.id })}>
-                                                        <Button variant="ghost" size="sm">
-                                                            <Edit className="w-4 h-4" />
+                                                    <Link
+                                                        href={voting.admin.elections.edit.url(
+                                                            {
+                                                                election:
+                                                                    election.id,
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Edit className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleDelete(election)}
-                                                        className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                election,
+                                                            )
+                                                        }
+                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
                                                     >
-                                                        <Trash2 className="w-4 h-4" />
+                                                        <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                             </TableCell>

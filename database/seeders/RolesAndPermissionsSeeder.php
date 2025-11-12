@@ -62,7 +62,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->command->info('✓ Core roles and permissions created successfully!');
         $this->command->info('');
         $this->command->info('Running module-specific permission seeders...');
-        
+
         // Call module-specific permission seeders
         $this->call([
             \Modules\Registrar\Database\Seeders\RegistrarPermissionsSeeder::class,

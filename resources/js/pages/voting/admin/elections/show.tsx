@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { Edit, FileText, Users, Vote, UserCheck } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import { Edit, FileText, UserCheck, Users, Vote } from 'lucide-react';
 
 interface Election {
     id: number;
@@ -27,7 +27,10 @@ export default function Show({ election }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Elections', href: voting.admin.elections.index.url() },
-        { title: election.name, href: voting.admin.elections.show.url({ election: election.id }) },
+        {
+            title: election.name,
+            href: voting.admin.elections.show.url({ election: election.id }),
+        },
     ];
 
     return (
@@ -36,18 +39,26 @@ export default function Show({ election }: Props) {
 
             <div>
                 {/* Header with Actions */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800">{election.name}</h1>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <h1 className="text-3xl font-bold text-gray-800">
+                            {election.name}
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
                             Election Code:{' '}
-                            <code className="bg-gray-100 px-2 py-1 rounded">{election.election_code}</code>
+                            <code className="rounded bg-gray-100 px-2 py-1">
+                                {election.election_code}
+                            </code>
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Link href={voting.admin.elections.edit.url({ election: election.id })}>
+                        <Link
+                            href={voting.admin.elections.edit.url({
+                                election: election.id,
+                            })}
+                        >
                             <Button className="bg-indigo-600 hover:bg-indigo-700">
-                                <Edit className="w-4 h-4 mr-2" />
+                                <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Button>
                         </Link>
@@ -57,31 +68,42 @@ export default function Show({ election }: Props) {
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid gap-6 md:grid-cols-3">
                     {/* Election Info Card */}
                     <div className="md:col-span-1">
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <h2 className="text-lg font-bold text-gray-800 mb-4">Election Details</h2>
+                        <div className="rounded-lg bg-white p-6 shadow-md">
+                            <h2 className="mb-4 text-lg font-bold text-gray-800">
+                                Election Details
+                            </h2>
 
                             <div className="space-y-4">
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">Status</div>
+                                    <div className="text-xs text-gray-500 uppercase">
+                                        Status
+                                    </div>
                                     {election.status === 'active' ? (
-                                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100 mt-1">
+                                        <Badge className="mt-1 bg-green-100 text-green-800 hover:bg-green-100">
                                             Active
                                         </Badge>
                                     ) : (
-                                        <Badge variant="secondary" className="mt-1">
+                                        <Badge
+                                            variant="secondary"
+                                            className="mt-1"
+                                        >
                                             Ended
                                         </Badge>
                                     )}
                                 </div>
 
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">End Time</div>
-                                    <div className="text-sm font-medium text-gray-800 mt-1">
+                                    <div className="text-xs text-gray-500 uppercase">
+                                        End Time
+                                    </div>
+                                    <div className="mt-1 text-sm font-medium text-gray-800">
                                         {election.end_time
-                                            ? new Date(election.end_time).toLocaleDateString('en-US', {
+                                            ? new Date(
+                                                  election.end_time,
+                                              ).toLocaleDateString('en-US', {
                                                   month: 'short',
                                                   day: 'numeric',
                                                   year: 'numeric',
@@ -93,9 +115,13 @@ export default function Show({ election }: Props) {
                                 </div>
 
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">Created</div>
-                                    <div className="text-sm font-medium text-gray-800 mt-1">
-                                        {new Date(election.created_at).toLocaleDateString('en-US', {
+                                    <div className="text-xs text-gray-500 uppercase">
+                                        Created
+                                    </div>
+                                    <div className="mt-1 text-sm font-medium text-gray-800">
+                                        {new Date(
+                                            election.created_at,
+                                        ).toLocaleDateString('en-US', {
                                             month: 'short',
                                             day: 'numeric',
                                             year: 'numeric',
@@ -106,24 +132,42 @@ export default function Show({ election }: Props) {
                         </div>
 
                         {/* Quick Stats */}
-                        <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-                            <h2 className="text-lg font-bold text-gray-800 mb-4">Quick Stats</h2>
+                        <div className="mt-6 rounded-lg bg-white p-6 shadow-md">
+                            <h2 className="mb-4 text-lg font-bold text-gray-800">
+                                Quick Stats
+                            </h2>
                             <div className="space-y-3">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Positions</span>
-                                    <span className="font-bold">{election.positions_count || 0}</span>
+                                    <span className="text-gray-600">
+                                        Positions
+                                    </span>
+                                    <span className="font-bold">
+                                        {election.positions_count || 0}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Candidates</span>
-                                    <span className="font-bold">{election.candidates_count || 0}</span>
+                                    <span className="text-gray-600">
+                                        Candidates
+                                    </span>
+                                    <span className="font-bold">
+                                        {election.candidates_count || 0}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Voters</span>
-                                    <span className="font-bold">{election.voters_count || 0}</span>
+                                    <span className="text-gray-600">
+                                        Voters
+                                    </span>
+                                    <span className="font-bold">
+                                        {election.voters_count || 0}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Votes Cast</span>
-                                    <span className="font-bold text-green-600">{election.votes_count || 0}</span>
+                                    <span className="text-gray-600">
+                                        Votes Cast
+                                    </span>
+                                    <span className="font-bold text-green-600">
+                                        {election.votes_count || 0}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -131,78 +175,88 @@ export default function Show({ election }: Props) {
 
                     {/* Management Links */}
                     <div className="md:col-span-2">
-                        <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
                             {/* Positions Card */}
                             <Link
                                 href={`/voting/admin/positions?election_id=${election.id}`}
-                                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group block"
+                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition">
+                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
                                             Positions
                                         </h3>
-                                        <p className="text-sm text-gray-600 mt-1">Manage election positions</p>
-                                        <p className="text-2xl font-bold text-gray-800 mt-4">
+                                        <p className="mt-1 text-sm text-gray-600">
+                                            Manage election positions
+                                        </p>
+                                        <p className="mt-4 text-2xl font-bold text-gray-800">
                                             {election.positions_count || 0}
                                         </p>
                                     </div>
-                                    <FileText className="w-8 h-8 text-gray-400 group-hover:text-blue-600 transition" />
+                                    <FileText className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
                                 </div>
                             </Link>
 
                             {/* Candidates Card */}
                             <Link
                                 href={`/voting/admin/candidates?election_id=${election.id}`}
-                                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group block"
+                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition">
+                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
                                             Candidates
                                         </h3>
-                                        <p className="text-sm text-gray-600 mt-1">Manage candidates</p>
-                                        <p className="text-2xl font-bold text-gray-800 mt-4">
+                                        <p className="mt-1 text-sm text-gray-600">
+                                            Manage candidates
+                                        </p>
+                                        <p className="mt-4 text-2xl font-bold text-gray-800">
                                             {election.candidates_count || 0}
                                         </p>
                                     </div>
-                                    <Users className="w-8 h-8 text-gray-400 group-hover:text-blue-600 transition" />
+                                    <Users className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
                                 </div>
                             </Link>
 
                             {/* Partylists Card */}
                             <Link
                                 href={`/voting/admin/partylists?election_id=${election.id}`}
-                                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group block"
+                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition">
+                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
                                             Partylists
                                         </h3>
-                                        <p className="text-sm text-gray-600 mt-1">Manage partylists</p>
-                                        <p className="text-2xl font-bold text-gray-800 mt-4">0</p>
+                                        <p className="mt-1 text-sm text-gray-600">
+                                            Manage partylists
+                                        </p>
+                                        <p className="mt-4 text-2xl font-bold text-gray-800">
+                                            0
+                                        </p>
                                     </div>
-                                    <Vote className="w-8 h-8 text-gray-400 group-hover:text-blue-600 transition" />
+                                    <Vote className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
                                 </div>
                             </Link>
 
                             {/* Voters Card */}
                             <Link
                                 href={`/voting/admin/voters?election_id=${election.id}`}
-                                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group block"
+                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition">
+                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
                                             Voters
                                         </h3>
-                                        <p className="text-sm text-gray-600 mt-1">Manage voters</p>
-                                        <p className="text-2xl font-bold text-gray-800 mt-4">
+                                        <p className="mt-1 text-sm text-gray-600">
+                                            Manage voters
+                                        </p>
+                                        <p className="mt-4 text-2xl font-bold text-gray-800">
                                             {election.voters_count || 0}
                                         </p>
                                     </div>
-                                    <UserCheck className="w-8 h-8 text-gray-400 group-hover:text-blue-600 transition" />
+                                    <UserCheck className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
                                 </div>
                             </Link>
                         </div>

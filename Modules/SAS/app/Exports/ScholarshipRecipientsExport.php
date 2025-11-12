@@ -75,7 +75,7 @@ class ScholarshipRecipientsExport implements FromQuery, WithHeadings, WithMappin
             $recipient->student->email ?? 'N/A',
             $recipient->scholarship->scholarship_name ?? 'N/A',
             $recipient->status,
-            '₱' . number_format($recipient->amount, 2),
+            '₱'.number_format($recipient->amount, 2),
             $recipient->semester,
             $recipient->academic_year,
             $recipient->date_awarded?->format('Y-m-d') ?? 'N/A',

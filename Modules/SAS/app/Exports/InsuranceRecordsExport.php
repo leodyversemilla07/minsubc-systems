@@ -28,7 +28,7 @@ class InsuranceRecordsExport implements FromQuery, WithHeadings, WithMapping, Wi
         }
 
         if (! empty($this->filters['insurance_provider'])) {
-            $query->where('insurance_provider', 'like', '%' . $this->filters['insurance_provider'] . '%');
+            $query->where('insurance_provider', 'like', '%'.$this->filters['insurance_provider'].'%');
         }
 
         if (! empty($this->filters['date_from'])) {
@@ -72,7 +72,7 @@ class InsuranceRecordsExport implements FromQuery, WithHeadings, WithMapping, Wi
             $record->insurance_provider,
             $record->policy_number,
             $record->policy_type,
-            '₱' . number_format($record->coverage_amount, 2),
+            '₱'.number_format($record->coverage_amount, 2),
             $record->status,
             $record->effective_date?->format('Y-m-d') ?? 'N/A',
             $record->expiration_date?->format('Y-m-d') ?? 'N/A',

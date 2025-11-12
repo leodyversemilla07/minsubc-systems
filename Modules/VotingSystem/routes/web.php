@@ -44,7 +44,7 @@ Route::prefix('voting')->name('voting.')->group(function () {
 
     // Vote Confirmation (accessible after logout)
     Route::get('/confirmation', [BallotController::class, 'confirmation'])->name('confirmation');
-    
+
     // Printable Receipt
     Route::get('/receipt', [BallotController::class, 'receipt'])->name('receipt');
 

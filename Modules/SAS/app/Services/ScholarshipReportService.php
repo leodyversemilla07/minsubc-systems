@@ -29,7 +29,7 @@ class ScholarshipReportService
 
         return Pdf::loadHTML($html)
             ->setPaper('a4', 'landscape')
-            ->stream('Scholarship-Recipients-' . now()->format('Y-m-d') . '.pdf');
+            ->stream('Scholarship-Recipients-'.now()->format('Y-m-d').'.pdf');
     }
 
     /**
@@ -62,7 +62,7 @@ class ScholarshipReportService
      */
     public function exportToExcel(array $filters = []): BinaryFileResponse
     {
-        $filename = 'scholarship-recipients-' . now()->format('Y-m-d') . '.xlsx';
+        $filename = 'scholarship-recipients-'.now()->format('Y-m-d').'.xlsx';
 
         return Excel::download(
             new ScholarshipRecipientsExport($filters),
@@ -86,7 +86,7 @@ class ScholarshipReportService
                 ->with('scholarship')
                 ->get()
                 ->groupBy('scholarship.scholarship_name')
-                ->map(fn($group) => [
+                ->map(fn ($group) => [
                     'count' => $group->count(),
                     'total_amount' => $group->sum('amount'),
                 ]),
@@ -150,24 +150,24 @@ class ScholarshipReportService
         if (! empty($filters)) {
             $filterParts = [];
             if (! empty($filters['scholarship_id'])) {
-                $filterParts[] = 'Scholarship ID: ' . $filters['scholarship_id'];
+                $filterParts[] = 'Scholarship ID: '.$filters['scholarship_id'];
             }
             if (! empty($filters['status'])) {
-                $filterParts[] = 'Status: ' . $filters['status'];
+                $filterParts[] = 'Status: '.$filters['status'];
             }
             if (! empty($filters['semester'])) {
-                $filterParts[] = 'Semester: ' . $filters['semester'];
+                $filterParts[] = 'Semester: '.$filters['semester'];
             }
             if (! empty($filters['academic_year'])) {
-                $filterParts[] = 'Academic Year: ' . $filters['academic_year'];
+                $filterParts[] = 'Academic Year: '.$filters['academic_year'];
             }
             if (! empty($filters['date_from'])) {
-                $filterParts[] = 'From: ' . $filters['date_from'];
+                $filterParts[] = 'From: '.$filters['date_from'];
             }
             if (! empty($filters['date_to'])) {
-                $filterParts[] = 'To: ' . $filters['date_to'];
+                $filterParts[] = 'To: '.$filters['date_to'];
             }
-            $filterText = '<div class="filters"><strong>Filters Applied:</strong> ' . implode(' | ', $filterParts) . '</div>';
+            $filterText = '<div class="filters"><strong>Filters Applied:</strong> '.implode(' | ', $filterParts).'</div>';
         }
 
         $rows = '';
@@ -176,7 +176,7 @@ class ScholarshipReportService
             $studentName = $recipient->student->name ?? 'N/A';
             $scholarshipName = $recipient->scholarship->scholarship_name ?? 'N/A';
             $statusClass = $recipient->status === 'Active' ? 'status-active' : 'status-inactive';
-            $amount = '₱' . number_format($recipient->amount, 2);
+            $amount = '₱'.number_format($recipient->amount, 2);
             $dateAwarded = $recipient->date_awarded?->format('M d, Y') ?? 'N/A';
 
             $rows .= "<tr>
@@ -239,7 +239,7 @@ class ScholarshipReportService
             <div class=\"summary-label\">Inactive</div>
         </div>
         <div class=\"summary-box\">
-            <div class=\"summary-value\">₱" . number_format($totalAmount, 2) . "</div>
+            <div class=\"summary-value\">₱".number_format($totalAmount, 2)."</div>
             <div class=\"summary-label\">Total Amount</div>
         </div>
     </div>
@@ -277,7 +277,7 @@ class ScholarshipReportService
             foreach ($scholars as $scholar) {
                 $studentId = $scholar->student->student_id ?? 'N/A';
                 $studentName = $scholar->student->name ?? 'N/A';
-                $amount = '₱' . number_format($scholar->amount, 2);
+                $amount = '₱'.number_format($scholar->amount, 2);
                 $dateAwarded = $scholar->date_awarded?->format('M d, Y') ?? 'N/A';
                 $expirationDate = $scholar->expiration_date?->format('M d, Y') ?? 'N/A';
 
@@ -344,7 +344,7 @@ class ScholarshipReportService
             <div class=\"summary-label\">Total Scholars</div>
         </div>
         <div class=\"summary-box\">
-            <div class=\"summary-value\">₱" . number_format($totalAmount, 2) . "</div>
+            <div class=\"summary-value\">₱".number_format($totalAmount, 2)."</div>
             <div class=\"summary-label\">Total Amount Disbursed</div>
         </div>
     </div>
@@ -367,7 +367,7 @@ class ScholarshipReportService
             $byTypeRows .= "<tr>
                 <td>{$type}</td>
                 <td>{$data['count']}</td>
-                <td>₱" . number_format($data['total_amount'], 2) . '</td>
+                <td>₱".number_format($data['total_amount'], 2).'</td>
             </tr>';
         }
 
@@ -376,7 +376,7 @@ class ScholarshipReportService
             $bySemesterRows .= "<tr>
                 <td>{$semester}</td>
                 <td>{$data->count}</td>
-                <td>₱" . number_format($data->total_amount, 2) . '</td>
+                <td>₱".number_format($data->total_amount, 2).'</td>
             </tr>';
         }
 
@@ -425,7 +425,7 @@ class ScholarshipReportService
             <div class=\"summary-label\">Inactive Scholars</div>
         </div>
         <div class=\"summary-box\">
-            <div class=\"summary-value\">₱" . number_format($stats['total_disbursed'], 2) . "</div>
+            <div class=\"summary-value\">₱".number_format($stats['total_disbursed'], 2)."</div>
             <div class=\"summary-label\">Total Disbursed</div>
         </div>
     </div>

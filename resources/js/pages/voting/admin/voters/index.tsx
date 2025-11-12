@@ -1,12 +1,5 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import {
     Empty,
     EmptyContent,
@@ -15,13 +8,26 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Eye, Plus, Trash2, UserCheck } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { Eye, Plus, Trash2, UserCheck } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -57,15 +63,26 @@ interface Props {
     selectedElectionId?: number;
 }
 
-export default function Index({ voters, elections, selectedElectionId }: Props) {
+export default function Index({
+    voters,
+    elections,
+    selectedElectionId,
+}: Props) {
     const handleDelete = (voter: Voter) => {
         if (confirm('Delete this voter?')) {
-            router.delete(voting.admin.voters.destroy.url({ voter: Number(voter.voters_id) }));
+            router.delete(
+                voting.admin.voters.destroy.url({
+                    voter: Number(voter.voters_id),
+                }),
+            );
         }
     };
 
     const handleElectionChange = (value: string) => {
-        router.get(voting.admin.voters.index.url(), value !== 'all' ? { election_id: value } : {});
+        router.get(
+            voting.admin.voters.index.url(),
+            value !== 'all' ? { election_id: value } : {},
+        );
     };
 
     return (
@@ -74,16 +91,25 @@ export default function Index({ voters, elections, selectedElectionId }: Props) 
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Voters</h1>
-                        <p className="text-muted-foreground">Manage voter accounts</p>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Voters
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Manage voter accounts
+                        </p>
                     </div>
                     <Link
-                        href={voting.admin.voters.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
+                        href={
+                            voting.admin.voters.create.url() +
+                            (selectedElectionId
+                                ? `?election_id=${selectedElectionId}`
+                                : '')
+                        }
                     >
                         <Button className="bg-blue-600 hover:bg-blue-700">
-                            <Plus className="w-4 h-4 mr-2" />
+                            <Plus className="mr-2 h-4 w-4" />
                             Generate Voters
                         </Button>
                     </Link>
@@ -91,38 +117,51 @@ export default function Index({ voters, elections, selectedElectionId }: Props) 
 
                 {/* Election Filter */}
                 <div className="flex gap-3">
-                        <Select value={selectedElectionId?.toString() || 'all'} onValueChange={handleElectionChange}>
-                            <SelectTrigger className="w-64">
-                                <SelectValue placeholder="All Elections" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Elections</SelectItem>
-                                {elections.map((election) => (
-                                    <SelectItem key={election.id} value={election.id.toString()}>
-                                        {election.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <Select
+                        value={selectedElectionId?.toString() || 'all'}
+                        onValueChange={handleElectionChange}
+                    >
+                        <SelectTrigger className="w-64">
+                            <SelectValue placeholder="All Elections" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Elections</SelectItem>
+                            {elections.map((election) => (
+                                <SelectItem
+                                    key={election.id}
+                                    value={election.id.toString()}
+                                >
+                                    {election.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
 
                 {/* Voters List */}
                 <div>
                     {voters.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
-                                <UserCheck className="w-16 h-16" />
+                                <UserCheck className="h-16 w-16" />
                             </EmptyMedia>
                             <EmptyHeader>
                                 <EmptyTitle>No voters yet</EmptyTitle>
-                                <EmptyDescription>Generate voter accounts for students</EmptyDescription>
+                                <EmptyDescription>
+                                    Generate voter accounts for students
+                                </EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
                                 <Link
-                                    href={voting.admin.voters.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
+                                    href={
+                                        voting.admin.voters.create.url() +
+                                        (selectedElectionId
+                                            ? `?election_id=${selectedElectionId}`
+                                            : '')
+                                    }
                                 >
                                     <Button className="bg-blue-600 hover:bg-blue-700">
-                                        <Plus className="w-4 h-4 mr-2" />
+                                        <Plus className="mr-2 h-4 w-4" />
                                         Generate Voters
                                     </Button>
                                 </Link>
@@ -138,23 +177,27 @@ export default function Index({ voters, elections, selectedElectionId }: Props) 
                                         <TableHead>Election</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead>Batch</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {voters.map((voter) => (
                                         <TableRow key={voter.voters_id}>
                                             <TableCell>
-                                                <code className="bg-gray-100 px-2 py-1 rounded text-xs">
+                                                <code className="rounded bg-gray-100 px-2 py-1 text-xs">
                                                     {voter.voters_id}
                                                 </code>
                                             </TableCell>
                                             <TableCell>
                                                 <div className="font-medium text-gray-800">
-                                                    {voter.student?.user?.full_name || 'N/A'}
+                                                    {voter.student?.user
+                                                        ?.full_name || 'N/A'}
                                                 </div>
                                                 <div className="text-xs text-gray-500">
-                                                    {voter.student?.course} {voter.student?.year_level}
+                                                    {voter.student?.course}{' '}
+                                                    {voter.student?.year_level}
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-sm text-gray-600">
@@ -162,9 +205,13 @@ export default function Index({ voters, elections, selectedElectionId }: Props) 
                                             </TableCell>
                                             <TableCell>
                                                 {voter.has_voted ? (
-                                                    <Badge className="bg-green-100 text-green-800">Voted</Badge>
+                                                    <Badge className="bg-green-100 text-green-800">
+                                                        Voted
+                                                    </Badge>
                                                 ) : (
-                                                    <Badge variant="secondary">Not Voted</Badge>
+                                                    <Badge variant="secondary">
+                                                        Not Voted
+                                                    </Badge>
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-sm text-gray-600">
@@ -172,18 +219,31 @@ export default function Index({ voters, elections, selectedElectionId }: Props) 
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Link href={voting.admin.voters.show.url({ voter: Number(voter.voters_id) })}>
-                                                        <Button variant="ghost" size="sm">
-                                                            <Eye className="w-4 h-4" />
+                                                    <Link
+                                                        href={voting.admin.voters.show.url(
+                                                            {
+                                                                voter: Number(
+                                                                    voter.voters_id,
+                                                                ),
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleDelete(voter)}
-                                                        className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                                                        onClick={() =>
+                                                            handleDelete(voter)
+                                                        }
+                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
                                                     >
-                                                        <Trash2 className="w-4 h-4" />
+                                                        <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                             </TableCell>

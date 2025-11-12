@@ -2,11 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { Form } from '@inertiajs/react';
-import { AlertCircle } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Form, Head, Link } from '@inertiajs/react';
+import { AlertCircle } from 'lucide-react';
 
 interface Election {
     id: number;
@@ -30,8 +29,14 @@ export default function Edit({ election, errors = {} }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Elections', href: voting.admin.elections.index.url() },
-        { title: election.name, href: voting.admin.elections.show.url({ election: election.id }) },
-        { title: 'Edit', href: voting.admin.elections.edit.url({ election: election.id }) },
+        {
+            title: election.name,
+            href: voting.admin.elections.show.url({ election: election.id }),
+        },
+        {
+            title: 'Edit',
+            href: voting.admin.elections.edit.url({ election: election.id }),
+        },
     ];
 
     return (
@@ -39,24 +44,43 @@ export default function Edit({ election, errors = {} }: Props) {
             <Head title="Edit Election" />
 
             <div className="max-w-3xl">
-                <div className="bg-white rounded-lg shadow-md">
+                <div className="rounded-lg bg-white shadow-md">
                     {/* Header */}
                     <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">Edit Election</h1>
-                        <p className="text-sm text-gray-600 mt-1">Update election details</p>
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Edit Election
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Update election details
+                        </p>
                     </div>
 
                     {/* Form */}
-                    <Form action={voting.admin.elections.update.url({ election: election.id })} method="post">
+                    <Form
+                        action={voting.admin.elections.update.url({
+                            election: election.id,
+                        })}
+                        method="post"
+                    >
                         {({ processing }) => (
-                            <div className="p-6 space-y-6">
-                                <input type="hidden" name="_method" value="PUT" />
+                            <div className="space-y-6 p-6">
+                                <input
+                                    type="hidden"
+                                    name="_method"
+                                    value="PUT"
+                                />
 
                                 {/* Election Name */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                                            Election Name <span className="text-red-500">*</span>
+                                        <label
+                                            htmlFor="name"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
+                                            Election Name{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </label>
                                         <Input
                                             type="text"
@@ -64,11 +88,15 @@ export default function Edit({ election, errors = {} }: Props) {
                                             name="name"
                                             defaultValue={election.name}
                                             required
-                                            className={errors.name ? 'border-red-500' : ''}
+                                            className={
+                                                errors.name
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
                                         />
                                         {errors.name && (
                                             <FieldError>
-                                                <AlertCircle className="w-4 h-4 mr-1" />
+                                                <AlertCircle className="mr-1 h-4 w-4" />
                                                 {errors.name}
                                             </FieldError>
                                         )}
@@ -78,7 +106,10 @@ export default function Edit({ election, errors = {} }: Props) {
                                 {/* Election Code (Read-only) */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="election_code" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label
+                                            htmlFor="election_code"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
                                             Election Code
                                         </label>
                                         <Input
@@ -97,7 +128,10 @@ export default function Edit({ election, errors = {} }: Props) {
                                 {/* End Time */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="end_time" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label
+                                            htmlFor="end_time"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
                                             End Time
                                         </label>
                                         <Input
@@ -105,11 +139,15 @@ export default function Edit({ election, errors = {} }: Props) {
                                             id="end_time"
                                             name="end_time"
                                             defaultValue={formattedEndTime}
-                                            className={errors.end_time ? 'border-red-500' : ''}
+                                            className={
+                                                errors.end_time
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
                                         />
                                         {errors.end_time && (
                                             <FieldError>
-                                                <AlertCircle className="w-4 h-4 mr-1" />
+                                                <AlertCircle className="mr-1 h-4 w-4" />
                                                 {errors.end_time}
                                             </FieldError>
                                         )}
@@ -119,22 +157,30 @@ export default function Edit({ election, errors = {} }: Props) {
                                 {/* Status */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
-                                            Status <span className="text-red-500">*</span>
+                                        <label
+                                            htmlFor="status"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
+                                            Status{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </label>
                                         <select
                                             id="status"
                                             name="status"
                                             required
                                             defaultValue={election.status}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                                         >
-                                            <option value="active">Active</option>
+                                            <option value="active">
+                                                Active
+                                            </option>
                                             <option value="ended">Ended</option>
                                         </select>
                                         {errors.status && (
                                             <FieldError>
-                                                <AlertCircle className="w-4 h-4 mr-1" />
+                                                <AlertCircle className="mr-1 h-4 w-4" />
                                                 {errors.status}
                                             </FieldError>
                                         )}
@@ -142,15 +188,19 @@ export default function Edit({ election, errors = {} }: Props) {
                                 </FieldGroup>
 
                                 {/* Form Actions */}
-                                <div className="flex gap-4 pt-4 border-t">
+                                <div className="flex gap-4 border-t pt-4">
                                     <Button
                                         type="submit"
                                         disabled={processing}
                                         className="bg-blue-600 hover:bg-blue-700"
                                     >
-                                        {processing ? 'Updating...' : 'Update Election'}
+                                        {processing
+                                            ? 'Updating...'
+                                            : 'Update Election'}
                                     </Button>
-                                    <Link href={voting.admin.elections.index.url()}>
+                                    <Link
+                                        href={voting.admin.elections.index.url()}
+                                    >
                                         <Button type="button" variant="outline">
                                             Cancel
                                         </Button>

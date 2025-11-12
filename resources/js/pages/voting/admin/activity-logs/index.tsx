@@ -1,4 +1,19 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -7,21 +22,12 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Empty,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from '@/components/ui/empty';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Eye, Database } from 'lucide-react';
 import voting from '@/routes/voting';
-import { format } from 'date-fns';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { format } from 'date-fns';
+import { Database, Eye } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -77,7 +83,12 @@ interface Props {
     };
 }
 
-export default function Index({ activityLogs, elections, actions, filters }: Props) {
+export default function Index({
+    activityLogs,
+    elections,
+    actions,
+    filters,
+}: Props) {
     const handleFilterChange = (key: string, value: string) => {
         router.get(
             voting.admin.activityLogs.index.url(),
@@ -85,11 +96,19 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                 ...filters,
                 [key]: value !== 'all' ? value : undefined,
             },
-            { preserveState: true }
+            { preserveState: true },
         );
     };
 
-    const getActionBadgeVariant = (action: string): "default" | "destructive" | "outline" | "secondary" | null | undefined => {
+    const getActionBadgeVariant = (
+        action: string,
+    ):
+        | 'default'
+        | 'destructive'
+        | 'outline'
+        | 'secondary'
+        | null
+        | undefined => {
         switch (action) {
             case 'login':
                 return 'default';
@@ -129,86 +148,118 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Voter Activity Logs</h1>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Voter Activity Logs
+                        </h1>
                         <p className="text-muted-foreground">
-                            Track and monitor all voter activities across elections
+                            Track and monitor all voter activities across
+                            elections
                         </p>
                     </div>
                 </div>
 
                 {/* Filters */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <Select
-                            value={filters.election_id?.toString() || 'all'}
-                            onValueChange={(value) => handleFilterChange('election_id', value)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="All Elections" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Elections</SelectItem>
-                                {elections.map((election) => (
-                                    <SelectItem key={election.id} value={election.id.toString()}>
-                                        {election.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <Select
+                        value={filters.election_id?.toString() || 'all'}
+                        onValueChange={(value) =>
+                            handleFilterChange('election_id', value)
+                        }
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Elections" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Elections</SelectItem>
+                            {elections.map((election) => (
+                                <SelectItem
+                                    key={election.id}
+                                    value={election.id.toString()}
+                                >
+                                    {election.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
-                        <Select
-                            value={filters.action || 'all'}
-                            onValueChange={(value) => handleFilterChange('action', value)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="All Actions" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Actions</SelectItem>
-                                {Object.entries(actions).map(([key, label]) => (
-                                    <SelectItem key={key} value={key}>
-                                        {label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                    <Select
+                        value={filters.action || 'all'}
+                        onValueChange={(value) =>
+                            handleFilterChange('action', value)
+                        }
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Actions" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Actions</SelectItem>
+                            {Object.entries(actions).map(([key, label]) => (
+                                <SelectItem key={key} value={key}>
+                                    {label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
-                        {(filters.election_id || filters.action) && (
-                            <Button
-                                variant="ghost"
-                                onClick={() =>
-                                    router.get(voting.admin.activityLogs.index.url(), {}, { preserveState: true })
-                                }
-                            >
-                                Clear Filters
-                            </Button>
-                        )}
-                    </div>
+                    {(filters.election_id || filters.action) && (
+                        <Button
+                            variant="ghost"
+                            onClick={() =>
+                                router.get(
+                                    voting.admin.activityLogs.index.url(),
+                                    {},
+                                    { preserveState: true },
+                                )
+                            }
+                        >
+                            Clear Filters
+                        </Button>
+                    )}
+                </div>
 
                 {/* Stats Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-800">{activityLogs.total}</div>
-                        <div className="text-sm text-gray-600">Total Activities</div>
+                        <div className="text-2xl font-bold text-gray-800">
+                            {activityLogs.total}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                            Total Activities
+                        </div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-blue-600">
-                            {activityLogs.data.filter((log) => log.action === 'login').length}
+                            {
+                                activityLogs.data.filter(
+                                    (log) => log.action === 'login',
+                                ).length
+                            }
                         </div>
                         <div className="text-sm text-gray-600">Logins</div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-green-600">
-                            {activityLogs.data.filter((log) => log.action === 'vote_cast').length}
+                            {
+                                activityLogs.data.filter(
+                                    (log) => log.action === 'vote_cast',
+                                ).length
+                            }
                         </div>
                         <div className="text-sm text-gray-600">Votes Cast</div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-purple-600">
-                            {activityLogs.data.filter((log) => log.action === 'results_viewed').length}
+                            {
+                                activityLogs.data.filter(
+                                    (log) => log.action === 'results_viewed',
+                                ).length
+                            }
                         </div>
-                        <div className="text-sm text-gray-600">Results Viewed</div>
+                        <div className="text-sm text-gray-600">
+                            Results Viewed
+                        </div>
                     </div>
                 </div>
 
@@ -217,7 +268,7 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                     {activityLogs.data.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
-                                <Database className="w-12 h-12" />
+                                <Database className="h-12 w-12" />
                             </EmptyMedia>
                             <EmptyHeader>
                                 <EmptyTitle>No Activity Logs</EmptyTitle>
@@ -238,7 +289,9 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                                         <TableHead>Action</TableHead>
                                         <TableHead>IP Address</TableHead>
                                         <TableHead>Timestamp</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -252,26 +305,39 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
                                             </TableCell>
                                             <TableCell>
                                                 <Badge
-                                                    variant={getActionBadgeVariant(log.action)}
-                                                    className={getActionColor(log.action)}
+                                                    variant={getActionBadgeVariant(
+                                                        log.action,
+                                                    )}
+                                                    className={getActionColor(
+                                                        log.action,
+                                                    )}
                                                 >
-                                                    {actions[log.action] || log.action}
+                                                    {actions[log.action] ||
+                                                        log.action}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-600 font-mono">
+                                            <TableCell className="font-mono text-sm text-gray-600">
                                                 {log.ip_address || 'N/A'}
                                             </TableCell>
                                             <TableCell className="text-sm text-gray-600">
-                                                {format(new Date(log.created_at), 'MMM dd, yyyy HH:mm:ss')}
+                                                {format(
+                                                    new Date(log.created_at),
+                                                    'MMM dd, yyyy HH:mm:ss',
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <Link
-                                                    href={voting.admin.activityLogs.show.url({
-                                                        activityLog: log.id,
-                                                    })}
+                                                    href={voting.admin.activityLogs.show.url(
+                                                        {
+                                                            activityLog: log.id,
+                                                        },
+                                                    )}
                                                 >
-                                                    <Button variant="ghost" size="sm">
-                                                        <Eye className="w-4 h-4" />
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
+                                                        <Eye className="h-4 w-4" />
                                                     </Button>
                                                 </Link>
                                             </TableCell>
@@ -282,15 +348,24 @@ export default function Index({ activityLogs, elections, actions, filters }: Pro
 
                             {/* Pagination */}
                             {activityLogs.last_page > 1 && (
-                                <div className="flex justify-center gap-1 mt-6">
+                                <div className="mt-6 flex justify-center gap-1">
                                     {activityLogs.links.map((link, index) => (
                                         <Button
                                             key={index}
-                                            variant={link.active ? 'default' : 'ghost'}
+                                            variant={
+                                                link.active
+                                                    ? 'default'
+                                                    : 'ghost'
+                                            }
                                             size="sm"
                                             disabled={!link.url}
-                                            onClick={() => link.url && router.visit(link.url)}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            onClick={() =>
+                                                link.url &&
+                                                router.visit(link.url)
+                                            }
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
                                         />
                                     ))}
                                 </div>

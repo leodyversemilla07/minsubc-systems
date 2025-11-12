@@ -258,7 +258,7 @@ export default function CreateAnnouncement({
         >
             <Head title="Create Announcement - USG Admin" />
 
-                        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
                 <PageHeader
                     title="Create New Announcement"
                     description="Share important news and updates with your audience"
@@ -925,7 +925,7 @@ export default function CreateAnnouncement({
 
                             {/* Action Buttons */}
                             {canManage && (
-                                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:gap-4 pt-6">
+                                <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:justify-end sm:gap-4">
                                     <Button
                                         type="button"
                                         variant="outline"

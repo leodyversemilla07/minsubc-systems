@@ -1,12 +1,19 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, User, Calendar, MapPin, Monitor, Database } from 'lucide-react';
 import voting from '@/routes/voting';
-import { format } from 'date-fns';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import { format } from 'date-fns';
+import {
+    ArrowLeft,
+    Calendar,
+    Database,
+    MapPin,
+    Monitor,
+    User,
+} from 'lucide-react';
 
 interface Election {
     id: number;
@@ -39,7 +46,12 @@ export default function Show({ activityLog }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Activity Logs', href: voting.admin.activityLogs.index.url() },
-        { title: `Log #${activityLog.id}`, href: voting.admin.activityLogs.show.url({ activityLog: activityLog.id }) },
+        {
+            title: `Log #${activityLog.id}`,
+            href: voting.admin.activityLogs.show.url({
+                activityLog: activityLog.id,
+            }),
+        },
     ];
 
     const getActionColor = (action: string) => {
@@ -71,18 +83,20 @@ export default function Show({ activityLog }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Activity Log #${activityLog.id}`} />
 
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto max-w-4xl">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">Activity Log Details</h1>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Activity Log Details
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
                             View detailed information about this voter activity
                         </p>
                     </div>
                     <Link href={voting.admin.activityLogs.index.url()}>
                         <Button variant="outline">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Logs
                         </Button>
                     </Link>
@@ -93,24 +107,30 @@ export default function Show({ activityLog }: Props) {
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <CardTitle className="flex items-center gap-2">
-                                <Database className="w-5 h-5" />
+                                <Database className="h-5 w-5" />
                                 Log ID: {activityLog.id}
                             </CardTitle>
-                            <Badge variant="default" className={getActionColor(activityLog.action)}>
-                                {actionLabels[activityLog.action] || activityLog.action}
+                            <Badge
+                                variant="default"
+                                className={getActionColor(activityLog.action)}
+                            >
+                                {actionLabels[activityLog.action] ||
+                                    activityLog.action}
                             </Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         {/* Voter Information */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div>
-                                <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-2">
-                                    <User className="w-4 h-4" />
+                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                    <User className="h-4 w-4" />
                                     Voter Information
                                 </div>
                                 <div className="ml-6">
-                                    <div className="text-sm text-gray-600">Voter ID</div>
+                                    <div className="text-sm text-gray-600">
+                                        Voter ID
+                                    </div>
                                     <div className="font-medium text-gray-800">
                                         {activityLog.voter.voters_id}
                                     </div>
@@ -118,41 +138,54 @@ export default function Show({ activityLog }: Props) {
                             </div>
 
                             <div>
-                                <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-2">
-                                    <Calendar className="w-4 h-4" />
+                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                    <Calendar className="h-4 w-4" />
                                     Election
                                 </div>
                                 <div className="ml-6">
-                                    <div className="font-medium text-gray-800">{activityLog.election.name}</div>
+                                    <div className="font-medium text-gray-800">
+                                        {activityLog.election.name}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="border-t pt-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
-                                    <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-2">
-                                        <MapPin className="w-4 h-4" />
+                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                        <MapPin className="h-4 w-4" />
                                         IP Address
                                     </div>
                                     <div className="ml-6">
                                         <div className="font-mono text-sm text-gray-800">
-                                            {activityLog.ip_address || 'Not recorded'}
+                                            {activityLog.ip_address ||
+                                                'Not recorded'}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-2">
-                                        <Calendar className="w-4 h-4" />
+                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                        <Calendar className="h-4 w-4" />
                                         Timestamp
                                     </div>
                                     <div className="ml-6">
                                         <div className="text-sm text-gray-800">
-                                            {format(new Date(activityLog.created_at), 'MMMM dd, yyyy')}
+                                            {format(
+                                                new Date(
+                                                    activityLog.created_at,
+                                                ),
+                                                'MMMM dd, yyyy',
+                                            )}
                                         </div>
                                         <div className="text-sm text-gray-600">
-                                            {format(new Date(activityLog.created_at), 'hh:mm:ss a')}
+                                            {format(
+                                                new Date(
+                                                    activityLog.created_at,
+                                                ),
+                                                'hh:mm:ss a',
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -162,12 +195,12 @@ export default function Show({ activityLog }: Props) {
                         {/* User Agent */}
                         {activityLog.user_agent && (
                             <div className="border-t pt-6">
-                                <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-2">
-                                    <Monitor className="w-4 h-4" />
+                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                    <Monitor className="h-4 w-4" />
                                     User Agent
                                 </div>
                                 <div className="ml-6">
-                                    <div className="text-sm text-gray-600 break-all font-mono bg-gray-50 p-3 rounded">
+                                    <div className="rounded bg-gray-50 p-3 font-mono text-sm break-all text-gray-600">
                                         {activityLog.user_agent}
                                     </div>
                                 </div>
@@ -175,19 +208,24 @@ export default function Show({ activityLog }: Props) {
                         )}
 
                         {/* Metadata */}
-                        {activityLog.metadata && Object.keys(activityLog.metadata).length > 0 && (
-                            <div className="border-t pt-6">
-                                <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-2">
-                                    <Database className="w-4 h-4" />
-                                    Additional Information
+                        {activityLog.metadata &&
+                            Object.keys(activityLog.metadata).length > 0 && (
+                                <div className="border-t pt-6">
+                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                        <Database className="h-4 w-4" />
+                                        Additional Information
+                                    </div>
+                                    <div className="ml-6">
+                                        <pre className="overflow-x-auto rounded bg-gray-50 p-3 text-sm text-gray-600">
+                                            {JSON.stringify(
+                                                activityLog.metadata,
+                                                null,
+                                                2,
+                                            )}
+                                        </pre>
+                                    </div>
                                 </div>
-                                <div className="ml-6">
-                                    <pre className="text-sm text-gray-600 bg-gray-50 p-3 rounded overflow-x-auto">
-                                        {JSON.stringify(activityLog.metadata, null, 2)}
-                                    </pre>
-                                </div>
-                            </div>
-                        )}
+                            )}
                     </CardContent>
                 </Card>
             </div>

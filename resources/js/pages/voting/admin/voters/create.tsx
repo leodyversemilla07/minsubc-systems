@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
+import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
-import voting from '@/routes/voting';
-import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -39,19 +39,31 @@ interface Props {
     errors?: Record<string, string>;
 }
 
-export default function Create({ elections, availableStudents, selectedElectionId, errors = {} }: Props) {
-    const [selectedElection, setSelectedElection] = useState(selectedElectionId);
+export default function Create({
+    elections,
+    availableStudents,
+    selectedElectionId,
+    errors = {},
+}: Props) {
+    const [selectedElection, setSelectedElection] =
+        useState(selectedElectionId);
     const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
     const handleElectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const electionId = e.target.value;
         setSelectedElection(Number(electionId));
-        router.get(voting.admin.voters.create.url() + `?election_id=${electionId}`, {}, { preserveState: false });
+        router.get(
+            voting.admin.voters.create.url() + `?election_id=${electionId}`,
+            {},
+            { preserveState: false },
+        );
     };
 
     const handleStudentToggle = (studentId: string) => {
         setSelectedStudents((prev) =>
-            prev.includes(studentId) ? prev.filter((id) => id !== studentId) : [...prev, studentId]
+            prev.includes(studentId)
+                ? prev.filter((id) => id !== studentId)
+                : [...prev, studentId],
         );
     };
 
@@ -66,20 +78,28 @@ export default function Create({ elections, availableStudents, selectedElectionI
             <Head title="Generate Voters" />
 
             <div className="max-w-3xl">
-                <div className="bg-white rounded-lg shadow-md">
+                <div className="rounded-lg bg-white shadow-md">
                     {/* Header */}
                     <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">Generate Voters in Bulk</h1>
-                        <p className="text-sm text-gray-600 mt-1">Create voter accounts from student records</p>
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Generate Voters in Bulk
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Create voter accounts from student records
+                        </p>
                     </div>
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6 p-6">
                         {/* Election */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="election_id" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Election <span className="text-red-500">*</span>
+                                <label
+                                    htmlFor="election_id"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
+                                    Election{' '}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     id="election_id"
@@ -87,17 +107,20 @@ export default function Create({ elections, availableStudents, selectedElectionI
                                     required
                                     value={selectedElection}
                                     onChange={handleElectionChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                                 >
                                     {elections.map((election) => (
-                                        <option key={election.id} value={election.id}>
+                                        <option
+                                            key={election.id}
+                                            value={election.id}
+                                        >
                                             {election.name}
                                         </option>
                                     ))}
                                 </select>
                                 {errors.election_id && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.election_id}
                                     </FieldError>
                                 )}
@@ -110,9 +133,10 @@ export default function Create({ elections, availableStudents, selectedElectionI
                                 <Field>
                                     <label
                                         htmlFor="generation_batch"
-                                        className="block text-sm font-medium text-gray-700 mb-2"
+                                        className="mb-2 block text-sm font-medium text-gray-700"
                                     >
-                                        Generation Batch <span className="text-red-500">*</span>
+                                        Generation Batch{' '}
+                                        <span className="text-red-500">*</span>
                                     </label>
                                     <Input
                                         type="number"
@@ -121,12 +145,18 @@ export default function Create({ elections, availableStudents, selectedElectionI
                                         defaultValue={1}
                                         required
                                         min={1}
-                                        className={errors.generation_batch ? 'border-red-500' : ''}
+                                        className={
+                                            errors.generation_batch
+                                                ? 'border-red-500'
+                                                : ''
+                                        }
                                     />
-                                    <p className="mt-1 text-xs text-gray-500">For tracking purposes</p>
+                                    <p className="mt-1 text-xs text-gray-500">
+                                        For tracking purposes
+                                    </p>
                                     {errors.generation_batch && (
                                         <FieldError>
-                                            <AlertCircle className="w-4 h-4 mr-1" />
+                                            <AlertCircle className="mr-1 h-4 w-4" />
                                             {errors.generation_batch}
                                         </FieldError>
                                     )}
@@ -135,7 +165,10 @@ export default function Create({ elections, availableStudents, selectedElectionI
 
                             <FieldGroup>
                                 <Field>
-                                    <label htmlFor="prefix" className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label
+                                        htmlFor="prefix"
+                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                    >
                                         Prefix (Optional)
                                     </label>
                                     <Input
@@ -154,7 +187,7 @@ export default function Create({ elections, availableStudents, selectedElectionI
                             <Field>
                                 <label
                                     htmlFor="default_password"
-                                    className="block text-sm font-medium text-gray-700 mb-2"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
                                 >
                                     Default Password
                                 </label>
@@ -164,40 +197,51 @@ export default function Create({ elections, availableStudents, selectedElectionI
                                     name="default_password"
                                     defaultValue="password"
                                 />
-                                <p className="mt-1 text-xs text-gray-500">All voters will use this password initially</p>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    All voters will use this password initially
+                                </p>
                             </Field>
                         </FieldGroup>
 
                         {/* Select Students */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Select Students <span className="text-red-500">*</span>
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                                Select Students{' '}
+                                <span className="text-red-500">*</span>
                             </label>
-                            <div className="bg-gray-50 rounded-lg p-4 max-h-96 overflow-y-auto">
-                                <div className="mb-3 flex justify-between items-center">
+                            <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-50 p-4">
+                                <div className="mb-3 flex items-center justify-between">
                                     <span className="text-sm text-gray-600">
-                                        Available Students: {availableStudents.length}
+                                        Available Students:{' '}
+                                        {availableStudents.length}
                                     </span>
                                     <span className="text-sm font-medium text-blue-600">
                                         {selectedStudents.length} selected
                                     </span>
                                 </div>
                                 {availableStudents.length === 0 ? (
-                                    <p className="text-center text-gray-500 py-8">
-                                        All active students are already voters for this election
+                                    <p className="py-8 text-center text-gray-500">
+                                        All active students are already voters
+                                        for this election
                                     </p>
                                 ) : (
                                     <div className="space-y-2">
                                         {availableStudents.map((student) => (
                                             <label
                                                 key={student.student_id}
-                                                className="flex items-center p-3 bg-white rounded-lg border hover:border-blue-500 cursor-pointer"
+                                                className="flex cursor-pointer items-center rounded-lg border bg-white p-3 hover:border-blue-500"
                                             >
                                                 <Checkbox
                                                     name="student_ids[]"
                                                     value={student.student_id}
-                                                    checked={selectedStudents.includes(student.student_id)}
-                                                    onCheckedChange={() => handleStudentToggle(student.student_id)}
+                                                    checked={selectedStudents.includes(
+                                                        student.student_id,
+                                                    )}
+                                                    onCheckedChange={() =>
+                                                        handleStudentToggle(
+                                                            student.student_id,
+                                                        )
+                                                    }
                                                     className="mr-3"
                                                 />
                                                 <div className="flex-1">
@@ -205,7 +249,9 @@ export default function Create({ elections, availableStudents, selectedElectionI
                                                         {student.user.full_name}
                                                     </div>
                                                     <div className="text-xs text-gray-500">
-                                                        {student.course} - {student.year_level} - {student.campus}
+                                                        {student.course} -{' '}
+                                                        {student.year_level} -{' '}
+                                                        {student.campus}
                                                     </div>
                                                 </div>
                                             </label>
@@ -214,15 +260,15 @@ export default function Create({ elections, availableStudents, selectedElectionI
                                 )}
                             </div>
                             {errors.student_ids && (
-                                <p className="mt-2 text-sm text-red-600 flex items-center">
-                                    <AlertCircle className="w-4 h-4 mr-1" />
+                                <p className="mt-2 flex items-center text-sm text-red-600">
+                                    <AlertCircle className="mr-1 h-4 w-4" />
                                     {errors.student_ids}
                                 </p>
                             )}
                         </div>
 
                         {/* Form Actions */}
-                        <div className="flex gap-4 pt-4 border-t">
+                        <div className="flex gap-4 border-t pt-4">
                             <Button
                                 type="submit"
                                 disabled={selectedStudents.length === 0}

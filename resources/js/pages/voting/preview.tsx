@@ -1,9 +1,9 @@
-import { router } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
 import { Alert } from '@/components/ui/alert';
-import { CircleAlert, CircleCheck, ArrowLeft, Lock } from 'lucide-react';
-import voting from '@/routes/voting';
+import { Button } from '@/components/ui/button';
 import { SecurityBadge } from '@/components/voting/security-badge';
+import voting from '@/routes/voting';
+import { router } from '@inertiajs/react';
+import { ArrowLeft, CircleAlert, CircleCheck, Lock } from 'lucide-react';
 import { useState } from 'react';
 
 interface Partylist {
@@ -41,68 +41,86 @@ interface PreviewPageProps {
     votes: Record<number, number[]>;
 }
 
-export default function Preview({ election, selections, votes }: PreviewPageProps) {
+export default function Preview({
+    election,
+    selections,
+    votes,
+}: PreviewPageProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleEditVotes = () => {
-        router.get(voting.ballot.url(), {}, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        router.get(
+            voting.ballot.url(),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     const handleConfirmSubmit = () => {
         setIsSubmitting(true);
-        router.post(voting.submit.url(), { votes }, {
-            onFinish: () => setIsSubmitting(false),
-        });
+        router.post(
+            voting.submit.url(),
+            { votes },
+            {
+                onFinish: () => setIsSubmitting(false),
+            },
+        );
     };
 
     const totalSelections = selections.reduce(
         (sum, selection) => sum + selection.candidates.length,
-        0
+        0,
     );
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30 dark:from-gray-950 dark:to-gray-900">
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 text-white shadow-lg">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg dark:from-green-500 dark:to-emerald-500">
                 <div className="container mx-auto px-4 py-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-4">
                             {/* Logo */}
-                            <img 
-                                src="/votesys-logo.png" 
-                                alt="VoteSys Logo" 
-                                className="h-12 w-auto hidden sm:block"
+                            <img
+                                src="/votesys-logo.png"
+                                alt="VoteSys Logo"
+                                className="hidden h-12 w-auto sm:block"
                             />
                             <div>
-                                <h1 className="text-2xl font-bold">{election.name}</h1>
-                                <p className="text-sm opacity-90">Review Your Selections</p>
+                                <h1 className="text-2xl font-bold">
+                                    {election.name}
+                                </h1>
+                                <p className="text-sm opacity-90">
+                                    Review Your Selections
+                                </p>
                             </div>
                         </div>
                         <Button
                             variant="ghost"
                             onClick={handleEditVotes}
-                            className="bg-white/20 hover:bg-white/30 text-white"
+                            className="bg-white/20 text-white hover:bg-white/30"
                             disabled={isSubmitting}
                         >
-                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            <ArrowLeft className="mr-2 h-4 w-4" />
                             Edit Selections
                         </Button>
                     </div>
 
                     {/* Progress Indicator */}
                     <div className="mt-4 flex items-center gap-3 text-sm">
-                        <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
-                            <CircleCheck className="w-4 h-4" />
+                        <div className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2">
+                            <CircleCheck className="h-4 w-4" />
                             <span className="font-semibold">
-                                {selections.length} position{selections.length !== 1 ? 's' : ''} filled
+                                {selections.length} position
+                                {selections.length !== 1 ? 's' : ''} filled
                             </span>
                         </div>
-                        <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+                        <div className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2">
                             <span className="font-semibold">
-                                {totalSelections} candidate{totalSelections !== 1 ? 's' : ''} selected
+                                {totalSelections} candidate
+                                {totalSelections !== 1 ? 's' : ''} selected
                             </span>
                         </div>
                     </div>
@@ -110,44 +128,56 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
             </div>
 
             {/* Preview Content */}
-            <div className="container mx-auto px-4 py-8 max-w-5xl">
+            <div className="container mx-auto max-w-5xl px-4 py-8">
                 {/* Security Badge */}
                 <div className="mb-6">
                     <SecurityBadge message="Your vote will be encrypted and submitted securely. This cannot be undone." />
                 </div>
 
                 {/* Warning Alert */}
-                <Alert className="mb-6 border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950 text-yellow-800 dark:text-yellow-200 shadow-md">
+                <Alert className="mb-6 border-yellow-200 bg-yellow-50 text-yellow-800 shadow-md dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-200">
                     <CircleAlert className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
                     <div>
-                        <h3 className="font-semibold mb-1">⚠️ Final Confirmation Required</h3>
+                        <h3 className="mb-1 font-semibold">
+                            ⚠️ Final Confirmation Required
+                        </h3>
                         <p className="text-sm">
-                            Please carefully review your selections below. Once you submit your vote, 
-                            <span className="font-semibold"> it cannot be changed or withdrawn</span>.
-                            Make sure all selections are correct before proceeding.
+                            Please carefully review your selections below. Once
+                            you submit your vote,
+                            <span className="font-semibold">
+                                {' '}
+                                it cannot be changed or withdrawn
+                            </span>
+                            . Make sure all selections are correct before
+                            proceeding.
                         </p>
                     </div>
                 </Alert>
 
                 {/* Selections Display */}
-                <div className="space-y-6 mb-6">
+                <div className="mb-6 space-y-6">
                     {selections.map((selection) => (
                         <div
                             key={selection.position.position_id}
-                            className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-800"
+                            className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-800 dark:bg-gray-900"
                         >
                             {/* Position Header */}
-                            <div className="bg-green-600 dark:bg-green-700 text-white px-6 py-4">
+                            <div className="bg-green-600 px-6 py-4 text-white dark:bg-green-700">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <h3 className="text-lg font-bold">
                                             {selection.position.description}
                                         </h3>
                                         <p className="text-sm opacity-90">
-                                            {selection.candidates.length} of {selection.position.max_vote} {selection.position.max_vote > 1 ? 'candidates' : 'candidate'} selected
+                                            {selection.candidates.length} of{' '}
+                                            {selection.position.max_vote}{' '}
+                                            {selection.position.max_vote > 1
+                                                ? 'candidates'
+                                                : 'candidate'}{' '}
+                                            selected
                                         </p>
                                     </div>
-                                    <CircleCheck className="w-8 h-8" />
+                                    <CircleCheck className="h-8 w-8" />
                                 </div>
                             </div>
 
@@ -157,40 +187,45 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
                                     {selection.candidates.map((candidate) => (
                                         <div
                                             key={candidate.id}
-                                            className="flex items-center gap-4 p-4 border-2 border-green-100 dark:border-green-900 bg-green-50 dark:bg-green-950 rounded-lg"
+                                            className="flex items-center gap-4 rounded-lg border-2 border-green-100 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950"
                                         >
                                             {/* Candidate Photo */}
                                             {candidate.photo ? (
                                                 <img
                                                     src={`/storage/${candidate.photo}`}
                                                     alt={candidate.fullname}
-                                                    className="w-16 h-16 rounded-full object-cover border-2 border-green-600 dark:border-green-500 shadow-md"
+                                                    className="h-16 w-16 rounded-full border-2 border-green-600 object-cover shadow-md dark:border-green-500"
                                                 />
                                             ) : (
-                                                <div className="w-16 h-16 rounded-full bg-green-600 dark:bg-green-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
-                                                    {candidate.fullname.charAt(0)}
+                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-600 text-xl font-bold text-white shadow-md dark:bg-green-500">
+                                                    {candidate.fullname.charAt(
+                                                        0,
+                                                    )}
                                                 </div>
                                             )}
 
                                             {/* Candidate Info */}
                                             <div className="flex-1">
-                                                <h4 className="font-bold text-gray-800 dark:text-gray-100 text-lg">
+                                                <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">
                                                     {candidate.fullname}
                                                 </h4>
                                                 {candidate.partylist ? (
-                                                    <p className="text-sm text-green-700 dark:text-green-400 font-medium">
-                                                        {candidate.partylist.name}
+                                                    <p className="text-sm font-medium text-green-700 dark:text-green-400">
+                                                        {
+                                                            candidate.partylist
+                                                                .name
+                                                        }
                                                     </p>
                                                 ) : (
-                                                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                                                    <p className="text-sm text-gray-500 italic dark:text-gray-400">
                                                         Independent
                                                     </p>
                                                 )}
                                             </div>
 
                                             {/* Checkmark */}
-                                            <div className="bg-green-600 dark:bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
-                                                <CircleCheck className="w-5 h-5" />
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
+                                                <CircleCheck className="h-5 w-5" />
                                             </div>
                                         </div>
                                     ))}
@@ -200,21 +235,21 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
                     ))}
 
                     {selections.length === 0 && (
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-12 text-center border border-gray-200 dark:border-gray-800">
-                            <div className="text-gray-400 dark:text-gray-600 mb-4">
-                                <CircleAlert className="w-16 h-16 mx-auto" />
+                        <div className="rounded-lg border border-gray-200 bg-white p-12 text-center shadow-md dark:border-gray-800 dark:bg-gray-900">
+                            <div className="mb-4 text-gray-400 dark:text-gray-600">
+                                <CircleAlert className="mx-auto h-16 w-16" />
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            <h3 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-300">
                                 No Selections Made
                             </h3>
-                            <p className="text-gray-500 dark:text-gray-400 mb-6">
+                            <p className="mb-6 text-gray-500 dark:text-gray-400">
                                 You haven't selected any candidates yet.
                             </p>
                             <Button
                                 onClick={handleEditVotes}
                                 className="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                             >
-                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                <ArrowLeft className="mr-2 h-4 w-4" />
                                 Go Back to Ballot
                             </Button>
                         </div>
@@ -223,38 +258,41 @@ export default function Preview({ election, selections, votes }: PreviewPageProp
 
                 {/* Action Buttons */}
                 {selections.length > 0 && (
-                    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-800">
-                        <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
+                        <div className="flex flex-col gap-4 sm:flex-row">
                             <Button
                                 onClick={handleEditVotes}
                                 variant="outline"
-                                className="flex-1 py-6 text-lg border-2"
+                                className="flex-1 border-2 py-6 text-lg"
                                 disabled={isSubmitting}
                             >
-                                <ArrowLeft className="w-5 h-5 mr-2" />
+                                <ArrowLeft className="mr-2 h-5 w-5" />
                                 Edit My Selections
                             </Button>
                             <Button
                                 onClick={handleConfirmSubmit}
-                                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 py-6 text-lg font-bold shadow-lg"
+                                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 py-6 text-lg font-bold shadow-lg hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                                         Submitting Vote...
                                     </>
                                 ) : (
                                     <>
-                                        <Lock className="w-5 h-5 mr-2" />
+                                        <Lock className="mr-2 h-5 w-5" />
                                         Confirm & Submit Vote
                                     </>
                                 )}
                             </Button>
                         </div>
-                        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-                            By confirming, you acknowledge that your selections are final and{' '}
-                            <span className="font-semibold text-red-600 dark:text-red-500">cannot be changed</span>
+                        <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                            By confirming, you acknowledge that your selections
+                            are final and{' '}
+                            <span className="font-semibold text-red-600 dark:text-red-500">
+                                cannot be changed
+                            </span>
                         </p>
                     </div>
                 )}

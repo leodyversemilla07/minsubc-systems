@@ -1,13 +1,5 @@
 import { Button } from '@/components/ui/button';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import {
     Empty,
     EmptyContent,
     EmptyDescription,
@@ -15,12 +7,34 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Edit, Eye, FileText, Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import {
+    ArrowDown,
+    ArrowUp,
+    Edit,
+    Eye,
+    FileText,
+    Plus,
+    Trash2,
+} from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -47,23 +61,38 @@ interface Props {
     selectedElectionId?: number;
 }
 
-export default function Index({ positions, elections, selectedElectionId }: Props) {
+export default function Index({
+    positions,
+    elections,
+    selectedElectionId,
+}: Props) {
     const handleDelete = (position: Position) => {
         if (confirm('Delete this position?')) {
-            router.delete(voting.admin.positions.destroy.url({ position: position.position_id }));
+            router.delete(
+                voting.admin.positions.destroy.url({
+                    position: position.position_id,
+                }),
+            );
         }
     };
 
     const handleElectionChange = (value: string) => {
-        router.get(voting.admin.positions.index.url(), value !== 'all' ? { election_id: value } : {});
+        router.get(
+            voting.admin.positions.index.url(),
+            value !== 'all' ? { election_id: value } : {},
+        );
     };
 
     const handleMoveUp = (positionId: number) => {
-        router.post(voting.admin.positions.moveUp.url({ position: positionId }));
+        router.post(
+            voting.admin.positions.moveUp.url({ position: positionId }),
+        );
     };
 
     const handleMoveDown = (positionId: number) => {
-        router.post(voting.admin.positions.moveDown.url({ position: positionId }));
+        router.post(
+            voting.admin.positions.moveDown.url({ position: positionId }),
+        );
     };
 
     return (
@@ -72,16 +101,25 @@ export default function Index({ positions, elections, selectedElectionId }: Prop
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Positions</h1>
-                        <p className="text-muted-foreground">Manage election positions</p>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Positions
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Manage election positions
+                        </p>
                     </div>
                     <Link
-                        href={voting.admin.positions.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
+                        href={
+                            voting.admin.positions.create.url() +
+                            (selectedElectionId
+                                ? `?election_id=${selectedElectionId}`
+                                : '')
+                        }
                     >
                         <Button className="bg-blue-600 hover:bg-blue-700">
-                            <Plus className="w-4 h-4 mr-2" />
+                            <Plus className="mr-2 h-4 w-4" />
                             Add Position
                         </Button>
                     </Link>
@@ -89,38 +127,51 @@ export default function Index({ positions, elections, selectedElectionId }: Prop
 
                 {/* Election Filter */}
                 <div className="flex gap-3">
-                        <Select value={selectedElectionId?.toString() || 'all'} onValueChange={handleElectionChange}>
-                            <SelectTrigger className="w-64">
-                                <SelectValue placeholder="All Elections" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Elections</SelectItem>
-                                {elections.map((election) => (
-                                    <SelectItem key={election.id} value={election.id.toString()}>
-                                        {election.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <Select
+                        value={selectedElectionId?.toString() || 'all'}
+                        onValueChange={handleElectionChange}
+                    >
+                        <SelectTrigger className="w-64">
+                            <SelectValue placeholder="All Elections" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Elections</SelectItem>
+                            {elections.map((election) => (
+                                <SelectItem
+                                    key={election.id}
+                                    value={election.id.toString()}
+                                >
+                                    {election.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
 
                 {/* Positions List */}
                 <div>
                     {positions.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
-                                <FileText className="w-16 h-16" />
+                                <FileText className="h-16 w-16" />
                             </EmptyMedia>
                             <EmptyHeader>
                                 <EmptyTitle>No positions yet</EmptyTitle>
-                                <EmptyDescription>Add positions to organize your election</EmptyDescription>
+                                <EmptyDescription>
+                                    Add positions to organize your election
+                                </EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
                                 <Link
-                                    href={voting.admin.positions.create.url() + (selectedElectionId ? `?election_id=${selectedElectionId}` : '')}
+                                    href={
+                                        voting.admin.positions.create.url() +
+                                        (selectedElectionId
+                                            ? `?election_id=${selectedElectionId}`
+                                            : '')
+                                    }
                                 >
                                     <Button className="bg-blue-600 hover:bg-blue-700">
-                                        <Plus className="w-4 h-4 mr-2" />
+                                        <Plus className="mr-2 h-4 w-4" />
                                         Add Position
                                     </Button>
                                 </Link>
@@ -136,14 +187,16 @@ export default function Index({ positions, elections, selectedElectionId }: Prop
                                         <TableHead>Max Votes</TableHead>
                                         <TableHead>Election</TableHead>
                                         <TableHead>Candidates</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {positions.map((position, index) => (
                                         <TableRow key={position.position_id}>
                                             <TableCell>
-                                                <span className="inline-flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full font-bold text-gray-700">
+                                                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 font-bold text-gray-700">
                                                     {position.priority}
                                                 </span>
                                             </TableCell>
@@ -166,40 +219,73 @@ export default function Index({ positions, elections, selectedElectionId }: Prop
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleMoveUp(position.position_id)}
+                                                        onClick={() =>
+                                                            handleMoveUp(
+                                                                position.position_id,
+                                                            )
+                                                        }
                                                         disabled={index === 0}
                                                         title="Move Up"
                                                     >
-                                                        <ArrowUp className="w-4 h-4" />
+                                                        <ArrowUp className="h-4 w-4" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleMoveDown(position.position_id)}
-                                                        disabled={index === positions.length - 1}
+                                                        onClick={() =>
+                                                            handleMoveDown(
+                                                                position.position_id,
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            index ===
+                                                            positions.length - 1
+                                                        }
                                                         title="Move Down"
                                                     >
-                                                        <ArrowDown className="w-4 h-4" />
+                                                        <ArrowDown className="h-4 w-4" />
                                                     </Button>
-                                                    <Link href={voting.admin.positions.show.url({ position: position.position_id })}>
-                                                        <Button variant="ghost" size="sm">
-                                                            <Eye className="w-4 h-4" />
+                                                    <Link
+                                                        href={voting.admin.positions.show.url(
+                                                            {
+                                                                position:
+                                                                    position.position_id,
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
                                                     <Link
-                                                        href={voting.admin.positions.edit.url({ position: position.position_id })}
+                                                        href={voting.admin.positions.edit.url(
+                                                            {
+                                                                position:
+                                                                    position.position_id,
+                                                            },
+                                                        )}
                                                     >
-                                                        <Button variant="ghost" size="sm">
-                                                            <Edit className="w-4 h-4" />
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Edit className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleDelete(position)}
-                                                        className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                position,
+                                                            )
+                                                        }
+                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
                                                     >
-                                                        <Trash2 className="w-4 h-4" />
+                                                        <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                             </TableCell>

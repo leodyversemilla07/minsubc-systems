@@ -3,11 +3,11 @@ import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import voting from '@/routes/voting';
+import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
-import voting from '@/routes/voting';
-import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -38,13 +38,24 @@ interface Props {
     errors?: Record<string, string>;
 }
 
-export default function Create({ elections, positions, partylists, selectedElectionId, errors = {} }: Props) {
-    const [selectedElection, setSelectedElection] = useState(selectedElectionId);
+export default function Create({
+    elections,
+    positions,
+    partylists,
+    selectedElectionId,
+    errors = {},
+}: Props) {
+    const [selectedElection, setSelectedElection] =
+        useState(selectedElectionId);
 
     const handleElectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const electionId = e.target.value;
         setSelectedElection(Number(electionId));
-        router.get(voting.admin.candidates.create.url() + `?election_id=${electionId}`, {}, { preserveState: false });
+        router.get(
+            voting.admin.candidates.create.url() + `?election_id=${electionId}`,
+            {},
+            { preserveState: false },
+        );
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,20 +69,28 @@ export default function Create({ elections, positions, partylists, selectedElect
             <Head title="Add Candidate" />
 
             <div className="max-w-3xl">
-                <div className="bg-white rounded-lg shadow-md">
+                <div className="rounded-lg bg-white shadow-md">
                     {/* Header */}
                     <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">Add New Candidate</h1>
-                        <p className="text-sm text-gray-600 mt-1">Add a candidate to the election</p>
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Add New Candidate
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Add a candidate to the election
+                        </p>
                     </div>
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6 p-6">
                         {/* Election */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="election_id" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Election <span className="text-red-500">*</span>
+                                <label
+                                    htmlFor="election_id"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
+                                    Election{' '}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     id="election_id"
@@ -79,17 +98,20 @@ export default function Create({ elections, positions, partylists, selectedElect
                                     required
                                     value={selectedElection}
                                     onChange={handleElectionChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                                 >
                                     {elections.map((election) => (
-                                        <option key={election.id} value={election.id}>
+                                        <option
+                                            key={election.id}
+                                            value={election.id}
+                                        >
                                             {election.name}
                                         </option>
                                     ))}
                                 </select>
                                 {errors.election_id && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.election_id}
                                     </FieldError>
                                 )}
@@ -99,25 +121,32 @@ export default function Create({ elections, positions, partylists, selectedElect
                         {/* Position */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="position_id" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Position <span className="text-red-500">*</span>
+                                <label
+                                    htmlFor="position_id"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
+                                    Position{' '}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     id="position_id"
                                     name="position_id"
                                     required
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="">Select Position</option>
                                     {positions.map((position) => (
-                                        <option key={position.position_id} value={position.position_id}>
+                                        <option
+                                            key={position.position_id}
+                                            value={position.position_id}
+                                        >
                                             {position.description}
                                         </option>
                                     ))}
                                 </select>
                                 {errors.position_id && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.position_id}
                                     </FieldError>
                                 )}
@@ -127,8 +156,12 @@ export default function Create({ elections, positions, partylists, selectedElect
                         {/* First Name */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="firstname" className="block text-sm font-medium text-gray-700 mb-2">
-                                    First Name <span className="text-red-500">*</span>
+                                <label
+                                    htmlFor="firstname"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
+                                    First Name{' '}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <Input
                                     type="text"
@@ -136,11 +169,13 @@ export default function Create({ elections, positions, partylists, selectedElect
                                     name="firstname"
                                     required
                                     maxLength={30}
-                                    className={errors.firstname ? 'border-red-500' : ''}
+                                    className={
+                                        errors.firstname ? 'border-red-500' : ''
+                                    }
                                 />
                                 {errors.firstname && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.firstname}
                                     </FieldError>
                                 )}
@@ -150,8 +185,12 @@ export default function Create({ elections, positions, partylists, selectedElect
                         {/* Last Name */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="lastname" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Last Name <span className="text-red-500">*</span>
+                                <label
+                                    htmlFor="lastname"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
+                                    Last Name{' '}
+                                    <span className="text-red-500">*</span>
                                 </label>
                                 <Input
                                     type="text"
@@ -159,11 +198,13 @@ export default function Create({ elections, positions, partylists, selectedElect
                                     name="lastname"
                                     required
                                     maxLength={30}
-                                    className={errors.lastname ? 'border-red-500' : ''}
+                                    className={
+                                        errors.lastname ? 'border-red-500' : ''
+                                    }
                                 />
                                 {errors.lastname && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.lastname}
                                     </FieldError>
                                 )}
@@ -173,25 +214,33 @@ export default function Create({ elections, positions, partylists, selectedElect
                         {/* Partylist */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="partylist_id" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label
+                                    htmlFor="partylist_id"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
                                     Partylist
                                 </label>
                                 <select
                                     id="partylist_id"
                                     name="partylist_id"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="">Independent</option>
                                     {partylists.map((partylist) => (
-                                        <option key={partylist.partylist_id} value={partylist.partylist_id}>
+                                        <option
+                                            key={partylist.partylist_id}
+                                            value={partylist.partylist_id}
+                                        >
                                             {partylist.name}
                                         </option>
                                     ))}
                                 </select>
-                                <p className="mt-1 text-xs text-gray-500">Leave empty for independent candidate</p>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    Leave empty for independent candidate
+                                </p>
                                 {errors.partylist_id && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.partylist_id}
                                     </FieldError>
                                 )}
@@ -201,7 +250,10 @@ export default function Create({ elections, positions, partylists, selectedElect
                         {/* Photo */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="photo" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label
+                                    htmlFor="photo"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
                                     Photo
                                 </label>
                                 <Input
@@ -209,12 +261,16 @@ export default function Create({ elections, positions, partylists, selectedElect
                                     id="photo"
                                     name="photo"
                                     accept="image/*"
-                                    className={errors.photo ? 'border-red-500' : ''}
+                                    className={
+                                        errors.photo ? 'border-red-500' : ''
+                                    }
                                 />
-                                <p className="mt-1 text-xs text-gray-500">Max 2MB, JPG/PNG</p>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    Max 2MB, JPG/PNG
+                                </p>
                                 {errors.photo && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.photo}
                                     </FieldError>
                                 )}
@@ -224,18 +280,23 @@ export default function Create({ elections, positions, partylists, selectedElect
                         {/* Platform */}
                         <FieldGroup>
                             <Field>
-                                <label htmlFor="platform" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label
+                                    htmlFor="platform"
+                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                >
                                     Platform / Bio
                                 </label>
                                 <Textarea
                                     id="platform"
                                     name="platform"
                                     rows={4}
-                                    className={errors.platform ? 'border-red-500' : ''}
+                                    className={
+                                        errors.platform ? 'border-red-500' : ''
+                                    }
                                 />
                                 {errors.platform && (
                                     <FieldError>
-                                        <AlertCircle className="w-4 h-4 mr-1" />
+                                        <AlertCircle className="mr-1 h-4 w-4" />
                                         {errors.platform}
                                     </FieldError>
                                 )}
@@ -243,8 +304,11 @@ export default function Create({ elections, positions, partylists, selectedElect
                         </FieldGroup>
 
                         {/* Form Actions */}
-                        <div className="flex gap-4 pt-4 border-t">
-                            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                        <div className="flex gap-4 border-t pt-4">
+                            <Button
+                                type="submit"
+                                className="bg-blue-600 hover:bg-blue-700"
+                            >
                                 Add Candidate
                             </Button>
                             <Link href={voting.admin.candidates.index.url()}>

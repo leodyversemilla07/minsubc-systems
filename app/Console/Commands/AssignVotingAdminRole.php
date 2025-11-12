@@ -40,8 +40,8 @@ class AssignVotingAdminRole extends Command
         $role = Role::where('name', 'voting-admin')->first();
 
         if (! $role) {
-            $this->error("voting-admin role not found. Please run the VotingSystemPermissionsSeeder first.");
-            $this->info("Run: php artisan db:seed --class=VotingSystemPermissionsSeeder");
+            $this->error('voting-admin role not found. Please run the VotingSystemPermissionsSeeder first.');
+            $this->info('Run: php artisan db:seed --class=VotingSystemPermissionsSeeder');
 
             return self::FAILURE;
         }

@@ -1,4 +1,20 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -7,22 +23,12 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Empty,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from '@/components/ui/empty';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Eye, Star, MessageSquare, ThumbsUp, ThumbsDown } from 'lucide-react';
 import voting from '@/routes/voting';
-import { format } from 'date-fns';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { format } from 'date-fns';
+import { Eye, MessageSquare, Star, ThumbsDown, ThumbsUp } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -93,7 +99,12 @@ interface Props {
     };
 }
 
-export default function Index({ feedback, elections, statistics, filters }: Props) {
+export default function Index({
+    feedback,
+    elections,
+    statistics,
+    filters,
+}: Props) {
     const handleFilterChange = (key: string, value: string) => {
         router.get(
             voting.admin.feedback.index.url(),
@@ -101,7 +112,7 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                 ...filters,
                 [key]: value !== 'all' ? value : undefined,
             },
-            { preserveState: true }
+            { preserveState: true },
         );
     };
 
@@ -111,8 +122,10 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                 {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                         key={star}
-                        className={`w-4 h-4 ${
-                            star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                        className={`h-4 w-4 ${
+                            star <= rating
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-gray-300'
                         }`}
                     />
                 ))}
@@ -131,7 +144,9 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
         };
 
         return (
-            <Badge className={colors[experience] || ''}>{experience.charAt(0).toUpperCase() + experience.slice(1)}</Badge>
+            <Badge className={colors[experience] || ''}>
+                {experience.charAt(0).toUpperCase() + experience.slice(1)}
+            </Badge>
         );
     };
 
@@ -141,9 +156,11 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
 
             <div className="flex-1 space-y-8 p-6 md:p-8">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Voter Feedback</h1>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                            Voter Feedback
+                        </h1>
                         <p className="text-muted-foreground">
                             View and analyze feedback from voters
                         </p>
@@ -151,73 +168,91 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                 </div>
 
                 {/* Filters */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <Select
-                            value={filters.election_id?.toString() || 'all'}
-                            onValueChange={(value) => handleFilterChange('election_id', value)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="All Elections" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Elections</SelectItem>
-                                {elections.map((election) => (
-                                    <SelectItem key={election.id} value={election.id.toString()}>
-                                        {election.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <Select
+                        value={filters.election_id?.toString() || 'all'}
+                        onValueChange={(value) =>
+                            handleFilterChange('election_id', value)
+                        }
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Elections" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Elections</SelectItem>
+                            {elections.map((election) => (
+                                <SelectItem
+                                    key={election.id}
+                                    value={election.id.toString()}
+                                >
+                                    {election.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
-                        <Select
-                            value={filters.rating?.toString() || 'all'}
-                            onValueChange={(value) => handleFilterChange('rating', value)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="All Ratings" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Ratings</SelectItem>
-                                {[5, 4, 3, 2, 1].map((rating) => (
-                                    <SelectItem key={rating} value={rating.toString()}>
-                                        {rating} Star{rating !== 1 ? 's' : ''}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                    <Select
+                        value={filters.rating?.toString() || 'all'}
+                        onValueChange={(value) =>
+                            handleFilterChange('rating', value)
+                        }
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Ratings" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Ratings</SelectItem>
+                            {[5, 4, 3, 2, 1].map((rating) => (
+                                <SelectItem
+                                    key={rating}
+                                    value={rating.toString()}
+                                >
+                                    {rating} Star{rating !== 1 ? 's' : ''}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
-                        <Select
-                            value={filters.experience || 'all'}
-                            onValueChange={(value) => handleFilterChange('experience', value)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="All Experiences" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Experiences</SelectItem>
-                                <SelectItem value="excellent">Excellent</SelectItem>
-                                <SelectItem value="good">Good</SelectItem>
-                                <SelectItem value="average">Average</SelectItem>
-                                <SelectItem value="poor">Poor</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <Select
+                        value={filters.experience || 'all'}
+                        onValueChange={(value) =>
+                            handleFilterChange('experience', value)
+                        }
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Experiences" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Experiences</SelectItem>
+                            <SelectItem value="excellent">Excellent</SelectItem>
+                            <SelectItem value="good">Good</SelectItem>
+                            <SelectItem value="average">Average</SelectItem>
+                            <SelectItem value="poor">Poor</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
 
-                {(filters.election_id || filters.rating || filters.experience) && (
+                {(filters.election_id ||
+                    filters.rating ||
+                    filters.experience) && (
                     <div className="mt-3">
-                            <Button
-                                variant="ghost"
-                                onClick={() =>
-                                    router.get(voting.admin.feedback.index.url(), {}, { preserveState: true })
-                                }
-                            >
-                                Clear Filters
+                        <Button
+                            variant="ghost"
+                            onClick={() =>
+                                router.get(
+                                    voting.admin.feedback.index.url(),
+                                    {},
+                                    { preserveState: true },
+                                )
+                            }
+                        >
+                            Clear Filters
                         </Button>
                     </div>
                 )}
 
                 {/* Statistics */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                     <Card>
                         <CardHeader className="pb-2">
                             <CardTitle className="text-sm font-medium text-gray-600">
@@ -225,7 +260,9 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{statistics.total}</div>
+                            <div className="text-2xl font-bold">
+                                {statistics.total}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -237,8 +274,10 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                         </CardHeader>
                         <CardContent>
                             <div className="flex items-center gap-2">
-                                <span className="text-2xl font-bold">{statistics.average_rating}</span>
-                                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                                <span className="text-2xl font-bold">
+                                    {statistics.average_rating}
+                                </span>
+                                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                             </div>
                         </CardContent>
                     </Card>
@@ -253,7 +292,7 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex items-center gap-2">
-                                        <ThumbsUp className="w-5 h-5 text-green-600" />
+                                        <ThumbsUp className="h-5 w-5 text-green-600" />
                                         <span className="text-2xl font-bold text-green-600">
                                             {statistics.would_recommend.yes}
                                         </span>
@@ -269,7 +308,7 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex items-center gap-2">
-                                        <ThumbsDown className="w-5 h-5 text-red-600" />
+                                        <ThumbsDown className="h-5 w-5 text-red-600" />
                                         <span className="text-2xl font-bold text-red-600">
                                             {statistics.would_recommend.no}
                                         </span>
@@ -277,7 +316,7 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                 </CardContent>
                             </Card>
                         </>
-                )}
+                    )}
                 </div>
 
                 {/* Table */}
@@ -285,12 +324,14 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                     {feedback.data.length === 0 ? (
                         <Empty>
                             <EmptyMedia>
-                                <MessageSquare className="w-12 h-12" />
+                                <MessageSquare className="h-12 w-12" />
                             </EmptyMedia>
                             <EmptyHeader>
                                 <EmptyTitle>No Feedback Yet</EmptyTitle>
                                 <EmptyDescription>
-                                    {filters.election_id || filters.rating || filters.experience
+                                    {filters.election_id ||
+                                    filters.rating ||
+                                    filters.experience
                                         ? 'No feedback found matching your filters.'
                                         : 'No voter feedback has been submitted yet.'}
                                 </EmptyDescription>
@@ -307,7 +348,9 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                         <TableHead>Experience</TableHead>
                                         <TableHead>Comment</TableHead>
                                         <TableHead>Date</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -319,28 +362,44 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
                                             <TableCell className="text-sm text-gray-600">
                                                 {item.election.name}
                                             </TableCell>
-                                            <TableCell>{renderStars(item.rating)}</TableCell>
-                                            <TableCell>{getExperienceBadge(item.experience)}</TableCell>
+                                            <TableCell>
+                                                {renderStars(item.rating)}
+                                            </TableCell>
+                                            <TableCell>
+                                                {getExperienceBadge(
+                                                    item.experience,
+                                                )}
+                                            </TableCell>
                                             <TableCell className="max-w-xs">
                                                 {item.comment ? (
                                                     <div className="truncate text-sm text-gray-600">
                                                         {item.comment}
                                                     </div>
                                                 ) : (
-                                                    <span className="text-gray-400 text-sm">No comment</span>
+                                                    <span className="text-sm text-gray-400">
+                                                        No comment
+                                                    </span>
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-sm text-gray-600">
-                                                {format(new Date(item.created_at), 'MMM dd, yyyy')}
+                                                {format(
+                                                    new Date(item.created_at),
+                                                    'MMM dd, yyyy',
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <Link
-                                                    href={voting.admin.feedback.show.url({
-                                                        feedback: item.id,
-                                                    })}
+                                                    href={voting.admin.feedback.show.url(
+                                                        {
+                                                            feedback: item.id,
+                                                        },
+                                                    )}
                                                 >
-                                                    <Button variant="ghost" size="sm">
-                                                        <Eye className="w-4 h-4" />
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
+                                                        <Eye className="h-4 w-4" />
                                                     </Button>
                                                 </Link>
                                             </TableCell>
@@ -351,22 +410,31 @@ export default function Index({ feedback, elections, statistics, filters }: Prop
 
                             {/* Pagination */}
                             {feedback.last_page > 1 && (
-                                <div className="flex justify-center gap-1 mt-6">
+                                <div className="mt-6 flex justify-center gap-1">
                                     {feedback.links.map((link, index) => (
                                         <Button
                                             key={index}
-                                            variant={link.active ? 'default' : 'ghost'}
+                                            variant={
+                                                link.active
+                                                    ? 'default'
+                                                    : 'ghost'
+                                            }
                                             size="sm"
                                             disabled={!link.url}
-                                            onClick={() => link.url && router.visit(link.url)}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            onClick={() =>
+                                                link.url &&
+                                                router.visit(link.url)
+                                            }
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
                                         />
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
         </AppLayout>
     );

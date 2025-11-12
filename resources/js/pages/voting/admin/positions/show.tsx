@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { Edit, Users } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import { Edit, Users } from 'lucide-react';
 
 interface Election {
     id: number;
@@ -42,7 +42,12 @@ export default function Show({ position }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Positions', href: voting.admin.positions.index.url() },
-        { title: position.description, href: voting.admin.positions.show.url({ position: position.position_id }) },
+        {
+            title: position.description,
+            href: voting.admin.positions.show.url({
+                position: position.position_id,
+            }),
+        },
     ];
 
     return (
@@ -51,15 +56,23 @@ export default function Show({ position }: Props) {
 
             <div className="max-w-4xl">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800">{position.description}</h1>
-                        <p className="text-sm text-gray-600 mt-1">{position.election.name}</p>
+                        <h1 className="text-3xl font-bold text-gray-800">
+                            {position.description}
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
+                            {position.election.name}
+                        </p>
                     </div>
                     <div className="flex gap-2">
-                        <Link href={voting.admin.positions.edit.url({ position: position.position_id })}>
+                        <Link
+                            href={voting.admin.positions.edit.url({
+                                position: position.position_id,
+                            })}
+                        >
                             <Button className="bg-indigo-600 hover:bg-indigo-700">
-                                <Edit className="w-4 h-4 mr-2" />
+                                <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Button>
                         </Link>
@@ -69,36 +82,45 @@ export default function Show({ position }: Props) {
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid gap-6 md:grid-cols-3">
                     {/* Position Info */}
                     <div className="md:col-span-1">
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <h2 className="text-lg font-bold text-gray-800 mb-4">Position Details</h2>
+                        <div className="rounded-lg bg-white p-6 shadow-md">
+                            <h2 className="mb-4 text-lg font-bold text-gray-800">
+                                Position Details
+                            </h2>
 
                             <div className="space-y-4">
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">Priority</div>
+                                    <div className="text-xs text-gray-500 uppercase">
+                                        Priority
+                                    </div>
                                     <div className="mt-1">
-                                        <span className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full font-bold text-blue-700 text-lg">
+                                        <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-lg font-bold text-blue-700">
                                             {position.priority}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">Maximum Votes</div>
-                                    <div className="text-2xl font-bold text-gray-800 mt-1">
+                                    <div className="text-xs text-gray-500 uppercase">
+                                        Maximum Votes
+                                    </div>
+                                    <div className="mt-1 text-2xl font-bold text-gray-800">
                                         {position.max_vote}
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1">
-                                        Voters can select up to {position.max_vote} candidate
+                                    <p className="mt-1 text-xs text-gray-500">
+                                        Voters can select up to{' '}
+                                        {position.max_vote} candidate
                                         {position.max_vote !== 1 ? 's' : ''}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">Total Candidates</div>
-                                    <div className="text-2xl font-bold text-blue-600 mt-1">
+                                    <div className="text-xs text-gray-500 uppercase">
+                                        Total Candidates
+                                    </div>
+                                    <div className="mt-1 text-2xl font-bold text-blue-600">
                                         {position.candidates.length}
                                     </div>
                                 </div>
@@ -108,25 +130,30 @@ export default function Show({ position }: Props) {
 
                     {/* Candidates List */}
                     <div className="md:col-span-2">
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                                    <Users className="w-5 h-5" />
+                        <div className="rounded-lg bg-white p-6 shadow-md">
+                            <div className="mb-4 flex items-center justify-between">
+                                <h3 className="flex items-center gap-2 text-lg font-bold text-gray-800">
+                                    <Users className="h-5 w-5" />
                                     Candidates ({position.candidates.length})
                                 </h3>
                                 <Link
                                     href={`/voting/admin/candidates/create?election_id=${position.election.id}`}
                                 >
-                                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                                    <Button
+                                        size="sm"
+                                        className="bg-blue-600 hover:bg-blue-700"
+                                    >
                                         Add Candidate
                                     </Button>
                                 </Link>
                             </div>
 
                             {position.candidates.length === 0 ? (
-                                <div className="text-center py-12 text-gray-500">
-                                    <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                                    <p className="text-sm">No candidates for this position yet</p>
+                                <div className="py-12 text-center text-gray-500">
+                                    <Users className="mx-auto mb-3 h-12 w-12 text-gray-300" />
+                                    <p className="text-sm">
+                                        No candidates for this position yet
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
@@ -134,18 +161,22 @@ export default function Show({ position }: Props) {
                                         <Link
                                             key={candidate.candidate_id}
                                             href={`/voting/admin/candidates/${candidate.candidate_id}`}
-                                            className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50/50 transition group"
+                                            className="group flex items-center gap-4 rounded-lg border border-gray-200 p-4 transition hover:border-blue-300 hover:bg-blue-50/50"
                                         >
                                             {candidate.photo ? (
                                                 <img
                                                     src={`/storage/${candidate.photo}`}
                                                     alt={candidate.fullname}
-                                                    className="w-12 h-12 rounded-full object-cover"
+                                                    className="h-12 w-12 rounded-full object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">
-                                                    {candidate.firstname.charAt(0)}
-                                                    {candidate.lastname.charAt(0)}
+                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 font-bold text-gray-500">
+                                                    {candidate.firstname.charAt(
+                                                        0,
+                                                    )}
+                                                    {candidate.lastname.charAt(
+                                                        0,
+                                                    )}
                                                 </div>
                                             )}
                                             <div className="flex-1">
@@ -157,7 +188,10 @@ export default function Show({ position }: Props) {
                                                         variant="secondary"
                                                         className="mt-1 bg-blue-100 text-blue-700"
                                                     >
-                                                        {candidate.partylist.name}
+                                                        {
+                                                            candidate.partylist
+                                                                .name
+                                                        }
                                                     </Badge>
                                                 ) : (
                                                     <span className="text-xs text-gray-500 italic">

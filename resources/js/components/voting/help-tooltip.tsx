@@ -1,5 +1,10 @@
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { HelpCircle } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface HelpTooltipProps {
     content: string;
@@ -13,10 +18,10 @@ export function HelpTooltip({ content, side = 'top' }: HelpTooltipProps) {
                 <TooltipTrigger asChild>
                     <button
                         type="button"
-                        className="inline-flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                        className="inline-flex items-center justify-center text-gray-400 transition-colors hover:text-gray-600"
                         aria-label="Help information"
                     >
-                        <HelpCircle className="w-4 h-4" />
+                        <HelpCircle className="h-4 w-4" />
                     </button>
                 </TooltipTrigger>
                 <TooltipContent side={side} className="max-w-xs">

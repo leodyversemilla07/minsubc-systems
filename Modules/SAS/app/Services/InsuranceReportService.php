@@ -29,7 +29,7 @@ class InsuranceReportService
 
         return Pdf::loadHTML($html)
             ->setPaper('a4', 'landscape')
-            ->stream('Insurance-Records-' . now()->format('Y-m-d') . '.pdf');
+            ->stream('Insurance-Records-'.now()->format('Y-m-d').'.pdf');
     }
 
     /**
@@ -46,13 +46,13 @@ class InsuranceReportService
             'total_records' => $records->count(),
             'active' => $records->where('status', 'Active')->count(),
             'expired' => $records->where('status', 'Expired')->count(),
-            'expiring_soon' => $records->filter(fn($r) => $r->daysUntilExpiration() <= 30 && $r->daysUntilExpiration() > 0)->count(),
+            'expiring_soon' => $records->filter(fn ($r) => $r->daysUntilExpiration() <= 30 && $r->daysUntilExpiration() > 0)->count(),
             'total_coverage' => $records->sum('coverage_amount'),
-            'by_policy_type' => $records->groupBy('policy_type')->map(fn($group) => [
+            'by_policy_type' => $records->groupBy('policy_type')->map(fn ($group) => [
                 'count' => $group->count(),
                 'total_coverage' => $group->sum('coverage_amount'),
             ]),
-            'by_provider' => $records->groupBy('insurance_provider')->map(fn($group) => [
+            'by_provider' => $records->groupBy('insurance_provider')->map(fn ($group) => [
                 'count' => $group->count(),
                 'total_coverage' => $group->sum('coverage_amount'),
             ]),
@@ -71,7 +71,7 @@ class InsuranceReportService
      */
     public function exportToExcel(array $filters = []): BinaryFileResponse
     {
-        $filename = 'insurance-records-' . now()->format('Y-m-d') . '.xlsx';
+        $filename = 'insurance-records-'.now()->format('Y-m-d').'.xlsx';
 
         return Excel::download(
             new InsuranceRecordsExport($filters),
@@ -96,7 +96,7 @@ class InsuranceReportService
         }
 
         if (! empty($filters['insurance_provider'])) {
-            $query->where('insurance_provider', 'like', '%' . $filters['insurance_provider'] . '%');
+            $query->where('insurance_provider', 'like', '%'.$filters['insurance_provider'].'%');
         }
 
         if (! empty($filters['date_from'])) {
@@ -119,21 +119,21 @@ class InsuranceReportService
         if (! empty($filters)) {
             $filterParts = [];
             if (! empty($filters['policy_type'])) {
-                $filterParts[] = 'Policy Type: ' . $filters['policy_type'];
+                $filterParts[] = 'Policy Type: '.$filters['policy_type'];
             }
             if (! empty($filters['status'])) {
-                $filterParts[] = 'Status: ' . $filters['status'];
+                $filterParts[] = 'Status: '.$filters['status'];
             }
             if (! empty($filters['insurance_provider'])) {
-                $filterParts[] = 'Provider: ' . $filters['insurance_provider'];
+                $filterParts[] = 'Provider: '.$filters['insurance_provider'];
             }
             if (! empty($filters['date_from'])) {
-                $filterParts[] = 'From: ' . $filters['date_from'];
+                $filterParts[] = 'From: '.$filters['date_from'];
             }
             if (! empty($filters['date_to'])) {
-                $filterParts[] = 'To: ' . $filters['date_to'];
+                $filterParts[] = 'To: '.$filters['date_to'];
             }
-            $filterText = '<div class="filters"><strong>Filters Applied:</strong> ' . implode(' | ', $filterParts) . '</div>';
+            $filterText = '<div class="filters"><strong>Filters Applied:</strong> '.implode(' | ', $filterParts).'</div>';
         }
 
         $rows = '';
@@ -141,7 +141,7 @@ class InsuranceReportService
             $studentId = $record->student->student_id ?? 'N/A';
             $studentName = $record->student->name ?? 'N/A';
             $statusClass = $record->status === 'Active' ? 'status-active' : 'status-expired';
-            $coverage = '₱' . number_format($record->coverage_amount, 2);
+            $coverage = '₱'.number_format($record->coverage_amount, 2);
             $effectiveDate = $record->effective_date?->format('M d, Y') ?? 'N/A';
             $expirationDate = $record->expiration_date?->format('M d, Y') ?? 'N/A';
 
@@ -206,7 +206,7 @@ class InsuranceReportService
             <div class=\"summary-label\">Expired</div>
         </div>
         <div class=\"summary-box\">
-            <div class=\"summary-value\">₱" . number_format($totalCoverage, 2) . "</div>
+            <div class=\"summary-value\">₱".number_format($totalCoverage, 2)."</div>
             <div class=\"summary-label\">Total Coverage</div>
         </div>
     </div>
@@ -244,7 +244,7 @@ class InsuranceReportService
             $byTypeRows .= "<tr>
                 <td>{$type}</td>
                 <td>{$data['count']}</td>
-                <td>₱" . number_format($data['total_coverage'], 2) . '</td>
+                <td>₱".number_format($data['total_coverage'], 2).'</td>
             </tr>';
         }
 
@@ -253,7 +253,7 @@ class InsuranceReportService
             $byProviderRows .= "<tr>
                 <td>{$provider}</td>
                 <td>{$data['count']}</td>
-                <td>₱" . number_format($data['total_coverage'], 2) . '</td>
+                <td>₱".number_format($data['total_coverage'], 2).'</td>
             </tr>';
         }
 
@@ -306,7 +306,7 @@ class InsuranceReportService
             <div class=\"summary-label\">Expiring Soon (30 days)</div>
         </div>
         <div class=\"summary-box\">
-            <div class=\"summary-value\">₱" . number_format($stats['total_coverage'], 2) . "</div>
+            <div class=\"summary-value\">₱".number_format($stats['total_coverage'], 2)."</div>
             <div class=\"summary-label\">Total Coverage</div>
         </div>
     </div>

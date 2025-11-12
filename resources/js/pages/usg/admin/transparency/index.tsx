@@ -16,7 +16,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
     Select,
     SelectContent,
@@ -24,6 +23,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -283,7 +283,10 @@ export default function TransparencyManagement({
         <AppLayout
             breadcrumbs={[
                 { title: 'USG Admin', href: '/usg/admin' },
-                { title: 'Transparency Reports', href: '/usg/admin/transparency' },
+                {
+                    title: 'Transparency Reports',
+                    href: '/usg/admin/transparency',
+                },
             ]}
         >
             <Head title="Transparency Reports Management - USG Admin" />

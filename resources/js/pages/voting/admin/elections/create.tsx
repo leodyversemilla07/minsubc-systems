@@ -2,11 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
-import { Form } from '@inertiajs/react';
-import { AlertCircle } from 'lucide-react';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
+import { Form, Head, Link } from '@inertiajs/react';
+import { AlertCircle } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -24,22 +23,35 @@ export default function Create({ errors = {} }: Props) {
             <Head title="Create Election" />
 
             <div className="max-w-3xl">
-                <div className="bg-white rounded-lg shadow-md">
+                <div className="rounded-lg bg-white shadow-md">
                     {/* Header */}
                     <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">Create New Election</h1>
-                        <p className="text-sm text-gray-600 mt-1">Set up a new election cycle</p>
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Create New Election
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Set up a new election cycle
+                        </p>
                     </div>
 
                     {/* Form */}
-                    <Form action={voting.admin.elections.store.url()} method="post">
+                    <Form
+                        action={voting.admin.elections.store.url()}
+                        method="post"
+                    >
                         {({ processing }) => (
-                            <div className="p-6 space-y-6">
+                            <div className="space-y-6 p-6">
                                 {/* Election Name */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                                            Election Name <span className="text-red-500">*</span>
+                                        <label
+                                            htmlFor="name"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
+                                            Election Name{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </label>
                                         <Input
                                             type="text"
@@ -47,11 +59,15 @@ export default function Create({ errors = {} }: Props) {
                                             name="name"
                                             required
                                             placeholder="e.g., Student Council Election 2025"
-                                            className={errors.name ? 'border-red-500' : ''}
+                                            className={
+                                                errors.name
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
                                         />
                                         {errors.name && (
                                             <FieldError>
-                                                <AlertCircle className="w-4 h-4 mr-1" />
+                                                <AlertCircle className="mr-1 h-4 w-4" />
                                                 {errors.name}
                                             </FieldError>
                                         )}
@@ -61,21 +77,28 @@ export default function Create({ errors = {} }: Props) {
                                 {/* End Time */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="end_time" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label
+                                            htmlFor="end_time"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
                                             End Time
                                         </label>
                                         <Input
                                             type="datetime-local"
                                             id="end_time"
                                             name="end_time"
-                                            className={errors.end_time ? 'border-red-500' : ''}
+                                            className={
+                                                errors.end_time
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
                                         />
                                         <p className="mt-1 text-xs text-gray-500">
                                             Leave empty for no end time limit
                                         </p>
                                         {errors.end_time && (
                                             <FieldError>
-                                                <AlertCircle className="w-4 h-4 mr-1" />
+                                                <AlertCircle className="mr-1 h-4 w-4" />
                                                 {errors.end_time}
                                             </FieldError>
                                         )}
@@ -85,21 +108,29 @@ export default function Create({ errors = {} }: Props) {
                                 {/* Status */}
                                 <FieldGroup>
                                     <Field>
-                                        <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
-                                            Status <span className="text-red-500">*</span>
+                                        <label
+                                            htmlFor="status"
+                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                        >
+                                            Status{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </label>
                                         <select
                                             id="status"
                                             name="status"
                                             required
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                                         >
-                                            <option value="active">Active</option>
+                                            <option value="active">
+                                                Active
+                                            </option>
                                             <option value="ended">Ended</option>
                                         </select>
                                         {errors.status && (
                                             <FieldError>
-                                                <AlertCircle className="w-4 h-4 mr-1" />
+                                                <AlertCircle className="mr-1 h-4 w-4" />
                                                 {errors.status}
                                             </FieldError>
                                         )}
@@ -107,15 +138,19 @@ export default function Create({ errors = {} }: Props) {
                                 </FieldGroup>
 
                                 {/* Form Actions */}
-                                <div className="flex gap-4 pt-4 border-t">
+                                <div className="flex gap-4 border-t pt-4">
                                     <Button
                                         type="submit"
                                         disabled={processing}
                                         className="bg-blue-600 hover:bg-blue-700"
                                     >
-                                        {processing ? 'Creating...' : 'Create Election'}
+                                        {processing
+                                            ? 'Creating...'
+                                            : 'Create Election'}
                                     </Button>
-                                    <Link href={voting.admin.elections.index.url()}>
+                                    <Link
+                                        href={voting.admin.elections.index.url()}
+                                    >
                                         <Button type="button" variant="outline">
                                             Cancel
                                         </Button>
