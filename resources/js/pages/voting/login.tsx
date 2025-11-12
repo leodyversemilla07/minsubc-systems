@@ -4,7 +4,7 @@ import { Field, FieldLabel, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert } from '@/components/ui/alert';
-import { CircleAlert, CircleCheck, ShieldCheck, Lock, Info } from 'lucide-react';
+import { CircleAlert, CircleCheck, ShieldCheck, Info } from 'lucide-react';
 import voting from '@/routes/voting';
 import { SecurityBadge } from '@/components/voting/security-badge';
 import { HelpTooltip } from '@/components/voting/help-tooltip';
@@ -33,16 +33,15 @@ export default function Login({ elections, flash }: LoginPageProps) {
                     <div className="text-center mb-8">
                         {/* Logo */}
                         <div className="mb-6 flex justify-center">
-                            <img 
-                                src="/votesys-logo.png" 
-                                alt="VoteSys Logo" 
-                                className="h-20 w-auto"
-                            />
+                            <Link href={voting.index.url()}>
+                                <img 
+                                    src="/votesys-logo.png" 
+                                    alt="VoteSys Logo" 
+                                    className="h-20 w-auto hover:opacity-80 transition cursor-pointer"
+                                />
+                            </Link>
                         </div>
-                        
-                        <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                            <Lock className="w-8 h-8 text-white" />
-                        </div>
+
                         <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent mb-2">
                             Voter Login
                         </h2>
@@ -52,7 +51,7 @@ export default function Login({ elections, flash }: LoginPageProps) {
                     </div>
 
                     {/* Security Badge */}
-                    <div className="mb-6">
+                    <div className="mb-6 flex justify-center">
                         <SecurityBadge variant="compact" />
                     </div>
 
