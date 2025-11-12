@@ -1,16 +1,18 @@
 <?php
 
 use Modules\SAS\Models\InsuranceRecord;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
+    Role::create(['name' => 'sas-admin']);
     $admin = \App\Models\User::factory()->create();
-    $admin->assignRole('admin');
+    $admin->assignRole('sas-admin');
     $this->actingAs($admin);
 });
 
 test('insurance records report generates PDF successfully', function () {
     InsuranceRecord::factory()->count(5)->create([
-        'status' => 'Active',
+        'status' => 'Approved',
     ]);
 
     $response = $this->get('/sas/admin/reports/insurance/records');
@@ -34,13 +36,13 @@ test('insurance records report can be filtered by policy type', function () {
 
 test('insurance records report can be filtered by status', function () {
     InsuranceRecord::factory()->count(3)->create([
-        'status' => 'Active',
+        'status' => 'Approved',
     ]);
     InsuranceRecord::factory()->count(2)->create([
         'status' => 'Expired',
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?status=Active');
+    $response = $this->get('/sas/admin/reports/insurance/records?status=Approved');
 
     $response->assertSuccessful();
 });
@@ -66,7 +68,7 @@ test('insurance records report can be filtered by date range', function () {
         'effective_date' => now()->subDays(5),
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?date_from=' . now()->subDays(7)->toDateString());
+    $response = $this->get('/sas/admin/reports/insurance/records?date_from='.now()->subDays(7)->toDateString());
 
     $response->assertSuccessful();
 });
@@ -82,7 +84,7 @@ test('insurance records can be exported to Excel', function () {
 
 test('insurance statistics report generates PDF successfully', function () {
     InsuranceRecord::factory()->count(10)->create([
-        'status' => 'Active',
+        'status' => 'Approved',
         'effective_date' => now(),
         'expiration_date' => now()->addYear(),
     ]);

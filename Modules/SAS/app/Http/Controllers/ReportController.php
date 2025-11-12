@@ -23,7 +23,7 @@ class ReportController extends Controller
      */
     public function index(): InertiaResponse
     {
-        return inertia('sas/reports/index', [
+        return inertia('sas/admin/reports/index', [
             'scholarships' => Scholarship::select('id', 'scholarship_name')->get(),
         ]);
     }
