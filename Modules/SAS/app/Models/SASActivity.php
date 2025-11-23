@@ -45,6 +45,8 @@ class SASActivity extends Model
         'created_by',
     ];
 
+    protected $appends = ['activity_status'];
+
     protected function casts(): array
     {
         return [
@@ -115,5 +117,16 @@ class SASActivity extends Model
     public function isUpcoming(): bool
     {
         return $this->start_date->isFuture() && $this->status === 'Scheduled';
+    }
+
+    public function getActivityStatusAttribute(): string
+    {
+        return match ($this->status) {
+            'Scheduled' => 'upcoming',
+            'Ongoing' => 'ongoing',
+            'Completed' => 'completed',
+            'Cancelled' => 'cancelled',
+            default => 'upcoming',
+        };
     }
 }

@@ -20,7 +20,7 @@ class ActivityService
         }
 
         if (isset($filters['status'])) {
-            $query->where('activity_status', $filters['status']);
+            $query->where('status', $filters['status']);
         }
 
         if (isset($filters['organization_id'])) {
@@ -102,7 +102,7 @@ class ActivityService
     {
         return SASActivity::with('organization')
             ->where('start_date', '>=', now())
-            ->where('activity_status', 'upcoming')
+            ->where('status', 'Scheduled')
             ->orderBy('start_date')
             ->limit($limit)
             ->get();
@@ -115,10 +115,10 @@ class ActivityService
     {
         return [
             'total_activities' => SASActivity::count(),
-            'upcoming_activities' => SASActivity::where('activity_status', 'upcoming')->count(),
-            'ongoing_activities' => SASActivity::where('activity_status', 'ongoing')->count(),
-            'completed_activities' => SASActivity::where('activity_status', 'completed')->count(),
-            'cancelled_activities' => SASActivity::where('activity_status', 'cancelled')->count(),
+            'upcoming_activities' => SASActivity::where('status', 'Scheduled')->count(),
+            'ongoing_activities' => SASActivity::where('status', 'Ongoing')->count(),
+            'completed_activities' => SASActivity::where('status', 'Completed')->count(),
+            'cancelled_activities' => SASActivity::where('status', 'Cancelled')->count(),
             'total_target_participants' => SASActivity::sum('target_participants'),
             'total_actual_participants' => SASActivity::sum('actual_participants'),
             'by_category' => SASActivity::selectRaw('category, COUNT(*) as count')

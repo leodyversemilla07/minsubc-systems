@@ -81,14 +81,6 @@ export default function Header() {
                                 />
                                 <div className="absolute inset-0 rounded-full bg-blue-400/20 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
                             </div>
-                            <div className="relative">
-                                <img
-                                    src="/sas-logo.png"
-                                    alt="SAS Logo"
-                                    className="h-10 w-10 rounded-full object-contain transition-transform duration-300 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 rounded-full bg-blue-400/20 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
-                            </div>
                         </div>
                         <div className="flex flex-col">
                             <span className="hidden bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-xs leading-tight font-bold text-transparent transition-all lg:block dark:from-blue-100 dark:to-blue-300">

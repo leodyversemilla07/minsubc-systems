@@ -25,11 +25,6 @@ export default function Footer() {
                                 alt="MinSUBC Logo"
                                 className="h-12 w-12 rounded-full object-contain"
                             />
-                            <img
-                                src="/sas-logo.png"
-                                alt="SAS Logo"
-                                className="h-12 w-12 rounded-full object-contain"
-                            />
                         </div>
                         <h3 className="text-base font-bold text-gray-900 dark:text-white">
                             Student Affairs and Services
