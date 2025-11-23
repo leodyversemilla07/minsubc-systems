@@ -119,13 +119,22 @@ class PageController extends Controller
             ->with([
                 'adviser',
                 'officers' => function ($query) {
-                    $query->orderByDesc('is_current')->orderBy('position');
+                    $query->with('student:id,first_name,last_name,email')
+                        ->orderByDesc('is_current')
+                        ->orderBy('position');
                 },
                 'members' => function ($query) {
-                    $query->where('status', 'Active')->orderBy('member_name');
+                    $query->where('status', 'Active')
+                        ->with('student:id,first_name,middle_name,last_name,email')
+                        ->join('users', 'organization_members.student_id', '=', 'users.id')
+                        ->orderBy('users.last_name')
+                        ->orderBy('users.first_name')
+                        ->select('organization_members.*');
                 },
                 'activities' => function ($query) {
-                    $query->latest('start_date')->limit(10);
+                    $query->latest('activity_date')
+                        ->limit(10)
+                        ->select(['id', 'activity_name', 'activity_date', 'description', 'venue']);
                 },
             ])
             ->withCount(['officers', 'members', 'activities'])

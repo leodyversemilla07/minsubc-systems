@@ -1,11 +1,52 @@
-import AppearanceToggleDropdown from '@/components/appearance-dropdown';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { dashboard, login, register } from '@/routes';
 import sas from '@/routes/sas';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
+
+/**
+ * Theme Toggle Component
+ */
+const ThemeToggle = () => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      setIsDark(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDark(true);
+    }
+  };
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="p-2 rounded-full text-slate-500 hover:text-green-700 dark:text-slate-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-slate-800 transition-colors focus:outline-none"
+      aria-label="Toggle Dark Mode"
+    >
+      {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+    </button>
+  );
+};
 
 export default function Header() {
     const page = usePage<SharedData>();
@@ -64,10 +105,13 @@ export default function Header() {
     };
 
     return (
-        <nav className="fixed top-0 right-0 left-0 z-50 border-b border-blue-100/50 bg-white/95 shadow-sm backdrop-blur-lg backdrop-saturate-150 transition-all duration-300 dark:border-gray-800/50 dark:bg-gray-900/95">
+        <nav className="fixed top-0 right-0 left-0 z-50 border-b border-green-100/50 bg-white/95 shadow-sm backdrop-blur-lg backdrop-saturate-150 transition-all duration-300 dark:border-slate-800/50 dark:bg-slate-950/95">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                
                 {/* Top row: Logo, Name, and Auth buttons */}
                 <div className="flex h-16 items-center justify-between">
+                    
+                    {/* Logo Section */}
                     <Link
                         href={sas.index.url()}
                         className="group flex items-center gap-3 transition-all duration-300 hover:gap-4"
@@ -79,49 +123,50 @@ export default function Header() {
                                     alt="MinSUBC Logo"
                                     className="h-10 w-10 rounded-full object-contain transition-transform duration-300 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 rounded-full bg-blue-400/20 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
+                                <div className="absolute inset-0 rounded-full bg-green-400/20 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="hidden bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-xs leading-tight font-bold text-transparent transition-all lg:block dark:from-blue-100 dark:to-blue-300">
+                            <span className="hidden bg-gradient-to-r from-green-900 to-green-700 bg-clip-text text-xs leading-tight font-bold text-transparent transition-all lg:block dark:from-green-100 dark:to-green-300">
                                 Mindoro State University — Bongabong Campus
                             </span>
-                            <span className="bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-xs leading-tight font-bold text-transparent lg:text-sm dark:from-white dark:to-blue-200">
+                            <span className="bg-gradient-to-r from-green-900 to-green-600 bg-clip-text text-xs leading-tight font-bold text-transparent lg:text-sm dark:from-white dark:to-green-200">
                                 Student Affairs and Services
                             </span>
-                            <span className="bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-xs font-bold text-transparent lg:hidden dark:from-white dark:to-blue-300">
+                            <span className="bg-gradient-to-r from-green-900 to-green-700 bg-clip-text text-xs font-bold text-transparent lg:hidden dark:from-white dark:to-green-300">
                                 MinSU Bongabong | SAS
                             </span>
                         </div>
                     </Link>
 
+                    {/* Right Side Actions */}
                     <div className="flex items-center gap-3">
-                        <AppearanceToggleDropdown />
+                        <ThemeToggle />
 
                         {auth.user ? (
                             <Link
                                 href={dashboard()}
-                                className="group relative hidden overflow-hidden rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 sm:block"
+                                className="group relative hidden overflow-hidden rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 sm:block"
                             >
                                 <span className="relative z-10">Dashboard</span>
-                                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-700 to-green-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                             </Link>
                         ) : (
                             <>
                                 <Link
                                     href={login()}
-                                    className="hidden px-4 py-2 text-sm font-semibold text-blue-700 transition-all hover:text-blue-900 sm:block dark:text-blue-400 dark:hover:text-blue-300"
+                                    className="hidden px-4 py-2 text-sm font-semibold text-green-700 transition-all hover:text-green-900 sm:block dark:text-green-400 dark:hover:text-green-300"
                                 >
                                     Log in
                                 </Link>
                                 <Link
                                     href={register()}
-                                    className="group relative hidden overflow-hidden rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 sm:block"
+                                    className="group relative hidden overflow-hidden rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-green-500/30 sm:block"
                                 >
                                     <span className="relative z-10">
                                         Register
                                     </span>
-                                    <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                    <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-700 to-green-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                                 </Link>
                             </>
                         )}
@@ -143,7 +188,7 @@ export default function Header() {
                 </div>
 
                 {/* Bottom row: Desktop Navigation */}
-                <div className="hidden border-t border-blue-100/50 py-3 md:block dark:border-gray-800/50">
+                <div className="hidden border-t border-green-100/50 py-3 md:block dark:border-slate-800/50">
                     <div className="flex items-center gap-1">
                         {navigationLinks.map((link) => {
                             const active = isActive(link.href);
@@ -153,18 +198,18 @@ export default function Header() {
                                     href={link.href}
                                     className={`group relative overflow-hidden rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 ${
                                         active
-                                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
-                                            : 'text-gray-600 hover:bg-blue-50/80 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-gray-800/50 dark:hover:text-blue-400'
+                                            ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-md'
+                                            : 'text-slate-600 hover:bg-green-50/80 hover:text-green-700 dark:text-slate-300 dark:hover:bg-slate-800/50 dark:hover:text-green-400'
                                     }`}
                                 >
                                     <span className="relative z-10">
                                         {link.label}
                                     </span>
                                     {active && (
-                                        <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                        <div className="absolute inset-0 -z-0 bg-gradient-to-r from-green-700 to-green-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                                     )}
                                     {!active && (
-                                        <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-blue-600 to-blue-700 transition-all duration-300 group-hover:w-full" />
+                                        <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-green-600 to-green-700 transition-all duration-300 group-hover:w-full" />
                                     )}
                                 </Link>
                             );
@@ -175,7 +220,7 @@ export default function Header() {
 
             {/* Mobile Navigation */}
             {isMenuOpen && (
-                <div className="border-t border-blue-200 bg-white md:hidden dark:border-gray-800 dark:bg-gray-900">
+                <div className="border-t border-green-200 bg-white md:hidden dark:border-slate-800 dark:bg-slate-900">
                     <div className="mx-auto max-w-7xl space-y-2 px-4 py-4 sm:px-6 lg:px-8">
                         {navigationLinks.map((link) => {
                             const active = isActive(link.href);
@@ -185,8 +230,8 @@ export default function Header() {
                                     href={link.href}
                                     className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-all ${
                                         active
-                                            ? 'bg-blue-700 text-white shadow-sm'
-                                            : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                                            ? 'bg-green-700 text-white shadow-sm'
+                                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
                                     }`}
                                     onClick={() => setIsMenuOpen(false)}
                                 >
@@ -196,11 +241,11 @@ export default function Header() {
                         })}
 
                         {/* Mobile auth buttons */}
-                        <div className="border-t border-blue-200 pt-4 dark:border-gray-800">
+                        <div className="border-t border-green-200 pt-4 dark:border-slate-800">
                             {auth.user ? (
                                 <Link
                                     href={dashboard()}
-                                    className="block rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-medium text-white shadow-md transition-colors hover:bg-blue-800"
+                                    className="block rounded-lg bg-green-700 px-4 py-2 text-center text-sm font-medium text-white shadow-md transition-colors hover:bg-green-800"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Dashboard
@@ -209,14 +254,14 @@ export default function Header() {
                                 <div className="space-y-2">
                                     <Link
                                         href={login()}
-                                        className="block rounded-lg border-2 border-blue-700 px-4 py-2 text-center text-sm font-medium text-blue-900 transition-colors hover:bg-blue-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                                        className="block rounded-lg border-2 border-green-700 px-4 py-2 text-center text-sm font-medium text-green-900 transition-colors hover:bg-green-50 dark:text-slate-300 dark:border-green-600 dark:hover:bg-slate-800"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         Log in
                                     </Link>
                                     <Link
                                         href={register()}
-                                        className="block rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-medium text-white shadow-md transition-colors hover:bg-blue-800"
+                                        className="block rounded-lg bg-green-700 px-4 py-2 text-center text-sm font-medium text-white shadow-md transition-colors hover:bg-green-800"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         Register

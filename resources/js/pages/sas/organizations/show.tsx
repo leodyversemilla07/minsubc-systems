@@ -1,30 +1,44 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
 import type { Organization, OrganizationOfficer } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Calendar, Mail, Phone, Target, Users } from 'lucide-react';
+import {
+    ArrowLeft,
+    Users,
+    Target,
+    Award,
+    Mail,
+    Phone,
+    Calendar,
+    MapPin,
+    Globe
+} from 'lucide-react';
 
 interface Props {
     organization: Organization & {
         officers?: OrganizationOfficer[];
         members?: Array<{
             id: number;
-            member_name: string;
             student_id?: string;
-            contact_email?: string;
             membership_date: string;
             status: string;
+            student?: {
+                id: number;
+                first_name: string;
+                middle_name?: string;
+                last_name: string;
+                email: string;
+            };
         }>;
         activities?: Array<{
             id: number;
             activity_name: string;
             activity_date: string;
-            activity_type: string;
-            status: string;
+            description?: string;
+            venue?: string;
         }>;
     };
 }
@@ -37,105 +51,73 @@ export default function OrganizationShow({ organization }: Props) {
         <SASLayout>
             <Head title={`${organization.organization_name} - SAS`} />
 
-            {/* Back Button & Header */}
-            <section className="border-b bg-white px-4 py-6 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl">
-                    <Link href={sas.organizations.index.url()}>
-                        <Button variant="ghost" size="sm" className="mb-4">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Organizations
-                        </Button>
+            {/* Hero / Header Section */}
+            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white pt-8 pb-12 dark:from-gray-900 dark:via-green-950/20 dark:to-gray-900 border-b border-green-100 dark:border-gray-800">
+
+                {/* Background Pattern */}
+                <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
+                    <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="hero-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <circle cx="20" cy="20" r="1.5" fill="currentColor" className="text-green-600" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#hero-pattern)" />
+                    </svg>
+                </div>
+
+                <div className="relative mx-auto max-w-7xl px-4">
+                    {/* Back Link */}
+                    <Link href={sas.organizations.index.url()} className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-green-700 dark:text-gray-400 dark:hover:text-green-400">
+                        <ArrowLeft className="h-4 w-4" />
+                        Back to Organizations
                     </Link>
 
-                    <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-                        {/* Logo */}
-                        <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-blue-100 dark:bg-blue-900">
-                            {organization.logo_path ? (
-                                <img
-                                    src={organization.logo_path}
-                                    alt={organization.organization_name}
-                                    className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                <Users className="h-12 w-12 text-blue-700 dark:text-blue-400" />
-                            )}
+                    <div className="flex flex-col md:flex-row md:items-start gap-6 lg:gap-8">
+                        {/* Logo Box */}
+                        <div className="flex-shrink-0">
+                            <div className="flex h-24 w-24 md:h-32 md:w-32 items-center justify-center rounded-3xl bg-gradient-to-br from-green-100 to-emerald-200 shadow-xl dark:from-green-900 dark:to-green-800 ring-4 ring-white dark:ring-gray-900">
+                                {organization.logo_path ? (
+                                    <img src={organization.logo_path} alt={organization.organization_name} className="h-full w-full object-cover rounded-3xl" />
+                                ) : (
+                                    <Users className="h-12 w-12 md:h-16 md:w-16 text-green-700 dark:text-green-300" />
+                                )}
+                            </div>
                         </div>
 
-                        {/* Info */}
+                        {/* Title & Meta */}
                         <div className="flex-1">
-                            <div className="mb-2 flex flex-wrap items-center gap-2">
-                                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                                    {organization.organization_name}
-                                </h1>
-                                <Badge
-                                    variant={
-                                        organization.status === 'Active'
-                                            ? 'default'
-                                            : 'secondary'
-                                    }
-                                    className={
-                                        organization.status === 'Active'
-                                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                            : ''
-                                    }
-                                >
+                            <div className="mb-4 flex flex-wrap items-center gap-3">
+                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                     {organization.status}
                                 </Badge>
+                                <Badge variant="outline">{organization.organization_code}</Badge>
+                                <Badge variant="outline">{organization.organization_type}</Badge>
+                                <Badge variant="outline">{organization.category}</Badge>
                             </div>
 
-                            <p className="mb-3 text-lg text-gray-600 dark:text-gray-400">
-                                {organization.organization_code}
+                            <h1 className="mb-4 text-3xl font-black text-gray-900 sm:text-4xl lg:text-5xl dark:text-white tracking-tight">
+                                {organization.organization_name}
+                            </h1>
+
+                            <p className="max-w-3xl text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                                {organization.org_name}
                             </p>
-
-                            <div className="flex flex-wrap gap-2">
-                                <Badge variant="outline">
-                                    {organization.organization_type}
-                                </Badge>
-                                <Badge variant="outline">
-                                    {organization.category}
-                                </Badge>
-                            </div>
-                        </div>
-
-                        {/* Quick Stats */}
-                        <div className="grid grid-cols-3 gap-4 sm:grid-cols-1">
-                            <div className="text-center sm:text-right">
-                                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                                    {organization.officers_count || 0}
-                                </div>
-                                <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Officers
-                                </div>
-                            </div>
-                            <div className="text-center sm:text-right">
-                                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                                    {organization.members_count || 0}
-                                </div>
-                                <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Members
-                                </div>
-                            </div>
-                            <div className="text-center sm:text-right">
-                                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                                    {organization.activities_count || 0}
-                                </div>
-                                <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Activities
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Content */}
-            <section className="bg-gray-50 px-4 py-8 dark:bg-gray-800">
+            {/* Content Section */}
+            <section className="px-4 py-8 bg-gray-50/50 dark:bg-gray-800/50 min-h-[60vh]">
                 <div className="mx-auto max-w-7xl">
-                    <Tabs defaultValue="about" className="space-y-6">
-                        <TabsList>
+
+                    {/* Tabs Navigation */}
+                    <Tabs defaultValue="about" className="w-full">
+                        <TabsList className="grid w-full grid-cols-4">
                             <TabsTrigger value="about">About</TabsTrigger>
                             <TabsTrigger value="officers">
-                                Officers ({currentOfficers.length})
+                                Officers {organization.officers_count ? `(${organization.officers_count})` : ''}
                             </TabsTrigger>
                             {organization.members && (
                                 <TabsTrigger value="members">
@@ -144,330 +126,226 @@ export default function OrganizationShow({ organization }: Props) {
                             )}
                             {organization.activities && (
                                 <TabsTrigger value="activities">
-                                    Activities ({organization.activities.length}
-                                    )
+                                    Activities ({organization.activities.length})
                                 </TabsTrigger>
                             )}
                         </TabsList>
 
-                        {/* About Tab */}
-                        <TabsContent value="about" className="space-y-6">
-                            <div className="grid gap-6 lg:grid-cols-3">
-                                {/* Main Info */}
-                                <div className="space-y-6 lg:col-span-2">
-                                    {/* Mission */}
-                                    {organization.mission && (
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle className="flex items-center gap-2">
-                                                    <Target className="h-5 w-5 text-blue-700" />
-                                                    Mission
-                                                </CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-gray-700 dark:text-gray-300">
-                                                    {organization.mission}
-                                                </p>
-                                            </CardContent>
-                                        </Card>
-                                    )}
+                        <div className="grid gap-8 lg:grid-cols-3 mt-8">
 
-                                    {/* Vision */}
-                                    {organization.vision && (
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle className="flex items-center gap-2">
-                                                    <Target className="h-5 w-5 text-blue-700" />
-                                                    Vision
-                                                </CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-gray-700 dark:text-gray-300">
-                                                    {organization.vision}
-                                                </p>
-                                            </CardContent>
-                                        </Card>
-                                    )}
-                                </div>
+                            {/* Main Content Column */}
+                            <div className="lg:col-span-2 space-y-8">
 
-                                {/* Sidebar Info */}
-                                <div className="space-y-6">
-                                    {/* Contact Information */}
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Contact</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="space-y-3">
-                                            {organization.contact_email && (
-                                                <div className="flex items-start gap-3">
-                                                    <Mail className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
-                                                    <a
-                                                        href={`mailto:${organization.contact_email}`}
-                                                        className="text-sm text-blue-700 hover:underline dark:text-blue-400"
-                                                    >
-                                                        {
-                                                            organization.contact_email
-                                                        }
-                                                    </a>
-                                                </div>
-                                            )}
+                                {/* About Tab */}
+                                <TabsContent value="about" className="mt-0">
+                                    <div className="space-y-6">
+                                        {/* Mission */}
+                                        {organization.mission && (
+                                            <Card className="rounded-2xl border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                                                <CardHeader>
+                                                    <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
+                                                        <Target className="h-5 w-5 text-green-600" /> Mission
+                                                    </CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{organization.mission}</p>
+                                                </CardContent>
+                                            </Card>
+                                        )}
 
-                                            {organization.contact_phone && (
-                                                <div className="flex items-start gap-3">
-                                                    <Phone className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
-                                                    <a
-                                                        href={`tel:${organization.contact_phone}`}
-                                                        className="text-sm text-blue-700 hover:underline dark:text-blue-400"
-                                                    >
-                                                        {
-                                                            organization.contact_phone
-                                                        }
-                                                    </a>
-                                                </div>
-                                            )}
+                                        {/* Vision */}
+                                        {organization.vision && (
+                                            <Card className="rounded-2xl border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                                                <CardHeader>
+                                                    <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
+                                                        <Globe className="h-5 w-5 text-green-600" /> Vision
+                                                    </CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{organization.vision}</p>
+                                                </CardContent>
+                                            </Card>
+                                        )}
+                                    </div>
+                                </TabsContent>
 
-                                            {organization.establishment_date && (
-                                                <div className="flex items-start gap-3">
-                                                    <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
-                                                    <div className="text-sm text-gray-700 dark:text-gray-300">
-                                                        <div className="font-medium">
-                                                            Established
-                                                        </div>
-                                                        <div>
-                                                            {new Date(
-                                                                organization.establishment_date,
-                                                            ).toLocaleDateString(
-                                                                'en-US',
-                                                                {
-                                                                    year: 'numeric',
-                                                                    month: 'long',
-                                                                    day: 'numeric',
-                                                                },
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </CardContent>
-                                    </Card>
-
-                                    {/* Adviser */}
-                                    {organization.adviser && (
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle>Adviser</CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                                                        <Users className="h-5 w-5 text-blue-700 dark:text-blue-400" />
+                                {/* Officers Tab */}
+                                <TabsContent value="officers" className="mt-0">
+                                    {organization.officers && organization.officers.length > 0 ? (
+                                        <div className="grid gap-4 sm:grid-cols-2">
+                                            {currentOfficers.map((officer) => (
+                                                <div key={officer.id} className="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-green-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-green-700">
+                                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
+                                                        <Users className="h-6 w-6" />
                                                     </div>
                                                     <div>
-                                                        <div className="font-semibold text-gray-900 dark:text-white">
-                                                            {
-                                                                organization
-                                                                    .adviser
-                                                                    .name
-                                                            }
-                                                        </div>
-                                                        <div className="text-xs text-gray-600 dark:text-gray-400">
-                                                            {
-                                                                organization
-                                                                    .adviser
-                                                                    .email
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    )}
-                                </div>
-                            </div>
-                        </TabsContent>
-
-                        {/* Officers Tab */}
-                        <TabsContent value="officers">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Current Officers</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    {currentOfficers.length > 0 ? (
-                                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                            {currentOfficers.map((officer) => (
-                                                <div
-                                                    key={officer.id}
-                                                    className="rounded-lg border border-gray-200 p-4 dark:border-gray-700"
-                                                >
-                                                    <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                                                        <Users className="h-6 w-6 text-blue-700 dark:text-blue-400" />
-                                                    </div>
-                                                    <h4 className="font-semibold text-gray-900 dark:text-white">
-                                                        {officer.officer_name}
-                                                    </h4>
-                                                    <p className="text-sm font-medium text-blue-700 dark:text-blue-400">
-                                                        {officer.position}
-                                                    </p>
-                                                    {officer.contact_email && (
-                                                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                                                            {
-                                                                officer.contact_email
-                                                            }
+                                                        <h4 className="font-bold text-gray-900 dark:text-white">
+                                                            {officer.officer_name || (officer.student ? `${officer.student.first_name} ${officer.student.last_name}` : 'Unknown Officer')}
+                                                        </h4>
+                                                        <p className="text-sm font-medium text-green-600 dark:text-green-400">{officer.position}</p>
+                                                        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                                            <Mail className="h-3 w-3" /> {officer.contact_email || (officer.student ? officer.student.email : 'No email provided')}
                                                         </p>
-                                                    )}
-                                                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
-                                                        {new Date(
-                                                            officer.term_start,
-                                                        ).getFullYear()}{' '}
-                                                        -{' '}
-                                                        {new Date(
-                                                            officer.term_end,
-                                                        ).getFullYear()}
-                                                    </p>
+                                                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                                                            Term: {new Date(officer.term_start).getFullYear()} - {new Date(officer.term_end).getFullYear()}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
                                     ) : (
-                                        <p className="text-center text-gray-600 dark:text-gray-400">
-                                            No current officers listed
-                                        </p>
+                                        <Card className="rounded-2xl border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                                            <CardContent className="pt-6">
+                                                <p className="text-center text-gray-500 dark:text-gray-400">No officers found for this organization.</p>
+                                            </CardContent>
+                                        </Card>
                                     )}
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
+                                </TabsContent>
 
-                        {/* Members Tab */}
-                        {organization.members && (
-                            <TabsContent value="members">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>Members</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        {organization.members.length > 0 ? (
-                                            <div className="overflow-x-auto">
-                                                <table className="w-full">
-                                                    <thead>
-                                                        <tr className="border-b">
-                                                            <th className="pb-2 text-left text-sm font-semibold">
-                                                                Name
-                                                            </th>
-                                                            <th className="pb-2 text-left text-sm font-semibold">
-                                                                Student ID
-                                                            </th>
-                                                            <th className="pb-2 text-left text-sm font-semibold">
-                                                                Status
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {organization.members.map(
-                                                            (member) => (
-                                                                <tr
-                                                                    key={
-                                                                        member.id
-                                                                    }
-                                                                    className="border-b"
-                                                                >
-                                                                    <td className="py-3">
-                                                                        {
-                                                                            member.member_name
-                                                                        }
-                                                                    </td>
-                                                                    <td className="py-3 text-sm text-gray-600">
-                                                                        {member.student_id ||
-                                                                            'N/A'}
-                                                                    </td>
-                                                                    <td className="py-3">
-                                                                        <Badge
-                                                                            variant={
-                                                                                member.status ===
-                                                                                'Active'
-                                                                                    ? 'default'
-                                                                                    : 'secondary'
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                member.status
-                                                                            }
-                                                                        </Badge>
-                                                                    </td>
-                                                                </tr>
-                                                            ),
+                                {/* Members Tab */}
+                                {organization.members && (
+                                    <TabsContent value="members" className="mt-0">
+                                        <div className="grid gap-4 sm:grid-cols-2">
+                                            {organization.members.map((member) => (
+                                                <div key={member.id} className="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-green-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-green-700">
+                                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                                                        <Users className="h-6 w-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-900 dark:text-white">
+                                                            {member.student ? `${member.student.first_name} ${member.student.last_name}` : 'Unknown Member'}
+                                                        </h4>
+                                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                            Student ID: {member.student_id || 'N/A'}
+                                                        </p>
+                                                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                                                            Member since: {new Date(member.membership_date).toLocaleDateString()}
+                                                        </p>
+                                                        <Badge variant="outline" className="mt-2 text-xs">
+                                                            {member.status}
+                                                        </Badge>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </TabsContent>
+                                )}
+
+                                {/* Activities Tab */}
+                                {organization.activities && (
+                                    <TabsContent value="activities" className="mt-0">
+                                        <div className="grid gap-4 sm:grid-cols-2">
+                                            {organization.activities.map((activity) => (
+                                                <div key={activity.id} className="flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-green-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-green-700">
+                                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400">
+                                                        <Calendar className="h-6 w-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-900 dark:text-white">{activity.activity_name}</h4>
+                                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                            Date: {new Date(activity.activity_date).toLocaleDateString()}
+                                                        </p>
+                                                        {activity.venue && (
+                                                            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
+                                                                <MapPin className="h-3 w-3" /> {activity.venue}
+                                                            </p>
                                                         )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        ) : (
-                                            <p className="text-center text-gray-600 dark:text-gray-400">
-                                                No members listed
-                                            </p>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                        )}
+                                                        {activity.description && (
+                                                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{activity.description}</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </TabsContent>
+                                )}
+                            </div>
 
-                        {/* Activities Tab */}
-                        {organization.activities && (
-                            <TabsContent value="activities">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>Recent Activities</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        {organization.activities.length > 0 ? (
-                                            <div className="space-y-4">
-                                                {organization.activities.map(
-                                                    (activity) => (
-                                                        <div
-                                                            key={activity.id}
-                                                            className="flex items-start gap-4 rounded-lg border border-gray-200 p-4 dark:border-gray-700"
-                                                        >
-                                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                                                                <Calendar className="h-6 w-6 text-blue-700 dark:text-blue-400" />
-                                                            </div>
-                                                            <div className="flex-1">
-                                                                <h4 className="font-semibold text-gray-900 dark:text-white">
-                                                                    {
-                                                                        activity.activity_name
-                                                                    }
-                                                                </h4>
-                                                                <div className="mt-1 flex flex-wrap items-center gap-2">
-                                                                    <Badge
-                                                                        variant="outline"
-                                                                        className="text-xs"
-                                                                    >
-                                                                        {
-                                                                            activity.activity_type
-                                                                        }
-                                                                    </Badge>
-                                                                    <Badge className="text-xs">
-                                                                        {
-                                                                            activity.status
-                                                                        }
-                                                                    </Badge>
-                                                                    <span className="text-xs text-gray-600 dark:text-gray-400">
-                                                                        {new Date(
-                                                                            activity.activity_date,
-                                                                        ).toLocaleDateString()}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ),
-                                                )}
+                            {/* Sidebar Column */}
+                            <div className="lg:col-span-1">
+                                <div className="sticky top-24 space-y-6">
+
+                                    {/* Adviser Card */}
+                                    {organization.adviser && (
+                                        <Card className="rounded-2xl border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                                            <CardHeader>
+                                                <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                                    Organization Adviser
+                                                </CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                                                        <Award className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold text-gray-900 dark:text-white">{organization.adviser.name}</div>
+                                                        <div className="text-sm text-gray-500 dark:text-gray-400">{organization.adviser.email}</div>
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    )}
+
+                                    {/* Stats Card */}
+                                    <Card className="rounded-2xl border-gray-200 bg-gray-50 shadow-sm dark:border-gray-700 dark:bg-gray-800/50">
+                                        <CardHeader>
+                                            <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                                Quick Stats
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="grid grid-cols-3 gap-2 text-center">
+                                                <div className="p-2 bg-white rounded-xl shadow-sm dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                                                    <div className="text-xl font-black text-green-600 dark:text-green-400">{organization.officers_count || 0}</div>
+                                                    <div className="text-[10px] uppercase font-bold text-gray-400">Officers</div>
+                                                </div>
+                                                <div className="p-2 bg-white rounded-xl shadow-sm dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                                                    <div className="text-xl font-black text-green-600 dark:text-green-400">{organization.members_count || 0}</div>
+                                                    <div className="text-[10px] uppercase font-bold text-gray-400">Members</div>
+                                                </div>
+                                                <div className="p-2 bg-white rounded-xl shadow-sm dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                                                    <div className="text-xl font-black text-green-600 dark:text-green-400">{organization.activities_count || 0}</div>
+                                                    <div className="text-[10px] uppercase font-bold text-gray-400">Events</div>
+                                                </div>
                                             </div>
-                                        ) : (
-                                            <p className="text-center text-gray-600 dark:text-gray-400">
-                                                No activities listed
-                                            </p>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                        )}
+                                        </CardContent>
+                                    </Card>
+
+                                    {/* Contact Card */}
+                                    <Card className="rounded-2xl border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                                        <CardHeader>
+                                            <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                                Contact Information
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <ul className="space-y-3 text-sm">
+                                                {organization.contact_email && (
+                                                    <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                                        <Mail className="h-4 w-4 text-green-600" />
+                                                        <a href={`mailto:${organization.contact_email}`} className="hover:text-green-600 hover:underline">{organization.contact_email}</a>
+                                                    </li>
+                                                )}
+                                                {organization.contact_phone && (
+                                                    <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                                        <Phone className="h-4 w-4 text-green-600" />
+                                                        <span>{organization.contact_phone}</span>
+                                                    </li>
+                                                )}
+                                                {organization.establishment_date && (
+                                                    <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                                        <Calendar className="h-4 w-4 text-green-600" />
+                                                        <span>Est. {new Date(organization.establishment_date).getFullYear()}</span>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </CardContent>
+                                    </Card>
+
+                                </div>
+                            </div>
+                        </div>
                     </Tabs>
                 </div>
             </section>

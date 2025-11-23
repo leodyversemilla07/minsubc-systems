@@ -1,26 +1,37 @@
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import SASLayout from '@/layouts/sas-layout';
-import sas from '@/routes/sas';
-import type { SASActivity } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    Calendar as CalendarIcon,
-    ChevronLeft,
-    ChevronRight,
-    Download,
+import { 
+    ArrowLeft, 
+    Calendar as CalendarIcon, 
+    ChevronLeft, 
+    ChevronRight, 
+    Download, 
+    Clock
 } from 'lucide-react';
-import { useState } from 'react';
 
 interface Props {
     activities: SASActivity[];
     startDate: string;
 }
 
+interface SASActivity {
+    id: number;
+    activity_title: string;
+    start_date: string;
+    end_date?: string;
+    all_day: boolean;
+    location: string;
+    category: string;
+    slug: string;
+}
+
 export default function ActivitiesCalendar({ activities, startDate }: Props) {
-    const [currentDate, setCurrentDate] = useState(new Date(startDate));
+    const [currentDate, setCurrentDate] = useState(() => {
+        const date = new Date(startDate);
+        return isNaN(date.getTime()) ? new Date() : date;
+    });
 
     // Safety check
     if (!activities) {
@@ -104,7 +115,7 @@ export default function ActivitiesCalendar({ activities, startDate }: Props) {
         calendarDays.push(
             <div
                 key={`empty-${i}`}
-                className="min-h-24 border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
+                className="min-h-32 bg-slate-50/50 dark:bg-slate-900/50 border-b border-r border-slate-200 dark:border-slate-800 last:border-r-0"
             ></div>,
         );
     }
@@ -118,32 +129,39 @@ export default function ActivitiesCalendar({ activities, startDate }: Props) {
         calendarDays.push(
             <div
                 key={day}
-                className={`min-h-24 border border-gray-200 bg-white p-2 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800 ${
-                    isToday ? 'ring-2 ring-blue-500' : ''
+                className={`min-h-32 p-3 border-b border-r border-slate-200 dark:border-slate-800 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/80 flex flex-col gap-2 ${
+                    isToday ? 'bg-green-50/30 dark:bg-green-900/10' : 'bg-white dark:bg-slate-900'
                 }`}
             >
-                <div
-                    className={`mb-1 text-sm font-semibold ${isToday ? 'text-blue-700 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}
-                >
-                    {day}
+                <div className="flex justify-between items-start">
+                    <div
+                        className={`text-sm font-bold h-7 w-7 flex items-center justify-center rounded-full ${
+                            isToday 
+                                ? 'bg-green-600 text-white shadow-lg shadow-green-500/30' 
+                                : 'text-slate-700 dark:text-slate-300'
+                        }`}
+                    >
+                        {day}
+                    </div>
+                    {isToday && <span className="text-[10px] font-bold uppercase text-green-600 dark:text-green-400">Today</span>}
                 </div>
-                <div className="space-y-1">
+                
+                <div className="space-y-1.5 mt-1">
                     {dayActivities.slice(0, 3).map((activity) => (
                         <Link
                             key={activity.id}
                             href={`/sas/activities/${activity.slug}`}
-                            className="block"
+                            className="group block"
                         >
-                            <div className="rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-900 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800">
-                                <div className="truncate">
+                            <div className="rounded-md border border-green-100 bg-green-50 px-2 py-1.5 transition-all hover:border-green-300 hover:bg-green-100 hover:shadow-sm dark:border-green-900/50 dark:bg-green-900/20 dark:hover:border-green-700">
+                                <div className="truncate text-xs font-semibold text-green-900 dark:text-green-100">
                                     {activity.activity_title}
                                 </div>
                                 {!activity.all_day && (
-                                    <div className="text-xs opacity-75">
-                                        {new Date(
-                                            activity.start_date,
-                                        ).toLocaleTimeString('en-US', {
-                                            hour: '2-digit',
+                                    <div className="mt-0.5 flex items-center gap-1 text-[10px] text-green-700 dark:text-green-400">
+                                        <Clock className="h-3 w-3" />
+                                        {new Date(activity.start_date).toLocaleTimeString('en-US', {
+                                            hour: 'numeric',
                                             minute: '2-digit',
                                         })}
                                     </div>
@@ -152,7 +170,7 @@ export default function ActivitiesCalendar({ activities, startDate }: Props) {
                         </Link>
                     ))}
                     {dayActivities.length > 3 && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400 pl-1">
                             +{dayActivities.length - 3} more
                         </div>
                     )}
@@ -164,213 +182,101 @@ export default function ActivitiesCalendar({ activities, startDate }: Props) {
     return (
         <SASLayout>
             <Head title="Activities Calendar - SAS" />
-
-            {/* Header */}
-            <section className="border-b bg-white px-4 py-6 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl">
-                    <Link href={sas.activities.index.url()}>
-                        <Button variant="ghost" size="sm" className="mb-4">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to List View
-                        </Button>
-                    </Link>
-
-                    <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                                <CalendarIcon className="h-6 w-6 text-purple-700 dark:text-purple-400" />
+            
+            <main>
+                {/* --- Header Section --- */}
+                <section className="bg-white px-4 py-8 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+                    <div className="mx-auto max-w-7xl">
+                        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                            {/* Title & Navigation */}
+                            <div className="flex items-center gap-4">
+                                <Link href="/sas/activities" className="group flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600 transition-colors hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400">
+                                    <ArrowLeft className="h-6 w-6 transition-transform group-hover:-translate-x-1" />
+                                </Link>
+                                <div>
+                                    <div className="flex items-center gap-3">
+                                        <h1 className="text-3xl font-black text-slate-900 dark:text-white">
+                                            {getMonthYear()}
+                                        </h1>
+                                    </div>
+                                    <p className="text-slate-600 dark:text-slate-400 flex items-center gap-2 mt-1">
+                                        <CalendarIcon className="h-4 w-4" />
+                                        Organization Schedules & Events
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                                    {getMonthYear()}
-                                </h1>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {activities.length} activities this month
-                                </p>
-                            </div>
-                        </div>
 
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={previousMonth}
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={today}>
-                                Today
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={nextMonth}
-                            >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                            <a
-                                href={`/sas/activities/export?year=${currentDate.getFullYear()}&month=${currentDate.getMonth() + 1}`}
-                                download
-                            >
-                                <Button variant="outline" size="sm">
-                                    <Download className="mr-2 h-4 w-4" />
-                                    Export Month
+                            {/* Controls */}
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center rounded-xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+                                    <button
+                                        onClick={previousMonth}
+                                        className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                                    >
+                                        <ChevronLeft className="h-5 w-5" />
+                                    </button>
+                                    <button
+                                        onClick={today}
+                                        className="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                                    >
+                                        Today
+                                    </button>
+                                    <button
+                                        onClick={nextMonth}
+                                        className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                                    >
+                                        <ChevronRight className="h-5 w-5" />
+                                    </button>
+                                </div>
+                                
+                                <Button variant="outline" size="icon" className="hidden sm:flex" title="Download Schedule">
+                                    <Download className="h-5 w-5" />
                                 </Button>
-                            </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Calendar */}
-            <section className="bg-gray-50 px-4 py-8 dark:bg-gray-800">
-                <div className="mx-auto max-w-7xl">
-                    <Card>
-                        <CardContent className="p-4">
+                {/* --- Calendar Grid Section --- */}
+                <section className="px-4 py-8 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950 min-h-[60vh]">
+                    <div className="mx-auto max-w-7xl">
+                        <div className="rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden dark:border-slate-800 dark:bg-slate-900">
                             {/* Weekday Headers */}
-                            <div className="mb-2 grid grid-cols-7 gap-px">
-                                {[
-                                    'Sun',
-                                    'Mon',
-                                    'Tue',
-                                    'Wed',
-                                    'Thu',
-                                    'Fri',
-                                    'Sat',
-                                ].map((day) => (
+                            <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50">
+                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                                     <div
                                         key={day}
-                                        className="py-2 text-center text-sm font-semibold text-gray-700 dark:text-gray-300"
+                                        className="py-4 text-center text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                                     >
                                         {day}
                                     </div>
                                 ))}
                             </div>
 
-                            {/* Calendar Grid */}
-                            <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
+                            {/* Days */}
+                            <div className="grid grid-cols-7">
                                 {calendarDays}
                             </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Legend */}
-                    <div className="mt-6 flex flex-wrap items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-                            <span className="text-sm text-gray-700 dark:text-gray-300">
-                                Activity
-                            </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 rounded-full border-2 border-blue-500"></div>
-                            <span className="text-sm text-gray-700 dark:text-gray-300">
-                                Today
-                            </span>
-                        </div>
-                    </div>
 
-                    {/* Upcoming Activities List */}
-                    {activities.length > 0 && (
-                        <div className="mt-8">
-                            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                                All Activities This Month
-                            </h2>
-                            <div className="space-y-3">
-                                {activities.map((activity) => (
-                                    <Link
-                                        key={activity.id}
-                                        href={`/sas/activities/${activity.slug}`}
-                                    >
-                                        <Card className="transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                                            <CardContent className="flex items-start gap-4 p-4">
-                                                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
-                                                    <div className="text-xs font-medium text-blue-700 dark:text-blue-300">
-                                                        {new Date(
-                                                            activity.start_date,
-                                                        ).toLocaleDateString(
-                                                            'en-US',
-                                                            { month: 'short' },
-                                                        )}
-                                                    </div>
-                                                    <div className="text-xl font-bold text-blue-900 dark:text-blue-100">
-                                                        {new Date(
-                                                            activity.start_date,
-                                                        ).getDate()}
-                                                    </div>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="mb-1 flex items-start justify-between gap-2">
-                                                        <h3 className="font-semibold text-gray-900 dark:text-white">
-                                                            {
-                                                                activity.activity_title
-                                                            }
-                                                        </h3>
-                                                        {activity.category && (
-                                                            <Badge
-                                                                variant="outline"
-                                                                className="shrink-0"
-                                                            >
-                                                                {
-                                                                    activity.category
-                                                                }
-                                                            </Badge>
-                                                        )}
-                                                    </div>
-                                                    {activity.description && (
-                                                        <p className="mb-2 line-clamp-1 text-sm text-gray-600 dark:text-gray-400">
-                                                            {
-                                                                activity.description
-                                                            }
-                                                        </p>
-                                                    )}
-                                                    <div className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
-                                                        {!activity.all_day && (
-                                                            <span>
-                                                                ⏰{' '}
-                                                                {new Date(
-                                                                    activity.start_date,
-                                                                ).toLocaleTimeString(
-                                                                    'en-US',
-                                                                    {
-                                                                        hour: '2-digit',
-                                                                        minute: '2-digit',
-                                                                    },
-                                                                )}
-                                                            </span>
-                                                        )}
-                                                        {activity.all_day && (
-                                                            <span>
-                                                                ⏰ All Day
-                                                            </span>
-                                                        )}
-                                                        {activity.location && (
-                                                            <span>
-                                                                📍{' '}
-                                                                {
-                                                                    activity.location
-                                                                }
-                                                            </span>
-                                                        )}
-                                                        {activity.organizer && (
-                                                            <span>
-                                                                👤{' '}
-                                                                {
-                                                                    activity.organizer
-                                                                }
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </Link>
-                                ))}
+                        {/* Legend */}
+                        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-600 dark:text-slate-400">
+                            <div className="flex items-center gap-2">
+                                <div className="h-3 w-3 rounded-full bg-green-500 shadow-sm shadow-green-500/50"></div>
+                                <span className="font-medium">Today</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="h-3 w-3 rounded-full bg-green-100 border border-green-200"></div>
+                                <span>Scheduled Activity</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="h-3 w-3 rounded-full bg-white border border-slate-300"></div>
+                                <span>No Events</span>
                             </div>
                         </div>
-                    )}
-                </div>
-            </section>
+                    </div>
+                </section>
+            </main>
         </SASLayout>
     );
 }

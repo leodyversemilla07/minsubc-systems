@@ -39,9 +39,10 @@ export interface OrganizationOfficer {
     term_start: string;
     term_end: string;
     is_current: boolean;
-    user?: {
+    student?: {
         id: number;
-        name: string;
+        first_name: string;
+        last_name: string;
         email: string;
     };
     organization?: Organization;
