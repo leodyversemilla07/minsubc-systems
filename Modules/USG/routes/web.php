@@ -107,14 +107,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Resolution Management
         Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::resource('resolutions', ResolutionController::class);
-            Route::patch('resolutions/{resolution}/submit', [ResolutionController::class, 'submit'])->name('resolutions.submit');
-        });
-
-        // Resolution Approval - restricted to USG Admins and System Admins
-        Route::middleware(['role:usg-admin|super-admin'])->group(function () {
-            Route::get('resolutions/pending', [ResolutionController::class, 'pending'])->name('resolutions.pending');
-            Route::patch('resolutions/{resolution}/approve', [ResolutionController::class, 'approve'])->name('resolutions.approve');
-            Route::patch('resolutions/{resolution}/reject', [ResolutionController::class, 'reject'])->name('resolutions.reject');
             Route::patch('resolutions/{resolution}/archive', [ResolutionController::class, 'archive'])->name('resolutions.archive');
         });
 

@@ -19,45 +19,45 @@ class VotingSystemPermissionsSeeder extends Seeder
         // Create permissions for Voting System
         $permissions = [
             // Election Management
-            'voting.elections.view',
-            'voting.elections.create',
-            'voting.elections.edit',
-            'voting.elections.delete',
-            'voting.elections.toggle-status',
+            'elections.view',
+            'elections.create',
+            'elections.edit',
+            'elections.delete',
+            'elections.toggle-status',
 
             // Candidate Management
-            'voting.candidates.view',
-            'voting.candidates.create',
-            'voting.candidates.edit',
-            'voting.candidates.delete',
+            'candidates.view',
+            'candidates.create',
+            'candidates.edit',
+            'candidates.delete',
 
             // Position Management
-            'voting.positions.view',
-            'voting.positions.create',
-            'voting.positions.edit',
-            'voting.positions.delete',
-            'voting.positions.reorder',
+            'positions.view',
+            'positions.create',
+            'positions.edit',
+            'positions.delete',
+            'positions.reorder',
 
             // Partylist Management
-            'voting.partylists.view',
-            'voting.partylists.create',
-            'voting.partylists.edit',
-            'voting.partylists.delete',
+            'partylists.view',
+            'partylists.create',
+            'partylists.edit',
+            'partylists.delete',
 
             // Voter Management
-            'voting.voters.view',
-            'voting.voters.create',
-            'voting.voters.edit',
-            'voting.voters.delete',
-            'voting.voters.reset-password',
-            'voting.voters.reset-vote',
-            'voting.voters.export',
+            'voters.view',
+            'voters.create',
+            'voters.edit',
+            'voters.delete',
+            'voters.reset-password',
+            'voters.reset-vote',
+            'voters.export',
 
             // Activity Logs
-            'voting.activity-logs.view',
+            'activity-logs.view',
 
             // Feedback
-            'voting.feedback.view',
+            'feedback.view',
         ];
 
         foreach ($permissions as $permission) {
@@ -71,13 +71,13 @@ class VotingSystemPermissionsSeeder extends Seeder
         // Create Voting Manager role with limited permissions
         $votingManagerRole = Role::firstOrCreate(['name' => 'voting-manager']);
         $votingManagerRole->givePermissionTo([
-            'voting.elections.view',
-            'voting.candidates.view',
-            'voting.positions.view',
-            'voting.partylists.view',
-            'voting.voters.view',
-            'voting.activity-logs.view',
-            'voting.feedback.view',
+            'elections.view',
+            'candidates.view',
+            'positions.view',
+            'partylists.view',
+            'voters.view',
+            'activity-logs.view',
+            'feedback.view',
         ]);
 
         // If Super Admin role exists, give it all voting permissions

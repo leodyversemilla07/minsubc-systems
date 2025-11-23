@@ -19,24 +19,24 @@ class SASPermissionsSeeder extends Seeder
         // Create permissions for SAS Module
         $permissions = [
             // SAS Staff permissions
-            'sas.view_dashboard',
-            'sas.view_scholarships',
-            'sas.view_insurance',
-            'sas.view_organizations',
-            'sas.view_activities',
-            'sas.process_scholarships',
-            'sas.process_insurance',
+            'view_dashboard',
+            'view_scholarships',
+            'view_insurance',
+            'view_organizations',
+            'view_activities',
+            'process_scholarships',
+            'process_insurance',
 
             // SAS Admin permissions (additional to staff permissions)
-            'sas.manage_scholarships',
-            'sas.manage_insurance',
-            'sas.manage_organizations',
-            'sas.manage_activities',
-            'sas.manage_documents',
-            'sas.approve_applications',
-            'sas.reject_applications',
-            'sas.view_analytics',
-            'sas.manage_settings',
+            'manage_scholarships',
+            'manage_insurance',
+            'manage_organizations',
+            'manage_activities',
+            'manage_documents',
+            'approve_applications',
+            'reject_applications',
+            'view_analytics',
+            'manage_settings',
         ];
 
         foreach ($permissions as $permission) {
@@ -46,36 +46,36 @@ class SASPermissionsSeeder extends Seeder
         // Create SAS Staff role
         $sasStaffRole = Role::firstOrCreate(['name' => 'sas-staff']);
         $sasStaffRole->givePermissionTo([
-            'sas.view_dashboard',
-            'sas.view_scholarships',
-            'sas.view_insurance',
-            'sas.view_organizations',
-            'sas.view_activities',
-            'sas.process_scholarships',
-            'sas.process_insurance',
+            'view_dashboard',
+            'view_scholarships',
+            'view_insurance',
+            'view_organizations',
+            'view_activities',
+            'process_scholarships',
+            'process_insurance',
         ]);
 
         // Create SAS Admin role (has all staff permissions plus admin-specific ones)
         $sasAdminRole = Role::firstOrCreate(['name' => 'sas-admin']);
         $sasAdminRole->givePermissionTo([
             // All staff permissions
-            'sas.view_dashboard',
-            'sas.view_scholarships',
-            'sas.view_insurance',
-            'sas.view_organizations',
-            'sas.view_activities',
-            'sas.process_scholarships',
-            'sas.process_insurance',
+            'view_dashboard',
+            'view_scholarships',
+            'view_insurance',
+            'view_organizations',
+            'view_activities',
+            'process_scholarships',
+            'process_insurance',
             // Plus admin permissions
-            'sas.manage_scholarships',
-            'sas.manage_insurance',
-            'sas.manage_organizations',
-            'sas.manage_activities',
-            'sas.manage_documents',
-            'sas.approve_applications',
-            'sas.reject_applications',
-            'sas.view_analytics',
-            'sas.manage_settings',
+            'manage_scholarships',
+            'manage_insurance',
+            'manage_organizations',
+            'manage_activities',
+            'manage_documents',
+            'approve_applications',
+            'reject_applications',
+            'view_analytics',
+            'manage_settings',
         ]);
 
         // If Super Admin role exists, give it all SAS permissions

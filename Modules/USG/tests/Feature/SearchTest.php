@@ -214,8 +214,6 @@ describe('SearchService - Resolutions', function () {
     });
 
     it('can filter resolutions by status', function () {
-        $this->markTestSkipped('Draft status workflow is not yet fully implemented');
-
         $user = User::factory()->create();
         $user->assignRole('usg-admin');
 
@@ -223,7 +221,7 @@ describe('SearchService - Resolutions', function () {
             'submitted_by' => $user->id,
         ]);
 
-        Resolution::factory()->draft()->create([
+        Resolution::factory()->archived()->create([
             'submitted_by' => $user->id,
         ]);
 

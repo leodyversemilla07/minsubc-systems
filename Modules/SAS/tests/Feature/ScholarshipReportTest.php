@@ -129,5 +129,8 @@ test('reports index page loads successfully', function () {
     $response = $this->get('/sas/admin/reports');
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page->component('sas/admin/reports/index'));
+    $response->assertInertia(fn ($page) => $page
+        ->component('sas/admin/reports/index')
+        ->has('scholarships')
+    );
 });

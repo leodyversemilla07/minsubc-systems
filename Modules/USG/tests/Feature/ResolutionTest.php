@@ -248,70 +248,8 @@ test('non-admin cannot delete resolutions', function () {
     $response->assertForbidden();
 });
 
-// Resolution Workflow Tests
-test('draft resolution can be submitted for review', function () {
-    $this->markTestSkipped('Workflow features (submit, approve, reject) are not yet implemented');
-    $this->seed(RolesAndPermissionsSeeder::class);
-
-    $usgAdmin = User::factory()->create();
-    $usgAdmin->assignRole('usg-admin');
-
-    $resolution = Resolution::factory()->draft()->create();
-
-    $response = $this->actingAs($usgAdmin)
-        ->patch(route('usg.admin.resolutions.submit', $resolution->id));
-
-    $response->assertRedirect();
-    $response->assertSessionHas('success');
-
-    $this->assertDatabaseHas('resolutions', [
-        'id' => $resolution->id,
-        'status' => 'review',
-    ]);
-});
-
-test('resolution can be approved', function () {
-    $this->markTestSkipped('Workflow features (submit, approve, reject) are not yet implemented');
-
-    $this->seed(RolesAndPermissionsSeeder::class);
-
-    $usgAdmin = User::factory()->create();
-    $usgAdmin->assignRole('usg-admin');
-
-    $resolution = Resolution::factory()->review()->create();
-
-    $response = $this->actingAs($usgAdmin)
-        ->patch(route('usg.admin.resolutions.approve', $resolution->id));
-
-    $response->assertRedirect();
-    $response->assertSessionHas('success');
-
-    $resolution->refresh();
-    expect($resolution->status)->toBe('published');
-    expect($resolution->approved_by)->toBe($usgAdmin->id);
-    expect($resolution->approved_at)->not->toBeNull();
-});
-
-test('resolution can be rejected', function () {
-    $this->markTestSkipped('Workflow features (submit, approve, reject) are not yet implemented');
-
-    $this->seed(RolesAndPermissionsSeeder::class);
-
-    $usgAdmin = User::factory()->create();
-    $usgAdmin->assignRole('usg-admin');
-
-    $resolution = Resolution::factory()->review()->create();
-
-    $response = $this->actingAs($usgAdmin)
-        ->patch(route('usg.admin.resolutions.reject', $resolution->id));
-
-    $response->assertRedirect();
-    $response->assertSessionHas('success');
-
-    $resolution->refresh();
-    expect($resolution->status)->toBe('rejected');
-    expect($resolution->approved_by)->toBe($usgAdmin->id);
-});
+// Resolution Workflow Tests - REMOVED: Resolutions are uploaded as already approved
+// No draft/review workflow needed since resolutions are pre-approved
 
 test('resolution can be archived', function () {
     $this->seed(RolesAndPermissionsSeeder::class);
@@ -333,11 +271,10 @@ test('resolution can be archived', function () {
     ]);
 });
 
-// Resolution Scopes Tests
+// Resolution Scopes Tests - UPDATED: Only published/archived workflow used
 test('published scope filters resolutions correctly', function () {
     Resolution::factory()->published()->count(3)->create();
-    Resolution::factory()->draft()->count(2)->create();
-    Resolution::factory()->review()->create();
+    Resolution::factory()->archived()->count(2)->create();
 
     $publishedResolutions = Resolution::published()->get();
 
@@ -347,48 +284,19 @@ test('published scope filters resolutions correctly', function () {
     });
 });
 
-test('draft scope filters resolutions correctly', function () {
-    $this->markTestSkipped('Resolution model scopes (draft, pending, rejected) are not yet implemented');
-
+test('archived scope filters resolutions correctly', function () {
     Resolution::factory()->published()->count(2)->create();
-    Resolution::factory()->draft()->count(3)->create();
+    Resolution::factory()->archived()->count(3)->create();
 
-    $draftResolutions = Resolution::draft()->get();
+    $archivedResolutions = Resolution::archived()->get();
 
-    expect($draftResolutions)->toHaveCount(3);
-    $draftResolutions->each(function ($resolution) {
-        expect($resolution->status)->toBe('draft');
+    expect($archivedResolutions)->toHaveCount(3);
+    $archivedResolutions->each(function ($resolution) {
+        expect($resolution->status)->toBe('archived');
     });
 });
 
-test('pending scope filters resolutions correctly', function () {
-    $this->markTestSkipped('Resolution model scopes (draft, pending, rejected) are not yet implemented');
-
-    Resolution::factory()->published()->create();
-    Resolution::factory()->review()->count(2)->create();
-    Resolution::factory()->draft()->create();
-
-    $pendingResolutions = Resolution::pending()->get();
-
-    expect($pendingResolutions)->toHaveCount(2);
-    $pendingResolutions->each(function ($resolution) {
-        expect($resolution->status)->toBe('review');
-    });
-});
-
-test('rejected scope filters resolutions correctly', function () {
-    $this->markTestSkipped('Resolution model scopes (draft, pending, rejected) are not yet implemented');
-
-    Resolution::factory()->published()->create();
-    Resolution::factory()->rejected()->count(2)->create();
-
-    $rejectedResolutions = Resolution::rejected()->get();
-
-    expect($rejectedResolutions)->toHaveCount(2);
-    $rejectedResolutions->each(function ($resolution) {
-        expect($resolution->status)->toBe('rejected');
-    });
-});
+// REMOVED: draft, pending, rejected scopes - not used in publish/archive workflow
 
 // Public Resolution Viewing Tests
 test('public can view published resolutions', function () {
