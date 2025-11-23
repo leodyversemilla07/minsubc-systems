@@ -90,7 +90,7 @@ export default function ScholarshipsIndex({
             <Head title="Scholarships - SAS" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white px-4 py-16 text-slate-900 sm:px-6 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950 dark:text-white">
+            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white px-4 py-8 sm:py-16 text-slate-900 sm:px-6 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950 dark:text-white">
                 {/* Background Pattern */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
                     <svg

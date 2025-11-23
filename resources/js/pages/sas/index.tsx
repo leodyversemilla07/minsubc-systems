@@ -25,7 +25,7 @@ export default function SASHome() {
             </Head>
 
             {/* Hero Section */}
-            <section className="-mt-28 relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white pt-24 sm:pt-48 pb-24 sm:px-6 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950">
+            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white pt-8 sm:pt-48 pb-24 sm:px-6 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950">
       
                 {/* 1. Background Pattern (SVG Dots) */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">

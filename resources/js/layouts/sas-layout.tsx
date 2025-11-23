@@ -11,7 +11,7 @@ export default function SASLayout({ children }: SASLayoutProps) {
             <Header />
 
             {/* Main content - updated padding for taller header */}
-            <main className="flex-1 pt-28">{children}</main>
+            <main className="flex-1 pt-16 sm:pt-28">{children}</main>
 
             <Footer />
         </div>
