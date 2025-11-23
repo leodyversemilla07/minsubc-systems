@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Carousel from '@/components/usg/carousel';
-import CountUp from '@/components/usg/count-up';
 import { OfficerCardSkeleton } from '@/components/usg/skeleton';
 import USGLayout from '@/layouts/usg-layout';
 import usg from '@/routes/usg';
@@ -35,20 +34,9 @@ interface Announcement {
 interface Props {
     featuredOfficers: Officer[];
     recentAnnouncements: Announcement[];
-    stats: {
-        totalOfficers: number;
-        totalResolutions: number;
-        upcomingEvents: number;
-        recentAnnouncements: number;
-        totalStudents?: number;
-        activeProjects?: number;
-        eventsThisYear?: number;
-        volunteersActive?: number;
-    };
 }
 
 export default function USGHomepage({
-    stats,
     featuredOfficers,
     recentAnnouncements,
 }: Props) {
@@ -56,124 +44,58 @@ export default function USGHomepage({
         <USGLayout>
             <Head title="USG Information Portal" />
 
-            {/* Hero Section - Clear Value Proposition */}
-            <section className="relative -mt-28 overflow-hidden bg-gradient-to-br from-[var(--usg-primary)] via-[var(--usg-primary)] to-[var(--usg-dark)] pt-36 pb-20 text-white sm:pt-48">
+            {/* Hero Section */}
+            <section className="relative -mt-28 overflow-hidden bg-gradient-to-br from-green-700 via-green-700 to-green-900 pt-32 pb-20 text-white sm:pt-40 dark:from-green-900 dark:via-green-900 dark:to-black">
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                     <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-white blur-3xl"></div>
                 </div>
 
+                {/* Grid Pattern Background */}
+                <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
+
                 <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
-                        <div className="mb-6 inline-flex items-center rounded-full bg-white/20 px-6 py-2 text-sm font-semibold backdrop-blur-sm">
+                        <div className="mb-6 inline-flex items-center rounded-full bg-white/20 px-6 py-2 text-sm font-semibold backdrop-blur-sm border border-white/10 shadow-sm">
                             <GraduationCap className="mr-2 h-4 w-4" />
                             Empowering Students Since Day One
                         </div>
-                        <h1 className="mb-6 text-4xl leading-tight font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                        <h1 className="mb-6 text-4xl leading-tight font-bold tracking-tight sm:text-5xl lg:text-6xl drop-shadow-md">
                             Your Voice. Your Campus.
                             <br />
-                            <span className="text-[var(--usg-light)]">
+                            <span className="text-green-200 dark:text-green-400">
                                 Your Future.
                             </span>
                         </h1>
-                        <p className="mx-auto mb-10 max-w-3xl text-lg text-[var(--usg-hero-text)] sm:text-xl lg:text-2xl">
+                        <p className="mx-auto mb-10 max-w-3xl text-lg text-green-50 sm:text-xl lg:text-2xl leading-relaxed dark:text-gray-200">
                             We're here to represent you, amplify your concerns,
                             and create meaningful change in our university
                             community.
                         </p>
 
-                        {/* Primary CTAs */}
                         <div className="mb-12 flex flex-col justify-center gap-4 sm:flex-row">
-                            <Button
-                                asChild
-                                size="lg"
-                                className="bg-white text-[var(--usg-primary)] shadow-2xl transition-all hover:-translate-y-0.5 hover:bg-[var(--usg-light)] hover:shadow-green-300/50"
+                            <Link
+                                href="/usg/about"
+                                className="inline-flex items-center justify-center rounded-lg bg-white text-green-700 font-bold h-14 px-8 text-lg shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
                             >
-                                <Link
-                                    href="/usg/about"
-                                    className="px-10 py-4 text-lg font-bold"
-                                >
-                                    Get Involved
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Link>
-                            </Button>
-                            <Button
-                                asChild
-                                size="lg"
-                                variant="outline"
-                                className="border-2 border-white/30 bg-[var(--usg-dark)]/80 text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-[var(--usg-very-dark)]"
+                                Get Involved
+                                <ArrowRight className="ml-2 h-5 w-5" />
+                            </Link>
+                            <Link
+                                href={usg.announcements.index.url()}
+                                className="inline-flex items-center justify-center rounded-lg border-2 border-white/30 bg-green-900/80 text-white backdrop-blur-sm font-bold h-14 px-8 text-lg transition-all hover:border-white/50 hover:bg-green-950"
                             >
-                                <Link
-                                    href={usg.announcements.index.url()}
-                                    className="px-10 py-4 text-lg font-bold"
-                                >
-                                    View Latest Updates
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Link>
-                            </Button>
-                        </div>
-
-                        {/* Social Proof - Impact Statistics */}
-                        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 border-t border-white/20 pt-10 md:grid-cols-4">
-                            <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    <CountUp
-                                        end={stats.totalStudents || 2500}
-                                        suffix="+"
-                                        duration={2000}
-                                    />
-                                </div>
-                                <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                    Students Represented
-                                </div>
-                            </div>
-                            <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    <CountUp
-                                        end={stats.activeProjects || 12}
-                                        duration={2000}
-                                    />
-                                </div>
-                                <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                    Active Projects
-                                </div>
-                            </div>
-                            <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    <CountUp
-                                        end={
-                                            stats.eventsThisYear ||
-                                            stats.upcomingEvents
-                                        }
-                                        duration={2000}
-                                    />
-                                </div>
-                                <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                    Events This Year
-                                </div>
-                            </div>
-                            <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-                                    <CountUp
-                                        end={
-                                            stats.volunteersActive ||
-                                            stats.totalOfficers
-                                        }
-                                        duration={2000}
-                                    />
-                                </div>
-                                <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                    Active Volunteers
-                                </div>
-                            </div>
+                                View Latest Updates
+                                <ArrowRight className="ml-2 h-5 w-5" />
+                            </Link>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* What We Do Section - Our Purpose */}
-            <section className="bg-white py-16 dark:bg-gray-900">
+            {/* What We Do Section */}
+            <section className="bg-white py-16 dark:bg-gray-950">
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
@@ -187,9 +109,9 @@ export default function USGHomepage({
 
                     <div className="mb-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                         {/* Student Representation */}
-                        <Card className="group border-0 bg-[var(--usg-light)] shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800/50">
+                        <Card className="group border-0 bg-green-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900">
                             <CardContent className="p-8">
-                                <div className="mb-4 inline-block rounded-full bg-[var(--usg-primary)] p-4 dark:bg-[var(--usg-dark)]">
+                                <div className="mb-4 inline-block rounded-full bg-green-700 p-4 dark:bg-green-900">
                                     <Users className="h-8 w-8 text-white" />
                                 </div>
                                 <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
@@ -203,9 +125,9 @@ export default function USGHomepage({
                         </Card>
 
                         {/* Events & Programs */}
-                        <Card className="group border-0 bg-[var(--usg-light)] shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800/50">
+                        <Card className="group border-0 bg-green-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900">
                             <CardContent className="p-8">
-                                <div className="mb-4 inline-block rounded-full bg-purple-700 p-4 dark:bg-purple-600">
+                                <div className="mb-4 inline-block rounded-full bg-purple-700 p-4 dark:bg-purple-900">
                                     <Calendar className="h-8 w-8 text-white" />
                                 </div>
                                 <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
@@ -219,9 +141,9 @@ export default function USGHomepage({
                         </Card>
 
                         {/* Policy & Resolutions */}
-                        <Card className="group border-0 bg-[var(--usg-light)] shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800/50">
+                        <Card className="group border-0 bg-green-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900">
                             <CardContent className="p-8">
-                                <div className="mb-4 inline-block rounded-full bg-blue-700 p-4 dark:bg-blue-600">
+                                <div className="mb-4 inline-block rounded-full bg-blue-700 p-4 dark:bg-blue-900">
                                     <FileText className="h-8 w-8 text-white" />
                                 </div>
                                 <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
@@ -235,9 +157,9 @@ export default function USGHomepage({
                         </Card>
 
                         {/* Communication */}
-                        <Card className="group border-0 bg-[var(--usg-light)] shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800/50">
+                        <Card className="group border-0 bg-green-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900">
                             <CardContent className="p-8">
-                                <div className="mb-4 inline-block rounded-full bg-orange-700 p-4 dark:bg-orange-600">
+                                <div className="mb-4 inline-block rounded-full bg-orange-700 p-4 dark:bg-orange-900">
                                     <Megaphone className="h-8 w-8 text-white" />
                                 </div>
                                 <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
@@ -253,101 +175,37 @@ export default function USGHomepage({
                 </div>
             </section>
 
-            {/* Stats Bar - By The Numbers */}
-            <section className="bg-[var(--usg-primary)] py-12">
-                <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-2 gap-8 text-center text-white md:grid-cols-4">
-                        <div>
-                            <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp
-                                    end={stats.totalOfficers}
-                                    duration={2000}
-                                />
-                            </div>
-                            <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                Dedicated Officers
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp
-                                    end={stats.totalResolutions}
-                                    duration={2000}
-                                />
-                            </div>
-                            <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                Resolutions Passed
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp
-                                    end={stats.upcomingEvents}
-                                    duration={2000}
-                                />
-                            </div>
-                            <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                Upcoming Events
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-2 text-3xl font-bold sm:text-4xl">
-                                <CountUp
-                                    end={stats.recentAnnouncements}
-                                    duration={2000}
-                                />
-                            </div>
-                            <div className="text-sm tracking-wide text-[var(--usg-hero-text)] uppercase">
-                                Recent Updates
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Call to Action Section */}
-            <section className="bg-[var(--usg-primary)] py-20 text-white">
-                <div className="container mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+            <section className="bg-green-700 py-20 text-white relative overflow-hidden dark:bg-green-900">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <div className="container mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8 relative z-10">
                     <h2 className="mb-6 text-3xl font-bold lg:text-4xl">
                         Ready to Make a Difference?
                     </h2>
-                    <p className="mb-10 text-xl text-[var(--usg-light)] dark:text-[var(--usg-hero-text)]">
+                    <p className="mb-10 text-xl text-green-100 dark:text-green-200">
                         Join us in shaping the future of MinSUBC. Your voice
                         matters, and we want to hear it.
                     </p>
                     <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                        <Button
-                            asChild
-                            size="lg"
-                            className="bg-white text-[var(--usg-primary)] shadow-xl transition-all hover:-translate-y-0.5 hover:bg-[var(--usg-very-light)] hover:shadow-2xl"
+                        <Link
+                            href="/usg/contact"
+                            className="inline-flex items-center justify-center rounded-lg bg-white text-green-700 font-bold h-14 px-8 text-lg shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
                         >
-                            <Link
-                                href="/usg/contact"
-                                className="px-10 py-4 text-lg font-bold"
-                            >
-                                Contact Us
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </Button>
-                        <Button
-                            asChild
-                            size="lg"
-                            variant="outline"
-                            className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-green-700"
+                            Contact Us
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
+                        <Link
+                            href="/usg/about"
+                            className="inline-flex items-center justify-center rounded-lg border-2 border-white bg-transparent text-white backdrop-blur-sm font-bold h-14 px-8 text-lg transition-all hover:bg-white hover:text-green-700"
                         >
-                            <Link
-                                href="/usg/about"
-                                className="px-10 py-4 text-lg font-bold"
-                            >
-                                Learn More About USG
-                            </Link>
-                        </Button>
+                            Learn More About USG
+                        </Link>
                     </div>
                 </div>
             </section>
 
             {/* Meet Our Officers Section */}
-            <section className="bg-gray-50 py-16 dark:bg-gray-800">
+            <section className="bg-gray-50 py-16 dark:bg-gray-900" id="officers">
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
@@ -365,7 +223,7 @@ export default function USGHomepage({
                                 items={featuredOfficers.map((officer) => (
                                     <Card
                                         key={officer.id}
-                                        className="group mx-2 border-0 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900"
+                                        className="group mx-2 border-0 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
                                     >
                                         <CardContent className="p-6 text-center">
                                             <div className="mb-4">
@@ -376,7 +234,7 @@ export default function USGHomepage({
                                                         className="mx-auto h-24 w-24 rounded-full object-cover shadow-md"
                                                     />
                                                 ) : (
-                                                    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[var(--usg-primary)] text-white shadow-md">
+                                                    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-green-100 text-green-700 shadow-md ring-4 ring-white dark:bg-green-900/50 dark:text-green-300 dark:ring-gray-700">
                                                         <Users className="h-12 w-12" />
                                                     </div>
                                                 )}
@@ -384,7 +242,7 @@ export default function USGHomepage({
                                             <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
                                                 {officer.name}
                                             </h3>
-                                            <p className="text-sm font-medium text-[var(--usg-primary)]">
+                                            <p className="text-sm font-medium text-green-700 uppercase tracking-wide dark:text-green-400">
                                                 {officer.position}
                                             </p>
                                         </CardContent>
@@ -408,7 +266,7 @@ export default function USGHomepage({
                             asChild
                             variant="outline"
                             size="lg"
-                            className="border-[var(--usg-primary)] text-[var(--usg-primary)] hover:bg-[var(--usg-primary)] hover:text-white"
+                            className="border-green-700 text-green-700 hover:bg-green-700 hover:text-white"
                         >
                             <Link href={usg.officers.index.url()}>
                                 View All Officers
@@ -420,7 +278,7 @@ export default function USGHomepage({
             </section>
 
             {/* Latest Announcements Section */}
-            <section className="bg-white py-16 dark:bg-gray-900">
+            <section className="bg-white py-16 dark:bg-gray-950" id="announcements">
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
@@ -441,19 +299,19 @@ export default function USGHomepage({
                             > = {
                                 Academic: {
                                     icon: Megaphone,
-                                    color: 'bg-[var(--usg-primary)]',
+                                    color: 'bg-green-700 dark:bg-green-900',
                                 },
                                 Welfare: {
                                     icon: Calendar,
-                                    color: 'bg-purple-700 dark:bg-purple-600',
+                                    color: 'bg-purple-700 dark:bg-purple-900',
                                 },
                                 Scholarship: {
                                     icon: FileText,
-                                    color: 'bg-blue-700 dark:bg-blue-600',
+                                    color: 'bg-blue-700 dark:bg-blue-900',
                                 },
                                 Events: {
                                     icon: Calendar,
-                                    color: 'bg-orange-700 dark:bg-orange-600',
+                                    color: 'bg-orange-700 dark:bg-orange-900',
                                 },
                             };
 
@@ -461,35 +319,38 @@ export default function USGHomepage({
                                 announcement.category
                             ] || {
                                 icon: Megaphone,
-                                color: 'bg-[var(--usg-primary)]',
+                                color: 'bg-green-700 dark:bg-green-900',
                             };
                             const IconComponent = config.icon;
 
                             return (
                                 <Card
                                     key={announcement.id}
-                                    className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
+                                    className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl h-full flex flex-col dark:bg-gray-800"
                                 >
-                                    <CardContent className="p-6">
+                                    <CardContent className="p-6 flex-1 flex flex-col">
                                         <div
-                                            className={`mb-4 inline-block rounded-full ${config.color} p-3`}
+                                            className={`mb-4 inline-block w-fit rounded-full ${config.color} p-3 shadow-md`}
                                         >
                                             <IconComponent className="h-6 w-6 text-white" />
                                         </div>
-                                        <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                                        <h3 className="mb-2 text-xl font-bold text-gray-900 line-clamp-2 dark:text-white">
                                             {announcement.title}
                                         </h3>
-                                        <p className="mb-4 text-gray-600 dark:text-gray-300">
+                                        <p className="mb-4 text-gray-600 line-clamp-3 flex-1 dark:text-gray-400">
                                             {announcement.excerpt}
                                         </p>
-                                        <Link
-                                            href={usg.announcements.show.url(
-                                                announcement.slug,
-                                            )}
-                                            className="text-sm font-medium text-[var(--usg-primary)] hover:underline"
-                                        >
-                                            Read More →
-                                        </Link>
+                                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between dark:border-gray-700">
+                                            <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">{announcement.publish_date}</span>
+                                            <Link
+                                                href={usg.announcements.show.url(
+                                                    announcement.slug,
+                                                )}
+                                                className="text-sm font-bold text-green-700 hover:text-green-800 hover:underline flex items-center dark:text-green-400 dark:hover:text-green-300"
+                                            >
+                                                Read More <ArrowRight size={14} className="ml-1" />
+                                            </Link>
+                                        </div>
                                     </CardContent>
                                 </Card>
                             );
@@ -500,7 +361,7 @@ export default function USGHomepage({
                         <Button
                             asChild
                             size="lg"
-                            className="bg-[var(--usg-primary)] text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-[var(--usg-dark)] hover:shadow-2xl"
+                            className="bg-green-700 text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-800 hover:shadow-2xl dark:bg-green-600 dark:hover:bg-green-500"
                         >
                             <Link href={usg.announcements.index.url()}>
                                 View All Announcements
@@ -512,7 +373,7 @@ export default function USGHomepage({
             </section>
 
             {/* Transparency Section Teaser */}
-            <section className="bg-[var(--usg-light)] py-16 dark:bg-gray-800">
+            <section className="bg-green-50 py-16 dark:bg-gray-900" id="transparency">
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
@@ -525,7 +386,7 @@ export default function USGHomepage({
                         <Button
                             asChild
                             size="lg"
-                            className="bg-[var(--usg-primary)] text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-[var(--usg-dark)] hover:shadow-2xl"
+                            className="bg-green-800 hover:bg-green-900 dark:bg-green-700 dark:hover:bg-green-600"
                         >
                             <Link href={usg.transparency.index.url()}>
                                 Explore Transparency

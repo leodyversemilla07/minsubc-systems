@@ -1,4 +1,3 @@
-import AppearanceToggleDropdown from '@/components/appearance-dropdown';
 import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import SearchCommand from '@/components/usg/search-command';
@@ -6,8 +5,13 @@ import { dashboard, login, register } from '@/routes';
 import usg from '@/routes/usg';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, Search, X } from 'lucide-react';
+import { Menu, Search, X, Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+interface HeaderProps {
+    isDark: boolean;
+    toggleTheme: () => void;
+}
 
 const navigationLinks = [
     { href: usg.index.url(), label: 'Home' },
@@ -19,7 +23,7 @@ const navigationLinks = [
     { href: usg.transparency.index.url(), label: 'Transparency' },
 ];
 
-export default function Header() {
+export default function Header({ isDark, toggleTheme }: HeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -104,7 +108,13 @@ export default function Header() {
                                 </Kbd>
                             </Button>
 
-                            <AppearanceToggleDropdown />
+                            <button 
+                                onClick={toggleTheme}
+                                className="p-2 text-gray-600 hover:bg-gray-100 rounded-md dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                                aria-label="Toggle theme"
+                            >
+                                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                            </button>
 
                             {auth.user ? (
                                 <Link

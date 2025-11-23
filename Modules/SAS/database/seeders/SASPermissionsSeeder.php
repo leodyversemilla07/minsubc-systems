@@ -78,6 +78,14 @@ class SASPermissionsSeeder extends Seeder
             'manage_settings',
         ]);
 
+        // Create Organization Adviser role
+        $orgAdviserRole = Role::firstOrCreate(['name' => 'org_adviser']);
+        $orgAdviserRole->givePermissionTo([
+            'view_dashboard',
+            'view_organizations',
+            'manage_organizations', // Limited management for their organization
+        ]);
+
         // If Super Admin role exists, give it all SAS permissions
         $superAdminRole = Role::where('name', 'super-admin')->first();
         if ($superAdminRole) {
