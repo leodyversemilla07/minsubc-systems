@@ -248,7 +248,7 @@ class AdminController extends Controller
         $auditLogs = $query->paginate(50);
 
         // Get unique actions for filter dropdown
-        $actions = AuditLog::distinct('action')->pluck('action')->sort();
+        $actions = AuditLog::distinct()->pluck('action')->sort();
 
         // Get users who have audit logs
         $users = User::whereHas('auditLogs')

@@ -68,7 +68,7 @@ it('calculates revenue by type correctly', function () {
     $data = $this->service->getRevenueByType();
 
     expect($data)->toHaveCount(1)
-        ->and($data->first()['total_revenue'])->toBe(300.00);
+        ->and((float) $data->first()['total_revenue'])->toBe(300.00);
 });
 
 it('calculates average processing time correctly', function () {
@@ -96,9 +96,9 @@ it('provides request trends for specified period', function () {
     DocumentRequest::factory()->count(2)->create(['created_at' => now()->subDays(2)]);
     DocumentRequest::factory()->count(3)->create(['created_at' => now()->subDays(3)]);
 
-    $trends = $this->service->getRequestTrends(7);
+    $trends = $this->service->getRequestTrends(now()->subDays(7));
 
-    expect($trends)->toHaveCount(7)
+    expect($trends)->toHaveCount(8)
         ->and($trends->first())->toHaveKeys(['date', 'count']);
 });
 
@@ -109,9 +109,9 @@ it('provides revenue trends for specified period', function () {
         'created_at' => now()->subDays(1),
     ]);
 
-    $trends = $this->service->getRevenueTrends(7);
+    $trends = $this->service->getRevenueTrends(now()->subDays(7));
 
-    expect($trends)->toHaveCount(7)
+    expect($trends)->toHaveCount(8)
         ->and($trends->first())->toHaveKeys(['date', 'revenue']);
 });
 
@@ -145,7 +145,7 @@ it('returns analytics data via controller endpoint', function () {
 
     $response->assertSuccessful()
         ->assertInertia(
-            fn ($page) => $page
+            fn($page) => $page
                 ->component('registrar/analytics/index')
                 ->has('stats')
         );
