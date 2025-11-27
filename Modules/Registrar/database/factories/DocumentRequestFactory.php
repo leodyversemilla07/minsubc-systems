@@ -19,9 +19,11 @@ class DocumentRequestFactory extends Factory
      */
     public function definition(): array
     {
+        $student = \Modules\Registrar\Models\Student::factory()->create();
+
         return [
             'request_number' => 'REQ-'.now()->format('Ymd').'-'.$this->faker->unique()->numberBetween(1000, 9999),
-            'student_id' => $this->faker->regexify('[A-Z]{3}[0-9]{5}'),
+            'student_id' => $student->student_id,
             'document_type' => $this->faker->randomElement(['coe', 'cog', 'tor', 'honorable_dismissal', 'certificate_good_moral', 'cav', 'diploma', 'so', 'form_137']),
             'quantity' => $this->faker->numberBetween(1, 3),
             'purpose' => $this->faker->sentence(),

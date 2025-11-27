@@ -139,8 +139,12 @@ class AdminController extends Controller
         // Log status change
         AuditLog::log(
             'document_ready',
+            $request->user()->id,
+            DocumentRequest::class,
+            $documentRequest->id,
+            $oldRequest,
+            $documentRequest->toArray(),
             'Document marked as ready for claim',
-            $documentRequest,
             [
                 'request_number' => $documentRequest->request_number,
                 'student_id' => $documentRequest->student_id,

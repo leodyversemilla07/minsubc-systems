@@ -4,6 +4,7 @@ namespace Modules\SAS\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Modules\SAS\Models\ScholarshipRecipient;
 use Modules\SAS\Notifications\ScholarshipRenewalReminderNotification;
 
@@ -49,19 +50,33 @@ class ScholarshipRenewalService
     /**
      * Create renewal application (simplified with pre-filled data).
      */
-    public function createRenewalApplication(ScholarshipRecipient $previousRecipient, array $data = []): ScholarshipRecipient
+    public function createRenewalApplication(ScholarshipRecipient $previousRecipient, array $data = []): ?ScholarshipRecipient
     {
+        $academicYear = $data['academic_year'] ?? $previousRecipient->academic_year;
+        $semester = $data['semester'] ?? $previousRecipient->semester;
+
+        // Check if renewal already exists for this period
+        $existingRenewal = ScholarshipRecipient::query()
+            ->where('student_id', $previousRecipient->student_id)
+            ->where('scholarship_id', $previousRecipient->scholarship_id)
+            ->where('academic_year', $academicYear)
+            ->where('semester', $semester)
+            ->exists();
+
+        if ($existingRenewal) {
+            return null;
+        }
+
         return ScholarshipRecipient::create([
             'student_id' => $previousRecipient->student_id,
             'scholarship_id' => $previousRecipient->scholarship_id,
-            'academic_year' => $data['academic_year'] ?? $previousRecipient->academic_year,
-            'semester' => $data['semester'] ?? $previousRecipient->semester,
+            'academic_year' => $academicYear,
+            'semester' => $semester,
             'amount' => $previousRecipient->amount,
             'status' => 'Active',
-            'renewal_status' => 'Renewed',
+            'renewal_status' => 'Approved',
             'remarks' => $data['remarks'] ?? 'Renewal from previous period',
-            'requirements_complete' => false,
-            'created_by' => $data['created_by'] ?? auth()->user()?->id,
+            'created_by' => $data['created_by'] ?? Auth::id(),
         ]);
     }
 
@@ -72,7 +87,7 @@ class ScholarshipRenewalService
     {
         return ScholarshipRecipient::query()
             ->where('student_id', $studentId)
-            ->where('renewal_status', 'Renewed')
+            ->where('renewal_status', 'Approved')
             ->with('scholarship')
             ->orderBy('academic_year', 'desc')
             ->orderBy('semester', 'desc')
@@ -122,7 +137,7 @@ class ScholarshipRenewalService
         if ($semester === '1st') {
             // Previous is 2nd semester of previous year
             return [
-                'academic_year' => ($startYear - 1).'-'.$startYear,
+                'academic_year' => ($startYear - 1) . '-' . $startYear,
                 'semester' => '2nd',
             ];
         }
@@ -148,5 +163,15 @@ class ScholarshipRenewalService
             ->where('expiration_date', '>=', now())
             ->with(['student', 'scholarship'])
             ->get();
+    }
+
+    /**
+     * Mark a scholar as renewed (update renewal status to Approved).
+     */
+    public function markAsRenewed(ScholarshipRecipient $recipient): void
+    {
+        $recipient->update([
+            'renewal_status' => 'Approved',
+        ]);
     }
 }

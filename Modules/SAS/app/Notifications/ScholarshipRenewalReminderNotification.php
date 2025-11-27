@@ -31,7 +31,7 @@ class ScholarshipRenewalReminderNotification extends Notification
     public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Scholarship Renewal Available')
+            ->subject('Scholarship Renewal Reminder')
             ->greeting('Hello '.$notifiable->name.'!')
             ->line('Your '.$this->recipient->scholarship->scholarship_name.' scholarship is up for renewal.')
             ->line('Academic Year: '.$this->academicYear)

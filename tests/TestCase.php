@@ -21,7 +21,21 @@ abstract class TestCase extends BaseTestCase
 
     protected function createRolesIfNeeded(): void
     {
-        $roles = ['admin', 'student', 'org_adviser', 'sas_officer', 'sas_admin', 'registrar', 'cashier'];
+        $roles = [
+            'admin',
+            'student',
+            'org_adviser',
+            'sas_officer',
+            'sas-admin',
+            'sas-staff',
+            'registrar',
+            'registrar-admin',
+            'registrar-staff',
+            'cashier',
+            'super-admin',
+            'usg-admin',
+            'usg-officer',
+        ];
 
         foreach ($roles as $roleName) {
             if (! Role::where('name', $roleName)->exists()) {

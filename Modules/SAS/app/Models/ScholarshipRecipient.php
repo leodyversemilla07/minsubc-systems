@@ -9,6 +9,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\SAS\Database\Factories\ScholarshipRecipientFactory;
 
+/**
+ * @property int $id
+ * @property int $student_id
+ * @property int $scholarship_id
+ * @property string $academic_year
+ * @property string $semester
+ * @property float $amount
+ * @property string $status
+ * @property \Carbon\Carbon|null $date_awarded
+ * @property \Carbon\Carbon|null $expiration_date
+ * @property string $renewal_status
+ * @property string|null $remarks
+ * @property bool $requirements_complete
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read Scholarship $scholarship
+ * @property-read User $student
+ * @property-read User|null $createdBy
+ * @property-read User|null $updatedBy
+ * @property-read \Illuminate\Database\Eloquent\Collection<ScholarshipRequirement> $requirements
+ * @property-read \Illuminate\Database\Eloquent\Collection<ScholarshipRenewal> $renewals
+ */
 class ScholarshipRecipient extends Model
 {
     use HasFactory;
@@ -57,6 +81,11 @@ class ScholarshipRecipient extends Model
     public function requirements(): HasMany
     {
         return $this->hasMany(ScholarshipRequirement::class, 'recipient_id');
+    }
+
+    public function renewals(): HasMany
+    {
+        return $this->hasMany(ScholarshipRenewal::class, 'recipient_id');
     }
 
     public function createdBy(): BelongsTo

@@ -55,7 +55,9 @@ class DocumentRequestController extends Controller
         $student = $user->student;
 
         if (! $student) {
-            return back()->withErrors(['student' => 'Student record not found. Please contact registrar.']);
+            return Inertia::render('registrar/document-requests/create', [
+                'error' => 'Student record not found. Please contact registrar.',
+            ]);
         }
 
         $dailyLimit = config('app.document_request_daily_limit', 5);

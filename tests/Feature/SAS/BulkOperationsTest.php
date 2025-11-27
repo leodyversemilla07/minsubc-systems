@@ -8,13 +8,14 @@ use Modules\SAS\Models\ScholarshipRecipient;
 
 beforeEach(function () {
     $this->admin = User::factory()->create();
+    $this->admin->assignRole('sas-admin');
 });
 
 it('can bulk approve scholarships', function () {
     $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'Suspended']);
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.scholarships.approve'), [
+        ->post(route('sas.admin.bulk.scholarships.approve'), [
             'ids' => $scholarships->pluck('id')->toArray(),
         ]);
 
@@ -31,7 +32,7 @@ it('can bulk reject scholarships with reason', function () {
     $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'Active']);
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.scholarships.reject'), [
+        ->post(route('sas.admin.bulk.scholarships.reject'), [
             'ids' => $scholarships->pluck('id')->toArray(),
             'rejection_reason' => 'Does not meet GPA requirements',
         ]);
@@ -49,7 +50,7 @@ it('validates rejection reason for scholarships', function () {
     $scholarships = ScholarshipRecipient::factory()->count(2)->create();
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.scholarships.reject'), [
+        ->post(route('sas.admin.bulk.scholarships.reject'), [
             'ids' => $scholarships->pluck('id')->toArray(),
             'rejection_reason' => '',
         ]);
@@ -61,7 +62,7 @@ it('can bulk delete scholarships', function () {
     $scholarships = ScholarshipRecipient::factory()->count(3)->create();
 
     $response = $this->actingAs($this->admin)
-        ->delete(route('sas.bulk.scholarships.delete'), [
+        ->delete(route('sas.admin.bulk.scholarships.delete'), [
             'ids' => $scholarships->pluck('id')->toArray(),
         ]);
 
@@ -77,7 +78,7 @@ it('can bulk update scholarship status', function () {
     $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'Active']);
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.scholarships.update-status'), [
+        ->post(route('sas.admin.bulk.scholarships.update-status'), [
             'ids' => $scholarships->pluck('id')->toArray(),
             'status' => 'Suspended',
         ]);
@@ -94,7 +95,7 @@ it('validates status when bulk updating scholarships', function () {
     $scholarships = ScholarshipRecipient::factory()->count(2)->create();
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.scholarships.update-status'), [
+        ->post(route('sas.admin.bulk.scholarships.update-status'), [
             'ids' => $scholarships->pluck('id')->toArray(),
             'status' => 'invalid_status',
         ]);
@@ -106,7 +107,7 @@ it('can bulk approve insurance enrollments', function () {
     $insurances = InsuranceRecord::factory()->count(3)->create(['status' => 'Pending Review']);
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.insurance.approve'), [
+        ->post(route('sas.admin.bulk.insurance.approve'), [
             'ids' => $insurances->pluck('id')->toArray(),
         ]);
 
@@ -123,7 +124,7 @@ it('can bulk reject insurance enrollments with reason', function () {
     $insurances = InsuranceRecord::factory()->count(3)->create(['status' => 'Pending Review']);
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.insurance.reject'), [
+        ->post(route('sas.admin.bulk.insurance.reject'), [
             'ids' => $insurances->pluck('id')->toArray(),
             'rejection_reason' => 'Incomplete documents',
         ]);
@@ -141,7 +142,7 @@ it('validates rejection reason for insurance', function () {
     $insurances = InsuranceRecord::factory()->count(2)->create();
 
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.insurance.reject'), [
+        ->post(route('sas.admin.bulk.insurance.reject'), [
             'ids' => $insurances->pluck('id')->toArray(),
             'rejection_reason' => '',
         ]);
@@ -153,7 +154,7 @@ it('can bulk delete insurance records', function () {
     $insurances = InsuranceRecord::factory()->count(3)->create();
 
     $response = $this->actingAs($this->admin)
-        ->delete(route('sas.bulk.insurance.delete'), [
+        ->delete(route('sas.admin.bulk.insurance.delete'), [
             'ids' => $insurances->pluck('id')->toArray(),
         ]);
 
@@ -167,7 +168,7 @@ it('can bulk delete insurance records', function () {
 
 it('requires at least one id for bulk operations', function () {
     $response = $this->actingAs($this->admin)
-        ->post(route('sas.bulk.scholarships.approve'), [
+        ->post(route('sas.admin.bulk.scholarships.approve'), [
             'ids' => [],
         ]);
 
@@ -177,7 +178,7 @@ it('requires at least one id for bulk operations', function () {
 it('requires authentication for bulk operations', function () {
     $scholarships = ScholarshipRecipient::factory()->count(2)->create();
 
-    $response = $this->post(route('sas.bulk.scholarships.approve'), [
+    $response = $this->post(route('sas.admin.bulk.scholarships.approve'), [
         'ids' => $scholarships->pluck('id')->toArray(),
     ]);
 

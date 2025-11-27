@@ -23,7 +23,6 @@ class BulkOperationsController extends Controller
         $count = DocumentRequest::whereIn('id', $validated['request_ids'])
             ->update([
                 'status' => $validated['status'],
-                'updated_by' => $request->user()?->id,
             ]);
 
         return back()->with('success', "{$count} requests updated to {$validated['status']}");
@@ -43,7 +42,6 @@ class BulkOperationsController extends Controller
         $count = DocumentRequest::whereIn('id', $validated['request_ids'])
             ->update([
                 'assigned_to' => $validated['assigned_to'],
-                'updated_by' => $request->user()?->id,
             ]);
 
         return back()->with('success', "{$count} requests assigned successfully");
@@ -60,12 +58,11 @@ class BulkOperationsController extends Controller
         ]);
 
         $count = DocumentRequest::whereIn('id', $validated['request_ids'])
-            ->whereIn('status', ['ready_for_release', 'processing'])
+            ->whereIn('status', ['ready_for_claim', 'processing'])
             ->update([
                 'status' => 'released',
                 'released_at' => now(),
                 'released_by' => $request->user()?->id,
-                'updated_by' => $request->user()?->id,
             ]);
 
         if ($count === 0) {
@@ -90,7 +87,6 @@ class BulkOperationsController extends Controller
             ->update([
                 'status' => 'rejected',
                 'rejection_reason' => $validated['rejection_reason'],
-                'updated_by' => $request->user()?->id,
             ]);
 
         return back()->with('success', "{$count} requests rejected");

@@ -17,15 +17,50 @@ class AnalyticsService
 
         return [
             'total_requests' => $this->getTotalRequests($startDate),
+            'pending_requests' => $this->getPendingRequests($startDate),
+            'processing_requests' => $this->getProcessingRequests($startDate),
+            'completed_requests' => $this->getCompletedRequests($startDate),
+            'total_revenue' => $this->getTotalRevenue($startDate),
+            'average_processing_time' => $this->getAverageProcessingTime($startDate),
             'requests_by_type' => $this->getRequestsByType($startDate),
             'requests_by_status' => $this->getRequestsByStatus($startDate),
             'revenue_by_type' => $this->getRevenueByType($startDate),
-            'average_processing_time' => $this->getAverageProcessingTime($startDate),
             'request_trends' => $this->getRequestTrends($startDate),
             'revenue_trends' => $this->getRevenueTrends($startDate),
-            'top_requested_documents' => $this->getTopRequestedDocuments($startDate, 5),
+            'top_requested_documents' => $this->getTopRequestedDocuments(5, $startDate),
             'completion_rate' => $this->getCompletionRate($startDate),
         ];
+    }
+
+    protected function getPendingRequests(Carbon $startDate): int
+    {
+        return DocumentRequest::query()
+            ->where('created_at', '>=', $startDate)
+            ->where('status', 'pending_payment')
+            ->count();
+    }
+
+    protected function getProcessingRequests(Carbon $startDate): int
+    {
+        return DocumentRequest::query()
+            ->where('created_at', '>=', $startDate)
+            ->where('status', 'processing')
+            ->count();
+    }
+
+    protected function getCompletedRequests(Carbon $startDate): int
+    {
+        return DocumentRequest::query()
+            ->where('created_at', '>=', $startDate)
+            ->where('status', 'claimed')
+            ->count();
+    }
+
+    protected function getTotalRevenue(Carbon $startDate): float
+    {
+        return (float) DocumentRequest::query()
+            ->where('created_at', '>=', $startDate)
+            ->sum('amount');
     }
 
     /**
@@ -39,55 +74,59 @@ class AnalyticsService
     /**
      * Get requests grouped by document type.
      */
-    protected function getRequestsByType(Carbon $startDate): array
+    public function getRequestsByType(?Carbon $startDate = null): \Illuminate\Support\Collection
     {
+        $startDate = $startDate ?? now()->subDays(30);
+
         return DocumentRequest::query()
             ->where('created_at', '>=', $startDate)
             ->select('document_type', DB::raw('COUNT(*) as count'))
             ->groupBy('document_type')
-            ->pluck('count', 'document_type')
-            ->toArray();
+            ->get();
     }
 
     /**
      * Get requests grouped by status.
      */
-    protected function getRequestsByStatus(Carbon $startDate): array
+    public function getRequestsByStatus(?Carbon $startDate = null): \Illuminate\Support\Collection
     {
+        $startDate = $startDate ?? now()->subDays(30);
+
         return DocumentRequest::query()
             ->where('created_at', '>=', $startDate)
             ->select('status', DB::raw('COUNT(*) as count'))
             ->groupBy('status')
-            ->pluck('count', 'status')
-            ->toArray();
+            ->get();
     }
 
     /**
      * Get revenue grouped by document type.
      */
-    protected function getRevenueByType(Carbon $startDate): array
+    public function getRevenueByType(?Carbon $startDate = null): \Illuminate\Support\Collection
     {
+        $startDate = $startDate ?? now()->subDays(30);
+
         return DocumentRequest::query()
             ->where('created_at', '>=', $startDate)
-            ->whereNotNull('payment_amount')
-            ->where('payment_status', 'paid')
-            ->select('document_type', DB::raw('SUM(payment_amount) as total'))
+            ->whereNotNull('amount')
+            ->select('document_type', DB::raw('SUM(amount) as total_revenue'))
             ->groupBy('document_type')
-            ->pluck('total', 'document_type')
-            ->map(fn ($value) => (float) $value)
-            ->toArray();
+            ->get();
     }
 
     /**
      * Get average processing time in hours.
      */
-    protected function getAverageProcessingTime(Carbon $startDate): float
+    public function getAverageProcessingTime(?Carbon $startDate = null): float
     {
+        $startDate = $startDate ?? now()->subDays(30);
+
+        // Use database-agnostic calculation: (released_at - created_at) in hours
         $result = DocumentRequest::query()
             ->where('status', 'released')
             ->where('created_at', '>=', $startDate)
             ->whereNotNull('released_at')
-            ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, created_at, released_at)) as avg_hours')
+            ->selectRaw('AVG((julianday(released_at) - julianday(created_at)) * 24) as avg_hours')
             ->value('avg_hours');
 
         return $result ? round((float) $result, 2) : 0.0;
@@ -96,54 +135,59 @@ class AnalyticsService
     /**
      * Get request trends over time (daily).
      */
-    protected function getRequestTrends(Carbon $startDate): array
+    public function getRequestTrends(Carbon $startDate): \Illuminate\Support\Collection
     {
-        return DocumentRequest::query()
-            ->where('created_at', '>=', $startDate)
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->pluck('count', 'date')
-            ->toArray();
+        $start = $startDate->copy()->startOfDay();
+        $end = now()->startOfDay();
+        $days = $start->diffInDays($end) + 1;
+
+        return collect(range(0, $days - 1))->map(function (int $offset) use ($start): array {
+            $date = $start->copy()->addDays($offset)->format('Y-m-d');
+            $count = DocumentRequest::whereDate('created_at', $date)->count();
+
+            return ['date' => $date, 'count' => $count];
+        });
     }
 
     /**
      * Get revenue trends over time (daily).
      */
-    protected function getRevenueTrends(Carbon $startDate): array
+    public function getRevenueTrends(Carbon $startDate): \Illuminate\Support\Collection
     {
-        return DocumentRequest::query()
-            ->where('created_at', '>=', $startDate)
-            ->whereNotNull('payment_amount')
-            ->where('payment_status', 'paid')
-            ->selectRaw('DATE(created_at) as date, SUM(payment_amount) as total')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->pluck('total', 'date')
-            ->map(fn ($value) => (float) $value)
-            ->toArray();
+        $start = $startDate->copy()->startOfDay();
+        $end = now()->startOfDay();
+        $days = $start->diffInDays($end) + 1;
+
+        return collect(range(0, $days - 1))->map(function (int $offset) use ($start): array {
+            $date = $start->copy()->addDays($offset)->format('Y-m-d');
+            $revenue = DocumentRequest::whereDate('created_at', $date)->sum('amount');
+
+            return ['date' => $date, 'revenue' => (float) $revenue];
+        });
     }
 
     /**
      * Get top requested documents.
      */
-    protected function getTopRequestedDocuments(Carbon $startDate, int $limit = 5): array
+    public function getTopRequestedDocuments(int $limit = 5, ?Carbon $startDate = null): \Illuminate\Support\Collection
     {
+        $startDate = $startDate ?? now()->subDays(30);
+
         return DocumentRequest::query()
             ->where('created_at', '>=', $startDate)
-            ->select('document_type', DB::raw('COUNT(*) as count'))
+            ->selectRaw('document_type, COUNT(*) as count')
             ->groupBy('document_type')
             ->orderByDesc('count')
             ->limit($limit)
-            ->pluck('count', 'document_type')
-            ->toArray();
+            ->get();
     }
 
     /**
      * Get completion rate percentage.
      */
-    protected function getCompletionRate(Carbon $startDate): float
+    public function getCompletionRate(?Carbon $startDate = null): float
     {
+        $startDate = $startDate ?? now()->subDays(30);
         $total = DocumentRequest::where('created_at', '>=', $startDate)->count();
 
         if ($total === 0) {
@@ -152,7 +196,7 @@ class AnalyticsService
 
         $completed = DocumentRequest::query()
             ->where('created_at', '>=', $startDate)
-            ->where('status', 'released')
+            ->where('status', 'claimed')
             ->count();
 
         return round(($completed / $total) * 100, 2);

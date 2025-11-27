@@ -4,7 +4,7 @@ use Modules\SAS\Models\InsuranceRecord;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    Role::create(['name' => 'sas-admin']);
+    Role::firstOrCreate(['name' => 'sas-admin']);
     $admin = \App\Models\User::factory()->create();
     $admin->assignRole('sas-admin');
     $this->actingAs($admin);

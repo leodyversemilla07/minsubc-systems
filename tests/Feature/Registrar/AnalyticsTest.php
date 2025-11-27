@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Modules\Registrar\Models\DocumentRequest;
-use Modules\Registrar\Models\PaymentMethod;
 use Modules\Registrar\Services\AnalyticsService;
 
 beforeEach(function () {
@@ -59,12 +58,11 @@ it('groups requests by status correctly', function () {
 });
 
 it('calculates revenue by type correctly', function () {
-    // Create payment method with price
-    $paymentMethod = PaymentMethod::factory()->create(['price' => 100.00]);
-
+    // Create document requests with amounts
     DocumentRequest::factory()->count(3)->create([
-        'payment_method_id' => $paymentMethod->id,
         'document_type' => 'transcript',
+        'amount' => 100.00,
+        'payment_method' => 'digital',
     ]);
 
     $data = $this->service->getRevenueByType();
@@ -74,17 +72,17 @@ it('calculates revenue by type correctly', function () {
 });
 
 it('calculates average processing time correctly', function () {
-    // Create completed requests with processing times
+    // Create released requests with processing times
     DocumentRequest::factory()->create([
-        'status' => 'completed',
-        'requested_at' => now()->subDays(5),
-        'completed_at' => now()->subDays(3), // 2 days
+        'status' => 'released',
+        'created_at' => now()->subDays(5),
+        'released_at' => now()->subDays(3), // 2 days
     ]);
 
     DocumentRequest::factory()->create([
-        'status' => 'completed',
-        'requested_at' => now()->subDays(10),
-        'completed_at' => now()->subDays(6), // 4 days
+        'status' => 'released',
+        'created_at' => now()->subDays(10),
+        'released_at' => now()->subDays(6), // 4 days
     ]);
 
     $avgTime = $this->service->getAverageProcessingTime();
@@ -92,12 +90,11 @@ it('calculates average processing time correctly', function () {
     expect($avgTime)->toBeNumeric()
         ->and($avgTime)->toBeGreaterThan(0);
 });
-
 it('provides request trends for specified period', function () {
     // Create requests across different dates
-    DocumentRequest::factory()->create(['requested_at' => now()->subDays(1)]);
-    DocumentRequest::factory()->count(2)->create(['requested_at' => now()->subDays(2)]);
-    DocumentRequest::factory()->count(3)->create(['requested_at' => now()->subDays(3)]);
+    DocumentRequest::factory()->create(['created_at' => now()->subDays(1)]);
+    DocumentRequest::factory()->count(2)->create(['created_at' => now()->subDays(2)]);
+    DocumentRequest::factory()->count(3)->create(['created_at' => now()->subDays(3)]);
 
     $trends = $this->service->getRequestTrends(7);
 
@@ -106,11 +103,10 @@ it('provides request trends for specified period', function () {
 });
 
 it('provides revenue trends for specified period', function () {
-    $paymentMethod = PaymentMethod::factory()->create(['price' => 100.00]);
-
     DocumentRequest::factory()->create([
-        'payment_method_id' => $paymentMethod->id,
-        'requested_at' => now()->subDays(1),
+        'amount' => 100.00,
+        'payment_method' => 'digital',
+        'created_at' => now()->subDays(1),
     ]);
 
     $trends = $this->service->getRevenueTrends(7);
@@ -132,8 +128,8 @@ it('identifies top requested documents', function () {
 });
 
 it('calculates completion rate correctly', function () {
-    DocumentRequest::factory()->count(8)->create(['status' => 'completed']);
-    DocumentRequest::factory()->count(2)->create(['status' => 'pending']);
+    DocumentRequest::factory()->count(8)->create(['status' => 'claimed']);
+    DocumentRequest::factory()->count(2)->create(['status' => 'pending_payment']);
 
     $rate = $this->service->getCompletionRate();
 
@@ -142,13 +138,14 @@ it('calculates completion rate correctly', function () {
 
 it('returns analytics data via controller endpoint', function () {
     DocumentRequest::factory()->count(5)->create();
+    $this->admin->assignRole('registrar-admin');
 
     $response = $this->actingAs($this->admin)
-        ->get(route('registrar.analytics.index'));
+        ->get(route('registrar.admin.analytics'));
 
     $response->assertSuccessful()
         ->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('registrar/analytics/index')
                 ->has('stats')
         );
@@ -156,21 +153,20 @@ it('returns analytics data via controller endpoint', function () {
 
 it('returns analytics JSON data for AJAX requests', function () {
     DocumentRequest::factory()->count(5)->create();
+    $this->admin->assignRole('registrar-admin');
 
     $response = $this->actingAs($this->admin)
-        ->get(route('registrar.analytics.data', ['period' => 30]));
+        ->get(route('registrar.admin.analytics.data', ['period' => 30]));
 
     $response->assertSuccessful()
         ->assertJsonStructure([
-            'trends',
-            'statusDistribution',
-            'typeDistribution',
-            'revenueTrends',
+            'stats',
+            'revenueStats',
         ]);
 });
 
 it('requires authentication to access analytics', function () {
-    $response = $this->get(route('registrar.analytics.index'));
+    $response = $this->get(route('registrar.admin.analytics'));
 
     $response->assertRedirect(route('login'));
 });

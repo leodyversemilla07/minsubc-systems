@@ -40,12 +40,14 @@ it('checks if scholar is eligible for renewal', function () {
         'academic_year' => '2023-2024',
         'semester' => '2nd',
         'requirements_complete' => true,
+        'expiration_date' => now()->addYear(),
     ]);
 
     $suspendedScholar = ScholarshipRecipient::factory()->create([
         'status' => 'Suspended',
         'academic_year' => '2023-2024',
         'semester' => '2nd',
+        'requirements_complete' => true,
     ]);
 
     expect($this->service->isEligibleForRenewal($activeScholar, '2024-2025', '1st'))->toBeTrue()
@@ -90,6 +92,7 @@ it('does not send reminders to ineligible scholars', function () {
 it('creates renewal application for eligible scholar', function () {
     $scholar = ScholarshipRecipient::factory()->create([
         'status' => 'Active',
+        'renewal_status' => 'Not Applicable',
         'academic_year' => '2023-2024',
         'semester' => '2nd',
     ]);
@@ -103,6 +106,7 @@ it('creates renewal application for eligible scholar', function () {
         ->and($renewal->academic_year)->toBe('2024-2025')
         ->and($renewal->semester)->toBe('1st')
         ->and($renewal->status)->toBe('Active')
+        ->and($renewal->renewal_status)->toBe('Approved')
         ->and($renewal->student_id)->toBe($scholar->student_id)
         ->and($renewal->scholarship_id)->toBe($scholar->scholarship_id);
 });
@@ -132,9 +136,8 @@ it('renewal notification contains correct details', function () {
     $mailData = $notification->toMail($scholar->student);
 
     expect($mailData->subject)->toContain('Scholarship Renewal Reminder')
-        ->and($mailData->viewData)->toHaveKey('recipient')
-        ->and($mailData->viewData)->toHaveKey('newAcademicYear')
-        ->and($mailData->viewData)->toHaveKey('newSemester');
+        ->and($mailData->introLines)->toContain('Academic Year: 2024-2025')
+        ->and($mailData->introLines)->toContain('Semester: 1st');
 });
 
 it('artisan command sends renewal reminders', function () {
@@ -146,9 +149,50 @@ it('artisan command sends renewal reminders', function () {
         'semester' => '2nd',
     ]);
 
+    $scholar = ScholarshipRecipient::factory()->create([
+        'status' => 'Active',
+        'academic_year' => '2023-2024',
+        'semester' => '2nd',
+    ]);
+
     $this->artisan('sas:send-renewal-reminders', [
         'academic_year' => '2024-2025',
         'semester' => '1st',
     ])
         ->assertSuccessful();
+
+    Notification::assertSentTo([$scholar->student], ScholarshipRenewalReminderNotification::class);
+});
+
+it('marks scholar as renewed', function () {
+    $scholar = ScholarshipRecipient::factory()->create([
+        'status' => 'Active',
+        'renewal_status' => 'Pending',
+    ]);
+
+    $this->service->markAsRenewed($scholar);
+
+    expect($scholar->fresh()->renewal_status)->toBe('Approved');
+});
+
+it('prevents duplicate renewal applications', function () {
+    $scholar = ScholarshipRecipient::factory()->create([
+        'status' => 'Active',
+        'academic_year' => '2023-2024',
+        'semester' => '2nd',
+    ]);
+
+    // Create first renewal
+    $this->service->createRenewalApplication($scholar, [
+        'academic_year' => '2024-2025',
+        'semester' => '1st',
+    ]);
+
+    // Attempt second renewal for same period
+    $secondRenewal = $this->service->createRenewalApplication($scholar, [
+        'academic_year' => '2024-2025',
+        'semester' => '1st',
+    ]);
+
+    expect($secondRenewal)->toBeNull();
 });
