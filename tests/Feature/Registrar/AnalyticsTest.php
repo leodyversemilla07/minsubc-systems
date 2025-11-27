@@ -14,8 +14,8 @@ beforeEach(function () {
 
 it('calculates dashboard stats correctly', function () {
     // Create test data
-    DocumentRequest::factory()->count(10)->create(['status' => 'completed']);
-    DocumentRequest::factory()->count(5)->create(['status' => 'pending']);
+    DocumentRequest::factory()->count(10)->create(['status' => 'claimed']);
+    DocumentRequest::factory()->count(5)->create(['status' => 'pending_payment']);
     DocumentRequest::factory()->count(3)->create(['status' => 'processing']);
 
     $stats = $this->service->getDashboardStats();
@@ -48,14 +48,14 @@ it('groups requests by type correctly', function () {
 });
 
 it('groups requests by status correctly', function () {
-    DocumentRequest::factory()->count(5)->create(['status' => 'completed']);
-    DocumentRequest::factory()->count(3)->create(['status' => 'pending']);
+    DocumentRequest::factory()->count(5)->create(['status' => 'claimed']);
+    DocumentRequest::factory()->count(3)->create(['status' => 'pending_payment']);
 
     $data = $this->service->getRequestsByStatus();
 
     expect($data)->toHaveCount(2)
-        ->and($data->firstWhere('status', 'completed')['count'])->toBe(5)
-        ->and($data->firstWhere('status', 'pending')['count'])->toBe(3);
+        ->and($data->firstWhere('status', 'claimed')['count'])->toBe(5)
+        ->and($data->firstWhere('status', 'pending_payment')['count'])->toBe(3);
 });
 
 it('calculates revenue by type correctly', function () {
@@ -148,7 +148,7 @@ it('returns analytics data via controller endpoint', function () {
 
     $response->assertSuccessful()
         ->assertInertia(
-            fn ($page) => $page
+            fn($page) => $page
                 ->component('registrar/analytics/index')
                 ->has('stats')
         );

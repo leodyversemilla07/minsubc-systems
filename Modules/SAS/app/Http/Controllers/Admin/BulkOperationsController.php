@@ -42,10 +42,11 @@ class BulkOperationsController extends Controller
         ]);
         $count = ScholarshipRecipient::whereIn('id', $validated['ids'])
             ->update([
-                'status' => 'Inactive',
+                'status' => 'Cancelled',
                 'remarks' => $validated['rejection_reason'],
                 'updated_by' => Auth::id(),
             ]);
+
         return back()->with('success', "{$count} scholarship recipients rejected");
     }
 
@@ -61,12 +62,13 @@ class BulkOperationsController extends Controller
         $count = InsuranceRecord::whereIn('id', $validated['ids'])
             ->update([
                 'status' => 'Approved',
-                'approved_at' => now(),
-                'approved_by' => Auth::id(),
+                'reviewed_at' => now(),
+                'reviewed_by' => Auth::id(),
             ]);
 
         return back()->with('success', "{$count} insurance records approved");
     }
+
     /**
      * Bulk reject insurance records.
      */
@@ -80,15 +82,14 @@ class BulkOperationsController extends Controller
         $count = InsuranceRecord::whereIn('id', $validated['ids'])
             ->update([
                 'status' => 'Rejected',
-                'notes' => $validated['rejection_reason'],
+                'review_notes' => $validated['rejection_reason'],
+                'reviewed_at' => now(),
                 'reviewed_by' => Auth::id(),
             ]);
 
         return back()->with('success', "{$count} insurance records rejected");
     }
 
-    /**
-     */
     public function bulkDeleteScholarships(Request $request): RedirectResponse
     {
         $validated = $request->validate([

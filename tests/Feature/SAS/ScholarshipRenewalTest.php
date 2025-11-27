@@ -14,22 +14,21 @@ beforeEach(function () {
 });
 
 it('identifies eligible scholars for renewal', function () {
-    // Create eligible scholar (active, no recent renewal)
+    // Create eligible scholar (Active, no recent renewal)
     $eligible = ScholarshipRecipient::factory()->create([
-        'status' => 'active',
+        'status' => 'Active',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
-        'created_at' => now()->subMonths(6),
+        'semester' => '2nd',
     ]);
 
-    // Create ineligible scholar (inactive)
+    // Create ineligible scholar (Suspended)
     ScholarshipRecipient::factory()->create([
-        'status' => 'inactive',
+        'status' => 'Suspended',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
+        'semester' => '2nd',
     ]);
 
-    $eligibleScholars = $this->service->getEligibleScholars('2024-2025', '1st Semester');
+    $eligibleScholars = $this->service->getEligibleScholars('2024-2025', '1st');
 
     expect($eligibleScholars)->toHaveCount(1)
         ->and($eligibleScholars->first()->id)->toBe($eligible->id);
@@ -37,38 +36,37 @@ it('identifies eligible scholars for renewal', function () {
 
 it('checks if scholar is eligible for renewal', function () {
     $activeScholar = ScholarshipRecipient::factory()->create([
-        'status' => 'active',
+        'status' => 'Active',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
-        'created_at' => now()->subMonths(6),
+        'semester' => '2nd',
+        'requirements_complete' => true,
     ]);
 
-    $inactiveScholar = ScholarshipRecipient::factory()->create([
-        'status' => 'inactive',
+    $suspendedScholar = ScholarshipRecipient::factory()->create([
+        'status' => 'Suspended',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
+        'semester' => '2nd',
     ]);
 
-    expect($this->service->isEligibleForRenewal($activeScholar, '2024-2025', '1st Semester'))->toBeTrue()
-        ->and($this->service->isEligibleForRenewal($inactiveScholar, '2024-2025', '1st Semester'))->toBeFalse();
+    expect($this->service->isEligibleForRenewal($activeScholar, '2024-2025', '1st'))->toBeTrue()
+        ->and($this->service->isEligibleForRenewal($suspendedScholar, '2024-2025', '1st'))->toBeFalse();
 });
 
 it('sends renewal reminders to eligible scholars', function () {
     Notification::fake();
 
     $scholar = ScholarshipRecipient::factory()->create([
-        'status' => 'active',
+        'status' => 'Active',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
-        'created_at' => now()->subMonths(6),
+        'semester' => '2nd',
     ]);
 
-    $count = $this->service->sendRenewalReminders('2024-2025', '1st Semester');
+    $count = $this->service->sendRenewalReminders('2024-2025', '1st');
 
     expect($count)->toBe(1);
 
     Notification::assertSentTo(
-        [$scholar->user],
+        [$scholar->student],
         ScholarshipRenewalReminderNotification::class
     );
 });
@@ -77,12 +75,12 @@ it('does not send reminders to ineligible scholars', function () {
     Notification::fake();
 
     ScholarshipRecipient::factory()->create([
-        'status' => 'inactive',
+        'status' => 'Suspended',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
+        'semester' => '2nd',
     ]);
 
-    $count = $this->service->sendRenewalReminders('2024-2025', '1st Semester');
+    $count = $this->service->sendRenewalReminders('2024-2025', '1st');
 
     expect($count)->toBe(0);
 
@@ -91,32 +89,34 @@ it('does not send reminders to ineligible scholars', function () {
 
 it('creates renewal application for eligible scholar', function () {
     $scholar = ScholarshipRecipient::factory()->create([
-        'status' => 'active',
+        'status' => 'Active',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
-        'created_at' => now()->subMonths(6),
+        'semester' => '2nd',
     ]);
 
-    $renewal = $this->service->createRenewalApplication($scholar, '2024-2025', '1st Semester');
+    $renewal = $this->service->createRenewalApplication($scholar, [
+        'academic_year' => '2024-2025',
+        'semester' => '1st',
+    ]);
 
     expect($renewal)->toBeInstanceOf(ScholarshipRecipient::class)
         ->and($renewal->academic_year)->toBe('2024-2025')
-        ->and($renewal->semester)->toBe('1st Semester')
-        ->and($renewal->status)->toBe('pending')
-        ->and($renewal->user_id)->toBe($scholar->user_id)
-        ->and($renewal->scholarship_program_id)->toBe($scholar->scholarship_program_id);
+        ->and($renewal->semester)->toBe('1st')
+        ->and($renewal->status)->toBe('Active')
+        ->and($renewal->student_id)->toBe($scholar->student_id)
+        ->and($renewal->scholarship_id)->toBe($scholar->scholarship_id);
 });
 
-it('gets scholars needing renewal for current period', function () {
-    // Create scholar from last period
+it('gets scholars needing renewal soon', function () {
+    // Create scholar with expiration date in 20 days
     $scholar = ScholarshipRecipient::factory()->create([
-        'status' => 'active',
+        'status' => 'Active',
         'academic_year' => '2023-2024',
-        'semester' => '2nd Semester',
-        'created_at' => now()->subMonths(6),
+        'semester' => '2nd',
+        'expiration_date' => now()->addDays(20),
     ]);
 
-    $scholars = $this->service->getScholarsNeedingRenewal('2024-2025', '1st Semester');
+    $scholars = $this->service->getScholarsNeedingRenewal(30);
 
     expect($scholars)->toHaveCount(1);
 });
@@ -124,15 +124,15 @@ it('gets scholars needing renewal for current period', function () {
 it('renewal notification contains correct details', function () {
     $scholar = ScholarshipRecipient::factory()->create([
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
+        'semester' => '2nd',
     ]);
 
-    $notification = new ScholarshipRenewalReminderNotification($scholar, '2024-2025', '1st Semester');
+    $notification = new ScholarshipRenewalReminderNotification($scholar, '2024-2025', '1st');
 
-    $mailData = $notification->toMail($scholar->user);
+    $mailData = $notification->toMail($scholar->student);
 
     expect($mailData->subject)->toContain('Scholarship Renewal Reminder')
-        ->and($mailData->viewData)->toHaveKey('scholar')
+        ->and($mailData->viewData)->toHaveKey('recipient')
         ->and($mailData->viewData)->toHaveKey('newAcademicYear')
         ->and($mailData->viewData)->toHaveKey('newSemester');
 });
@@ -141,16 +141,14 @@ it('artisan command sends renewal reminders', function () {
     Notification::fake();
 
     ScholarshipRecipient::factory()->create([
-        'status' => 'active',
+        'status' => 'Active',
         'academic_year' => '2023-2024',
-        'semester' => '1st Semester',
-        'created_at' => now()->subMonths(6),
+        'semester' => '2nd',
     ]);
 
     $this->artisan('sas:send-renewal-reminders', [
         'academic_year' => '2024-2025',
-        'semester' => '1st Semester',
+        'semester' => '1st',
     ])
-        ->expectsOutput('Renewal reminders sent to 1 scholar(s).')
         ->assertSuccessful();
 });

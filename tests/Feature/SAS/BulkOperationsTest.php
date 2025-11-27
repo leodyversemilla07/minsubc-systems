@@ -11,7 +11,7 @@ beforeEach(function () {
 });
 
 it('can bulk approve scholarships', function () {
-    $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'pending']);
+    $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'Suspended']);
 
     $response = $this->actingAs($this->admin)
         ->post(route('sas.bulk.scholarships.approve'), [
@@ -22,13 +22,13 @@ it('can bulk approve scholarships', function () {
         ->assertSessionHas('success');
 
     foreach ($scholarships as $scholarship) {
-        expect($scholarship->fresh()->status)->toBe('active')
-            ->and($scholarship->fresh()->approved_at)->not->toBeNull();
+        expect($scholarship->fresh()->status)->toBe('Active')
+            ->and($scholarship->fresh()->date_awarded)->not->toBeNull();
     }
 });
 
 it('can bulk reject scholarships with reason', function () {
-    $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'pending']);
+    $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'Active']);
 
     $response = $this->actingAs($this->admin)
         ->post(route('sas.bulk.scholarships.reject'), [
@@ -40,8 +40,8 @@ it('can bulk reject scholarships with reason', function () {
         ->assertSessionHas('success');
 
     foreach ($scholarships as $scholarship) {
-        expect($scholarship->fresh()->status)->toBe('rejected')
-            ->and($scholarship->fresh()->notes)->toContain('Does not meet GPA requirements');
+        expect($scholarship->fresh()->status)->toBe('Cancelled')
+            ->and($scholarship->fresh()->remarks)->toContain('Does not meet GPA requirements');
     }
 });
 
@@ -74,19 +74,19 @@ it('can bulk delete scholarships', function () {
 });
 
 it('can bulk update scholarship status', function () {
-    $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'active']);
+    $scholarships = ScholarshipRecipient::factory()->count(3)->create(['status' => 'Active']);
 
     $response = $this->actingAs($this->admin)
         ->post(route('sas.bulk.scholarships.update-status'), [
             'ids' => $scholarships->pluck('id')->toArray(),
-            'status' => 'suspended',
+            'status' => 'Suspended',
         ]);
 
     $response->assertRedirect()
         ->assertSessionHas('success');
 
     foreach ($scholarships as $scholarship) {
-        expect($scholarship->fresh()->status)->toBe('suspended');
+        expect($scholarship->fresh()->status)->toBe('Suspended');
     }
 });
 
@@ -103,7 +103,7 @@ it('validates status when bulk updating scholarships', function () {
 });
 
 it('can bulk approve insurance enrollments', function () {
-    $insurances = InsuranceRecord::factory()->count(3)->create(['status' => 'pending']);
+    $insurances = InsuranceRecord::factory()->count(3)->create(['status' => 'Pending Review']);
 
     $response = $this->actingAs($this->admin)
         ->post(route('sas.bulk.insurance.approve'), [
@@ -114,13 +114,13 @@ it('can bulk approve insurance enrollments', function () {
         ->assertSessionHas('success');
 
     foreach ($insurances as $insurance) {
-        expect($insurance->fresh()->status)->toBe('approved')
-            ->and($insurance->fresh()->approved_at)->not->toBeNull();
+        expect($insurance->fresh()->status)->toBe('Approved')
+            ->and($insurance->fresh()->reviewed_at)->not->toBeNull();
     }
 });
 
 it('can bulk reject insurance enrollments with reason', function () {
-    $insurances = InsuranceRecord::factory()->count(3)->create(['status' => 'pending']);
+    $insurances = InsuranceRecord::factory()->count(3)->create(['status' => 'Pending Review']);
 
     $response = $this->actingAs($this->admin)
         ->post(route('sas.bulk.insurance.reject'), [
@@ -132,8 +132,8 @@ it('can bulk reject insurance enrollments with reason', function () {
         ->assertSessionHas('success');
 
     foreach ($insurances as $insurance) {
-        expect($insurance->fresh()->status)->toBe('rejected')
-            ->and($insurance->fresh()->notes)->toContain('Incomplete documents');
+        expect($insurance->fresh()->status)->toBe('Rejected')
+            ->and($insurance->fresh()->review_notes)->toContain('Incomplete documents');
     }
 });
 
