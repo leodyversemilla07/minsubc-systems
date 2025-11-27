@@ -124,4 +124,18 @@ Route::prefix('sas/admin')->name('sas.admin.')->middleware(['auth', 'role:sas-st
         Route::get('insurance/records', [\Modules\SAS\Http\Controllers\ReportController::class, 'insuranceRecords'])->name('insurance.records');
         Route::get('insurance/statistics/{academicYear}', [\Modules\SAS\Http\Controllers\ReportController::class, 'insuranceStatistics'])->name('insurance.statistics');
     });
+
+    // Bulk Operations
+    Route::prefix('bulk')->name('bulk.')->group(function () {
+        // Scholarship bulk operations
+        Route::post('scholarships/approve', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkApproveScholarships'])->name('scholarships.approve');
+        Route::post('scholarships/reject', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkRejectScholarships'])->name('scholarships.reject');
+        Route::post('scholarships/update-status', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkUpdateScholarshipStatus'])->name('scholarships.update-status');
+        Route::delete('scholarships/delete', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkDeleteScholarships'])->name('scholarships.delete');
+
+        // Insurance bulk operations
+        Route::post('insurance/approve', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkApproveInsurance'])->name('insurance.approve');
+        Route::post('insurance/reject', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkRejectInsurance'])->name('insurance.reject');
+        Route::delete('insurance/delete', [\Modules\SAS\Http\Controllers\Admin\BulkOperationsController::class, 'bulkDeleteInsurance'])->name('insurance.delete');
+    });
 });

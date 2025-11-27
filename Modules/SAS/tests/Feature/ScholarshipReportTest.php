@@ -5,7 +5,7 @@ use Modules\SAS\Models\ScholarshipRecipient;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    Role::create(['name' => 'sas-admin']);
+    Role::firstOrCreate(['name' => 'sas-admin']);
     $admin = \App\Models\User::factory()->create();
     $admin->assignRole('sas-admin');
     $this->actingAs($admin);
@@ -129,8 +129,9 @@ test('reports index page loads successfully', function () {
     $response = $this->get('/sas/admin/reports');
 
     $response->assertSuccessful();
-    $response->assertInertia(fn ($page) => $page
-        ->component('sas/admin/reports/index')
-        ->has('scholarships')
+    $response->assertInertia(
+        fn ($page) => $page
+            ->component('sas/admin/reports/index')
+            ->has('scholarships')
     );
 });

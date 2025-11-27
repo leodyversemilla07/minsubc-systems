@@ -1,3 +1,4 @@
+import { DocumentViewer } from '@/components/sas/document-viewer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -200,27 +201,37 @@ export default function ShowDocument({ document }: Props) {
                             <CardTitle>Document Preview</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-12 dark:border-gray-700 dark:bg-gray-800">
-                                <div className="text-center">
-                                    <FileText className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-                                    <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        {document.file_name}
-                                    </p>
-                                    <p className="text-xs text-gray-600">
-                                        {document.file_type.toUpperCase()} •{' '}
-                                        {formatFileSize(document.file_size)}
-                                    </p>
-                                    <Button className="mt-4" asChild>
-                                        <a
-                                            href={document.file_path}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Open in New Tab
-                                        </a>
-                                    </Button>
+                            {document.file_type === 'pdf' ||
+                            document.file_path
+                                .toLowerCase()
+                                .endsWith('.pdf') ? (
+                                <DocumentViewer
+                                    documentUrl={document.file_path}
+                                    showVerifyButton={false}
+                                />
+                            ) : (
+                                <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-12 dark:border-gray-700 dark:bg-gray-800">
+                                    <div className="text-center">
+                                        <FileText className="mx-auto mb-4 h-16 w-16 text-gray-400" />
+                                        <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                            {document.file_name}
+                                        </p>
+                                        <p className="text-xs text-gray-600">
+                                            {document.file_type.toUpperCase()} •{' '}
+                                            {formatFileSize(document.file_size)}
+                                        </p>
+                                        <Button className="mt-4" asChild>
+                                            <a
+                                                href={document.file_path}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Open in New Tab
+                                            </a>
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </CardContent>
                     </Card>
 

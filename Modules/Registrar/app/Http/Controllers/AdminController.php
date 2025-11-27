@@ -139,8 +139,12 @@ class AdminController extends Controller
         // Log status change
         AuditLog::log(
             'document_ready',
+            $request->user()->id,
+            DocumentRequest::class,
+            $documentRequest->id,
+            $oldRequest,
+            $documentRequest->toArray(),
             'Document marked as ready for claim',
-            $documentRequest,
             [
                 'request_number' => $documentRequest->request_number,
                 'student_id' => $documentRequest->student_id,
@@ -244,7 +248,7 @@ class AdminController extends Controller
         $auditLogs = $query->paginate(50);
 
         // Get unique actions for filter dropdown
-        $actions = AuditLog::distinct('action')->pluck('action')->sort();
+        $actions = AuditLog::distinct()->pluck('action')->sort();
 
         // Get users who have audit logs
         $users = User::whereHas('auditLogs')

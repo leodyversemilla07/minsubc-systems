@@ -1,13 +1,18 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\SAS\Models\InsuranceRecord;
 use Spatie\Permission\Models\Role;
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
+
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    Role::create(['name' => 'sas-admin']);
+    Role::firstOrCreate(['name' => 'sas-admin']);
     $admin = \App\Models\User::factory()->create();
     $admin->assignRole('sas-admin');
-    $this->actingAs($admin);
+    actingAs($admin);
 });
 
 test('insurance records report generates PDF successfully', function () {
@@ -15,7 +20,7 @@ test('insurance records report generates PDF successfully', function () {
         'status' => 'Approved',
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records');
+    $response = get('/sas/admin/reports/insurance/records');
 
     $response->assertSuccessful();
     $response->assertHeader('Content-Type', 'application/pdf');
@@ -29,7 +34,7 @@ test('insurance records report can be filtered by policy type', function () {
         'policy_type' => 'Accident',
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?policy_type=Health');
+    $response = get('/sas/admin/reports/insurance/records?policy_type=Health');
 
     $response->assertSuccessful();
 });
@@ -42,7 +47,7 @@ test('insurance records report can be filtered by status', function () {
         'status' => 'Expired',
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?status=Approved');
+    $response = get('/sas/admin/reports/insurance/records?status=Approved');
 
     $response->assertSuccessful();
 });
@@ -55,7 +60,7 @@ test('insurance records report can be filtered by provider', function () {
         'insurance_provider' => 'SSS',
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?insurance_provider=PhilHealth');
+    $response = get('/sas/admin/reports/insurance/records?insurance_provider=PhilHealth');
 
     $response->assertSuccessful();
 });
@@ -68,7 +73,7 @@ test('insurance records report can be filtered by date range', function () {
         'effective_date' => now()->subDays(5),
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/records?date_from='.now()->subDays(7)->toDateString());
+    $response = get('/sas/admin/reports/insurance/records?date_from=' . now()->subDays(7)->toDateString());
 
     $response->assertSuccessful();
 });
@@ -76,7 +81,7 @@ test('insurance records report can be filtered by date range', function () {
 test('insurance records can be exported to Excel', function () {
     InsuranceRecord::factory()->count(5)->create();
 
-    $response = $this->get('/sas/admin/reports/insurance/records?format=excel');
+    $response = get('/sas/admin/reports/insurance/records?format=excel');
 
     $response->assertSuccessful();
     $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -89,7 +94,7 @@ test('insurance statistics report generates PDF successfully', function () {
         'expiration_date' => now()->addYear(),
     ]);
 
-    $response = $this->get('/sas/admin/reports/insurance/statistics/2024-2025');
+    $response = get('/sas/admin/reports/insurance/statistics/2024-2025');
 
     $response->assertSuccessful();
     $response->assertHeader('Content-Type', 'application/pdf');

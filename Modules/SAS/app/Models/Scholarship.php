@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\SAS\Database\Factories\ScholarshipFactory;
 
+/**
+ * @property int $id
+ * @property string $scholarship_code
+ * @property string $scholarship_name
+ * @property string $scholarship_type
+ * @property string|null $description
+ * @property string|null $provider
+ * @property bool $is_active
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<ScholarshipRecipient> $recipients
+ */
 class Scholarship extends Model
 {
     use HasFactory;

@@ -4,6 +4,7 @@ namespace Modules\SAS\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\SAS\Console\Commands\SendRenewalRemindersCommand;
 use Modules\SAS\Console\Commands\SendSASReminders;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -45,6 +46,7 @@ class SASServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
+            SendRenewalRemindersCommand::class,
             SendSASReminders::class,
         ]);
     }

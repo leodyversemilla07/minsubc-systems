@@ -1,7 +1,7 @@
 <?php
 
 test('student model has correct fillable attributes', function () {
-    $student = new \App\Models\Student();
+    $student = new \App\Models\Student;
 
     expect($student->getFillable())->toEqual([
         'student_id',
@@ -15,7 +15,7 @@ test('student model has correct fillable attributes', function () {
 });
 
 test('student model has correct primary key', function () {
-    $student = new \App\Models\Student();
+    $student = new \App\Models\Student;
 
     expect($student->getKeyName())->toBe('student_id');
     expect($student->getIncrementing())->toBeFalse();
@@ -23,7 +23,7 @@ test('student model has correct primary key', function () {
 });
 
 test('student model has correct casts', function () {
-    $student = new \App\Models\Student();
+    $student = new \App\Models\Student;
 
     $casts = $student->getCasts();
 
