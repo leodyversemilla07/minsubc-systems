@@ -1,3 +1,4 @@
+import { DocumentViewer } from '@/components/sas/document-viewer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,7 +34,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { DocumentViewer } from '@/components/sas/document-viewer';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router, useForm } from '@inertiajs/react';
@@ -201,7 +201,10 @@ export default function ShowDocument({ document }: Props) {
                             <CardTitle>Document Preview</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {document.file_type === 'pdf' || document.file_path.toLowerCase().endsWith('.pdf') ? (
+                            {document.file_type === 'pdf' ||
+                            document.file_path
+                                .toLowerCase()
+                                .endsWith('.pdf') ? (
                                 <DocumentViewer
                                     documentUrl={document.file_path}
                                     showVerifyButton={false}
