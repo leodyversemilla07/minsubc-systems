@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Registrar\Http\Controllers\AdminController;
+use Modules\Registrar\Http\Controllers\AnalyticsController;
+use Modules\Registrar\Http\Controllers\BulkOperationsController;
 use Modules\Registrar\Http\Controllers\DocumentRequestController;
 use Modules\Registrar\Http\Controllers\PaymentController;
 use Modules\Registrar\Http\Controllers\StudentController;
@@ -68,6 +70,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Audit log routes - accessible to registrar admin and system admin
         Route::get('admin/audit-logs', [AdminController::class, 'auditLogs'])->name('registrar.admin.audit-logs');
         Route::get('admin/audit-logs/{auditLog}', [AdminController::class, 'showAuditLog'])->name('registrar.admin.audit-logs.show');
+
+        // Analytics routes
+        Route::get('admin/analytics', [AnalyticsController::class, 'index'])->name('registrar.admin.analytics');
+        Route::get('admin/analytics/data', [AnalyticsController::class, 'getData'])->name('registrar.admin.analytics.data');
+
+        // Bulk operations routes
+        Route::post('admin/bulk/update-status', [BulkOperationsController::class, 'bulkUpdateStatus'])->name('registrar.admin.bulk.update-status');
+        Route::post('admin/bulk/assign', [BulkOperationsController::class, 'bulkAssign'])->name('registrar.admin.bulk.assign');
+        Route::post('admin/bulk/release', [BulkOperationsController::class, 'bulkRelease'])->name('registrar.admin.bulk.release');
+        Route::post('admin/bulk/reject', [BulkOperationsController::class, 'bulkReject'])->name('registrar.admin.bulk.reject');
+        Route::delete('admin/bulk/delete', [BulkOperationsController::class, 'bulkDelete'])->name('registrar.admin.bulk.delete');
     });
 
     // Student management - accessible to registrar admin and system admin
