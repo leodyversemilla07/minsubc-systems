@@ -70,60 +70,60 @@ Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-a
     ->name('voting.admin.')
     ->group(function () {
         // Elections
-        Route::get('elections', [ElectionController::class, 'index'])->middleware('permission:voting.elections.view')->name('elections.index');
-        Route::get('elections/create', [ElectionController::class, 'create'])->middleware('permission:voting.elections.create')->name('elections.create');
-        Route::post('elections', [ElectionController::class, 'store'])->middleware('permission:voting.elections.create')->name('elections.store');
-        Route::get('elections/{election}', [ElectionController::class, 'show'])->middleware('permission:voting.elections.view')->name('elections.show');
-        Route::get('elections/{election}/edit', [ElectionController::class, 'edit'])->middleware('permission:voting.elections.edit')->name('elections.edit');
-        Route::put('elections/{election}', [ElectionController::class, 'update'])->middleware('permission:voting.elections.edit')->name('elections.update');
-        Route::delete('elections/{election}', [ElectionController::class, 'destroy'])->middleware('permission:voting.elections.delete')->name('elections.destroy');
-        Route::post('elections/{election}/toggle-status', [ElectionController::class, 'toggleStatus'])->middleware('permission:voting.elections.toggle-status')->name('elections.toggle-status');
+        Route::get('elections', [ElectionController::class, 'index'])->middleware('permission:elections.view')->name('elections.index');
+        Route::get('elections/create', [ElectionController::class, 'create'])->middleware('permission:elections.create')->name('elections.create');
+        Route::post('elections', [ElectionController::class, 'store'])->middleware('permission:elections.create')->name('elections.store');
+        Route::get('elections/{election}', [ElectionController::class, 'show'])->middleware('permission:elections.view')->name('elections.show');
+        Route::get('elections/{election}/edit', [ElectionController::class, 'edit'])->middleware('permission:elections.edit')->name('elections.edit');
+        Route::put('elections/{election}', [ElectionController::class, 'update'])->middleware('permission:elections.edit')->name('elections.update');
+        Route::delete('elections/{election}', [ElectionController::class, 'destroy'])->middleware('permission:elections.delete')->name('elections.destroy');
+        Route::post('elections/{election}/toggle-status', [ElectionController::class, 'toggleStatus'])->middleware('permission:elections.toggle-status')->name('elections.toggle-status');
 
         // Candidates
-        Route::get('candidates', [CandidateController::class, 'index'])->middleware('permission:voting.candidates.view')->name('candidates.index');
-        Route::get('candidates/create', [CandidateController::class, 'create'])->middleware('permission:voting.candidates.create')->name('candidates.create');
-        Route::post('candidates', [CandidateController::class, 'store'])->middleware('permission:voting.candidates.create')->name('candidates.store');
-        Route::get('candidates/{candidate}', [CandidateController::class, 'show'])->middleware('permission:voting.candidates.view')->name('candidates.show');
-        Route::get('candidates/{candidate}/edit', [CandidateController::class, 'edit'])->middleware('permission:voting.candidates.edit')->name('candidates.edit');
-        Route::put('candidates/{candidate}', [CandidateController::class, 'update'])->middleware('permission:voting.candidates.edit')->name('candidates.update');
-        Route::delete('candidates/{candidate}', [CandidateController::class, 'destroy'])->middleware('permission:voting.candidates.delete')->name('candidates.destroy');
+        Route::get('candidates', [CandidateController::class, 'index'])->middleware('permission:candidates.view')->name('candidates.index');
+        Route::get('candidates/create', [CandidateController::class, 'create'])->middleware('permission:candidates.create')->name('candidates.create');
+        Route::post('candidates', [CandidateController::class, 'store'])->middleware('permission:candidates.create')->name('candidates.store');
+        Route::get('candidates/{candidate}', [CandidateController::class, 'show'])->middleware('permission:candidates.view')->name('candidates.show');
+        Route::get('candidates/{candidate}/edit', [CandidateController::class, 'edit'])->middleware('permission:candidates.edit')->name('candidates.edit');
+        Route::put('candidates/{candidate}', [CandidateController::class, 'update'])->middleware('permission:candidates.edit')->name('candidates.update');
+        Route::delete('candidates/{candidate}', [CandidateController::class, 'destroy'])->middleware('permission:candidates.delete')->name('candidates.destroy');
 
         // Positions
-        Route::get('positions', [PositionController::class, 'index'])->middleware('permission:voting.positions.view')->name('positions.index');
-        Route::get('positions/create', [PositionController::class, 'create'])->middleware('permission:voting.positions.create')->name('positions.create');
-        Route::post('positions', [PositionController::class, 'store'])->middleware('permission:voting.positions.create')->name('positions.store');
-        Route::get('positions/{position}', [PositionController::class, 'show'])->middleware('permission:voting.positions.view')->name('positions.show');
-        Route::get('positions/{position}/edit', [PositionController::class, 'edit'])->middleware('permission:voting.positions.edit')->name('positions.edit');
-        Route::put('positions/{position}', [PositionController::class, 'update'])->middleware('permission:voting.positions.edit')->name('positions.update');
-        Route::delete('positions/{position}', [PositionController::class, 'destroy'])->middleware('permission:voting.positions.delete')->name('positions.destroy');
-        Route::post('positions/{position}/move-up', [PositionController::class, 'moveUp'])->middleware('permission:voting.positions.reorder')->name('positions.move-up');
-        Route::post('positions/{position}/move-down', [PositionController::class, 'moveDown'])->middleware('permission:voting.positions.reorder')->name('positions.move-down');
+        Route::get('positions', [PositionController::class, 'index'])->middleware('permission:positions.view')->name('positions.index');
+        Route::get('positions/create', [PositionController::class, 'create'])->middleware('permission:positions.create')->name('positions.create');
+        Route::post('positions', [PositionController::class, 'store'])->middleware('permission:positions.create')->name('positions.store');
+        Route::get('positions/{position}', [PositionController::class, 'show'])->middleware('permission:positions.view')->name('positions.show');
+        Route::get('positions/{position}/edit', [PositionController::class, 'edit'])->middleware('permission:positions.edit')->name('positions.edit');
+        Route::put('positions/{position}', [PositionController::class, 'update'])->middleware('permission:positions.edit')->name('positions.update');
+        Route::delete('positions/{position}', [PositionController::class, 'destroy'])->middleware('permission:positions.delete')->name('positions.destroy');
+        Route::post('positions/{position}/move-up', [PositionController::class, 'moveUp'])->middleware('permission:positions.reorder')->name('positions.move-up');
+        Route::post('positions/{position}/move-down', [PositionController::class, 'moveDown'])->middleware('permission:positions.reorder')->name('positions.move-down');
 
         // Partylists
-        Route::get('partylists', [PartylistController::class, 'index'])->middleware('permission:voting.partylists.view')->name('partylists.index');
-        Route::get('partylists/create', [PartylistController::class, 'create'])->middleware('permission:voting.partylists.create')->name('partylists.create');
-        Route::post('partylists', [PartylistController::class, 'store'])->middleware('permission:voting.partylists.create')->name('partylists.store');
-        Route::get('partylists/{partylist}', [PartylistController::class, 'show'])->middleware('permission:voting.partylists.view')->name('partylists.show');
-        Route::get('partylists/{partylist}/edit', [PartylistController::class, 'edit'])->middleware('permission:voting.partylists.edit')->name('partylists.edit');
-        Route::put('partylists/{partylist}', [PartylistController::class, 'update'])->middleware('permission:voting.partylists.edit')->name('partylists.update');
-        Route::delete('partylists/{partylist}', [PartylistController::class, 'destroy'])->middleware('permission:voting.partylists.delete')->name('partylists.destroy');
+        Route::get('partylists', [PartylistController::class, 'index'])->middleware('permission:partylists.view')->name('partylists.index');
+        Route::get('partylists/create', [PartylistController::class, 'create'])->middleware('permission:partylists.create')->name('partylists.create');
+        Route::post('partylists', [PartylistController::class, 'store'])->middleware('permission:partylists.create')->name('partylists.store');
+        Route::get('partylists/{partylist}', [PartylistController::class, 'show'])->middleware('permission:partylists.view')->name('partylists.show');
+        Route::get('partylists/{partylist}/edit', [PartylistController::class, 'edit'])->middleware('permission:partylists.edit')->name('partylists.edit');
+        Route::put('partylists/{partylist}', [PartylistController::class, 'update'])->middleware('permission:partylists.edit')->name('partylists.update');
+        Route::delete('partylists/{partylist}', [PartylistController::class, 'destroy'])->middleware('permission:partylists.delete')->name('partylists.destroy');
 
         // Voters
-        Route::get('voters', [VoterManagementController::class, 'index'])->middleware('permission:voting.voters.view')->name('voters.index');
-        Route::get('voters/create', [VoterManagementController::class, 'create'])->middleware('permission:voting.voters.create')->name('voters.create');
-        Route::post('voters', [VoterManagementController::class, 'store'])->middleware('permission:voting.voters.create')->name('voters.store');
-        Route::get('voters/{voter}', [VoterManagementController::class, 'show'])->middleware('permission:voting.voters.view')->name('voters.show');
-        Route::put('voters/{voter}', [VoterManagementController::class, 'update'])->middleware('permission:voting.voters.edit')->name('voters.update');
-        Route::delete('voters/{voter}', [VoterManagementController::class, 'destroy'])->middleware('permission:voting.voters.delete')->name('voters.destroy');
-        Route::post('voters/{voter}/reset-password', [VoterManagementController::class, 'resetPassword'])->middleware('permission:voting.voters.reset-password')->name('voters.reset-password');
-        Route::post('voters/{voter}/reset-vote', [VoterManagementController::class, 'resetVote'])->middleware('permission:voting.voters.reset-vote')->name('voters.reset-vote');
-        Route::get('voters/{election}/export', [VoterManagementController::class, 'export'])->middleware('permission:voting.voters.export')->name('voters.export');
+        Route::get('voters', [VoterManagementController::class, 'index'])->middleware('permission:voters.view')->name('voters.index');
+        Route::get('voters/create', [VoterManagementController::class, 'create'])->middleware('permission:voters.create')->name('voters.create');
+        Route::post('voters', [VoterManagementController::class, 'store'])->middleware('permission:voters.create')->name('voters.store');
+        Route::get('voters/{voter}', [VoterManagementController::class, 'show'])->middleware('permission:voters.view')->name('voters.show');
+        Route::put('voters/{voter}', [VoterManagementController::class, 'update'])->middleware('permission:voters.edit')->name('voters.update');
+        Route::delete('voters/{voter}', [VoterManagementController::class, 'destroy'])->middleware('permission:voters.delete')->name('voters.destroy');
+        Route::post('voters/{voter}/reset-password', [VoterManagementController::class, 'resetPassword'])->middleware('permission:voters.reset-password')->name('voters.reset-password');
+        Route::post('voters/{voter}/reset-vote', [VoterManagementController::class, 'resetVote'])->middleware('permission:voters.reset-vote')->name('voters.reset-vote');
+        Route::get('voters/{election}/export', [VoterManagementController::class, 'export'])->middleware('permission:voters.export')->name('voters.export');
 
         // Activity Logs
-        Route::get('activity-logs', [ActivityLogController::class, 'index'])->middleware('permission:voting.activity-logs.view')->name('activity-logs.index');
-        Route::get('activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->middleware('permission:voting.activity-logs.view')->name('activity-logs.show');
+        Route::get('activity-logs', [ActivityLogController::class, 'index'])->middleware('permission:activity-logs.view')->name('activity-logs.index');
+        Route::get('activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->middleware('permission:activity-logs.view')->name('activity-logs.show');
 
         // Feedback
-        Route::get('feedback', [AdminFeedbackController::class, 'index'])->middleware('permission:voting.feedback.view')->name('feedback.index');
-        Route::get('feedback/{feedback}', [AdminFeedbackController::class, 'show'])->middleware('permission:voting.feedback.view')->name('feedback.show');
+        Route::get('feedback', [AdminFeedbackController::class, 'index'])->middleware('permission:feedback.view')->name('feedback.index');
+        Route::get('feedback/{feedback}', [AdminFeedbackController::class, 'show'])->middleware('permission:feedback.view')->name('feedback.show');
     });
