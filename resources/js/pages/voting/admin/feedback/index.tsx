@@ -1,6 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyDescription,
@@ -125,7 +131,7 @@ export default function Index({
                         className={`h-4 w-4 ${
                             star <= rating
                                 ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
+                                : 'text-muted-foreground'
                         }`}
                     />
                 ))}
@@ -133,18 +139,29 @@ export default function Index({
         );
     };
 
+    const getExperienceBadgeVariant = (
+        experience: string | null,
+    ): 'default' | 'secondary' | 'destructive' | 'outline' => {
+        if (!experience) return 'secondary';
+        switch (experience) {
+            case 'excellent':
+                return 'default';
+            case 'good':
+                return 'secondary';
+            case 'average':
+                return 'outline';
+            case 'poor':
+                return 'destructive';
+            default:
+                return 'secondary';
+        }
+    };
+
     const getExperienceBadge = (experience: string | null) => {
         if (!experience) return null;
 
-        const colors: Record<string, string> = {
-            excellent: 'bg-green-100 text-green-800',
-            good: 'bg-blue-100 text-blue-800',
-            average: 'bg-yellow-100 text-yellow-800',
-            poor: 'bg-red-100 text-red-800',
-        };
-
         return (
-            <Badge className={colors[experience] || ''}>
+            <Badge variant={getExperienceBadgeVariant(experience)}>
                 {experience.charAt(0).toUpperCase() + experience.slice(1)}
             </Badge>
         );
@@ -158,7 +175,7 @@ export default function Index({
                 {/* Header */}
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                        <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
                             Voter Feedback
                         </h1>
                         <p className="text-muted-foreground">
@@ -255,12 +272,12 @@ export default function Index({
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-gray-600">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
                                 Total Feedback
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">
+                            <div className="text-2xl font-bold text-foreground">
                                 {statistics.total}
                             </div>
                         </CardContent>
@@ -268,13 +285,13 @@ export default function Index({
 
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-gray-600">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
                                 Average Rating
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="flex items-center gap-2">
-                                <span className="text-2xl font-bold">
+                                <span className="text-2xl font-bold text-foreground">
                                     {statistics.average_rating}
                                 </span>
                                 <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
@@ -286,14 +303,14 @@ export default function Index({
                         <>
                             <Card>
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-sm font-medium text-gray-600">
+                                    <CardTitle className="text-sm font-medium text-muted-foreground">
                                         Would Recommend
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex items-center gap-2">
-                                        <ThumbsUp className="h-5 w-5 text-green-600" />
-                                        <span className="text-2xl font-bold text-green-600">
+                                        <ThumbsUp className="h-5 w-5 text-primary" />
+                                        <span className="text-2xl font-bold text-primary">
                                             {statistics.would_recommend.yes}
                                         </span>
                                     </div>
@@ -302,14 +319,14 @@ export default function Index({
 
                             <Card>
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-sm font-medium text-gray-600">
+                                    <CardTitle className="text-sm font-medium text-muted-foreground">
                                         Would Not Recommend
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex items-center gap-2">
-                                        <ThumbsDown className="h-5 w-5 text-red-600" />
-                                        <span className="text-2xl font-bold text-red-600">
+                                        <ThumbsDown className="h-5 w-5 text-destructive" />
+                                        <span className="text-2xl font-bold text-destructive">
                                             {statistics.would_recommend.no}
                                         </span>
                                     </div>
@@ -320,121 +337,146 @@ export default function Index({
                 </div>
 
                 {/* Table */}
-                <div>
-                    {feedback.data.length === 0 ? (
-                        <Empty>
-                            <EmptyMedia>
-                                <MessageSquare className="h-12 w-12" />
-                            </EmptyMedia>
-                            <EmptyHeader>
-                                <EmptyTitle>No Feedback Yet</EmptyTitle>
-                                <EmptyDescription>
-                                    {filters.election_id ||
-                                    filters.rating ||
-                                    filters.experience
-                                        ? 'No feedback found matching your filters.'
-                                        : 'No voter feedback has been submitted yet.'}
-                                </EmptyDescription>
-                            </EmptyHeader>
-                        </Empty>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Voter ID</TableHead>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead>Rating</TableHead>
-                                        <TableHead>Experience</TableHead>
-                                        <TableHead>Comment</TableHead>
-                                        <TableHead>Date</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {feedback.data.map((item) => (
-                                        <TableRow key={item.id}>
-                                            <TableCell className="font-medium">
-                                                {item.voter.voters_id}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {item.election.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {renderStars(item.rating)}
-                                            </TableCell>
-                                            <TableCell>
-                                                {getExperienceBadge(
-                                                    item.experience,
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="max-w-xs">
-                                                {item.comment ? (
-                                                    <div className="truncate text-sm text-gray-600">
-                                                        {item.comment}
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-sm text-gray-400">
-                                                        No comment
-                                                    </span>
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {format(
-                                                    new Date(item.created_at),
-                                                    'MMM dd, yyyy',
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <Link
-                                                    href={voting.admin.feedback.show.url(
-                                                        {
-                                                            feedback: item.id,
-                                                        },
-                                                    )}
-                                                >
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                    >
-                                                        <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                </Link>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-
-                            {/* Pagination */}
-                            {feedback.last_page > 1 && (
-                                <div className="mt-6 flex justify-center gap-1">
-                                    {feedback.links.map((link, index) => (
-                                        <Button
-                                            key={index}
-                                            variant={
-                                                link.active
-                                                    ? 'default'
-                                                    : 'ghost'
-                                            }
-                                            size="sm"
-                                            disabled={!link.url}
-                                            onClick={() =>
-                                                link.url &&
-                                                router.visit(link.url)
-                                            }
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                <Card>
+                    {feedback.data.length > 0 && (
+                        <CardHeader>
+                            <CardTitle className="text-foreground">
+                                Feedback Entries
+                            </CardTitle>
+                            <CardDescription>
+                                Showing {feedback.data.length} of{' '}
+                                {feedback.total} feedback entries
+                            </CardDescription>
+                        </CardHeader>
                     )}
-                </div>
+                    <CardContent className="p-6">
+                        {feedback.data.length === 0 ? (
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <MessageSquare />
+                                    </EmptyMedia>
+                                    <EmptyTitle>No Feedback Yet</EmptyTitle>
+                                    <EmptyDescription>
+                                        {filters.election_id ||
+                                        filters.rating ||
+                                        filters.experience
+                                            ? 'No feedback found matching your filters.'
+                                            : 'No voter feedback has been submitted yet.'}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-muted">
+                                            <TableHead className="text-foreground">
+                                                Voter ID
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Election
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Rating
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Experience
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Comment
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Date
+                                            </TableHead>
+                                            <TableHead className="text-right text-foreground">
+                                                Actions
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {feedback.data.map((item) => (
+                                            <TableRow key={item.id}>
+                                                <TableCell className="font-medium text-foreground">
+                                                    {item.voter.voters_id}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {item.election.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {renderStars(item.rating)}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {getExperienceBadge(
+                                                        item.experience,
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="max-w-xs">
+                                                    {item.comment ? (
+                                                        <div className="truncate text-sm text-muted-foreground">
+                                                            {item.comment}
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-sm text-muted-foreground">
+                                                            No comment
+                                                        </span>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {format(
+                                                        new Date(item.created_at),
+                                                        'MMM dd, yyyy',
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Link
+                                                        href={voting.admin.feedback.show.url(
+                                                            {
+                                                                feedback: item.id,
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+
+                                {/* Pagination */}
+                                {feedback.last_page > 1 && (
+                                    <div className="mt-6 flex justify-center gap-1">
+                                        {feedback.links.map((link, index) => (
+                                            <Button
+                                                key={index}
+                                                variant={
+                                                    link.active
+                                                        ? 'default'
+                                                        : 'ghost'
+                                                }
+                                                size="sm"
+                                                disabled={!link.url}
+                                                onClick={() =>
+                                                    link.url &&
+                                                    router.visit(link.url)
+                                                }
+                                                dangerouslySetInnerHTML={{
+                                                    __html: link.label,
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );

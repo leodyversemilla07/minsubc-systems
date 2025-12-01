@@ -30,6 +30,25 @@ class Election extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = [
+        'computed_status',
+    ];
+
+    /**
+     * Get the computed status based on end_time.
+     */
+    public function getComputedStatusAttribute(): string
+    {
+        if ($this->end_time === null) {
+            return 'active';
+        }
+
+        return $this->end_time->isPast() ? 'ended' : 'active';
+    }
+
+    /**
      * Get the partylists for the election.
      */
     public function partylists(): HasMany
@@ -79,10 +98,19 @@ class Election extends Model
 
     /**
      * Check if the election is active.
+     * Now checks both the status flag and the end_time.
      */
     public function isActive(): bool
     {
-        return $this->status === true;
+        if (! $this->status) {
+            return false;
+        }
+
+        if ($this->end_time === null) {
+            return true;
+        }
+
+        return ! $this->end_time->isPast();
     }
 
     /**

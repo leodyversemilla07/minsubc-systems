@@ -1,10 +1,17 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Form, Head, Link, router } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -33,67 +40,62 @@ export default function Create({
     const [selectedElection, setSelectedElection] =
         useState(selectedElectionId);
 
-    const handleElectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const electionId = e.target.value;
-        setSelectedElection(Number(electionId));
+    const handleElectionChange = (value: string) => {
+        setSelectedElection(Number(value));
         router.get(
-            voting.admin.positions.create.url() + `?election_id=${electionId}`,
+            voting.admin.positions.create.url() + `?election_id=${value}`,
             {},
             { preserveState: false },
         );
-    };
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        router.post(voting.admin.positions.store.url(), formData);
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Add Position" />
 
-            <div className="max-w-3xl">
-                <div className="rounded-lg bg-white shadow-md">
-                    {/* Header */}
-                    <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Add New Position
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-600">
-                            Create a new position for the election
-                        </p>
-                    </div>
+            <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
+                <div>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Add New Position</h1>
+                    <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                        Create a new position for the election
+                    </p>
+                </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6 p-6">
-                        {/* Election */}
+                <Form
+                    action={voting.admin.positions.store.url()}
+                    method="post"
+                >
+                    {({ processing }) => (
                         <FieldGroup>
+                            {/* Election */}
                             <Field>
-                                <label
-                                    htmlFor="election_id"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="election_id">
                                     Election{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    id="election_id"
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
+                                <input
+                                    type="hidden"
                                     name="election_id"
-                                    required
                                     value={selectedElection}
-                                    onChange={handleElectionChange}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                                />
+                                <Select
+                                    value={selectedElection.toString()}
+                                    onValueChange={handleElectionChange}
                                 >
-                                    {elections.map((election) => (
-                                        <option
-                                            key={election.id}
-                                            value={election.id}
-                                        >
-                                            {election.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select election" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {elections.map((election) => (
+                                            <SelectItem
+                                                key={election.id}
+                                                value={election.id.toString()}
+                                            >
+                                                {election.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 {errors.election_id && (
                                     <FieldError>
                                         <AlertCircle className="mr-1 h-4 w-4" />
@@ -101,18 +103,13 @@ export default function Create({
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Position Description */}
-                        <FieldGroup>
+                            {/* Position Description */}
                             <Field>
-                                <label
-                                    htmlFor="description"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="description">
                                     Position Title{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="text"
                                     id="description"
@@ -122,7 +119,7 @@ export default function Create({
                                     placeholder="e.g., President, Vice President, Secretary"
                                     className={
                                         errors.description
-                                            ? 'border-red-500'
+                                            ? 'border-destructive'
                                             : ''
                                     }
                                 />
@@ -133,18 +130,13 @@ export default function Create({
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Max Vote */}
-                        <FieldGroup>
+                            {/* Max Vote */}
                             <Field>
-                                <label
-                                    htmlFor="max_vote"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="max_vote">
                                     Maximum Votes{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="number"
                                     id="max_vote"
@@ -154,10 +146,12 @@ export default function Create({
                                     max={20}
                                     defaultValue={1}
                                     className={
-                                        errors.max_vote ? 'border-red-500' : ''
+                                        errors.max_vote
+                                            ? 'border-destructive'
+                                            : ''
                                     }
                                 />
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     Number of candidates voters can select for
                                     this position (1-20)
                                 </p>
@@ -168,18 +162,13 @@ export default function Create({
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Priority */}
-                        <FieldGroup>
+                            {/* Priority */}
                             <Field>
-                                <label
-                                    htmlFor="priority"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="priority">
                                     Display Priority{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="number"
                                     id="priority"
@@ -188,10 +177,12 @@ export default function Create({
                                     min={0}
                                     defaultValue={0}
                                     className={
-                                        errors.priority ? 'border-red-500' : ''
+                                        errors.priority
+                                            ? 'border-destructive'
+                                            : ''
                                     }
                                 />
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     Order in which this position appears (lower
                                     numbers appear first)
                                 </p>
@@ -202,24 +193,36 @@ export default function Create({
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Form Actions */}
-                        <div className="flex gap-4 border-t pt-4">
-                            <Button
-                                type="submit"
-                                className="bg-blue-600 hover:bg-blue-700"
-                            >
-                                Create Position
-                            </Button>
-                            <Link href={voting.admin.positions.index.url()}>
-                                <Button type="button" variant="outline">
-                                    Cancel
-                                </Button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+                            {/* Actions */}
+                            <Field>
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                                    <Link
+                                        href={voting.admin.positions.index.url()}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        {processing
+                                            ? 'Creating...'
+                                            : 'Create Position'}
+                                    </Button>
+                                </div>
+                            </Field>
+                        </FieldGroup>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

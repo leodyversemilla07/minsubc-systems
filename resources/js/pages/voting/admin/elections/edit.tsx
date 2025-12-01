@@ -1,17 +1,28 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup } from '@/components/ui/field';
+import { Calendar } from '@/components/ui/calendar';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import { Switch } from '@/components/ui/switch';
+import { cn } from '@/lib/utils';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link } from '@inertiajs/react';
-import { AlertCircle } from 'lucide-react';
+import { format } from 'date-fns';
+import { AlertCircle, CalendarIcon, Clock } from 'lucide-react';
+import { useState } from 'react';
 
 interface Election {
     id: number;
     name: string;
     election_code: string;
-    status: 'active' | 'ended';
+    status: boolean;
+    computed_status: 'active' | 'ended';
     end_time: string | null;
 }
 
@@ -21,10 +32,28 @@ interface Props {
 }
 
 export default function Edit({ election, errors = {} }: Props) {
-    // Format end_time for datetime-local input
-    const formattedEndTime = election.end_time
-        ? new Date(election.end_time).toISOString().slice(0, 16)
-        : '';
+    // Parse existing end_time
+    const initialEndDate = election.end_time
+        ? new Date(election.end_time)
+        : undefined;
+    const initialEndTime = election.end_time
+        ? format(new Date(election.end_time), 'HH:mm')
+        : '17:00';
+
+    const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate);
+    const [endTime, setEndTime] = useState<string>(initialEndTime);
+    const [datePickerOpen, setDatePickerOpen] = useState(false);
+    const [isActive, setIsActive] = useState<boolean>(election.status);
+
+    // Combine date and time into a single value for the hidden input
+    const getEndTimeValue = () => {
+        if (!endDate) return '';
+        const dateStr = format(endDate, 'yyyy-MM-dd');
+        if (endTime) {
+            return `${dateStr}T${endTime}`;
+        }
+        return `${dateStr}T00:00`;
+    };
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -43,173 +72,223 @@ export default function Edit({ election, errors = {} }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Election" />
 
-            <div className="max-w-3xl">
-                <div className="rounded-lg bg-white shadow-md">
-                    {/* Header */}
-                    <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Edit Election
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-600">
-                            Update election details
-                        </p>
-                    </div>
+            <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
+                <div>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Edit Election</h1>
+                    <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                        Update the election details and settings
+                    </p>
+                </div>
 
-                    {/* Form */}
-                    <Form
-                        action={voting.admin.elections.update.url({
-                            election: election.id,
-                        })}
-                        method="post"
-                    >
-                        {({ processing }) => (
-                            <div className="space-y-6 p-6">
+                <Form
+                    action={voting.admin.elections.update.url({
+                        election: election.id,
+                    })}
+                    method="post"
+                >
+                    {({ processing }) => (
+                        <FieldGroup>
+                            <input
+                                type="hidden"
+                                name="_method"
+                                value="PUT"
+                            />
+
+                            {/* Election Name */}
+                            <Field>
+                                <FieldLabel htmlFor="name">
+                                    Election Name{' '}
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
+                                <Input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    defaultValue={election.name}
+                                    required
+                                    placeholder="e.g., Student Council Election 2025"
+                                    className={
+                                        errors.name ? 'border-destructive' : ''
+                                    }
+                                />
+                                {errors.name && (
+                                    <FieldError>
+                                        <AlertCircle className="mr-1 h-4 w-4" />
+                                        {errors.name}
+                                    </FieldError>
+                                )}
+                            </Field>
+
+                            {/* Election Code (Read-only) */}
+                            <Field>
+                                <FieldLabel htmlFor="election_code">
+                                    Election Code
+                                </FieldLabel>
+                                <Input
+                                    type="text"
+                                    id="election_code"
+                                    value={election.election_code}
+                                    disabled
+                                    className="bg-muted text-muted-foreground"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Election code cannot be changed
+                                </p>
+                            </Field>
+
+                            {/* End Date and Time */}
+                            <Field>
+                                <FieldLabel>End Date & Time</FieldLabel>
                                 <input
                                     type="hidden"
-                                    name="_method"
-                                    value="PUT"
+                                    name="end_time"
+                                    value={getEndTimeValue()}
                                 />
-
-                                {/* Election Name */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
-                                            htmlFor="name"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+                                    <Popover
+                                        open={datePickerOpen}
+                                        onOpenChange={setDatePickerOpen}
+                                    >
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                id="end_date"
+                                                type="button"
+                                                className={cn(
+                                                    'justify-start text-left font-normal',
+                                                    !endDate &&
+                                                        'text-muted-foreground',
+                                                    errors.end_time &&
+                                                        'border-destructive',
+                                                )}
+                                            >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                {endDate
+                                                    ? format(endDate, 'PPP')
+                                                    : 'Pick a date'}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="w-auto p-0"
+                                            align="start"
                                         >
-                                            Election Name{' '}
-                                            <span className="text-red-500">
-                                                *
-                                            </span>
-                                        </label>
+                                            <Calendar
+                                                mode="single"
+                                                selected={endDate}
+                                                onSelect={(date) => {
+                                                    setEndDate(date);
+                                                    setDatePickerOpen(false);
+                                                }}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <div className="relative">
+                                        <Clock className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
                                         <Input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            defaultValue={election.name}
-                                            required
-                                            className={
-                                                errors.name
-                                                    ? 'border-red-500'
-                                                    : ''
+                                            type="time"
+                                            id="end_time_picker"
+                                            value={endTime}
+                                            onChange={(e) =>
+                                                setEndTime(e.target.value)
                                             }
+                                            className={cn(
+                                                'pl-10 sm:w-40',
+                                                errors.end_time &&
+                                                    'border-destructive',
+                                            )}
                                         />
-                                        {errors.name && (
-                                            <FieldError>
-                                                <AlertCircle className="mr-1 h-4 w-4" />
-                                                {errors.name}
-                                            </FieldError>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => {
+                                            setEndDate(undefined);
+                                            setEndTime('17:00');
+                                        }}
+                                        className="h-auto px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
+                                    >
+                                        Clear date
+                                    </Button>
+                                    <span className="text-xs text-muted-foreground">
+                                        Leave empty for no end time limit
+                                    </span>
+                                </div>
+                                {errors.end_time && (
+                                    <FieldError>
+                                        <AlertCircle className="mr-1 h-4 w-4" />
+                                        {errors.end_time}
+                                    </FieldError>
+                                )}
+                            </Field>
 
-                                {/* Election Code (Read-only) */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
-                                            htmlFor="election_code"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
-                                        >
-                                            Election Code
-                                        </label>
-                                        <Input
-                                            type="text"
-                                            id="election_code"
-                                            value={election.election_code}
-                                            disabled
-                                            className="bg-gray-50 text-gray-500"
-                                        />
-                                        <p className="mt-1 text-xs text-gray-500">
-                                            Election code cannot be changed
-                                        </p>
-                                    </Field>
-                                </FieldGroup>
-
-                                {/* End Time */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
-                                            htmlFor="end_time"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
-                                        >
-                                            End Time
-                                        </label>
-                                        <Input
-                                            type="datetime-local"
-                                            id="end_time"
-                                            name="end_time"
-                                            defaultValue={formattedEndTime}
-                                            className={
-                                                errors.end_time
-                                                    ? 'border-red-500'
-                                                    : ''
-                                            }
-                                        />
-                                        {errors.end_time && (
-                                            <FieldError>
-                                                <AlertCircle className="mr-1 h-4 w-4" />
-                                                {errors.end_time}
-                                            </FieldError>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
-
-                                {/* Status */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
+                            {/* Active Status Toggle */}
+                            <Field>
+                                <div className="flex items-center justify-between rounded-lg border p-4">
+                                    <div className="space-y-0.5">
+                                        <FieldLabel
                                             htmlFor="status"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                            className="text-base"
                                         >
-                                            Status{' '}
-                                            <span className="text-red-500">
-                                                *
-                                            </span>
-                                        </label>
-                                        <select
-                                            id="status"
-                                            name="status"
-                                            required
-                                            defaultValue={election.status}
-                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                                        >
-                                            <option value="active">
-                                                Active
-                                            </option>
-                                            <option value="ended">Ended</option>
-                                        </select>
-                                        {errors.status && (
-                                            <FieldError>
-                                                <AlertCircle className="mr-1 h-4 w-4" />
-                                                {errors.status}
-                                            </FieldError>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
+                                            Election Active
+                                        </FieldLabel>
+                                        <p className="text-sm text-muted-foreground">
+                                            {isActive
+                                                ? 'Election is currently accepting votes'
+                                                : 'Election is disabled and not accepting votes'}
+                                        </p>
+                                    </div>
+                                    <Switch
+                                        id="status"
+                                        checked={isActive}
+                                        onCheckedChange={setIsActive}
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value={isActive ? '1' : '0'}
+                                    />
+                                </div>
+                                {errors.status && (
+                                    <FieldError>
+                                        <AlertCircle className="mr-1 h-4 w-4" />
+                                        {errors.status}
+                                    </FieldError>
+                                )}
+                            </Field>
 
-                                {/* Form Actions */}
-                                <div className="flex gap-4 border-t pt-4">
+                            {/* Actions */}
+                            <Field>
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                                    <Link
+                                        href={voting.admin.elections.index.url()}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Link>
                                     <Button
                                         type="submit"
                                         disabled={processing}
-                                        className="bg-blue-600 hover:bg-blue-700"
+                                        className="w-full sm:w-auto"
                                     >
                                         {processing
                                             ? 'Updating...'
                                             : 'Update Election'}
                                     </Button>
-                                    <Link
-                                        href={voting.admin.elections.index.url()}
-                                    >
-                                        <Button type="button" variant="outline">
-                                            Cancel
-                                        </Button>
-                                    </Link>
                                 </div>
-                            </div>
-                        )}
-                    </Form>
-                </div>
+                            </Field>
+                        </FieldGroup>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

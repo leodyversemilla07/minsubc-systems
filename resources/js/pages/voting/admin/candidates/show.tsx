@@ -1,4 +1,10 @@
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -39,7 +45,7 @@ interface Vote {
 }
 
 interface Candidate {
-    candidate_id: number;
+    id: number;
     firstname: string;
     lastname: string;
     fullname: string;
@@ -64,7 +70,7 @@ export default function Show({ candidate }: Props) {
         {
             title: candidate.fullname,
             href: voting.admin.candidates.show.url({
-                candidate: candidate.candidate_id,
+                candidate: candidate.id,
             }),
         },
     ];
@@ -73,19 +79,19 @@ export default function Show({ candidate }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Candidate: ${candidate.fullname}`} />
 
-            <div className="max-w-4xl">
+            <div className="max-w-4xl space-y-6 p-6 md:space-y-8 md:p-8">
                 {/* Header */}
-                <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                    <h1 className="text-3xl font-bold text-gray-800">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                    <h1 className="text-3xl font-bold text-foreground">
                         Candidate Details
                     </h1>
                     <div className="flex gap-2">
                         <Link
                             href={voting.admin.candidates.edit.url({
-                                candidate: candidate.candidate_id,
+                                candidate: candidate.id,
                             })}
                         >
-                            <Button className="bg-indigo-600 hover:bg-indigo-700">
+                            <Button>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Button>
@@ -99,139 +105,144 @@ export default function Show({ candidate }: Props) {
                 <div className="grid gap-6 md:grid-cols-3">
                     {/* Candidate Info */}
                     <div className="md:col-span-1">
-                        <div className="rounded-lg bg-white p-6 shadow-md">
-                            {/* Photo */}
-                            {candidate.photo ? (
-                                <img
-                                    src={`/storage/${candidate.photo}`}
-                                    alt={candidate.fullname}
-                                    className="mb-4 aspect-square w-full rounded-lg object-cover"
-                                />
-                            ) : (
-                                <div className="mb-4 flex aspect-square w-full items-center justify-center rounded-lg bg-gray-200 text-6xl font-bold text-gray-500">
-                                    {candidate.firstname.charAt(0)}
-                                    {candidate.lastname.charAt(0)}
+                        <Card>
+                            <CardContent className="pt-6">
+                                {/* Photo */}
+                                {candidate.photo ? (
+                                    <img
+                                        src={`/storage/${candidate.photo}`}
+                                        alt={candidate.fullname}
+                                        className="mb-4 aspect-square w-full rounded-lg object-cover"
+                                    />
+                                ) : (
+                                    <div className="mb-4 flex aspect-square w-full items-center justify-center rounded-lg bg-muted text-6xl font-bold text-muted-foreground">
+                                        {candidate.firstname.charAt(0)}
+                                        {candidate.lastname.charAt(0)}
+                                    </div>
+                                )}
+
+                                <h2 className="mb-2 text-2xl font-bold text-foreground">
+                                    {candidate.fullname}
+                                </h2>
+
+                                {candidate.partylist ? (
+                                    <p className="mb-4 font-medium text-primary">
+                                        {candidate.partylist.name}
+                                    </p>
+                                ) : (
+                                    <p className="mb-4 text-muted-foreground italic">
+                                        Independent
+                                    </p>
+                                )}
+
+                                <div className="space-y-3 border-t pt-4">
+                                    <div>
+                                        <div className="text-xs text-muted-foreground uppercase">
+                                            Election
+                                        </div>
+                                        <div className="text-sm font-medium text-foreground">
+                                            {candidate.election.name}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div className="text-xs text-muted-foreground uppercase">
+                                            Position
+                                        </div>
+                                        <div className="text-sm font-medium text-foreground">
+                                            {candidate.position.description}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div className="text-xs text-muted-foreground uppercase">
+                                            Total Votes
+                                        </div>
+                                        <div className="text-2xl font-bold text-primary">
+                                            {voteCount}
+                                        </div>
+                                    </div>
                                 </div>
-                            )}
-
-                            <h2 className="mb-2 text-2xl font-bold text-gray-800">
-                                {candidate.fullname}
-                            </h2>
-
-                            {candidate.partylist ? (
-                                <p className="mb-4 font-medium text-blue-600">
-                                    {candidate.partylist.name}
-                                </p>
-                            ) : (
-                                <p className="mb-4 text-gray-500 italic">
-                                    Independent
-                                </p>
-                            )}
-
-                            <div className="space-y-3 border-t pt-4">
-                                <div>
-                                    <div className="text-xs text-gray-500 uppercase">
-                                        Election
-                                    </div>
-                                    <div className="text-sm font-medium text-gray-800">
-                                        {candidate.election.name}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div className="text-xs text-gray-500 uppercase">
-                                        Position
-                                    </div>
-                                    <div className="text-sm font-medium text-gray-800">
-                                        {candidate.position.description}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div className="text-xs text-gray-500 uppercase">
-                                        Total Votes
-                                    </div>
-                                    <div className="text-2xl font-bold text-blue-600">
-                                        {voteCount}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
                     </div>
 
                     {/* Platform & Votes */}
                     <div className="space-y-6 md:col-span-2">
                         {/* Platform */}
                         {candidate.platform && (
-                            <div className="rounded-lg bg-white p-6 shadow-md">
-                                <h3 className="mb-3 text-lg font-bold text-gray-800">
-                                    Platform / Bio
-                                </h3>
-                                <p className="whitespace-pre-line text-gray-700">
-                                    {candidate.platform}
-                                </p>
-                            </div>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Platform / Bio</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="whitespace-pre-line text-muted-foreground">
+                                        {candidate.platform}
+                                    </p>
+                                </CardContent>
+                            </Card>
                         )}
 
                         {/* Votes List */}
-                        <div className="rounded-lg bg-white p-6 shadow-md">
-                            <h3 className="mb-4 text-lg font-bold text-gray-800">
-                                Votes Received ({voteCount})
-                            </h3>
-
-                            {voteCount === 0 ? (
-                                <p className="py-8 text-center text-gray-500">
-                                    No votes yet
-                                </p>
-                            ) : (
-                                <div className="space-y-2">
-                                    {candidate.votes.map((vote, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex items-center justify-between border-b py-2 last:border-0"
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-600">
-                                                    {index + 1}
-                                                </div>
-                                                <div>
-                                                    <div className="text-sm font-medium text-gray-800">
-                                                        {vote.voter.student
-                                                            ?.user?.full_name ||
-                                                            `Voter #${vote.voter.voters_id}`}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Votes Received ({voteCount})</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {voteCount === 0 ? (
+                                    <p className="py-8 text-center text-muted-foreground">
+                                        No votes yet
+                                    </p>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {candidate.votes.map((vote, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex items-center justify-between border-b py-2 last:border-0"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-bold text-muted-foreground">
+                                                        {index + 1}
                                                     </div>
-                                                    {vote.voter.student && (
-                                                        <div className="text-xs text-gray-500">
-                                                            {
-                                                                vote.voter
-                                                                    .student
-                                                                    .course
-                                                            }{' '}
-                                                            {
-                                                                vote.voter
-                                                                    .student
-                                                                    .year_level
-                                                            }
+                                                    <div>
+                                                        <div className="text-sm font-medium text-foreground">
+                                                            {vote.voter.student
+                                                                ?.user?.full_name ||
+                                                                `Voter #${vote.voter.voters_id}`}
                                                         </div>
-                                                    )}
+                                                        {vote.voter.student && (
+                                                            <div className="text-xs text-muted-foreground">
+                                                                {
+                                                                    vote.voter
+                                                                        .student
+                                                                        .course
+                                                                }{' '}
+                                                                {
+                                                                    vote.voter
+                                                                        .student
+                                                                        .year_level
+                                                                }
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {new Date(
+                                                        vote.timestamp,
+                                                    ).toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric',
+                                                        hour: 'numeric',
+                                                        minute: '2-digit',
+                                                    })}
                                                 </div>
                                             </div>
-                                            <div className="text-xs text-gray-500">
-                                                {new Date(
-                                                    vote.timestamp,
-                                                ).toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric',
-                                                    hour: 'numeric',
-                                                    minute: '2-digit',
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
             </div>

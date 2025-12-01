@@ -1,4 +1,22 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyContent,
@@ -49,15 +67,15 @@ interface Partylist {
 }
 
 interface Candidate {
-    candidate_id: number;
+    id: number;
     firstname: string;
     lastname: string;
     fullname: string;
     photo: string | null;
     platform: string | null;
-    election: Election;
-    position: Position;
-    partylist: Partylist | null;
+    election?: Election;
+    position?: Position;
+    partylist?: Partylist | null;
 }
 
 interface Props {
@@ -71,16 +89,6 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
-    const handleDelete = (candidate: Candidate) => {
-        if (confirm('Delete this candidate?')) {
-            router.delete(
-                voting.admin.candidates.destroy.url({
-                    candidate: candidate.candidate_id,
-                }),
-            );
-        }
-    };
-
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.candidates.index.url(),
@@ -111,7 +119,7 @@ export default function Index({
                                 : '')
                         }
                     >
-                        <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Candidate
                         </Button>
@@ -142,13 +150,13 @@ export default function Index({
                 </div>
 
                 {/* Candidates List */}
-                <div>
+                <Card>
                     {candidates.length === 0 ? (
                         <Empty>
-                            <EmptyMedia>
-                                <Users className="h-16 w-16" />
-                            </EmptyMedia>
                             <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <Users />
+                                </EmptyMedia>
                                 <EmptyTitle>No candidates yet</EmptyTitle>
                                 <EmptyDescription>
                                     Add candidates to get started
@@ -163,7 +171,7 @@ export default function Index({
                                             : '')
                                     }
                                 >
-                                    <Button className="bg-blue-600 hover:bg-blue-700">
+                                    <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add Candidate
                                     </Button>
@@ -171,120 +179,154 @@ export default function Index({
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Candidate</TableHead>
-                                        <TableHead>Position</TableHead>
-                                        <TableHead>Partylist</TableHead>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {candidates.map((candidate) => (
-                                        <TableRow key={candidate.candidate_id}>
-                                            <TableCell>
-                                                <div className="flex items-center gap-3">
-                                                    {candidate.photo ? (
-                                                        <img
-                                                            src={`/storage/${candidate.photo}`}
-                                                            alt={
-                                                                candidate.fullname
-                                                            }
-                                                            className="h-10 w-10 rounded-full object-cover"
-                                                        />
-                                                    ) : (
-                                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 font-bold text-gray-500">
-                                                            {candidate.firstname.charAt(
-                                                                0,
-                                                            )}
-                                                            {candidate.lastname.charAt(
-                                                                0,
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                    <div className="font-medium text-gray-800">
-                                                        {candidate.fullname}
-                                                    </div>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {candidate.position.description}
-                                            </TableCell>
-                                            <TableCell className="text-sm">
-                                                {candidate.partylist ? (
-                                                    <span className="text-blue-600">
-                                                        {
-                                                            candidate.partylist
-                                                                .name
-                                                        }
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-gray-500 italic">
-                                                        Independent
-                                                    </span>
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {candidate.election.name}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Link
-                                                        href={voting.admin.candidates.show.url(
-                                                            {
-                                                                candidate:
-                                                                    candidate.candidate_id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Link
-                                                        href={voting.admin.candidates.edit.url(
-                                                            {
-                                                                candidate:
-                                                                    candidate.candidate_id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                candidate,
-                                                            )
-                                                        }
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
+                        <>
+                            <CardHeader>
+                                <CardTitle>All Candidates</CardTitle>
+                                <CardDescription>
+                                    View and manage all election candidates
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Candidate</TableHead>
+                                            <TableHead>Position</TableHead>
+                                            <TableHead>Partylist</TableHead>
+                                            <TableHead>Election</TableHead>
+                                            <TableHead className="text-right">
+                                                Actions
+                                            </TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {candidates
+                                            .filter((candidate) => candidate.id)
+                                            .map((candidate) => (
+                                            <TableRow key={candidate.id}>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-3">
+                                                        {candidate.photo ? (
+                                                            <img
+                                                                src={`/storage/${candidate.photo}`}
+                                                                alt={
+                                                                    candidate.fullname
+                                                                }
+                                                                className="h-10 w-10 rounded-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
+                                                                {candidate.firstname.charAt(
+                                                                    0,
+                                                                )}
+                                                                {candidate.lastname.charAt(
+                                                                    0,
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        <div className="font-medium text-foreground">
+                                                            {candidate.fullname}
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {candidate.position?.description ?? 'N/A'}
+                                                </TableCell>
+                                                <TableCell className="text-sm">
+                                                    {candidate.partylist ? (
+                                                        <span className="text-primary">
+                                                            {
+                                                                candidate.partylist
+                                                                    .name
+                                                            }
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-muted-foreground italic">
+                                                            Independent
+                                                        </span>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {candidate.election?.name ?? 'N/A'}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <Link
+                                                            href={voting.admin.candidates.show.url(
+                                                                {
+                                                                    candidate:
+                                                                        candidate.id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Link
+                                                            href={voting.admin.candidates.edit.url(
+                                                                {
+                                                                    candidate:
+                                                                        candidate.id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>
+                                                                        Delete Candidate
+                                                                    </AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Are you sure you want to delete "{candidate.fullname}"? This action cannot be undone and will remove all associated votes.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        onClick={() =>
+                                                                            router.delete(
+                                                                                voting.admin.candidates.destroy.url({
+                                                                                    candidate: candidate.id,
+                                                                                }),
+                                                                            )
+                                                                        }
+                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                    >
+                                                                        Delete
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </>
                     )}
-                </div>
+                </Card>
             </div>
         </AppLayout>
     );

@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 
 interface Election {
@@ -44,59 +44,43 @@ export default function Edit({ position, errors = {} }: Props) {
         },
     ];
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        formData.append('_method', 'PUT');
-        router.post(
-            voting.admin.positions.update.url({
-                position: position.position_id,
-            }),
-            formData,
-        );
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Position" />
 
-            <div className="max-w-3xl">
-                <div className="rounded-lg bg-white shadow-md">
-                    {/* Header */}
-                    <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Edit Position
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-600">
-                            Update position details
-                        </p>
-                    </div>
+            <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
+                <div>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Edit Position</h1>
+                    <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                        Update position details
+                    </p>
+                </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6 p-6">
-                        {/* Election (Read-only) */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">
-                                Election
-                            </label>
-                            <div className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-600">
-                                {position.election.name}
-                            </div>
-                            <p className="mt-1 text-xs text-gray-500">
-                                Election cannot be changed
-                            </p>
-                        </div>
-
-                        {/* Position Description */}
+                <Form
+                    action={voting.admin.positions.update.url({
+                        position: position.position_id,
+                    })}
+                    method="put"
+                >
+                    {({ processing }) => (
                         <FieldGroup>
+                            {/* Election (Read-only) */}
                             <Field>
-                                <label
-                                    htmlFor="description"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel>Election</FieldLabel>
+                                <div className="w-full rounded-lg border bg-muted px-4 py-2 text-muted-foreground">
+                                    {position.election.name}
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    Election cannot be changed
+                                </p>
+                            </Field>
+
+                            {/* Position Description */}
+                            <Field>
+                                <FieldLabel htmlFor="description">
                                     Position Title{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="text"
                                     id="description"
@@ -106,7 +90,7 @@ export default function Edit({ position, errors = {} }: Props) {
                                     maxLength={255}
                                     className={
                                         errors.description
-                                            ? 'border-red-500'
+                                            ? 'border-destructive'
                                             : ''
                                     }
                                 />
@@ -117,18 +101,13 @@ export default function Edit({ position, errors = {} }: Props) {
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Max Vote */}
-                        <FieldGroup>
+                            {/* Max Vote */}
                             <Field>
-                                <label
-                                    htmlFor="max_vote"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="max_vote">
                                     Maximum Votes{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="number"
                                     id="max_vote"
@@ -138,10 +117,12 @@ export default function Edit({ position, errors = {} }: Props) {
                                     min={1}
                                     max={20}
                                     className={
-                                        errors.max_vote ? 'border-red-500' : ''
+                                        errors.max_vote
+                                            ? 'border-destructive'
+                                            : ''
                                     }
                                 />
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     Number of candidates voters can select for
                                     this position (1-20)
                                 </p>
@@ -152,18 +133,13 @@ export default function Edit({ position, errors = {} }: Props) {
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Priority */}
-                        <FieldGroup>
+                            {/* Priority */}
                             <Field>
-                                <label
-                                    htmlFor="priority"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="priority">
                                     Display Priority{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="number"
                                     id="priority"
@@ -172,10 +148,12 @@ export default function Edit({ position, errors = {} }: Props) {
                                     required
                                     min={0}
                                     className={
-                                        errors.priority ? 'border-red-500' : ''
+                                        errors.priority
+                                            ? 'border-destructive'
+                                            : ''
                                     }
                                 />
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     Order in which this position appears (lower
                                     numbers appear first)
                                 </p>
@@ -186,24 +164,36 @@ export default function Edit({ position, errors = {} }: Props) {
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Form Actions */}
-                        <div className="flex gap-4 border-t pt-4">
-                            <Button
-                                type="submit"
-                                className="bg-blue-600 hover:bg-blue-700"
-                            >
-                                Update Position
-                            </Button>
-                            <Link href={voting.admin.positions.index.url()}>
-                                <Button type="button" variant="outline">
-                                    Cancel
-                                </Button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+                            {/* Actions */}
+                            <Field>
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                                    <Link
+                                        href={voting.admin.positions.index.url()}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        {processing
+                                            ? 'Updating...'
+                                            : 'Update Position'}
+                                    </Button>
+                                </div>
+                            </Field>
+                        </FieldGroup>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

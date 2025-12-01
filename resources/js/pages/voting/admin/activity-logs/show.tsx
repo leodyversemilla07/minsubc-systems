@@ -87,10 +87,10 @@ export default function Show({ activityLog }: Props) {
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">
+                        <h1 className="text-2xl font-bold text-foreground">
                             Activity Log Details
                         </h1>
-                        <p className="mt-1 text-sm text-gray-600">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             View detailed information about this voter activity
                         </p>
                     </div>
@@ -123,27 +123,27 @@ export default function Show({ activityLog }: Props) {
                         {/* Voter Information */}
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div>
-                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                                     <User className="h-4 w-4" />
                                     Voter Information
                                 </div>
                                 <div className="ml-6">
-                                    <div className="text-sm text-gray-600">
+                                    <div className="text-sm text-muted-foreground">
                                         Voter ID
                                     </div>
-                                    <div className="font-medium text-gray-800">
+                                    <div className="font-medium text-foreground">
                                         {activityLog.voter.voters_id}
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                                     <Calendar className="h-4 w-4" />
                                     Election
                                 </div>
                                 <div className="ml-6">
-                                    <div className="font-medium text-gray-800">
+                                    <div className="font-medium text-foreground">
                                         {activityLog.election.name}
                                     </div>
                                 </div>
@@ -153,12 +153,12 @@ export default function Show({ activityLog }: Props) {
                         <div className="border-t pt-6">
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
-                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                                         <MapPin className="h-4 w-4" />
                                         IP Address
                                     </div>
                                     <div className="ml-6">
-                                        <div className="font-mono text-sm text-gray-800">
+                                        <div className="font-mono text-sm text-foreground">
                                             {activityLog.ip_address ||
                                                 'Not recorded'}
                                         </div>
@@ -166,12 +166,12 @@ export default function Show({ activityLog }: Props) {
                                 </div>
 
                                 <div>
-                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                                         <Calendar className="h-4 w-4" />
                                         Timestamp
                                     </div>
                                     <div className="ml-6">
-                                        <div className="text-sm text-gray-800">
+                                        <div className="text-sm text-foreground">
                                             {format(
                                                 new Date(
                                                     activityLog.created_at,
@@ -179,7 +179,7 @@ export default function Show({ activityLog }: Props) {
                                                 'MMMM dd, yyyy',
                                             )}
                                         </div>
-                                        <div className="text-sm text-gray-600">
+                                        <div className="text-sm text-muted-foreground">
                                             {format(
                                                 new Date(
                                                     activityLog.created_at,
@@ -195,12 +195,12 @@ export default function Show({ activityLog }: Props) {
                         {/* User Agent */}
                         {activityLog.user_agent && (
                             <div className="border-t pt-6">
-                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                                     <Monitor className="h-4 w-4" />
                                     User Agent
                                 </div>
                                 <div className="ml-6">
-                                    <div className="rounded bg-gray-50 p-3 font-mono text-sm break-all text-gray-600">
+                                    <div className="rounded bg-muted p-3 font-mono text-sm break-all text-muted-foreground">
                                         {activityLog.user_agent}
                                     </div>
                                 </div>
@@ -211,12 +211,12 @@ export default function Show({ activityLog }: Props) {
                         {activityLog.metadata &&
                             Object.keys(activityLog.metadata).length > 0 && (
                                 <div className="border-t pt-6">
-                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+                                    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                                         <Database className="h-4 w-4" />
                                         Additional Information
                                     </div>
                                     <div className="ml-6">
-                                        <pre className="overflow-x-auto rounded bg-gray-50 p-3 text-sm text-gray-600">
+                                        <pre className="overflow-x-auto rounded bg-muted p-3 text-sm text-muted-foreground">
                                             {JSON.stringify(
                                                 activityLog.metadata,
                                                 null,

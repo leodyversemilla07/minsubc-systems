@@ -1,5 +1,23 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyContent,
@@ -68,16 +86,6 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
-    const handleDelete = (voter: Voter) => {
-        if (confirm('Delete this voter?')) {
-            router.delete(
-                voting.admin.voters.destroy.url({
-                    voter: Number(voter.voters_id),
-                }),
-            );
-        }
-    };
-
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.voters.index.url(),
@@ -108,7 +116,7 @@ export default function Index({
                                 : '')
                         }
                     >
-                        <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Generate Voters
                         </Button>
@@ -139,13 +147,13 @@ export default function Index({
                 </div>
 
                 {/* Voters List */}
-                <div>
+                <Card>
                     {voters.length === 0 ? (
                         <Empty>
-                            <EmptyMedia>
-                                <UserCheck className="h-16 w-16" />
-                            </EmptyMedia>
                             <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <UserCheck />
+                                </EmptyMedia>
                                 <EmptyTitle>No voters yet</EmptyTitle>
                                 <EmptyDescription>
                                     Generate voter accounts for students
@@ -160,7 +168,7 @@ export default function Index({
                                             : '')
                                     }
                                 >
-                                    <Button className="bg-blue-600 hover:bg-blue-700">
+                                    <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Generate Voters
                                     </Button>
@@ -168,92 +176,126 @@ export default function Index({
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Voter ID</TableHead>
-                                        <TableHead>Student</TableHead>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Batch</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {voters.map((voter) => (
-                                        <TableRow key={voter.voters_id}>
-                                            <TableCell>
-                                                <code className="rounded bg-gray-100 px-2 py-1 text-xs">
-                                                    {voter.voters_id}
-                                                </code>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="font-medium text-gray-800">
-                                                    {voter.student?.user
-                                                        ?.full_name || 'N/A'}
-                                                </div>
-                                                <div className="text-xs text-gray-500">
-                                                    {voter.student?.course}{' '}
-                                                    {voter.student?.year_level}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {voter.election.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {voter.has_voted ? (
-                                                    <Badge className="bg-green-100 text-green-800">
-                                                        Voted
-                                                    </Badge>
-                                                ) : (
-                                                    <Badge variant="secondary">
-                                                        Not Voted
-                                                    </Badge>
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {voter.generation_batch}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Link
-                                                        href={voting.admin.voters.show.url(
-                                                            {
-                                                                voter: Number(
-                                                                    voter.voters_id,
-                                                                ),
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDelete(voter)
-                                                        }
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
+                        <>
+                            <CardHeader>
+                                <CardTitle>All Voters</CardTitle>
+                                <CardDescription>
+                                    View and manage all voter accounts
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Voter ID</TableHead>
+                                            <TableHead>Student</TableHead>
+                                            <TableHead>Election</TableHead>
+                                            <TableHead>Status</TableHead>
+                                            <TableHead>Batch</TableHead>
+                                            <TableHead className="text-right">
+                                                Actions
+                                            </TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {voters.map((voter) => (
+                                            <TableRow key={voter.voters_id}>
+                                                <TableCell>
+                                                    <code className="rounded bg-muted px-2 py-1 text-xs">
+                                                        {voter.voters_id}
+                                                    </code>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="font-medium text-foreground">
+                                                        {voter.student?.user
+                                                            ?.full_name || 'N/A'}
+                                                    </div>
+                                                    <div className="text-xs text-muted-foreground">
+                                                        {voter.student?.course}{' '}
+                                                        {voter.student?.year_level}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {voter.election.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {voter.has_voted ? (
+                                                        <Badge variant="default">
+                                                            Voted
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge variant="secondary">
+                                                            Not Voted
+                                                        </Badge>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {voter.generation_batch}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <Link
+                                                            href={voting.admin.voters.show.url(
+                                                                {
+                                                                    voter: Number(
+                                                                        voter.voters_id,
+                                                                    ),
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>
+                                                                        Delete Voter
+                                                                    </AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Are you sure you want to delete voter "{voter.voters_id}"? This action cannot be undone.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        onClick={() =>
+                                                                            router.delete(
+                                                                                voting.admin.voters.destroy.url({
+                                                                                    voter: Number(voter.voters_id),
+                                                                                }),
+                                                                            )
+                                                                        }
+                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                    >
+                                                                        Delete
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </>
                     )}
-                </div>
+                </Card>
             </div>
         </AppLayout>
     );

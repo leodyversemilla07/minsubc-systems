@@ -1,4 +1,22 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyContent,
@@ -56,16 +74,6 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
-    const handleDelete = (partylist: Partylist) => {
-        if (confirm('Delete this partylist?')) {
-            router.delete(
-                voting.admin.partylists.destroy.url({
-                    partylist: partylist.partylist_id,
-                }),
-            );
-        }
-    };
-
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.partylists.index.url(),
@@ -96,7 +104,7 @@ export default function Index({
                                 : '')
                         }
                     >
-                        <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Partylist
                         </Button>
@@ -127,13 +135,13 @@ export default function Index({
                 </div>
 
                 {/* Partylists List */}
-                <div>
+                <Card>
                     {partylists.length === 0 ? (
                         <Empty>
-                            <EmptyMedia>
-                                <Flag className="h-16 w-16" />
-                            </EmptyMedia>
                             <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <Flag />
+                                </EmptyMedia>
                                 <EmptyTitle>No partylists yet</EmptyTitle>
                                 <EmptyDescription>
                                     Add partylists to organize candidates
@@ -148,7 +156,7 @@ export default function Index({
                                             : '')
                                     }
                                 >
-                                    <Button className="bg-blue-600 hover:bg-blue-700">
+                                    <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add Partylist
                                     </Button>
@@ -156,86 +164,118 @@ export default function Index({
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Partylist</TableHead>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead>Candidates</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {partylists.map((partylist) => (
-                                        <TableRow key={partylist.partylist_id}>
-                                            <TableCell>
-                                                <div className="font-medium text-gray-800">
-                                                    {partylist.name}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {partylist.election.name}
-                                            </TableCell>
-                                            <TableCell className="text-sm font-semibold text-gray-800">
-                                                {partylist.candidates_count ||
-                                                    0}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Link
-                                                        href={voting.admin.partylists.show.url(
-                                                            {
-                                                                partylist:
-                                                                    partylist.partylist_id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Link
-                                                        href={voting.admin.partylists.edit.url(
-                                                            {
-                                                                partylist:
-                                                                    partylist.partylist_id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                partylist,
-                                                            )
-                                                        }
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
+                        <>
+                            <CardHeader>
+                                <CardTitle>All Partylists</CardTitle>
+                                <CardDescription>
+                                    View and manage all political parties and groups
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Partylist</TableHead>
+                                            <TableHead>Election</TableHead>
+                                            <TableHead>Candidates</TableHead>
+                                            <TableHead className="text-right">
+                                                Actions
+                                            </TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {partylists.map((partylist) => (
+                                            <TableRow key={partylist.partylist_id}>
+                                                <TableCell>
+                                                    <div className="font-medium text-foreground">
+                                                        {partylist.name}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {partylist.election.name}
+                                                </TableCell>
+                                                <TableCell className="text-sm font-semibold text-foreground">
+                                                    {partylist.candidates_count ||
+                                                        0}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <Link
+                                                            href={voting.admin.partylists.show.url(
+                                                                {
+                                                                    partylist:
+                                                                        partylist.partylist_id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Link
+                                                            href={voting.admin.partylists.edit.url(
+                                                                {
+                                                                    partylist:
+                                                                        partylist.partylist_id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>
+                                                                        Delete Partylist
+                                                                    </AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Are you sure you want to delete "{partylist.name}"? This action cannot be undone.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        onClick={() =>
+                                                                            router.delete(
+                                                                                voting.admin.partylists.destroy.url({
+                                                                                    partylist: partylist.partylist_id,
+                                                                                }),
+                                                                            )
+                                                                        }
+                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                    >
+                                                                        Delete
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </>
                     )}
-                </div>
+                </Card>
             </div>
         </AppLayout>
     );

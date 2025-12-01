@@ -1,5 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -10,7 +16,8 @@ interface Election {
     id: number;
     name: string;
     election_code: string;
-    status: 'active' | 'ended';
+    status: boolean;
+    computed_status: 'active' | 'ended';
     end_time: string | null;
     created_at: string;
     positions_count?: number;
@@ -37,16 +44,16 @@ export default function Show({ election }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Election: ${election.name}`} />
 
-            <div>
+            <div className="space-y-6 p-6 md:space-y-8 md:p-8">
                 {/* Header with Actions */}
-                <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800">
+                        <h1 className="text-3xl font-bold text-foreground">
                             {election.name}
                         </h1>
-                        <p className="mt-1 text-sm text-gray-600">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             Election Code:{' '}
-                            <code className="rounded bg-gray-100 px-2 py-1">
+                            <code className="rounded bg-muted px-2 py-1">
                                 {election.election_code}
                             </code>
                         </p>
@@ -57,7 +64,7 @@ export default function Show({ election }: Props) {
                                 election: election.id,
                             })}
                         >
-                            <Button className="bg-indigo-600 hover:bg-indigo-700">
+                            <Button>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Button>
@@ -70,36 +77,32 @@ export default function Show({ election }: Props) {
 
                 <div className="grid gap-6 md:grid-cols-3">
                     {/* Election Info Card */}
-                    <div className="md:col-span-1">
-                        <div className="rounded-lg bg-white p-6 shadow-md">
-                            <h2 className="mb-4 text-lg font-bold text-gray-800">
-                                Election Details
-                            </h2>
-
-                            <div className="space-y-4">
+                    <div className="space-y-6 md:col-span-1">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Election Details</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">
+                                    <div className="text-xs uppercase text-muted-foreground">
                                         Status
                                     </div>
-                                    {election.status === 'active' ? (
-                                        <Badge className="mt-1 bg-green-100 text-green-800 hover:bg-green-100">
+                                    {election.computed_status === 'active' ? (
+                                        <Badge variant="default" className="mt-1">
                                             Active
                                         </Badge>
                                     ) : (
-                                        <Badge
-                                            variant="secondary"
-                                            className="mt-1"
-                                        >
+                                        <Badge variant="secondary" className="mt-1">
                                             Ended
                                         </Badge>
                                     )}
                                 </div>
 
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">
+                                    <div className="text-xs uppercase text-muted-foreground">
                                         End Time
                                     </div>
-                                    <div className="mt-1 text-sm font-medium text-gray-800">
+                                    <div className="mt-1 text-sm font-medium text-foreground">
                                         {election.end_time
                                             ? new Date(
                                                   election.end_time,
@@ -115,10 +118,10 @@ export default function Show({ election }: Props) {
                                 </div>
 
                                 <div>
-                                    <div className="text-xs text-gray-500 uppercase">
+                                    <div className="text-xs uppercase text-muted-foreground">
                                         Created
                                     </div>
-                                    <div className="mt-1 text-sm font-medium text-gray-800">
+                                    <div className="mt-1 text-sm font-medium text-foreground">
                                         {new Date(
                                             election.created_at,
                                         ).toLocaleDateString('en-US', {
@@ -128,49 +131,49 @@ export default function Show({ election }: Props) {
                                         })}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
 
                         {/* Quick Stats */}
-                        <div className="mt-6 rounded-lg bg-white p-6 shadow-md">
-                            <h2 className="mb-4 text-lg font-bold text-gray-800">
-                                Quick Stats
-                            </h2>
-                            <div className="space-y-3">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Quick Stats</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-3">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">
+                                    <span className="text-muted-foreground">
                                         Positions
                                     </span>
-                                    <span className="font-bold">
+                                    <span className="font-bold text-foreground">
                                         {election.positions_count || 0}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">
+                                    <span className="text-muted-foreground">
                                         Candidates
                                     </span>
-                                    <span className="font-bold">
+                                    <span className="font-bold text-foreground">
                                         {election.candidates_count || 0}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">
+                                    <span className="text-muted-foreground">
                                         Voters
                                     </span>
-                                    <span className="font-bold">
+                                    <span className="font-bold text-foreground">
                                         {election.voters_count || 0}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">
+                                    <span className="text-muted-foreground">
                                         Votes Cast
                                     </span>
-                                    <span className="font-bold text-green-600">
+                                    <span className="font-bold text-primary">
                                         {election.votes_count || 0}
                                     </span>
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
                     </div>
 
                     {/* Management Links */}
@@ -179,85 +182,93 @@ export default function Show({ election }: Props) {
                             {/* Positions Card */}
                             <Link
                                 href={`/voting/admin/positions?election_id=${election.id}`}
-                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
+                                className="group block"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
-                                            Positions
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Manage election positions
-                                        </p>
-                                        <p className="mt-4 text-2xl font-bold text-gray-800">
-                                            {election.positions_count || 0}
-                                        </p>
-                                    </div>
-                                    <FileText className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
-                                </div>
+                                <Card className="h-full transition hover:shadow-lg">
+                                    <CardContent className="flex items-start justify-between p-6">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-foreground transition group-hover:text-primary">
+                                                Positions
+                                            </h3>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Manage election positions
+                                            </p>
+                                            <p className="mt-4 text-2xl font-bold text-foreground">
+                                                {election.positions_count || 0}
+                                            </p>
+                                        </div>
+                                        <FileText className="h-8 w-8 text-muted-foreground transition group-hover:text-primary" />
+                                    </CardContent>
+                                </Card>
                             </Link>
 
                             {/* Candidates Card */}
                             <Link
                                 href={`/voting/admin/candidates?election_id=${election.id}`}
-                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
+                                className="group block"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
-                                            Candidates
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Manage candidates
-                                        </p>
-                                        <p className="mt-4 text-2xl font-bold text-gray-800">
-                                            {election.candidates_count || 0}
-                                        </p>
-                                    </div>
-                                    <Users className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
-                                </div>
+                                <Card className="h-full transition hover:shadow-lg">
+                                    <CardContent className="flex items-start justify-between p-6">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-foreground transition group-hover:text-primary">
+                                                Candidates
+                                            </h3>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Manage candidates
+                                            </p>
+                                            <p className="mt-4 text-2xl font-bold text-foreground">
+                                                {election.candidates_count || 0}
+                                            </p>
+                                        </div>
+                                        <Users className="h-8 w-8 text-muted-foreground transition group-hover:text-primary" />
+                                    </CardContent>
+                                </Card>
                             </Link>
 
                             {/* Partylists Card */}
                             <Link
                                 href={`/voting/admin/partylists?election_id=${election.id}`}
-                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
+                                className="group block"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
-                                            Partylists
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Manage partylists
-                                        </p>
-                                        <p className="mt-4 text-2xl font-bold text-gray-800">
-                                            0
-                                        </p>
-                                    </div>
-                                    <Vote className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
-                                </div>
+                                <Card className="h-full transition hover:shadow-lg">
+                                    <CardContent className="flex items-start justify-between p-6">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-foreground transition group-hover:text-primary">
+                                                Partylists
+                                            </h3>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Manage partylists
+                                            </p>
+                                            <p className="mt-4 text-2xl font-bold text-foreground">
+                                                0
+                                            </p>
+                                        </div>
+                                        <Vote className="h-8 w-8 text-muted-foreground transition group-hover:text-primary" />
+                                    </CardContent>
+                                </Card>
                             </Link>
 
                             {/* Voters Card */}
                             <Link
                                 href={`/voting/admin/voters?election_id=${election.id}`}
-                                className="group block rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg"
+                                className="group block"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-800 transition group-hover:text-blue-600">
-                                            Voters
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Manage voters
-                                        </p>
-                                        <p className="mt-4 text-2xl font-bold text-gray-800">
-                                            {election.voters_count || 0}
-                                        </p>
-                                    </div>
-                                    <UserCheck className="h-8 w-8 text-gray-400 transition group-hover:text-blue-600" />
-                                </div>
+                                <Card className="h-full transition hover:shadow-lg">
+                                    <CardContent className="flex items-start justify-between p-6">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-foreground transition group-hover:text-primary">
+                                                Voters
+                                            </h3>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Manage voters
+                                            </p>
+                                            <p className="mt-4 text-2xl font-bold text-foreground">
+                                                {election.voters_count || 0}
+                                            </p>
+                                        </div>
+                                        <UserCheck className="h-8 w-8 text-muted-foreground transition group-hover:text-primary" />
+                                    </CardContent>
+                                </Card>
                             </Link>
                         </div>
                     </div>

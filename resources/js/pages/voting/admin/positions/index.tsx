@@ -1,4 +1,22 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyContent,
@@ -66,16 +84,6 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
-    const handleDelete = (position: Position) => {
-        if (confirm('Delete this position?')) {
-            router.delete(
-                voting.admin.positions.destroy.url({
-                    position: position.position_id,
-                }),
-            );
-        }
-    };
-
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.positions.index.url(),
@@ -118,7 +126,7 @@ export default function Index({
                                 : '')
                         }
                     >
-                        <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Position
                         </Button>
@@ -149,13 +157,13 @@ export default function Index({
                 </div>
 
                 {/* Positions List */}
-                <div>
+                <Card>
                     {positions.length === 0 ? (
                         <Empty>
-                            <EmptyMedia>
-                                <FileText className="h-16 w-16" />
-                            </EmptyMedia>
                             <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <FileText />
+                                </EmptyMedia>
                                 <EmptyTitle>No positions yet</EmptyTitle>
                                 <EmptyDescription>
                                     Add positions to organize your election
@@ -170,7 +178,7 @@ export default function Index({
                                             : '')
                                     }
                                 >
-                                    <Button className="bg-blue-600 hover:bg-blue-700">
+                                    <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add Position
                                     </Button>
@@ -178,124 +186,156 @@ export default function Index({
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Priority</TableHead>
-                                        <TableHead>Position</TableHead>
-                                        <TableHead>Max Votes</TableHead>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead>Candidates</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {positions.map((position, index) => (
-                                        <TableRow key={position.position_id}>
-                                            <TableCell>
-                                                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 font-bold text-gray-700">
-                                                    {position.priority}
-                                                </span>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="font-medium text-gray-800">
-                                                    {position.description}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {position.max_vote}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {position.election.name}
-                                            </TableCell>
-                                            <TableCell className="text-sm font-semibold text-gray-800">
-                                                {position.candidates_count || 0}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleMoveUp(
-                                                                position.position_id,
-                                                            )
-                                                        }
-                                                        disabled={index === 0}
-                                                        title="Move Up"
-                                                    >
-                                                        <ArrowUp className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleMoveDown(
-                                                                position.position_id,
-                                                            )
-                                                        }
-                                                        disabled={
-                                                            index ===
-                                                            positions.length - 1
-                                                        }
-                                                        title="Move Down"
-                                                    >
-                                                        <ArrowDown className="h-4 w-4" />
-                                                    </Button>
-                                                    <Link
-                                                        href={voting.admin.positions.show.url(
-                                                            {
-                                                                position:
-                                                                    position.position_id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Link
-                                                        href={voting.admin.positions.edit.url(
-                                                            {
-                                                                position:
-                                                                    position.position_id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                position,
-                                                            )
-                                                        }
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
+                        <>
+                            <CardHeader>
+                                <CardTitle>All Positions</CardTitle>
+                                <CardDescription>
+                                    View and manage all election positions
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Priority</TableHead>
+                                            <TableHead>Position</TableHead>
+                                            <TableHead>Max Votes</TableHead>
+                                            <TableHead>Election</TableHead>
+                                            <TableHead>Candidates</TableHead>
+                                            <TableHead className="text-right">
+                                                Actions
+                                            </TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {positions.map((position, index) => (
+                                            <TableRow key={position.position_id}>
+                                                <TableCell>
+                                                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
+                                                        {position.priority}
+                                                    </span>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="font-medium text-foreground">
+                                                        {position.description}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {position.max_vote}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {position.election.name}
+                                                </TableCell>
+                                                <TableCell className="text-sm font-semibold text-foreground">
+                                                    {position.candidates_count || 0}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                handleMoveUp(
+                                                                    position.position_id,
+                                                                )
+                                                            }
+                                                            disabled={index === 0}
+                                                            title="Move Up"
+                                                        >
+                                                            <ArrowUp className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                handleMoveDown(
+                                                                    position.position_id,
+                                                                )
+                                                            }
+                                                            disabled={
+                                                                index ===
+                                                                positions.length - 1
+                                                            }
+                                                            title="Move Down"
+                                                        >
+                                                            <ArrowDown className="h-4 w-4" />
+                                                        </Button>
+                                                        <Link
+                                                            href={voting.admin.positions.show.url(
+                                                                {
+                                                                    position:
+                                                                        position.position_id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Link
+                                                            href={voting.admin.positions.edit.url(
+                                                                {
+                                                                    position:
+                                                                        position.position_id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>
+                                                                        Delete Position
+                                                                    </AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Are you sure you want to delete "{position.description}"? This action cannot be undone and will remove all associated candidates.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        onClick={() =>
+                                                                            router.delete(
+                                                                                voting.admin.positions.destroy.url({
+                                                                                    position: position.position_id,
+                                                                                }),
+                                                                            )
+                                                                        }
+                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                    >
+                                                                        Delete
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </>
                     )}
-                </div>
+                </Card>
             </div>
         </AppLayout>
     );

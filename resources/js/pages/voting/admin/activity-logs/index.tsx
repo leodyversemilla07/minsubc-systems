@@ -1,6 +1,13 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {
     Empty,
     EmptyDescription,
     EmptyHeader,
@@ -111,34 +118,17 @@ export default function Index({
         | undefined => {
         switch (action) {
             case 'login':
-                return 'default';
+                return 'secondary';
             case 'vote_cast':
                 return 'default';
             case 'results_viewed':
-                return 'default';
+                return 'outline';
             case 'ballot_accessed':
-                return 'default';
+                return 'secondary';
             case 'logout':
-                return 'default';
+                return 'outline';
             default:
-                return 'default';
-        }
-    };
-
-    const getActionColor = (action: string) => {
-        switch (action) {
-            case 'login':
-                return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-            case 'vote_cast':
-                return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-            case 'results_viewed':
-                return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
-            case 'ballot_accessed':
-                return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
-            case 'logout':
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
-            default:
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+                return 'secondary';
         }
     };
 
@@ -150,7 +140,7 @@ export default function Index({
                 {/* Header */}
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+                        <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
                             Voter Activity Logs
                         </h1>
                         <p className="text-muted-foreground">
@@ -221,158 +211,198 @@ export default function Index({
 
                 {/* Stats Summary */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                    <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-800">
-                            {activityLogs.total}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                            Total Activities
-                        </div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-600">
-                            {
-                                activityLogs.data.filter(
-                                    (log) => log.action === 'login',
-                                ).length
-                            }
-                        </div>
-                        <div className="text-sm text-gray-600">Logins</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-2xl font-bold text-green-600">
-                            {
-                                activityLogs.data.filter(
-                                    (log) => log.action === 'vote_cast',
-                                ).length
-                            }
-                        </div>
-                        <div className="text-sm text-gray-600">Votes Cast</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-600">
-                            {
-                                activityLogs.data.filter(
-                                    (log) => log.action === 'results_viewed',
-                                ).length
-                            }
-                        </div>
-                        <div className="text-sm text-gray-600">
-                            Results Viewed
-                        </div>
-                    </div>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Total Activities
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-foreground">
+                                {activityLogs.total}
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Logins
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-primary">
+                                {
+                                    activityLogs.data.filter(
+                                        (log) => log.action === 'login',
+                                    ).length
+                                }
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Votes Cast
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-primary">
+                                {
+                                    activityLogs.data.filter(
+                                        (log) => log.action === 'vote_cast',
+                                    ).length
+                                }
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">
+                                Results Viewed
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-primary">
+                                {
+                                    activityLogs.data.filter(
+                                        (log) => log.action === 'results_viewed',
+                                    ).length
+                                }
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 {/* Table */}
-                <div className="p-6">
-                    {activityLogs.data.length === 0 ? (
-                        <Empty>
-                            <EmptyMedia>
-                                <Database className="h-12 w-12" />
-                            </EmptyMedia>
-                            <EmptyHeader>
-                                <EmptyTitle>No Activity Logs</EmptyTitle>
-                                <EmptyDescription>
-                                    {filters.election_id || filters.action
-                                        ? 'No activity logs found matching your filters.'
-                                        : 'No voter activity has been recorded yet.'}
-                                </EmptyDescription>
-                            </EmptyHeader>
-                        </Empty>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Voter ID</TableHead>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead>Action</TableHead>
-                                        <TableHead>IP Address</TableHead>
-                                        <TableHead>Timestamp</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {activityLogs.data.map((log) => (
-                                        <TableRow key={log.id}>
-                                            <TableCell className="font-medium text-gray-800">
-                                                {log.voter.voters_id}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {log.election.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    variant={getActionBadgeVariant(
-                                                        log.action,
-                                                    )}
-                                                    className={getActionColor(
-                                                        log.action,
-                                                    )}
-                                                >
-                                                    {actions[log.action] ||
-                                                        log.action}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="font-mono text-sm text-gray-600">
-                                                {log.ip_address || 'N/A'}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {format(
-                                                    new Date(log.created_at),
-                                                    'MMM dd, yyyy HH:mm:ss',
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <Link
-                                                    href={voting.admin.activityLogs.show.url(
-                                                        {
-                                                            activityLog: log.id,
-                                                        },
-                                                    )}
-                                                >
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                    >
-                                                        <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                </Link>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-
-                            {/* Pagination */}
-                            {activityLogs.last_page > 1 && (
-                                <div className="mt-6 flex justify-center gap-1">
-                                    {activityLogs.links.map((link, index) => (
-                                        <Button
-                                            key={index}
-                                            variant={
-                                                link.active
-                                                    ? 'default'
-                                                    : 'ghost'
-                                            }
-                                            size="sm"
-                                            disabled={!link.url}
-                                            onClick={() =>
-                                                link.url &&
-                                                router.visit(link.url)
-                                            }
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                <Card>
+                    {activityLogs.data.length > 0 && (
+                        <CardHeader>
+                            <CardTitle className="text-foreground">
+                                Activity Logs
+                            </CardTitle>
+                            <CardDescription>
+                                Showing {activityLogs.data.length} of{' '}
+                                {activityLogs.total} activity logs
+                            </CardDescription>
+                        </CardHeader>
                     )}
-                </div>
+                    <CardContent className="p-6">
+                        {activityLogs.data.length === 0 ? (
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <Database />
+                                    </EmptyMedia>
+                                    <EmptyTitle>No Activity Logs</EmptyTitle>
+                                    <EmptyDescription>
+                                        {filters.election_id || filters.action
+                                            ? 'No activity logs found matching your filters.'
+                                            : 'No voter activity has been recorded yet.'}
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-muted">
+                                            <TableHead className="text-foreground">
+                                                Voter ID
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Election
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Action
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                IP Address
+                                            </TableHead>
+                                            <TableHead className="text-foreground">
+                                                Timestamp
+                                            </TableHead>
+                                            <TableHead className="text-right text-foreground">
+                                                Actions
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {activityLogs.data.map((log) => (
+                                            <TableRow key={log.id}>
+                                                <TableCell className="font-medium text-foreground">
+                                                    {log.voter.voters_id}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {log.election.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant={getActionBadgeVariant(
+                                                            log.action,
+                                                        )}
+                                                    >
+                                                        {actions[log.action] ||
+                                                            log.action}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="font-mono text-sm text-muted-foreground">
+                                                    {log.ip_address || 'N/A'}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {format(
+                                                        new Date(log.created_at),
+                                                        'MMM dd, yyyy HH:mm:ss',
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Link
+                                                        href={voting.admin.activityLogs.show.url(
+                                                            {
+                                                                activityLog: log.id,
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+
+                                {/* Pagination */}
+                                {activityLogs.last_page > 1 && (
+                                    <div className="mt-6 flex justify-center gap-1">
+                                        {activityLogs.links.map((link, index) => (
+                                            <Button
+                                                key={index}
+                                                variant={
+                                                    link.active
+                                                        ? 'default'
+                                                        : 'ghost'
+                                                }
+                                                size="sm"
+                                                disabled={!link.url}
+                                                onClick={() =>
+                                                    link.url &&
+                                                    router.visit(link.url)
+                                                }
+                                                dangerouslySetInnerHTML={{
+                                                    __html: link.label,
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );

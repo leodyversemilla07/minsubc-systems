@@ -1,11 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldError, FieldGroup } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Form, Head, Link, router } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -49,11 +56,10 @@ export default function Create({
         useState(selectedElectionId);
     const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
-    const handleElectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const electionId = e.target.value;
-        setSelectedElection(Number(electionId));
+    const handleElectionChange = (value: string) => {
+        setSelectedElection(Number(value));
         router.get(
-            voting.admin.voters.create.url() + `?election_id=${electionId}`,
+            voting.admin.voters.create.url() + `?election_id=${value}`,
             {},
             { preserveState: false },
         );
@@ -67,57 +73,50 @@ export default function Create({
         );
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        router.post(voting.admin.voters.store.url(), formData);
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Generate Voters" />
 
-            <div className="max-w-3xl">
-                <div className="rounded-lg bg-white shadow-md">
-                    {/* Header */}
-                    <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Generate Voters in Bulk
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-600">
-                            Create voter accounts from student records
-                        </p>
-                    </div>
+            <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
+                <div>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Generate Voters in Bulk</h1>
+                    <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                        Create voter accounts from student records
+                    </p>
+                </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6 p-6">
-                        {/* Election */}
+                <Form action={voting.admin.voters.store.url()} method="post">
+                    {({ processing }) => (
                         <FieldGroup>
+                            {/* Election */}
                             <Field>
-                                <label
-                                    htmlFor="election_id"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="election_id">
                                     Election{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    id="election_id"
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
+                                <input
+                                    type="hidden"
                                     name="election_id"
-                                    required
                                     value={selectedElection}
-                                    onChange={handleElectionChange}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                                />
+                                <Select
+                                    value={selectedElection.toString()}
+                                    onValueChange={handleElectionChange}
                                 >
-                                    {elections.map((election) => (
-                                        <option
-                                            key={election.id}
-                                            value={election.id}
-                                        >
-                                            {election.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select election" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {elections.map((election) => (
+                                            <SelectItem
+                                                key={election.id}
+                                                value={election.id.toString()}
+                                            >
+                                                {election.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 {errors.election_id && (
                                     <FieldError>
                                         <AlertCircle className="mr-1 h-4 w-4" />
@@ -125,19 +124,14 @@ export default function Create({
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Generation Batch & Prefix */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <FieldGroup>
+                            {/* Generation Batch & Prefix */}
+                            <div className="grid gap-4 sm:grid-cols-2">
                                 <Field>
-                                    <label
-                                        htmlFor="generation_batch"
-                                        className="mb-2 block text-sm font-medium text-gray-700"
-                                    >
+                                    <FieldLabel htmlFor="generation_batch">
                                         Generation Batch{' '}
-                                        <span className="text-red-500">*</span>
-                                    </label>
+                                        <span className="text-destructive">*</span>
+                                    </FieldLabel>
                                     <Input
                                         type="number"
                                         id="generation_batch"
@@ -147,11 +141,11 @@ export default function Create({
                                         min={1}
                                         className={
                                             errors.generation_batch
-                                                ? 'border-red-500'
+                                                ? 'border-destructive'
                                                 : ''
                                         }
                                     />
-                                    <p className="mt-1 text-xs text-gray-500">
+                                    <p className="text-xs text-muted-foreground">
                                         For tracking purposes
                                     </p>
                                     {errors.generation_batch && (
@@ -161,16 +155,11 @@ export default function Create({
                                         </FieldError>
                                     )}
                                 </Field>
-                            </FieldGroup>
 
-                            <FieldGroup>
                                 <Field>
-                                    <label
-                                        htmlFor="prefix"
-                                        className="mb-2 block text-sm font-medium text-gray-700"
-                                    >
+                                    <FieldLabel htmlFor="prefix">
                                         Prefix (Optional)
-                                    </label>
+                                    </FieldLabel>
                                     <Input
                                         type="text"
                                         id="prefix"
@@ -179,111 +168,120 @@ export default function Create({
                                         placeholder="e.g., 2025"
                                     />
                                 </Field>
-                            </FieldGroup>
-                        </div>
+                            </div>
 
-                        {/* Default Password */}
-                        <FieldGroup>
+                            {/* Default Password */}
                             <Field>
-                                <label
-                                    htmlFor="default_password"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel htmlFor="default_password">
                                     Default Password
-                                </label>
+                                </FieldLabel>
                                 <Input
                                     type="text"
                                     id="default_password"
                                     name="default_password"
                                     defaultValue="password"
                                 />
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     All voters will use this password initially
                                 </p>
                             </Field>
-                        </FieldGroup>
 
-                        {/* Select Students */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">
-                                Select Students{' '}
-                                <span className="text-red-500">*</span>
-                            </label>
-                            <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-50 p-4">
-                                <div className="mb-3 flex items-center justify-between">
-                                    <span className="text-sm text-gray-600">
-                                        Available Students:{' '}
-                                        {availableStudents.length}
-                                    </span>
-                                    <span className="text-sm font-medium text-blue-600">
-                                        {selectedStudents.length} selected
-                                    </span>
-                                </div>
-                                {availableStudents.length === 0 ? (
-                                    <p className="py-8 text-center text-gray-500">
-                                        All active students are already voters
-                                        for this election
-                                    </p>
-                                ) : (
-                                    <div className="space-y-2">
-                                        {availableStudents.map((student) => (
-                                            <label
-                                                key={student.student_id}
-                                                className="flex cursor-pointer items-center rounded-lg border bg-white p-3 hover:border-blue-500"
-                                            >
-                                                <Checkbox
-                                                    name="student_ids[]"
-                                                    value={student.student_id}
-                                                    checked={selectedStudents.includes(
-                                                        student.student_id,
-                                                    )}
-                                                    onCheckedChange={() =>
-                                                        handleStudentToggle(
-                                                            student.student_id,
-                                                        )
-                                                    }
-                                                    className="mr-3"
-                                                />
-                                                <div className="flex-1">
-                                                    <div className="font-medium text-gray-800">
-                                                        {student.user.full_name}
-                                                    </div>
-                                                    <div className="text-xs text-gray-500">
-                                                        {student.course} -{' '}
-                                                        {student.year_level} -{' '}
-                                                        {student.campus}
-                                                    </div>
-                                                </div>
-                                            </label>
-                                        ))}
+                            {/* Select Students */}
+                            <Field>
+                                <FieldLabel>
+                                    Select Students{' '}
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
+                                <div className="rounded-lg border bg-muted p-4">
+                                    <div className="mb-3 flex items-center justify-between">
+                                        <span className="text-sm text-muted-foreground">
+                                            Available Students:{' '}
+                                            {availableStudents.length}
+                                        </span>
+                                        <span className="text-sm font-medium text-primary">
+                                            {selectedStudents.length} selected
+                                        </span>
                                     </div>
+                                    {availableStudents.length === 0 ? (
+                                        <p className="py-8 text-center text-muted-foreground">
+                                            All active students are already
+                                            voters for this election
+                                        </p>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            {availableStudents.map((student) => (
+                                                <label
+                                                    key={student.student_id}
+                                                    className="flex cursor-pointer items-center rounded-lg border bg-background p-3 hover:border-primary"
+                                                >
+                                                    <Checkbox
+                                                        name="student_ids[]"
+                                                        value={student.student_id}
+                                                        checked={selectedStudents.includes(
+                                                            student.student_id,
+                                                        )}
+                                                        onCheckedChange={() =>
+                                                            handleStudentToggle(
+                                                                student.student_id,
+                                                            )
+                                                        }
+                                                        className="mr-3"
+                                                    />
+                                                    <div className="flex-1">
+                                                        <div className="font-medium text-foreground">
+                                                            {student.user.full_name}
+                                                        </div>
+                                                        <div className="text-xs text-muted-foreground">
+                                                            {student.course} -{' '}
+                                                            {student.year_level} -{' '}
+                                                            {student.campus}
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                {errors.student_ids && (
+                                    <FieldError>
+                                        <AlertCircle className="mr-1 h-4 w-4" />
+                                        {errors.student_ids}
+                                    </FieldError>
                                 )}
-                            </div>
-                            {errors.student_ids && (
-                                <p className="mt-2 flex items-center text-sm text-red-600">
-                                    <AlertCircle className="mr-1 h-4 w-4" />
-                                    {errors.student_ids}
-                                </p>
-                            )}
-                        </div>
+                            </Field>
 
-                        {/* Form Actions */}
-                        <div className="flex gap-4 border-t pt-4">
-                            <Button
-                                type="submit"
-                                disabled={selectedStudents.length === 0}
-                                className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
-                            >
-                                Generate Voters
-                            </Button>
-                            <Link href={voting.admin.voters.index.url()}>
-                                <Button type="button" variant="outline">
-                                    Cancel
-                                </Button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+                            {/* Actions */}
+                            <Field>
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                                    <Link
+                                        href={voting.admin.voters.index.url()}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        type="submit"
+                                        disabled={
+                                            selectedStudents.length === 0 ||
+                                            processing
+                                        }
+                                        className="w-full sm:w-auto"
+                                    >
+                                        {processing
+                                            ? 'Generating...'
+                                            : 'Generate Voters'}
+                                    </Button>
+                                </div>
+                            </Field>
+                        </FieldGroup>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

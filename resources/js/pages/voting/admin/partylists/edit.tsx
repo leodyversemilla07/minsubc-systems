@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 
 interface Election {
@@ -41,59 +41,43 @@ export default function Edit({ partylist, errors = {} }: Props) {
             }),
         },
     ];
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        formData.append('_method', 'PUT');
-        router.post(
-            voting.admin.partylists.update.url({
-                partylist: partylist.partylist_id,
-            }),
-            formData,
-        );
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Partylist" />
 
-            <div className="max-w-3xl">
-                <div className="rounded-lg bg-white shadow-md">
-                    {/* Header */}
-                    <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Edit Partylist
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-600">
-                            Update partylist details
-                        </p>
-                    </div>
+            <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
+                <div>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Edit Partylist</h1>
+                    <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                        Update partylist details
+                    </p>
+                </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6 p-6">
-                        {/* Election (Read-only) */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">
-                                Election
-                            </label>
-                            <div className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-600">
-                                {partylist.election.name}
-                            </div>
-                            <p className="mt-1 text-xs text-gray-500">
-                                Election cannot be changed
-                            </p>
-                        </div>
-
-                        {/* Partylist Name */}
+                <Form
+                    action={voting.admin.partylists.update.url({
+                        partylist: partylist.partylist_id,
+                    })}
+                    method="put"
+                >
+                    {({ processing }) => (
                         <FieldGroup>
+                            {/* Election (Read-only) */}
                             <Field>
-                                <label
-                                    htmlFor="name"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
+                                <FieldLabel>Election</FieldLabel>
+                                <div className="w-full rounded-lg border bg-muted px-4 py-2 text-muted-foreground">
+                                    {partylist.election.name}
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    Election cannot be changed
+                                </p>
+                            </Field>
+
+                            {/* Partylist Name */}
+                            <Field>
+                                <FieldLabel htmlFor="name">
                                     Partylist Name{' '}
-                                    <span className="text-red-500">*</span>
-                                </label>
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
                                 <Input
                                     type="text"
                                     id="name"
@@ -102,7 +86,7 @@ export default function Edit({ partylist, errors = {} }: Props) {
                                     required
                                     maxLength={255}
                                     className={
-                                        errors.name ? 'border-red-500' : ''
+                                        errors.name ? 'border-destructive' : ''
                                     }
                                 />
                                 {errors.name && (
@@ -112,24 +96,36 @@ export default function Edit({ partylist, errors = {} }: Props) {
                                     </FieldError>
                                 )}
                             </Field>
-                        </FieldGroup>
 
-                        {/* Form Actions */}
-                        <div className="flex gap-4 border-t pt-4">
-                            <Button
-                                type="submit"
-                                className="bg-blue-600 hover:bg-blue-700"
-                            >
-                                Update Partylist
-                            </Button>
-                            <Link href={voting.admin.partylists.index.url()}>
-                                <Button type="button" variant="outline">
-                                    Cancel
-                                </Button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+                            {/* Actions */}
+                            <Field>
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                                    <Link
+                                        href={voting.admin.partylists.index.url()}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        {processing
+                                            ? 'Updating...'
+                                            : 'Update Partylist'}
+                                    </Button>
+                                </div>
+                            </Field>
+                        </FieldGroup>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

@@ -1,11 +1,20 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup } from '@/components/ui/field';
+import { Calendar } from '@/components/ui/calendar';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link } from '@inertiajs/react';
-import { AlertCircle } from 'lucide-react';
+import { format } from 'date-fns';
+import { AlertCircle, CalendarIcon, Clock } from 'lucide-react';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Voting Admin', href: voting.admin.elections.index.url() },
@@ -18,148 +27,166 @@ interface Props {
 }
 
 export default function Create({ errors = {} }: Props) {
+    const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+    const [endTime, setEndTime] = useState<string>('17:00');
+    const [datePickerOpen, setDatePickerOpen] = useState(false);
+
+    // Combine date and time into a single value for the hidden input
+    const getEndTimeValue = () => {
+        if (!endDate) return '';
+        const dateStr = format(endDate, 'yyyy-MM-dd');
+        if (endTime) {
+            return `${dateStr}T${endTime}`;
+        }
+        return `${dateStr}T00:00`;
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Election" />
 
-            <div className="max-w-3xl">
-                <div className="rounded-lg bg-white shadow-md">
-                    {/* Header */}
-                    <div className="border-b p-6">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Create New Election
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-600">
-                            Set up a new election cycle
-                        </p>
-                    </div>
+            <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
+                <div>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Create New Election</h1>
+                    <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                        Set up a new election cycle for your organization
+                    </p>
+                </div>
 
-                    {/* Form */}
-                    <Form
-                        action={voting.admin.elections.store.url()}
-                        method="post"
-                    >
-                        {({ processing }) => (
-                            <div className="space-y-6 p-6">
-                                {/* Election Name */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
-                                            htmlFor="name"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
+                <Form
+                    action={voting.admin.elections.store.url()}
+                    method="post"
+                >
+                    {({ processing }) => (
+                        <FieldGroup>
+                            {/* Election Name */}
+                            <Field>
+                                <FieldLabel htmlFor="name">
+                                    Election Name{' '}
+                                    <span className="text-destructive">*</span>
+                                </FieldLabel>
+                                <Input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    required
+                                    placeholder="e.g., Student Council Election 2025"
+                                    className={
+                                        errors.name ? 'border-destructive' : ''
+                                    }
+                                />
+                                {errors.name && (
+                                    <FieldError>
+                                        <AlertCircle className="mr-1 h-4 w-4" />
+                                        {errors.name}
+                                    </FieldError>
+                                )}
+                            </Field>
+
+                            {/* End Date and Time */}
+                            <Field>
+                                <FieldLabel>End Date & Time</FieldLabel>
+                                <input
+                                    type="hidden"
+                                    name="end_time"
+                                    value={getEndTimeValue()}
+                                />
+                                <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+                                    <Popover
+                                        open={datePickerOpen}
+                                        onOpenChange={setDatePickerOpen}
+                                    >
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                id="end_date"
+                                                type="button"
+                                                className={cn(
+                                                    'justify-start text-left font-normal',
+                                                    !endDate &&
+                                                        'text-muted-foreground',
+                                                    errors.end_time &&
+                                                        'border-destructive',
+                                                )}
+                                            >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                {endDate
+                                                    ? format(endDate, 'PPP')
+                                                    : 'Pick a date'}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="w-auto p-0"
+                                            align="start"
                                         >
-                                            Election Name{' '}
-                                            <span className="text-red-500">
-                                                *
-                                            </span>
-                                        </label>
+                                            <Calendar
+                                                mode="single"
+                                                selected={endDate}
+                                                onSelect={(date) => {
+                                                    setEndDate(date);
+                                                    setDatePickerOpen(false);
+                                                }}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <div className="relative">
+                                        <Clock className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
                                         <Input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            required
-                                            placeholder="e.g., Student Council Election 2025"
-                                            className={
-                                                errors.name
-                                                    ? 'border-red-500'
-                                                    : ''
+                                            type="time"
+                                            id="end_time_picker"
+                                            value={endTime}
+                                            onChange={(e) =>
+                                                setEndTime(e.target.value)
                                             }
+                                            className={cn(
+                                                'pl-10 sm:w-40',
+                                                errors.end_time &&
+                                                    'border-destructive',
+                                            )}
                                         />
-                                        {errors.name && (
-                                            <FieldError>
-                                                <AlertCircle className="mr-1 h-4 w-4" />
-                                                {errors.name}
-                                            </FieldError>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
+                                    </div>
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    Leave empty for no end time limit
+                                </p>
+                                {errors.end_time && (
+                                    <FieldError>
+                                        <AlertCircle className="mr-1 h-4 w-4" />
+                                        {errors.end_time}
+                                    </FieldError>
+                                )}
+                            </Field>
 
-                                {/* End Time */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
-                                            htmlFor="end_time"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
+                            {/* Actions */}
+                            <Field>
+                                <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                                    <Link
+                                        href={voting.admin.elections.index.url()}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
                                         >
-                                            End Time
-                                        </label>
-                                        <Input
-                                            type="datetime-local"
-                                            id="end_time"
-                                            name="end_time"
-                                            className={
-                                                errors.end_time
-                                                    ? 'border-red-500'
-                                                    : ''
-                                            }
-                                        />
-                                        <p className="mt-1 text-xs text-gray-500">
-                                            Leave empty for no end time limit
-                                        </p>
-                                        {errors.end_time && (
-                                            <FieldError>
-                                                <AlertCircle className="mr-1 h-4 w-4" />
-                                                {errors.end_time}
-                                            </FieldError>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
-
-                                {/* Status */}
-                                <FieldGroup>
-                                    <Field>
-                                        <label
-                                            htmlFor="status"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
-                                        >
-                                            Status{' '}
-                                            <span className="text-red-500">
-                                                *
-                                            </span>
-                                        </label>
-                                        <select
-                                            id="status"
-                                            name="status"
-                                            required
-                                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                                        >
-                                            <option value="active">
-                                                Active
-                                            </option>
-                                            <option value="ended">Ended</option>
-                                        </select>
-                                        {errors.status && (
-                                            <FieldError>
-                                                <AlertCircle className="mr-1 h-4 w-4" />
-                                                {errors.status}
-                                            </FieldError>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
-
-                                {/* Form Actions */}
-                                <div className="flex gap-4 border-t pt-4">
+                                            Cancel
+                                        </Button>
+                                    </Link>
                                     <Button
                                         type="submit"
                                         disabled={processing}
-                                        className="bg-blue-600 hover:bg-blue-700"
+                                        className="w-full sm:w-auto"
                                     >
                                         {processing
                                             ? 'Creating...'
                                             : 'Create Election'}
                                     </Button>
-                                    <Link
-                                        href={voting.admin.elections.index.url()}
-                                    >
-                                        <Button type="button" variant="outline">
-                                            Cancel
-                                        </Button>
-                                    </Link>
                                 </div>
-                            </div>
-                        )}
-                    </Form>
-                </div>
+                            </Field>
+                        </FieldGroup>
+                    )}
+                </Form>
             </div>
         </AppLayout>
     );

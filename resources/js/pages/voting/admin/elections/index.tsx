@@ -1,5 +1,23 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyContent,
@@ -31,7 +49,8 @@ interface Election {
     id: number;
     name: string;
     election_code: string;
-    status: 'active' | 'ended';
+    status: boolean;
+    computed_status: 'active' | 'ended';
     end_time: string | null;
     created_at: string;
     updated_at: string;
@@ -46,14 +65,6 @@ interface Props {
 }
 
 export default function Index({ elections }: Props) {
-    const handleDelete = (election: Election) => {
-        if (confirm('Are you sure you want to delete this election?')) {
-            router.delete(
-                voting.admin.elections.destroy.url({ election: election.id }),
-            );
-        }
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Elections" />
@@ -70,7 +81,7 @@ export default function Index({ elections }: Props) {
                         </p>
                     </div>
                     <Link href={voting.admin.elections.create.url()}>
-                        <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Create Election
                         </Button>
@@ -78,13 +89,13 @@ export default function Index({ elections }: Props) {
                 </div>
 
                 {/* Elections Table */}
-                <div>
+                <Card>
                     {elections.length === 0 ? (
                         <Empty>
-                            <EmptyMedia>
-                                <Calendar className="h-16 w-16" />
-                            </EmptyMedia>
                             <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <Calendar />
+                                </EmptyMedia>
                                 <EmptyTitle>No elections yet</EmptyTitle>
                                 <EmptyDescription>
                                     Create your first election to get started
@@ -94,7 +105,7 @@ export default function Index({ elections }: Props) {
                                 <Link
                                     href={voting.admin.elections.create.url()}
                                 >
-                                    <Button className="bg-blue-600 hover:bg-blue-700">
+                                    <Button>
                                         <Plus className="mr-2 h-4 w-4" />
                                         Create Election
                                     </Button>
@@ -102,113 +113,145 @@ export default function Index({ elections }: Props) {
                             </EmptyContent>
                         </Empty>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Election</TableHead>
-                                        <TableHead>Code</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>End Time</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {elections.map((election) => (
-                                        <TableRow key={election.id}>
-                                            <TableCell>
-                                                <div className="font-medium text-gray-800">
-                                                    {election.name}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <code className="rounded bg-gray-100 px-2 py-1 text-sm">
-                                                    {election.election_code}
-                                                </code>
-                                            </TableCell>
-                                            <TableCell>
-                                                {election.status ===
-                                                'active' ? (
-                                                    <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                                                        Active
-                                                    </Badge>
-                                                ) : (
-                                                    <Badge variant="secondary">
-                                                        Ended
-                                                    </Badge>
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {election.end_time
-                                                    ? new Date(
-                                                          election.end_time,
-                                                      ).toLocaleDateString(
-                                                          'en-US',
-                                                          {
-                                                              month: 'short',
-                                                              day: 'numeric',
-                                                              year: 'numeric',
-                                                              hour: 'numeric',
-                                                              minute: '2-digit',
-                                                          },
-                                                      )
-                                                    : 'N/A'}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Link
-                                                        href={voting.admin.elections.show.url(
-                                                            {
-                                                                election:
-                                                                    election.id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Link
-                                                        href={voting.admin.elections.edit.url(
-                                                            {
-                                                                election:
-                                                                    election.id,
-                                                            },
-                                                        )}
-                                                    >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                election,
-                                                            )
-                                                        }
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-800"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
+                        <>
+                            <CardHeader>
+                                <CardTitle>All Elections</CardTitle>
+                                <CardDescription>
+                                    View and manage all election cycles
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Election</TableHead>
+                                            <TableHead>Code</TableHead>
+                                            <TableHead>Status</TableHead>
+                                            <TableHead>End Time</TableHead>
+                                            <TableHead className="text-right">
+                                                Actions
+                                            </TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {elections.map((election) => (
+                                            <TableRow key={election.id}>
+                                                <TableCell>
+                                                    <div className="font-medium text-foreground">
+                                                        {election.name}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <code className="rounded bg-muted px-2 py-1 text-sm">
+                                                        {election.election_code}
+                                                    </code>
+                                                </TableCell>
+                                                <TableCell>
+                                                    {election.computed_status ===
+                                                    'active' ? (
+                                                        <Badge variant="default">
+                                                            Active
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge variant="secondary">
+                                                            Ended
+                                                        </Badge>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">
+                                                    {election.end_time
+                                                        ? new Date(
+                                                              election.end_time,
+                                                          ).toLocaleDateString(
+                                                              'en-US',
+                                                              {
+                                                                  month: 'short',
+                                                                  day: 'numeric',
+                                                                  year: 'numeric',
+                                                                  hour: 'numeric',
+                                                                  minute: '2-digit',
+                                                              },
+                                                          )
+                                                        : 'N/A'}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex justify-end gap-2">
+                                                        <Link
+                                                            href={voting.admin.elections.show.url(
+                                                                {
+                                                                    election:
+                                                                        election.id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Link
+                                                            href={voting.admin.elections.edit.url(
+                                                                {
+                                                                    election:
+                                                                        election.id,
+                                                                },
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                            >
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent>
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>
+                                                                        Delete Election
+                                                                    </AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Are you sure you want to delete "{election.name}"? This action cannot be undone and will remove all associated positions, candidates, and votes.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                    <AlertDialogAction
+                                                                        onClick={() =>
+                                                                            router.delete(
+                                                                                voting.admin.elections.destroy.url({
+                                                                                    election: election.id,
+                                                                                }),
+                                                                            )
+                                                                        }
+                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                    >
+                                                                        Delete
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </>
                     )}
-                </div>
+                </Card>
             </div>
         </AppLayout>
     );

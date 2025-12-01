@@ -43,7 +43,9 @@ class ElectionController extends Controller
         ]);
 
         $validated['election_code'] = strtoupper(Str::random(10));
-        $validated['status'] = false;
+        // Status is automatically determined by end_time
+        // If end_time is null or in the future, it's active
+        $validated['status'] = true;
 
         Election::create($validated);
 
