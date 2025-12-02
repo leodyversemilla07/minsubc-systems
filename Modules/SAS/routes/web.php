@@ -35,6 +35,7 @@ Route::prefix('sas')->name('sas.')->group(function () {
     // Activities
     Route::get('/activities', [PageController::class, 'activities'])->name('activities.index');
     Route::get('/activities/calendar', [PageController::class, 'activitiesCalendar'])->name('activities.calendar');
+    Route::get('/activities/yearly-timeline', [PageController::class, 'yearlyTimeline'])->name('activities.yearly-timeline');
     Route::get('/activities/export', [PageController::class, 'exportCalendar'])->name('activities.export');
     Route::get('/activities/{slug}', [PageController::class, 'activityShow'])->name('activities.show');
     Route::get('/activities/{slug}/export', [PageController::class, 'exportActivity'])->name('activities.export-single');

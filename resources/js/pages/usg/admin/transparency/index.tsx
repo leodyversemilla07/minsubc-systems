@@ -291,12 +291,12 @@ export default function TransparencyManagement({
         >
             <Head title="Transparency Reports Management - USG Admin" />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
+            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header with action button */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Transparency Reports Management
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                            Transparency Reports
                         </h1>
                         <p className="text-muted-foreground">
                             Upload and manage USG transparency reports
@@ -308,9 +308,9 @@ export default function TransparencyManagement({
                         {canManage && (
                             <Link
                                 href="/usg/admin/transparency/create"
-                                className={cn(buttonVariants())}
+                                className={cn(buttonVariants({ size: 'sm' }))}
                             >
-                                <Plus className="h-4 w-4" />
+                                <Plus className="mr-1 h-4 w-4" />
                                 New Report
                             </Link>
                         )}
@@ -318,18 +318,18 @@ export default function TransparencyManagement({
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-                    <Card>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
-                                    <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                                <div className="rounded-full bg-indigo-100 p-3 dark:bg-indigo-900/20">
+                                    <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {safeStatistics.total}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Total
                                     </div>
                                 </div>
@@ -337,17 +337,17 @@ export default function TransparencyManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
-                                    <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                                    <Eye className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {safeStatistics.published}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Published
                                     </div>
                                 </div>
@@ -355,17 +355,17 @@ export default function TransparencyManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
-                                    <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                                <div className="rounded-full bg-gray-100 p-3 dark:bg-gray-800/50">
+                                    <Edit className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {safeStatistics.draft}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Drafts
                                     </div>
                                 </div>
@@ -373,17 +373,17 @@ export default function TransparencyManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-purple-100 p-3 dark:bg-purple-900">
-                                    <Download className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                                <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/20">
+                                    <Download className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {safeStatistics.total_downloads}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Downloads
                                     </div>
                                 </div>
@@ -391,17 +391,17 @@ export default function TransparencyManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-orange-100 p-3 dark:bg-orange-900">
-                                    <Eye className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                                <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/20">
+                                    <Eye className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {safeStatistics.total_views}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Views
                                     </div>
                                 </div>

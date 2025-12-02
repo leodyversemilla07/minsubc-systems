@@ -712,12 +712,12 @@ export default function EventsManagement({
         >
             <Head title="Events Management - USG Admin" />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
+            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header with action buttons */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Events Management
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                            Events
                         </h1>
                         <p className="text-muted-foreground">
                             Create, edit and manage USG events and activities
@@ -740,12 +740,9 @@ export default function EventsManagement({
                                     {isBulkActionLoading ? (
                                         <Loader2 className="h-4 w-4 animate-spin" />
                                     ) : (
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="mr-1 h-4 w-4" />
                                     )}
-                                    <span className="hidden sm:inline">
-                                        Delete Selected
-                                    </span>
-                                    <span className="sm:hidden">Delete</span>
+                                    Delete Selected
                                 </Button>
                             </>
                         )}
@@ -753,13 +750,9 @@ export default function EventsManagement({
                             variant="outline"
                             onClick={() => router.visit(calendar())}
                             size="sm"
-                            className="w-full sm:w-auto"
                         >
-                            <CalendarDays className="mr-2 h-4 w-4" />
-                            <span className="hidden sm:inline">
-                                Calendar View
-                            </span>
-                            <span className="sm:hidden">Calendar</span>
+                            <CalendarDays className="mr-1 h-4 w-4" />
+                            Calendar
                         </Button>
 
                         <ViewToggle view={view} onViewChange={setView} />
@@ -768,31 +761,27 @@ export default function EventsManagement({
                             <Button
                                 onClick={() => router.visit(create())}
                                 size="sm"
-                                className="w-full sm:w-auto"
                             >
-                                <Plus className="mr-2 h-4 w-4" />
-                                <span className="hidden sm:inline">
-                                    New Event
-                                </span>
-                                <span className="sm:hidden">New</span>
+                                <Plus className="mr-1 h-4 w-4" />
+                                New Event
                             </Button>
                         )}
                     </div>
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
-                                    <Calendar className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                                <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
+                                    <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.total}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Total Events
                                     </div>
                                 </div>
@@ -800,17 +789,17 @@ export default function EventsManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
-                                    <Clock className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                                    <Clock className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.upcoming}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Upcoming
                                     </div>
                                 </div>
@@ -818,17 +807,17 @@ export default function EventsManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
-                                    <Eye className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                                <div className="rounded-full bg-gray-100 p-3 dark:bg-gray-800/50">
+                                    <Eye className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.past}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Completed
                                     </div>
                                 </div>
@@ -836,17 +825,17 @@ export default function EventsManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-red-100 p-3 dark:bg-red-900">
-                                    <Trash2 className="h-6 w-6 text-red-600 dark:text-red-400" />
+                                <div className="rounded-full bg-red-100 p-3 dark:bg-red-900/20">
+                                    <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.cancelled}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Cancelled
                                     </div>
                                 </div>
@@ -1038,7 +1027,7 @@ export default function EventsManagement({
                                                         size="sm"
                                                         onClick={() =>
                                                             router.visit(
-                                                                publicShow(
+                                                                publicShow.url(
                                                                     event.id,
                                                                 ),
                                                             )
@@ -1415,7 +1404,7 @@ export default function EventsManagement({
                                                                     size="sm"
                                                                     onClick={() =>
                                                                         router.visit(
-                                                                            publicShow(
+                                                                            publicShow.url(
                                                                                 event.id,
                                                                             ),
                                                                         )

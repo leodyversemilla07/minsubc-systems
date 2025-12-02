@@ -108,6 +108,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
             Route::resource('resolutions', ResolutionController::class);
             Route::patch('resolutions/{resolution}/archive', [ResolutionController::class, 'archive'])->name('resolutions.archive');
+            Route::patch('resolutions/{resolution}/unarchive', [ResolutionController::class, 'unarchive'])->name('resolutions.unarchive');
         });
 
         // Document Management - restricted to USG Admins and System Admins

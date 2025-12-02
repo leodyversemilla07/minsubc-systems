@@ -283,12 +283,12 @@ export default function OfficersManagement({
         >
             <Head title="Officers Management - USG Admin" />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
+            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header with action button */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Officers Management
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                            Officers
                         </h1>
                         <p className="text-muted-foreground">
                             Manage USG officer profiles and information
@@ -302,9 +302,9 @@ export default function OfficersManagement({
                                 onClick={() =>
                                     router.visit(officerRoutes.create())
                                 }
-                                className="w-full sm:w-auto"
+                                size="sm"
                             >
-                                <Plus className="mr-2 h-4 w-4" />
+                                <Plus className="mr-1 h-4 w-4" />
                                 Add Officer
                             </Button>
                         )}
@@ -312,18 +312,15 @@ export default function OfficersManagement({
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-6 md:grid-cols-3">
-                    <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-chart-1/10 via-chart-1/5 to-chart-1/10">
+                <div className="grid gap-4 md:grid-cols-3">
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="relative">
-                                    <div className="rounded-xl bg-gradient-to-br from-chart-1 to-chart-1/80 p-3 shadow-lg">
-                                        <Users className="h-6 w-6 text-white" />
-                                    </div>
-                                    <div className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-chart-1/20"></div>
+                                <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/20">
+                                    <Users className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-bold text-foreground">
+                                    <div className="text-2xl font-bold">
                                         {safeOfficers.length}
                                     </div>
                                     <div className="text-sm text-muted-foreground">
@@ -334,17 +331,14 @@ export default function OfficersManagement({
                         </CardContent>
                     </Card>
 
-                    <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-chart-2/10 via-chart-2/5 to-chart-2/10">
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="relative">
-                                    <div className="rounded-xl bg-gradient-to-br from-chart-2 to-chart-2/80 p-3 shadow-lg">
-                                        <User className="h-6 w-6 text-white" />
-                                    </div>
-                                    <div className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-green-500"></div>
+                                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                                    <User className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-bold text-foreground">
+                                    <div className="text-2xl font-bold">
                                         {
                                             safeOfficers.filter(
                                                 (o) => o.is_active,
@@ -359,17 +353,14 @@ export default function OfficersManagement({
                         </CardContent>
                     </Card>
 
-                    <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-chart-3/10 via-chart-3/5 to-chart-3/10">
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="relative">
-                                    <div className="rounded-xl bg-gradient-to-br from-chart-3 to-chart-3/80 p-3 shadow-lg">
-                                        <MapPin className="h-6 w-6 text-white" />
-                                    </div>
-                                    <div className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-chart-3/20"></div>
+                                <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
+                                    <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-bold text-foreground">
+                                    <div className="text-2xl font-bold">
                                         {safeDepartments.length}
                                     </div>
                                     <div className="text-sm text-muted-foreground">

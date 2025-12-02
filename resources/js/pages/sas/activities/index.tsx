@@ -10,7 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import type { PaginatedData, SASActivity } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Download, Search, Filter, ArrowRight, X, MapPin } from 'lucide-react';
+import { Calendar, CalendarDays, Download, Search, Filter, ArrowRight, X, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import SASLayout from '@/layouts/sas-layout';
 import { calendar, exportMethod, index, show } from '@/routes/sas/activities';
@@ -181,10 +181,15 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                         </p>
 
                         {/* Quick Actions */}
-                        <div className="mb-10 flex justify-center gap-4">
+                        <div className="mb-10 flex flex-wrap justify-center gap-4">
                             <Link href={calendar()}>
                                 <Button variant="secondary" size="lg" className="gap-2">
-                                    <Calendar className="h-5 w-5" /> Calendar View
+                                    <Calendar className="h-5 w-5" /> Monthly Calendar
+                                </Button>
+                            </Link>
+                            <Link href="/sas/activities/yearly-timeline">
+                                <Button variant="secondary" size="lg" className="gap-2">
+                                    <CalendarDays className="h-5 w-5" /> Yearly Timeline
                                 </Button>
                             </Link>
                             <a href={exportMethod().url} download className="inline-flex">

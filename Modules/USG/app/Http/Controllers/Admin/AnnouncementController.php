@@ -126,6 +126,14 @@ class AnnouncementController extends Controller
         return back()->with('success', 'Announcement unpublished successfully.');
     }
 
+    public function archive(int $id): RedirectResponse
+    {
+        $announcement = $this->announcementService->getById($id);
+        $this->announcementService->archive($announcement);
+
+        return back()->with('success', 'Announcement archived successfully.');
+    }
+
     public function preview(string $slug): Response
     {
         $announcement = $this->announcementService->getBySlugForAdmin($slug);

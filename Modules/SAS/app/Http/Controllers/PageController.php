@@ -11,6 +11,7 @@ use Modules\SAS\Models\SASActivity;
 use Modules\SAS\Services\ActivityService;
 use Modules\SAS\Services\CalendarService;
 use Modules\SAS\Services\OrganizationService;
+use Modules\USG\Models\Event;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class PageController extends Controller
@@ -212,6 +213,61 @@ class PageController extends Controller
             'categories' => $categories,
             'currentMonth' => $month,
             'currentYear' => $year,
+        ]);
+    }
+
+    /**
+     * Display the yearly timeline of USG events and activities.
+     */
+    public function yearlyTimeline(Request $request): Response
+    {
+        $year = $request->get('year', now()->year);
+        $category = $request->get('category');
+
+        // Fetch USG events for the entire year
+        $eventsQuery = Event::whereYear('start_date', $year)
+            ->published()
+            ->orderBy('start_date');
+
+        if ($category) {
+            $eventsQuery->where('category', $category);
+        }
+
+        $events = $eventsQuery->get();
+
+        // Get event categories for filtering
+        $categories = Event::distinct()
+            ->whereNotNull('category')
+            ->pluck('category')
+            ->sort()
+            ->values();
+
+        // Group events by month
+        $eventsByMonth = $events->groupBy(function ($event) {
+            return $event->start_date->format('n'); // Month number (1-12)
+        });
+
+        // Create a structure for all 12 months
+        $yearlyData = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $monthEvents = $eventsByMonth->get($month, collect());
+            $yearlyData[$month] = [
+                'month' => $month,
+                'month_name' => \Carbon\Carbon::create($year, $month, 1)->format('F'),
+                'month_short' => \Carbon\Carbon::create($year, $month, 1)->format('M'),
+                'events' => $monthEvents->values()->toArray(),
+                'event_count' => $monthEvents->count(),
+            ];
+        }
+
+        return Inertia::render('sas/activities/yearly-timeline', [
+            'yearlyData' => array_values($yearlyData),
+            'categories' => $categories,
+            'currentYear' => (int) $year,
+            'filters' => [
+                'year' => (int) $year,
+                'category' => $category,
+            ],
         ]);
     }
 

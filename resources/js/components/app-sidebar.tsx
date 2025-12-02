@@ -11,6 +11,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import profile from '@/routes/profile';
 import registrar from '@/routes/registrar';
 import sas from '@/routes/sas';
 import superAdmin from '@/routes/super-admin';
@@ -25,11 +26,11 @@ import {
     CheckSquare,
     ClipboardList,
     FileText,
-    Folder,
     GraduationCap,
     LayoutGrid,
     ListChecks,
     Megaphone,
+    Settings,
     Shield,
     Target,
     Users,
@@ -37,22 +38,18 @@ import {
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
-
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
+
+    // Footer navigation items
+    const footerNavItems: NavItem[] = [
+        {
+            title: 'Settings',
+            href: profile.edit.url(),
+            icon: Settings,
+        },
+    ];
 
     // Helper function to check if user has any of the specified roles
     const hasAnyRole = (roles: string[]): boolean => {
@@ -267,7 +264,28 @@ export function AppSidebar() {
         return items;
     };
 
+    // Get the navigation label based on user role
+    const getNavLabel = (): string => {
+        if (hasAnyRole(['super-admin'])) {
+            return 'Super Admin';
+        }
+        if (hasAnyRole(['usg-admin', 'usg-officer'])) {
+            return 'USG Management';
+        }
+        if (hasAnyRole(['voting-admin', 'voting-manager'])) {
+            return 'Voting Management';
+        }
+        if (hasAnyRole(['sas-admin', 'sas-staff'])) {
+            return 'SAS Management';
+        }
+        if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
+            return 'Registrar';
+        }
+        return 'Student Services';
+    };
+
     const mainNavItems = getMainNavItems();
+    const navLabel = getNavLabel();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -284,7 +302,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems} label={navLabel} />
             </SidebarContent>
 
             <SidebarFooter>

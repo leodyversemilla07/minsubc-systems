@@ -1,3 +1,13 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -248,19 +258,37 @@ export default function ResolutionsManagement({
         );
     };
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [resolutionToDelete, setResolutionToDelete] =
+        useState<Resolution | null>(null);
+
     const handleDelete = (resolution: Resolution) => {
-        if (confirm(`Are you sure you want to delete "${resolution.title}"?`)) {
-            router.delete(`/usg/admin/resolutions/${resolution.id}`);
+        setResolutionToDelete(resolution);
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (resolutionToDelete) {
+            router.delete(`/usg/admin/resolutions/${resolutionToDelete.id}`, {
+                onFinish: () => {
+                    setDeleteDialogOpen(false);
+                    setResolutionToDelete(null);
+                },
+            });
         }
     };
 
     const handleStatusChange = (resolution: Resolution, newStatus: string) => {
         setUpdatingStatus(resolution.id.toString());
+        
+        // Use the correct endpoint based on the action
+        const endpoint = newStatus === 'archived' 
+            ? `/usg/admin/resolutions/${resolution.id}/archive`
+            : `/usg/admin/resolutions/${resolution.id}/unarchive`;
+        
         router.patch(
-            `/usg/admin/resolutions/${resolution.id}/status`,
-            {
-                status: newStatus,
-            },
+            endpoint,
+            {},
             {
                 onFinish: () => setUpdatingStatus(null),
             },
@@ -353,29 +381,25 @@ export default function ResolutionsManagement({
 
             <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header with action buttons */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between lg:items-center">
-                    <div className="space-y-1">
-                        <h1 className="text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
-                            Resolutions Management
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                            Resolutions
                         </h1>
-                        <p className="text-sm text-muted-foreground sm:text-base">
+                        <p className="text-muted-foreground">
                             Create, edit and manage USG resolutions and
                             legislative documents
                         </p>
                     </div>
 
-                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+                    <div className="flex items-center gap-3">
                         <Button
                             variant="outline"
                             onClick={() => router.visit('/usg/resolutions')}
                             size="sm"
-                            className="w-full justify-center sm:w-auto sm:justify-start"
                         >
-                            <Archive className="mr-2 h-4 w-4" />
-                            <span className="hidden sm:inline">
-                                View Archive
-                            </span>
-                            <span className="sm:hidden">Archive</span>
+                            <Archive className="mr-1 h-4 w-4" />
+                            View Archive
                         </Button>
 
                         <ViewToggle view={view} onViewChange={setView} />
@@ -388,34 +412,30 @@ export default function ResolutionsManagement({
                                     )
                                 }
                                 size="sm"
-                                className="w-full justify-center sm:w-auto sm:justify-start"
                             >
-                                <Plus className="mr-2 h-4 w-4" />
-                                <span className="hidden sm:inline">
-                                    New Resolution
-                                </span>
-                                <span className="sm:hidden">New</span>
+                                <Plus className="mr-1 h-4 w-4" />
+                                New Resolution
                             </Button>
                         )}
                     </div>
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card
-                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        className="cursor-pointer transition-shadow hover:shadow-lg"
                         onClick={() => handleStatusFilter('all')}
                     >
-                        <CardContent className="p-4 md:p-6">
-                            <div className="flex items-center gap-3 md:gap-4">
-                                <div className="rounded-lg bg-chart-1 p-2 transition-colors md:p-3">
-                                    <FileText className="h-5 w-5 text-foreground md:h-6 md:w-6" />
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/20">
+                                    <FileText className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xl font-bold md:text-2xl">
+                                <div>
+                                    <div className="text-2xl font-bold">
                                         {stats.total}
                                     </div>
-                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                    <div className="text-sm text-muted-foreground">
                                         Total
                                     </div>
                                 </div>
@@ -424,19 +444,19 @@ export default function ResolutionsManagement({
                     </Card>
 
                     <Card
-                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        className="cursor-pointer transition-shadow hover:shadow-lg"
                         onClick={() => handleStatusFilter('published')}
                     >
-                        <CardContent className="p-4 md:p-6">
-                            <div className="flex items-center gap-3 md:gap-4">
-                                <div className="rounded-lg bg-chart-2 p-2 transition-colors md:p-3">
-                                    <Eye className="h-5 w-5 text-success md:h-6 md:w-6" />
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                                    <Eye className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xl font-bold md:text-2xl">
+                                <div>
+                                    <div className="text-2xl font-bold">
                                         {stats.published}
                                     </div>
-                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                    <div className="text-sm text-muted-foreground">
                                         Published
                                     </div>
                                 </div>
@@ -445,19 +465,19 @@ export default function ResolutionsManagement({
                     </Card>
 
                     <Card
-                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md"
+                        className="cursor-pointer transition-shadow hover:shadow-lg"
                         onClick={() => handleStatusFilter('archived')}
                     >
-                        <CardContent className="p-4 md:p-6">
-                            <div className="flex items-center gap-3 md:gap-4">
-                                <div className="rounded-lg bg-chart-3 p-2 transition-colors md:p-3">
-                                    <Archive className="h-5 w-5 text-muted-foreground md:h-6 md:w-6" />
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-full bg-gray-100 p-3 dark:bg-gray-800/50">
+                                    <Archive className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xl font-bold md:text-2xl">
+                                <div>
+                                    <div className="text-2xl font-bold">
                                         {stats.archived}
                                     </div>
-                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                    <div className="text-sm text-muted-foreground">
                                         Archived
                                     </div>
                                 </div>
@@ -466,19 +486,19 @@ export default function ResolutionsManagement({
                     </Card>
 
                     <Card
-                        className="cursor-pointer border-2 transition-all hover:scale-[1.02] hover:border-ring hover:shadow-md sm:col-span-2 md:col-span-3 lg:col-span-1"
+                        className="cursor-pointer transition-shadow hover:shadow-lg"
                         onClick={() => handleStatusFilter('all')}
                     >
-                        <CardContent className="p-4 md:p-6">
-                            <div className="flex items-center gap-3 md:gap-4">
-                                <div className="rounded-lg bg-chart-5 p-2 transition-colors md:p-3">
-                                    <Vote className="h-5 w-5 text-foreground md:h-6 md:w-6" />
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
+                                    <Vote className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xl font-bold md:text-2xl">
+                                <div>
+                                    <div className="text-2xl font-bold">
                                         {stats.withVotes}
                                     </div>
-                                    <div className="text-xs text-muted-foreground md:text-sm">
+                                    <div className="text-sm text-muted-foreground">
                                         With Votes
                                     </div>
                                 </div>
@@ -1180,6 +1200,32 @@ export default function ResolutionsManagement({
                     </Card>
                 )}
             </div>
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Resolution</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete "
+                            {resolutionToDelete?.title}"? This action cannot
+                            be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmDelete}
+                            className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </AppLayout>
     );
 }

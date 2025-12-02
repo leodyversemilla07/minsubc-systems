@@ -1,3 +1,13 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -211,6 +221,11 @@ export default function AnnouncementsManagement({
     );
     const [view, setView] = useState<'grid' | 'table'>('grid');
 
+    // Delete dialog state
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [announcementToDelete, setAnnouncementToDelete] =
+        useState<Announcement | null>(null);
+
     const handleSearch = (query: string) => {
         setSearchQuery(query);
         applyFilters({ search: query });
@@ -249,10 +264,18 @@ export default function AnnouncementsManagement({
     };
 
     const handleDelete = (announcement: Announcement) => {
-        if (
-            confirm(`Are you sure you want to delete "${announcement.title}"?`)
-        ) {
-            router.delete(destroy.url(announcement.id));
+        setAnnouncementToDelete(announcement);
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (announcementToDelete) {
+            router.delete(destroy.url(announcementToDelete.id), {
+                onFinish: () => {
+                    setDeleteDialogOpen(false);
+                    setAnnouncementToDelete(null);
+                },
+            });
         }
     };
 
@@ -260,9 +283,22 @@ export default function AnnouncementsManagement({
         announcement: Announcement,
         newStatus: string,
     ) => {
-        router.patch(`/usg/admin/announcements/${announcement.id}/status`, {
-            status: newStatus,
-        });
+        // Use the correct route based on the status action
+        let route = '';
+        switch (newStatus) {
+            case 'published':
+                route = `/usg/admin/announcements/${announcement.id}/publish`;
+                break;
+            case 'draft':
+                route = `/usg/admin/announcements/${announcement.id}/unpublish`;
+                break;
+            case 'archived':
+                route = `/usg/admin/announcements/${announcement.id}/archive`;
+                break;
+            default:
+                return;
+        }
+        router.patch(route);
     };
 
     const formatDate = (dateString: string) => {
@@ -338,12 +374,12 @@ export default function AnnouncementsManagement({
         >
             <Head title="Announcements Management - USG Admin" />
 
-            <div className="flex-1 space-y-8 p-6 md:p-8">
+            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header with action button */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-                            Announcements Management
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                            Announcements
                         </h1>
                         <p className="text-muted-foreground">
                             Create, edit and manage USG announcements
@@ -357,7 +393,7 @@ export default function AnnouncementsManagement({
                                 href={create.url()}
                                 className={cn(buttonVariants())}
                             >
-                                <Plus className="h-4 w-4" />
+                                <Plus className="mr-1 h-4 w-4" />
                                 New Announcement
                             </Link>
                         )}
@@ -365,18 +401,18 @@ export default function AnnouncementsManagement({
                 </div>
 
                 {/* Stats */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900">
-                                    <Megaphone className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                                <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/20">
+                                    <Megaphone className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.total}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Total
                                     </div>
                                 </div>
@@ -384,17 +420,17 @@ export default function AnnouncementsManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900">
-                                    <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
+                                    <Eye className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.published}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Published
                                     </div>
                                 </div>
@@ -402,17 +438,17 @@ export default function AnnouncementsManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-yellow-100 p-3 dark:bg-yellow-900">
-                                    <Filter className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                                <div className="rounded-full bg-yellow-100 p-3 dark:bg-yellow-900/20">
+                                    <Filter className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.pending}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Pending
                                     </div>
                                 </div>
@@ -420,17 +456,17 @@ export default function AnnouncementsManagement({
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="transition-shadow hover:shadow-lg">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4">
-                                <div className="rounded-lg bg-gray-100 p-3 dark:bg-gray-800">
-                                    <Edit className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                                <div className="rounded-full bg-gray-100 p-3 dark:bg-gray-800/50">
+                                    <Edit className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold">
                                         {stats.draft}
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-muted-foreground">
                                         Drafts
                                     </div>
                                 </div>
@@ -978,6 +1014,32 @@ export default function AnnouncementsManagement({
                     </Card>
                 )}
             </div>
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Announcement</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete "
+                            {announcementToDelete?.title}"? This action cannot
+                            be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmDelete}
+                            className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </AppLayout>
     );
 }
