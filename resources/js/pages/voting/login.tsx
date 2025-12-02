@@ -140,27 +140,27 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                     )}
                                 </Field>
 
-                                {/* Voter ID Field */}
+                                {/* School ID Field */}
                                 <Field>
                                     <div className="flex items-center gap-2">
-                                        <FieldLabel htmlFor="voters_id">
-                                            Voter ID
+                                        <FieldLabel htmlFor="school_id">
+                                            School ID
                                         </FieldLabel>
-                                        <HelpTooltip content="Your unique voter identification number provided by the election administrator" />
+                                        <HelpTooltip content="Your school identification number" />
                                     </div>
                                     <Input
                                         type="text"
-                                        id="voters_id"
-                                        name="voters_id"
+                                        id="school_id"
+                                        name="school_id"
                                         required
                                         autoFocus
-                                        placeholder="Enter your voter ID"
+                                        placeholder="Enter your school ID"
                                         className="w-full"
-                                        aria-label="Voter ID"
+                                        aria-label="School ID"
                                     />
-                                    {errors.voters_id && (
+                                    {errors.school_id && (
                                         <FieldError>
-                                            {errors.voters_id}
+                                            {errors.school_id}
                                         </FieldError>
                                     )}
                                 </Field>

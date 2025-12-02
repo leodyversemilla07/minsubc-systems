@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('voters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('election_id')->constrained('elections')->onDelete('cascade');
-            $table->string('voters_id', 15)->unique();
+            $table->string('school_id', 15)->unique();
             $table->string('password')->nullable();
             $table->integer('generation_batch')->default(1);
             $table->string('prefix', 10)->default('');
             $table->boolean('has_voted')->default(false);
             $table->timestamps();
 
-            $table->index(['election_id', 'voters_id']);
+            $table->index(['election_id', 'school_id']);
         });
     }
 

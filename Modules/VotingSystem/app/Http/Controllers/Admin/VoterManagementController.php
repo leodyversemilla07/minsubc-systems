@@ -80,13 +80,13 @@ class VoterManagementController extends Controller
         foreach ($validated['student_ids'] as $studentId) {
             // Check if voter already exists
             $exists = Voter::where('election_id', $validated['election_id'])
-                ->where('voters_id', $studentId)
+                ->where('school_id', $studentId)
                 ->exists();
 
             if (! $exists) {
                 Voter::create([
                     'election_id' => $validated['election_id'],
-                    'voters_id' => $studentId,
+                    'school_id' => $studentId,
                     'password' => $hashedPassword,
                     'generation_batch' => $validated['generation_batch'],
                     'prefix' => $validated['prefix'] ?? '',
@@ -161,12 +161,12 @@ class VoterManagementController extends Controller
             ->where('election_id', $election->id)
             ->get();
 
-        $csvData = "Voter ID,Student Name,Course,Year Level,Has Voted,Generation Batch,Prefix\n";
+        $csvData = "School ID,Student Name,Course,Year Level,Has Voted,Generation Batch,Prefix\n";
 
         foreach ($voters as $voter) {
             $csvData .= sprintf(
                 "%s,%s,%s,%s,%s,%s,%s\n",
-                $voter->voters_id,
+                $voter->school_id,
                 $voter->student?->user?->full_name ?? 'N/A',
                 $voter->student?->course ?? 'N/A',
                 $voter->student?->year_level ?? 'N/A',

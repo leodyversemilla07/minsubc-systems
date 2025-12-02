@@ -41,21 +41,21 @@ class VoterAuthController extends Controller
     {
         // Find the voter
         $voter = Voter::where('election_id', $request->election_id)
-            ->where('voters_id', $request->voters_id)
+            ->where('school_id', $request->school_id)
             ->first();
 
         // Check if voter exists and password matches
         if (! $voter || ! Hash::check($request->password, $voter->password)) {
             return back()->withErrors([
-                'voters_id' => 'Invalid voter ID or password.',
-            ])->onlyInput('voters_id', 'election_id');
+                'school_id' => 'Invalid school ID or password.',
+            ])->onlyInput('school_id', 'election_id');
         }
 
         // Check if voter has already voted
         if ($voter->hasVoted()) {
             return back()->withErrors([
-                'voters_id' => 'You have already cast your vote in this election.',
-            ])->onlyInput('voters_id', 'election_id');
+                'school_id' => 'You have already cast your vote in this election.',
+            ])->onlyInput('school_id', 'election_id');
         }
 
         // Check if election is still active
@@ -63,7 +63,7 @@ class VoterAuthController extends Controller
         if (! $election->isActive() || $election->hasEnded()) {
             return back()->withErrors([
                 'election_id' => 'This election is no longer active.',
-            ])->onlyInput('voters_id', 'election_id');
+            ])->onlyInput('school_id', 'election_id');
         }
 
         // Log the voter in using the 'voter' guard

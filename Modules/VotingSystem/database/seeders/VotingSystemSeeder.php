@@ -94,7 +94,7 @@ class VotingSystemSeeder extends Seeder
             foreach ($existingStudents->take(5) as $student) {
                 Voter::create([
                     'election_id' => $election->id,
-                    'voters_id' => $student->student_id,
+                    'school_id' => $student->student_id,
                     'password' => Hash::make('password'),
                     'generation_batch' => 1,
                     'prefix' => '',
@@ -126,7 +126,7 @@ class VotingSystemSeeder extends Seeder
                 // Create voter for this student
                 Voter::create([
                     'election_id' => $election->id,
-                    'voters_id' => $student->student_id,
+                    'school_id' => $student->student_id,
                     'password' => Hash::make('password'),
                     'generation_batch' => 1,
                     'prefix' => '',
@@ -152,7 +152,7 @@ class VotingSystemSeeder extends Seeder
                 foreach ($candidates as $candidate) {
                     Vote::create([
                         'election_id' => $election->id,
-                        'voters_id' => $voter->id,
+                        'voter_id' => $voter->id,
                         'candidate_id' => $candidate->id,
                         'position_id' => $position->position_id,
                         'timestamp' => now(),

@@ -228,7 +228,7 @@ export function AppSidebar() {
                 icon: LayoutGrid,
             });
         }
-        // Student/Default Navigation
+        // Student/Default Navigation - Unified 4 Systems
         else {
             items.push(
                 {
@@ -240,6 +240,26 @@ export function AppSidebar() {
                     title: 'Document Requests',
                     href: registrar.documentRequests.index.url(),
                     icon: ClipboardList,
+                },
+                {
+                    title: 'My Scholarships',
+                    href: sas.student.scholarships.index.url(),
+                    icon: GraduationCap,
+                },
+                {
+                    title: 'My Insurance',
+                    href: sas.student.insurance.index.url(),
+                    icon: Shield,
+                },
+                {
+                    title: 'USG Portal',
+                    href: usg.index.url(),
+                    icon: Users,
+                },
+                {
+                    title: 'Voting System',
+                    href: voting.index.url(),
+                    icon: Vote,
                 },
             );
         }

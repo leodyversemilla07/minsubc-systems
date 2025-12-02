@@ -41,6 +41,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -68,7 +69,7 @@ interface Student {
 }
 
 interface Voter {
-    voters_id: string;
+    school_id: string;
     election: Election;
     student?: Student;
     has_voted: boolean;
@@ -86,6 +87,8 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
+    const { can } = usePermissions();
+
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.voters.index.url(),
@@ -108,19 +111,21 @@ export default function Index({
                             Manage voter accounts
                         </p>
                     </div>
-                    <Link
-                        href={
-                            voting.admin.voters.create.url() +
-                            (selectedElectionId
-                                ? `?election_id=${selectedElectionId}`
-                                : '')
-                        }
-                    >
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Generate Voters
-                        </Button>
-                    </Link>
+                    {can('voters.create') && (
+                        <Link
+                            href={
+                                voting.admin.voters.create.url() +
+                                (selectedElectionId
+                                    ? `?election_id=${selectedElectionId}`
+                                    : '')
+                            }
+                        >
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Generate Voters
+                            </Button>
+                        </Link>
+                    )}
                 </div>
 
                 {/* Election Filter */}
@@ -160,19 +165,21 @@ export default function Index({
                                 </EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
-                                <Link
-                                    href={
-                                        voting.admin.voters.create.url() +
-                                        (selectedElectionId
-                                            ? `?election_id=${selectedElectionId}`
-                                            : '')
-                                    }
-                                >
-                                    <Button>
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Generate Voters
-                                    </Button>
-                                </Link>
+                                {can('voters.create') && (
+                                    <Link
+                                        href={
+                                            voting.admin.voters.create.url() +
+                                            (selectedElectionId
+                                                ? `?election_id=${selectedElectionId}`
+                                                : '')
+                                        }
+                                    >
+                                        <Button>
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Generate Voters
+                                        </Button>
+                                    </Link>
+                                )}
                             </EmptyContent>
                         </Empty>
                     ) : (
@@ -187,7 +194,7 @@ export default function Index({
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead>Voter ID</TableHead>
+                                            <TableHead>School ID</TableHead>
                                             <TableHead>Student</TableHead>
                                             <TableHead>Election</TableHead>
                                             <TableHead>Status</TableHead>
@@ -199,10 +206,10 @@ export default function Index({
                                     </TableHeader>
                                     <TableBody>
                                         {voters.map((voter) => (
-                                            <TableRow key={voter.voters_id}>
+                                            <TableRow key={voter.school_id}>
                                                 <TableCell>
                                                     <code className="rounded bg-muted px-2 py-1 text-xs">
-                                                        {voter.voters_id}
+                                                        {voter.school_id}
                                                     </code>
                                                 </TableCell>
                                                 <TableCell>
@@ -238,7 +245,7 @@ export default function Index({
                                                             href={voting.admin.voters.show.url(
                                                                 {
                                                                     voter: Number(
-                                                                        voter.voters_id,
+                                                                        voter.school_id,
                                                                     ),
                                                                 },
                                                             )}
@@ -250,42 +257,44 @@ export default function Index({
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
-                                                                </Button>
-                                                            </AlertDialogTrigger>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>
-                                                                        Delete Voter
-                                                                    </AlertDialogTitle>
-                                                                    <AlertDialogDescription>
-                                                                        Are you sure you want to delete voter "{voter.voters_id}"? This action cannot be undone.
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                    <AlertDialogAction
-                                                                        onClick={() =>
-                                                                            router.delete(
-                                                                                voting.admin.voters.destroy.url({
-                                                                                    voter: Number(voter.voters_id),
-                                                                                }),
-                                                                            )
-                                                                        }
-                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                        {can('voters.delete') && (
+                                                            <AlertDialog>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                     >
-                                                                        Delete
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                                                        </AlertDialog>
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent>
+                                                                    <AlertDialogHeader>
+                                                                        <AlertDialogTitle>
+                                                                            Delete Voter
+                                                                        </AlertDialogTitle>
+                                                                        <AlertDialogDescription>
+                                                                            Are you sure you want to delete voter with School ID "{voter.school_id}"? This action cannot be undone.
+                                                                        </AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogAction
+                                                                            onClick={() =>
+                                                                                router.delete(
+                                                                                    voting.admin.voters.destroy.url({
+                                                                                        voter: Number(voter.school_id),
+                                                                                    }),
+                                                                                )
+                                                                            }
+                                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                        >
+                                                                            Delete
+                                                                        </AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        )}
                                                     </div>
                                                 </TableCell>
                                             </TableRow>

@@ -22,7 +22,7 @@ class VoterFactory extends Factory
     {
         return [
             'election_id' => Election::factory(),
-            'voters_id' => Student::factory()->create()->student_id,
+            'school_id' => Student::factory()->create()->student_id,
             'password' => Hash::make('password'),
             'generation_batch' => fake()->numberBetween(1, 5),
             'prefix' => fake()->randomElement(['', 'BSIT', 'BSCS', 'BSBA', 'BSED']),

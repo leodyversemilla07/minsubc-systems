@@ -23,7 +23,7 @@ class VoteFactory extends Factory
     {
         return [
             'election_id' => Election::factory(),
-            'voters_id' => Voter::factory(),
+            'voter_id' => Voter::factory(),
             'candidate_id' => Candidate::factory(),
             'position_id' => Position::factory(),
             'timestamp' => now(),

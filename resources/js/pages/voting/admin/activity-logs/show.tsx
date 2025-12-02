@@ -22,7 +22,7 @@ interface Election {
 
 interface Voter {
     id: number;
-    voters_id: string;
+    school_id: string;
 }
 
 interface VoterActivityLog {
@@ -129,10 +129,10 @@ export default function Show({ activityLog }: Props) {
                                 </div>
                                 <div className="ml-6">
                                     <div className="text-sm text-muted-foreground">
-                                        Voter ID
+                                        School ID
                                     </div>
                                     <div className="font-medium text-foreground">
-                                        {activityLog.voter.voters_id}
+                                        {activityLog.voter.school_id}
                                     </div>
                                 </div>
                             </div>

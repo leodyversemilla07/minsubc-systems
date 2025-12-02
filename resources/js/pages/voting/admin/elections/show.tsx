@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -31,6 +32,8 @@ interface Props {
 }
 
 export default function Show({ election }: Props) {
+    const { can } = usePermissions();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Elections', href: voting.admin.elections.index.url() },
@@ -59,16 +62,18 @@ export default function Show({ election }: Props) {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Link
-                            href={voting.admin.elections.edit.url({
-                                election: election.id,
-                            })}
-                        >
-                            <Button>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                            </Button>
-                        </Link>
+                        {can('elections.edit') && (
+                            <Link
+                                href={voting.admin.elections.edit.url({
+                                    election: election.id,
+                                })}
+                            >
+                                <Button>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit
+                                </Button>
+                            </Link>
+                        )}
                         <Link href={voting.admin.elections.index.url()}>
                             <Button variant="outline">Back</Button>
                         </Link>

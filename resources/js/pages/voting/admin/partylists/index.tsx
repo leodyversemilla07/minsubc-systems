@@ -40,6 +40,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -74,6 +75,8 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
+    const { can } = usePermissions();
+
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.partylists.index.url(),
@@ -96,19 +99,21 @@ export default function Index({
                             Manage political parties and groups
                         </p>
                     </div>
-                    <Link
-                        href={
-                            voting.admin.partylists.create.url() +
-                            (selectedElectionId
-                                ? `?election_id=${selectedElectionId}`
-                                : '')
-                        }
-                    >
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Partylist
-                        </Button>
-                    </Link>
+                    {can('partylists.create') && (
+                        <Link
+                            href={
+                                voting.admin.partylists.create.url() +
+                                (selectedElectionId
+                                    ? `?election_id=${selectedElectionId}`
+                                    : '')
+                            }
+                        >
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Partylist
+                            </Button>
+                        </Link>
+                    )}
                 </div>
 
                 {/* Election Filter */}
@@ -148,19 +153,21 @@ export default function Index({
                                 </EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
-                                <Link
-                                    href={
-                                        voting.admin.partylists.create.url() +
-                                        (selectedElectionId
-                                            ? `?election_id=${selectedElectionId}`
-                                            : '')
-                                    }
-                                >
-                                    <Button>
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Add Partylist
-                                    </Button>
-                                </Link>
+                                {can('partylists.create') && (
+                                    <Link
+                                        href={
+                                            voting.admin.partylists.create.url() +
+                                            (selectedElectionId
+                                                ? `?election_id=${selectedElectionId}`
+                                                : '')
+                                        }
+                                    >
+                                        <Button>
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Add Partylist
+                                        </Button>
+                                    </Link>
+                                )}
                             </EmptyContent>
                         </Empty>
                     ) : (
@@ -215,57 +222,61 @@ export default function Index({
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        <Link
-                                                            href={voting.admin.partylists.edit.url(
-                                                                {
-                                                                    partylist:
-                                                                        partylist.partylist_id,
-                                                                },
-                                                            )}
-                                                        >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
+                                                        {can('partylists.edit') && (
+                                                            <Link
+                                                                href={voting.admin.partylists.edit.url(
+                                                                    {
+                                                                        partylist:
+                                                                            partylist.partylist_id,
+                                                                    },
+                                                                )}
                                                             >
-                                                                <Edit className="h-4 w-4" />
-                                                            </Button>
-                                                        </Link>
-                                                        <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="sm"
-                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                 >
-                                                                    <Trash2 className="h-4 w-4" />
+                                                                    <Edit className="h-4 w-4" />
                                                                 </Button>
-                                                            </AlertDialogTrigger>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>
-                                                                        Delete Partylist
-                                                                    </AlertDialogTitle>
-                                                                    <AlertDialogDescription>
-                                                                        Are you sure you want to delete "{partylist.name}"? This action cannot be undone.
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                    <AlertDialogAction
-                                                                        onClick={() =>
-                                                                            router.delete(
-                                                                                voting.admin.partylists.destroy.url({
-                                                                                    partylist: partylist.partylist_id,
-                                                                                }),
-                                                                            )
-                                                                        }
-                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                            </Link>
+                                                        )}
+                                                        {can('partylists.delete') && (
+                                                            <AlertDialog>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                     >
-                                                                        Delete
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                                                        </AlertDialog>
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent>
+                                                                    <AlertDialogHeader>
+                                                                        <AlertDialogTitle>
+                                                                            Delete Partylist
+                                                                        </AlertDialogTitle>
+                                                                        <AlertDialogDescription>
+                                                                            Are you sure you want to delete "{partylist.name}"? This action cannot be undone.
+                                                                        </AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogAction
+                                                                            onClick={() =>
+                                                                                router.delete(
+                                                                                    voting.admin.partylists.destroy.url({
+                                                                                        partylist: partylist.partylist_id,
+                                                                                    }),
+                                                                                )
+                                                                            }
+                                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                        >
+                                                                            Delete
+                                                                        </AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        )}
                                                     </div>
                                                 </TableCell>
                                             </TableRow>

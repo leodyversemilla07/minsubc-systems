@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('voters', function (Blueprint $table) {
             // Add foreign key constraint to students table
-            // voters_id should reference student_id in students table
-            $table->foreign('voters_id')
+            // school_id should reference student_id in students table
+            $table->foreign('school_id')
                 ->references('student_id')
                 ->on('students')
                 ->onDelete('cascade');
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('voters', function (Blueprint $table) {
-            $table->dropForeign(['voters_id']);
+            $table->dropForeign(['school_id']);
         });
     }
 };

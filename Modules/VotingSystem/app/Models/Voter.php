@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class Voter extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
         'election_id',
-        'voters_id',
+        'school_id',
         'password',
         'generation_batch',
         'prefix',
@@ -52,7 +53,7 @@ class Voter extends Authenticatable
      */
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class, 'voters_id', 'student_id');
+        return $this->belongsTo(Student::class, 'school_id', 'student_id');
     }
 
     /**
@@ -60,7 +61,7 @@ class Voter extends Authenticatable
      */
     public function votes(): HasMany
     {
-        return $this->hasMany(Vote::class, 'voters_id');
+        return $this->hasMany(Vote::class, 'voter_id');
     }
 
     /**

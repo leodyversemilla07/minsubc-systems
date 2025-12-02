@@ -40,6 +40,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -89,6 +90,8 @@ export default function Index({
     elections,
     selectedElectionId,
 }: Props) {
+    const { can } = usePermissions();
+
     const handleElectionChange = (value: string) => {
         router.get(
             voting.admin.candidates.index.url(),
@@ -111,19 +114,21 @@ export default function Index({
                             Manage election candidates
                         </p>
                     </div>
-                    <Link
-                        href={
-                            voting.admin.candidates.create.url() +
-                            (selectedElectionId
-                                ? `?election_id=${selectedElectionId}`
-                                : '')
-                        }
-                    >
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Candidate
-                        </Button>
-                    </Link>
+                    {can('candidates.create') && (
+                        <Link
+                            href={
+                                voting.admin.candidates.create.url() +
+                                (selectedElectionId
+                                    ? `?election_id=${selectedElectionId}`
+                                    : '')
+                            }
+                        >
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Candidate
+                            </Button>
+                        </Link>
+                    )}
                 </div>
 
                 {/* Election Filter */}
@@ -163,19 +168,21 @@ export default function Index({
                                 </EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
-                                <Link
-                                    href={
-                                        voting.admin.candidates.create.url() +
-                                        (selectedElectionId
-                                            ? `?election_id=${selectedElectionId}`
-                                            : '')
-                                    }
-                                >
-                                    <Button>
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Add Candidate
-                                    </Button>
-                                </Link>
+                                {can('candidates.create') && (
+                                    <Link
+                                        href={
+                                            voting.admin.candidates.create.url() +
+                                            (selectedElectionId
+                                                ? `?election_id=${selectedElectionId}`
+                                                : '')
+                                        }
+                                    >
+                                        <Button>
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Add Candidate
+                                        </Button>
+                                    </Link>
+                                )}
                             </EmptyContent>
                         </Empty>
                     ) : (
@@ -266,57 +273,61 @@ export default function Index({
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        <Link
-                                                            href={voting.admin.candidates.edit.url(
-                                                                {
-                                                                    candidate:
-                                                                        candidate.id,
-                                                                },
-                                                            )}
-                                                        >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
+                                                        {can('candidates.edit') && (
+                                                            <Link
+                                                                href={voting.admin.candidates.edit.url(
+                                                                    {
+                                                                        candidate:
+                                                                            candidate.id,
+                                                                    },
+                                                                )}
                                                             >
-                                                                <Edit className="h-4 w-4" />
-                                                            </Button>
-                                                        </Link>
-                                                        <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="sm"
-                                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                 >
-                                                                    <Trash2 className="h-4 w-4" />
+                                                                    <Edit className="h-4 w-4" />
                                                                 </Button>
-                                                            </AlertDialogTrigger>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>
-                                                                        Delete Candidate
-                                                                    </AlertDialogTitle>
-                                                                    <AlertDialogDescription>
-                                                                        Are you sure you want to delete "{candidate.fullname}"? This action cannot be undone and will remove all associated votes.
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                    <AlertDialogAction
-                                                                        onClick={() =>
-                                                                            router.delete(
-                                                                                voting.admin.candidates.destroy.url({
-                                                                                    candidate: candidate.id,
-                                                                                }),
-                                                                            )
-                                                                        }
-                                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                            </Link>
+                                                        )}
+                                                        {can('candidates.delete') && (
+                                                            <AlertDialog>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                     >
-                                                                        Delete
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                                                        </AlertDialog>
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent>
+                                                                    <AlertDialogHeader>
+                                                                        <AlertDialogTitle>
+                                                                            Delete Candidate
+                                                                        </AlertDialogTitle>
+                                                                        <AlertDialogDescription>
+                                                                            Are you sure you want to delete "{candidate.fullname}"? This action cannot be undone and will remove all associated votes.
+                                                                        </AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogAction
+                                                                            onClick={() =>
+                                                                                router.delete(
+                                                                                    voting.admin.candidates.destroy.url({
+                                                                                        candidate: candidate.id,
+                                                                                    }),
+                                                                                )
+                                                                            }
+                                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                        >
+                                                                            Delete
+                                                                        </AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        )}
                                                     </div>
                                                 </TableCell>
                                             </TableRow>

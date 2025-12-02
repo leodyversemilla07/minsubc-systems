@@ -25,6 +25,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -63,7 +64,7 @@ interface Vote {
 }
 
 interface Voter {
-    voters_id: string;
+    school_id: string;
     election: Election;
     student?: Student;
     has_voted: boolean;
@@ -77,10 +78,12 @@ interface Props {
 }
 
 export default function Show({ voter }: Props) {
+    const { can } = usePermissions();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Voters', href: voting.admin.voters.index.url() },
-        { title: voter.student?.user?.full_name || voter.voters_id, href: '#' },
+        { title: voter.student?.user?.full_name || voter.school_id, href: '#' },
     ];
 
     const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
@@ -90,7 +93,7 @@ export default function Show({ voter }: Props) {
         if (!newPassword) return;
         router.post(
             voting.admin.voters.resetPassword.url({
-                voter: Number(voter.voters_id),
+                voter: Number(voter.school_id),
             }),
             { new_password: newPassword },
         );
@@ -101,7 +104,7 @@ export default function Show({ voter }: Props) {
     const handleResetVote = () => {
         router.post(
             voting.admin.voters.resetVote.url({
-                voter: Number(voter.voters_id),
+                voter: Number(voter.school_id),
             }),
         );
     };
@@ -109,14 +112,14 @@ export default function Show({ voter }: Props) {
     const handleDelete = () => {
         router.delete(
             voting.admin.voters.destroy.url({
-                voter: Number(voter.voters_id),
+                voter: Number(voter.school_id),
             }),
         );
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Voter: ${voter.voters_id}`} />
+            <Head title={`Student: ${voter.school_id}`} />
 
             <div className="max-w-4xl space-y-6 p-6 md:space-y-8 md:p-8">
                 {/* Header */}
@@ -140,10 +143,10 @@ export default function Show({ voter }: Props) {
                             <CardContent className="space-y-3">
                                 <div>
                                     <div className="text-xs uppercase text-muted-foreground">
-                                        Voter ID
+                                        School ID
                                     </div>
                                     <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
-                                        {voter.voters_id}
+                                        {voter.school_id}
                                     </code>
                                 </div>
                                 <div>
@@ -238,145 +241,151 @@ export default function Show({ voter }: Props) {
                     {/* Right Column: Actions & Votes */}
                     <div className="space-y-6 md:col-span-2">
                         {/* Actions */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Actions</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex flex-wrap gap-3">
-                                    {/* Reset Password Dialog */}
-                                    <Dialog
-                                        open={resetPasswordOpen}
-                                        onOpenChange={setResetPasswordOpen}
-                                    >
-                                        <DialogTrigger asChild>
-                                            <Button>
-                                                <KeyRound className="mr-2 h-4 w-4" />
-                                                Reset Password
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>
-                                                    Reset Voter Password
-                                                </DialogTitle>
-                                            </DialogHeader>
-                                            <div className="space-y-4 py-4">
-                                                <div>
-                                                    <label
-                                                        htmlFor="new_password"
-                                                        className="mb-2 block text-sm font-medium"
-                                                    >
-                                                        New Password
-                                                    </label>
-                                                    <Input
-                                                        id="new_password"
-                                                        type="text"
-                                                        value={newPassword}
-                                                        onChange={(e) =>
-                                                            setNewPassword(
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Enter new password"
-                                                    />
-                                                </div>
-                                                <div className="flex gap-3">
-                                                    <Button
-                                                        onClick={
-                                                            handleResetPassword
-                                                        }
-                                                        disabled={!newPassword}
-                                                    >
-                                                        Confirm Reset
+                        {(can('voters.reset-password') || can('voters.reset-vote') || can('voters.delete')) && (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Actions</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex flex-wrap gap-3">
+                                        {/* Reset Password Dialog */}
+                                        {can('voters.reset-password') && (
+                                            <Dialog
+                                                open={resetPasswordOpen}
+                                                onOpenChange={setResetPasswordOpen}
+                                            >
+                                                <DialogTrigger asChild>
+                                                    <Button>
+                                                        <KeyRound className="mr-2 h-4 w-4" />
+                                                        Reset Password
                                                     </Button>
-                                                    <Button
-                                                        variant="outline"
-                                                        onClick={() =>
-                                                            setResetPasswordOpen(
-                                                                false,
-                                                            )
-                                                        }
-                                                    >
-                                                        Cancel
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </DialogContent>
-                                    </Dialog>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>
+                                                            Reset Voter Password
+                                                        </DialogTitle>
+                                                    </DialogHeader>
+                                                    <div className="space-y-4 py-4">
+                                                        <div>
+                                                            <label
+                                                                htmlFor="new_password"
+                                                                className="mb-2 block text-sm font-medium"
+                                                            >
+                                                                New Password
+                                                            </label>
+                                                            <Input
+                                                                id="new_password"
+                                                                type="text"
+                                                                value={newPassword}
+                                                                onChange={(e) =>
+                                                                    setNewPassword(
+                                                                        e.target.value,
+                                                                    )
+                                                                }
+                                                                placeholder="Enter new password"
+                                                            />
+                                                        </div>
+                                                        <div className="flex gap-3">
+                                                            <Button
+                                                                onClick={
+                                                                    handleResetPassword
+                                                                }
+                                                                disabled={!newPassword}
+                                                            >
+                                                                Confirm Reset
+                                                            </Button>
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() =>
+                                                                    setResetPasswordOpen(
+                                                                        false,
+                                                                    )
+                                                                }
+                                                            >
+                                                                Cancel
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </DialogContent>
+                                            </Dialog>
+                                        )}
 
-                                    {/* Reset Vote */}
-                                    {voter.has_voted && (
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button variant="outline">
-                                                    <RotateCcw className="mr-2 h-4 w-4" />
-                                                    Reset Vote
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                        Reset Voter's Vote
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        This will delete all
-                                                        votes cast by this voter
-                                                        and allow them to vote
-                                                        again. This action
-                                                        cannot be undone.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Cancel
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={handleResetVote}
-                                                    >
+                                        {/* Reset Vote */}
+                                        {can('voters.reset-vote') && voter.has_voted && (
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="outline">
+                                                        <RotateCcw className="mr-2 h-4 w-4" />
                                                         Reset Vote
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    )}
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Reset Voter's Vote
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            This will delete all
+                                                            votes cast by this voter
+                                                            and allow them to vote
+                                                            again. This action
+                                                            cannot be undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={handleResetVote}
+                                                        >
+                                                            Reset Vote
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
 
-                                    {/* Delete Voter */}
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button variant="destructive">
-                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                Delete Voter
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    Delete Voter
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    Are you sure you want to
-                                                    permanently delete this
-                                                    voter? This action cannot be
-                                                    undone.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>
-                                                    Cancel
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={handleDelete}
-                                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                >
-                                                    Delete
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                        {/* Delete Voter */}
+                                        {can('voters.delete') && (
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="destructive">
+                                                        <Trash2 className="mr-2 h-4 w-4" />
+                                                        Delete Voter
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Delete Voter
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Are you sure you want to
+                                                            permanently delete this
+                                                            voter? This action cannot be
+                                                            undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={handleDelete}
+                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                        >
+                                                            Delete
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
 
                         {/* Votes Cast */}
                         <Card>

@@ -48,7 +48,7 @@ interface Election {
 
 interface Voter {
     id: number;
-    voters_id: string;
+    school_id: string;
 }
 
 interface VoterActivityLog {
@@ -307,7 +307,7 @@ export default function Index({
                                     <TableHeader>
                                         <TableRow className="bg-muted">
                                             <TableHead className="text-foreground">
-                                                Voter ID
+                                                School ID
                                             </TableHead>
                                             <TableHead className="text-foreground">
                                                 Election
@@ -330,7 +330,7 @@ export default function Index({
                                         {activityLogs.data.map((log) => (
                                             <TableRow key={log.id}>
                                                 <TableCell className="font-medium text-foreground">
-                                                    {log.voter.voters_id}
+                                                    {log.voter.school_id}
                                                 </TableCell>
                                                 <TableCell className="text-sm text-muted-foreground">
                                                     {log.election.name}

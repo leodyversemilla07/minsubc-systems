@@ -48,7 +48,7 @@ interface Election {
 
 interface Voter {
     id: number;
-    voters_id: string;
+    school_id: string;
 }
 
 interface VoterFeedback {
@@ -372,7 +372,7 @@ export default function Index({
                                     <TableHeader>
                                         <TableRow className="bg-muted">
                                             <TableHead className="text-foreground">
-                                                Voter ID
+                                                School ID
                                             </TableHead>
                                             <TableHead className="text-foreground">
                                                 Election
@@ -398,7 +398,7 @@ export default function Index({
                                         {feedback.data.map((item) => (
                                             <TableRow key={item.id}>
                                                 <TableCell className="font-medium text-foreground">
-                                                    {item.voter.voters_id}
+                                                    {item.voter.school_id}
                                                 </TableCell>
                                                 <TableCell className="text-sm text-muted-foreground">
                                                     {item.election.name}

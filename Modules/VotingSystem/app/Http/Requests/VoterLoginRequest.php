@@ -23,7 +23,7 @@ class VoterLoginRequest extends FormRequest
     {
         return [
             'election_id' => ['required', 'exists:elections,id'],
-            'voters_id' => ['required', 'string'],
+            'school_id' => ['required', 'string'],
             'password' => ['required', 'string'],
             'remember' => ['nullable', 'boolean'],
         ];
@@ -39,7 +39,7 @@ class VoterLoginRequest extends FormRequest
         return [
             'election_id.required' => 'Please select an election.',
             'election_id.exists' => 'The selected election is not valid.',
-            'voters_id.required' => 'Please enter your voter ID.',
+            'school_id.required' => 'Please enter your school ID.',
             'password.required' => 'Please enter your password.',
         ];
     }
@@ -52,7 +52,7 @@ class VoterLoginRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'voters_id' => 'voter ID',
+            'school_id' => 'school ID',
             'election_id' => 'election',
         ];
     }

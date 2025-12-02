@@ -140,7 +140,7 @@ class BallotController extends Controller
                 foreach ($candidateIds as $candidateId) {
                     Vote::create([
                         'election_id' => $election->id,
-                        'voters_id' => $voter->id,
+                        'voter_id' => $voter->id,
                         'candidate_id' => $candidateId,
                         'position_id' => $positionId,
                         'timestamp' => $timestamp,

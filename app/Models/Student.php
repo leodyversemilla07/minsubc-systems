@@ -66,7 +66,7 @@ class Student extends Model
      */
     public function voters(): HasMany
     {
-        return $this->hasMany(\Modules\VotingSystem\Models\Voter::class, 'voters_id', 'student_id');
+        return $this->hasMany(\Modules\VotingSystem\Models\Voter::class, 'school_id', 'student_id');
     }
 
     /**

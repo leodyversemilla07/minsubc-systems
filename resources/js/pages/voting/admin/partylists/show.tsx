@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -43,6 +44,8 @@ interface Props {
 }
 
 export default function Show({ partylist }: Props) {
+    const { can } = usePermissions();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Voting Admin', href: voting.admin.elections.index.url() },
         { title: 'Partylists', href: voting.admin.partylists.index.url() },
@@ -70,16 +73,18 @@ export default function Show({ partylist }: Props) {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Link
-                            href={voting.admin.partylists.edit.url({
-                                partylist: partylist.partylist_id,
-                            })}
-                        >
-                            <Button>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                            </Button>
-                        </Link>
+                        {can('partylists.edit') && (
+                            <Link
+                                href={voting.admin.partylists.edit.url({
+                                    partylist: partylist.partylist_id,
+                                })}
+                            >
+                                <Button>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit
+                                </Button>
+                            </Link>
+                        )}
                         <Link href={voting.admin.partylists.index.url()}>
                             <Button variant="outline">Back</Button>
                         </Link>
@@ -130,11 +135,13 @@ export default function Show({ partylist }: Props) {
                                     <Users className="h-5 w-5" />
                                     Candidates ({partylist.candidates.length})
                                 </CardTitle>
-                                <Link
-                                    href={`/voting/admin/candidates/create?election_id=${partylist.election.id}`}
-                                >
-                                    <Button size="sm">Add Candidate</Button>
-                                </Link>
+                                {can('candidates.create') && (
+                                    <Link
+                                        href={`/voting/admin/candidates/create?election_id=${partylist.election.id}`}
+                                    >
+                                        <Button size="sm">Add Candidate</Button>
+                                    </Link>
+                                )}
                             </CardHeader>
                             <CardContent>
                                 {partylist.candidates.length === 0 ? (

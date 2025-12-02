@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('election_id')->nullable()->constrained('elections')->onDelete('cascade');
-            $table->foreignId('voters_id')->nullable()->constrained('voters')->onDelete('cascade');
+            $table->foreignId('voter_id')->nullable()->constrained('voters')->onDelete('cascade');
             $table->foreignId('candidate_id')->nullable()->constrained('candidates')->onDelete('cascade');
             $table->foreignId('position_id')->nullable()->constrained('positions', 'position_id')->onDelete('cascade');
             $table->timestamp('timestamp')->useCurrent();
             $table->timestamps();
 
-            $table->index(['election_id', 'voters_id']);
+            $table->index(['election_id', 'voter_id']);
             $table->index(['candidate_id', 'position_id']);
         });
     }

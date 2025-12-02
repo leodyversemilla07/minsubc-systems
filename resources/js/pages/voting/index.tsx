@@ -211,7 +211,7 @@ export default function Index({ activeElection }: IndexPageProps) {
                                 step: 1,
                                 icon: Users,
                                 title: 'Login',
-                                desc: 'Access with your voter ID and password',
+                                desc: 'Access with your school ID and password',
                             },
                             {
                                 step: 2,

@@ -5,6 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -35,7 +36,7 @@ interface Student {
 }
 
 interface Voter {
-    voters_id: number;
+    school_id: number;
     student?: Student;
 }
 
@@ -62,6 +63,7 @@ interface Props {
 }
 
 export default function Show({ candidate }: Props) {
+    const { can } = usePermissions();
     const voteCount = candidate.votes.length;
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -86,16 +88,18 @@ export default function Show({ candidate }: Props) {
                         Candidate Details
                     </h1>
                     <div className="flex gap-2">
-                        <Link
-                            href={voting.admin.candidates.edit.url({
-                                candidate: candidate.id,
-                            })}
-                        >
-                            <Button>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                            </Button>
-                        </Link>
+                        {can('candidates.edit') && (
+                            <Link
+                                href={voting.admin.candidates.edit.url({
+                                    candidate: candidate.id,
+                                })}
+                            >
+                                <Button>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit
+                                </Button>
+                            </Link>
+                        )}
                         <Link href={voting.admin.candidates.index.url()}>
                             <Button variant="outline">Back</Button>
                         </Link>
@@ -208,7 +212,7 @@ export default function Show({ candidate }: Props) {
                                                         <div className="text-sm font-medium text-foreground">
                                                             {vote.voter.student
                                                                 ?.user?.full_name ||
-                                                                `Voter #${vote.voter.voters_id}`}
+                                                                `Student ID: ${vote.voter.school_id}`}
                                                         </div>
                                                         {vote.voter.student && (
                                                             <div className="text-xs text-muted-foreground">
