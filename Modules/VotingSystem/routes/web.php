@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\VotingSystem\Http\Controllers\Admin\ActivityLogController;
 use Modules\VotingSystem\Http\Controllers\Admin\CandidateController;
+use Modules\VotingSystem\Http\Controllers\Admin\DashboardController;
 use Modules\VotingSystem\Http\Controllers\Admin\ElectionController;
 use Modules\VotingSystem\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use Modules\VotingSystem\Http\Controllers\Admin\PartylistController;
@@ -69,6 +70,9 @@ Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-a
     ->prefix('voting/admin')
     ->name('voting.admin.')
     ->group(function () {
+        // Dashboard
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
         // Elections
         Route::get('elections', [ElectionController::class, 'index'])->middleware('permission:elections.view')->name('elections.index');
         Route::get('elections/create', [ElectionController::class, 'create'])->middleware('permission:elections.create')->name('elections.create');

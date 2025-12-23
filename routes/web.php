@@ -38,6 +38,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return redirect()->route('registrar.admin.dashboard');
         }
 
+        // Redirect cashier to cashier dashboard
+        if (in_array('cashier', $userRoles)) {
+            return redirect()->route('registrar.cashier.dashboard');
+        }
+
+        // Redirect SAS staff and admins to SAS admin dashboard
+        if (array_intersect($userRoles, ['sas-admin', 'sas-staff'])) {
+            return redirect()->route('sas.admin.dashboard');
+        }
+
+        // Redirect voting admins and managers to voting admin dashboard
+        if (array_intersect($userRoles, ['voting-admin', 'voting-manager'])) {
+            return redirect()->route('voting.admin.dashboard');
+        }
+
         // Get registrar stats for the user
         $stats = [
             'total_requests' => 0,
@@ -139,7 +154,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     'active_election' => true,
                     'election_name' => $activeElection->name ?? 'Active Election',
                     'has_voted' => $voter ? $voter->has_voted : false,
-                    'can_vote' => $voter !== null && !$voter->has_voted,
+                    'can_vote' => $voter !== null && ! $voter->has_voted,
                 ];
             }
         }
