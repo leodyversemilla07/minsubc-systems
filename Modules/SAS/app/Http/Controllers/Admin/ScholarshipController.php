@@ -24,14 +24,22 @@ class ScholarshipController extends Controller
     public function index(Request $request): Response
     {
         $scholarships = $this->scholarshipService->getScholarships([
-            'scholarship_type' => $request->input('scholarship_type'),
-            'is_active' => $request->input('is_active'),
+            'scholarship_type' => $request->input('type'),
+            'is_active' => $request->input('status') === 'active' ? true : ($request->input('status') === 'inactive' ? false : null),
             'search' => $request->input('search'),
         ], $request->input('per_page', 15));
 
+        // Get distinct scholarship types for filter dropdown
+        $scholarshipTypes = Scholarship::distinct()->pluck('scholarship_type')->filter()->values()->toArray();
+
         return Inertia::render('sas/admin/scholarships/index', [
             'scholarships' => $scholarships,
-            'filters' => $request->only(['scholarship_type', 'is_active', 'search']),
+            'filters' => [
+                'search' => $request->input('search', ''),
+                'type' => $request->input('type', ''),
+                'status' => $request->input('status', ''),
+            ],
+            'scholarshipTypes' => $scholarshipTypes,
         ]);
     }
 

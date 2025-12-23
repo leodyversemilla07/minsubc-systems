@@ -32,7 +32,7 @@ class DocumentService
             $query->where('disposal_status', $filters['disposal_status']);
         }
 
-        if (isset($filters['is_public']) !== null) {
+        if (isset($filters['is_public'])) {
             $query->where('is_public', $filters['is_public']);
         }
 
@@ -44,7 +44,7 @@ class DocumentService
             });
         }
 
-        return $query->orderBy('upload_date', 'desc')->paginate($perPage);
+        return $query->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     /**
@@ -64,11 +64,11 @@ class DocumentService
             $file = $data['file'];
             $data['file_path'] = $file->store('documents/digitalized', 'public');
             $data['file_name'] = $file->getClientOriginalName();
-            $data['file_type'] = $file->getClientOriginalExtension();
+            $data['mime_type'] = $file->getClientMimeType();
             $data['file_size'] = $file->getSize();
         }
 
-        $data['upload_date'] = now();
+        $data['digitalized_date'] = $data['digitalized_date'] ?? now();
 
         return DigitalizedDocument::create($data);
     }
@@ -87,7 +87,7 @@ class DocumentService
             $file = $data['file'];
             $data['file_path'] = $file->store('documents/digitalized', 'public');
             $data['file_name'] = $file->getClientOriginalName();
-            $data['file_type'] = $file->getClientOriginalExtension();
+            $data['mime_type'] = $file->getClientMimeType();
             $data['file_size'] = $file->getSize();
         }
 
@@ -115,7 +115,7 @@ class DocumentService
     {
         return DigitalizedDocument::where('related_entity_type', $entityType)
             ->where('related_entity_id', $entityId)
-            ->orderBy('upload_date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
@@ -126,7 +126,7 @@ class DocumentService
     {
         return DigitalizedDocument::with('uploader')
             ->where('disposal_status', 'Pending Disposal Approval')
-            ->orderBy('upload_date')
+            ->orderBy('created_at')
             ->get();
     }
 

@@ -41,7 +41,10 @@ class OrganizationController extends Controller
      */
     public function create(): Response
     {
-        $advisers = User::permission('advise organization')->get();
+        // Get users who can advise organizations (org_adviser role or SAS staff/admin)
+        $advisers = User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['org_adviser', 'sas-staff', 'sas-admin']);
+        })->get();
 
         return Inertia::render('sas/admin/organizations/create', [
             'advisers' => $advisers,
@@ -77,7 +80,11 @@ class OrganizationController extends Controller
     public function edit(int $id): Response
     {
         $organization = $this->organizationService->getOrganizationById($id);
-        $advisers = User::permission('advise organization')->get();
+
+        // Get users who can advise organizations (org_adviser role or SAS staff/admin)
+        $advisers = User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['org_adviser', 'sas-staff', 'sas-admin']);
+        })->get();
 
         return Inertia::render('sas/admin/organizations/edit', [
             'organization' => $organization,

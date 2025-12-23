@@ -134,8 +134,8 @@ class DashboardService
     {
         return [
             'total' => DigitalizedDocument::count(),
-            'this_month' => DigitalizedDocument::whereYear('upload_date', now()->year)
-                ->whereMonth('upload_date', now()->month)
+            'this_month' => DigitalizedDocument::whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
                 ->count(),
             'pending_disposal' => DigitalizedDocument::where('disposal_status', 'Pending Disposal Approval')->count(),
             'total_size' => DigitalizedDocument::sum('file_size'),

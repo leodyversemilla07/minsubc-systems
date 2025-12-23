@@ -18,17 +18,19 @@ class ScholarshipService
      */
     public function getScholarships(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Scholarship::query();
+        $query = Scholarship::query()
+            ->withCount('recipients')
+            ->withSum('recipients', 'amount');
 
-        if (isset($filters['scholarship_type'])) {
+        if (! empty($filters['scholarship_type'])) {
             $query->where('scholarship_type', $filters['scholarship_type']);
         }
 
-        if (isset($filters['is_active'])) {
+        if (isset($filters['is_active']) && $filters['is_active'] !== null) {
             $query->where('is_active', $filters['is_active']);
         }
 
-        if (isset($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('scholarship_name', 'like', "%{$filters['search']}%")
                     ->orWhere('scholarship_code', 'like', "%{$filters['search']}%")
@@ -36,7 +38,18 @@ class ScholarshipService
             });
         }
 
-        return $query->orderBy('scholarship_name')->paginate($perPage);
+        return $query->orderBy('scholarship_name')->paginate($perPage)->through(function ($scholarship) {
+            return [
+                'id' => $scholarship->id,
+                'scholarship_code' => $scholarship->scholarship_code,
+                'scholarship_name' => $scholarship->scholarship_name,
+                'scholarship_type' => $scholarship->scholarship_type,
+                'provider' => $scholarship->provider,
+                'is_active' => (bool) $scholarship->is_active,
+                'recipients_count' => (int) ($scholarship->recipients_count ?? 0),
+                'total_amount' => (float) ($scholarship->recipients_sum_amount ?? 0),
+            ];
+        });
     }
 
     /**

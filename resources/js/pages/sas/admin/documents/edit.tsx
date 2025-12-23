@@ -19,25 +19,47 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { Upload } from 'lucide-react';
+import { ArrowLeft, Upload } from 'lucide-react';
 import { useState } from 'react';
 
-export default function UploadDocument() {
+interface DigitalizedDocument {
+    id: number;
+    document_title: string;
+    document_category: string;
+    document_type: string | null;
+    file_path: string;
+    file_name: string;
+    file_size: number;
+    reference_number: string | null;
+    original_date: string | null;
+    academic_year: string | null;
+    related_entity_type: string | null;
+    related_entity_id: number | null;
+    physical_location: string | null;
+    is_public: boolean;
+}
+
+interface Props {
+    document: DigitalizedDocument;
+}
+
+export default function EditDocument({ document }: Props) {
     const { data, setData, post, processing, errors, progress } = useForm({
-        document_title: '',
-        document_category: '',
-        document_type: '',
+        _method: 'PUT',
+        document_title: document.document_title,
+        document_category: document.document_category,
+        document_type: document.document_type || '',
         file: null as File | null,
-        reference_number: '',
-        original_date: '',
-        academic_year: '',
-        related_entity_type: '',
-        related_entity_id: '',
-        physical_location: '',
-        is_public: false,
+        reference_number: document.reference_number || '',
+        original_date: document.original_date ? document.original_date.split('T')[0] : '',
+        academic_year: document.academic_year || '',
+        related_entity_type: document.related_entity_type || '',
+        related_entity_id: document.related_entity_id?.toString() || '',
+        physical_location: document.physical_location || '',
+        is_public: document.is_public,
     });
 
-    const [fileName, setFileName] = useState('');
+    const [fileName, setFileName] = useState(document.file_name);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -49,7 +71,8 @@ export default function UploadDocument() {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(sas.admin.documents.store.url());
+        // Use post with _method: 'PUT' for multipart support
+        post(sas.admin.documents.update.url(document.id));
     };
 
     return (
@@ -57,20 +80,20 @@ export default function UploadDocument() {
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
                 { title: 'Documents', href: sas.admin.documents.index.url() },
-                { title: 'Upload Document', href: sas.admin.documents.create.url() },
+                { title: `Edit: ${document.document_title}`, href: sas.admin.documents.edit.url(document.id) },
             ]}
         >
-            <Head title="Upload Document" />
+            <Head title={`Edit Document: ${document.document_title}`} />
 
             <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
                 {/* Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between lg:items-center">
                     <div className="space-y-1">
                         <h1 className="text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
-                            Upload Document
+                            Edit Document
                         </h1>
                         <p className="text-sm text-muted-foreground sm:text-base">
-                            Digitalize and upload a new document
+                            Update document details and file
                         </p>
                     </div>
                 </div>
@@ -79,28 +102,28 @@ export default function UploadDocument() {
                     {/* File Upload */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>File Upload</CardTitle>
+                            <CardTitle>File Information</CardTitle>
                             <CardDescription>
-                                Upload the document file (PDF, DOC, DOCX, XLS, XLSX,
-                                JPG, PNG - Max 10MB)
+                                Current file: <span className="font-semibold text-foreground">{document.file_name}</span>.
+                                Upload a new file only if you want to replace it.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="file">Document File *</Label>
+                                <Label htmlFor="file">Replace Document File (Optional)</Label>
                                 <div className="flex items-center gap-4">
                                     <Button
                                         type="button"
                                         variant="outline"
                                         onClick={() =>
-                                            document.getElementById('file')?.click()
+                                            window.document.getElementById('file')?.click()
                                         }
                                     >
                                         <Upload className="mr-2 h-4 w-4" />
-                                        Choose File
+                                        Choose New File
                                     </Button>
                                     <span className="text-sm text-gray-600">
-                                        {fileName || 'No file chosen'}
+                                        {fileName}
                                     </span>
                                 </div>
                                 <Input
@@ -393,11 +416,11 @@ export default function UploadDocument() {
                             </Link>
                         </Button>
                         <Button type="submit" disabled={processing}>
-                            {processing ? 'Uploading...' : 'Upload Document'}
+                            {processing ? 'Saving...' : 'Save Changes'}
                         </Button>
                     </div>
                 </form>
             </div>
-        </AppLayout >
+        </AppLayout>
     );
 }

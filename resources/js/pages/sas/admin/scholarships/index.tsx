@@ -177,7 +177,7 @@ export default function ScholarshipsIndex({
                         <CardContent>
                             <div className="text-2xl font-bold">
                                 {scholarships.data.reduce(
-                                    (sum, s) => sum + s.recipients_count,
+                                    (sum, s) => sum + Number(s.recipients_count || 0),
                                     0,
                                 )}
                             </div>
@@ -193,7 +193,7 @@ export default function ScholarshipsIndex({
                             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                                 ₱
                                 {scholarships.data
-                                    .reduce((sum, s) => sum + s.total_amount, 0)
+                                    .reduce((sum, s) => sum + Number(s.total_amount || 0), 0)
                                     .toLocaleString()}
                             </div>
                         </CardContent>
@@ -471,23 +471,23 @@ export default function ScholarshipsIndex({
                                             )}
                                             {scholarships.current_page <
                                                 scholarships.last_page && (
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() =>
-                                                        router.get(
-                                                            '/sas/admin/scholarships',
-                                                            {
-                                                                page:
-                                                                    scholarships.current_page +
-                                                                    1,
-                                                            },
-                                                        )
-                                                    }
-                                                >
-                                                    Next
-                                                </Button>
-                                            )}
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            router.get(
+                                                                '/sas/admin/scholarships',
+                                                                {
+                                                                    page:
+                                                                        scholarships.current_page +
+                                                                        1,
+                                                                },
+                                                            )
+                                                        }
+                                                    >
+                                                        Next
+                                                    </Button>
+                                                )}
                                         </div>
                                     </div>
                                 )}

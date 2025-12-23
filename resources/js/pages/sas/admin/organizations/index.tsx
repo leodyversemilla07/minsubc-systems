@@ -17,12 +17,23 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Building2,
     Edit,
+    Eye,
     Plus,
     Search,
     Shield,
@@ -58,15 +69,17 @@ interface Props {
 
 export default function OrganizationsIndex({ organizations, filters }: Props) {
     const [search, setSearch] = useState(filters.search || '');
-    const [orgType, setOrgType] = useState(filters.organization_type || '');
-    const [status, setStatus] = useState(filters.status || '');
+    const [orgType, setOrgType] = useState(filters.organization_type || 'all');
+    const [status, setStatus] = useState(filters.status || 'all');
+    const [organizationToDelete, setOrganizationToDelete] = useState<Organization | null>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     function handleFilter() {
         router.get(
-            '/sas/admin/organizations',
+            sas.admin.organizations.index.url(),
             {
-                organization_type: orgType || undefined,
-                status: status || undefined,
+                organization_type: orgType === 'all' ? undefined : orgType,
+                status: status === 'all' ? undefined : status,
                 search: search || undefined,
             },
             {
@@ -78,8 +91,8 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
     function handleReset() {
         setSearch('');
-        setOrgType('');
-        setStatus('');
+        setOrgType('all');
+        setStatus('all');
         router.get(
             sas.admin.organizations.index.url(),
             {},
@@ -87,14 +100,19 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
         );
     }
 
-    function handleDelete(id: number, name: string) {
-        if (
-            confirm(
-                `Are you sure you want to delete "${name}"? This action cannot be undone.`,
-            )
-        ) {
-            router.delete(`/sas/admin/organizations/${id}`, {
+    function handleDelete(organization: Organization) {
+        setOrganizationToDelete(organization);
+        setIsDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        if (organizationToDelete) {
+            router.delete(sas.admin.organizations.destroy.url(organizationToDelete.id), {
                 preserveScroll: true,
+                onSuccess: () => {
+                    setIsDeleteDialogOpen(false);
+                    setOrganizationToDelete(null);
+                },
             });
         }
     }
@@ -130,17 +148,22 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
     }
 
     return (
-        <AppLayout>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'SAS Admin', href: sas.admin.dashboard.url() },
+                { title: 'Organizations', href: sas.admin.organizations.index.url() },
+            ]}
+        >
             <Head title="Organizations Management" />
 
-            {/* Header */}
-            <div className="mb-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
+                {/* Header */}
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between lg:items-center">
+                    <div className="space-y-1">
+                        <h1 className="text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
                             Organizations Management
                         </h1>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-muted-foreground sm:text-base">
                             Manage student organizations and their activities
                         </p>
                     </div>
@@ -151,259 +174,292 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                         </Link>
                     </Button>
                 </div>
-            </div>
 
-            {/* Stats Cards */}
-            <div className="mb-6 grid gap-4 md:grid-cols-4">
+                {/* Stats Cards */}
+                <div className="grid gap-4 md:grid-cols-4">
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Total Organizations
+                            </CardTitle>
+                            <Building2 className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.total}</div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Active
+                            </CardTitle>
+                            <Shield className="h-4 w-4 text-green-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.active}</div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Major Organizations
+                            </CardTitle>
+                            <Users className="h-4 w-4 text-blue-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.major}</div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Minor Organizations
+                            </CardTitle>
+                            <Users className="h-4 w-4 text-purple-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.minor}</div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Filters */}
                 <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Total Organizations
-                        </CardTitle>
-                        <Building2 className="h-4 w-4 text-gray-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.total}</div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Active
-                        </CardTitle>
-                        <Shield className="h-4 w-4 text-green-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.active}</div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Major Organizations
-                        </CardTitle>
-                        <Users className="h-4 w-4 text-blue-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.major}</div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Minor Organizations
-                        </CardTitle>
-                        <Users className="h-4 w-4 text-purple-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.minor}</div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Filters */}
-            <Card className="mb-6">
-                <CardContent className="pt-6">
-                    <div className="flex flex-col gap-4 md:flex-row">
-                        <div className="flex-1">
-                            <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                                <Input
-                                    placeholder="Search by organization name or code..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    className="pl-9"
-                                    onKeyDown={(e) =>
-                                        e.key === 'Enter' && handleFilter()
-                                    }
-                                />
+                    <CardContent className="pt-6">
+                        <div className="flex flex-col gap-4 md:flex-row">
+                            <div className="flex-1">
+                                <div className="relative">
+                                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <Input
+                                        placeholder="Search by organization name or code..."
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="pl-9"
+                                        onKeyDown={(e) =>
+                                            e.key === 'Enter' && handleFilter()
+                                        }
+                                    />
+                                </div>
+                            </div>
+                            <Select value={orgType} onValueChange={setOrgType}>
+                                <SelectTrigger className="w-full md:w-[180px]">
+                                    <SelectValue placeholder="All Types" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Types</SelectItem>
+                                    <SelectItem value="Major">Major</SelectItem>
+                                    <SelectItem value="Minor">Minor</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Select value={status} onValueChange={setStatus}>
+                                <SelectTrigger className="w-full md:w-[180px]">
+                                    <SelectValue placeholder="All Statuses" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Statuses</SelectItem>
+                                    <SelectItem value="Active">Active</SelectItem>
+                                    <SelectItem value="Inactive">
+                                        Inactive
+                                    </SelectItem>
+                                    <SelectItem value="Suspended">
+                                        Suspended
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <div className="flex gap-2">
+                                <Button onClick={handleFilter}>Filter</Button>
+                                <Button variant="outline" onClick={handleReset}>
+                                    Reset
+                                </Button>
                             </div>
                         </div>
-                        <Select value={orgType} onValueChange={setOrgType}>
-                            <SelectTrigger className="w-full md:w-[180px]">
-                                <SelectValue placeholder="All Types" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="">All Types</SelectItem>
-                                <SelectItem value="Major">Major</SelectItem>
-                                <SelectItem value="Minor">Minor</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Select value={status} onValueChange={setStatus}>
-                            <SelectTrigger className="w-full md:w-[180px]">
-                                <SelectValue placeholder="All Statuses" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="">All Statuses</SelectItem>
-                                <SelectItem value="Active">Active</SelectItem>
-                                <SelectItem value="Inactive">
-                                    Inactive
-                                </SelectItem>
-                                <SelectItem value="Suspended">
-                                    Suspended
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <div className="flex gap-2">
-                            <Button onClick={handleFilter}>Filter</Button>
-                            <Button variant="outline" onClick={handleReset}>
-                                Reset
-                            </Button>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
 
-            {/* Organizations Table */}
-            <Card>
-                <CardContent className="p-0">
-                    {organizations.data.length > 0 ? (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Code</TableHead>
-                                    <TableHead>Organization Name</TableHead>
-                                    <TableHead>Type</TableHead>
-                                    <TableHead>Category</TableHead>
-                                    <TableHead>Established</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead className="text-right">
-                                        Actions
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {organizations.data.map((org) => (
-                                    <TableRow key={org.id}>
-                                        <TableCell className="font-mono text-sm">
-                                            {org.organization_code}
-                                        </TableCell>
-                                        <TableCell className="font-medium">
-                                            {org.organization_name}
-                                        </TableCell>
-                                        <TableCell>
-                                            {getTypeBadge(
-                                                org.organization_type,
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge variant="outline">
-                                                {org.category}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            {org.establishment_date
-                                                ? new Date(
-                                                      org.establishment_date,
-                                                  ).getFullYear()
-                                                : 'N/A'}
-                                        </TableCell>
-                                        <TableCell>
-                                            {getStatusBadge(org.status)}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex justify-end gap-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    asChild
-                                                >
-                                                    <Link
-                                                        href={`/sas/admin/organizations/${org.id}/edit`}
-                                                    >
-                                                        <Edit className="h-4 w-4" />
-                                                    </Link>
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() =>
-                                                        handleDelete(
-                                                            org.id,
-                                                            org.organization_name,
-                                                        )
-                                                    }
-                                                >
-                                                    <Trash2 className="h-4 w-4 text-red-600" />
-                                                </Button>
-                                            </div>
-                                        </TableCell>
+                {/* Organizations Table */}
+                <Card>
+                    <CardContent className="p-0">
+                        {organizations.data.length > 0 ? (
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Code</TableHead>
+                                        <TableHead>Organization Name</TableHead>
+                                        <TableHead>Type</TableHead>
+                                        <TableHead>Category</TableHead>
+                                        <TableHead>Established</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead className="text-right">
+                                            Actions
+                                        </TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    ) : (
-                        <div className="py-12 text-center">
-                            <Building2 className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                            <p className="text-gray-600 dark:text-gray-400">
-                                No organizations found
-                            </p>
-                            <Button className="mt-4" asChild>
-                                <Link
-                                    href={sas.admin.organizations.create.url()}
-                                >
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Create First Organization
-                                </Link>
+                                </TableHeader>
+                                <TableBody>
+                                    {organizations.data.map((org) => (
+                                        <TableRow key={org.id}>
+                                            <TableCell className="font-mono text-sm">
+                                                {org.organization_code}
+                                            </TableCell>
+                                            <TableCell className="font-medium">
+                                                {org.organization_name}
+                                            </TableCell>
+                                            <TableCell>
+                                                {getTypeBadge(
+                                                    org.organization_type,
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge variant="outline">
+                                                    {org.category}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                {org.establishment_date
+                                                    ? new Date(
+                                                        org.establishment_date,
+                                                    ).getFullYear()
+                                                    : 'N/A'}
+                                            </TableCell>
+                                            <TableCell>
+                                                {getStatusBadge(org.status)}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        asChild
+                                                    >
+                                                        <Link
+                                                            href={sas.admin.organizations.show.url(org.id)}
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        asChild
+                                                    >
+                                                        <Link
+                                                            href={sas.admin.organizations.edit.url(org.id)}
+                                                        >
+                                                            <Edit className="h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleDelete(org)}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 text-destructive" />
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        ) : (
+                            <div className="py-12 text-center">
+                                <Building2 className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                                <p className="text-muted-foreground">
+                                    No organizations found
+                                </p>
+                                <Button className="mt-4" asChild>
+                                    <Link
+                                        href={sas.admin.organizations.create.url()}
+                                    >
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        Create First Organization
+                                    </Link>
+                                </Button>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* Pagination */}
+                {organizations.last_page > 1 && (
+                    <div className="mt-6 flex items-center justify-between">
+                        <p className="text-sm text-muted-foreground">
+                            Showing page {organizations.current_page} of{' '}
+                            {organizations.last_page}
+                        </p>
+                        <div className="flex gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={organizations.current_page === 1}
+                                onClick={() =>
+                                    router.get(
+                                        sas.admin.organizations.index.url(),
+                                        {
+                                            page: organizations.current_page - 1,
+                                            organization_type: orgType === 'all' ? undefined : orgType,
+                                            status: status === 'all' ? undefined : status,
+                                            search: search || undefined,
+                                        },
+                                        { preserveState: true },
+                                    )
+                                }
+                            >
+                                Previous
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={
+                                    organizations.current_page ===
+                                    organizations.last_page
+                                }
+                                onClick={() =>
+                                    router.get(
+                                        sas.admin.organizations.index.url(),
+                                        {
+                                            page: organizations.current_page + 1,
+                                            organization_type: orgType === 'all' ? undefined : orgType,
+                                            status: status === 'all' ? undefined : status,
+                                            search: search || undefined,
+                                        },
+                                        { preserveState: true },
+                                    )
+                                }
+                            >
+                                Next
                             </Button>
                         </div>
-                    )}
-                </CardContent>
-            </Card>
-
-            {/* Pagination */}
-            {organizations.last_page > 1 && (
-                <div className="mt-6 flex items-center justify-between">
-                    <p className="text-sm text-gray-600">
-                        Showing page {organizations.current_page} of{' '}
-                        {organizations.last_page}
-                    </p>
-                    <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            disabled={organizations.current_page === 1}
-                            onClick={() =>
-                                router.get(
-                                    `/sas/admin/organizations?page=${organizations.current_page - 1}`,
-                                    {
-                                        organization_type: orgType || undefined,
-                                        status: status || undefined,
-                                        search: search || undefined,
-                                    },
-                                    { preserveState: true },
-                                )
-                            }
-                        >
-                            Previous
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            disabled={
-                                organizations.current_page ===
-                                organizations.last_page
-                            }
-                            onClick={() =>
-                                router.get(
-                                    `/sas/admin/organizations?page=${organizations.current_page + 1}`,
-                                    {
-                                        organization_type: orgType || undefined,
-                                        status: status || undefined,
-                                        search: search || undefined,
-                                    },
-                                    { preserveState: true },
-                                )
-                            }
-                        >
-                            Next
-                        </Button>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
+
+            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete the
+                            organization{' '}
+                            <span className="font-semibold text-foreground">
+                                {organizationToDelete?.organization_name}
+                            </span>{' '}
+                            and remove its data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </AppLayout>
     );
 }

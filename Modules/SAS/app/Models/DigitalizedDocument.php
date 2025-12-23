@@ -21,6 +21,8 @@ class DigitalizedDocument extends Model
         return DigitalizedDocumentFactory::new();
     }
 
+    protected $appends = ['file_url', 'file_type'];
+
     protected $fillable = [
         'document_title',
         'document_category',
@@ -54,7 +56,7 @@ class DigitalizedDocument extends Model
         ];
     }
 
-    public function uploadedBy(): BelongsTo
+    public function uploader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uploaded_by');
     }
@@ -91,6 +93,11 @@ class DigitalizedDocument extends Model
         }
 
         return null;
+    }
+
+    public function getFileTypeAttribute(): string
+    {
+        return pathinfo($this->file_name, PATHINFO_EXTENSION) ?: 'FILE';
     }
 
     public function canBeDisposed(): bool
