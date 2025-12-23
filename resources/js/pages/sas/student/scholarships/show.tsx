@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import SASLayout from '@/layouts/sas-layout';
+import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { ScholarshipRecipient } from '@/types/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -89,7 +89,13 @@ export default function Show({ recipient }: Props) {
     const totalRequirements = recipient.requirements?.length || 0;
 
     return (
-        <SASLayout>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/dashboard' },
+                { title: 'My Scholarships', href: sas.student.scholarships.index.url() },
+                { title: recipient.scholarship.scholarship_name, href: '#' },
+            ]}
+        >
             <Head
                 title={`${recipient.scholarship.scholarship_name} - My Scholarships`}
             />
@@ -159,9 +165,11 @@ export default function Show({ recipient }: Props) {
                                                 Award Date
                                             </Label>
                                             <p className="mt-1 text-gray-600 dark:text-gray-400">
-                                                {new Date(
-                                                    recipient.award_date,
-                                                ).toLocaleDateString()}
+                                                {recipient.date_awarded
+                                                    ? new Date(
+                                                        recipient.date_awarded,
+                                                    ).toLocaleDateString()
+                                                    : 'N/A'}
                                             </p>
                                         </div>
 
@@ -316,10 +324,10 @@ export default function Show({ recipient }: Props) {
                                         <div className="text-4xl font-bold text-blue-700 dark:text-blue-400">
                                             {totalRequirements > 0
                                                 ? Math.round(
-                                                      (completedRequirements /
-                                                          totalRequirements) *
-                                                          100,
-                                                  )
+                                                    (completedRequirements /
+                                                        totalRequirements) *
+                                                    100,
+                                                )
                                                 : 0}
                                             %
                                         </div>
@@ -382,13 +390,15 @@ export default function Show({ recipient }: Props) {
                                                 Awarded On
                                             </p>
                                             <p className="font-semibold">
-                                                {new Date(
-                                                    recipient.award_date,
-                                                ).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
+                                                {recipient.date_awarded
+                                                    ? new Date(
+                                                        recipient.date_awarded,
+                                                    ).toLocaleDateString('en-US', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })
+                                                    : 'N/A'}
                                             </p>
                                         </div>
                                     </div>
@@ -457,6 +467,6 @@ export default function Show({ recipient }: Props) {
                     </form>
                 </DialogContent>
             </Dialog>
-        </SASLayout>
+        </AppLayout>
     );
 }

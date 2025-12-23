@@ -8,7 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import SASLayout from '@/layouts/sas-layout';
+import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { PaginatedData, ScholarshipRecipient } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
@@ -64,88 +64,89 @@ export default function Index({ scholarships, filters }: Props) {
     ).length;
 
     return (
-        <SASLayout>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/dashboard' },
+                { title: 'My Scholarships', href: sas.student.scholarships.index.url() },
+            ]}
+        >
             <Head title="My Scholarships - Student Portal" />
 
-            {/* Hero Section */}
-            <section className="bg-gradient-to-b from-blue-50 to-white px-4 py-12 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
-                <div className="mx-auto max-w-7xl">
-                    <div className="mb-4 flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
-                            <Award className="h-6 w-6 text-blue-700 dark:text-blue-400" />
-                        </div>
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                                My Scholarships
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-300">
-                                View and manage your scholarship records
-                            </p>
-                        </div>
+            <div className="flex-1 space-y-6 p-6 md:p-8">
+                {/* Page Header */}
+                <div className="flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+                        <Award className="h-6 w-6 text-blue-700 dark:text-blue-400" />
                     </div>
-
-                    {/* Stats Cards */}
-                    <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                                        <TrendingUp className="h-6 w-6 text-green-700 dark:text-green-400" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                                            Active Scholarships
-                                        </p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                            {activeCount}
-                                        </p>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
-                                        <Award className="h-6 w-6 text-blue-700 dark:text-blue-400" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                                            Total Scholarships
-                                        </p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                            {scholarships.data.length}
-                                        </p>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardContent className="p-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                                        <Calendar className="h-6 w-6 text-purple-700 dark:text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                                            Completed
-                                        </p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                            {completedCount}
-                                        </p>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl dark:text-white">
+                            My Scholarships
+                        </h1>
+                        <p className="text-muted-foreground dark:text-slate-400">
+                            View and manage your scholarship records
+                        </p>
                     </div>
                 </div>
-            </section>
 
-            {/* Scholarships List */}
-            <section className="bg-white px-4 py-8 sm:px-6 lg:px-8 dark:bg-gray-900">
-                <div className="mx-auto max-w-7xl">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <Card className="transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-800/50">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-500/20">
+                                    <TrendingUp className="h-6 w-6 text-green-700 dark:text-green-400" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground dark:text-slate-400">
+                                        Active Scholarships
+                                    </p>
+                                    <p className="text-2xl font-bold dark:text-white">
+                                        {activeCount}
+                                    </p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-800/50">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/20">
+                                    <Award className="h-6 w-6 text-blue-700 dark:text-blue-400" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground dark:text-slate-400">
+                                        Total Scholarships
+                                    </p>
+                                    <p className="text-2xl font-bold dark:text-white">
+                                        {scholarships.data.length}
+                                    </p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-800/50">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-500/20">
+                                    <Calendar className="h-6 w-6 text-purple-700 dark:text-purple-400" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground dark:text-slate-400">
+                                        Completed
+                                    </p>
+                                    <p className="text-2xl font-bold dark:text-white">
+                                        {completedCount}
+                                    </p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Scholarships List */}
+                <div>
                     {/* Filters */}
                     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-2">
@@ -219,7 +220,7 @@ export default function Index({ scholarships, filters }: Props) {
                                                     <Badge
                                                         className={
                                                             statusColors[
-                                                                recipient.status
+                                                            recipient.status
                                                             ]
                                                         }
                                                     >
@@ -236,21 +237,23 @@ export default function Index({ scholarships, filters }: Props) {
                                                 <Calendar className="h-4 w-4" />
                                                 <span>
                                                     Award Date:{' '}
-                                                    {new Date(
-                                                        recipient.award_date,
-                                                    ).toLocaleDateString()}
+                                                    {recipient.date_awarded
+                                                        ? new Date(
+                                                            recipient.date_awarded,
+                                                        ).toLocaleDateString()
+                                                        : 'N/A'}
                                                 </span>
                                             </div>
 
                                             {recipient.scholarship
                                                 ?.description && (
-                                                <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
-                                                    {
-                                                        recipient.scholarship
-                                                            .description
-                                                    }
-                                                </p>
-                                            )}
+                                                    <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+                                                        {
+                                                            recipient.scholarship
+                                                                .description
+                                                        }
+                                                    </p>
+                                                )}
 
                                             <Link
                                                 href={sas.student.scholarships.show.url(
@@ -287,7 +290,7 @@ export default function Index({ scholarships, filters }: Props) {
                         </Card>
                     )}
                 </div>
-            </section>
-        </SASLayout>
+            </div>
+        </AppLayout>
     );
 }

@@ -116,7 +116,7 @@ class ScholarshipService
             $query->where('status', $filters['status']);
         }
 
-        return $query->orderBy('award_date', 'desc')->get();
+        return $query->orderBy('date_awarded', 'desc')->get();
     }
 
     /**

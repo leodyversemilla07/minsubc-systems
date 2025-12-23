@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import SASLayout from '@/layouts/sas-layout';
+import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { InsuranceRecord } from '@/types/sas';
 import { Head, Link } from '@inertiajs/react';
@@ -52,11 +52,17 @@ export default function Show({ insurance }: Props) {
     const isExpired = new Date(insurance.expiry_date) < new Date();
     const daysUntilExpiry = Math.ceil(
         (new Date(insurance.expiry_date).getTime() - new Date().getTime()) /
-            (1000 * 60 * 60 * 24),
+        (1000 * 60 * 60 * 24),
     );
 
     return (
-        <SASLayout>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/dashboard' },
+                { title: 'My Insurance', href: sas.student.insurance.index.url() },
+                { title: insurance.insurance_provider || 'Insurance Details', href: '#' },
+            ]}
+        >
             <Head
                 title={`${insurance.insurance_provider || 'Insurance'} - My Insurance`}
             />
@@ -379,6 +385,6 @@ export default function Show({ insurance }: Props) {
                     </div>
                 </div>
             </section>
-        </SASLayout>
+        </AppLayout>
     );
 }

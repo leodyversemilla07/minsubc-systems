@@ -10,10 +10,10 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import SASLayout from '@/layouts/sas-layout';
+import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, Save, ShieldCheck } from 'lucide-react';
+import { Save, ShieldCheck } from 'lucide-react';
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
@@ -32,40 +32,34 @@ export default function Create() {
     };
 
     return (
-        <SASLayout>
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/dashboard' },
+                { title: 'My Insurance', href: sas.student.insurance.index.url() },
+                { title: 'Submit New', href: '#' },
+            ]}
+        >
             <Head title="Submit Insurance - Student Portal" />
 
-            {/* Hero Section */}
-            <section className="bg-gradient-to-b from-purple-50 to-white px-4 py-12 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-800">
-                <div className="mx-auto max-w-3xl">
-                    <Link href={sas.student.insurance.index.url()}>
-                        <Button variant="ghost" className="mb-4">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Insurance
-                        </Button>
-                    </Link>
-
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                            <ShieldCheck className="h-6 w-6 text-purple-700 dark:text-purple-400" />
-                        </div>
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                                Submit New Insurance
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-300">
-                                Fill out the form to submit your insurance
-                                policy
-                            </p>
-                        </div>
+            <div className="flex-1 space-y-6 p-6 md:p-8">
+                {/* Page Header */}
+                <div className="flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
+                        <ShieldCheck className="h-6 w-6 text-purple-700 dark:text-purple-400" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight md:text-3xl dark:text-white">
+                            Submit New Insurance
+                        </h1>
+                        <p className="text-muted-foreground dark:text-slate-400">
+                            Fill out the form to submit your insurance policy
+                        </p>
                     </div>
                 </div>
-            </section>
 
-            {/* Form Section */}
-            <section className="bg-white px-4 py-8 sm:px-6 lg:px-8 dark:bg-gray-900">
+                {/* Form Card */}
                 <div className="mx-auto max-w-3xl">
-                    <Card>
+                    <Card className="dark:border-slate-800 dark:bg-slate-800/50">
                         <CardHeader>
                             <CardTitle>Insurance Information</CardTitle>
                         </CardHeader>
@@ -314,7 +308,7 @@ export default function Create() {
                         </CardContent>
                     </Card>
                 </div>
-            </section>
-        </SASLayout>
+            </div>
+        </AppLayout>
     );
 }

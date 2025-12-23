@@ -38,7 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return redirect()->route('registrar.admin.dashboard');
         }
 
-        // Get stats for the user
+        // Get registrar stats for the user
         $stats = [
             'total_requests' => 0,
             'pending_payment' => 0,
@@ -71,6 +71,79 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ]);
         }
 
+        // SAS Stats
+        $sasStats = [
+            'active_scholarships' => 0,
+            'total_scholarships' => 0,
+            'insurance_status' => 'None',
+            'organizations_joined' => 0,
+        ];
+
+        if ($user->id) {
+            $sasStats = [
+                'active_scholarships' => \Modules\SAS\Models\ScholarshipRecipient::where('student_id', $user->id)
+                    ->where('status', 'Active')
+                    ->count(),
+                'total_scholarships' => \Modules\SAS\Models\ScholarshipRecipient::where('student_id', $user->id)->count(),
+                'insurance_status' => \Modules\SAS\Models\Insurance::where('student_id', $user->id)
+                    ->orderBy('created_at', 'desc')
+                    ->value('status') ?? 'None',
+                'organizations_joined' => \Modules\SAS\Models\OrganizationOfficer::where('student_id', $user->id)
+                    ->where('is_current', true)
+                    ->count(),
+            ];
+        }
+
+        // USG Stats
+        $recentAnnouncements = \Modules\USG\Models\Announcement::published()
+            ->orderBy('publish_date', 'desc')
+            ->take(5)
+            ->get(['id', 'title', 'slug', 'category', 'publish_date']);
+
+        $upcomingEvents = \Modules\USG\Models\Event::published()
+            ->upcoming()
+            ->orderBy('start_date')
+            ->take(5)
+            ->get(['id', 'title', 'slug', 'start_date', 'location']);
+
+        $usgStats = [
+            'recent_announcements' => $recentAnnouncements->count(),
+            'upcoming_events' => $upcomingEvents->count(),
+            'new_resolutions' => \Modules\USG\Models\Resolution::where('created_at', '>=', now()->subDays(30))->count(),
+        ];
+
+        // Voting Stats
+        $votingStats = [
+            'active_election' => false,
+            'election_name' => null,
+            'has_voted' => false,
+            'can_vote' => false,
+        ];
+
+        // Check for active elections if VotingSystem module exists
+        if (class_exists(\Modules\VotingSystem\Models\Election::class)) {
+            $activeElection = \Modules\VotingSystem\Models\Election::where('status', true)
+                ->where(function ($query) {
+                    $query->whereNull('end_time')
+                        ->orWhere('end_time', '>', now());
+                })
+                ->first();
+
+            if ($activeElection) {
+                // Check if user is a voter and has voted
+                $voter = \Modules\VotingSystem\Models\Voter::where('election_id', $activeElection->id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                $votingStats = [
+                    'active_election' => true,
+                    'election_name' => $activeElection->name ?? 'Active Election',
+                    'has_voted' => $voter ? $voter->has_voted : false,
+                    'can_vote' => $voter !== null && !$voter->has_voted,
+                ];
+            }
+        }
+
         return Inertia::render('student/dashboard', [
             'user' => [
                 'first_name' => $user->first_name,
@@ -84,6 +157,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ],
             'stats' => $stats,
             'recent_requests' => $recentRequests,
+            'sasStats' => $sasStats,
+            'usgStats' => $usgStats,
+            'recentAnnouncements' => $recentAnnouncements,
+            'upcomingEvents' => $upcomingEvents,
+            'votingStats' => $votingStats,
         ]);
     })->name('dashboard');
 });
