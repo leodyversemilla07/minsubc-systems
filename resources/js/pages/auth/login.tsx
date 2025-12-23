@@ -20,7 +20,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <AuthLayout
             title="Log in to your account"
-            description="Enter your email and password below to log in"
+            description="Enter your school ID, email and password below to log in"
         >
             <Head title="Log in" />
 
@@ -32,6 +32,27 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">
+                            {/* School ID Field */}
+                            <div className="grid gap-2">
+                                <Label htmlFor="school_id">
+                                    School ID{' '}
+                                    <span className="text-xs font-normal text-muted-foreground">
+                                        (Required for students)
+                                    </span>
+                                </Label>
+                                <Input
+                                    id="school_id"
+                                    type="text"
+                                    name="school_id"
+                                    autoFocus
+                                    tabIndex={1}
+                                    autoComplete="username"
+                                    placeholder="2021-12345"
+                                />
+                                <InputError message={errors.school_id} />
+                            </div>
+
+                            {/* Email Field */}
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email address</Label>
                                 <Input
@@ -39,14 +60,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     type="email"
                                     name="email"
                                     required
-                                    autoFocus
-                                    tabIndex={1}
+                                    tabIndex={2}
                                     autoComplete="email"
                                     placeholder="email@example.com"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
+                            {/* Password Field */}
                             <div className="grid gap-2">
                                 <div className="flex items-center">
                                     <Label htmlFor="password">Password</Label>
@@ -54,7 +75,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm"
-                                            tabIndex={5}
+                                            tabIndex={6}
                                         >
                                             Forgot password?
                                         </TextLink>
@@ -65,7 +86,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     type="password"
                                     name="password"
                                     required
-                                    tabIndex={2}
+                                    tabIndex={3}
                                     autoComplete="current-password"
                                     placeholder="Password"
                                 />
@@ -76,7 +97,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 <Checkbox
                                     id="remember"
                                     name="remember"
-                                    tabIndex={3}
+                                    tabIndex={4}
                                 />
                                 <Label htmlFor="remember">Remember me</Label>
                             </div>
@@ -84,7 +105,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             <Button
                                 type="submit"
                                 className="mt-4 w-full"
-                                tabIndex={4}
+                                tabIndex={5}
                                 disabled={processing}
                                 data-test="login-button"
                             >
@@ -97,7 +118,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                         <div className="text-center text-sm text-muted-foreground">
                             Don't have an account?{' '}
-                            <TextLink href={register()} tabIndex={5}>
+                            <TextLink href={register()} tabIndex={7}>
                                 Sign up
                             </TextLink>
                         </div>

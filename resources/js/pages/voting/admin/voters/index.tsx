@@ -69,6 +69,7 @@ interface Student {
 }
 
 interface Voter {
+    id: number;
     school_id: string;
     election: Election;
     student?: Student;
@@ -244,9 +245,7 @@ export default function Index({
                                                         <Link
                                                             href={voting.admin.voters.show.url(
                                                                 {
-                                                                    voter: Number(
-                                                                        voter.school_id,
-                                                                    ),
+                                                                    voter: voter.id,
                                                                 },
                                                             )}
                                                         >
@@ -283,7 +282,7 @@ export default function Index({
                                                                             onClick={() =>
                                                                                 router.delete(
                                                                                     voting.admin.voters.destroy.url({
-                                                                                        voter: Number(voter.school_id),
+                                                                                        voter: voter.id,
                                                                                     }),
                                                                                 )
                                                                             }

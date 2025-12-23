@@ -5,7 +5,6 @@ namespace Modules\VotingSystem\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -19,9 +18,10 @@ class BallotController extends Controller
     /**
      * Display the ballot for the authenticated voter.
      */
-    public function show(): Response
+    public function show(Request $request): Response
     {
-        $voter = Auth::guard('voter')->user();
+        $voterId = $request->session()->get('voting.voter_id');
+        $voter = \Modules\VotingSystem\Models\Voter::with(['election', 'user'])->findOrFail($voterId);
         $election = $voter->election;
 
         // Log ballot access
@@ -49,7 +49,8 @@ class BallotController extends Controller
      */
     public function preview(Request $request): Response
     {
-        $voter = Auth::guard('voter')->user();
+        $voterId = $request->session()->get('voting.voter_id');
+        $voter = \Modules\VotingSystem\Models\Voter::with(['election', 'user'])->findOrFail($voterId);
         $election = $voter->election;
 
         // Validate the votes
@@ -103,7 +104,8 @@ class BallotController extends Controller
      */
     public function submit(Request $request): RedirectResponse
     {
-        $voter = Auth::guard('voter')->user();
+        $voterId = $request->session()->get('voting.voter_id');
+        $voter = \Modules\VotingSystem\Models\Voter::with(['election', 'user'])->findOrFail($voterId);
         $election = $voter->election;
 
         // Check if voter has already voted
@@ -202,9 +204,8 @@ class BallotController extends Controller
                 'election_id' => $election->id,
             ], now()->addMinutes(30));
 
-            // Log out the voter
-            Auth::guard('voter')->logout();
-            $request->session()->invalidate();
+            // Clear voter session
+            $request->session()->forget(['voting.voter_id', 'voting.election_id']);
             $request->session()->regenerateToken();
 
             return redirect()->route('voting.confirmation', ['ref' => $referenceId])

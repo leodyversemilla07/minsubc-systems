@@ -6,9 +6,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { HelpTooltip } from '@/components/voting/help-tooltip';
+import { PositionNavigator } from '@/components/voting/position-navigator';
 import { SecurityBadge } from '@/components/voting/security-badge';
+import { VotingProgress } from '@/components/voting/voting-progress';
 import voting from '@/routes/voting';
 import { router } from '@inertiajs/react';
 import {
@@ -56,12 +59,36 @@ interface BallotPageProps {
 }
 
 export default function Ballot({ election, positions }: BallotPageProps) {
+    // Load draft from localStorage on mount
+    const loadDraft = () => {
+        try {
+            const draftKey = `voting_draft_${election.id}`;
+            const savedDraft = localStorage.getItem(draftKey);
+            if (savedDraft) {
+                return JSON.parse(savedDraft);
+            }
+        } catch (error) {
+            console.error('Failed to load draft:', error);
+        }
+        return {};
+    };
+
     const [selectedVotes, setSelectedVotes] = useState<
         Record<number, number[]>
-    >({});
+    >(loadDraft);
     const [selectedCandidate, setSelectedCandidate] =
         useState<Candidate | null>(null);
     const [timeRemaining, setTimeRemaining] = useState<string>('');
+
+    // Save draft to localStorage whenever selections change
+    useEffect(() => {
+        try {
+            const draftKey = `voting_draft_${election.id}`;
+            localStorage.setItem(draftKey, JSON.stringify(selectedVotes));
+        } catch (error) {
+            console.error('Failed to save draft:', error);
+        }
+    }, [selectedVotes, election.id]);
 
     // Calculate time remaining if election has end time
     useEffect(() => {
@@ -132,7 +159,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30 dark:from-gray-950 dark:to-green-950/30">
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg dark:from-green-700 dark:to-emerald-700">
+            <div className="bg-green-600 text-white shadow-lg dark:bg-green-700">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-4">
@@ -168,19 +195,9 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                         </Button>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="mt-4">
-                        <div className="mb-2 flex items-center justify-between text-xs">
-                            <span className="opacity-90">Your Progress</span>
-                            <span className="font-semibold">
-                                {completedPositions} of {totalPositions}{' '}
-                                positions
-                            </span>
-                        </div>
-                        <Progress
-                            value={progressPercentage}
-                            className="h-2 bg-white/20 dark:bg-white/10"
-                        />
+                    {/* Voting Progress Indicator - Centered */}
+                    <div className="mt-8 flex justify-center">
+                        <VotingProgress currentStep={2} />
                     </div>
                 </div>
             </div>
@@ -193,63 +210,56 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                         <SecurityBadge />
                     </div>
 
-                    {/* Instructions Card */}
-                    <div className="mb-6 rounded-lg border border-l-4 border-gray-200 border-l-green-600 bg-white p-6 shadow-md dark:border-gray-800 dark:border-l-green-500 dark:bg-gray-900">
-                        <div className="flex items-start gap-3">
-                            <Info className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600 dark:text-green-500" />
-                            <div>
-                                <h2 className="mb-3 text-lg font-bold text-gray-800 dark:text-gray-100">
-                                    Voting Instructions
-                                </h2>
-                                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                                    <li className="flex items-start gap-2">
-                                        <span className="mt-0.5 font-bold text-green-600 dark:text-green-500">
+                    {/* Voting Instructions */}
+                    <div className="mb-6 space-y-4">
+                        <Alert className="bg-white dark:bg-gray-900">
+                            <Info className="h-4 w-4" />
+                            <AlertTitle>Voting Instructions</AlertTitle>
+                            <AlertDescription>
+                                <ol className="mt-2 space-y-2 text-sm">
+                                    <li className="flex gap-2">
+                                        <span className="font-semibold text-green-600 dark:text-green-500">
                                             1.
                                         </span>
                                         <span>
-                                            Review all candidates carefully
-                                            before making your selection
+                                            Review all candidates carefully before making your selection
                                         </span>
                                     </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="mt-0.5 font-bold text-green-600 dark:text-green-500">
+                                    <li className="flex gap-2">
+                                        <span className="font-semibold text-green-600 dark:text-green-500">
                                             2.
                                         </span>
                                         <span>
-                                            Click "View Details" to see full
-                                            candidate information
+                                            Click "View Details" to see full candidate information
                                         </span>
                                     </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="mt-0.5 font-bold text-green-600 dark:text-green-500">
+                                    <li className="flex gap-2">
+                                        <span className="font-semibold text-green-600 dark:text-green-500">
                                             3.
                                         </span>
                                         <span>
-                                            Some positions allow multiple votes
-                                            - check the maximum
+                                            Some positions allow multiple votes - check the maximum
                                         </span>
                                     </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="mt-0.5 font-bold text-green-600 dark:text-green-500">
+                                    <li className="flex gap-2">
+                                        <span className="font-semibold text-green-600 dark:text-green-500">
                                             4.
                                         </span>
                                         <span>
-                                            Review your selections before final
-                                            submission
+                                            Review your selections before final submission
                                         </span>
                                     </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="mt-0.5 font-bold text-red-500 dark:text-red-400">
-                                            ⚠
-                                        </span>
-                                        <span className="font-semibold text-red-600 dark:text-red-400">
-                                            Once submitted, you cannot change
-                                            your vote
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                                </ol>
+                            </AlertDescription>
+                        </Alert>
+
+                        <Alert variant="destructive" className="bg-white dark:bg-gray-900">
+                            <CircleAlert className="h-4 w-4" />
+                            <AlertTitle>Important Notice</AlertTitle>
+                            <AlertDescription>
+                                Once submitted, you cannot change your vote. Please review carefully.
+                            </AlertDescription>
+                        </Alert>
                     </div>
 
                     {/* Positions and Candidates */}
@@ -262,11 +272,10 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                         return (
                             <div
                                 key={position.position_id}
-                                className={`mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 ${
-                                    isComplete
-                                        ? 'ring-opacity-50 ring-2 ring-green-500 dark:ring-green-600'
-                                        : ''
-                                }`}
+                                className={`mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 ${isComplete
+                                    ? 'ring-opacity-50 ring-2 ring-green-500 dark:ring-green-600'
+                                    : ''
+                                    }`}
                                 role="region"
                                 aria-labelledby={`position-${position.position_id}`}
                             >
@@ -335,11 +344,10 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                 className="relative"
                                             >
                                                 <label
-                                                    className={`group relative block cursor-pointer ${
-                                                        isDisabled
-                                                            ? 'cursor-not-allowed opacity-50'
-                                                            : ''
-                                                    }`}
+                                                    className={`group relative block cursor-pointer ${isDisabled
+                                                        ? 'cursor-not-allowed opacity-50'
+                                                        : ''
+                                                        }`}
                                                 >
                                                     <input
                                                         type="checkbox"
@@ -356,91 +364,94 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                         className="peer sr-only"
                                                         aria-label={`Select ${candidate.fullname} for ${position.description}`}
                                                     />
-                                                    <div
-                                                        className={`rounded-lg border-2 p-4 transition-all ${
-                                                            isSelected
-                                                                ? 'scale-[1.02] border-green-600 bg-green-50 shadow-lg dark:border-green-500 dark:bg-green-950'
-                                                                : 'border-gray-200 hover:border-green-300 hover:shadow-md dark:border-gray-700 dark:hover:border-green-700'
-                                                        } ${!isDisabled && 'hover:scale-[1.01]'}`}
+                                                    <Card
+                                                        className={`border-2 bg-white transition-all dark:bg-gray-900 ${isSelected
+                                                            ? 'scale-[1.02] border-green-600 bg-green-50 shadow-lg dark:border-green-500 dark:bg-green-950'
+                                                            : 'border-gray-200 hover:border-green-300 hover:shadow-md dark:border-gray-700 dark:hover:border-green-700'
+                                                            } ${!isDisabled && 'hover:scale-[1.01]'}`}
                                                     >
-                                                        <div className="flex items-start gap-4">
-                                                            {/* Candidate Photo */}
-                                                            {candidate.photo ? (
-                                                                <img
-                                                                    src={`/storage/${candidate.photo}`}
-                                                                    alt={
-                                                                        candidate.fullname
-                                                                    }
-                                                                    className="h-16 w-16 rounded-full border-2 border-gray-200 object-cover shadow-sm dark:border-gray-600"
-                                                                    loading="lazy"
-                                                                />
-                                                            ) : (
-                                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 text-xl font-bold text-white shadow-sm dark:from-green-500 dark:to-green-700">
-                                                                    {candidate.firstname.charAt(
-                                                                        0,
+                                                        <CardContent className="p-4">
+                                                            <div className="flex items-start gap-4">
+                                                                {/* Candidate Photo */}
+                                                                {candidate.photo ? (
+                                                                    <img
+                                                                        src={`/storage/${candidate.photo}`}
+                                                                        alt={
+                                                                            candidate.fullname
+                                                                        }
+                                                                        className="h-16 w-16 rounded-full border-2 border-gray-200 object-cover shadow-sm dark:border-gray-600"
+                                                                        loading="lazy"
+                                                                    />
+                                                                ) : (
+                                                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 text-xl font-bold text-white shadow-sm dark:from-green-500 dark:to-green-700">
+                                                                        {candidate.firstname.charAt(
+                                                                            0,
+                                                                        )}
+                                                                        {candidate.lastname.charAt(
+                                                                            0,
+                                                                        )}
+                                                                    </div>
+                                                                )}
+
+                                                                <div className="min-w-0 flex-1">
+                                                                    <h4 className="truncate font-bold text-gray-800 dark:text-gray-100">
+                                                                        {
+                                                                            candidate.fullname
+                                                                        }
+                                                                    </h4>
+                                                                    {candidate.partylist ? (
+                                                                        <p className="text-sm font-medium text-green-600 dark:text-green-400">
+                                                                            {
+                                                                                candidate
+                                                                                    .partylist
+                                                                                    .name
+                                                                            }
+                                                                        </p>
+                                                                    ) : (
+                                                                        <p className="text-sm italic text-gray-500 dark:text-gray-400">
+                                                                            Independent
+                                                                        </p>
                                                                     )}
-                                                                    {candidate.lastname.charAt(
-                                                                        0,
+                                                                    {candidate.platform && (
+                                                                        <p className="mt-2 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                                                                            {
+                                                                                candidate.platform
+                                                                            }
+                                                                        </p>
                                                                     )}
                                                                 </div>
-                                                            )}
 
-                                                            <div className="min-w-0 flex-1">
-                                                                <h4 className="truncate font-bold text-gray-800 dark:text-gray-100">
-                                                                    {
-                                                                        candidate.fullname
-                                                                    }
-                                                                </h4>
-                                                                {candidate.partylist ? (
-                                                                    <p className="text-sm font-medium text-green-600 dark:text-green-400">
-                                                                        {
-                                                                            candidate
-                                                                                .partylist
-                                                                                .name
-                                                                        }
-                                                                    </p>
-                                                                ) : (
-                                                                    <p className="text-sm text-gray-500 italic dark:text-gray-400">
-                                                                        Independent
-                                                                    </p>
-                                                                )}
-                                                                {candidate.platform && (
-                                                                    <p className="mt-2 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
-                                                                        {
-                                                                            candidate.platform
-                                                                        }
-                                                                    </p>
+                                                                {/* Checkmark Icon */}
+                                                                {isSelected && (
+                                                                    <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
+                                                                        <CircleCheck className="h-4 w-4" />
+                                                                    </div>
                                                                 )}
                                                             </div>
+                                                        </CardContent>
 
-                                                            {/* Checkmark Icon */}
-                                                            {isSelected && (
-                                                                <div className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
-                                                                    <CircleCheck className="h-4 w-4" />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                                        {/* View Details Button */}
+                                                        {candidate.platform && (
+                                                            <CardFooter className="border-t p-3">
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        setSelectedCandidate(
+                                                                            candidate,
+                                                                        );
+                                                                    }}
+                                                                    className="h-9 w-full text-sm"
+                                                                >
+                                                                    <Eye className="mr-1 h-3 w-3" />
+                                                                    View Full Details
+                                                                </Button>
+                                                            </CardFooter>
+                                                        )}
+                                                    </Card>
                                                 </label>
-
-                                                {/* View Details Button */}
-                                                {candidate.platform && (
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setSelectedCandidate(
-                                                                candidate,
-                                                            );
-                                                        }}
-                                                        className="absolute right-2 bottom-2 h-7 bg-white/80 px-2 text-xs hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
-                                                    >
-                                                        <Eye className="mr-1 h-3 w-3" />
-                                                        Details
-                                                    </Button>
-                                                )}
                                             </div>
                                         );
                                     })}
@@ -557,6 +568,13 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                     )}
                 </DialogContent>
             </Dialog>
+
+            {/* Position Navigator */}
+            <PositionNavigator
+                positions={positions}
+                selectedVotes={selectedVotes}
+                onNavigate={() => { }}
+            />
         </div>
     );
 }

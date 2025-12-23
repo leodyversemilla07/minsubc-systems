@@ -57,7 +57,7 @@ Route::prefix('voting')->name('voting.')->group(function () {
 });
 
 // Voter Routes (Authenticated Voters)
-Route::middleware(['auth:voter'])->prefix('voting')->name('voting.')->group(function () {
+Route::middleware([\Modules\VotingSystem\Http\Middleware\EnsureVoterAuthenticated::class])->prefix('voting')->name('voting.')->group(function () {
     Route::get('/ballot', [BallotController::class, 'show'])->name('ballot');
     Route::post('/preview', [BallotController::class, 'preview'])->name('preview');
     Route::post('/vote', [BallotController::class, 'submit'])->name('submit');
@@ -115,7 +115,6 @@ Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-a
         Route::get('voters/{voter}', [VoterManagementController::class, 'show'])->middleware('permission:voters.view')->name('voters.show');
         Route::put('voters/{voter}', [VoterManagementController::class, 'update'])->middleware('permission:voters.edit')->name('voters.update');
         Route::delete('voters/{voter}', [VoterManagementController::class, 'destroy'])->middleware('permission:voters.delete')->name('voters.destroy');
-        Route::post('voters/{voter}/reset-password', [VoterManagementController::class, 'resetPassword'])->middleware('permission:voters.reset-password')->name('voters.reset-password');
         Route::post('voters/{voter}/reset-vote', [VoterManagementController::class, 'resetVote'])->middleware('permission:voters.reset-vote')->name('voters.reset-vote');
         Route::get('voters/{election}/export', [VoterManagementController::class, 'export'])->middleware('permission:voters.export')->name('voters.export');
 

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 use Modules\VotingSystem\Models\Election;
@@ -70,11 +69,7 @@ class VoterManagementController extends Controller
             'student_ids.*' => 'exists:students,student_id',
             'generation_batch' => 'required|integer|min:1',
             'prefix' => 'nullable|string|max:10',
-            'default_password' => 'nullable|string|min:6',
         ]);
-
-        $password = $validated['default_password'] ?? 'password';
-        $hashedPassword = Hash::make($password);
 
         $created = 0;
         foreach ($validated['student_ids'] as $studentId) {
@@ -84,10 +79,13 @@ class VoterManagementController extends Controller
                 ->exists();
 
             if (! $exists) {
+                // Find the user associated with this student
+                $student = Student::where('student_id', $studentId)->with('user')->first();
+
                 Voter::create([
                     'election_id' => $validated['election_id'],
+                    'user_id' => $student?->user_id, // Link to user
                     'school_id' => $studentId,
-                    'password' => $hashedPassword,
                     'generation_batch' => $validated['generation_batch'],
                     'prefix' => $validated['prefix'] ?? '',
                     'has_voted' => false,
@@ -108,22 +106,6 @@ class VoterManagementController extends Controller
         $voter->load(['election', 'student.user', 'votes.candidate.position']);
 
         return Inertia::render('voting/admin/voters/show', compact('voter'));
-    }
-
-    /**
-     * Reset voter's password.
-     */
-    public function resetPassword(Request $request, Voter $voter): RedirectResponse
-    {
-        $validated = $request->validate([
-            'new_password' => 'required|string|min:6',
-        ]);
-
-        $voter->update([
-            'password' => Hash::make($validated['new_password']),
-        ]);
-
-        return back()->with('success', 'Voter password reset successfully!');
     }
 
     /**

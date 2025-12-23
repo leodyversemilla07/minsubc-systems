@@ -83,7 +83,7 @@ export default function Show({ activityLog }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Activity Log #${activityLog.id}`} />
 
-            <div className="mx-auto max-w-4xl">
+            <div className="mx-auto max-w-4xl px-4 py-10">
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>

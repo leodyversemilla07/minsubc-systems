@@ -2,11 +2,11 @@ import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { HelpTooltip } from '@/components/voting/help-tooltip';
-import { SecurityBadge } from '@/components/voting/security-badge';
 import voting from '@/routes/voting';
 import { Form, Link } from '@inertiajs/react';
-import { CircleAlert, CircleCheck, Info, ShieldCheck } from 'lucide-react';
+import { CircleAlert, CircleCheck, ShieldCheck } from 'lucide-react';
 
 interface Election {
     id: number;
@@ -14,51 +14,73 @@ interface Election {
     election_code: string;
 }
 
+interface AuthenticatedUser {
+    name: string;
+    student_id: string;
+    email: string;
+}
+
 interface LoginPageProps {
     elections: Election[];
+    authenticatedUser?: AuthenticatedUser | null;
     flash?: {
         success?: string;
         error?: string;
     };
 }
 
-export default function Login({ elections, flash }: LoginPageProps) {
+export default function Login({
+    elections,
+    authenticatedUser,
+    flash,
+}: LoginPageProps) {
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-100 via-emerald-50 to-white px-4 py-12 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
             <div className="w-full max-w-md">
+                {/* Header - Moved Outside Card */}
+                <div className="mb-8 text-center">
+                    {/* Logo */}
+                    <div className="mb-6 flex justify-center">
+                        <Link href={voting.index.url()}>
+                            <img
+                                src="/votesys-logo.png"
+                                alt="VoteSys Logo"
+                                className="h-20 w-auto cursor-pointer transition hover:opacity-80"
+                            />
+                        </Link>
+                    </div>
+
+                    <h2 className="mb-2 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-3xl font-bold text-transparent dark:from-green-400 dark:to-emerald-400">
+                        Voter Login
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-300">
+                        Enter your credentials to cast your vote
+                    </p>
+                </div>
+
                 {/* Login Card */}
                 <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-                    {/* Header */}
-                    <div className="mb-8 text-center">
-                        {/* Logo */}
-                        <div className="mb-6 flex justify-center">
-                            <Link href={voting.index.url()}>
-                                <img
-                                    src="/votesys-logo.png"
-                                    alt="VoteSys Logo"
-                                    className="h-20 w-auto cursor-pointer transition hover:opacity-80"
-                                />
-                            </Link>
-                        </div>
-
-                        <h2 className="mb-2 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-3xl font-bold text-transparent dark:from-green-400 dark:to-emerald-400">
-                            Voter Login
-                        </h2>
-                        <p className="text-gray-600 dark:text-gray-300">
-                            Enter your credentials to cast your vote
-                        </p>
-                    </div>
-
-                    {/* Security Badge */}
-                    <div className="mb-6 flex justify-center">
-                        <SecurityBadge variant="compact" />
-                    </div>
-
                     {/* Display Success Message */}
                     {flash?.success && (
                         <Alert className="mb-6 border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
                             <CircleCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
                             <div>{flash.success}</div>
+                        </Alert>
+                    )}
+
+                    {/* Authenticated User Welcome */}
+                    {authenticatedUser && (
+                        <Alert className="mb-6 border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
+                            <CircleCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
+                            <div>
+                                <p className="font-semibold">
+                                    Welcome, {authenticatedUser.name}!
+                                </p>
+                                <p className="mt-1 text-sm">
+                                    You're logged in as {authenticatedUser.student_id}.
+                                    Select an election and confirm your password to vote.
+                                </p>
+                            </div>
                         </Alert>
                     )}
 
@@ -140,30 +162,38 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                     )}
                                 </Field>
 
-                                {/* School ID Field */}
-                                <Field>
-                                    <div className="flex items-center gap-2">
-                                        <FieldLabel htmlFor="school_id">
-                                            School ID
-                                        </FieldLabel>
-                                        <HelpTooltip content="Your school identification number" />
-                                    </div>
-                                    <Input
-                                        type="text"
-                                        id="school_id"
+                                {/* School ID Field - Only for non-authenticated users */}
+                                {!authenticatedUser ? (
+                                    <Field>
+                                        <div className="flex items-center gap-2">
+                                            <FieldLabel htmlFor="school_id">
+                                                School ID
+                                            </FieldLabel>
+                                            <HelpTooltip content="Your school identification number" />
+                                        </div>
+                                        <Input
+                                            type="text"
+                                            id="school_id"
+                                            name="school_id"
+                                            required
+                                            autoFocus
+                                            placeholder="Enter your school ID"
+                                            className="w-full"
+                                            aria-label="School ID"
+                                        />
+                                        {errors.school_id && (
+                                            <FieldError>
+                                                {errors.school_id}
+                                            </FieldError>
+                                        )}
+                                    </Field>
+                                ) : (
+                                    <input
+                                        type="hidden"
                                         name="school_id"
-                                        required
-                                        autoFocus
-                                        placeholder="Enter your school ID"
-                                        className="w-full"
-                                        aria-label="School ID"
+                                        value={authenticatedUser.student_id}
                                     />
-                                    {errors.school_id && (
-                                        <FieldError>
-                                            {errors.school_id}
-                                        </FieldError>
-                                    )}
-                                </Field>
+                                )}
 
                                 {/* Password Field */}
                                 <Field>
@@ -171,7 +201,13 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                         <FieldLabel htmlFor="password">
                                             Password
                                         </FieldLabel>
-                                        <HelpTooltip content="Your secure password for this election" />
+                                        <HelpTooltip
+                                            content={
+                                                authenticatedUser
+                                                    ? 'Confirm your account password to proceed'
+                                                    : 'Your secure password for this election'
+                                            }
+                                        />
                                     </div>
                                     <Input
                                         type="password"
@@ -199,7 +235,7 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                 >
                                     {processing ? (
                                         <>
-                                            <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                            <Spinner className="mr-2 h-5 w-5 text-white" />
                                             Logging in...
                                         </>
                                     ) : (
@@ -209,6 +245,21 @@ export default function Login({ elections, flash }: LoginPageProps) {
                                         </>
                                     )}
                                 </Button>
+
+                                <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
+                                    <ShieldCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
+                                    <div>
+                                        <h5 className="mb-1 font-medium leading-none tracking-tight">
+                                            Secure Voting System
+                                        </h5>
+                                        <div className="text-sm opacity-90">
+                                            Your vote is encrypted, anonymous,
+                                            and secure. Protected by
+                                            industry-standard security
+                                            protocols.
+                                        </div>
+                                    </div>
+                                </Alert>
                             </div>
                         )}
                     </Form>
@@ -226,21 +277,7 @@ export default function Login({ elections, flash }: LoginPageProps) {
                         </p>
                     </div>
                 </div>
-
-                {/* Info Card */}
-                <div className="mt-6 rounded-xl border-2 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-4 text-center text-green-800 shadow-lg dark:border-green-800 dark:from-green-950 dark:to-emerald-950 dark:text-green-200">
-                    <div className="mb-2 flex items-center justify-center gap-2">
-                        <Info className="h-5 w-5 text-green-600 dark:text-green-400" />
-                        <span className="text-lg font-bold">
-                            Secure Voting System
-                        </span>
-                    </div>
-                    <p className="text-sm text-green-700 dark:text-green-300">
-                        Your vote is encrypted, anonymous, and secure. Protected
-                        by industry-standard security protocols.
-                    </p>
-                </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

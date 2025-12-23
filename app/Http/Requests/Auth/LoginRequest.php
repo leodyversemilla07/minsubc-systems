@@ -27,6 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'school_id' => ['nullable', 'string'],
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
@@ -41,16 +42,48 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Find user by email first
         /** @var User|null $user */
-        $user = Auth::getProvider()->retrieveByCredentials($this->only('email', 'password'));
+        $user = User::where('email', $this->input('email'))->first();
 
-        if (! $user || ! Auth::getProvider()->validateCredentials($user, $this->only('password'))) {
+        // Validate user exists
+        if (! $user) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => 'The provided credentials do not match our records.',
             ]);
         }
+
+        // Validate password
+        if (! Auth::getProvider()->validateCredentials($user, $this->only('password'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'password' => 'The provided password is incorrect.',
+            ]);
+        }
+
+        // Validate school_id matches student_id (only for students)
+        if ($user->student) {
+            // User is a student - school_id is required and must match
+            if (! $this->filled('school_id')) {
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages([
+                    'school_id' => 'School ID is required for student accounts.',
+                ]);
+            }
+
+            if ($user->student->student_id !== $this->input('school_id')) {
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages([
+                    'school_id' => 'The provided school ID does not match your account.',
+                ]);
+            }
+        }
+        // For non-student users (staff, admin), school_id is optional and not validated
 
         RateLimiter::clear($this->throttleKey());
 

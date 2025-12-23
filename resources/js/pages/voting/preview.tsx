@@ -1,6 +1,8 @@
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { PrintReceipt } from '@/components/voting/print-receipt';
 import { SecurityBadge } from '@/components/voting/security-badge';
+import { VotingProgress } from '@/components/voting/voting-progress';
 import voting from '@/routes/voting';
 import { router } from '@inertiajs/react';
 import { ArrowLeft, CircleAlert, CircleCheck, Lock } from 'lucide-react';
@@ -78,7 +80,7 @@ export default function Preview({
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30 dark:from-gray-950 dark:to-gray-900">
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg dark:from-green-500 dark:to-emerald-500">
+            <div className="bg-green-600 text-white shadow-lg dark:bg-green-700">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-4">
@@ -124,6 +126,11 @@ export default function Preview({
                             </span>
                         </div>
                     </div>
+
+                    {/* Voting Progress Indicator - Centered */}
+                    <div className="mt-6">
+                        <VotingProgress currentStep={3} />
+                    </div>
                 </div>
             </div>
 
@@ -139,7 +146,7 @@ export default function Preview({
                     <CircleAlert className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
                     <div>
                         <h3 className="mb-1 font-semibold">
-                            ⚠️ Final Confirmation Required
+                            Final Confirmation Required
                         </h3>
                         <p className="text-sm">
                             Please carefully review your selections below. Once
@@ -154,85 +161,83 @@ export default function Preview({
                     </div>
                 </Alert>
 
-                {/* Selections Display */}
-                <div className="mb-6 space-y-6">
-                    {selections.map((selection) => (
-                        <div
-                            key={selection.position.position_id}
-                            className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-800 dark:bg-gray-900"
-                        >
-                            {/* Position Header */}
-                            <div className="bg-green-600 px-6 py-4 text-white dark:bg-green-700">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <h3 className="text-lg font-bold">
-                                            {selection.position.description}
-                                        </h3>
-                                        <p className="text-sm opacity-90">
-                                            {selection.candidates.length} of{' '}
-                                            {selection.position.max_vote}{' '}
-                                            {selection.position.max_vote > 1
-                                                ? 'candidates'
-                                                : 'candidate'}{' '}
-                                            selected
-                                        </p>
-                                    </div>
-                                    <CircleCheck className="h-8 w-8" />
+                {/* Selections Display - Consolidated */}
+                <div className="mb-6">
+                    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-800 dark:bg-gray-900">
+                        {/* Header */}
+                        <div className="bg-green-600 px-6 py-4 text-white dark:bg-green-700">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h3 className="text-xl font-bold">
+                                        Your Vote Summary
+                                    </h3>
+                                    <p className="text-sm opacity-90">
+                                        {totalSelections} candidate{totalSelections !== 1 ? 's' : ''} selected across {selections.length} position{selections.length !== 1 ? 's' : ''}
+                                    </p>
                                 </div>
-                            </div>
-
-                            {/* Selected Candidates */}
-                            <div className="p-6">
-                                <div className="space-y-4">
-                                    {selection.candidates.map((candidate) => (
-                                        <div
-                                            key={candidate.id}
-                                            className="flex items-center gap-4 rounded-lg border-2 border-green-100 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950"
-                                        >
-                                            {/* Candidate Photo */}
-                                            {candidate.photo ? (
-                                                <img
-                                                    src={`/storage/${candidate.photo}`}
-                                                    alt={candidate.fullname}
-                                                    className="h-16 w-16 rounded-full border-2 border-green-600 object-cover shadow-md dark:border-green-500"
-                                                />
-                                            ) : (
-                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-600 text-xl font-bold text-white shadow-md dark:bg-green-500">
-                                                    {candidate.fullname.charAt(
-                                                        0,
-                                                    )}
-                                                </div>
-                                            )}
-
-                                            {/* Candidate Info */}
-                                            <div className="flex-1">
-                                                <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">
-                                                    {candidate.fullname}
-                                                </h4>
-                                                {candidate.partylist ? (
-                                                    <p className="text-sm font-medium text-green-700 dark:text-green-400">
-                                                        {
-                                                            candidate.partylist
-                                                                .name
-                                                        }
-                                                    </p>
-                                                ) : (
-                                                    <p className="text-sm text-gray-500 italic dark:text-gray-400">
-                                                        Independent
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Checkmark */}
-                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
-                                                <CircleCheck className="h-5 w-5" />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <CircleCheck className="h-10 w-10" />
                             </div>
                         </div>
-                    ))}
+
+                        {/* All Selections */}
+                        <div className="divide-y divide-gray-200 dark:divide-gray-800">
+                            {selections.map((selection) => (
+                                <div key={selection.position.position_id} className="p-6">
+                                    {/* Position Title */}
+                                    <h4 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-100">
+                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs text-white dark:bg-green-500">
+                                            {selection.candidates.length}
+                                        </span>
+                                        {selection.position.description}
+                                    </h4>
+
+                                    {/* Candidates for this position */}
+                                    <div className="space-y-3">
+                                        {selection.candidates.map((candidate) => (
+                                            <div
+                                                key={candidate.id}
+                                                className="flex items-center gap-4 rounded-lg border-2 border-green-100 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950"
+                                            >
+                                                {/* Candidate Photo */}
+                                                {candidate.photo ? (
+                                                    <img
+                                                        src={`/storage/${candidate.photo}`}
+                                                        alt={candidate.fullname}
+                                                        className="h-14 w-14 rounded-full border-2 border-green-600 object-cover shadow-md dark:border-green-500"
+                                                    />
+                                                ) : (
+                                                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-lg font-bold text-white shadow-md dark:bg-green-500">
+                                                        {candidate.fullname.charAt(0)}
+                                                    </div>
+                                                )}
+
+                                                {/* Candidate Info */}
+                                                <div className="flex-1">
+                                                    <h5 className="font-bold text-gray-800 dark:text-gray-100">
+                                                        {candidate.fullname}
+                                                    </h5>
+                                                    {candidate.partylist ? (
+                                                        <p className="text-sm font-medium text-green-700 dark:text-green-400">
+                                                            {candidate.partylist.name}
+                                                        </p>
+                                                    ) : (
+                                                        <p className="text-sm italic text-gray-500 dark:text-gray-400">
+                                                            Independent
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                {/* Checkmark */}
+                                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
+                                                    <CircleCheck className="h-4 w-4" />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
                     {selections.length === 0 && (
                         <div className="rounded-lg border border-gray-200 bg-white p-12 text-center shadow-md dark:border-gray-800 dark:bg-gray-900">

@@ -7,10 +7,13 @@ import {
     ItemMedia,
     ItemTitle,
 } from '@/components/ui/item';
+import { PrintReceipt } from '@/components/voting/print-receipt';
 import { SecurityBadge } from '@/components/voting/security-badge';
 import { VoteReceipt } from '@/components/voting/vote-receipt';
+import { VotingProgress } from '@/components/voting/voting-progress';
 import voting from '@/routes/voting';
 import { Link } from '@inertiajs/react';
+import { useEffect } from 'react';
 import {
     CheckCircle2,
     CircleCheck,
@@ -48,6 +51,18 @@ export default function Confirmation({
     timestamp = new Date().toISOString(),
     feedbackToken,
 }: ConfirmationPageProps) {
+    // Clear draft from localStorage after successful vote submission
+    useEffect(() => {
+        if (election?.id) {
+            try {
+                const draftKey = `voting_draft_${election.id}`;
+                localStorage.removeItem(draftKey);
+            } catch (error) {
+                console.error('Failed to clear draft:', error);
+            }
+        }
+    }, [election?.id]);
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-white px-4 py-12 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
             <div className="w-full max-w-3xl">
@@ -77,6 +92,9 @@ export default function Confirmation({
                     </p>
                 </div>
 
+                {/* Voting Progress Indicator */}
+                <VotingProgress currentStep={4} />
+
                 {/* Security Confirmation */}
                 <div className="mb-6">
                     <SecurityBadge message="Your vote has been encrypted and securely stored. You have been automatically logged out for security." />
@@ -84,14 +102,26 @@ export default function Confirmation({
 
                 {/* Vote Receipt */}
                 {votes.length > 0 && election && (
-                    <div className="mb-6">
-                        <VoteReceipt
-                            votes={votes}
-                            electionName={election.name}
-                            timestamp={timestamp}
-                            referenceId={referenceId}
-                        />
-                    </div>
+                    <>
+                        <div className="mb-6">
+                            <VoteReceipt
+                                votes={votes}
+                                electionName={election.name}
+                                timestamp={timestamp}
+                                referenceId={referenceId}
+                            />
+                        </div>
+
+                        {/* Print Receipt Button */}
+                        <div className="mb-6 flex justify-center">
+                            <PrintReceipt
+                                votes={votes}
+                                electionName={election.name}
+                                timestamp={timestamp}
+                                referenceId={referenceId}
+                            />
+                        </div>
+                    </>
                 )}
 
                 {/* Quick Stats */}

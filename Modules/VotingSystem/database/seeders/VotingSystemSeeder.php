@@ -87,15 +87,15 @@ class VotingSystemSeeder extends Seeder
 
         // Create some students and voters
         // Check if students already exist
-        $existingStudents = Student::limit(10)->get();
+        $existingStudents = Student::with('user')->limit(10)->get();
 
         if ($existingStudents->count() >= 5) {
             // Use existing students
             foreach ($existingStudents->take(5) as $student) {
                 Voter::create([
                     'election_id' => $election->id,
+                    'user_id' => $student->user_id,
                     'school_id' => $student->student_id,
-                    'password' => Hash::make('password'),
                     'generation_batch' => 1,
                     'prefix' => '',
                     'has_voted' => false,
@@ -114,7 +114,7 @@ class VotingSystemSeeder extends Seeder
 
                 // Create student
                 $student = Student::create([
-                    'student_id' => '2021-'.str_pad($i + 1, 5, '0', STR_PAD_LEFT),
+                    'student_id' => 'MBC2025-'.str_pad($i + 1, 4, '0', STR_PAD_LEFT),
                     'user_id' => $user->id,
                     'phone' => fake()->phoneNumber(),
                     'course' => fake()->randomElement(['BSIT', 'BSCS', 'BSBA', 'BSED', 'BSN']),
@@ -123,11 +123,11 @@ class VotingSystemSeeder extends Seeder
                     'status' => 'active',
                 ]);
 
-                // Create voter for this student
+                // Create voter for this student (linked to user)
                 Voter::create([
                     'election_id' => $election->id,
+                    'user_id' => $user->id,
                     'school_id' => $student->student_id,
-                    'password' => Hash::make('password'),
                     'generation_batch' => 1,
                     'prefix' => '',
                     'has_voted' => fake()->boolean(30), // 30% have voted

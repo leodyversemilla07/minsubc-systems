@@ -3,23 +3,23 @@
 namespace Modules\VotingSystem\Models;
 
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
-class Voter extends Authenticatable
+class Voter extends Model
 {
-    use HasFactory, HasRoles;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
         'election_id',
+        'user_id',
         'school_id',
-        'password',
         'generation_batch',
         'prefix',
         'has_voted',
@@ -29,7 +29,7 @@ class Voter extends Authenticatable
      * The attributes that should be hidden for serialization.
      */
     protected $hidden = [
-        'password',
+        // Password removed - uses User's password via relationship
     ];
 
     /**
@@ -39,6 +39,14 @@ class Voter extends Authenticatable
         'has_voted' => 'boolean',
         'generation_batch' => 'integer',
     ];
+
+    /**
+     * Get the user that owns the voter.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Get the election that owns the voter.
@@ -78,5 +86,32 @@ class Voter extends Authenticatable
     public function markAsVoted(): void
     {
         $this->update(['has_voted' => true]);
+    }
+
+    /**
+     * Get the user's remember token (delegated to User model).
+     */
+    public function getRememberToken()
+    {
+        return $this->user ? $this->user->getRememberToken() : null;
+    }
+
+    /**
+     * Set the user's remember token (delegated to User model).
+     */
+    public function setRememberToken($value)
+    {
+        if ($this->user) {
+            $this->user->setRememberToken($value);
+            $this->user->save();
+        }
+    }
+
+    /**
+     * Get the column name for the "remember me" token.
+     */
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
     }
 }

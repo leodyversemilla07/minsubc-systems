@@ -75,13 +75,19 @@ class ResultsController extends Controller
         $totalVotes = $election->votes()->count();
 
         // Log results viewing if user is a voter
-        $voter = Auth::guard('voter')->user();
-        if ($voter && $voter->election_id === $election->id) {
-            VoterActivityLog::log(
-                voterId: $voter->id,
-                electionId: $election->id,
-                action: 'results_viewed'
-            );
+        $user = Auth::user();
+        if ($user) {
+            $voter = \Modules\VotingSystem\Models\Voter::where('user_id', $user->id)
+                ->where('election_id', $election->id)
+                ->first();
+
+            if ($voter) {
+                VoterActivityLog::log(
+                    voterId: $voter->id,
+                    electionId: $election->id,
+                    action: 'results_viewed'
+                );
+            }
         }
 
         return Inertia::render('voting/results', [
