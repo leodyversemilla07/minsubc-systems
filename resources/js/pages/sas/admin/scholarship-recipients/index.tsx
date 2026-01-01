@@ -7,6 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,7 +16,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -24,19 +24,21 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import {
+    FilterField,
+    SearchFilters,
+} from '@/components/search-filters';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
 import {
     Edit,
     FileText,
-    Filter,
     MoreHorizontal,
     Plus,
-    Search,
     Trash2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 interface Recipient {
     id: number;
@@ -51,6 +53,11 @@ interface Recipient {
     requirements_complete: boolean;
 }
 
+interface Scholarship {
+    id: number;
+    scholarship_name: string;
+}
+
 interface Props {
     recipients: {
         data: Recipient[];
@@ -58,11 +65,22 @@ interface Props {
         last_page: number;
         total: number;
     };
-    filters: { search: string; scholarship: string; status: string };
+    scholarships: Scholarship[];
+    filters: {
+        search?: string;
+        scholarship_id?: string;
+        status?: string;
+        academic_year?: string;
+        semester?: string;
+    };
 }
 
-export default function RecipientsIndex({ recipients, filters }: Props) {
-    const [search, setSearch] = useState(filters.search || '');
+export default function RecipientsIndex({
+    recipients,
+    scholarships,
+    filters,
+}: Props) {
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
     const getStatusColor = (status: string) => {
         const colors: Record<string, string> = {
@@ -78,6 +96,97 @@ export default function RecipientsIndex({ recipients, filters }: Props) {
             colors[status] ||
             'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
         );
+    };
+
+    // Generate academic year options (current year and 5 years back)
+    const academicYearOptions = useMemo(() => {
+        const currentYear = new Date().getFullYear();
+        return Array.from({ length: 6 }, (_, i) => {
+            const year = currentYear - i;
+            return {
+                value: `${year}-${year + 1}`,
+                label: `${year}-${year + 1}`,
+            };
+        });
+    }, []);
+
+    const filterFields: FilterField[] = [
+        {
+            name: 'search',
+            label: 'Search',
+            type: 'text',
+            placeholder: 'Student name or ID...',
+        },
+        {
+            name: 'scholarship_id',
+            label: 'Scholarship',
+            type: 'select',
+            placeholder: 'Select scholarship',
+            options: scholarships.map((s) => ({
+                value: s.id.toString(),
+                label: s.scholarship_name,
+            })),
+        },
+        {
+            name: 'status',
+            label: 'Status',
+            type: 'select',
+            placeholder: 'Select status',
+            options: [
+                { value: 'Active', label: 'Active' },
+                { value: 'Suspended', label: 'Suspended' },
+                { value: 'Completed', label: 'Completed' },
+                { value: 'Cancelled', label: 'Cancelled' },
+            ],
+        },
+        {
+            name: 'academic_year',
+            label: 'Academic Year',
+            type: 'select',
+            placeholder: 'Select year',
+            options: academicYearOptions,
+        },
+        {
+            name: 'semester',
+            label: 'Semester',
+            type: 'select',
+            placeholder: 'Select semester',
+            options: [
+                { value: '1st Semester', label: '1st Semester' },
+                { value: '2nd Semester', label: '2nd Semester' },
+                { value: 'Summer', label: 'Summer' },
+            ],
+        },
+    ];
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            setSelectedIds(recipients.data.map((r) => r.id));
+        } else {
+            setSelectedIds([]);
+        }
+    };
+
+    const handleSelectOne = (id: number, checked: boolean) => {
+        if (checked) {
+            setSelectedIds((prev) => [...prev, id]);
+        } else {
+            setSelectedIds((prev) => prev.filter((i) => i !== id));
+        }
+    };
+
+    const handleBulkDelete = () => {
+        if (
+            selectedIds.length > 0 &&
+            confirm(
+                `Are you sure you want to delete ${selectedIds.length} recipient(s)?`,
+            )
+        ) {
+            router.delete('/sas/admin/scholarship-recipients/bulk-delete', {
+                data: { ids: selectedIds },
+                onSuccess: () => setSelectedIds([]),
+            });
+        }
     };
 
     return (
@@ -110,41 +219,50 @@ export default function RecipientsIndex({ recipients, filters }: Props) {
                     </Link>
                 </div>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Filter Recipients</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex gap-4">
-                            <div className="relative flex-1">
-                                <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    placeholder="Search by student name..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    className="pl-8"
-                                />
+                {/* Advanced Search Filters */}
+                <SearchFilters
+                    fields={filterFields}
+                    filters={filters as Record<string, string>}
+                    baseUrl="/sas/admin/scholarship-recipients"
+                    title="Filter Recipients"
+                    description="Search and filter scholarship recipients by various criteria"
+                />
+
+                {/* Bulk Actions Bar */}
+                {selectedIds.length > 0 && (
+                    <Card className="border-primary/50 bg-primary/5">
+                        <CardContent className="flex items-center justify-between py-3">
+                            <span className="text-sm font-medium">
+                                {selectedIds.length} recipient(s) selected
+                            </span>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={handleBulkDelete}
+                                >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Delete Selected
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setSelectedIds([])}
+                                >
+                                    Clear Selection
+                                </Button>
                             </div>
-                            <Button
-                                onClick={() =>
-                                    router.get(
-                                        '/sas/admin/scholarship-recipients',
-                                        { search },
-                                    )
-                                }
-                            >
-                                <Filter className="mr-2 h-4 w-4" />
-                                Apply
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                )}
 
                 <Card>
                     <CardHeader>
                         <CardTitle>Recipients</CardTitle>
                         <CardDescription>
-                            All scholarship recipients
+                            {recipients.data.length > 0
+                                ? `Showing ${recipients.data.length} of ${recipients.total || recipients.data.length} recipients`
+                                : 'No recipients found'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -152,6 +270,16 @@ export default function RecipientsIndex({ recipients, filters }: Props) {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
+                                        <TableHead className="w-12">
+                                            <Checkbox
+                                                checked={
+                                                    recipients.data.length > 0 &&
+                                                    selectedIds.length ===
+                                                        recipients.data.length
+                                                }
+                                                onCheckedChange={handleSelectAll}
+                                            />
+                                        </TableHead>
                                         <TableHead>Student</TableHead>
                                         <TableHead>Scholarship</TableHead>
                                         <TableHead>Academic Year</TableHead>
@@ -170,34 +298,53 @@ export default function RecipientsIndex({ recipients, filters }: Props) {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {recipients.data.map((recipient) => (
-                                        <TableRow key={recipient.id}>
-                                            <TableCell>
-                                                <div>
-                                                    <div className="font-medium">
-                                                        {recipient.student.name}
-                                                    </div>
-                                                    <div className="text-sm text-muted-foreground">
-                                                        {
-                                                            recipient.student
-                                                                .email
+                                    {recipients.data.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell
+                                                colSpan={8}
+                                                className="py-8 text-center text-muted-foreground"
+                                            >
+                                                No scholarship recipients found.
+                                                Try adjusting your filters.
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        recipients.data.map((recipient) => (
+                                            <TableRow key={recipient.id}>
+                                                <TableCell>
+                                                    <Checkbox
+                                                        checked={selectedIds.includes(
+                                                            recipient.id,
+                                                        )}
+                                                        onCheckedChange={(
+                                                            checked,
+                                                        ) =>
+                                                            handleSelectOne(
+                                                                recipient.id,
+                                                                checked as boolean,
+                                                            )
                                                         }
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div>
+                                                        <div className="font-medium">
+                                                            {recipient.student.name}
+                                                        </div>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            {recipient.student.email}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                {
-                                                    recipient.scholarship
-                                                        .scholarship_name
-                                                }
-                                            </TableCell>
-                                            <TableCell>
-                                                {recipient.academic_year} -{' '}
-                                                {recipient.semester}
-                                            </TableCell>
-                                            <TableCell className="text-right font-medium">
-                                                ₱
-                                                {recipient.amount.toLocaleString()}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {recipient.scholarship.scholarship_name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {recipient.academic_year} -{' '}
+                                                    {recipient.semester}
+                                                </TableCell>
+                                                <TableCell className="text-right font-medium">
+                                                    ₱{recipient.amount.toLocaleString()}
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 <Badge
@@ -276,7 +423,8 @@ export default function RecipientsIndex({ recipients, filters }: Props) {
                                                 </DropdownMenu>
                                             </TableCell>
                                         </TableRow>
-                                    ))}
+                                        ))
+                                    )}
                                 </TableBody>
                             </Table>
                         </div>

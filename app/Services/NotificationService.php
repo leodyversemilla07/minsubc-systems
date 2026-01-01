@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Log;
 
 class NotificationService
 {
+    public function __construct(
+        protected ?BrandedEmailService $brandedEmailService = null
+    ) {
+        $this->brandedEmailService = $brandedEmailService ?? new BrandedEmailService;
+    }
+
     /**
      * Send SMS notification via Semaphore API
      */
@@ -146,6 +152,40 @@ class NotificationService
 
         foreach ($emails as $email) {
             if ($this->sendEmail($email, $subject, $message, $fromEmail, $fromName)) {
+                $successCount++;
+            }
+        }
+
+        return $successCount;
+    }
+
+    /**
+     * Send a branded HTML email.
+     */
+    public function sendBrandedEmail(
+        string $email,
+        string $subject,
+        string $message,
+        string $module = 'general',
+        array $options = []
+    ): bool {
+        return $this->brandedEmailService->send($email, $subject, $message, $module, $options);
+    }
+
+    /**
+     * Send branded emails to multiple recipients.
+     */
+    public function sendBrandedBulkEmail(
+        array $emails,
+        string $subject,
+        string $message,
+        string $module = 'general',
+        array $options = []
+    ): int {
+        $successCount = 0;
+
+        foreach ($emails as $email) {
+            if ($this->brandedEmailService->send($email, $subject, $message, $module, $options)) {
                 $successCount++;
             }
         }

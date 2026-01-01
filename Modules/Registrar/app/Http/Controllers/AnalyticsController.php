@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Response as InertiaResponse;
 use Modules\Registrar\Services\AnalyticsService;
+use Modules\Registrar\Services\ReceiptService;
+use Symfony\Component\HttpFoundation\Response;
 
 class AnalyticsController extends Controller
 {
     public function __construct(
-        protected AnalyticsService $analyticsService
+        protected AnalyticsService $analyticsService,
+        protected ReceiptService $receiptService
     ) {}
 
     /**
@@ -41,5 +44,15 @@ class AnalyticsController extends Controller
             'stats' => $this->analyticsService->getDashboardStats($period),
             'revenueStats' => $this->analyticsService->getRevenueStats($period),
         ]);
+    }
+
+    /**
+     * Generate daily collection report PDF.
+     */
+    public function dailyCollectionReport(Request $request): Response
+    {
+        $date = $request->get('date', now()->format('Y-m-d'));
+
+        return $this->receiptService->generateDailyCollectionReport($date);
     }
 }

@@ -7,9 +7,9 @@ Thank you for your interest in contributing to the MinSU Systems Platform! This 
 The MinSU Systems Platform is a comprehensive web-based platform built with Laravel 12, Inertia.js v2, React 19, TypeScript, and Shadcn UI. It consists of four integrated systems serving different aspects of Mindoro State University operations:
 
 - **📄 Document Request System (Registrar)**: Automates document request processing for the Registrar's Office
-- **🎓 Guidance System**: Student guidance and counseling management
 - **📊 Student Affairs and Services (SAS)**: Student affairs and services management
 - **🏛️ University Student Government (USG)**: Student government operations and management
+- **🗳️ Voting System**: Student elections and voting management
 
 ## How to Contribute
 
@@ -60,9 +60,9 @@ The MinSU Systems Platform is a comprehensive web-based platform built with Lara
    git checkout -b feature/your-feature-name
    # Or for specific systems:
    git checkout -b feature/registrar/document-validation
-   git checkout -b feature/guidance/counseling-module
    git checkout -b feature/sas/event-management
    git checkout -b feature/usg/election-system
+   git checkout -b feature/voting/ballot-improvements
    ```
 
 2. **Make your changes** following our coding standards
@@ -92,17 +92,17 @@ The MinSU Systems Platform is a comprehensive web-based platform built with Lara
 This platform uses a modular architecture:
 
 ```
-app/Modules/
-├── Guidance/     # Student guidance and counseling
-├── Registrar/    # Document request system
-├── SAS/          # Student affairs and services
-└── USG/          # Student government operations
+Modules/
+├── Registrar/      # Document request system
+├── SAS/            # Student affairs and services
+├── USG/            # Student government operations
+└── VotingSystem/   # Student elections and voting
 
 resources/js/pages/
-├── guidance/     # Frontend pages for guidance system
-├── registrar/    # Frontend pages for document system
-├── sas/          # Frontend pages for student affairs
-└── usg/          # Frontend pages for student government
+├── registrar/      # Frontend pages for document system
+├── sas/            # Frontend pages for student affairs
+├── usg/            # Frontend pages for student government
+└── voting/         # Frontend pages for voting system
 ```
 
 ### 🛠️ Development Standards
@@ -150,12 +150,12 @@ resources/js/pages/
 ```
 type(system:scope): description
 
-Systems: guidance, registrar, sas, usg, shared
+Systems: registrar, sas, usg, voting, shared
 Types: feat, fix, docs, style, refactor, test, chore
 Examples:
 - feat(registrar:documents): add COE request validation
-- fix(guidance:counseling): resolve session booking bug
-- feat(sas:events): implement event registration system
+- fix(sas:scholarships): resolve scholarship tracking bug
+- feat(voting:ballot): implement ballot preview
 - refactor(shared:auth): improve user role management
 ```
 
@@ -212,9 +212,9 @@ If you need help:
 
 **Current Focus Areas:**
 - **Registrar System**: Document request processing and payment integration
-- **Guidance System**: Counseling session management and student support
-- **SAS System**: Event management and student services
-- **USG System**: Election system and governance tools
+- **SAS System**: Scholarship management and student services
+- **USG System**: Transparency portal and governance tools
+- **Voting System**: Election management and voting workflows
 
 **Cross-System Features:**
 - Unified authentication and user management

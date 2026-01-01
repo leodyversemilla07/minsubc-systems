@@ -101,14 +101,6 @@ The **MinSU BC Systems Platform** is a modern, modular monorepo application buil
 - Activity documents and reports
 - Student notifications system
 
-#### 🎓 Guidance Module (Planned)
-- Student guidance and counseling services
-- Appointment scheduling system
-- Confidential counseling records
-- Career guidance resources
-- Psychological assessments
-- Referral system
-
 ---
 
 ## 🏗️ Architecture
@@ -219,9 +211,9 @@ minsubc-systems/
 | Module | Status | Routes | Database Tables | Purpose |
 |--------|--------|--------|-----------------|---------|
 | **Registrar** | ✅ Active | 35+ | 7 | Document request system |
-| **USG** | ✅ Active | 50+ | 11 | Student government transparency |
+| **USG** | ✅ Active | 50+ | 9 | Student government transparency |
 | **SAS** | ✅ Active | 40+ | 15 | Student affairs management |
-| **Guidance** | 🔜 Planned | - | - | Student counseling services |
+| **VotingSystem** | ✅ Active | 30+ | 8 | Student elections and voting |
 
 ### Module Anatomy
 
@@ -467,7 +459,7 @@ php artisan boost:logs --lines=50
 - **payment_webhooks** - PayMongo webhook logs
 - **notifications** - SMS/Email notifications
 
-**USG Module (11 tables):**
+**USG Module (9 tables):**
 - **usg_vmgo** - Vision, Mission, Goals, Objectives
 - **usg_officers** - Student government officers
 - **usg_announcements** - News and announcements
@@ -477,8 +469,6 @@ php artisan boost:logs --lines=50
 - **usg_documents** - Document repository
 - **usg_document_downloads** - Download tracking
 - **usg_transparency_reports** - Transparency reports
-- **usg_foi_requests** - Freedom of Information requests
-- **usg_foi_responses** - FOI request responses
 
 **SAS Module (15 tables):**
 - **scholarships** - Scholarship programs
@@ -514,8 +504,6 @@ users (1) ─────── (*) usg_announcements (as author)
 users (1) ─────── (*) usg_events (as creator)
 users (1) ─────── (*) usg_event_registrations
 usg_events (1) ─── (*) usg_event_registrations
-users (1) ─────── (*) usg_foi_requests
-usg_foi_requests (1) ─ (*) usg_foi_responses
 ```
 
 **SAS:**
@@ -956,10 +944,8 @@ We welcome contributions! Please follow these guidelines:
 ### Development Priorities
 
 **Current Focus Areas:**
-- **Registrar System**: Payment flow improvements
-- **USG System**: Initial module implementation
-- **Guidance System**: Module planning
-- **SAS System**: Module planning
+- **Production Readiness**: Security audit, performance optimization
+- **Integration Testing**: PayMongo payment flow, SMS/email notifications
 - **Cross-System**: Shared components and utilities
 
 ### Code Review Process

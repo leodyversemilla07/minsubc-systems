@@ -409,7 +409,7 @@ export default function EditEvent({
                                             id="location"
                                             name="location"
                                             type="text"
-                                            placeholder="e.g., MSU-Buug Campus Auditorium"
+                                            placeholder="e.g., MinSU-BC Campus Auditorium"
                                             value={location}
                                             onChange={(e) =>
                                                 setLocation(e.target.value)

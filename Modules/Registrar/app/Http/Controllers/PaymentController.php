@@ -13,13 +13,16 @@ use Modules\Registrar\Http\Requests\VerifyPaymentReferenceRequest;
 use Modules\Registrar\Models\DocumentRequest;
 use Modules\Registrar\Models\Payment;
 use Modules\Registrar\Services\PaymentService;
+use Modules\Registrar\Services\ReceiptService;
 use Modules\Registrar\Services\RegistrarNotificationService;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class PaymentController extends Controller
 {
     public function __construct(
         private PaymentService $paymentService,
-        private RegistrarNotificationService $notificationService
+        private RegistrarNotificationService $notificationService,
+        private ReceiptService $receiptService
     ) {}
 
     /**
@@ -262,11 +265,27 @@ class PaymentController extends Controller
     }
 
     /**
-     * Display official receipt information for a confirmed payment
-     * Note: Since registrar has their own software for receipt generation,
-     * this displays receipt data that can be integrated with their existing system
+     * Generate and stream PDF receipt for a confirmed payment.
      */
-    public function printOfficialReceipt(Payment $payment, Request $request): JsonResponse
+    public function printOfficialReceipt(Payment $payment, Request $request): HttpResponse
+    {
+        // Ensure only cashiers can access this and only for cash payments they confirmed
+        if (! $request->user()->hasRole('cashier') || $payment->payment_method !== 'cash') {
+            abort(403);
+        }
+
+        // Only allow viewing receipts for paid cash payments
+        if ($payment->status !== 'paid' || ! $payment->official_receipt_number) {
+            abort(404);
+        }
+
+        return $this->receiptService->generateReceipt($payment);
+    }
+
+    /**
+     * Get receipt data as JSON for integration with external systems.
+     */
+    public function getReceiptData(Payment $payment, Request $request): JsonResponse
     {
         // Ensure only cashiers can access this and only for cash payments they confirmed
         if (! $request->user()->hasRole('cashier') || $payment->payment_method !== 'cash') {
@@ -290,7 +309,7 @@ class PaymentController extends Controller
                 'payment_method' => $payment->payment_method,
                 'status' => $payment->status,
                 'paid_at' => $payment->paid_at,
-                'reference_number' => $payment->reference_number,
+                'reference_number' => $payment->payment_reference_number,
             ],
             'document_request' => [
                 'request_number' => $payment->documentRequest->request_number,
@@ -307,8 +326,8 @@ class PaymentController extends Controller
             ],
             'university' => [
                 'name' => config('app.name', 'MinSU Document Request System'),
-                'address' => 'Address here',
-                'contact' => 'Contact here',
+                'address' => 'Bongabong Campus, Oriental Mindoro',
+                'contact' => 'registrar@minsu.edu.ph',
             ],
         ]);
     }

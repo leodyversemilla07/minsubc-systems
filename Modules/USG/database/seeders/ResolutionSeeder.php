@@ -25,7 +25,7 @@ class ResolutionSeeder extends Seeder
         $resolutions = [
             [
                 'title' => 'Resolution Establishing the Student Scholarship Program',
-                'description' => 'A resolution to establish a merit-based scholarship program for deserving students of Mindanao State University at Buug Campus.',
+                'description' => 'A resolution to establish a merit-based scholarship program for deserving students of Mindoro State University at Bongabong Campus.',
                 'category' => 'Academic',
                 'status' => 'published',
                 'date_passed' => now()->subDays(45),

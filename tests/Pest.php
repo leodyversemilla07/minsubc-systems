@@ -19,6 +19,19 @@ pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Browser');
 
+/*
+|--------------------------------------------------------------------------
+| Browser Testing Configuration
+|--------------------------------------------------------------------------
+|
+| Configure Pest browser testing settings.
+| The browser uses APP_URL from .env automatically.
+|
+*/
+
+pest()->browser()
+    ->timeout(10000);
+
 pest()->extend(\PHPUnit\Framework\TestCase::class)
     ->in('Unit');
 

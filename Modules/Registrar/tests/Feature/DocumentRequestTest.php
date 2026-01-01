@@ -428,8 +428,42 @@ test('cashier can print official receipt', function () {
         'paid_at' => now(),
     ]);
 
-    // Act as cashier and access receipt data
+    // Act as cashier and access receipt PDF - should return PDF stream
     $response = $this->actingAs($cashier)->get(route('registrar.cashier.receipt', $payment));
+
+    // Assert PDF response
+    $response->assertStatus(200);
+    $response->assertHeader('content-type', 'application/pdf');
+});
+
+test('cashier can get receipt data as JSON', function () {
+    // Seed roles and permissions
+    $this->seed(RolesAndPermissionsSeeder::class);
+
+    // Create a cashier user
+    $cashier = User::factory()->create();
+    $cashier->assignRole('cashier');
+
+    // Create a student and document request with confirmed cash payment
+    $student = Student::factory()->create(['user_id' => User::factory()->create()->id]);
+    $request = Modules\Registrar\Models\DocumentRequest::factory()->create([
+        'student_id' => $student->student_id,
+        'status' => 'paid',
+        'amount' => 100.00,
+    ]);
+
+    $payment = Modules\Registrar\Models\Payment::factory()->create([
+        'request_id' => $request->id,
+        'payment_method' => 'cash',
+        'amount' => 100.00,
+        'status' => 'paid',
+        'cashier_id' => $cashier->id,
+        'official_receipt_number' => 'OR-2025-001234',
+        'paid_at' => now(),
+    ]);
+
+    // Act as cashier and access receipt data JSON endpoint
+    $response = $this->actingAs($cashier)->get(route('registrar.cashier.receipt.data', $payment));
 
     // Assert JSON response with receipt data (for integration with registrar's existing software)
     $response->assertStatus(200)

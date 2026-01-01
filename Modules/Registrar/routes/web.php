@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('cashier/verify-payment', [PaymentController::class, 'verifyPaymentReference'])->name('registrar.cashier.verify-payment');
         Route::post('cashier/confirm-payment', [PaymentController::class, 'confirmCashPayment'])->name('registrar.cashier.confirm-payment');
         Route::get('cashier/receipt/{payment}', [PaymentController::class, 'printOfficialReceipt'])->name('registrar.cashier.receipt');
+        Route::get('cashier/receipt/{payment}/data', [PaymentController::class, 'getReceiptData'])->name('registrar.cashier.receipt.data');
     });
 
     // Admin routes - accessible to registrar staff and admins
@@ -74,6 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Analytics routes
         Route::get('admin/analytics', [AnalyticsController::class, 'index'])->name('registrar.admin.analytics');
         Route::get('admin/analytics/data', [AnalyticsController::class, 'getData'])->name('registrar.admin.analytics.data');
+        Route::get('admin/analytics/daily-collection', [AnalyticsController::class, 'dailyCollectionReport'])->name('registrar.admin.analytics.daily-collection');
 
         // Bulk operations routes
         Route::post('admin/bulk/update-status', [BulkOperationsController::class, 'bulkUpdateStatus'])->name('registrar.admin.bulk.update-status');
