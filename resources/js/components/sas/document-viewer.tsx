@@ -36,8 +36,8 @@ export function DocumentViewer({
         setLoading(false);
     };
 
-    const onDocumentLoadError = (error: Error) => {
-        console.error('Error loading PDF:', error);
+    const onDocumentLoadError = () => {
+        // PDF loading error occurred
         setLoading(false);
     };
 

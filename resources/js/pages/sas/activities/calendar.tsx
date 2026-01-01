@@ -30,7 +30,7 @@ interface SASActivity {
 }
 
 export default function ActivitiesCalendar({ activities, currentMonth, currentYear }: Props) {
-    const [displayDate, setDisplayDate] = useState(() => {
+    const [displayDate] = useState(() => {
         return new Date(currentYear, currentMonth - 1, 1);
     });
 

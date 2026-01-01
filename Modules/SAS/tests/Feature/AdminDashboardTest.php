@@ -30,7 +30,9 @@ describe('Admin Dashboard Access', function () {
         $response->assertSuccessful();
         $response->assertInertia(fn ($page) => $page
             ->component('sas/admin/dashboard')
-            ->has('dashboardData')
+            ->has('statistics')
+            ->has('recentActivities')
+            ->has('pendingTasks')
         );
     });
 

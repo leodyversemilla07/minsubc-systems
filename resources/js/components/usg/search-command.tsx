@@ -248,8 +248,8 @@ export default function SearchCommand({
 
                     setSearchResults(results);
                 }
-            } catch (error) {
-                console.error('Search error:', error);
+            } catch {
+                // Search error occurred
                 setSearchResults([]);
             } finally {
                 setIsSearching(false);

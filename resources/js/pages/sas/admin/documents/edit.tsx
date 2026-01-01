@@ -19,7 +19,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, Upload } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { useState } from 'react';
 
 interface DigitalizedDocument {

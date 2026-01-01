@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
     Sheet,
     SheetContent,
@@ -8,7 +7,6 @@ import {
 import voting from '@/routes/voting';
 import { Link } from '@inertiajs/react';
 import {
-    ArrowRight,
     BarChart3,
     CheckCircle2,
     Menu,

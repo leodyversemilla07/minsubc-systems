@@ -271,8 +271,8 @@ export const RichTextEditor = forwardRef<EditorRef, RichTextEditorProps>(
                 const uploadedUrl = await onImageUpload(file);
                 const imageMarkdown = `![${file.name}](${uploadedUrl})`;
                 insertAtCursor(imageMarkdown);
-            } catch (error) {
-                console.error('Image upload failed:', error);
+            } catch {
+                // Image upload failed
             }
 
             // Reset file input

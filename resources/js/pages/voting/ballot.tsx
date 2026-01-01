@@ -67,8 +67,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
             if (savedDraft) {
                 return JSON.parse(savedDraft);
             }
-        } catch (error) {
-            console.error('Failed to load draft:', error);
+        } catch {
+            // Failed to load draft from storage
         }
         return {};
     };
@@ -85,8 +85,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
         try {
             const draftKey = `voting_draft_${election.id}`;
             localStorage.setItem(draftKey, JSON.stringify(selectedVotes));
-        } catch (error) {
-            console.error('Failed to save draft:', error);
+        } catch {
+            // Failed to save draft to storage
         }
     }, [selectedVotes, election.id]);
 
@@ -140,7 +140,6 @@ export default function Ballot({ election, positions }: BallotPageProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted with votes:', selectedVotes);
         router.post(voting.preview.url(), { votes: selectedVotes });
     };
 
@@ -148,13 +147,10 @@ export default function Ballot({ election, positions }: BallotPageProps) {
         router.post(voting.logout.url());
     };
 
-    // Calculate overall progress
-    const totalPositions = positions.length;
+    // Calculate completion for button state
     const completedPositions = Object.keys(selectedVotes).filter(
         (key) => selectedVotes[parseInt(key)].length > 0,
     ).length;
-    const progressPercentage =
-        totalPositions > 0 ? (completedPositions / totalPositions) * 100 : 0;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30 dark:from-gray-950 dark:to-green-950/30">

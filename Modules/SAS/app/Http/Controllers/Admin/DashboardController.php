@@ -26,7 +26,7 @@ class DashboardController extends Controller
             'scholarships' => [
                 'total' => $dashboardData['scholarships']['total'] ?? 0,
                 'active' => $dashboardData['scholarships']['active_recipients'] ?? 0,
-                'expiring_soon' => 0, // TODO: Add expiring_soon calculation
+                'expiring_soon' => $dashboardData['scholarships']['expiring_soon'] ?? 0,
                 'total_amount' => $dashboardData['scholarships']['total_disbursed'] ?? 0,
             ],
             'insurance' => [

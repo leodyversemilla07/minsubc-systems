@@ -17,21 +17,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { KeyRound, RotateCcw, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { RotateCcw, Trash2 } from 'lucide-react';
 
 interface Election {
     id: number;
@@ -85,21 +76,6 @@ export default function Show({ voter }: Props) {
         { title: 'Voters', href: voting.admin.voters.index.url() },
         { title: voter.student?.user?.full_name || voter.school_id, href: '#' },
     ];
-
-    const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
-    const [newPassword, setNewPassword] = useState('');
-
-    const handleResetPassword = () => {
-        if (!newPassword) return;
-        router.post(
-            voting.admin.voters.resetPassword.url({
-                voter: Number(voter.school_id),
-            }),
-            { new_password: newPassword },
-        );
-        setResetPasswordOpen(false);
-        setNewPassword('');
-    };
 
     const handleResetVote = () => {
         router.post(
@@ -241,76 +217,13 @@ export default function Show({ voter }: Props) {
                     {/* Right Column: Actions & Votes */}
                     <div className="space-y-6 md:col-span-2">
                         {/* Actions */}
-                        {(can('voters.reset-password') || can('voters.reset-vote') || can('voters.delete')) && (
+                        {(can('voters.reset-vote') || can('voters.delete')) && (
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Actions</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex flex-wrap gap-3">
-                                        {/* Reset Password Dialog */}
-                                        {can('voters.reset-password') && (
-                                            <Dialog
-                                                open={resetPasswordOpen}
-                                                onOpenChange={setResetPasswordOpen}
-                                            >
-                                                <DialogTrigger asChild>
-                                                    <Button>
-                                                        <KeyRound className="mr-2 h-4 w-4" />
-                                                        Reset Password
-                                                    </Button>
-                                                </DialogTrigger>
-                                                <DialogContent>
-                                                    <DialogHeader>
-                                                        <DialogTitle>
-                                                            Reset Voter Password
-                                                        </DialogTitle>
-                                                    </DialogHeader>
-                                                    <div className="space-y-4 py-4">
-                                                        <div>
-                                                            <label
-                                                                htmlFor="new_password"
-                                                                className="mb-2 block text-sm font-medium"
-                                                            >
-                                                                New Password
-                                                            </label>
-                                                            <Input
-                                                                id="new_password"
-                                                                type="text"
-                                                                value={newPassword}
-                                                                onChange={(e) =>
-                                                                    setNewPassword(
-                                                                        e.target.value,
-                                                                    )
-                                                                }
-                                                                placeholder="Enter new password"
-                                                            />
-                                                        </div>
-                                                        <div className="flex gap-3">
-                                                            <Button
-                                                                onClick={
-                                                                    handleResetPassword
-                                                                }
-                                                                disabled={!newPassword}
-                                                            >
-                                                                Confirm Reset
-                                                            </Button>
-                                                            <Button
-                                                                variant="outline"
-                                                                onClick={() =>
-                                                                    setResetPasswordOpen(
-                                                                        false,
-                                                                    )
-                                                                }
-                                                            >
-                                                                Cancel
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </DialogContent>
-                                            </Dialog>
-                                        )}
-
                                         {/* Reset Vote */}
                                         {can('voters.reset-vote') && voter.has_voted && (
                                             <AlertDialog>

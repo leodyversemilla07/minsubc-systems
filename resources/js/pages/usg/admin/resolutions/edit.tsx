@@ -80,7 +80,7 @@ export default function EditResolution({
         resolution?.date_passed ? new Date(resolution.date_passed) : undefined,
     );
     const [selectedCategory, setSelectedCategory] = useState<string>(
-        resolution?.category_id?.toString() || '',
+        resolution?.category || '',
     );
     const [selectedStatus, setSelectedStatus] = useState<string>(
         resolution?.status || 'published',

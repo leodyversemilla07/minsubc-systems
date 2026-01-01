@@ -57,8 +57,8 @@ export default function Confirmation({
             try {
                 const draftKey = `voting_draft_${election.id}`;
                 localStorage.removeItem(draftKey);
-            } catch (error) {
-                console.error('Failed to clear draft:', error);
+            } catch {
+                // Failed to clear draft from storage
             }
         }
     }, [election?.id]);

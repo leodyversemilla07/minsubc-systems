@@ -64,6 +64,10 @@ class DashboardService
             'active' => Scholarship::where('is_active', true)->count(),
             'recipients' => ScholarshipRecipient::count(),
             'active_recipients' => ScholarshipRecipient::where('status', 'Active')->count(),
+            'expiring_soon' => ScholarshipRecipient::where('status', 'Active')
+                ->whereNotNull('end_date')
+                ->whereBetween('end_date', [now(), now()->addDays(30)])
+                ->count(),
             'total_disbursed' => ScholarshipRecipient::sum('amount'),
         ];
     }

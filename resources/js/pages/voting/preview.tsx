@@ -1,6 +1,5 @@
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { PrintReceipt } from '@/components/voting/print-receipt';
 import { SecurityBadge } from '@/components/voting/security-badge';
 import { VotingProgress } from '@/components/voting/voting-progress';
 import voting from '@/routes/voting';

@@ -117,8 +117,8 @@ export default function NotificationsIndex({
                 },
             });
             router.reload({ only: ['notifications'] });
-        } catch (error) {
-            console.error('Failed to mark notification as read:', error);
+        } catch {
+            // Failed to mark notification as read
         }
     };
 
@@ -135,8 +135,8 @@ export default function NotificationsIndex({
                 },
             });
             router.reload({ only: ['notifications'] });
-        } catch (error) {
-            console.error('Failed to mark all as read:', error);
+        } catch {
+            // Failed to mark all notifications as read
         }
     };
 

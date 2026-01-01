@@ -23,11 +23,25 @@ export function NavMain({ items = [], label = 'Navigation' }: NavMainProps) {
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                             asChild
-                            isActive={page.url.startsWith(
-                                typeof item.href === 'string'
-                                    ? item.href
-                                    : item.href.url,
-                            )}
+                            isActive={(() => {
+                                const currentPath = page.url.split('?')[0];
+                                let itemHref: string;
+                                if (typeof item.href === 'string') {
+                                    itemHref = item.href;
+                                } else if (typeof item.href === 'object' && item.href !== null && 'url' in item.href) {
+                                    itemHref = (item.href as { url: string }).url;
+                                } else {
+                                    itemHref = String(item.href);
+                                }
+                                const itemPath = itemHref.split('?')[0];
+                                const isDashboard = item.title.toLowerCase().includes('dashboard');
+
+                                if (isDashboard) {
+                                    return currentPath === itemPath;
+                                }
+
+                                return currentPath === itemPath || currentPath.startsWith(itemPath + '/');
+                            })()}
                             tooltip={{ children: item.title }}
                         >
                             <Link href={item.href} prefetch>

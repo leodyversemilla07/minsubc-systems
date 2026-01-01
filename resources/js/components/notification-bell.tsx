@@ -20,8 +20,8 @@ export function NotificationBell() {
             const response = await fetch('/api/notifications/unread-count');
             const data = await response.json();
             setUnreadCount(data.count);
-        } catch (error) {
-            console.error('Failed to fetch unread count:', error);
+        } catch {
+            // Failed to fetch unread count
         }
     };
 
@@ -45,8 +45,8 @@ export function NotificationBell() {
                 },
             });
             setUnreadCount(0);
-        } catch (error) {
-            console.error('Failed to mark all as read:', error);
+        } catch {
+            // Failed to mark all notifications as read
         }
     };
 
