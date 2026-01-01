@@ -94,19 +94,84 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'organizations_joined' => 0,
         ];
 
+        $scholarships = collect();
+        $organizations = collect();
+        $insuranceRecord = null;
+
         if ($user->id) {
+            // Get scholarship recipients with details
+            $scholarshipRecipients = \Modules\SAS\Models\ScholarshipRecipient::with(['scholarship', 'requirements'])
+                ->where('student_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
             $sasStats = [
-                'active_scholarships' => \Modules\SAS\Models\ScholarshipRecipient::where('student_id', $user->id)
-                    ->where('status', 'Active')
-                    ->count(),
-                'total_scholarships' => \Modules\SAS\Models\ScholarshipRecipient::where('student_id', $user->id)->count(),
+                'active_scholarships' => $scholarshipRecipients->where('status', 'Active')->count(),
+                'total_scholarships' => $scholarshipRecipients->count(),
                 'insurance_status' => \Modules\SAS\Models\Insurance::where('student_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->value('status') ?? 'None',
-                'organizations_joined' => \Modules\SAS\Models\OrganizationOfficer::where('student_id', $user->id)
-                    ->where('is_current', true)
+                'organizations_joined' => \Modules\SAS\Models\OrganizationMember::where('student_id', $user->id)
+                    ->where('status', 'Active')
                     ->count(),
             ];
+
+            // Get detailed scholarship info
+            $scholarships = $scholarshipRecipients->map(function ($recipient) {
+                $totalRequirements = $recipient->requirements->count();
+                $completedRequirements = $recipient->requirements->where('status', 'Submitted')->count();
+                
+                return [
+                    'id' => $recipient->id,
+                    'name' => $recipient->scholarship->name ?? 'Unknown Scholarship',
+                    'type' => $recipient->scholarship->scholarship_type ?? 'N/A',
+                    'status' => $recipient->status,
+                    'amount' => $recipient->amount,
+                    'academic_year' => $recipient->academic_year,
+                    'semester' => $recipient->semester,
+                    'requirements_complete' => $recipient->requirements_complete,
+                    'requirements_progress' => $totalRequirements > 0 
+                        ? round(($completedRequirements / $totalRequirements) * 100) 
+                        : 100,
+                    'total_requirements' => $totalRequirements,
+                    'completed_requirements' => $completedRequirements,
+                    'expiration_date' => $recipient->expiration_date?->format('M d, Y'),
+                ];
+            });
+
+            // Get organization memberships
+            $orgMemberships = \Modules\SAS\Models\OrganizationMember::with('organization')
+                ->where('student_id', $user->id)
+                ->where('status', 'Active')
+                ->get();
+
+            $organizations = $orgMemberships->map(function ($membership) {
+                return [
+                    'id' => $membership->id,
+                    'name' => $membership->organization->name ?? 'Unknown Organization',
+                    'acronym' => $membership->organization->acronym ?? '',
+                    'type' => $membership->organization->type ?? 'N/A',
+                    'membership_date' => $membership->membership_date?->format('M d, Y'),
+                    'status' => $membership->status,
+                ];
+            });
+
+            // Get insurance record details
+            $insurance = \Modules\SAS\Models\Insurance::where('student_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($insurance) {
+                $insuranceRecord = [
+                    'id' => $insurance->id,
+                    'status' => $insurance->status,
+                    'academic_year' => $insurance->academic_year ?? 'N/A',
+                    'semester' => $insurance->semester ?? 'N/A',
+                    'amount' => $insurance->amount ?? 0,
+                    'payment_status' => $insurance->payment_status ?? 'Unpaid',
+                    'created_at' => $insurance->created_at?->format('M d, Y'),
+                ];
+            }
         }
 
         // USG Stats
@@ -173,6 +238,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'stats' => $stats,
             'recent_requests' => $recentRequests,
             'sasStats' => $sasStats,
+            'scholarships' => $scholarships,
+            'organizations' => $organizations,
+            'insuranceRecord' => $insuranceRecord,
             'usgStats' => $usgStats,
             'recentAnnouncements' => $recentAnnouncements,
             'upcomingEvents' => $upcomingEvents,
@@ -187,6 +255,7 @@ require __DIR__.'/auth.php';
 // Super Admin Routes
 Route::middleware(['auth', 'verified', 'permission:super_admin_access'])->prefix('super-admin')->name('super-admin.')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/analytics', [SuperAdminController::class, 'analytics'])->name('analytics');
     Route::get('/users', [SuperAdminController::class, 'users'])->name('users');
     Route::get('/users/{user}', [SuperAdminController::class, 'showUser'])->name('users.show');
     Route::patch('/users/{user}/roles', [SuperAdminController::class, 'updateUserRoles'])->name('users.update-roles');

@@ -10,6 +10,7 @@ use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -495,10 +496,10 @@ class SuperAdminController extends Controller
                 'last_checked' => now()->toISOString(),
             ],
             [
-                'name' => 'Guidance Module',
+                'name' => 'Voting System Module',
                 'status' => 'active',
-                'version' => '1.0.0',
-                'description' => 'Student guidance and counseling services',
+                'version' => '2.0.0',
+                'description' => 'Student elections and voting system',
                 'last_checked' => now()->toISOString(),
             ],
         ];
@@ -507,6 +508,152 @@ class SuperAdminController extends Controller
             'system' => $system,
             'environment' => $environment,
             'modules' => $modules,
+        ]);
+    }
+
+    /**
+     * Show comprehensive analytics dashboard with data from all modules
+     */
+    public function analytics(Request $request): Response
+    {
+        $period = $request->get('period', '30'); // days
+        $startDate = now()->subDays((int) $period);
+
+        // ===== REGISTRAR MODULE STATS =====
+        $registrarStats = [];
+        if (class_exists(\Modules\Registrar\Models\DocumentRequest::class)) {
+            $documentRequests = \Modules\Registrar\Models\DocumentRequest::query();
+
+            $registrarStats = [
+                'total_requests' => $documentRequests->count(),
+                'requests_in_period' => (clone $documentRequests)->where('created_at', '>=', $startDate)->count(),
+                'pending_payment' => (clone $documentRequests)->where('status', 'pending_payment')->count(),
+                'processing' => (clone $documentRequests)->whereIn('status', ['paid', 'processing'])->count(),
+                'ready_for_claim' => (clone $documentRequests)->where('status', 'ready_for_claim')->count(),
+                'completed' => (clone $documentRequests)->whereIn('status', ['claimed', 'released'])->count(),
+                'cancelled' => (clone $documentRequests)->whereIn('status', ['cancelled', 'rejected', 'payment_expired'])->count(),
+                'total_revenue' => \Modules\Registrar\Models\Payment::where('status', 'paid')->sum('amount') / 100,
+                'revenue_in_period' => \Modules\Registrar\Models\Payment::where('status', 'paid')
+                    ->where('created_at', '>=', $startDate)->sum('amount') / 100,
+                'by_document_type' => (clone $documentRequests)
+                    ->select('document_type', DB::raw('count(*) as count'))
+                    ->groupBy('document_type')
+                    ->orderBy('count', 'desc')
+                    ->get(),
+                'by_status' => (clone $documentRequests)
+                    ->select('status', DB::raw('count(*) as count'))
+                    ->groupBy('status')
+                    ->get(),
+                'daily_requests' => (clone $documentRequests)
+                    ->where('created_at', '>=', $startDate)
+                    ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+                    ->groupBy('date')
+                    ->orderBy('date')
+                    ->get(),
+            ];
+        }
+
+        // ===== SAS MODULE STATS =====
+        $sasStats = [];
+        if (class_exists(\Modules\SAS\Models\ScholarshipRecipient::class)) {
+            $sasStats = [
+                'total_scholarships' => \Modules\SAS\Models\Scholarship::count(),
+                'active_recipients' => \Modules\SAS\Models\ScholarshipRecipient::where('status', 'Active')->count(),
+                'total_recipients' => \Modules\SAS\Models\ScholarshipRecipient::count(),
+                'total_organizations' => \Modules\SAS\Models\Organization::count(),
+                'active_organizations' => \Modules\SAS\Models\Organization::where('status', 'Active')->count(),
+                'total_insurance' => \Modules\SAS\Models\Insurance::count(),
+                'recipients_by_scholarship' => \Modules\SAS\Models\ScholarshipRecipient::query()
+                    ->join('scholarships', 'scholarship_recipients.scholarship_id', '=', 'scholarships.id')
+                    ->select('scholarships.name', DB::raw('count(*) as count'))
+                    ->groupBy('scholarships.name')
+                    ->orderBy('count', 'desc')
+                    ->get(),
+                'recipients_by_status' => \Modules\SAS\Models\ScholarshipRecipient::query()
+                    ->select('status', DB::raw('count(*) as count'))
+                    ->groupBy('status')
+                    ->get(),
+            ];
+        }
+
+        // ===== USG MODULE STATS =====
+        $usgStats = [];
+        if (class_exists(\Modules\USG\Models\Announcement::class)) {
+            $usgStats = [
+                'total_announcements' => \Modules\USG\Models\Announcement::count(),
+                'published_announcements' => \Modules\USG\Models\Announcement::where('status', 'published')->count(),
+                'total_events' => \Modules\USG\Models\Event::count(),
+                'upcoming_events' => \Modules\USG\Models\Event::where('start_date', '>=', now())->count(),
+                'total_resolutions' => \Modules\USG\Models\Resolution::count(),
+                'total_officers' => \Modules\USG\Models\Officer::count(),
+                'event_registrations' => \Modules\USG\Models\EventRegistration::count(),
+                'announcements_by_category' => \Modules\USG\Models\Announcement::query()
+                    ->select('category', DB::raw('count(*) as count'))
+                    ->groupBy('category')
+                    ->orderBy('count', 'desc')
+                    ->get(),
+                'events_by_month' => \Modules\USG\Models\Event::query()
+                    ->where('start_date', '>=', $startDate)
+                    ->select(DB::raw('MONTH(start_date) as month'), DB::raw('count(*) as count'))
+                    ->groupBy('month')
+                    ->orderBy('month')
+                    ->get(),
+            ];
+        }
+
+        // ===== VOTING SYSTEM STATS =====
+        $votingStats = [];
+        if (class_exists(\Modules\VotingSystem\Models\Election::class)) {
+            $votingStats = [
+                'total_elections' => \Modules\VotingSystem\Models\Election::count(),
+                'active_elections' => \Modules\VotingSystem\Models\Election::where('status', true)->count(),
+                'total_voters' => \Modules\VotingSystem\Models\Voter::count(),
+                'voters_who_voted' => \Modules\VotingSystem\Models\Voter::where('has_voted', true)->count(),
+                'total_votes' => \Modules\VotingSystem\Models\Vote::count(),
+                'total_candidates' => \Modules\VotingSystem\Models\Candidate::count(),
+                'total_positions' => \Modules\VotingSystem\Models\Position::count(),
+                'voter_turnout' => \Modules\VotingSystem\Models\Voter::count() > 0
+                    ? round((\Modules\VotingSystem\Models\Voter::where('has_voted', true)->count() / \Modules\VotingSystem\Models\Voter::count()) * 100, 1)
+                    : 0,
+                'feedback_count' => \Modules\VotingSystem\Models\VoterFeedback::count(),
+                'avg_rating' => \Modules\VotingSystem\Models\VoterFeedback::avg('rating') ?? 0,
+            ];
+        }
+
+        // ===== SYSTEM-WIDE STATS =====
+        $systemStats = [
+            'total_users' => User::count(),
+            'verified_users' => User::whereNotNull('email_verified_at')->count(),
+            'users_with_2fa' => User::whereNotNull('two_factor_secret')->count(),
+            'new_users_in_period' => User::where('created_at', '>=', $startDate)->count(),
+            'total_students' => \App\Models\Student::count(),
+            'audit_logs_in_period' => AuditLog::where('created_at', '>=', $startDate)->count(),
+        ];
+
+        // ===== TREND DATA (Last 7 days activity) =====
+        $trendData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $trendData[] = [
+                'date' => now()->subDays($i)->format('M d'),
+                'users' => User::whereDate('created_at', $date)->count(),
+                'requests' => class_exists(\Modules\Registrar\Models\DocumentRequest::class)
+                    ? \Modules\Registrar\Models\DocumentRequest::whereDate('created_at', $date)->count()
+                    : 0,
+                'votes' => class_exists(\Modules\VotingSystem\Models\Vote::class)
+                    ? \Modules\VotingSystem\Models\Vote::whereDate('created_at', $date)->count()
+                    : 0,
+            ];
+        }
+
+        return Inertia::render('super-admin/analytics', [
+            'period' => $period,
+            'registrarStats' => $registrarStats,
+            'sasStats' => $sasStats,
+            'usgStats' => $usgStats,
+            'votingStats' => $votingStats,
+            'systemStats' => $systemStats,
+            'trendData' => $trendData,
         ]);
     }
 }

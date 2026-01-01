@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import {
+    analytics,
     auditLogs,
     reports,
     systemConfig,
@@ -15,6 +16,7 @@ import {
     BarChart3,
     Database,
     Eye,
+    LineChart,
     Settings,
     Shield,
     TrendingUp,
@@ -63,6 +65,13 @@ export default function Dashboard({
     ];
 
     const quickActions = [
+        {
+            title: 'System Analytics',
+            description: 'Cross-module analytics and insights',
+            href: analytics.url(),
+            icon: LineChart,
+            color: 'text-indigo-600',
+        },
         {
             title: 'User Management',
             description: 'Manage users, roles, and permissions',

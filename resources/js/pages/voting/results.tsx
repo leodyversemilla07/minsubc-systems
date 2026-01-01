@@ -66,18 +66,18 @@ export default function Results({
 }: ResultsPageProps) {
     if (!election || !statistics) {
         return (
-            <div className="min-h-screen bg-gray-50 py-8 dark:bg-gray-950">
+            <div className="min-h-screen bg-background py-8">
                 <div className="container mx-auto max-w-6xl px-4">
-                    <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-md dark:border-gray-800 dark:bg-gray-900">
-                        <h2 className="mb-4 text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    <div className="rounded-lg border border-border bg-card p-8 text-center shadow-md">
+                        <h2 className="mb-4 text-2xl font-bold text-foreground">
                             No Election Selected
                         </h2>
-                        <p className="mb-6 text-gray-600 dark:text-gray-400">
+                        <p className="mb-6 text-muted-foreground">
                             Please select an election to view results.
                         </p>
                         <Link
                             href="/voting"
-                            className="inline-block rounded-lg bg-green-600 px-6 py-3 text-white transition hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+                            className="inline-block rounded-lg bg-primary px-6 py-3 text-primary-foreground transition hover:bg-primary/90"
                         >
                             Back to Home
                         </Link>
@@ -88,9 +88,9 @@ export default function Results({
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <div className="bg-green-600 text-white shadow-lg dark:bg-green-700">
+            <div className="bg-primary text-primary-foreground shadow-lg">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex items-center gap-4">
                         {/* Logo */}
@@ -114,35 +114,35 @@ export default function Results({
             <div className="container mx-auto max-w-6xl px-4 py-8">
                 {/* Election Statistics */}
                 <div className="mb-8 grid gap-4 md:grid-cols-4">
-                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-                        <div className="mb-1 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="rounded-lg border border-border bg-card p-6 shadow-md">
+                        <div className="mb-1 text-sm text-muted-foreground">
                             Total Voters
                         </div>
-                        <div className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                        <div className="text-3xl font-bold text-foreground">
                             {statistics.total_voters}
                         </div>
                     </div>
-                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-                        <div className="mb-1 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="rounded-lg border border-border bg-card p-6 shadow-md">
+                        <div className="mb-1 text-sm text-muted-foreground">
                             Voted
                         </div>
-                        <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                        <div className="text-3xl font-bold text-primary">
                             {statistics.voted_count}
                         </div>
                     </div>
-                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-                        <div className="mb-1 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="rounded-lg border border-border bg-card p-6 shadow-md">
+                        <div className="mb-1 text-sm text-muted-foreground">
                             Not Voted
                         </div>
-                        <div className="text-3xl font-bold text-gray-400 dark:text-gray-500">
+                        <div className="text-3xl font-bold text-muted-foreground">
                             {statistics.not_voted_count}
                         </div>
                     </div>
-                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-                        <div className="mb-1 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="rounded-lg border border-border bg-card p-6 shadow-md">
+                        <div className="mb-1 text-sm text-muted-foreground">
                             Turnout
                         </div>
-                        <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                        <div className="text-3xl font-bold text-primary">
                             {statistics.turnout_percentage.toFixed(1)}%
                         </div>
                     </div>
@@ -200,12 +200,12 @@ export default function Results({
                             className="mb-8 space-y-6"
                         >
                             {/* Position Header */}
-                            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
-                                <div className="border-b border-gray-200 pb-4 dark:border-gray-700">
-                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                            <div className="rounded-lg border border-border bg-card p-6 shadow-md">
+                                <div className="border-b border-border pb-4">
+                                    <h2 className="text-2xl font-bold text-foreground">
                                         {position.description}
                                     </h2>
-                                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    <p className="mt-1 text-sm text-muted-foreground">
                                         Total Votes: {position.total_votes}
                                     </p>
                                 </div>
@@ -214,12 +214,12 @@ export default function Results({
                             {position.candidates.length > 0 ? (
                                 <div className="grid gap-6 lg:grid-cols-2">
                                     {/* Bar Chart */}
-                                    <Card className="dark:border-gray-800 dark:bg-gray-900">
+                                    <Card>
                                         <CardHeader>
-                                            <CardTitle className="dark:text-gray-100">
+                                            <CardTitle>
                                                 Vote Distribution
                                             </CardTitle>
-                                            <CardDescription className="dark:text-gray-400">
+                                            <CardDescription>
                                                 Bar chart showing votes per
                                                 candidate
                                             </CardDescription>
@@ -260,7 +260,7 @@ export default function Results({
                                             </ChartContainer>
                                         </CardContent>
                                         <CardFooter className="flex-col gap-2 text-sm">
-                                            <div className="flex items-center gap-2 leading-none font-medium dark:text-gray-200">
+                                            <div className="flex items-center gap-2 leading-none font-medium text-foreground">
                                                 {position.total_votes > 0 && (
                                                     <>
                                                         Leading candidate:{' '}
@@ -280,12 +280,12 @@ export default function Results({
                                     </Card>
 
                                     {/* Pie Chart */}
-                                    <Card className="dark:border-gray-800 dark:bg-gray-900">
+                                    <Card>
                                         <CardHeader>
-                                            <CardTitle className="dark:text-gray-100">
+                                            <CardTitle>
                                                 Vote Share
                                             </CardTitle>
-                                            <CardDescription className="dark:text-gray-400">
+                                            <CardDescription>
                                                 Percentage distribution of votes
                                             </CardDescription>
                                         </CardHeader>
@@ -321,7 +321,7 @@ export default function Results({
                                             </ChartContainer>
                                         </CardContent>
                                         <CardFooter className="flex-col gap-2 text-sm">
-                                            <div className="flex items-center gap-2 leading-none font-medium dark:text-gray-200">
+                                            <div className="flex items-center gap-2 leading-none font-medium text-foreground">
                                                 <Users className="h-4 w-4" />
                                                 {
                                                     position.candidates.length
@@ -336,9 +336,9 @@ export default function Results({
                                     </Card>
                                 </div>
                             ) : (
-                                <Card className="dark:border-gray-800 dark:bg-gray-900">
+                                <Card>
                                     <CardContent className="py-8">
-                                        <div className="text-center text-gray-500 dark:text-gray-400">
+                                        <div className="text-center text-muted-foreground">
                                             No candidates for this position
                                         </div>
                                     </CardContent>
@@ -346,12 +346,12 @@ export default function Results({
                             )}
 
                             {/* Candidate Details List */}
-                            <Card className="dark:border-gray-800 dark:bg-gray-900">
+                            <Card>
                                 <CardHeader>
-                                    <CardTitle className="dark:text-gray-100">
+                                    <CardTitle>
                                         Detailed Results
                                     </CardTitle>
-                                    <CardDescription className="dark:text-gray-400">
+                                    <CardDescription>
                                         Complete ranking with candidate
                                         information
                                     </CardDescription>
@@ -376,12 +376,12 @@ export default function Results({
                                                         className="relative"
                                                     >
                                                         {/* Progress Bar Background */}
-                                                        <div className="absolute inset-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+                                                        <div className="absolute inset-0 overflow-hidden rounded-lg bg-muted">
                                                             <div
                                                                 className={`h-full transition-all duration-500 ${
                                                                     isWinner
-                                                                        ? 'bg-green-200 dark:bg-green-900'
-                                                                        : 'bg-green-50 dark:bg-green-950'
+                                                                        ? 'bg-primary/30'
+                                                                        : 'bg-primary/10'
                                                                 }`}
                                                                 style={{
                                                                     width: `${percentage}%`,
@@ -399,7 +399,7 @@ export default function Results({
                                                                             <Trophy className="h-5 w-5 text-white" />
                                                                         </div>
                                                                     ) : (
-                                                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 font-bold text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
                                                                             {index +
                                                                                 1}
                                                                         </div>
@@ -413,10 +413,10 @@ export default function Results({
                                                                         alt={
                                                                             candidate.fullname
                                                                         }
-                                                                        className="h-12 w-12 rounded-full border-2 border-white object-cover shadow dark:border-gray-700"
+                                                                        className="h-12 w-12 rounded-full border-2 border-background object-cover shadow"
                                                                     />
                                                                 ) : (
-                                                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 font-bold text-gray-600 shadow dark:bg-gray-600 dark:text-gray-300">
+                                                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground shadow">
                                                                         {candidate.fullname.charAt(
                                                                             0,
                                                                         )}
@@ -425,19 +425,19 @@ export default function Results({
 
                                                                 {/* Name and Partylist */}
                                                                 <div>
-                                                                    <div className="font-bold text-gray-800 dark:text-gray-100">
+                                                                    <div className="font-bold text-foreground">
                                                                         {
                                                                             candidate.fullname
                                                                         }
                                                                     </div>
                                                                     {candidate.partylist ? (
-                                                                        <div className="text-sm text-green-600 dark:text-green-400">
+                                                                        <div className="text-sm text-primary">
                                                                             {
                                                                                 candidate.partylist
                                                                             }
                                                                         </div>
                                                                     ) : (
-                                                                        <div className="text-sm text-gray-500 italic dark:text-gray-400">
+                                                                        <div className="text-sm text-muted-foreground italic">
                                                                             Independent
                                                                         </div>
                                                                     )}
@@ -446,12 +446,12 @@ export default function Results({
 
                                                             {/* Vote Count */}
                                                             <div className="text-right">
-                                                                <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                                                                <div className="text-2xl font-bold text-foreground">
                                                                     {
                                                                         candidate.votes
                                                                     }
                                                                 </div>
-                                                                <div className="text-sm text-gray-600 dark:text-gray-400">
+                                                                <div className="text-sm text-muted-foreground">
                                                                     {percentage.toFixed(
                                                                         1,
                                                                     )}
@@ -474,7 +474,7 @@ export default function Results({
                 <div className="text-center">
                     <Link
                         href="/voting"
-                        className="inline-block rounded-lg bg-green-600 px-8 py-3 font-medium text-white shadow-lg transition hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+                        className="inline-block rounded-lg bg-primary px-8 py-3 font-medium text-primary-foreground shadow-lg transition hover:bg-primary/90"
                     >
                         Back to Home
                     </Link>

@@ -8,16 +8,49 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * ============================================================================
+ * MINSU BC DESIGN SYSTEM
+ * Mindoro State University - Bongabong Campus
+ * ============================================================================
+ * 
+ * This design system provides a cohesive visual language for the MinSU BC
+ * student portal. It is built on top of Tailwind CSS and follows accessibility
+ * best practices (WCAG 2.1 AA).
+ *
+ * COLOR PHILOSOPHY:
+ * - Primary: Institutional Green - Represents growth, nature, and the university
+ * - Secondary: Neutral tones for balance and readability
+ * - Accent: Gold/Amber for highlights and calls-to-action
+ * - Semantic colors for success, warning, error, and info states
+ *
+ * USAGE:
+ * - Use `primary` for main actions, navigation, and branding
+ * - Use `secondary` for supporting elements and less prominent actions
+ * - Use `accent` for highlights, notifications, and special emphasis
+ * - Use semantic colors (`success`, `warning`, `destructive`, `info`) appropriately
+ * ============================================================================
+ */
+
 @theme {
+    /* Typography */
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+    
+    --font-display:
+        'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
 
+    /* Border Radius Scale */
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-full: 9999px;
 
+    /* Core Semantic Colors */
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 
@@ -45,15 +78,23 @@
     --color-border: var(--border);
     --color-input: var(--input);
     --color-ring: var(--ring);
+    
+    /* Semantic Status Colors */
     --color-success: var(--success);
     --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
 
+    /* Chart Colors */
     --color-chart-1: var(--chart-1);
     --color-chart-2: var(--chart-2);
     --color-chart-3: var(--chart-3);
     --color-chart-4: var(--chart-4);
     --color-chart-5: var(--chart-5);
 
+    /* Sidebar Colors */
     --color-sidebar: var(--sidebar);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar-primary: var(--sidebar-primary);
@@ -64,109 +105,192 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/*
+ * ============================================================================
+ * LIGHT MODE - Default Theme
+ * ============================================================================
+ * Primary: MinSU Institutional Green (#2e7d32)
+ * This green represents the university's connection to nature, growth, and
+ * the agricultural heritage of Mindoro.
+ * ============================================================================
+ */
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    /* Base Colors */
+    --background: oklch(0.985 0.002 120);
+    --foreground: oklch(0.205 0.015 120);
+    
+    /* Card & Popover */
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    --card-foreground: oklch(0.205 0.015 120);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.87 0 0);
-    --success: oklch(0.577 0.245 142.495);
-    --success-foreground: oklch(0.985 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.87 0 0);
-
-    /* Custom USG Color Palette */
-    --usg-primary: #2e7d32;
-    --usg-secondary: #66bb6a;
-    --usg-accent: #a5d6a7;
-    --usg-dark: #1b5e20;
-    --usg-light: #e8f5e9;
-    --usg-neutral: #f5f5f5;
-    --usg-text: #263238;
-    --usg-hero-text: #e8f5e9;
-
-    /* Additional USG variables for complete coverage */
-    --usg-very-light: #f1f8e9; /* Even lighter green for subtle hovers */
-    --usg-very-dark: #0d4f1a; /* Even darker green for deep backgrounds */
-    --usg-medium: #4caf50; /* Standard medium green for balanced elements */
-    --usg-hover: #e8f5e9; /* Specific hover background color */
+    --popover-foreground: oklch(0.205 0.015 120);
+    
+    /* Primary - MinSU Green */
+    --primary: oklch(0.45 0.15 145);
+    --primary-foreground: oklch(0.985 0.01 145);
+    
+    /* Secondary - Soft Green/Gray */
+    --secondary: oklch(0.96 0.015 145);
+    --secondary-foreground: oklch(0.35 0.08 145);
+    
+    /* Muted - Subtle backgrounds */
+    --muted: oklch(0.965 0.01 145);
+    --muted-foreground: oklch(0.45 0.03 145);
+    
+    /* Accent - Gold/Amber for highlights */
+    --accent: oklch(0.85 0.12 85);
+    --accent-foreground: oklch(0.25 0.08 85);
+    
+    /* Destructive - Error Red */
+    --destructive: oklch(0.55 0.22 25);
+    --destructive-foreground: oklch(0.98 0 0);
+    
+    /* Borders & Input */
+    --border: oklch(0.90 0.01 145);
+    --input: oklch(0.90 0.01 145);
+    --ring: oklch(0.45 0.15 145);
+    
+    /* Semantic Status Colors */
+    --success: oklch(0.55 0.18 145);
+    --success-foreground: oklch(0.98 0 0);
+    --warning: oklch(0.75 0.15 70);
+    --warning-foreground: oklch(0.25 0.08 70);
+    --info: oklch(0.55 0.15 240);
+    --info-foreground: oklch(0.98 0 0);
+    
+    /* Chart Palette - Harmonious greens and complementary colors */
+    --chart-1: oklch(0.50 0.16 145);
+    --chart-2: oklch(0.60 0.14 175);
+    --chart-3: oklch(0.55 0.12 240);
+    --chart-4: oklch(0.70 0.14 85);
+    --chart-5: oklch(0.45 0.10 280);
+    
+    /* Design Tokens */
+    --radius: 0.5rem;
+    
+    /* Sidebar */
+    --sidebar: oklch(0.99 0.005 145);
+    --sidebar-foreground: oklch(0.205 0.015 120);
+    --sidebar-primary: oklch(0.45 0.15 145);
+    --sidebar-primary-foreground: oklch(0.985 0.01 145);
+    --sidebar-accent: oklch(0.95 0.02 145);
+    --sidebar-accent-foreground: oklch(0.35 0.08 145);
+    --sidebar-border: oklch(0.92 0.01 145);
+    --sidebar-ring: oklch(0.45 0.15 145);
 }
 
+/*
+ * ============================================================================
+ * DARK MODE
+ * ============================================================================
+ * Maintains brand identity while ensuring proper contrast and reduced
+ * eye strain in low-light environments.
+ * ============================================================================
+ */
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.145 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.145 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.985 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.396 0.141 25.723);
-    --destructive-foreground: oklch(0.637 0.237 25.331);
-    --border: oklch(0.269 0 0);
-    --input: oklch(0.269 0 0);
-    --ring: oklch(0.439 0 0);
-    --success: oklch(0.5 0.2 142.495);
-    --success-foreground: oklch(0.9 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.985 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(0.269 0 0);
-    --sidebar-ring: oklch(0.439 0 0);
+    /* Base Colors */
+    --background: oklch(0.145 0.015 145);
+    --foreground: oklch(0.95 0.01 145);
+    
+    /* Card & Popover */
+    --card: oklch(0.18 0.015 145);
+    --card-foreground: oklch(0.95 0.01 145);
+    --popover: oklch(0.18 0.015 145);
+    --popover-foreground: oklch(0.95 0.01 145);
+    
+    /* Primary - Lighter green for dark mode */
+    --primary: oklch(0.65 0.18 145);
+    --primary-foreground: oklch(0.15 0.02 145);
+    
+    /* Secondary */
+    --secondary: oklch(0.25 0.02 145);
+    --secondary-foreground: oklch(0.90 0.01 145);
+    
+    /* Muted */
+    --muted: oklch(0.25 0.015 145);
+    --muted-foreground: oklch(0.65 0.02 145);
+    
+    /* Accent - Gold in dark mode */
+    --accent: oklch(0.70 0.14 85);
+    --accent-foreground: oklch(0.15 0.05 85);
+    
+    /* Destructive */
+    --destructive: oklch(0.50 0.20 25);
+    --destructive-foreground: oklch(0.95 0 0);
+    
+    /* Borders & Input */
+    --border: oklch(0.28 0.015 145);
+    --input: oklch(0.28 0.015 145);
+    --ring: oklch(0.65 0.18 145);
+    
+    /* Semantic Status Colors */
+    --success: oklch(0.60 0.18 145);
+    --success-foreground: oklch(0.15 0.02 145);
+    --warning: oklch(0.70 0.15 70);
+    --warning-foreground: oklch(0.15 0.05 70);
+    --info: oklch(0.60 0.15 240);
+    --info-foreground: oklch(0.15 0.02 240);
+    
+    /* Chart Palette */
+    --chart-1: oklch(0.60 0.16 145);
+    --chart-2: oklch(0.65 0.14 175);
+    --chart-3: oklch(0.60 0.14 240);
+    --chart-4: oklch(0.72 0.14 85);
+    --chart-5: oklch(0.55 0.12 280);
+    
+    /* Sidebar */
+    --sidebar: oklch(0.16 0.015 145);
+    --sidebar-foreground: oklch(0.95 0.01 145);
+    --sidebar-primary: oklch(0.65 0.18 145);
+    --sidebar-primary-foreground: oklch(0.15 0.02 145);
+    --sidebar-accent: oklch(0.22 0.015 145);
+    --sidebar-accent-foreground: oklch(0.90 0.01 145);
+    --sidebar-border: oklch(0.28 0.015 145);
+    --sidebar-ring: oklch(0.65 0.18 145);
 }
 
+/*
+ * ============================================================================
+ * BASE LAYER STYLES
+ * ============================================================================
+ */
 @layer base {
     * {
         @apply border-border;
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground antialiased;
     }
 
-    /* Enhanced focus states for accessibility */
+    /* Typography Scale */
+    h1 {
+        @apply text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl;
+    }
+
+    h2 {
+        @apply text-2xl font-semibold tracking-tight md:text-3xl;
+    }
+
+    h3 {
+        @apply text-xl font-semibold tracking-tight md:text-2xl;
+    }
+
+    h4 {
+        @apply text-lg font-semibold tracking-tight;
+    }
+
+    h5 {
+        @apply text-base font-semibold;
+    }
+
+    h6 {
+        @apply text-sm font-semibold;
+    }
+
+    /* Enhanced focus states for accessibility (WCAG 2.1 AA) */
     *:focus-visible {
-        @apply ring-2 ring-[var(--usg-primary)] ring-offset-2 outline-none;
+        @apply ring-2 ring-ring ring-offset-2 ring-offset-background outline-none;
     }
 
     /* Smooth transitions for all interactive elements */
@@ -177,15 +301,186 @@
     textarea {
         @apply transition-all duration-200;
     }
+
+    /* Selection styling */
+    ::selection {
+        @apply bg-primary/20 text-foreground;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        @apply w-2 h-2;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-muted/50;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-muted-foreground/20 rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-muted-foreground/30;
+    }
 }
 
-/* Animation delay utilities */
+/*
+ * ============================================================================
+ * COMPONENT UTILITIES
+ * ============================================================================
+ */
+@layer components {
+    /* Status Badges */
+    .status-active {
+        @apply bg-success/10 text-success border-success/20;
+    }
+
+    .status-pending {
+        @apply bg-warning/10 text-warning border-warning/20;
+    }
+
+    .status-inactive {
+        @apply bg-muted text-muted-foreground border-muted;
+    }
+
+    .status-error {
+        @apply bg-destructive/10 text-destructive border-destructive/20;
+    }
+
+    .status-info {
+        @apply bg-info/10 text-info border-info/20;
+    }
+
+    /* Card Variants */
+    .card-interactive {
+        @apply transition-all duration-200 hover:shadow-lg hover:border-primary/20 hover:-translate-y-0.5;
+    }
+
+    .card-highlighted {
+        @apply border-primary/30 bg-primary/5;
+    }
+
+    /* Section Spacing */
+    .section-spacing {
+        @apply py-12 md:py-16 lg:py-20;
+    }
+
+    .section-spacing-sm {
+        @apply py-8 md:py-10 lg:py-12;
+    }
+
+    /* Container Widths */
+    .container-narrow {
+        @apply max-w-3xl mx-auto px-4 sm:px-6;
+    }
+
+    .container-wide {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    /* Gradient Backgrounds */
+    .gradient-primary {
+        @apply bg-gradient-to-br from-primary to-primary/80;
+    }
+
+    .gradient-subtle {
+        @apply bg-gradient-to-br from-background via-muted/30 to-background;
+    }
+
+    .gradient-card {
+        @apply bg-gradient-to-br from-card to-muted/20;
+    }
+
+    /* Text Gradient */
+    .text-gradient-primary {
+        @apply bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent;
+    }
+
+    /* Glass Effect */
+    .glass {
+        @apply bg-background/80 backdrop-blur-sm border-border/50;
+    }
+
+    .glass-strong {
+        @apply bg-background/90 backdrop-blur-md border-border/60;
+    }
+}
+
+/*
+ * ============================================================================
+ * UTILITY CLASSES
+ * ============================================================================
+ */
 @layer utilities {
+    /* Animation Delays */
+    .animation-delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .animation-delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .animation-delay-300 {
+        animation-delay: 300ms;
+    }
+
+    .animation-delay-500 {
+        animation-delay: 500ms;
+    }
+
     .animation-delay-1000 {
         animation-delay: 1000ms;
     }
 
     .animation-delay-2000 {
         animation-delay: 2000ms;
+    }
+
+    /* Text Balance */
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .text-pretty {
+        text-wrap: pretty;
+    }
+
+    /* Hide Scrollbar */
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Focus Ring Variants */
+    .focus-ring-primary {
+        @apply focus-visible:ring-primary;
+    }
+
+    .focus-ring-accent {
+        @apply focus-visible:ring-accent;
+    }
+
+    /* Hover Lift Effect */
+    .hover-lift {
+        @apply transition-transform duration-200 hover:-translate-y-0.5;
+    }
+
+    .hover-lift-lg {
+        @apply transition-transform duration-200 hover:-translate-y-1;
+    }
+
+    /* Shadow Variants */
+    .shadow-primary {
+        box-shadow: 0 4px 14px 0 oklch(0.45 0.15 145 / 0.15);
+    }
+
+    .shadow-primary-lg {
+        box-shadow: 0 10px 40px 0 oklch(0.45 0.15 145 / 0.2);
     }
 }

@@ -77,9 +77,9 @@ export default function Preview({
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30 dark:from-gray-950 dark:to-gray-900">
+        <div className="min-h-screen bg-gradient-to-br from-background to-primary/5">
             {/* Header */}
-            <div className="bg-green-600 text-white shadow-lg dark:bg-green-700">
+            <div className="bg-primary text-primary-foreground shadow-lg">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-4">
@@ -162,9 +162,9 @@ export default function Preview({
 
                 {/* Selections Display - Consolidated */}
                 <div className="mb-6">
-                    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-800 dark:bg-gray-900">
+                    <div className="overflow-hidden rounded-lg border border-border bg-card shadow-md">
                         {/* Header */}
-                        <div className="bg-green-600 px-6 py-4 text-white dark:bg-green-700">
+                        <div className="bg-primary px-6 py-4 text-primary-foreground">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <h3 className="text-xl font-bold">
@@ -183,8 +183,8 @@ export default function Preview({
                             {selections.map((selection) => (
                                 <div key={selection.position.position_id} className="p-6">
                                     {/* Position Title */}
-                                    <h4 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-100">
-                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs text-white dark:bg-green-500">
+                                    <h4 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
+                                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                                             {selection.candidates.length}
                                         </span>
                                         {selection.position.description}
@@ -195,39 +195,38 @@ export default function Preview({
                                         {selection.candidates.map((candidate) => (
                                             <div
                                                 key={candidate.id}
-                                                className="flex items-center gap-4 rounded-lg border-2 border-green-100 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950"
-                                            >
+                                                className="flex items-center gap-4 rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
                                                 {/* Candidate Photo */}
                                                 {candidate.photo ? (
                                                     <img
                                                         src={`/storage/${candidate.photo}`}
                                                         alt={candidate.fullname}
-                                                        className="h-14 w-14 rounded-full border-2 border-green-600 object-cover shadow-md dark:border-green-500"
+                                                        className="h-14 w-14 rounded-full border-2 border-primary object-cover shadow-md"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-lg font-bold text-white shadow-md dark:bg-green-500">
+                                                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-md">
                                                         {candidate.fullname.charAt(0)}
                                                     </div>
                                                 )}
 
                                                 {/* Candidate Info */}
                                                 <div className="flex-1">
-                                                    <h5 className="font-bold text-gray-800 dark:text-gray-100">
+                                                    <h5 className="font-bold text-foreground">
                                                         {candidate.fullname}
                                                     </h5>
                                                     {candidate.partylist ? (
-                                                        <p className="text-sm font-medium text-green-700 dark:text-green-400">
+                                                        <p className="text-sm font-medium text-primary">
                                                             {candidate.partylist.name}
                                                         </p>
                                                     ) : (
-                                                        <p className="text-sm italic text-gray-500 dark:text-gray-400">
+                                                        <p className="text-sm italic text-muted-foreground">
                                                             Independent
                                                         </p>
                                                     )}
                                                 </div>
 
                                                 {/* Checkmark */}
-                                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
+                                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
                                                     <CircleCheck className="h-4 w-4" />
                                                 </div>
                                             </div>
@@ -239,19 +238,19 @@ export default function Preview({
                     </div>
 
                     {selections.length === 0 && (
-                        <div className="rounded-lg border border-gray-200 bg-white p-12 text-center shadow-md dark:border-gray-800 dark:bg-gray-900">
-                            <div className="mb-4 text-gray-400 dark:text-gray-600">
+                        <div className="rounded-lg border border-border bg-card p-12 text-center shadow-md">
+                            <div className="mb-4 text-muted-foreground">
                                 <CircleAlert className="mx-auto h-16 w-16" />
                             </div>
-                            <h3 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-300">
+                            <h3 className="mb-2 text-xl font-semibold text-foreground">
                                 No Selections Made
                             </h3>
-                            <p className="mb-6 text-gray-500 dark:text-gray-400">
+                            <p className="mb-6 text-muted-foreground">
                                 You haven't selected any candidates yet.
                             </p>
                             <Button
                                 onClick={handleEditVotes}
-                                className="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+                                className="bg-primary hover:bg-primary/90"
                             >
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Go Back to Ballot
@@ -262,7 +261,7 @@ export default function Preview({
 
                 {/* Action Buttons */}
                 {selections.length > 0 && (
-                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
+                    <div className="rounded-lg border border-border bg-card p-6 shadow-md">
                         <div className="flex flex-col gap-4 sm:flex-row">
                             <Button
                                 onClick={handleEditVotes}
@@ -275,12 +274,12 @@ export default function Preview({
                             </Button>
                             <Button
                                 onClick={handleConfirmSubmit}
-                                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 py-6 text-lg font-bold shadow-lg hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600"
+                                className="flex-1 bg-gradient-to-r from-primary to-primary/80 py-6 text-lg font-bold shadow-lg hover:from-primary/90 hover:to-primary/70"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                        <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                                         Submitting Vote...
                                     </>
                                 ) : (
@@ -291,10 +290,10 @@ export default function Preview({
                                 )}
                             </Button>
                         </div>
-                        <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                        <p className="mt-4 text-center text-sm text-muted-foreground">
                             By confirming, you acknowledge that your selections
                             are final and{' '}
-                            <span className="font-semibold text-red-600 dark:text-red-500">
+                            <span className="font-semibold text-destructive">
                                 cannot be changed
                             </span>
                         </p>

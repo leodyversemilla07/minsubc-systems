@@ -98,23 +98,23 @@ export default function Feedback({
         <>
             <Head title="Feedback" />
 
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-950 dark:to-gray-900">
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-info/5 to-background p-4">
                 <div className="w-full max-w-2xl">
-                    <Card className="dark:border-gray-800 dark:bg-gray-900">
+                    <Card>
                         <CardHeader className="text-center">
-                            <CardTitle className="text-2xl dark:text-gray-100">
+                            <CardTitle className="text-2xl">
                                 We Value Your Feedback!
                             </CardTitle>
-                            <CardDescription className="dark:text-gray-400">
+                            <CardDescription>
                                 Help us improve the voting experience for{' '}
                                 {election.name}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             {hasSubmittedFeedback ? (
-                                <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
-                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-500" />
-                                    <AlertDescription className="text-green-800 dark:text-green-200">
+                                <Alert className="border-primary/30 bg-primary/10">
+                                    <CheckCircle className="h-4 w-4 text-primary" />
+                                    <AlertDescription className="text-primary">
                                         Thank you! You have already submitted
                                         feedback for this election.
                                     </AlertDescription>

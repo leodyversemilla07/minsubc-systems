@@ -153,9 +153,9 @@ export default function Ballot({ election, positions }: BallotPageProps) {
     ).length;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50/30 dark:from-gray-950 dark:to-green-950/30">
+        <div className="min-h-screen bg-gradient-to-br from-background to-primary/5">
             {/* Header */}
-            <div className="bg-green-600 text-white shadow-lg dark:bg-green-700">
+            <div className="bg-primary text-primary-foreground shadow-lg">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-4">
@@ -185,7 +185,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                         <Button
                             variant="ghost"
                             onClick={handleLogout}
-                            className="bg-white/20 text-white hover:bg-white/30 dark:bg-white/10 dark:hover:bg-white/20"
+                            className="bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30"
                         >
                             Logout
                         </Button>
@@ -208,13 +208,13 @@ export default function Ballot({ election, positions }: BallotPageProps) {
 
                     {/* Voting Instructions */}
                     <div className="mb-6 space-y-4">
-                        <Alert className="bg-white dark:bg-gray-900">
+                        <Alert className="bg-card">
                             <Info className="h-4 w-4" />
                             <AlertTitle>Voting Instructions</AlertTitle>
                             <AlertDescription>
                                 <ol className="mt-2 space-y-2 text-sm">
                                     <li className="flex gap-2">
-                                        <span className="font-semibold text-green-600 dark:text-green-500">
+                                        <span className="font-semibold text-primary">
                                             1.
                                         </span>
                                         <span>
@@ -222,7 +222,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                         </span>
                                     </li>
                                     <li className="flex gap-2">
-                                        <span className="font-semibold text-green-600 dark:text-green-500">
+                                        <span className="font-semibold text-primary">
                                             2.
                                         </span>
                                         <span>
@@ -230,7 +230,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                         </span>
                                     </li>
                                     <li className="flex gap-2">
-                                        <span className="font-semibold text-green-600 dark:text-green-500">
+                                        <span className="font-semibold text-primary">
                                             3.
                                         </span>
                                         <span>
@@ -238,7 +238,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                         </span>
                                     </li>
                                     <li className="flex gap-2">
-                                        <span className="font-semibold text-green-600 dark:text-green-500">
+                                        <span className="font-semibold text-primary">
                                             4.
                                         </span>
                                         <span>
@@ -249,7 +249,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                             </AlertDescription>
                         </Alert>
 
-                        <Alert variant="destructive" className="bg-white dark:bg-gray-900">
+                        <Alert variant="destructive" className="bg-card">
                             <CircleAlert className="h-4 w-4" />
                             <AlertTitle>Important Notice</AlertTitle>
                             <AlertDescription>
@@ -268,35 +268,35 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                         return (
                             <div
                                 key={position.position_id}
-                                className={`mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 ${isComplete
-                                    ? 'ring-opacity-50 ring-2 ring-green-500 dark:ring-green-600'
+                                className={`mb-6 rounded-lg border border-border bg-card p-6 shadow-md transition-all ${isComplete
+                                    ? 'ring-opacity-50 ring-2 ring-primary'
                                     : ''
                                     }`}
                                 role="region"
                                 aria-labelledby={`position-${position.position_id}`}
                             >
-                                <div className="mb-6 border-b border-gray-200 pb-4 dark:border-gray-700">
+                                <div className="mb-6 border-b border-border pb-4">
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex-1">
                                             <h3
                                                 id={`position-${position.position_id}`}
-                                                className="text-xl font-bold text-gray-800 dark:text-gray-100"
+                                                className="text-xl font-bold text-foreground"
                                             >
                                                 {position.description}
                                                 {isComplete && (
-                                                    <CircleCheck className="ml-2 inline-block h-5 w-5 text-green-600 dark:text-green-500" />
+                                                    <CircleCheck className="ml-2 inline-block h-5 w-5 text-primary" />
                                                 )}
                                             </h3>
                                             <div className="mt-2 flex items-center gap-2">
-                                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                                <p className="text-sm text-muted-foreground">
                                                     Select{' '}
                                                     {maxVotes > 1 ? (
-                                                        <span className="font-semibold text-green-700 dark:text-green-500">
+                                                        <span className="font-semibold text-primary">
                                                             up to {maxVotes}{' '}
                                                             candidates
                                                         </span>
                                                     ) : (
-                                                        <span className="font-semibold text-green-700 dark:text-green-500">
+                                                        <span className="font-semibold text-primary">
                                                             one candidate
                                                         </span>
                                                     )}
@@ -307,15 +307,15 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                             </div>
                                             {selectedCount > 0 && (
                                                 <div className="mt-2 flex items-center gap-2">
-                                                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
+                                                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
                                                         <div
-                                                            className="h-full bg-green-600 transition-all duration-300 dark:bg-green-500"
+                                                            className="h-full bg-primary transition-all duration-300"
                                                             style={{
                                                                 width: `${(selectedCount / maxVotes) * 100}%`,
                                                             }}
                                                         />
                                                     </div>
-                                                    <span className="min-w-[60px] text-right text-xs font-semibold text-gray-600 dark:text-gray-300">
+                                                    <span className="min-w-[60px] text-right text-xs font-semibold text-muted-foreground">
                                                         {selectedCount} /{' '}
                                                         {maxVotes}
                                                     </span>
@@ -361,9 +361,9 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                         aria-label={`Select ${candidate.fullname} for ${position.description}`}
                                                     />
                                                     <Card
-                                                        className={`border-2 bg-white transition-all dark:bg-gray-900 ${isSelected
-                                                            ? 'scale-[1.02] border-green-600 bg-green-50 shadow-lg dark:border-green-500 dark:bg-green-950'
-                                                            : 'border-gray-200 hover:border-green-300 hover:shadow-md dark:border-gray-700 dark:hover:border-green-700'
+                                                        className={`border-2 bg-card transition-all ${isSelected
+                                                            ? 'scale-[1.02] border-primary bg-primary/5 shadow-lg'
+                                                            : 'border-border hover:border-primary/50 hover:shadow-md'
                                                             } ${!isDisabled && 'hover:scale-[1.01]'}`}
                                                     >
                                                         <CardContent className="p-4">
@@ -375,11 +375,11 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                         alt={
                                                                             candidate.fullname
                                                                         }
-                                                                        className="h-16 w-16 rounded-full border-2 border-gray-200 object-cover shadow-sm dark:border-gray-600"
+                                                                        className="h-16 w-16 rounded-full border-2 border-border object-cover shadow-sm"
                                                                         loading="lazy"
                                                                     />
                                                                 ) : (
-                                                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 text-xl font-bold text-white shadow-sm dark:from-green-500 dark:to-green-700">
+                                                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-primary text-xl font-bold text-primary-foreground shadow-sm">
                                                                         {candidate.firstname.charAt(
                                                                             0,
                                                                         )}
@@ -390,13 +390,13 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                 )}
 
                                                                 <div className="min-w-0 flex-1">
-                                                                    <h4 className="truncate font-bold text-gray-800 dark:text-gray-100">
+                                                                    <h4 className="truncate font-bold text-foreground">
                                                                         {
                                                                             candidate.fullname
                                                                         }
                                                                     </h4>
                                                                     {candidate.partylist ? (
-                                                                        <p className="text-sm font-medium text-green-600 dark:text-green-400">
+                                                                        <p className="text-sm font-medium text-primary">
                                                                             {
                                                                                 candidate
                                                                                     .partylist
@@ -404,12 +404,12 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                             }
                                                                         </p>
                                                                     ) : (
-                                                                        <p className="text-sm italic text-gray-500 dark:text-gray-400">
+                                                                        <p className="text-sm italic text-muted-foreground">
                                                                             Independent
                                                                         </p>
                                                                     )}
                                                                     {candidate.platform && (
-                                                                        <p className="mt-2 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                                                                        <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">
                                                                             {
                                                                                 candidate.platform
                                                                             }
@@ -419,7 +419,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
 
                                                                 {/* Checkmark Icon */}
                                                                 {isSelected && (
-                                                                    <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-600 text-white shadow-md dark:bg-green-500">
+                                                                    <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
                                                                         <CircleCheck className="h-4 w-4" />
                                                                     </div>
                                                                 )}
@@ -453,7 +453,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                     })}
 
                                     {position.candidates.length === 0 && (
-                                        <div className="col-span-2 py-8 text-center text-gray-500 dark:text-gray-400">
+                                        <div className="col-span-2 py-8 text-center text-muted-foreground">
                                             No candidates available for this
                                             position
                                         </div>
@@ -464,20 +464,20 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                     })}
 
                     {/* Submit Button */}
-                    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-gray-900">
+                    <div className="rounded-lg border border-border bg-card p-6 shadow-md">
                         <Button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 py-6 text-lg font-bold shadow-lg transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600"
+                            className="w-full bg-gradient-to-r from-primary to-primary/80 py-6 text-lg font-bold shadow-lg transition-all hover:from-primary/90 hover:to-primary/70 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                             disabled={completedPositions === 0}
                         >
                             <CircleCheck className="mr-2 h-5 w-5" />
                             Review My Selections ({completedPositions} position
                             {completedPositions !== 1 ? 's' : ''})
                         </Button>
-                        <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                        <p className="mt-4 text-center text-sm text-muted-foreground">
                             {completedPositions === 0 ? (
                                 <span className="flex items-center justify-center gap-2">
-                                    <CircleAlert className="h-4 w-4 text-yellow-600 dark:text-yellow-500" />
+                                    <CircleAlert className="h-4 w-4 text-warning" />
                                     Please select at least one candidate to
                                     continue
                                 </span>
@@ -494,42 +494,42 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                 open={!!selectedCandidate}
                 onOpenChange={() => setSelectedCandidate(null)}
             >
-                <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto bg-white dark:bg-gray-900">
+                <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto bg-card">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl text-gray-900 dark:text-gray-100">
+                        <DialogTitle className="text-2xl text-foreground">
                             Candidate Information
                         </DialogTitle>
-                        <DialogDescription className="dark:text-gray-400">
+                        <DialogDescription>
                             Review the complete profile and platform
                         </DialogDescription>
                     </DialogHeader>
                     {selectedCandidate && (
                         <div className="space-y-6">
                             {/* Candidate Header */}
-                            <div className="flex items-start gap-6 border-b border-gray-200 pb-4 dark:border-gray-700">
+                            <div className="flex items-start gap-6 border-b border-border pb-4">
                                 {selectedCandidate.photo ? (
                                     <img
                                         src={`/storage/${selectedCandidate.photo}`}
                                         alt={selectedCandidate.fullname}
-                                        className="h-32 w-32 rounded-lg border-2 border-gray-200 object-cover shadow-md dark:border-gray-600"
+                                        className="h-32 w-32 rounded-lg border-2 border-border object-cover shadow-md"
                                         loading="lazy"
                                     />
                                 ) : (
-                                    <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-gradient-to-br from-green-400 to-green-600 text-4xl font-bold text-white shadow-md dark:from-green-500 dark:to-green-700">
+                                    <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-gradient-to-br from-primary/80 to-primary text-4xl font-bold text-primary-foreground shadow-md">
                                         {selectedCandidate.firstname.charAt(0)}
                                         {selectedCandidate.lastname.charAt(0)}
                                     </div>
                                 )}
                                 <div className="flex-1">
-                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                    <h3 className="text-2xl font-bold text-foreground">
                                         {selectedCandidate.fullname}
                                     </h3>
                                     {selectedCandidate.partylist ? (
-                                        <p className="mt-1 text-lg font-semibold text-green-600 dark:text-green-400">
+                                        <p className="mt-1 text-lg font-semibold text-primary">
                                             {selectedCandidate.partylist.name}
                                         </p>
                                     ) : (
-                                        <p className="mt-1 text-lg text-gray-500 italic dark:text-gray-400">
+                                        <p className="mt-1 text-lg text-muted-foreground italic">
                                             Independent Candidate
                                         </p>
                                     )}
@@ -539,19 +539,19 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                             {/* Platform */}
                             {selectedCandidate.platform && (
                                 <div>
-                                    <h4 className="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-                                        <Shield className="h-5 w-5 text-green-600 dark:text-green-500" />
+                                    <h4 className="mb-3 flex items-center gap-2 text-lg font-semibold text-foreground">
+                                        <Shield className="h-5 w-5 text-primary" />
                                         Platform & Advocacy
                                     </h4>
-                                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
-                                        <p className="leading-relaxed whitespace-pre-wrap text-gray-700 dark:text-gray-300">
+                                    <div className="rounded-lg border border-border bg-muted p-4">
+                                        <p className="leading-relaxed whitespace-pre-wrap text-foreground">
                                             {selectedCandidate.platform}
                                         </p>
                                     </div>
                                 </div>
                             )}
 
-                            <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+                            <div className="border-t border-border pt-4">
                                 <Button
                                     onClick={() => setSelectedCandidate(null)}
                                     className="w-full"

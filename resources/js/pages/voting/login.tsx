@@ -35,7 +35,7 @@ export default function Login({
     flash,
 }: LoginPageProps) {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-100 via-emerald-50 to-white px-4 py-12 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/10 via-background to-background px-4 py-12">
             <div className="w-full max-w-md">
                 {/* Header - Moved Outside Card */}
                 <div className="mb-8 text-center">
@@ -50,28 +50,28 @@ export default function Login({
                         </Link>
                     </div>
 
-                    <h2 className="mb-2 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-3xl font-bold text-transparent dark:from-green-400 dark:to-emerald-400">
+                    <h2 className="mb-2 text-gradient-primary text-3xl font-bold">
                         Voter Login
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <p className="text-muted-foreground">
                         Enter your credentials to cast your vote
                     </p>
                 </div>
 
                 {/* Login Card */}
-                <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                <div className="rounded-xl border border-border bg-card p-8 shadow-2xl">
                     {/* Display Success Message */}
                     {flash?.success && (
-                        <Alert className="mb-6 border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
-                            <CircleCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
+                        <Alert className="mb-6 border-primary/30 bg-primary/10 text-primary">
+                            <CircleCheck className="h-4 w-4 text-primary" />
                             <div>{flash.success}</div>
                         </Alert>
                     )}
 
                     {/* Authenticated User Welcome */}
                     {authenticatedUser && (
-                        <Alert className="mb-6 border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
-                            <CircleCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
+                        <Alert className="mb-6 border-primary/30 bg-primary/10 text-primary">
+                            <CircleCheck className="h-4 w-4 text-primary" />
                             <div>
                                 <p className="font-semibold">
                                     Welcome, {authenticatedUser.name}!
@@ -117,7 +117,7 @@ export default function Login({
                                             id="election_id"
                                             name="election_id"
                                             required
-                                            className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-3 text-gray-900 transition focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-green-600 dark:focus:ring-green-600"
+                                            className="w-full rounded-lg border-2 border-input bg-background px-4 py-3 text-foreground transition focus:border-primary focus:ring-2 focus:ring-ring"
                                             aria-label="Select an election"
                                         >
                                             <option value="">
@@ -139,7 +139,7 @@ export default function Login({
                                                 name="election_id"
                                                 value={elections[0].id}
                                             />
-                                            <div className="rounded-lg border-2 border-green-200 bg-green-50 p-3 text-sm font-medium text-gray-700 dark:border-green-800 dark:bg-green-950 dark:text-gray-300">
+                                            <div className="rounded-lg border-2 border-primary/30 bg-primary/10 p-3 text-sm font-medium text-foreground">
                                                 {elections[0].name}
                                             </div>
                                         </>
@@ -231,11 +231,11 @@ export default function Login({
                                     disabled={
                                         processing || elections.length === 0
                                     }
-                                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 py-6 text-lg font-semibold shadow-lg hover:from-green-700 hover:to-emerald-700 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600"
+                                    className="w-full bg-gradient-to-r from-primary to-primary/80 py-6 text-lg font-semibold shadow-lg hover:from-primary/90 hover:to-primary/70"
                                 >
                                     {processing ? (
                                         <>
-                                            <Spinner className="mr-2 h-5 w-5 text-white" />
+                                            <Spinner className="mr-2 h-5 w-5 text-primary-foreground" />
                                             Logging in...
                                         </>
                                     ) : (
@@ -246,8 +246,8 @@ export default function Login({
                                     )}
                                 </Button>
 
-                                <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
-                                    <ShieldCheck className="h-4 w-4 text-green-600 dark:text-green-500" />
+                                <Alert className="border-primary/30 bg-primary/10 text-primary">
+                                    <ShieldCheck className="h-4 w-4 text-primary" />
                                     <div>
                                         <h5 className="mb-1 font-medium leading-none tracking-tight">
                                             Secure Voting System
@@ -266,11 +266,11 @@ export default function Login({
 
                     {/* Additional Links */}
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-muted-foreground">
                             Not a voter yet?{' '}
                             <Link
                                 href={voting.index.url()}
-                                className="font-semibold text-green-600 hover:underline dark:text-green-400"
+                                className="font-semibold text-primary hover:underline"
                             >
                                 Learn more
                             </Link>
