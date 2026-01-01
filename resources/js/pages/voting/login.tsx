@@ -35,7 +35,7 @@ export default function Login({
     flash,
 }: LoginPageProps) {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/10 via-background to-background px-4 py-12">
+        <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-primary/10 via-background to-background px-4 py-12">
             <div className="w-full max-w-md">
                 {/* Header - Moved Outside Card */}
                 <div className="mb-8 text-center">
@@ -231,7 +231,7 @@ export default function Login({
                                     disabled={
                                         processing || elections.length === 0
                                     }
-                                    className="w-full bg-gradient-to-r from-primary to-primary/80 py-6 text-lg font-semibold shadow-lg hover:from-primary/90 hover:to-primary/70"
+                                    className="w-full bg-linear-to-r from-primary to-primary/80 py-6 text-lg font-semibold shadow-lg hover:from-primary/90 hover:to-primary/70"
                                 >
                                     {processing ? (
                                         <>

@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Select,
@@ -14,8 +13,6 @@ import { Head, router } from '@inertiajs/react';
 import {
     Activity,
     Award,
-    BarChart3,
-    Calendar,
     CheckCircle,
     Clock,
     CreditCard,
@@ -150,7 +147,7 @@ export default function Analytics({
                     </div>
                     <div className="flex items-center gap-2">
                         <Select value={period} onValueChange={handlePeriodChange}>
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-45">
                                 <SelectValue placeholder="Select period" />
                             </SelectTrigger>
                             <SelectContent>

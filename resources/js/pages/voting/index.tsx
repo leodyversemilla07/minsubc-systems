@@ -29,7 +29,7 @@ export default function Index({ activeElection }: IndexPageProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-background">
+        <div className="min-h-screen bg-linear-to-br from-primary/5 via-background to-background">
             {/* Navigation Bar */}
             <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
@@ -48,7 +48,7 @@ export default function Index({ activeElection }: IndexPageProps) {
                     {activeElection && (
                         <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 md:px-4 md:py-1.5">
                             <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary md:h-2 md:w-2" />
-                            <span className="max-w-[140px] truncate text-xs font-medium text-primary md:max-w-none md:text-sm">
+                            <span className="max-w-35 truncate text-xs font-medium text-primary md:max-w-none md:text-sm">
                                 {activeElection.name}
                             </span>
                         </div>

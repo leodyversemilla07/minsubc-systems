@@ -98,7 +98,7 @@ export default function Feedback({
         <>
             <Head title="Feedback" />
 
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-info/5 to-background p-4">
+            <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-info/5 to-background p-4">
                 <div className="w-full max-w-2xl">
                     <Card>
                         <CardHeader className="text-center">

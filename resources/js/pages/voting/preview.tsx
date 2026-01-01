@@ -77,7 +77,7 @@ export default function Preview({
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-background to-primary/5">
+        <div className="min-h-screen bg-linear-to-br from-background to-primary/5">
             {/* Header */}
             <div className="bg-primary text-primary-foreground shadow-lg">
                 <div className="container mx-auto px-4 py-6">
@@ -274,7 +274,7 @@ export default function Preview({
                             </Button>
                             <Button
                                 onClick={handleConfirmSubmit}
-                                className="flex-1 bg-gradient-to-r from-primary to-primary/80 py-6 text-lg font-bold shadow-lg hover:from-primary/90 hover:to-primary/70"
+                                className="flex-1 bg-linear-to-r from-primary to-primary/80 py-6 text-lg font-bold shadow-lg hover:from-primary/90 hover:to-primary/70"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? (

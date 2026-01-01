@@ -8,7 +8,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, FileText, GraduationCap, Users, Vote } from 'lucide-react';
+import { ArrowRight, FileText, GraduationCap, Vote } from 'lucide-react';
 
 export default function Welcome() {
     return (
@@ -61,10 +61,10 @@ export default function Welcome() {
                     <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-4">
                         {/* USG Card */}
                         <Card className="card-interactive group relative overflow-hidden border shadow-lg">
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                            <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-primary/10 opacity-50" />
                             <CardHeader className="relative pb-4">
-                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/20 shadow-lg">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-primary/10 to-primary/20 shadow-lg">
                                     <img
                                         src="/usg-logo.png"
                                         alt="USG Logo"
@@ -102,10 +102,10 @@ export default function Welcome() {
 
                         {/* Registrar Card */}
                         <Card className="card-interactive group relative overflow-hidden border shadow-lg">
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                            <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-primary/10 opacity-50" />
                             <CardHeader className="relative pb-4">
-                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/20 shadow-lg">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-primary/10 to-primary/20 shadow-lg">
                                     <FileText className="h-8 w-8 text-primary" />
                                 </div>
                                 <CardTitle className="text-xl font-bold">
@@ -139,10 +139,10 @@ export default function Welcome() {
 
                         {/* SAS Card */}
                         <Card className="card-interactive group relative overflow-hidden border shadow-lg">
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                            <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-primary/10 opacity-50" />
                             <CardHeader className="relative pb-4">
-                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/20 shadow-lg">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-primary/10 to-primary/20 shadow-lg">
                                     <GraduationCap className="h-8 w-8 text-primary" />
                                 </div>
                                 <CardTitle className="text-xl font-bold">
@@ -176,10 +176,10 @@ export default function Welcome() {
 
                         {/* Voting System Card */}
                         <Card className="card-interactive group relative overflow-hidden border shadow-lg">
-                            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                            <div className="absolute inset-0 bg-linear-to-br from-accent/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-accent/20 opacity-50" />
                             <CardHeader className="relative pb-4">
-                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-accent/20 to-accent/30 shadow-lg">
+                                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-accent/20 to-accent/30 shadow-lg">
                                     <Vote className="h-8 w-8 text-accent-foreground" />
                                 </div>
                                 <CardTitle className="text-xl font-bold">

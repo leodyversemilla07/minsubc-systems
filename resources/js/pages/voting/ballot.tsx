@@ -153,7 +153,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
     ).length;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-background to-primary/5">
+        <div className="min-h-screen bg-linear-to-br from-background to-primary/5">
             {/* Header */}
             <div className="bg-primary text-primary-foreground shadow-lg">
                 <div className="container mx-auto px-4 py-6">
@@ -315,7 +315,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                             }}
                                                         />
                                                     </div>
-                                                    <span className="min-w-[60px] text-right text-xs font-semibold text-muted-foreground">
+                                                    <span className="min-w-15 text-right text-xs font-semibold text-muted-foreground">
                                                         {selectedCount} /{' '}
                                                         {maxVotes}
                                                     </span>
@@ -379,7 +379,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                         loading="lazy"
                                                                     />
                                                                 ) : (
-                                                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-primary text-xl font-bold text-primary-foreground shadow-sm">
+                                                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-primary/80 to-primary text-xl font-bold text-primary-foreground shadow-sm">
                                                                         {candidate.firstname.charAt(
                                                                             0,
                                                                         )}
@@ -467,7 +467,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                     <div className="rounded-lg border border-border bg-card p-6 shadow-md">
                         <Button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-primary to-primary/80 py-6 text-lg font-bold shadow-lg transition-all hover:from-primary/90 hover:to-primary/70 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                            className="w-full bg-linear-to-r from-primary to-primary/80 py-6 text-lg font-bold shadow-lg transition-all hover:from-primary/90 hover:to-primary/70 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                             disabled={completedPositions === 0}
                         >
                             <CircleCheck className="mr-2 h-5 w-5" />
@@ -515,7 +515,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                         loading="lazy"
                                     />
                                 ) : (
-                                    <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-gradient-to-br from-primary/80 to-primary text-4xl font-bold text-primary-foreground shadow-md">
+                                    <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-linear-to-br from-primary/80 to-primary text-4xl font-bold text-primary-foreground shadow-md">
                                         {selectedCandidate.firstname.charAt(0)}
                                         {selectedCandidate.lastname.charAt(0)}
                                     </div>

@@ -292,7 +292,7 @@ export default function Results({
                                         <CardContent>
                                             <ChartContainer
                                                 config={chartConfig}
-                                                className="mx-auto aspect-square max-h-[300px]"
+                                                className="mx-auto aspect-square max-h-75"
                                             >
                                                 <PieChart>
                                                     <ChartTooltip
@@ -393,7 +393,7 @@ export default function Results({
                                                         <div className="relative flex items-center justify-between p-4">
                                                             <div className="flex items-center gap-4">
                                                                 {/* Rank Badge */}
-                                                                <div className="flex-shrink-0">
+                                                                <div className="shrink-0">
                                                                     {isWinner ? (
                                                                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400 dark:bg-yellow-500">
                                                                             <Trophy className="h-5 w-5 text-white" />

@@ -217,7 +217,7 @@ export default function Dashboard({
                 <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                     <div className="flex items-center space-x-4">
                         <Avatar className="h-14 w-14 ring-2 ring-primary/50">
-                            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-lg text-primary-foreground">
+                            <AvatarFallback className="bg-linear-to-br from-primary to-primary/80 text-lg text-primary-foreground">
                                 {user.first_name[0]}
                                 {user.last_name[0]}
                             </AvatarFallback>
@@ -252,8 +252,8 @@ export default function Dashboard({
                 {/* Quick Access Grid - 4 Systems */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     {/* Registrar Quick Access */}
-                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-gradient-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-linear-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
@@ -287,8 +287,8 @@ export default function Dashboard({
                     </Card>
 
                     {/* SAS Quick Access */}
-                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-gradient-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-linear-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
@@ -322,8 +322,8 @@ export default function Dashboard({
                     </Card>
 
                     {/* USG Quick Access */}
-                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-gradient-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-linear-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
@@ -357,8 +357,8 @@ export default function Dashboard({
                     </Card>
 
                     {/* Voting System Quick Access */}
-                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-gradient-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <Card className="group relative overflow-hidden transition-all hover:shadow-lg dark:border-border dark:bg-linear-to-br dark:from-card/80 dark:to-card/60 dark:hover:border-primary/50 dark:hover:shadow-primary/10">
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">

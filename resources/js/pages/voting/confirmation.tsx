@@ -64,14 +64,14 @@ export default function Confirmation({
     }, [election?.id]);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/5 via-background to-background px-4 py-12">
+        <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-primary/5 via-background to-background px-4 py-12">
             <div className="w-full max-w-3xl">
                 {/* Success Animation Container */}
                 <div className="mb-8 text-center">
                     <div className="inline-block">
                         {/* Animated Success Icon */}
                         <div className="relative">
-                            <div className="animate-bounce-slow mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-primary shadow-2xl">
+                            <div className="animate-bounce-slow mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-linear-to-br from-primary/80 to-primary shadow-2xl">
                                 <CircleCheck
                                     className="h-16 w-16 text-primary-foreground"
                                     strokeWidth={2.5}
@@ -125,7 +125,7 @@ export default function Confirmation({
                 )}
 
                 {/* Quick Stats */}
-                <Card className="mb-6 border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10">
+                <Card className="mb-6 border-primary/30 bg-linear-to-r from-primary/5 to-primary/10">
                     <CardContent className="p-6">
                         <div className="grid grid-cols-2 gap-4 text-center md:grid-cols-3">
                             <div>
@@ -256,7 +256,7 @@ export default function Confirmation({
                         <Link
                             href={voting.results.url({ election: election.id })}
                         >
-                            <Button className="w-full bg-gradient-to-r from-primary to-primary/80 shadow-lg hover:from-primary/90 hover:to-primary/70">
+                            <Button className="w-full bg-linear-to-r from-primary to-primary/80 shadow-lg hover:from-primary/90 hover:to-primary/70">
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Election Results
                             </Button>
@@ -286,7 +286,7 @@ export default function Confirmation({
                                 `?token=${feedbackToken}`
                             }
                         >
-                            <Button className="bg-gradient-to-r from-info to-info/80 px-8 py-6 text-lg shadow-lg hover:from-info/90 hover:to-info/70">
+                            <Button className="bg-linear-to-r from-info to-info/80 px-8 py-6 text-lg shadow-lg hover:from-info/90 hover:to-info/70">
                                 <MessageSquare className="mr-2 h-5 w-5" />
                                 Share Your Feedback
                             </Button>
