@@ -30,6 +30,7 @@ import {
     LayoutGrid,
     ListChecks,
     Megaphone,
+    RefreshCw,
     Settings,
     Shield,
     Target,
@@ -191,6 +192,11 @@ export function AppSidebar() {
                     title: 'Scholarships',
                     href: sas.admin.scholarships.index.url(),
                     icon: GraduationCap,
+                },
+                {
+                    title: 'Renewals',
+                    href: sas.admin.renewals.index.url(),
+                    icon: RefreshCw,
                 },
                 {
                     title: 'Insurance',

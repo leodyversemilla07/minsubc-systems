@@ -8,6 +8,7 @@ use Modules\SAS\Http\Controllers\Admin\InsuranceController as AdminInsuranceCont
 use Modules\SAS\Http\Controllers\Admin\OrganizationController as AdminOrganizationController;
 use Modules\SAS\Http\Controllers\Admin\ScholarshipController as AdminScholarshipController;
 use Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController;
+use Modules\SAS\Http\Controllers\Admin\RenewalController;
 use Modules\SAS\Http\Controllers\Adviser\OrganizationController as AdviserOrganizationController;
 use Modules\SAS\Http\Controllers\PageController;
 use Modules\SAS\Http\Controllers\Student\InsuranceController as StudentInsuranceController;
@@ -82,6 +83,13 @@ Route::prefix('sas/admin')->name('sas.admin.')->middleware(['auth', 'role:sas-st
 
     // Scholarship Recipients
     Route::resource('scholarship-recipients', ScholarshipRecipientController::class);
+
+    // Scholarship Renewals
+    Route::get('renewals', [RenewalController::class, 'index'])->name('renewals.index');
+    Route::post('renewals/send-reminders', [RenewalController::class, 'sendReminders'])->name('renewals.send-reminders');
+    Route::post('renewals/{recipientId}/create', [RenewalController::class, 'createRenewal'])->name('renewals.create');
+    Route::post('renewals/bulk-renew', [RenewalController::class, 'bulkRenew'])->name('renewals.bulk-renew');
+    Route::get('renewals/history/{studentId}', [RenewalController::class, 'history'])->name('renewals.history');
 
     // Insurance
     Route::get('insurance', [AdminInsuranceController::class, 'index'])->name('insurance.index');
