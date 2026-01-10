@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\USG\Http\Controllers\Admin\AnalyticsController;
 use Modules\USG\Http\Controllers\Admin\AnnouncementController;
 use Modules\USG\Http\Controllers\Admin\DashboardController;
 use Modules\USG\Http\Controllers\Admin\DocumentController;
@@ -64,14 +65,21 @@ Route::prefix('usg')->name('usg.')->group(function () {
     Route::get('/search/quick', [SearchController::class, 'quickSearch'])->name('search.quick');
 });
 
-// Authenticated Routes
-Route::middleware(['auth', 'verified'])->group(function () {
-    // USG Admin Routes - accessible to USG Officers and System Admins
-    Route::prefix('usg/admin')->name('usg.admin.')->group(function () {
-        // Dashboard - accessible to all USG members
-        Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
-            Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        });
+    // Authenticated Routes
+    Route::middleware(['auth', 'verified'])->group(function () {
+        // USG Admin Routes - accessible to USG Officers and System Admins
+        Route::prefix('usg/admin')->name('usg.admin.')->group(function () {
+            // Dashboard - accessible to all USG members
+            Route::middleware(['role:usg-officer|usg-admin|super-admin'])->group(function () {
+                Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+            });
+
+            // Analytics - accessible to USG Admins and System Admins
+            Route::middleware(['role:usg-admin|super-admin'])->group(function () {
+                Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
+                Route::get('/analytics/export/pdf', [AnalyticsController::class, 'exportPdf'])->name('analytics.export.pdf');
+                Route::get('/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
+            });
 
         // VMGO Management - restricted to USG Admins and System Admins
         Route::middleware(['role:usg-admin|super-admin'])->group(function () {

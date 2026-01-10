@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\VotingSystem\Http\Controllers\Admin\ActivityLogController;
+use Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController;
 use Modules\VotingSystem\Http\Controllers\Admin\CandidateController;
 use Modules\VotingSystem\Http\Controllers\Admin\DashboardController;
 use Modules\VotingSystem\Http\Controllers\Admin\ElectionController;
@@ -65,13 +66,18 @@ Route::middleware([\Modules\VotingSystem\Http\Middleware\EnsureVoterAuthenticate
     Route::post('/logout', [VoterAuthController::class, 'logout'])->name('logout');
 });
 
-// Admin Routes (Authenticated Admins)
-Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-admin'])
-    ->prefix('voting/admin')
-    ->name('voting.admin.')
-    ->group(function () {
+    // Admin Routes (Authenticated Admins)
+    Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-admin'])
+        ->prefix('voting/admin')
+        ->name('voting.admin.')
+        ->group(function () {
         // Dashboard
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Analytics
+        Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics');
+        Route::get('analytics/export/pdf', [AnalyticsController::class, 'exportPdf'])->name('analytics.export.pdf');
+        Route::get('analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('analytics.export.excel');
 
         // Elections
         Route::get('elections', [ElectionController::class, 'index'])->middleware('permission:elections.view')->name('elections.index');

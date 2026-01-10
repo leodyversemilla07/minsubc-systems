@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -26,7 +27,14 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import { Clock, DollarSign, FileText, TrendingUp } from 'lucide-react';
+import {
+    Clock,
+    DollarSign,
+    Download,
+    FileSpreadsheet,
+    FileText,
+    TrendingUp,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 
@@ -148,7 +156,7 @@ export default function AnalyticsDashboard({
 
             <div className="space-y-6">
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                             Analytics Dashboard
@@ -157,18 +165,57 @@ export default function AnalyticsDashboard({
                             Document request statistics and insights
                         </p>
                     </div>
-                    <Select value={period} onValueChange={handlePeriodChange}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select period" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="7days">Last 7 Days</SelectItem>
-                            <SelectItem value="30days">Last 30 Days</SelectItem>
-                            <SelectItem value="90days">Last 90 Days</SelectItem>
-                            <SelectItem value="year">Last Year</SelectItem>
-                            <SelectItem value="all">All Time</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-2">
+                        <Select
+                            value={period}
+                            onValueChange={handlePeriodChange}
+                        >
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select period" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="7days">
+                                    Last 7 Days
+                                </SelectItem>
+                                <SelectItem value="30days">
+                                    Last 30 Days
+                                </SelectItem>
+                                <SelectItem value="90days">
+                                    Last 90 Days
+                                </SelectItem>
+                                <SelectItem value="year">Last Year</SelectItem>
+                                <SelectItem value="all">All Time</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <Button
+                            variant="outline"
+                            size="default"
+                            onClick={() =>
+                                window.open(
+                                    `/admin/analytics/export/pdf?period=${period}`,
+                                    '_blank',
+                                )
+                            }
+                            className="gap-2"
+                        >
+                            <Download className="h-4 w-4" />
+                            PDF
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="default"
+                            onClick={() =>
+                                window.open(
+                                    `/admin/analytics/export/excel?period=${period}`,
+                                    '_blank',
+                                )
+                            }
+                            className="gap-2"
+                        >
+                            <FileSpreadsheet className="h-4 w-4" />
+                            Excel
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Summary Cards */}

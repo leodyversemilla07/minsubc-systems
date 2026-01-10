@@ -76,6 +76,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('admin/analytics', [AnalyticsController::class, 'index'])->name('registrar.admin.analytics');
         Route::get('admin/analytics/data', [AnalyticsController::class, 'getData'])->name('registrar.admin.analytics.data');
         Route::get('admin/analytics/daily-collection', [AnalyticsController::class, 'dailyCollectionReport'])->name('registrar.admin.analytics.daily-collection');
+        Route::get('admin/analytics/export/pdf', [AnalyticsController::class, 'exportPdf'])->name('registrar.admin.analytics.export.pdf');
+        Route::get('admin/analytics/export/excel', [AnalyticsController::class, 'exportExcel'])->name('registrar.admin.analytics.export.excel');
 
         // Bulk operations routes
         Route::post('admin/bulk/update-status', [BulkOperationsController::class, 'bulkUpdateStatus'])->name('registrar.admin.bulk.update-status');

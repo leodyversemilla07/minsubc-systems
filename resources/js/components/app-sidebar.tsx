@@ -20,6 +20,7 @@ import voting from '@/routes/voting';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
+    BarChart3,
     BookOpen,
     Building2,
     Calendar,
@@ -76,6 +77,11 @@ export function AppSidebar() {
                     icon: LayoutGrid,
                 },
                 {
+                    title: 'Analytics',
+                    href: superAdmin.analytics.url(),
+                    icon: BarChart3,
+                },
+                {
                     title: 'User Management',
                     href: superAdmin.users.url(),
                     icon: Users,
@@ -112,6 +118,11 @@ export function AppSidebar() {
                     icon: LayoutGrid,
                 },
                 {
+                    title: 'Analytics',
+                    href: '/usg/admin/analytics',
+                    icon: BarChart3,
+                },
+                {
                     title: 'Announcements',
                     href: usg.admin.announcements.index.url(),
                     icon: Megaphone,
@@ -146,6 +157,11 @@ export function AppSidebar() {
                     title: 'Elections',
                     href: voting.admin.elections.index.url(),
                     icon: Vote,
+                },
+                {
+                    title: 'Analytics',
+                    href: '/voting/admin/analytics',
+                    icon: BarChart3,
                 },
                 {
                     title: 'Candidates',
@@ -189,6 +205,11 @@ export function AppSidebar() {
                     icon: LayoutGrid,
                 },
                 {
+                    title: 'Analytics & Reports',
+                    href: '/sas/admin/reports',
+                    icon: BarChart3,
+                },
+                {
                     title: 'Scholarships',
                     href: sas.admin.scholarships.index.url(),
                     icon: GraduationCap,
@@ -230,6 +251,13 @@ export function AppSidebar() {
                 href: dashboard.url(),
                 icon: LayoutGrid,
             });
+            if (hasAnyRole(['registrar-admin', 'super-admin'])) {
+                items.push({
+                    title: 'Analytics',
+                    href: '/admin/analytics',
+                    icon: BarChart3,
+                });
+            }
         }
         // Student/Default Navigation - Unified 4 Systems
         else {
