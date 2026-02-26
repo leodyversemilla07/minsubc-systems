@@ -7,7 +7,6 @@ declare(strict_types=1);
  *
  * Tests for responsive design across different devices and viewport sizes.
  */
-
 describe('Mobile Responsiveness', function () {
     it('renders homepage correctly on mobile', function () {
         $page = visit('/')->on()->mobile();
@@ -34,8 +33,6 @@ describe('Mobile Responsiveness', function () {
         $page->assertNoJavaScriptErrors();
     });
 });
-
-
 
 describe('Dark Mode Support', function () {
     it('renders homepage in dark mode', function () {

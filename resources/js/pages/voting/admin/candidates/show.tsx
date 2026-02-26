@@ -1,10 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
@@ -190,7 +185,9 @@ export default function Show({ candidate }: Props) {
                         {/* Votes List */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Votes Received ({voteCount})</CardTitle>
+                                <CardTitle>
+                                    Votes Received ({voteCount})
+                                </CardTitle>
                             </CardHeader>
                             <CardContent>
                                 {voteCount === 0 ? (
@@ -211,7 +208,8 @@ export default function Show({ candidate }: Props) {
                                                     <div>
                                                         <div className="text-sm font-medium text-foreground">
                                                             {vote.voter.student
-                                                                ?.user?.full_name ||
+                                                                ?.user
+                                                                ?.full_name ||
                                                                 `Student ID: ${vote.voter.school_id}`}
                                                         </div>
                                                         {vote.voter.student && (
@@ -233,13 +231,16 @@ export default function Show({ candidate }: Props) {
                                                 <div className="text-xs text-muted-foreground">
                                                     {new Date(
                                                         vote.timestamp,
-                                                    ).toLocaleDateString('en-US', {
-                                                        month: 'short',
-                                                        day: 'numeric',
-                                                        year: 'numeric',
-                                                        hour: 'numeric',
-                                                        minute: '2-digit',
-                                                    })}
+                                                    ).toLocaleDateString(
+                                                        'en-US',
+                                                        {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric',
+                                                            hour: 'numeric',
+                                                            minute: '2-digit',
+                                                        },
+                                                    )}
                                                 </div>
                                             </div>
                                         ))}

@@ -66,11 +66,11 @@ Route::middleware([\Modules\VotingSystem\Http\Middleware\EnsureVoterAuthenticate
     Route::post('/logout', [VoterAuthController::class, 'logout'])->name('logout');
 });
 
-    // Admin Routes (Authenticated Admins)
-    Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-admin'])
-        ->prefix('voting/admin')
-        ->name('voting.admin.')
-        ->group(function () {
+// Admin Routes (Authenticated Admins)
+Route::middleware(['auth', 'verified', 'role:voting-admin|voting-manager|super-admin'])
+    ->prefix('voting/admin')
+    ->name('voting.admin.')
+    ->group(function () {
         // Dashboard
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

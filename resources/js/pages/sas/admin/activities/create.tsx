@@ -57,7 +57,10 @@ export default function CreateActivity({ organizations }: Props) {
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
                 { title: 'Activities', href: sas.admin.activities.index.url() },
-                { title: 'Create Activity', href: sas.admin.activities.create.url() },
+                {
+                    title: 'Create Activity',
+                    href: sas.admin.activities.create.url(),
+                },
             ]}
         >
             <Head title="Create Activity" />
@@ -95,7 +98,10 @@ export default function CreateActivity({ organizations }: Props) {
                                     id="activity_title"
                                     value={data.activity_title}
                                     onChange={(e) =>
-                                        setData('activity_title', e.target.value)
+                                        setData(
+                                            'activity_title',
+                                            e.target.value,
+                                        )
                                     }
                                     placeholder="e.g., Leadership Training Seminar"
                                     required
@@ -158,7 +164,10 @@ export default function CreateActivity({ organizations }: Props) {
                                         Organization (Optional)
                                     </Label>
                                     <Select
-                                        value={data.organization_id?.toString() || 'none'}
+                                        value={
+                                            data.organization_id?.toString() ||
+                                            'none'
+                                        }
                                         onValueChange={(value) =>
                                             setData(
                                                 'organization_id',
@@ -222,13 +231,18 @@ export default function CreateActivity({ organizations }: Props) {
                         <CardContent className="space-y-4">
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="start_date">Start Date *</Label>
+                                    <Label htmlFor="start_date">
+                                        Start Date *
+                                    </Label>
                                     <Input
                                         id="start_date"
                                         type="datetime-local"
                                         value={data.start_date}
                                         onChange={(e) =>
-                                            setData('start_date', e.target.value)
+                                            setData(
+                                                'start_date',
+                                                e.target.value,
+                                            )
                                         }
                                         required
                                     />

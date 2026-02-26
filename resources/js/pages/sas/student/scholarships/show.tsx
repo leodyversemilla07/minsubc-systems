@@ -92,7 +92,10 @@ export default function Show({ recipient }: Props) {
         <AppLayout
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
-                { title: 'My Scholarships', href: sas.student.scholarships.index.url() },
+                {
+                    title: 'My Scholarships',
+                    href: sas.student.scholarships.index.url(),
+                },
                 { title: recipient.scholarship.scholarship_name, href: '#' },
             ]}
         >
@@ -167,8 +170,8 @@ export default function Show({ recipient }: Props) {
                                             <p className="mt-1 text-gray-600 dark:text-gray-400">
                                                 {recipient.date_awarded
                                                     ? new Date(
-                                                        recipient.date_awarded,
-                                                    ).toLocaleDateString()
+                                                          recipient.date_awarded,
+                                                      ).toLocaleDateString()
                                                     : 'N/A'}
                                             </p>
                                         </div>
@@ -324,10 +327,10 @@ export default function Show({ recipient }: Props) {
                                         <div className="text-4xl font-bold text-blue-700 dark:text-blue-400">
                                             {totalRequirements > 0
                                                 ? Math.round(
-                                                    (completedRequirements /
-                                                        totalRequirements) *
-                                                    100,
-                                                )
+                                                      (completedRequirements /
+                                                          totalRequirements) *
+                                                          100,
+                                                  )
                                                 : 0}
                                             %
                                         </div>
@@ -392,12 +395,15 @@ export default function Show({ recipient }: Props) {
                                             <p className="font-semibold">
                                                 {recipient.date_awarded
                                                     ? new Date(
-                                                        recipient.date_awarded,
-                                                    ).toLocaleDateString('en-US', {
-                                                        year: 'numeric',
-                                                        month: 'long',
-                                                        day: 'numeric',
-                                                    })
+                                                          recipient.date_awarded,
+                                                      ).toLocaleDateString(
+                                                          'en-US',
+                                                          {
+                                                              year: 'numeric',
+                                                              month: 'long',
+                                                              day: 'numeric',
+                                                          },
+                                                      )
                                                     : 'N/A'}
                                             </p>
                                         </div>

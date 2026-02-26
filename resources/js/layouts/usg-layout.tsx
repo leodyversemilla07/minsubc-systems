@@ -1,5 +1,5 @@
 import { Footer, Header } from '@/components/usg';
-import { type ReactNode, useState, useEffect } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 interface USGLayoutProps {
     children: ReactNode;
@@ -11,7 +11,11 @@ export default function USGLayout({ children }: USGLayoutProps) {
     useEffect(() => {
         // Check local storage or system preference
         const storedTheme = localStorage.getItem('theme');
-        if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (
+            storedTheme === 'dark' ||
+            (!storedTheme &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
             setIsDark(true);
             document.documentElement.classList.add('dark');
         } else {
@@ -35,7 +39,7 @@ export default function USGLayout({ children }: USGLayoutProps) {
     };
 
     return (
-        <div className="flex min-h-screen flex-col bg-white dark:bg-gray-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        <div className="flex min-h-screen flex-col bg-white text-slate-900 transition-colors duration-300 dark:bg-gray-950 dark:text-slate-100">
             <Header isDark={isDark} toggleTheme={toggleTheme} />
 
             {/* Main content - responsive padding for header height */}

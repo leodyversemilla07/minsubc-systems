@@ -41,7 +41,7 @@ export function PositionNavigator({
                 <Button
                     variant="outline"
                     size="sm"
-                    className="fixed right-6 bottom-6 z-50 h-14 w-14 rounded-full border-2 border-green-600 bg-white shadow-xl transition-all hover:scale-110 dark:border-green-500 dark:bg-gray-900 md:h-16 md:w-16"
+                    className="fixed right-6 bottom-6 z-50 h-14 w-14 rounded-full border-2 border-green-600 bg-white shadow-xl transition-all hover:scale-110 md:h-16 md:w-16 dark:border-green-500 dark:bg-gray-900"
                 >
                     <div className="relative">
                         <List className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -53,11 +53,7 @@ export function PositionNavigator({
                     </div>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent
-                align="end"
-                className="w-80 p-0"
-                sideOffset={10}
-            >
+            <PopoverContent align="end" className="w-80 p-0" sideOffset={10}>
                 <div className="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                         Quick Navigation
@@ -72,8 +68,7 @@ export function PositionNavigator({
                     <div className="space-y-1 p-2">
                         {positions.map((position, index) => {
                             const isCompleted =
-                                selectedVotes[position.position_id]?.length >
-                                0;
+                                selectedVotes[position.position_id]?.length > 0;
 
                             return (
                                 <button
@@ -82,23 +77,25 @@ export function PositionNavigator({
                                     onClick={() =>
                                         handleNavigate(position.position_id)
                                     }
-                                    className={`flex w-full items-start gap-3 rounded-lg p-3 text-left transition-all hover:bg-gray-100 dark:hover:bg-gray-800 ${isCompleted
+                                    className={`flex w-full items-start gap-3 rounded-lg p-3 text-left transition-all hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                                        isCompleted
                                             ? 'bg-green-50 dark:bg-green-950'
                                             : ''
-                                        }`}
+                                    }`}
                                 >
                                     {/* Position Number */}
                                     <div
-                                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${isCompleted
+                                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
+                                            isCompleted
                                                 ? 'bg-green-600 text-white dark:bg-green-500'
                                                 : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
-                                            }`}
+                                        }`}
                                     >
                                         {index + 1}
                                     </div>
 
                                     {/* Position Info */}
-                                    <div className="flex-1 min-w-0">
+                                    <div className="min-w-0 flex-1">
                                         <div className="font-medium text-gray-900 dark:text-gray-100">
                                             {position.description}
                                         </div>

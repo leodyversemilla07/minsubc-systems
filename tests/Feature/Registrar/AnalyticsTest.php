@@ -145,7 +145,7 @@ it('returns analytics data via controller endpoint', function () {
 
     $response->assertSuccessful()
         ->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('registrar/analytics/index')
                 ->has('stats')
         );

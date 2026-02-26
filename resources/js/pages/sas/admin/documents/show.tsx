@@ -1,13 +1,4 @@
 import { DocumentViewer } from '@/components/sas/document-viewer';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,6 +9,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -140,7 +140,7 @@ export default function ShowDocument({ document }: Props) {
 
     const confirmDelete = () => {
         router.delete(sas.admin.documents.destroy.url(document.id), {
-            onSuccess: () => setIsDeleteDialogOpen(false)
+            onSuccess: () => setIsDeleteDialogOpen(false),
         });
     };
 
@@ -173,7 +173,10 @@ export default function ShowDocument({ document }: Props) {
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
                 { title: 'Documents', href: sas.admin.documents.index.url() },
-                { title: document.document_title, href: sas.admin.documents.show.url(document.id) },
+                {
+                    title: document.document_title,
+                    href: sas.admin.documents.show.url(document.id),
+                },
             ]}
         >
             <Head title={document.document_title} />
@@ -226,9 +229,9 @@ export default function ShowDocument({ document }: Props) {
                             </CardHeader>
                             <CardContent>
                                 {document.file_type === 'pdf' ||
-                                    document.file_path
-                                        .toLowerCase()
-                                        .endsWith('.pdf') ? (
+                                document.file_path
+                                    .toLowerCase()
+                                    .endsWith('.pdf') ? (
                                     <DocumentViewer
                                         documentUrl={document.file_path}
                                         showVerifyButton={false}
@@ -241,8 +244,11 @@ export default function ShowDocument({ document }: Props) {
                                                 {document.file_name}
                                             </p>
                                             <p className="text-xs text-gray-600">
-                                                {document.file_type.toUpperCase()} •{' '}
-                                                {formatFileSize(document.file_size)}
+                                                {document.file_type.toUpperCase()}{' '}
+                                                •{' '}
+                                                {formatFileSize(
+                                                    document.file_size,
+                                                )}
                                             </p>
                                             <Button className="mt-4" asChild>
                                                 <a
@@ -309,8 +315,8 @@ export default function ShowDocument({ document }: Props) {
                                             <Calendar className="h-4 w-4 text-gray-500" />
                                             {document.original_date
                                                 ? new Date(
-                                                    document.original_date,
-                                                ).toLocaleDateString()
+                                                      document.original_date,
+                                                  ).toLocaleDateString()
                                                 : 'N/A'}
                                         </p>
                                     </div>
@@ -320,7 +326,8 @@ export default function ShowDocument({ document }: Props) {
                                         </Label>
                                         <p className="flex items-center gap-1 font-medium">
                                             <MapPin className="h-4 w-4 text-gray-500" />
-                                            {document.physical_location || 'N/A'}
+                                            {document.physical_location ||
+                                                'N/A'}
                                         </p>
                                     </div>
                                 </div>
@@ -363,7 +370,9 @@ export default function ShowDocument({ document }: Props) {
                             <CardHeader>
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <CardTitle>Disposal Management</CardTitle>
+                                        <CardTitle>
+                                            Disposal Management
+                                        </CardTitle>
                                         <CardDescription>
                                             Track document disposal status
                                         </CardDescription>
@@ -373,17 +382,22 @@ export default function ShowDocument({ document }: Props) {
                                         onOpenChange={setIsDisposalDialogOpen}
                                     >
                                         <DialogTrigger asChild>
-                                            <Button size="sm">Update Status</Button>
+                                            <Button size="sm">
+                                                Update Status
+                                            </Button>
                                         </DialogTrigger>
                                         <DialogContent>
-                                            <form onSubmit={handleDisposalUpdate}>
+                                            <form
+                                                onSubmit={handleDisposalUpdate}
+                                            >
                                                 <DialogHeader>
                                                     <DialogTitle>
                                                         Update Disposal Status
                                                     </DialogTitle>
                                                     <DialogDescription>
-                                                        Change the disposal status
-                                                        and related information
+                                                        Change the disposal
+                                                        status and related
+                                                        information
                                                     </DialogDescription>
                                                 </DialogHeader>
                                                 <div className="space-y-4 py-4">
@@ -409,11 +423,12 @@ export default function ShowDocument({ document }: Props) {
                                                             </SelectTrigger>
                                                             <SelectContent>
                                                                 <SelectItem value="Physical Copy Exists">
-                                                                    Physical Copy
-                                                                    Exists
+                                                                    Physical
+                                                                    Copy Exists
                                                                 </SelectItem>
                                                                 <SelectItem value="Pending Disposal Approval">
-                                                                    Pending Disposal
+                                                                    Pending
+                                                                    Disposal
                                                                     Approval
                                                                 </SelectItem>
                                                                 <SelectItem value="Approved for Disposal">
@@ -438,7 +453,8 @@ export default function ShowDocument({ document }: Props) {
                                                             onChange={(e) =>
                                                                 setData(
                                                                     'disposal_permit_number',
-                                                                    e.target.value,
+                                                                    e.target
+                                                                        .value,
                                                                 )
                                                             }
                                                             placeholder="e.g., DP-2024-001"
@@ -457,7 +473,8 @@ export default function ShowDocument({ document }: Props) {
                                                             onChange={(e) =>
                                                                 setData(
                                                                     'disposal_date',
-                                                                    e.target.value,
+                                                                    e.target
+                                                                        .value,
                                                                 )
                                                             }
                                                         />
@@ -505,7 +522,9 @@ export default function ShowDocument({ document }: Props) {
                                                 Permit Number
                                             </Label>
                                             <p className="font-medium">
-                                                {document.disposal_permit_number}
+                                                {
+                                                    document.disposal_permit_number
+                                                }
                                             </p>
                                         </div>
                                     )}
@@ -540,48 +559,56 @@ export default function ShowDocument({ document }: Props) {
                                             <TableRow>
                                                 <TableHead>Version</TableHead>
                                                 <TableHead>Changes</TableHead>
-                                                <TableHead>Updated By</TableHead>
+                                                <TableHead>
+                                                    Updated By
+                                                </TableHead>
                                                 <TableHead>Date</TableHead>
                                                 <TableHead>Actions</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {document.versions.map((version) => (
-                                                <TableRow key={version.id}>
-                                                    <TableCell>
-                                                        v{version.version_number}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {version.changes_description ||
-                                                            'No description'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {version.created_by?.name ||
-                                                            'Unknown'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {new Date(
-                                                            version.created_at,
-                                                        ).toLocaleDateString()}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            asChild
-                                                        >
-                                                            <a
-                                                                href={
-                                                                    version.file_path
-                                                                }
-                                                                download
+                                            {document.versions.map(
+                                                (version) => (
+                                                    <TableRow key={version.id}>
+                                                        <TableCell>
+                                                            v
+                                                            {
+                                                                version.version_number
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {version.changes_description ||
+                                                                'No description'}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {version.created_by
+                                                                ?.name ||
+                                                                'Unknown'}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {new Date(
+                                                                version.created_at,
+                                                            ).toLocaleDateString()}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                asChild
                                                             >
-                                                                <Download className="h-4 w-4" />
-                                                            </a>
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
+                                                                <a
+                                                                    href={
+                                                                        version.file_path
+                                                                    }
+                                                                    download
+                                                                >
+                                                                    <Download className="h-4 w-4" />
+                                                                </a>
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ),
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </CardContent>
@@ -681,7 +708,9 @@ export default function ShowDocument({ document }: Props) {
                                     asChild
                                 >
                                     <Link
-                                        href={sas.admin.documents.edit.url(document.id)}
+                                        href={sas.admin.documents.edit.url(
+                                            document.id,
+                                        )}
                                     >
                                         <Edit className="mr-2 h-4 w-4" />
                                         Edit Document
@@ -701,13 +730,22 @@ export default function ShowDocument({ document }: Props) {
                 </div>
             </div>
 
-            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <AlertDialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the
-                            document <span className="font-semibold text-foreground">{document.document_title}</span> and remove its data from our servers.
+                            This action cannot be undone. This will permanently
+                            delete the document{' '}
+                            <span className="font-semibold text-foreground">
+                                {document.document_title}
+                            </span>{' '}
+                            and remove its data from our servers.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

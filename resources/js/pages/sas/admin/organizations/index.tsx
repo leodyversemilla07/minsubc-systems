@@ -1,3 +1,13 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,16 +27,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
@@ -71,7 +71,8 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
     const [search, setSearch] = useState(filters.search || '');
     const [orgType, setOrgType] = useState(filters.organization_type || 'all');
     const [status, setStatus] = useState(filters.status || 'all');
-    const [organizationToDelete, setOrganizationToDelete] = useState<Organization | null>(null);
+    const [organizationToDelete, setOrganizationToDelete] =
+        useState<Organization | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     function handleFilter() {
@@ -107,13 +108,16 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
     function confirmDelete() {
         if (organizationToDelete) {
-            router.delete(sas.admin.organizations.destroy.url(organizationToDelete.id), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setIsDeleteDialogOpen(false);
-                    setOrganizationToDelete(null);
+            router.delete(
+                sas.admin.organizations.destroy.url(organizationToDelete.id),
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        setIsDeleteDialogOpen(false);
+                        setOrganizationToDelete(null);
+                    },
                 },
-            });
+            );
         }
     }
 
@@ -151,7 +155,10 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
         <AppLayout
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
-                { title: 'Organizations', href: sas.admin.organizations.index.url() },
+                {
+                    title: 'Organizations',
+                    href: sas.admin.organizations.index.url(),
+                },
             ]}
         >
             <Head title="Organizations Management" />
@@ -185,7 +192,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             <Building2 className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -197,7 +206,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             <Shield className="h-4 w-4 text-green-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.active}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.active}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -209,7 +220,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             <Users className="h-4 w-4 text-blue-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.major}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.major}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -221,7 +234,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             <Users className="h-4 w-4 text-purple-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.minor}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.minor}
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -236,7 +251,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     <Input
                                         placeholder="Search by organization name or code..."
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         className="pl-9"
                                         onKeyDown={(e) =>
                                             e.key === 'Enter' && handleFilter()
@@ -249,7 +266,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     <SelectValue placeholder="All Types" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Types</SelectItem>
+                                    <SelectItem value="all">
+                                        All Types
+                                    </SelectItem>
                                     <SelectItem value="Major">Major</SelectItem>
                                     <SelectItem value="Minor">Minor</SelectItem>
                                 </SelectContent>
@@ -259,8 +278,12 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     <SelectValue placeholder="All Statuses" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Statuses</SelectItem>
-                                    <SelectItem value="Active">Active</SelectItem>
+                                    <SelectItem value="all">
+                                        All Statuses
+                                    </SelectItem>
+                                    <SelectItem value="Active">
+                                        Active
+                                    </SelectItem>
                                     <SelectItem value="Inactive">
                                         Inactive
                                     </SelectItem>
@@ -319,8 +342,8 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                             <TableCell>
                                                 {org.establishment_date
                                                     ? new Date(
-                                                        org.establishment_date,
-                                                    ).getFullYear()
+                                                          org.establishment_date,
+                                                      ).getFullYear()
                                                     : 'N/A'}
                                             </TableCell>
                                             <TableCell>
@@ -334,7 +357,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                                         asChild
                                                     >
                                                         <Link
-                                                            href={sas.admin.organizations.show.url(org.id)}
+                                                            href={sas.admin.organizations.show.url(
+                                                                org.id,
+                                                            )}
                                                         >
                                                             <Eye className="h-4 w-4" />
                                                         </Link>
@@ -345,7 +370,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                                         asChild
                                                     >
                                                         <Link
-                                                            href={sas.admin.organizations.edit.url(org.id)}
+                                                            href={sas.admin.organizations.edit.url(
+                                                                org.id,
+                                                            )}
                                                         >
                                                             <Edit className="h-4 w-4" />
                                                         </Link>
@@ -353,7 +380,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleDelete(org)}
+                                                        onClick={() =>
+                                                            handleDelete(org)
+                                                        }
                                                     >
                                                         <Trash2 className="h-4 w-4 text-destructive" />
                                                     </Button>
@@ -398,9 +427,16 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     router.get(
                                         sas.admin.organizations.index.url(),
                                         {
-                                            page: organizations.current_page - 1,
-                                            organization_type: orgType === 'all' ? undefined : orgType,
-                                            status: status === 'all' ? undefined : status,
+                                            page:
+                                                organizations.current_page - 1,
+                                            organization_type:
+                                                orgType === 'all'
+                                                    ? undefined
+                                                    : orgType,
+                                            status:
+                                                status === 'all'
+                                                    ? undefined
+                                                    : status,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -420,9 +456,16 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     router.get(
                                         sas.admin.organizations.index.url(),
                                         {
-                                            page: organizations.current_page + 1,
-                                            organization_type: orgType === 'all' ? undefined : orgType,
-                                            status: status === 'all' ? undefined : status,
+                                            page:
+                                                organizations.current_page + 1,
+                                            organization_type:
+                                                orgType === 'all'
+                                                    ? undefined
+                                                    : orgType,
+                                            status:
+                                                status === 'all'
+                                                    ? undefined
+                                                    : status,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -436,13 +479,18 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                 )}
             </div>
 
-            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <AlertDialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the
-                            organization{' '}
+                            This action cannot be undone. This will permanently
+                            delete the organization{' '}
                             <span className="font-semibold text-foreground">
                                 {organizationToDelete?.organization_name}
                             </span>{' '}

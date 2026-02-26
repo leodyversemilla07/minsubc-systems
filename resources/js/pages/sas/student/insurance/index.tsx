@@ -32,7 +32,10 @@ export default function Index({ insuranceRecords }: Props) {
         <AppLayout
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
-                { title: 'My Insurance', href: sas.student.insurance.index.url() },
+                {
+                    title: 'My Insurance',
+                    href: sas.student.insurance.index.url(),
+                },
             ]}
         >
             <Head title="My Insurance - Student Portal" />
@@ -149,7 +152,7 @@ export default function Index({ insuranceRecords }: Props) {
                                                     <Badge
                                                         className={
                                                             statusColors[
-                                                            insurance.status
+                                                                insurance.status
                                                             ]
                                                         }
                                                     >

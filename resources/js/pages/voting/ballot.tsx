@@ -1,4 +1,6 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -6,8 +8,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { HelpTooltip } from '@/components/voting/help-tooltip';
 import { PositionNavigator } from '@/components/voting/position-navigator';
 import { SecurityBadge } from '@/components/voting/security-badge';
@@ -73,9 +73,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
         return {};
     };
 
-    const [selectedVotes, setSelectedVotes] = useState<
-        Record<number, number[]>
-    >(loadDraft);
+    const [selectedVotes, setSelectedVotes] =
+        useState<Record<number, number[]>>(loadDraft);
     const [selectedCandidate, setSelectedCandidate] =
         useState<Candidate | null>(null);
     const [timeRemaining, setTimeRemaining] = useState<string>('');
@@ -218,7 +217,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                             1.
                                         </span>
                                         <span>
-                                            Review all candidates carefully before making your selection
+                                            Review all candidates carefully
+                                            before making your selection
                                         </span>
                                     </li>
                                     <li className="flex gap-2">
@@ -226,7 +226,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                             2.
                                         </span>
                                         <span>
-                                            Click "View Details" to see full candidate information
+                                            Click "View Details" to see full
+                                            candidate information
                                         </span>
                                     </li>
                                     <li className="flex gap-2">
@@ -234,7 +235,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                             3.
                                         </span>
                                         <span>
-                                            Some positions allow multiple votes - check the maximum
+                                            Some positions allow multiple votes
+                                            - check the maximum
                                         </span>
                                     </li>
                                     <li className="flex gap-2">
@@ -242,7 +244,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                             4.
                                         </span>
                                         <span>
-                                            Review your selections before final submission
+                                            Review your selections before final
+                                            submission
                                         </span>
                                     </li>
                                 </ol>
@@ -253,7 +256,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                             <CircleAlert className="h-4 w-4" />
                             <AlertTitle>Important Notice</AlertTitle>
                             <AlertDescription>
-                                Once submitted, you cannot change your vote. Please review carefully.
+                                Once submitted, you cannot change your vote.
+                                Please review carefully.
                             </AlertDescription>
                         </Alert>
                     </div>
@@ -268,10 +272,11 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                         return (
                             <div
                                 key={position.position_id}
-                                className={`mb-6 rounded-lg border border-border bg-card p-6 shadow-md transition-all ${isComplete
-                                    ? 'ring-opacity-50 ring-2 ring-primary'
-                                    : ''
-                                    }`}
+                                className={`mb-6 rounded-lg border border-border bg-card p-6 shadow-md transition-all ${
+                                    isComplete
+                                        ? 'ring-opacity-50 ring-2 ring-primary'
+                                        : ''
+                                }`}
                                 role="region"
                                 aria-labelledby={`position-${position.position_id}`}
                             >
@@ -340,10 +345,11 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                 className="relative"
                                             >
                                                 <label
-                                                    className={`group relative block cursor-pointer ${isDisabled
-                                                        ? 'cursor-not-allowed opacity-50'
-                                                        : ''
-                                                        }`}
+                                                    className={`group relative block cursor-pointer ${
+                                                        isDisabled
+                                                            ? 'cursor-not-allowed opacity-50'
+                                                            : ''
+                                                    }`}
                                                 >
                                                     <input
                                                         type="checkbox"
@@ -361,10 +367,11 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                         aria-label={`Select ${candidate.fullname} for ${position.description}`}
                                                     />
                                                     <Card
-                                                        className={`border-2 bg-card transition-all ${isSelected
-                                                            ? 'scale-[1.02] border-primary bg-primary/5 shadow-lg'
-                                                            : 'border-border hover:border-primary/50 hover:shadow-md'
-                                                            } ${!isDisabled && 'hover:scale-[1.01]'}`}
+                                                        className={`border-2 bg-card transition-all ${
+                                                            isSelected
+                                                                ? 'scale-[1.02] border-primary bg-primary/5 shadow-lg'
+                                                                : 'border-border hover:border-primary/50 hover:shadow-md'
+                                                        } ${!isDisabled && 'hover:scale-[1.01]'}`}
                                                     >
                                                         <CardContent className="p-4">
                                                             <div className="flex items-start gap-4">
@@ -404,7 +411,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                             }
                                                                         </p>
                                                                     ) : (
-                                                                        <p className="text-sm italic text-muted-foreground">
+                                                                        <p className="text-sm text-muted-foreground italic">
                                                                             Independent
                                                                         </p>
                                                                     )}
@@ -419,7 +426,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
 
                                                                 {/* Checkmark Icon */}
                                                                 {isSelected && (
-                                                                    <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+                                                                    <div className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
                                                                         <CircleCheck className="h-4 w-4" />
                                                                     </div>
                                                                 )}
@@ -433,7 +440,9 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                     type="button"
                                                                     variant="ghost"
                                                                     size="sm"
-                                                                    onClick={(e) => {
+                                                                    onClick={(
+                                                                        e,
+                                                                    ) => {
                                                                         e.preventDefault();
                                                                         setSelectedCandidate(
                                                                             candidate,
@@ -442,7 +451,8 @@ export default function Ballot({ election, positions }: BallotPageProps) {
                                                                     className="h-9 w-full text-sm"
                                                                 >
                                                                     <Eye className="mr-1 h-3 w-3" />
-                                                                    View Full Details
+                                                                    View Full
+                                                                    Details
                                                                 </Button>
                                                             </CardFooter>
                                                         )}
@@ -569,7 +579,7 @@ export default function Ballot({ election, positions }: BallotPageProps) {
             <PositionNavigator
                 positions={positions}
                 selectedVotes={selectedVotes}
-                onNavigate={() => { }}
+                onNavigate={() => {}}
             />
         </div>
     );

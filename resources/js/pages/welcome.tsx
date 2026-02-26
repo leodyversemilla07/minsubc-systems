@@ -83,7 +83,10 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full gradient-primary shadow-primary">
+                                <Button
+                                    asChild
+                                    className="gradient-primary w-full shadow-primary"
+                                >
                                     <Link
                                         href="/usg"
                                         className="flex items-center justify-center"
@@ -120,7 +123,10 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full gradient-primary shadow-primary">
+                                <Button
+                                    asChild
+                                    className="gradient-primary w-full shadow-primary"
+                                >
                                     <Link
                                         href="/register"
                                         className="flex items-center justify-center"
@@ -157,7 +163,10 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full gradient-primary shadow-primary">
+                                <Button
+                                    asChild
+                                    className="gradient-primary w-full shadow-primary"
+                                >
                                     <Link
                                         href="/sas"
                                         className="flex items-center justify-center"
@@ -194,7 +203,10 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg">
+                                <Button
+                                    asChild
+                                    className="w-full bg-accent text-accent-foreground shadow-lg hover:bg-accent/90"
+                                >
                                     <a
                                         href="/voting"
                                         className="flex items-center justify-center"
@@ -231,8 +243,7 @@ export default function Welcome() {
                         </div>
                         <div className="flex items-center space-x-6 text-xs text-muted-foreground sm:text-sm">
                             <span>
-                                © 2025 Mindoro State University Bongabong
-                                Campus
+                                © 2025 Mindoro State University Bongabong Campus
                             </span>
                         </div>
                     </div>

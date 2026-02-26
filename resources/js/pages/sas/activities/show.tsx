@@ -7,13 +7,13 @@ import { Head, Link } from '@inertiajs/react';
 import {
     ArrowLeft,
     Calendar,
+    CheckCircle,
     Clock,
     Download,
+    FileText,
     MapPin,
     Share2,
     User,
-    FileText,
-    CheckCircle,
 } from 'lucide-react';
 
 interface Props {
@@ -122,43 +122,73 @@ export default function ActivityShow({ activity }: Props) {
             <Head title={`${activity.activity_title} - SAS`} />
 
             {/* --- Hero / Header Section --- */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white pt-12 pb-12 sm:px-6 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950 border-b border-green-100 dark:border-slate-800">
-
+            <section className="relative overflow-hidden border-b border-green-100 bg-gradient-to-br from-white via-green-50/50 to-white pt-12 pb-12 sm:px-6 lg:px-8 dark:border-slate-800 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950">
                 {/* Background Pattern */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
-                    <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                        className="h-full w-full"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
                         <defs>
-                            <pattern id="hero-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                                <circle cx="20" cy="20" r="1.5" fill="currentColor" className="text-green-600" />
+                            <pattern
+                                id="hero-pattern"
+                                x="0"
+                                y="0"
+                                width="40"
+                                height="40"
+                                patternUnits="userSpaceOnUse"
+                            >
+                                <circle
+                                    cx="20"
+                                    cy="20"
+                                    r="1.5"
+                                    fill="currentColor"
+                                    className="text-green-600"
+                                />
                             </pattern>
                         </defs>
-                        <rect width="100%" height="100%" fill="url(#hero-pattern)" />
+                        <rect
+                            width="100%"
+                            height="100%"
+                            fill="url(#hero-pattern)"
+                        />
                     </svg>
                 </div>
 
                 <div className="relative mx-auto max-w-7xl px-4">
                     {/* Back Link */}
-                    <Link href={sas.activities.index.url()} className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-green-700 dark:text-slate-400 dark:hover:text-green-400">
+                    <Link
+                        href={sas.activities.index.url()}
+                        className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-green-700 dark:text-slate-400 dark:hover:text-green-400"
+                    >
                         <ArrowLeft className="h-4 w-4" />
                         Back to Activities
                     </Link>
 
-                    <div className="flex flex-col md:flex-row md:items-start gap-6 lg:gap-8">
+                    <div className="flex flex-col gap-6 md:flex-row md:items-start lg:gap-8">
                         {/* Icon Box */}
                         <div className="flex-shrink-0">
-                            <div className="flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-green-100 to-emerald-200 shadow-xl dark:from-green-900 dark:to-green-800">
-                                <Calendar className="h-10 w-10 md:h-12 md:w-12 text-green-700 dark:text-green-300" />
+                            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-green-100 to-emerald-200 shadow-xl md:h-24 md:w-24 dark:from-green-900 dark:to-green-800">
+                                <Calendar className="h-10 w-10 text-green-700 md:h-12 md:w-12 dark:text-green-300" />
                             </div>
                         </div>
 
                         {/* Title & Meta */}
                         <div className="flex-1">
                             <div className="mb-4 flex flex-wrap items-center gap-3">
-                                <Badge className={getStatusColor(activity.activity_status)}>
+                                <Badge
+                                    className={getStatusColor(
+                                        activity.activity_status,
+                                    )}
+                                >
                                     {activity.activity_status}
                                 </Badge>
                                 {activity.category && (
-                                    <Badge className={getCategoryColor(activity.category)}>
+                                    <Badge
+                                        className={getCategoryColor(
+                                            activity.category,
+                                        )}
+                                    >
                                         {activity.category}
                                     </Badge>
                                 )}
@@ -170,19 +200,26 @@ export default function ActivityShow({ activity }: Props) {
                                 )}
                             </div>
 
-                            <h1 className="mb-4 text-3xl font-black text-slate-900 sm:text-4xl lg:text-5xl dark:text-white tracking-tight">
+                            <h1 className="mb-4 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl lg:text-5xl dark:text-white">
                                 {activity.activity_title}
                             </h1>
 
                             <div className="flex flex-wrap gap-6 text-sm text-slate-600 dark:text-slate-300">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="h-4 w-4 text-green-600 dark:text-green-400" />
-                                    <span className="font-semibold">{formatDate(activity.start_date)}</span>
+                                    <span className="font-semibold">
+                                        {formatDate(activity.start_date)}
+                                    </span>
                                 </div>
                                 {!activity.all_day && (
                                     <div className="flex items-center gap-2">
                                         <Clock className="h-4 w-4 text-green-600 dark:text-green-400" />
-                                        <span>{formatTime(activity.start_date)} - {formatTime(activity.end_date || '')}</span>
+                                        <span>
+                                            {formatTime(activity.start_date)} -{' '}
+                                            {formatTime(
+                                                activity.end_date || '',
+                                            )}
+                                        </span>
                                     </div>
                                 )}
                                 {activity.location && (
@@ -198,44 +235,55 @@ export default function ActivityShow({ activity }: Props) {
             </section>
 
             {/* --- Content Section --- */}
-            <section className="px-4 py-12 sm:px-6 lg:px-8 bg-slate-50/50 dark:bg-slate-900/50">
+            <section className="bg-slate-50/50 px-4 py-12 sm:px-6 lg:px-8 dark:bg-slate-900/50">
                 <div className="mx-auto max-w-7xl">
                     <div className="grid gap-8 lg:grid-cols-3">
-
                         {/* Main Content Column */}
-                        <div className="lg:col-span-2 space-y-8">
-
+                        <div className="space-y-8 lg:col-span-2">
                             {/* Description Card */}
                             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                                <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 dark:border-slate-800">
-                                    <div className="p-2 bg-green-50 rounded-lg dark:bg-green-900/20">
+                                <h2 className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4 text-xl font-bold text-slate-900 dark:border-slate-800 dark:text-white">
+                                    <div className="rounded-lg bg-green-50 p-2 dark:bg-green-900/20">
                                         <FileText className="h-5 w-5 text-green-600 dark:text-green-400" />
                                     </div>
                                     About This Activity
                                 </h2>
-                                <div className="prose prose-slate max-w-none dark:prose-invert text-slate-600 dark:text-slate-300 whitespace-pre-line leading-relaxed">
-                                    {activity.description ? activity.description : 'No description available.'}
+                                <div className="prose prose-slate dark:prose-invert max-w-none leading-relaxed whitespace-pre-line text-slate-600 dark:text-slate-300">
+                                    {activity.description
+                                        ? activity.description
+                                        : 'No description available.'}
                                 </div>
                             </div>
 
                             {/* Participants Card (if applicable) */}
                             {activity.target_participants && (
                                 <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                                    <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 dark:border-slate-800">
-                                        <div className="p-2 bg-green-50 rounded-lg dark:bg-green-900/20">
+                                    <h2 className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4 text-xl font-bold text-slate-900 dark:border-slate-800 dark:text-white">
+                                        <div className="rounded-lg bg-green-50 p-2 dark:bg-green-900/20">
                                             <User className="h-5 w-5 text-green-600 dark:text-green-400" />
                                         </div>
                                         Participants
                                     </h2>
                                     <div className="space-y-4">
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-sm font-semibold text-slate-900 dark:text-white">Target Participants</span>
-                                            <span className="text-slate-600 dark:text-slate-400">{activity.target_participants}</span>
+                                            <span className="text-sm font-semibold text-slate-900 dark:text-white">
+                                                Target Participants
+                                            </span>
+                                            <span className="text-slate-600 dark:text-slate-400">
+                                                {activity.target_participants}
+                                            </span>
                                         </div>
-                                        {activity.actual_participants !== undefined && (
+                                        {activity.actual_participants !==
+                                            undefined && (
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-sm font-semibold text-slate-900 dark:text-white">Expected / Actual Count</span>
-                                                <span className="text-slate-600 dark:text-slate-400">{activity.actual_participants}</span>
+                                                <span className="text-sm font-semibold text-slate-900 dark:text-white">
+                                                    Expected / Actual Count
+                                                </span>
+                                                <span className="text-slate-600 dark:text-slate-400">
+                                                    {
+                                                        activity.actual_participants
+                                                    }
+                                                </span>
                                             </div>
                                         )}
                                     </div>
@@ -243,28 +291,28 @@ export default function ActivityShow({ activity }: Props) {
                             )}
 
                             {/* Completion Report (if completed) */}
-                            {activity.activity_status === 'completed' && activity.completion_report && (
-                                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                                    <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 pb-4 dark:border-slate-800">
-                                        <div className="p-2 bg-green-50 rounded-lg dark:bg-green-900/20">
-                                            <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                            {activity.activity_status === 'completed' &&
+                                activity.completion_report && (
+                                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                                        <h2 className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4 text-xl font-bold text-slate-900 dark:border-slate-800 dark:text-white">
+                                            <div className="rounded-lg bg-green-50 p-2 dark:bg-green-900/20">
+                                                <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                            </div>
+                                            Completion Report
+                                        </h2>
+                                        <div className="prose prose-slate dark:prose-invert max-w-none leading-relaxed whitespace-pre-line text-slate-600 dark:text-slate-300">
+                                            {activity.completion_report}
                                         </div>
-                                        Completion Report
-                                    </h2>
-                                    <div className="prose prose-slate max-w-none dark:prose-invert text-slate-600 dark:text-slate-300 whitespace-pre-line leading-relaxed">
-                                        {activity.completion_report}
                                     </div>
-                                </div>
-                            )}
+                                )}
                         </div>
 
                         {/* Sidebar Column */}
                         <div className="lg:col-span-1">
                             <div className="sticky top-24 space-y-6">
-
                                 {/* Event Details Card */}
                                 <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                                    <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    <h3 className="mb-4 text-sm font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">
                                         Event Details
                                     </h3>
 
@@ -272,12 +320,21 @@ export default function ActivityShow({ activity }: Props) {
                                         <div className="flex items-start gap-3">
                                             <Calendar className="mt-0.5 h-5 w-5 text-slate-400" />
                                             <div>
-                                                <div className="text-sm font-bold text-slate-900 dark:text-white">Date</div>
+                                                <div className="text-sm font-bold text-slate-900 dark:text-white">
+                                                    Date
+                                                </div>
                                                 <div className="text-sm text-slate-600 dark:text-slate-400">
-                                                    {formatDate(activity.start_date)}
-                                                    {activity.end_date && activity.start_date.split('T')[0] !== activity.end_date.split('T')[0] &&
-                                                        ` - ${formatDate(activity.end_date)}`
-                                                    }
+                                                    {formatDate(
+                                                        activity.start_date,
+                                                    )}
+                                                    {activity.end_date &&
+                                                        activity.start_date.split(
+                                                            'T',
+                                                        )[0] !==
+                                                            activity.end_date.split(
+                                                                'T',
+                                                            )[0] &&
+                                                        ` - ${formatDate(activity.end_date)}`}
                                                 </div>
                                             </div>
                                         </div>
@@ -286,9 +343,18 @@ export default function ActivityShow({ activity }: Props) {
                                             <div className="flex items-start gap-3">
                                                 <Clock className="mt-0.5 h-5 w-5 text-slate-400" />
                                                 <div>
-                                                    <div className="text-sm font-bold text-slate-900 dark:text-white">Time</div>
+                                                    <div className="text-sm font-bold text-slate-900 dark:text-white">
+                                                        Time
+                                                    </div>
                                                     <div className="text-sm text-slate-600 dark:text-slate-400">
-                                                        {formatTime(activity.start_date)} - {formatTime(activity.end_date || '')}
+                                                        {formatTime(
+                                                            activity.start_date,
+                                                        )}{' '}
+                                                        -{' '}
+                                                        {formatTime(
+                                                            activity.end_date ||
+                                                                '',
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -297,16 +363,25 @@ export default function ActivityShow({ activity }: Props) {
                                         <div className="flex items-start gap-3">
                                             <MapPin className="mt-0.5 h-5 w-5 text-slate-400" />
                                             <div>
-                                                <div className="text-sm font-bold text-slate-900 dark:text-white">Venue</div>
-                                                <div className="text-sm text-slate-600 dark:text-slate-400">{activity.location || 'TBD'}</div>
+                                                <div className="text-sm font-bold text-slate-900 dark:text-white">
+                                                    Venue
+                                                </div>
+                                                <div className="text-sm text-slate-600 dark:text-slate-400">
+                                                    {activity.location || 'TBD'}
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div className="flex items-start gap-3">
                                             <User className="mt-0.5 h-5 w-5 text-slate-400" />
                                             <div>
-                                                <div className="text-sm font-bold text-slate-900 dark:text-white">Organizer</div>
-                                                <div className="text-sm text-slate-600 dark:text-slate-400">{activity.organizer || 'TBD'}</div>
+                                                <div className="text-sm font-bold text-slate-900 dark:text-white">
+                                                    Organizer
+                                                </div>
+                                                <div className="text-sm text-slate-600 dark:text-slate-400">
+                                                    {activity.organizer ||
+                                                        'TBD'}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -314,24 +389,35 @@ export default function ActivityShow({ activity }: Props) {
 
                                 {/* Actions Card */}
                                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800/50">
-                                    <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    <h3 className="mb-4 text-sm font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">
                                         Actions
                                     </h3>
                                     <div className="grid gap-3">
-                                        <a href={`/sas/activities/${activity.slug}/export`} download className="inline-block w-full">
-                                            <Button variant="outline" className="w-full justify-start bg-white dark:bg-slate-900">
-                                                <Download className="mr-2 h-4 w-4" /> Add to Calendar
+                                        <a
+                                            href={`/sas/activities/${activity.slug}/export`}
+                                            download
+                                            className="inline-block w-full"
+                                        >
+                                            <Button
+                                                variant="outline"
+                                                className="w-full justify-start bg-white dark:bg-slate-900"
+                                            >
+                                                <Download className="mr-2 h-4 w-4" />{' '}
+                                                Add to Calendar
                                             </Button>
                                         </a>
-                                        <Button variant="outline" className="w-full justify-start bg-white dark:bg-slate-900" onClick={shareActivity}>
-                                            <Share2 className="mr-2 h-4 w-4" /> Share Event
+                                        <Button
+                                            variant="outline"
+                                            className="w-full justify-start bg-white dark:bg-slate-900"
+                                            onClick={shareActivity}
+                                        >
+                                            <Share2 className="mr-2 h-4 w-4" />{' '}
+                                            Share Event
                                         </Button>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>

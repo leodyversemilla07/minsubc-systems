@@ -13,7 +13,6 @@ import { VoteReceipt } from '@/components/voting/vote-receipt';
 import { VotingProgress } from '@/components/voting/voting-progress';
 import voting from '@/routes/voting';
 import { Link } from '@inertiajs/react';
-import { useEffect } from 'react';
 import {
     CheckCircle2,
     CircleCheck,
@@ -24,6 +23,7 @@ import {
     Lock,
     MessageSquare,
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface Vote {
     position: string;

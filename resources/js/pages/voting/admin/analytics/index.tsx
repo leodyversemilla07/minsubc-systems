@@ -110,13 +110,6 @@ export default function AnalyticsDashboard({
         );
     };
 
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-PH', {
-            style: 'currency',
-            currency: 'PHP',
-        }).format(amount);
-    };
-
     return (
         <AppLayout>
             <Head title="Analytics Dashboard - Voting Admin" />

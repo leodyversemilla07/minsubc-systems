@@ -52,15 +52,21 @@ export default function Show({ insurance }: Props) {
     const isExpired = new Date(insurance.expiry_date) < new Date();
     const daysUntilExpiry = Math.ceil(
         (new Date(insurance.expiry_date).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24),
+            (1000 * 60 * 60 * 24),
     );
 
     return (
         <AppLayout
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
-                { title: 'My Insurance', href: sas.student.insurance.index.url() },
-                { title: insurance.insurance_provider || 'Insurance Details', href: '#' },
+                {
+                    title: 'My Insurance',
+                    href: sas.student.insurance.index.url(),
+                },
+                {
+                    title: insurance.insurance_provider || 'Insurance Details',
+                    href: '#',
+                },
             ]}
         >
             <Head

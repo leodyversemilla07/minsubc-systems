@@ -1,11 +1,3 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,6 +8,9 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -92,14 +87,24 @@ export default function ActivityShow({ activity }: Props) {
     };
 
     const confirmCancel = () => {
-        router.post(sas.admin.activities.cancel.url(activity.id), {}, {
-            onSuccess: () => setIsCancelDialogOpen(false)
-        });
+        router.post(
+            sas.admin.activities.cancel.url(activity.id),
+            {},
+            {
+                onSuccess: () => setIsCancelDialogOpen(false),
+            },
+        );
     };
 
     const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
 
-    const { data, setData, post: postComplete, processing: isCompleting, reset: resetComplete } = useForm({
+    const {
+        data,
+        setData,
+        post: postComplete,
+        processing: isCompleting,
+        reset: resetComplete,
+    } = useForm({
         actual_participants: activity.target_participants?.toString() || '0',
         completion_report: '',
     });
@@ -123,7 +128,10 @@ export default function ActivityShow({ activity }: Props) {
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
                 { title: 'Activities', href: sas.admin.activities.index.url() },
-                { title: activity.activity_title, href: sas.admin.activities.show.url(activity.id) },
+                {
+                    title: activity.activity_title,
+                    href: sas.admin.activities.show.url(activity.id),
+                },
             ]}
         >
             <Head title={`Activity: ${activity.activity_title}`} />
@@ -140,15 +148,18 @@ export default function ActivityShow({ activity }: Props) {
                                 {getStatusBadge(activity.status)}
                             </div>
                             <p className="text-sm text-muted-foreground sm:text-base">
-                                {activity.category || 'Uncategorized'} • Scheduled by{' '}
-                                {activity.organizer || 'SAS Admin'}
+                                {activity.category || 'Uncategorized'} •
+                                Scheduled by {activity.organizer || 'SAS Admin'}
                             </p>
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {activity.status === 'Scheduled' && (
                             <>
-                                <Button variant="outline" onClick={handleCancel}>
+                                <Button
+                                    variant="outline"
+                                    onClick={handleCancel}
+                                >
                                     <XCircle className="mr-2 h-4 w-4" />
                                     Cancel
                                 </Button>
@@ -159,7 +170,11 @@ export default function ActivityShow({ activity }: Props) {
                             </>
                         )}
                         <Button variant="secondary" asChild>
-                            <Link href={sas.admin.activities.edit.url(activity.id)}>
+                            <Link
+                                href={sas.admin.activities.edit.url(
+                                    activity.id,
+                                )}
+                            >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Link>
@@ -179,8 +194,9 @@ export default function ActivityShow({ activity }: Props) {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
-                                    {activity.description || 'No description provided.'}
+                                <p className="text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
+                                    {activity.description ||
+                                        'No description provided.'}
                                 </p>
                             </CardContent>
                         </Card>
@@ -197,22 +213,39 @@ export default function ActivityShow({ activity }: Props) {
                                 <CardContent className="space-y-4">
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <div>
-                                            <p className="text-sm font-medium">Actual Participants</p>
-                                            <p className="text-2xl font-bold">{activity.actual_participants || 0}</p>
+                                            <p className="text-sm font-medium">
+                                                Actual Participants
+                                            </p>
+                                            <p className="text-2xl font-bold">
+                                                {activity.actual_participants ||
+                                                    0}
+                                            </p>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium">Turnout Rate</p>
+                                            <p className="text-sm font-medium">
+                                                Turnout Rate
+                                            </p>
                                             <p className="text-2xl font-bold">
                                                 {activity.target_participants
-                                                    ? Math.round((activity.actual_participants || 0) / activity.target_participants * 100)
-                                                    : 0}%
+                                                    ? Math.round(
+                                                          ((activity.actual_participants ||
+                                                              0) /
+                                                              activity.target_participants) *
+                                                              100,
+                                                      )
+                                                    : 0}
+                                                %
                                             </p>
                                         </div>
                                     </div>
                                     {activity.completion_report && (
                                         <div>
-                                            <p className="mb-1 text-sm font-medium">Post-Activity Notes</p>
-                                            <p className="text-sm text-muted-foreground">{activity.completion_report}</p>
+                                            <p className="mb-1 text-sm font-medium">
+                                                Post-Activity Notes
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {activity.completion_report}
+                                            </p>
                                         </div>
                                     )}
                                 </CardContent>
@@ -231,27 +264,40 @@ export default function ActivityShow({ activity }: Props) {
                                 <div className="flex items-start gap-3">
                                     <Calendar className="mt-0.5 h-4 w-4 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium leading-none">Schedule</p>
+                                        <p className="text-sm leading-none font-medium">
+                                            Schedule
+                                        </p>
                                         <p className="mt-1 text-sm text-muted-foreground">
-                                            {new Date(activity.start_date).toLocaleDateString()}
-                                            {activity.all_day ? ' (All Day)' : ` @ ${new Date(activity.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+                                            {new Date(
+                                                activity.start_date,
+                                            ).toLocaleDateString()}
+                                            {activity.all_day
+                                                ? ' (All Day)'
+                                                : ` @ ${new Date(activity.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <Clock className="mt-0.5 h-4 w-4 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium leading-none">Duration</p>
+                                        <p className="text-sm leading-none font-medium">
+                                            Duration
+                                        </p>
                                         <p className="mt-1 text-sm text-muted-foreground">
-                                            {new Date(activity.end_date).toLocaleDateString()}
-                                            {!activity.all_day && ` @ ${new Date(activity.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+                                            {new Date(
+                                                activity.end_date,
+                                            ).toLocaleDateString()}
+                                            {!activity.all_day &&
+                                                ` @ ${new Date(activity.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <MapPin className="mt-0.5 h-4 w-4 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium leading-none">Venue</p>
+                                        <p className="text-sm leading-none font-medium">
+                                            Venue
+                                        </p>
                                         <p className="mt-1 text-sm text-muted-foreground">
                                             {activity.location || 'TBA'}
                                         </p>
@@ -260,10 +306,14 @@ export default function ActivityShow({ activity }: Props) {
                                 <div className="flex items-start gap-3">
                                     <div
                                         className="h-4 w-4 rounded-full border shadow-sm"
-                                        style={{ backgroundColor: activity.color }}
+                                        style={{
+                                            backgroundColor: activity.color,
+                                        }}
                                     />
                                     <div>
-                                        <p className="text-sm font-medium leading-none">Calendar Color</p>
+                                        <p className="text-sm leading-none font-medium">
+                                            Calendar Color
+                                        </p>
                                         <p className="mt-1 text-sm text-muted-foreground uppercase">
                                             {activity.color}
                                         </p>
@@ -281,13 +331,16 @@ export default function ActivityShow({ activity }: Props) {
                                 <div className="flex items-start gap-3">
                                     <Users className="mt-0.5 h-4 w-4 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium leading-none">Organizer</p>
+                                        <p className="text-sm leading-none font-medium">
+                                            Organizer
+                                        </p>
                                         <p className="mt-1 text-sm text-muted-foreground">
                                             {activity.organizer || 'SAS Admin'}
                                         </p>
                                         {activity.organization && (
-                                            <p className="text-xs text-muted-foreground mt-0.5">
-                                                Org: {activity.organization.name}
+                                            <p className="mt-0.5 text-xs text-muted-foreground">
+                                                Org:{' '}
+                                                {activity.organization.name}
                                             </p>
                                         )}
                                     </div>
@@ -295,9 +348,12 @@ export default function ActivityShow({ activity }: Props) {
                                 <div className="flex items-start gap-3">
                                     <Target className="mt-0.5 h-4 w-4 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm font-medium leading-none">Target Participants</p>
+                                        <p className="text-sm leading-none font-medium">
+                                            Target Participants
+                                        </p>
                                         <p className="mt-1 text-sm text-muted-foreground">
-                                            {activity.target_participants || 'Not specified'}
+                                            {activity.target_participants ||
+                                                'Not specified'}
                                         </p>
                                     </div>
                                 </div>
@@ -307,12 +363,18 @@ export default function ActivityShow({ activity }: Props) {
                 </div>
             </div>
 
-            <AlertDialog open={isCancelDialogOpen} onOpenChange={setIsCancelDialogOpen}>
+            <AlertDialog
+                open={isCancelDialogOpen}
+                onOpenChange={setIsCancelDialogOpen}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Cancel Activity</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Are you sure you want to cancel "{activity.activity_title}"? This action will mark the activity as cancelled and cannot be easily undone.
+                            Are you sure you want to cancel "
+                            {activity.activity_title}"? This action will mark
+                            the activity as cancelled and cannot be easily
+                            undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -327,12 +389,16 @@ export default function ActivityShow({ activity }: Props) {
                 </AlertDialogContent>
             </AlertDialog>
 
-            <Dialog open={isCompleteDialogOpen} onOpenChange={setIsCompleteDialogOpen}>
+            <Dialog
+                open={isCompleteDialogOpen}
+                onOpenChange={setIsCompleteDialogOpen}
+            >
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Mark Activity as Completed</DialogTitle>
                         <DialogDescription>
-                            Enter the final details for "{activity.activity_title}" to close this record.
+                            Enter the final details for "
+                            {activity.activity_title}" to close this record.
                         </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={confirmComplete} className="space-y-4 py-4">
@@ -345,7 +411,12 @@ export default function ActivityShow({ activity }: Props) {
                                 type="number"
                                 min="0"
                                 value={data.actual_participants}
-                                onChange={(e) => setData('actual_participants', e.target.value)}
+                                onChange={(e) =>
+                                    setData(
+                                        'actual_participants',
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Enter total attendees"
                                 required
                             />
@@ -357,7 +428,9 @@ export default function ActivityShow({ activity }: Props) {
                             <Textarea
                                 id="completion_report"
                                 value={data.completion_report}
-                                onChange={(e) => setData('completion_report', e.target.value)}
+                                onChange={(e) =>
+                                    setData('completion_report', e.target.value)
+                                }
                                 placeholder="Briefly describe how the activity went..."
                                 rows={4}
                             />
@@ -371,7 +444,9 @@ export default function ActivityShow({ activity }: Props) {
                                 Cancel
                             </Button>
                             <Button type="submit" disabled={isCompleting}>
-                                {isCompleting ? 'Processing...' : 'Complete Activity'}
+                                {isCompleting
+                                    ? 'Processing...'
+                                    : 'Complete Activity'}
                             </Button>
                         </DialogFooter>
                     </form>

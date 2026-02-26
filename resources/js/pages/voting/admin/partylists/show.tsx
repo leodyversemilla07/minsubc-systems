@@ -1,11 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
@@ -100,7 +95,7 @@ export default function Show({ partylist }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         Total Candidates
                                     </div>
                                     <div className="mt-1 text-2xl font-bold text-primary">
@@ -109,7 +104,7 @@ export default function Show({ partylist }: Props) {
                                 </div>
 
                                 <div>
-                                    <div className="mb-2 text-xs uppercase text-muted-foreground">
+                                    <div className="mb-2 text-xs text-muted-foreground uppercase">
                                         Election
                                     </div>
                                     <Link
@@ -156,9 +151,7 @@ export default function Show({ partylist }: Props) {
                                         {partylist.candidates.map(
                                             (candidate) => (
                                                 <Link
-                                                    key={
-                                                        candidate.id
-                                                    }
+                                                    key={candidate.id}
                                                     href={`/voting/admin/candidates/${candidate.id}`}
                                                     className="group flex items-center gap-4 rounded-lg border p-4 transition hover:border-primary hover:bg-primary/5"
                                                 >

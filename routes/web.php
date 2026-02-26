@@ -120,7 +120,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $scholarships = $scholarshipRecipients->map(function ($recipient) {
                 $totalRequirements = $recipient->requirements->count();
                 $completedRequirements = $recipient->requirements->where('status', 'Submitted')->count();
-                
+
                 return [
                     'id' => $recipient->id,
                     'name' => $recipient->scholarship->name ?? 'Unknown Scholarship',
@@ -130,8 +130,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     'academic_year' => $recipient->academic_year,
                     'semester' => $recipient->semester,
                     'requirements_complete' => $recipient->requirements_complete,
-                    'requirements_progress' => $totalRequirements > 0 
-                        ? round(($completedRequirements / $totalRequirements) * 100) 
+                    'requirements_progress' => $totalRequirements > 0
+                        ? round(($completedRequirements / $totalRequirements) * 100)
                         : 100,
                     'total_requirements' => $totalRequirements,
                     'completed_requirements' => $completedRequirements,

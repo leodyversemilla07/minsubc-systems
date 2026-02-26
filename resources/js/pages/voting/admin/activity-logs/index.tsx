@@ -265,7 +265,8 @@ export default function Index({
                             <div className="text-2xl font-bold text-primary">
                                 {
                                     activityLogs.data.filter(
-                                        (log) => log.action === 'results_viewed',
+                                        (log) =>
+                                            log.action === 'results_viewed',
                                     ).length
                                 }
                             </div>
@@ -350,7 +351,9 @@ export default function Index({
                                                 </TableCell>
                                                 <TableCell className="text-sm text-muted-foreground">
                                                     {format(
-                                                        new Date(log.created_at),
+                                                        new Date(
+                                                            log.created_at,
+                                                        ),
                                                         'MMM dd, yyyy HH:mm:ss',
                                                     )}
                                                 </TableCell>
@@ -358,7 +361,8 @@ export default function Index({
                                                     <Link
                                                         href={voting.admin.activityLogs.show.url(
                                                             {
-                                                                activityLog: log.id,
+                                                                activityLog:
+                                                                    log.id,
                                                             },
                                                         )}
                                                     >
@@ -378,25 +382,27 @@ export default function Index({
                                 {/* Pagination */}
                                 {activityLogs.last_page > 1 && (
                                     <div className="mt-6 flex justify-center gap-1">
-                                        {activityLogs.links.map((link, index) => (
-                                            <Button
-                                                key={index}
-                                                variant={
-                                                    link.active
-                                                        ? 'default'
-                                                        : 'ghost'
-                                                }
-                                                size="sm"
-                                                disabled={!link.url}
-                                                onClick={() =>
-                                                    link.url &&
-                                                    router.visit(link.url)
-                                                }
-                                                dangerouslySetInnerHTML={{
-                                                    __html: link.label,
-                                                }}
-                                            />
-                                        ))}
+                                        {activityLogs.links.map(
+                                            (link, index) => (
+                                                <Button
+                                                    key={index}
+                                                    variant={
+                                                        link.active
+                                                            ? 'default'
+                                                            : 'ghost'
+                                                    }
+                                                    size="sm"
+                                                    disabled={!link.url}
+                                                    onClick={() =>
+                                                        link.url &&
+                                                        router.visit(link.url)
+                                                    }
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: link.label,
+                                                    }}
+                                                />
+                                            ),
+                                        )}
                                     </div>
                                 )}
                             </div>

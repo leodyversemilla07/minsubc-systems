@@ -175,7 +175,8 @@ export default function Index({
                             <CardHeader>
                                 <CardTitle>All Partylists</CardTitle>
                                 <CardDescription>
-                                    View and manage all political parties and groups
+                                    View and manage all political parties and
+                                    groups
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="overflow-x-auto">
@@ -192,7 +193,9 @@ export default function Index({
                                     </TableHeader>
                                     <TableBody>
                                         {partylists.map((partylist) => (
-                                            <TableRow key={partylist.partylist_id}>
+                                            <TableRow
+                                                key={partylist.partylist_id}
+                                            >
                                                 <TableCell>
                                                     <div className="font-medium text-foreground">
                                                         {partylist.name}
@@ -222,7 +225,9 @@ export default function Index({
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        {can('partylists.edit') && (
+                                                        {can(
+                                                            'partylists.edit',
+                                                        ) && (
                                                             <Link
                                                                 href={voting.admin.partylists.edit.url(
                                                                     {
@@ -239,9 +244,13 @@ export default function Index({
                                                                 </Button>
                                                             </Link>
                                                         )}
-                                                        {can('partylists.delete') && (
+                                                        {can(
+                                                            'partylists.delete',
+                                                        ) && (
                                                             <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
+                                                                <AlertDialogTrigger
+                                                                    asChild
+                                                                >
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="sm"
@@ -253,20 +262,42 @@ export default function Index({
                                                                 <AlertDialogContent>
                                                                     <AlertDialogHeader>
                                                                         <AlertDialogTitle>
-                                                                            Delete Partylist
+                                                                            Delete
+                                                                            Partylist
                                                                         </AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            Are you sure you want to delete "{partylist.name}"? This action cannot be undone.
+                                                                            Are
+                                                                            you
+                                                                            sure
+                                                                            you
+                                                                            want
+                                                                            to
+                                                                            delete
+                                                                            "
+                                                                            {
+                                                                                partylist.name
+                                                                            }
+                                                                            "?
+                                                                            This
+                                                                            action
+                                                                            cannot
+                                                                            be
+                                                                            undone.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogCancel>
+                                                                            Cancel
+                                                                        </AlertDialogCancel>
                                                                         <AlertDialogAction
                                                                             onClick={() =>
                                                                                 router.delete(
-                                                                                    voting.admin.partylists.destroy.url({
-                                                                                        partylist: partylist.partylist_id,
-                                                                                    }),
+                                                                                    voting.admin.partylists.destroy.url(
+                                                                                        {
+                                                                                            partylist:
+                                                                                                partylist.partylist_id,
+                                                                                        },
+                                                                                    ),
                                                                                 )
                                                                             }
                                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"

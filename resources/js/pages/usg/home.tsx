@@ -53,22 +53,27 @@ export default function USGHomepage({
                 </div>
 
                 {/* Grid Pattern Background */}
-                <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
+                <div
+                    className="pointer-events-none absolute inset-0 z-0"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                ></div>
 
                 <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
-                        <div className="mb-6 inline-flex items-center rounded-full bg-white/20 px-6 py-2 text-sm font-semibold backdrop-blur-sm border border-white/10 shadow-sm">
+                        <div className="mb-6 inline-flex items-center rounded-full border border-white/10 bg-white/20 px-6 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm">
                             <GraduationCap className="mr-2 h-4 w-4" />
                             Empowering Students Since Day One
                         </div>
-                        <h1 className="mb-6 text-4xl leading-tight font-bold tracking-tight sm:text-5xl lg:text-6xl drop-shadow-md">
+                        <h1 className="mb-6 text-4xl leading-tight font-bold tracking-tight drop-shadow-md sm:text-5xl lg:text-6xl">
                             Your Voice. Your Campus.
                             <br />
                             <span className="text-green-200 dark:text-green-400">
                                 Your Future.
                             </span>
                         </h1>
-                        <p className="mx-auto mb-10 max-w-3xl text-lg text-green-50 sm:text-xl lg:text-2xl leading-relaxed dark:text-gray-200">
+                        <p className="mx-auto mb-10 max-w-3xl text-lg leading-relaxed text-green-50 sm:text-xl lg:text-2xl dark:text-gray-200">
                             We're here to represent you, amplify your concerns,
                             and create meaningful change in our university
                             community.
@@ -77,14 +82,14 @@ export default function USGHomepage({
                         <div className="mb-12 flex flex-col justify-center gap-4 sm:flex-row">
                             <Link
                                 href="/usg/about"
-                                className="inline-flex items-center justify-center rounded-lg bg-white text-green-700 font-bold h-14 px-8 text-lg shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
+                                className="inline-flex h-14 items-center justify-center rounded-lg bg-white px-8 text-lg font-bold text-green-700 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
                             >
                                 Get Involved
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </Link>
                             <Link
                                 href={usg.announcements.index.url()}
-                                className="inline-flex items-center justify-center rounded-lg border-2 border-white/30 bg-green-900/80 text-white backdrop-blur-sm font-bold h-14 px-8 text-lg transition-all hover:border-white/50 hover:bg-green-950"
+                                className="inline-flex h-14 items-center justify-center rounded-lg border-2 border-white/30 bg-green-900/80 px-8 text-lg font-bold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-green-950"
                             >
                                 View Latest Updates
                                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -176,9 +181,9 @@ export default function USGHomepage({
             </section>
 
             {/* Call to Action Section */}
-            <section className="bg-green-700 py-20 text-white relative overflow-hidden dark:bg-green-900">
+            <section className="relative overflow-hidden bg-green-700 py-20 text-white dark:bg-green-900">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                <div className="container mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8 relative z-10">
+                <div className="relative z-10 container mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="mb-6 text-3xl font-bold lg:text-4xl">
                         Ready to Make a Difference?
                     </h2>
@@ -189,14 +194,14 @@ export default function USGHomepage({
                     <div className="flex flex-col justify-center gap-4 sm:flex-row">
                         <Link
                             href="/usg/contact"
-                            className="inline-flex items-center justify-center rounded-lg bg-white text-green-700 font-bold h-14 px-8 text-lg shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
+                            className="inline-flex h-14 items-center justify-center rounded-lg bg-white px-8 text-lg font-bold text-green-700 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-50 hover:shadow-2xl"
                         >
                             Contact Us
                             <ArrowRight className="ml-2 h-5 w-5" />
                         </Link>
                         <Link
                             href="/usg/about"
-                            className="inline-flex items-center justify-center rounded-lg border-2 border-white bg-transparent text-white backdrop-blur-sm font-bold h-14 px-8 text-lg transition-all hover:bg-white hover:text-green-700"
+                            className="inline-flex h-14 items-center justify-center rounded-lg border-2 border-white bg-transparent px-8 text-lg font-bold text-white backdrop-blur-sm transition-all hover:bg-white hover:text-green-700"
                         >
                             Learn More About USG
                         </Link>
@@ -205,7 +210,10 @@ export default function USGHomepage({
             </section>
 
             {/* Meet Our Officers Section */}
-            <section className="bg-gray-50 py-16 dark:bg-gray-900" id="officers">
+            <section
+                className="bg-gray-50 py-16 dark:bg-gray-900"
+                id="officers"
+            >
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
@@ -242,7 +250,7 @@ export default function USGHomepage({
                                             <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
                                                 {officer.name}
                                             </h3>
-                                            <p className="text-sm font-medium text-green-700 uppercase tracking-wide dark:text-green-400">
+                                            <p className="text-sm font-medium tracking-wide text-green-700 uppercase dark:text-green-400">
                                                 {officer.position}
                                             </p>
                                         </CardContent>
@@ -278,7 +286,10 @@ export default function USGHomepage({
             </section>
 
             {/* Latest Announcements Section */}
-            <section className="bg-white py-16 dark:bg-gray-950" id="announcements">
+            <section
+                className="bg-white py-16 dark:bg-gray-950"
+                id="announcements"
+            >
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">
@@ -326,29 +337,35 @@ export default function USGHomepage({
                             return (
                                 <Card
                                     key={announcement.id}
-                                    className="group border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl h-full flex flex-col dark:bg-gray-800"
+                                    className="group flex h-full flex-col border-0 bg-gray-50 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
                                 >
-                                    <CardContent className="p-6 flex-1 flex flex-col">
+                                    <CardContent className="flex flex-1 flex-col p-6">
                                         <div
                                             className={`mb-4 inline-block w-fit rounded-full ${config.color} p-3 shadow-md`}
                                         >
                                             <IconComponent className="h-6 w-6 text-white" />
                                         </div>
-                                        <h3 className="mb-2 text-xl font-bold text-gray-900 line-clamp-2 dark:text-white">
+                                        <h3 className="mb-2 line-clamp-2 text-xl font-bold text-gray-900 dark:text-white">
                                             {announcement.title}
                                         </h3>
-                                        <p className="mb-4 text-gray-600 line-clamp-3 flex-1 dark:text-gray-400">
+                                        <p className="mb-4 line-clamp-3 flex-1 text-gray-600 dark:text-gray-400">
                                             {announcement.excerpt}
                                         </p>
-                                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between dark:border-gray-700">
-                                            <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">{announcement.publish_date}</span>
+                                        <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4 dark:border-gray-700">
+                                            <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">
+                                                {announcement.publish_date}
+                                            </span>
                                             <Link
                                                 href={usg.announcements.show.url(
                                                     announcement.slug,
                                                 )}
-                                                className="text-sm font-bold text-green-700 hover:text-green-800 hover:underline flex items-center dark:text-green-400 dark:hover:text-green-300"
+                                                className="flex items-center text-sm font-bold text-green-700 hover:text-green-800 hover:underline dark:text-green-400 dark:hover:text-green-300"
                                             >
-                                                Read More <ArrowRight size={14} className="ml-1" />
+                                                Read More{' '}
+                                                <ArrowRight
+                                                    size={14}
+                                                    className="ml-1"
+                                                />
                                             </Link>
                                         </div>
                                     </CardContent>
@@ -373,7 +390,10 @@ export default function USGHomepage({
             </section>
 
             {/* Transparency Section Teaser */}
-            <section className="bg-green-50 py-16 dark:bg-gray-900" id="transparency">
+            <section
+                className="bg-green-50 py-16 dark:bg-gray-900"
+                id="transparency"
+            >
                 <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl dark:text-white">

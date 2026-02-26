@@ -1,3 +1,13 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,16 +27,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
@@ -82,14 +82,17 @@ interface Props {
 
 export default function DocumentsIndex({ documents, filters }: Props) {
     const [search, setSearch] = useState(filters.search || '');
-    const [category, setCategory] = useState(filters.document_category || 'all');
+    const [category, setCategory] = useState(
+        filters.document_category || 'all',
+    );
     const [disposalStatus, setDisposalStatus] = useState(
         filters.disposal_status || 'all',
     );
     const [academicYear, setAcademicYear] = useState(
         filters.academic_year || 'all',
     );
-    const [documentToDelete, setDocumentToDelete] = useState<DigitalizedDocument | null>(null);
+    const [documentToDelete, setDocumentToDelete] =
+        useState<DigitalizedDocument | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     function handleFilter() {
@@ -97,8 +100,10 @@ export default function DocumentsIndex({ documents, filters }: Props) {
             sas.admin.documents.index.url(),
             {
                 document_category: category === 'all' ? undefined : category,
-                disposal_status: disposalStatus === 'all' ? undefined : disposalStatus,
-                academic_year: academicYear === 'all' ? undefined : academicYear,
+                disposal_status:
+                    disposalStatus === 'all' ? undefined : disposalStatus,
+                academic_year:
+                    academicYear === 'all' ? undefined : academicYear,
                 search: search || undefined,
             },
             { preserveState: true, preserveScroll: true },
@@ -124,13 +129,16 @@ export default function DocumentsIndex({ documents, filters }: Props) {
 
     function confirmDelete() {
         if (documentToDelete) {
-            router.delete(sas.admin.documents.destroy.url(documentToDelete.id), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setIsDeleteDialogOpen(false);
-                    setDocumentToDelete(null);
+            router.delete(
+                sas.admin.documents.destroy.url(documentToDelete.id),
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        setIsDeleteDialogOpen(false);
+                        setDocumentToDelete(null);
+                    },
                 },
-            });
+            );
         }
     }
 
@@ -233,7 +241,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                             <FileText className="h-4 w-4 text-gray-600" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -290,7 +300,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                     <Input
                                         placeholder="Search documents..."
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         className="pl-9"
                                         onKeyDown={(e) =>
                                             e.key === 'Enter' && handleFilter()
@@ -298,12 +310,17 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                     />
                                 </div>
                             </div>
-                            <Select value={category} onValueChange={setCategory}>
+                            <Select
+                                value={category}
+                                onValueChange={setCategory}
+                            >
                                 <SelectTrigger className="w-full md:w-[200px]">
                                     <SelectValue placeholder="All Categories" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Categories</SelectItem>
+                                    <SelectItem value="all">
+                                        All Categories
+                                    </SelectItem>
                                     <SelectItem value="Scholarship">
                                         Scholarship
                                     </SelectItem>
@@ -330,7 +347,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                     <SelectValue placeholder="All Status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Status</SelectItem>
+                                    <SelectItem value="all">
+                                        All Status
+                                    </SelectItem>
                                     <SelectItem value="Physical Copy Exists">
                                         Physical Copy
                                     </SelectItem>
@@ -406,7 +425,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                                         asChild
                                                     >
                                                         <Link
-                                                            href={sas.admin.documents.show.url(doc.id)}
+                                                            href={sas.admin.documents.show.url(
+                                                                doc.id,
+                                                            )}
                                                         >
                                                             <Eye className="h-4 w-4" />
                                                         </Link>
@@ -417,7 +438,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                                         asChild
                                                     >
                                                         <Link
-                                                            href={sas.admin.documents.edit.url(doc.id)}
+                                                            href={sas.admin.documents.edit.url(
+                                                                doc.id,
+                                                            )}
                                                         >
                                                             <FileText className="h-4 w-4 text-blue-600" />
                                                         </Link>
@@ -444,7 +467,9 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                     No documents found
                                 </p>
                                 <Button className="mt-4" asChild>
-                                    <Link href={sas.admin.documents.create.url()}>
+                                    <Link
+                                        href={sas.admin.documents.create.url()}
+                                    >
                                         <Plus className="mr-2 h-4 w-4" />
                                         Upload First Document
                                     </Link>
@@ -472,11 +497,17 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                         {
                                             page: documents.current_page - 1,
                                             document_category:
-                                                category === 'all' ? undefined : category,
+                                                category === 'all'
+                                                    ? undefined
+                                                    : category,
                                             disposal_status:
-                                                disposalStatus === 'all' ? undefined : disposalStatus,
+                                                disposalStatus === 'all'
+                                                    ? undefined
+                                                    : disposalStatus,
                                             academic_year:
-                                                academicYear === 'all' ? undefined : academicYear,
+                                                academicYear === 'all'
+                                                    ? undefined
+                                                    : academicYear,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -489,7 +520,8 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 variant="outline"
                                 size="sm"
                                 disabled={
-                                    documents.current_page === documents.last_page
+                                    documents.current_page ===
+                                    documents.last_page
                                 }
                                 onClick={() =>
                                     router.get(
@@ -497,11 +529,17 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                         {
                                             page: documents.current_page + 1,
                                             document_category:
-                                                category === 'all' ? undefined : category,
+                                                category === 'all'
+                                                    ? undefined
+                                                    : category,
                                             disposal_status:
-                                                disposalStatus === 'all' ? undefined : disposalStatus,
+                                                disposalStatus === 'all'
+                                                    ? undefined
+                                                    : disposalStatus,
                                             academic_year:
-                                                academicYear === 'all' ? undefined : academicYear,
+                                                academicYear === 'all'
+                                                    ? undefined
+                                                    : academicYear,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -513,13 +551,18 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                         </div>
                     </div>
                 )}
-                <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <AlertDialog
+                    open={isDeleteDialogOpen}
+                    onOpenChange={setIsDeleteDialogOpen}
+                >
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogTitle>
+                                Are you absolutely sure?
+                            </AlertDialogTitle>
                             <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete the
-                                document{' '}
+                                This action cannot be undone. This will
+                                permanently delete the document{' '}
                                 <span className="font-semibold text-foreground">
                                     {documentToDelete?.document_title}
                                 </span>{' '}

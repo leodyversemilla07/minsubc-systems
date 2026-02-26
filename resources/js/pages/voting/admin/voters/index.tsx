@@ -216,11 +216,15 @@ export default function Index({
                                                 <TableCell>
                                                     <div className="font-medium text-foreground">
                                                         {voter.student?.user
-                                                            ?.full_name || 'N/A'}
+                                                            ?.full_name ||
+                                                            'N/A'}
                                                     </div>
                                                     <div className="text-xs text-muted-foreground">
                                                         {voter.student?.course}{' '}
-                                                        {voter.student?.year_level}
+                                                        {
+                                                            voter.student
+                                                                ?.year_level
+                                                        }
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="text-sm text-muted-foreground">
@@ -256,9 +260,13 @@ export default function Index({
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        {can('voters.delete') && (
+                                                        {can(
+                                                            'voters.delete',
+                                                        ) && (
                                                             <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
+                                                                <AlertDialogTrigger
+                                                                    asChild
+                                                                >
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="sm"
@@ -270,20 +278,44 @@ export default function Index({
                                                                 <AlertDialogContent>
                                                                     <AlertDialogHeader>
                                                                         <AlertDialogTitle>
-                                                                            Delete Voter
+                                                                            Delete
+                                                                            Voter
                                                                         </AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            Are you sure you want to delete voter with School ID "{voter.school_id}"? This action cannot be undone.
+                                                                            Are
+                                                                            you
+                                                                            sure
+                                                                            you
+                                                                            want
+                                                                            to
+                                                                            delete
+                                                                            voter
+                                                                            with
+                                                                            School
+                                                                            ID "
+                                                                            {
+                                                                                voter.school_id
+                                                                            }
+                                                                            "?
+                                                                            This
+                                                                            action
+                                                                            cannot
+                                                                            be
+                                                                            undone.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogCancel>
+                                                                            Cancel
+                                                                        </AlertDialogCancel>
                                                                         <AlertDialogAction
                                                                             onClick={() =>
                                                                                 router.delete(
-                                                                                    voting.admin.voters.destroy.url({
-                                                                                        voter: voter.id,
-                                                                                    }),
+                                                                                    voting.admin.voters.destroy.url(
+                                                                                        {
+                                                                                            voter: voter.id,
+                                                                                        },
+                                                                                    ),
                                                                                 )
                                                                             }
                                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"

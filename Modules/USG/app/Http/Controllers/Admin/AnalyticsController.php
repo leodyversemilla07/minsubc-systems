@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Inertia\Response as InertiaResponse;
 use Modules\USG\Models\Announcement;
 use Modules\USG\Models\Event;
+use Modules\USG\Models\EventRegistration;
 use Modules\USG\Models\Officer;
 use Modules\USG\Models\Resolution;
-use Modules\USG\Models\EventRegistration;
 use Symfony\Component\HttpFoundation\Response;
 
 class AnalyticsController extends Controller
@@ -51,7 +51,7 @@ class AnalyticsController extends Controller
             'generatedAt' => now()->format('Y-m-d H:i:s'),
         ]);
 
-        return $pdf->download("usg-analytics-report-{$period}-" . now()->format('Y-m-d') . '.pdf');
+        return $pdf->download("usg-analytics-report-{$period}-".now()->format('Y-m-d').'.pdf');
     }
 
     /**
@@ -83,16 +83,16 @@ class AnalyticsController extends Controller
             'published_announcements' => Announcement::where('status', 'published')->count(),
             'draft_announcements' => Announcement::where('status', 'draft')->count(),
             'announcements_in_period' => Announcement::where('created_at', '>=', $startDate)->count(),
-            
+
             'total_events' => Event::count(),
             'upcoming_events' => Event::where('start_date', '>=', now())->count(),
             'past_events' => Event::where('start_date', '<', now())->count(),
             'events_in_period' => Event::where('created_at', '>=', $startDate)->count(),
             'total_registrations' => EventRegistration::count(),
-            
+
             'total_officers' => Officer::count(),
             'active_officers' => Officer::where('status', 'active')->count(),
-            
+
             'total_resolutions' => Resolution::count(),
             'published_resolutions' => Resolution::where('status', 'published')->count(),
         ];
@@ -109,7 +109,7 @@ class AnalyticsController extends Controller
                 ->where('created_at', '>=', $startDate)
                 ->groupBy('category')
                 ->get(),
-            
+
             'events_by_month' => Event::query()
                 ->select(
                     \Illuminate\Support\Facades\DB::raw('MONTH(start_date) as month'),
@@ -121,7 +121,7 @@ class AnalyticsController extends Controller
                 ->orderBy('year')
                 ->orderBy('month')
                 ->get(),
-            
+
             'announcement_trends' => $this->getDailyTrends(Announcement::class, $startDate),
             'event_trends' => $this->getDailyTrends(Event::class, $startDate),
         ];
@@ -133,7 +133,7 @@ class AnalyticsController extends Controller
     protected function getDailyTrends(string $model, $startDate): array
     {
         $days = now()->diffInDays($startDate) + 1;
-        
+
         return collect(range(0, $days - 1))->map(function (int $offset) use ($startDate, $model): array {
             $date = $startDate->copy()->addDays($offset)->format('Y-m-d');
             $count = $model::whereDate('created_at', $date)->count();

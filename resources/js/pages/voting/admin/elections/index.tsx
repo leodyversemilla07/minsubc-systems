@@ -198,7 +198,9 @@ export default function Index({ elections }: Props) {
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        {can('elections.edit') && (
+                                                        {can(
+                                                            'elections.edit',
+                                                        ) && (
                                                             <Link
                                                                 href={voting.admin.elections.edit.url(
                                                                     {
@@ -215,9 +217,13 @@ export default function Index({ elections }: Props) {
                                                                 </Button>
                                                             </Link>
                                                         )}
-                                                        {can('elections.delete') && (
+                                                        {can(
+                                                            'elections.delete',
+                                                        ) && (
                                                             <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
+                                                                <AlertDialogTrigger
+                                                                    asChild
+                                                                >
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="sm"
@@ -229,20 +235,51 @@ export default function Index({ elections }: Props) {
                                                                 <AlertDialogContent>
                                                                     <AlertDialogHeader>
                                                                         <AlertDialogTitle>
-                                                                            Delete Election
+                                                                            Delete
+                                                                            Election
                                                                         </AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            Are you sure you want to delete "{election.name}"? This action cannot be undone and will remove all associated positions, candidates, and votes.
+                                                                            Are
+                                                                            you
+                                                                            sure
+                                                                            you
+                                                                            want
+                                                                            to
+                                                                            delete
+                                                                            "
+                                                                            {
+                                                                                election.name
+                                                                            }
+                                                                            "?
+                                                                            This
+                                                                            action
+                                                                            cannot
+                                                                            be
+                                                                            undone
+                                                                            and
+                                                                            will
+                                                                            remove
+                                                                            all
+                                                                            associated
+                                                                            positions,
+                                                                            candidates,
+                                                                            and
+                                                                            votes.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogCancel>
+                                                                            Cancel
+                                                                        </AlertDialogCancel>
                                                                         <AlertDialogAction
                                                                             onClick={() =>
                                                                                 router.delete(
-                                                                                    voting.admin.elections.destroy.url({
-                                                                                        election: election.id,
-                                                                                    }),
+                                                                                    voting.admin.elections.destroy.url(
+                                                                                        {
+                                                                                            election:
+                                                                                                election.id,
+                                                                                        },
+                                                                                    ),
                                                                                 )
                                                                             }
                                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"

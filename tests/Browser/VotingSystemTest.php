@@ -26,5 +26,4 @@ describe('Voting System Pages', function () {
             ->assertNoJavaScriptErrors();
     });
 
-
 });

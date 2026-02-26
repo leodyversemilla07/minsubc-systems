@@ -9,8 +9,6 @@ declare(strict_types=1);
  */
 
 use App\Models\User;
-use Modules\USG\Models\Announcement;
-use Modules\USG\Models\Event;
 use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\actingAs;

@@ -11,12 +11,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
@@ -118,7 +113,7 @@ export default function Show({ voter }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         School ID
                                     </div>
                                     <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
@@ -126,7 +121,7 @@ export default function Show({ voter }: Props) {
                                     </code>
                                 </div>
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         Election
                                     </div>
                                     <div className="text-sm font-medium text-foreground">
@@ -134,7 +129,7 @@ export default function Show({ voter }: Props) {
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         Generation Batch
                                     </div>
                                     <div className="text-sm font-medium text-foreground">
@@ -143,7 +138,7 @@ export default function Show({ voter }: Props) {
                                 </div>
                                 {voter.prefix && (
                                     <div>
-                                        <div className="text-xs uppercase text-muted-foreground">
+                                        <div className="text-xs text-muted-foreground uppercase">
                                             Prefix
                                         </div>
                                         <div className="text-sm font-medium text-foreground">
@@ -152,7 +147,7 @@ export default function Show({ voter }: Props) {
                                     </div>
                                 )}
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         Status
                                     </div>
                                     <div className="mt-1">
@@ -178,7 +173,7 @@ export default function Show({ voter }: Props) {
                                 </CardHeader>
                                 <CardContent className="space-y-3">
                                     <div>
-                                        <div className="text-xs uppercase text-muted-foreground">
+                                        <div className="text-xs text-muted-foreground uppercase">
                                             Name
                                         </div>
                                         <div className="text-sm font-medium text-foreground">
@@ -186,7 +181,7 @@ export default function Show({ voter }: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-xs uppercase text-muted-foreground">
+                                        <div className="text-xs text-muted-foreground uppercase">
                                             Course
                                         </div>
                                         <div className="text-sm font-medium text-foreground">
@@ -194,7 +189,7 @@ export default function Show({ voter }: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-xs uppercase text-muted-foreground">
+                                        <div className="text-xs text-muted-foreground uppercase">
                                             Year Level
                                         </div>
                                         <div className="text-sm font-medium text-foreground">
@@ -202,7 +197,7 @@ export default function Show({ voter }: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-xs uppercase text-muted-foreground">
+                                        <div className="text-xs text-muted-foreground uppercase">
                                             Campus
                                         </div>
                                         <div className="text-sm font-medium text-foreground">
@@ -225,40 +220,47 @@ export default function Show({ voter }: Props) {
                                 <CardContent>
                                     <div className="flex flex-wrap gap-3">
                                         {/* Reset Vote */}
-                                        {can('voters.reset-vote') && voter.has_voted && (
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button variant="outline">
-                                                        <RotateCcw className="mr-2 h-4 w-4" />
-                                                        Reset Vote
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>
-                                                            Reset Voter's Vote
-                                                        </AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            This will delete all
-                                                            votes cast by this voter
-                                                            and allow them to vote
-                                                            again. This action
-                                                            cannot be undone.
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>
-                                                            Cancel
-                                                        </AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={handleResetVote}
-                                                        >
+                                        {can('voters.reset-vote') &&
+                                            voter.has_voted && (
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button variant="outline">
+                                                            <RotateCcw className="mr-2 h-4 w-4" />
                                                             Reset Vote
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
-                                        )}
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>
+                                                                Reset Voter's
+                                                                Vote
+                                                            </AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                This will delete
+                                                                all votes cast
+                                                                by this voter
+                                                                and allow them
+                                                                to vote again.
+                                                                This action
+                                                                cannot be
+                                                                undone.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>
+                                                                Cancel
+                                                            </AlertDialogCancel>
+                                                            <AlertDialogAction
+                                                                onClick={
+                                                                    handleResetVote
+                                                                }
+                                                            >
+                                                                Reset Vote
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            )}
 
                                         {/* Delete Voter */}
                                         {can('voters.delete') && (
@@ -275,10 +277,11 @@ export default function Show({ voter }: Props) {
                                                             Delete Voter
                                                         </AlertDialogTitle>
                                                         <AlertDialogDescription>
-                                                            Are you sure you want to
-                                                            permanently delete this
-                                                            voter? This action cannot be
-                                                            undone.
+                                                            Are you sure you
+                                                            want to permanently
+                                                            delete this voter?
+                                                            This action cannot
+                                                            be undone.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
@@ -286,7 +289,9 @@ export default function Show({ voter }: Props) {
                                                             Cancel
                                                         </AlertDialogCancel>
                                                         <AlertDialogAction
-                                                            onClick={handleDelete}
+                                                            onClick={
+                                                                handleDelete
+                                                            }
                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                                         >
                                                             Delete
@@ -321,7 +326,10 @@ export default function Show({ voter }: Props) {
                                             >
                                                 <div>
                                                     <div className="font-medium text-foreground">
-                                                        {vote.candidate.fullname}
+                                                        {
+                                                            vote.candidate
+                                                                .fullname
+                                                        }
                                                     </div>
                                                     <div className="text-sm text-muted-foreground">
                                                         {

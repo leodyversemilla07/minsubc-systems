@@ -41,12 +41,13 @@ export function VotingProgress({
                                     {/* Step Circle and Label */}
                                     <div className="flex flex-col items-center">
                                         <div
-                                            className={`flex h-12 w-12 items-center justify-center rounded-full border-2 font-semibold transition-all ${isCompleted
-                                                ? 'border-green-600 bg-green-600 text-white dark:border-green-500 dark:bg-green-500'
-                                                : isCurrent
-                                                    ? 'border-green-600 bg-white text-green-600 ring-4 ring-green-100 dark:border-green-500 dark:bg-gray-900 dark:text-green-400 dark:ring-green-900/50'
-                                                    : 'border-gray-300 bg-white text-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-500'
-                                                }`}
+                                            className={`flex h-12 w-12 items-center justify-center rounded-full border-2 font-semibold transition-all ${
+                                                isCompleted
+                                                    ? 'border-green-600 bg-green-600 text-white dark:border-green-500 dark:bg-green-500'
+                                                    : isCurrent
+                                                      ? 'border-green-600 bg-white text-green-600 ring-4 ring-green-100 dark:border-green-500 dark:bg-gray-900 dark:text-green-400 dark:ring-green-900/50'
+                                                      : 'border-gray-300 bg-white text-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-500'
+                                            }`}
                                         >
                                             {isCompleted ? (
                                                 <Check className="h-5 w-5" />
@@ -58,12 +59,13 @@ export function VotingProgress({
                                         {/* Step Label */}
                                         <div className="mt-3 w-24 text-center">
                                             <div
-                                                className={`text-sm font-semibold ${isCurrent
-                                                    ? 'text-green-600 dark:text-green-400'
-                                                    : isCompleted
-                                                        ? 'text-gray-700 dark:text-gray-300'
-                                                        : 'text-gray-400 dark:text-gray-500'
-                                                    }`}
+                                                className={`text-sm font-semibold ${
+                                                    isCurrent
+                                                        ? 'text-green-600 dark:text-green-400'
+                                                        : isCompleted
+                                                          ? 'text-gray-700 dark:text-gray-300'
+                                                          : 'text-gray-400 dark:text-gray-500'
+                                                }`}
                                             >
                                                 {step.label}
                                             </div>
@@ -78,10 +80,11 @@ export function VotingProgress({
                                     {/* Connector Line */}
                                     {index < steps.length - 1 && (
                                         <div
-                                            className={`mb-auto mt-6 h-0.5 w-16 transition-all ${isCompleted
-                                                ? 'bg-green-600 dark:bg-green-500'
-                                                : 'bg-gray-300 dark:bg-gray-600'
-                                                }`}
+                                            className={`mt-6 mb-auto h-0.5 w-16 transition-all ${
+                                                isCompleted
+                                                    ? 'bg-green-600 dark:bg-green-500'
+                                                    : 'bg-gray-300 dark:bg-gray-600'
+                                            }`}
                                         />
                                     )}
                                 </div>

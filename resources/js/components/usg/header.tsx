@@ -5,7 +5,7 @@ import { dashboard, login, register } from '@/routes';
 import usg from '@/routes/usg';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, Search, X, Sun, Moon } from 'lucide-react';
+import { Menu, Moon, Search, Sun, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface HeaderProps {
@@ -108,12 +108,16 @@ export default function Header({ isDark, toggleTheme }: HeaderProps) {
                                 </Kbd>
                             </Button>
 
-                            <button 
+                            <button
                                 onClick={toggleTheme}
-                                className="p-2 text-gray-600 hover:bg-gray-100 rounded-md dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                                className="rounded-md p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                                 aria-label="Toggle theme"
                             >
-                                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                                {isDark ? (
+                                    <Sun className="h-5 w-5" />
+                                ) : (
+                                    <Moon className="h-5 w-5" />
+                                )}
                             </button>
 
                             {auth.user ? (

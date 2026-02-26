@@ -1,14 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, Link } from '@inertiajs/react';
@@ -47,16 +52,15 @@ export default function Create({ errors = {} }: Props) {
 
             <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
                 <div>
-                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Create New Election</h1>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+                        Create New Election
+                    </h1>
                     <p className="mt-1 text-sm text-muted-foreground sm:text-base">
                         Set up a new election cycle for your organization
                     </p>
                 </div>
 
-                <Form
-                    action={voting.admin.elections.store.url()}
-                    method="post"
-                >
+                <Form action={voting.admin.elections.store.url()} method="post">
                     {({ processing }) => (
                         <FieldGroup>
                             {/* Election Name */}
@@ -131,7 +135,7 @@ export default function Create({ errors = {} }: Props) {
                                         </PopoverContent>
                                     </Popover>
                                     <div className="relative">
-                                        <Clock className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
+                                        <Clock className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         <Input
                                             type="time"
                                             id="end_time_picker"

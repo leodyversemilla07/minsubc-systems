@@ -137,7 +137,7 @@ class ScholarshipRenewalService
         if ($semester === '1st') {
             // Previous is 2nd semester of previous year
             return [
-                'academic_year' => ($startYear - 1) . '-' . $startYear,
+                'academic_year' => ($startYear - 1).'-'.$startYear,
                 'semester' => '2nd',
             ];
         }

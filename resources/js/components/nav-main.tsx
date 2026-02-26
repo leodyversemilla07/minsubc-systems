@@ -28,19 +28,29 @@ export function NavMain({ items = [], label = 'Navigation' }: NavMainProps) {
                                 let itemHref: string;
                                 if (typeof item.href === 'string') {
                                     itemHref = item.href;
-                                } else if (typeof item.href === 'object' && item.href !== null && 'url' in item.href) {
-                                    itemHref = (item.href as { url: string }).url;
+                                } else if (
+                                    typeof item.href === 'object' &&
+                                    item.href !== null &&
+                                    'url' in item.href
+                                ) {
+                                    itemHref = (item.href as { url: string })
+                                        .url;
                                 } else {
                                     itemHref = String(item.href);
                                 }
                                 const itemPath = itemHref.split('?')[0];
-                                const isDashboard = item.title.toLowerCase().includes('dashboard');
+                                const isDashboard = item.title
+                                    .toLowerCase()
+                                    .includes('dashboard');
 
                                 if (isDashboard) {
                                     return currentPath === itemPath;
                                 }
 
-                                return currentPath === itemPath || currentPath.startsWith(itemPath + '/');
+                                return (
+                                    currentPath === itemPath ||
+                                    currentPath.startsWith(itemPath + '/')
+                                );
                             })()}
                             tooltip={{ children: item.title }}
                         >

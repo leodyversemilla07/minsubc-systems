@@ -57,7 +57,10 @@ export default function UploadDocument() {
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
                 { title: 'Documents', href: sas.admin.documents.index.url() },
-                { title: 'Upload Document', href: sas.admin.documents.create.url() },
+                {
+                    title: 'Upload Document',
+                    href: sas.admin.documents.create.url(),
+                },
             ]}
         >
             <Head title="Upload Document" />
@@ -81,8 +84,8 @@ export default function UploadDocument() {
                         <CardHeader>
                             <CardTitle>File Upload</CardTitle>
                             <CardDescription>
-                                Upload the document file (PDF, DOC, DOCX, XLS, XLSX,
-                                JPG, PNG - Max 10MB)
+                                Upload the document file (PDF, DOC, DOCX, XLS,
+                                XLSX, JPG, PNG - Max 10MB)
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -93,7 +96,9 @@ export default function UploadDocument() {
                                         type="button"
                                         variant="outline"
                                         onClick={() =>
-                                            document.getElementById('file')?.click()
+                                            document
+                                                .getElementById('file')
+                                                ?.click()
                                         }
                                     >
                                         <Upload className="mr-2 h-4 w-4" />
@@ -152,7 +157,10 @@ export default function UploadDocument() {
                                     id="document_title"
                                     value={data.document_title}
                                     onChange={(e) =>
-                                        setData('document_title', e.target.value)
+                                        setData(
+                                            'document_title',
+                                            e.target.value,
+                                        )
                                     }
                                     placeholder="e.g., Scholarship Agreement 2024-2025"
                                     required
@@ -214,7 +222,10 @@ export default function UploadDocument() {
                                         id="document_type"
                                         value={data.document_type}
                                         onChange={(e) =>
-                                            setData('document_type', e.target.value)
+                                            setData(
+                                                'document_type',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="e.g., Agreement, Report, Form"
                                     />
@@ -258,7 +269,10 @@ export default function UploadDocument() {
                                         type="date"
                                         value={data.original_date}
                                         onChange={(e) =>
-                                            setData('original_date', e.target.value)
+                                            setData(
+                                                'original_date',
+                                                e.target.value,
+                                            )
                                         }
                                     />
                                     {errors.original_date && (
@@ -270,7 +284,9 @@ export default function UploadDocument() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="academic_year">Academic Year</Label>
+                                <Label htmlFor="academic_year">
+                                    Academic Year
+                                </Label>
                                 <Input
                                     id="academic_year"
                                     value={data.academic_year}
@@ -352,7 +368,10 @@ export default function UploadDocument() {
                                     id="physical_location"
                                     value={data.physical_location}
                                     onChange={(e) =>
-                                        setData('physical_location', e.target.value)
+                                        setData(
+                                            'physical_location',
+                                            e.target.value,
+                                        )
                                     }
                                     placeholder="e.g., Cabinet A, Shelf 3, Box 12"
                                 />
@@ -398,6 +417,6 @@ export default function UploadDocument() {
                     </div>
                 </form>
             </div>
-        </AppLayout >
+        </AppLayout>
     );
 }

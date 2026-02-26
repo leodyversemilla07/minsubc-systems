@@ -1,5 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -55,16 +60,15 @@ export default function Create({
 
             <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
                 <div>
-                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Add New Position</h1>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+                        Add New Position
+                    </h1>
                     <p className="mt-1 text-sm text-muted-foreground sm:text-base">
                         Create a new position for the election
                     </p>
                 </div>
 
-                <Form
-                    action={voting.admin.positions.store.url()}
-                    method="post"
-                >
+                <Form action={voting.admin.positions.store.url()} method="post">
                     {({ processing }) => (
                         <FieldGroup>
                             {/* Election */}

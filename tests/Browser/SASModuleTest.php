@@ -33,7 +33,6 @@ describe('SAS Portal Pages', function () {
             ->assertNoJavaScriptErrors();
     });
 
-
 });
 
 describe('SAS Navigation', function () {

@@ -1,11 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
@@ -145,15 +140,14 @@ export default function Show({ position }: Props) {
                                 <div className="flex items-center gap-2">
                                     <Users className="h-5 w-5" />
                                     <CardTitle>
-                                        Candidates ({position.candidates.length})
+                                        Candidates ({position.candidates.length}
+                                        )
                                     </CardTitle>
                                 </div>
                                 <Link
                                     href={`/voting/admin/candidates/create?election_id=${position.election.id}`}
                                 >
-                                    <Button size="sm">
-                                        Add Candidate
-                                    </Button>
+                                    <Button size="sm">Add Candidate</Button>
                                 </Link>
                             </CardHeader>
                             <CardContent>
@@ -166,50 +160,55 @@ export default function Show({ position }: Props) {
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
-                                        {position.candidates.map((candidate) => (
-                                            <Link
-                                                key={candidate.id}
-                                                href={`/voting/admin/candidates/${candidate.id}`}
-                                                className="group flex items-center gap-4 rounded-lg border p-4 transition hover:border-primary hover:bg-muted/50"
-                                            >
-                                                {candidate.photo ? (
-                                                    <img
-                                                        src={`/storage/${candidate.photo}`}
-                                                        alt={candidate.fullname}
-                                                        className="h-12 w-12 rounded-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
-                                                        {candidate.firstname.charAt(
-                                                            0,
-                                                        )}
-                                                        {candidate.lastname.charAt(
-                                                            0,
-                                                        )}
-                                                    </div>
-                                                )}
-                                                <div className="flex-1">
-                                                    <div className="font-medium text-foreground group-hover:text-primary">
-                                                        {candidate.fullname}
-                                                    </div>
-                                                    {candidate.partylist ? (
-                                                        <Badge
-                                                            variant="secondary"
-                                                            className="mt-1"
-                                                        >
-                                                            {
-                                                                candidate.partylist
-                                                                    .name
+                                        {position.candidates.map(
+                                            (candidate) => (
+                                                <Link
+                                                    key={candidate.id}
+                                                    href={`/voting/admin/candidates/${candidate.id}`}
+                                                    className="group flex items-center gap-4 rounded-lg border p-4 transition hover:border-primary hover:bg-muted/50"
+                                                >
+                                                    {candidate.photo ? (
+                                                        <img
+                                                            src={`/storage/${candidate.photo}`}
+                                                            alt={
+                                                                candidate.fullname
                                                             }
-                                                        </Badge>
+                                                            className="h-12 w-12 rounded-full object-cover"
+                                                        />
                                                     ) : (
-                                                        <span className="text-xs text-muted-foreground italic">
-                                                            Independent
-                                                        </span>
+                                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
+                                                            {candidate.firstname.charAt(
+                                                                0,
+                                                            )}
+                                                            {candidate.lastname.charAt(
+                                                                0,
+                                                            )}
+                                                        </div>
                                                     )}
-                                                </div>
-                                            </Link>
-                                        ))}
+                                                    <div className="flex-1">
+                                                        <div className="font-medium text-foreground group-hover:text-primary">
+                                                            {candidate.fullname}
+                                                        </div>
+                                                        {candidate.partylist ? (
+                                                            <Badge
+                                                                variant="secondary"
+                                                                className="mt-1"
+                                                            >
+                                                                {
+                                                                    candidate
+                                                                        .partylist
+                                                                        .name
+                                                                }
+                                                            </Badge>
+                                                        ) : (
+                                                            <span className="text-xs text-muted-foreground italic">
+                                                                Independent
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </Link>
+                                            ),
+                                        )}
                                     </div>
                                 )}
                             </CardContent>

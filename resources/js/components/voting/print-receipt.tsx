@@ -181,16 +181,16 @@ export function PrintReceipt({
                 <div class="votes-section">
                     <h2 style="color: #059669; margin-bottom: 20px;">Your Selections</h2>
                     ${votes
-                .map(
-                    (vote) => `
+                        .map(
+                            (vote) => `
                         <div class="vote-item">
                             <div class="position-name">${vote.position}</div>
                             <div class="candidate-name">${vote.candidate}</div>
                             ${vote.partylist ? `<div class="partylist">${vote.partylist}</div>` : ''}
                         </div>
                     `,
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
 
                 <div class="footer">
@@ -214,11 +214,7 @@ export function PrintReceipt({
     };
 
     return (
-        <Button
-            onClick={handlePrint}
-            variant="outline"
-            className="border-2"
-        >
+        <Button onClick={handlePrint} variant="outline" className="border-2">
             <Printer className="mr-2 h-4 w-4" />
             Print Receipt
         </Button>

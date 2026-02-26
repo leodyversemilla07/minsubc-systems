@@ -210,72 +210,62 @@ export default function Index({
                                         {candidates
                                             .filter((candidate) => candidate.id)
                                             .map((candidate) => (
-                                            <TableRow key={candidate.id}>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-3">
-                                                        {candidate.photo ? (
-                                                            <img
-                                                                src={`/storage/${candidate.photo}`}
-                                                                alt={
+                                                <TableRow key={candidate.id}>
+                                                    <TableCell>
+                                                        <div className="flex items-center gap-3">
+                                                            {candidate.photo ? (
+                                                                <img
+                                                                    src={`/storage/${candidate.photo}`}
+                                                                    alt={
+                                                                        candidate.fullname
+                                                                    }
+                                                                    className="h-10 w-10 rounded-full object-cover"
+                                                                />
+                                                            ) : (
+                                                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
+                                                                    {candidate.firstname.charAt(
+                                                                        0,
+                                                                    )}
+                                                                    {candidate.lastname.charAt(
+                                                                        0,
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                            <div className="font-medium text-foreground">
+                                                                {
                                                                     candidate.fullname
                                                                 }
-                                                                className="h-10 w-10 rounded-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
-                                                                {candidate.firstname.charAt(
-                                                                    0,
-                                                                )}
-                                                                {candidate.lastname.charAt(
-                                                                    0,
-                                                                )}
                                                             </div>
-                                                        )}
-                                                        <div className="font-medium text-foreground">
-                                                            {candidate.fullname}
                                                         </div>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="text-sm text-muted-foreground">
-                                                    {candidate.position?.description ?? 'N/A'}
-                                                </TableCell>
-                                                <TableCell className="text-sm">
-                                                    {candidate.partylist ? (
-                                                        <span className="text-primary">
-                                                            {
-                                                                candidate.partylist
-                                                                    .name
-                                                            }
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-muted-foreground italic">
-                                                            Independent
-                                                        </span>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="text-sm text-muted-foreground">
-                                                    {candidate.election?.name ?? 'N/A'}
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <div className="flex justify-end gap-2">
-                                                        <Link
-                                                            href={voting.admin.candidates.show.url(
+                                                    </TableCell>
+                                                    <TableCell className="text-sm text-muted-foreground">
+                                                        {candidate.position
+                                                            ?.description ??
+                                                            'N/A'}
+                                                    </TableCell>
+                                                    <TableCell className="text-sm">
+                                                        {candidate.partylist ? (
+                                                            <span className="text-primary">
                                                                 {
-                                                                    candidate:
-                                                                        candidate.id,
-                                                                },
-                                                            )}
-                                                        >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                            >
-                                                                <Eye className="h-4 w-4" />
-                                                            </Button>
-                                                        </Link>
-                                                        {can('candidates.edit') && (
+                                                                    candidate
+                                                                        .partylist
+                                                                        .name
+                                                                }
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-muted-foreground italic">
+                                                                Independent
+                                                            </span>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell className="text-sm text-muted-foreground">
+                                                        {candidate.election
+                                                            ?.name ?? 'N/A'}
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        <div className="flex justify-end gap-2">
                                                             <Link
-                                                                href={voting.admin.candidates.edit.url(
+                                                                href={voting.admin.candidates.show.url(
                                                                     {
                                                                         candidate:
                                                                             candidate.id,
@@ -286,52 +276,102 @@ export default function Index({
                                                                     variant="ghost"
                                                                     size="sm"
                                                                 >
-                                                                    <Edit className="h-4 w-4" />
+                                                                    <Eye className="h-4 w-4" />
                                                                 </Button>
                                                             </Link>
-                                                        )}
-                                                        {can('candidates.delete') && (
-                                                            <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
+                                                            {can(
+                                                                'candidates.edit',
+                                                            ) && (
+                                                                <Link
+                                                                    href={voting.admin.candidates.edit.url(
+                                                                        {
+                                                                            candidate:
+                                                                                candidate.id,
+                                                                        },
+                                                                    )}
+                                                                >
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="sm"
-                                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                     >
-                                                                        <Trash2 className="h-4 w-4" />
+                                                                        <Edit className="h-4 w-4" />
                                                                     </Button>
-                                                                </AlertDialogTrigger>
-                                                                <AlertDialogContent>
-                                                                    <AlertDialogHeader>
-                                                                        <AlertDialogTitle>
-                                                                            Delete Candidate
-                                                                        </AlertDialogTitle>
-                                                                        <AlertDialogDescription>
-                                                                            Are you sure you want to delete "{candidate.fullname}"? This action cannot be undone and will remove all associated votes.
-                                                                        </AlertDialogDescription>
-                                                                    </AlertDialogHeader>
-                                                                    <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                                        <AlertDialogAction
-                                                                            onClick={() =>
-                                                                                router.delete(
-                                                                                    voting.admin.candidates.destroy.url({
-                                                                                        candidate: candidate.id,
-                                                                                    }),
-                                                                                )
-                                                                            }
-                                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                </Link>
+                                                            )}
+                                                            {can(
+                                                                'candidates.delete',
+                                                            ) && (
+                                                                <AlertDialog>
+                                                                    <AlertDialogTrigger
+                                                                        asChild
+                                                                    >
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                                         >
-                                                                            Delete
-                                                                        </AlertDialogAction>
-                                                                    </AlertDialogFooter>
-                                                                </AlertDialogContent>
-                                                            </AlertDialog>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
+                                                                            <Trash2 className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </AlertDialogTrigger>
+                                                                    <AlertDialogContent>
+                                                                        <AlertDialogHeader>
+                                                                            <AlertDialogTitle>
+                                                                                Delete
+                                                                                Candidate
+                                                                            </AlertDialogTitle>
+                                                                            <AlertDialogDescription>
+                                                                                Are
+                                                                                you
+                                                                                sure
+                                                                                you
+                                                                                want
+                                                                                to
+                                                                                delete
+                                                                                "
+                                                                                {
+                                                                                    candidate.fullname
+                                                                                }
+                                                                                "?
+                                                                                This
+                                                                                action
+                                                                                cannot
+                                                                                be
+                                                                                undone
+                                                                                and
+                                                                                will
+                                                                                remove
+                                                                                all
+                                                                                associated
+                                                                                votes.
+                                                                            </AlertDialogDescription>
+                                                                        </AlertDialogHeader>
+                                                                        <AlertDialogFooter>
+                                                                            <AlertDialogCancel>
+                                                                                Cancel
+                                                                            </AlertDialogCancel>
+                                                                            <AlertDialogAction
+                                                                                onClick={() =>
+                                                                                    router.delete(
+                                                                                        voting.admin.candidates.destroy.url(
+                                                                                            {
+                                                                                                candidate:
+                                                                                                    candidate.id,
+                                                                                            },
+                                                                                        ),
+                                                                                    )
+                                                                                }
+                                                                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                            >
+                                                                                Delete
+                                                                            </AlertDialogAction>
+                                                                        </AlertDialogFooter>
+                                                                    </AlertDialogContent>
+                                                                </AlertDialog>
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
                                     </TableBody>
                                 </Table>
                             </CardContent>

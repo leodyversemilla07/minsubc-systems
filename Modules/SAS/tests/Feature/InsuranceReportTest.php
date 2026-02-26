@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\SAS\Models\InsuranceRecord;
 use Spatie\Permission\Models\Role;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
@@ -73,7 +74,7 @@ test('insurance records report can be filtered by date range', function () {
         'effective_date' => now()->subDays(5),
     ]);
 
-    $response = get('/sas/admin/reports/insurance/records?date_from=' . now()->subDays(7)->toDateString());
+    $response = get('/sas/admin/reports/insurance/records?date_from='.now()->subDays(7)->toDateString());
 
     $response->assertSuccessful();
 });

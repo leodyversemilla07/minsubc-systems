@@ -1,18 +1,8 @@
 import { Button } from '@/components/ui/button';
-import {
-    Sheet,
-    SheetContent,
-    SheetTrigger,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import voting from '@/routes/voting';
 import { Link } from '@inertiajs/react';
-import {
-    BarChart3,
-    CheckCircle2,
-    Menu,
-    Users,
-    Vote,
-} from 'lucide-react';
+import { BarChart3, CheckCircle2, Menu, Users, Vote } from 'lucide-react';
 import { useState } from 'react';
 
 interface Election {
@@ -31,8 +21,8 @@ export default function Index({ activeElection }: IndexPageProps) {
     return (
         <div className="min-h-screen bg-linear-to-br from-primary/5 via-background to-background">
             {/* Navigation Bar */}
-            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
+            <nav className="fixed top-0 right-0 left-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+                <div className="relative container mx-auto flex h-16 items-center justify-between px-4">
                     <div className="flex items-center gap-3">
                         <img
                             src="/votesys-logo.png"
@@ -46,7 +36,7 @@ export default function Index({ activeElection }: IndexPageProps) {
 
                     {/* Active Election - Centered */}
                     {activeElection && (
-                        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 md:px-4 md:py-1.5">
+                        <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 md:px-4 md:py-1.5">
                             <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary md:h-2 md:w-2" />
                             <span className="max-w-35 truncate text-xs font-medium text-primary md:max-w-none md:text-sm">
                                 {activeElection.name}
@@ -105,7 +95,10 @@ export default function Index({ activeElection }: IndexPageProps) {
                                             </Button>
                                         </Link>
                                     )}
-                                    <Link href={voting.login.url()} className="w-full pt-4">
+                                    <Link
+                                        href={voting.login.url()}
+                                        className="w-full pt-4"
+                                    >
                                         <Button className="w-full bg-primary py-6 text-lg text-primary-foreground shadow-lg hover:bg-primary/90">
                                             <Vote className="mr-2 h-5 w-5" />
                                             Cast Vote
@@ -158,7 +151,10 @@ export default function Index({ activeElection }: IndexPageProps) {
                                     desc: 'View results after election closes',
                                 },
                             ].map((item) => (
-                                <div key={item.step} className="group text-center">
+                                <div
+                                    key={item.step}
+                                    className="group text-center"
+                                >
                                     <div className="relative mb-6 inline-block">
                                         <div className="mx-auto flex h-24 w-24 transform items-center justify-center rounded-3xl bg-primary shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
                                             <item.icon className="h-12 w-12 text-primary-foreground" />

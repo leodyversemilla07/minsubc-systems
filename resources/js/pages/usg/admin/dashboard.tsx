@@ -787,7 +787,7 @@ export default function AdminDashboard({
                                                         {getStatusBadge(
                                                             item.status,
                                                         )}
-                                                        <span className="text-xs capitalize text-muted-foreground">
+                                                        <span className="text-xs text-muted-foreground capitalize">
                                                             {item.type}
                                                         </span>
                                                     </div>

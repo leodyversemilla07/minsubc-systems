@@ -171,7 +171,11 @@ export default function Preview({
                                         Your Vote Summary
                                     </h3>
                                     <p className="text-sm opacity-90">
-                                        {totalSelections} candidate{totalSelections !== 1 ? 's' : ''} selected across {selections.length} position{selections.length !== 1 ? 's' : ''}
+                                        {totalSelections} candidate
+                                        {totalSelections !== 1 ? 's' : ''}{' '}
+                                        selected across {selections.length}{' '}
+                                        position
+                                        {selections.length !== 1 ? 's' : ''}
                                     </p>
                                 </div>
                                 <CircleCheck className="h-10 w-10" />
@@ -181,7 +185,10 @@ export default function Preview({
                         {/* All Selections */}
                         <div className="divide-y divide-gray-200 dark:divide-gray-800">
                             {selections.map((selection) => (
-                                <div key={selection.position.position_id} className="p-6">
+                                <div
+                                    key={selection.position.position_id}
+                                    className="p-6"
+                                >
                                     {/* Position Title */}
                                     <h4 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
                                         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
@@ -192,45 +199,56 @@ export default function Preview({
 
                                     {/* Candidates for this position */}
                                     <div className="space-y-3">
-                                        {selection.candidates.map((candidate) => (
-                                            <div
-                                                key={candidate.id}
-                                                className="flex items-center gap-4 rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
-                                                {/* Candidate Photo */}
-                                                {candidate.photo ? (
-                                                    <img
-                                                        src={`/storage/${candidate.photo}`}
-                                                        alt={candidate.fullname}
-                                                        className="h-14 w-14 rounded-full border-2 border-primary object-cover shadow-md"
-                                                    />
-                                                ) : (
-                                                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-md">
-                                                        {candidate.fullname.charAt(0)}
-                                                    </div>
-                                                )}
-
-                                                {/* Candidate Info */}
-                                                <div className="flex-1">
-                                                    <h5 className="font-bold text-foreground">
-                                                        {candidate.fullname}
-                                                    </h5>
-                                                    {candidate.partylist ? (
-                                                        <p className="text-sm font-medium text-primary">
-                                                            {candidate.partylist.name}
-                                                        </p>
+                                        {selection.candidates.map(
+                                            (candidate) => (
+                                                <div
+                                                    key={candidate.id}
+                                                    className="flex items-center gap-4 rounded-lg border-2 border-primary/20 bg-primary/5 p-4"
+                                                >
+                                                    {/* Candidate Photo */}
+                                                    {candidate.photo ? (
+                                                        <img
+                                                            src={`/storage/${candidate.photo}`}
+                                                            alt={
+                                                                candidate.fullname
+                                                            }
+                                                            className="h-14 w-14 rounded-full border-2 border-primary object-cover shadow-md"
+                                                        />
                                                     ) : (
-                                                        <p className="text-sm italic text-muted-foreground">
-                                                            Independent
-                                                        </p>
+                                                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-md">
+                                                            {candidate.fullname.charAt(
+                                                                0,
+                                                            )}
+                                                        </div>
                                                     )}
-                                                </div>
 
-                                                {/* Checkmark */}
-                                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
-                                                    <CircleCheck className="h-4 w-4" />
+                                                    {/* Candidate Info */}
+                                                    <div className="flex-1">
+                                                        <h5 className="font-bold text-foreground">
+                                                            {candidate.fullname}
+                                                        </h5>
+                                                        {candidate.partylist ? (
+                                                            <p className="text-sm font-medium text-primary">
+                                                                {
+                                                                    candidate
+                                                                        .partylist
+                                                                        .name
+                                                                }
+                                                            </p>
+                                                        ) : (
+                                                            <p className="text-sm text-muted-foreground italic">
+                                                                Independent
+                                                            </p>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Checkmark */}
+                                                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+                                                        <CircleCheck className="h-4 w-4" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ),
+                                        )}
                                     </div>
                                 </div>
                             ))}

@@ -20,14 +20,18 @@ export function usePermissions() {
      * Check if user has any of the specified permissions
      */
     const canAny = (permissionList: string[]): boolean => {
-        return permissionList.some((permission) => permissions.includes(permission));
+        return permissionList.some((permission) =>
+            permissions.includes(permission),
+        );
     };
 
     /**
      * Check if user has all of the specified permissions
      */
     const canAll = (permissionList: string[]): boolean => {
-        return permissionList.every((permission) => permissions.includes(permission));
+        return permissionList.every((permission) =>
+            permissions.includes(permission),
+        );
     };
 
     return {

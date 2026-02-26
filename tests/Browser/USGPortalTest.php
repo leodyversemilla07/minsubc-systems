@@ -41,7 +41,6 @@ describe('USG Portal Pages', function () {
             ->assertNoJavaScriptErrors();
     });
 
-
 });
 
 describe('USG Navigation', function () {

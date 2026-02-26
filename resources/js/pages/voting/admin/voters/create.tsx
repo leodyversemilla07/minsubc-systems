@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -79,7 +84,9 @@ export default function Create({
 
             <div className="mx-auto w-full max-w-2xl space-y-6 p-6 md:space-y-8 md:p-8">
                 <div>
-                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">Generate Voters in Bulk</h1>
+                    <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+                        Generate Voters in Bulk
+                    </h1>
                     <p className="mt-1 text-sm text-muted-foreground sm:text-base">
                         Create voter accounts from student records
                     </p>
@@ -130,7 +137,9 @@ export default function Create({
                                 <Field>
                                     <FieldLabel htmlFor="generation_batch">
                                         Generation Batch{' '}
-                                        <span className="text-destructive">*</span>
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </FieldLabel>
                                     <Input
                                         type="number"
@@ -209,36 +218,47 @@ export default function Create({
                                         </p>
                                     ) : (
                                         <div className="space-y-2">
-                                            {availableStudents.map((student) => (
-                                                <label
-                                                    key={student.student_id}
-                                                    className="flex cursor-pointer items-center rounded-lg border bg-background p-3 hover:border-primary"
-                                                >
-                                                    <Checkbox
-                                                        name="student_ids[]"
-                                                        value={student.student_id}
-                                                        checked={selectedStudents.includes(
-                                                            student.student_id,
-                                                        )}
-                                                        onCheckedChange={() =>
-                                                            handleStudentToggle(
+                                            {availableStudents.map(
+                                                (student) => (
+                                                    <label
+                                                        key={student.student_id}
+                                                        className="flex cursor-pointer items-center rounded-lg border bg-background p-3 hover:border-primary"
+                                                    >
+                                                        <Checkbox
+                                                            name="student_ids[]"
+                                                            value={
+                                                                student.student_id
+                                                            }
+                                                            checked={selectedStudents.includes(
                                                                 student.student_id,
-                                                            )
-                                                        }
-                                                        className="mr-3"
-                                                    />
-                                                    <div className="flex-1">
-                                                        <div className="font-medium text-foreground">
-                                                            {student.user.full_name}
+                                                            )}
+                                                            onCheckedChange={() =>
+                                                                handleStudentToggle(
+                                                                    student.student_id,
+                                                                )
+                                                            }
+                                                            className="mr-3"
+                                                        />
+                                                        <div className="flex-1">
+                                                            <div className="font-medium text-foreground">
+                                                                {
+                                                                    student.user
+                                                                        .full_name
+                                                                }
+                                                            </div>
+                                                            <div className="text-xs text-muted-foreground">
+                                                                {student.course}{' '}
+                                                                -{' '}
+                                                                {
+                                                                    student.year_level
+                                                                }{' '}
+                                                                -{' '}
+                                                                {student.campus}
+                                                            </div>
                                                         </div>
-                                                        <div className="text-xs text-muted-foreground">
-                                                            {student.course} -{' '}
-                                                            {student.year_level} -{' '}
-                                                            {student.campus}
-                                                        </div>
-                                                    </div>
-                                                </label>
-                                            ))}
+                                                    </label>
+                                                ),
+                                            )}
                                         </div>
                                     )}
                                 </div>

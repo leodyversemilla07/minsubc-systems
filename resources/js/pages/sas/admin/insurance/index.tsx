@@ -175,7 +175,9 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                             <FileText className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -232,7 +234,9 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                     <Input
                                         placeholder="Search by policy number, provider, or student name..."
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         className="pl-9"
                                         onKeyDown={(e) =>
                                             e.key === 'Enter' && handleFilter()
@@ -245,8 +249,12 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                     <SelectValue placeholder="All Statuses" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Statuses</SelectItem>
-                                    <SelectItem value="Pending">Pending</SelectItem>
+                                    <SelectItem value="all">
+                                        All Statuses
+                                    </SelectItem>
+                                    <SelectItem value="Pending">
+                                        Pending
+                                    </SelectItem>
                                     <SelectItem value="Approved">
                                         Approved
                                     </SelectItem>
@@ -263,13 +271,19 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                     <SelectValue placeholder="All Types" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Types</SelectItem>
-                                    <SelectItem value="Health">Health</SelectItem>
+                                    <SelectItem value="all">
+                                        All Types
+                                    </SelectItem>
+                                    <SelectItem value="Health">
+                                        Health
+                                    </SelectItem>
                                     <SelectItem value="Life">Life</SelectItem>
                                     <SelectItem value="Accident">
                                         Accident
                                     </SelectItem>
-                                    <SelectItem value="Travel">Travel</SelectItem>
+                                    <SelectItem value="Travel">
+                                        Travel
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                             <div className="flex gap-2">
@@ -306,11 +320,20 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                         <TableRow key={insurance.id}>
                                             <TableCell>
                                                 <div className="font-medium">
-                                                    {insurance.student.first_name}{' '}
-                                                    {insurance.student.last_name}
+                                                    {
+                                                        insurance.student
+                                                            .first_name
+                                                    }{' '}
+                                                    {
+                                                        insurance.student
+                                                            .last_name
+                                                    }
                                                 </div>
                                                 <div className="text-sm text-gray-600">
-                                                    {insurance.student.student_id}
+                                                    {
+                                                        insurance.student
+                                                            .student_id
+                                                    }
                                                 </div>
                                             </TableCell>
                                             <TableCell className="font-mono text-sm">
@@ -335,7 +358,9 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                                 ).toLocaleDateString()}
                                             </TableCell>
                                             <TableCell>
-                                                {getStatusBadge(insurance.status)}
+                                                {getStatusBadge(
+                                                    insurance.status,
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <Button
@@ -381,8 +406,14 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                     router.get(
                                         `/sas/admin/insurance?page=${insuranceRecords.current_page - 1}`,
                                         {
-                                            status: status === 'all' ? undefined : status,
-                                            policy_type: policyType === 'all' ? undefined : policyType,
+                                            status:
+                                                status === 'all'
+                                                    ? undefined
+                                                    : status,
+                                            policy_type:
+                                                policyType === 'all'
+                                                    ? undefined
+                                                    : policyType,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -402,8 +433,14 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                     router.get(
                                         `/sas/admin/insurance?page=${insuranceRecords.current_page + 1}`,
                                         {
-                                            status: status === 'all' ? undefined : status,
-                                            policy_type: policyType === 'all' ? undefined : policyType,
+                                            status:
+                                                status === 'all'
+                                                    ? undefined
+                                                    : status,
+                                            policy_type:
+                                                policyType === 'all'
+                                                    ? undefined
+                                                    : policyType,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },

@@ -127,9 +127,12 @@ export default function Dashboard({
         },
     ];
 
-    const voterTurnout = statistics.voters.total > 0
-        ? Math.round((statistics.voters.voted / statistics.voters.total) * 100)
-        : 0;
+    const voterTurnout =
+        statistics.voters.total > 0
+            ? Math.round(
+                  (statistics.voters.voted / statistics.voters.total) * 100,
+              )
+            : 0;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -143,7 +146,8 @@ export default function Dashboard({
                             Voting System Dashboard
                         </h1>
                         <p className="text-muted-foreground">
-                            Manage elections, candidates, and monitor voting activity
+                            Manage elections, candidates, and monitor voting
+                            activity
                         </p>
                     </div>
                     {can('elections.create') && (
@@ -165,12 +169,18 @@ export default function Dashboard({
                                     <CardTitle className="text-sm font-medium">
                                         {stat.title}
                                     </CardTitle>
-                                    <div className={`rounded-full p-2 ${stat.bgColor}`}>
-                                        <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                                    <div
+                                        className={`rounded-full p-2 ${stat.bgColor}`}
+                                    >
+                                        <stat.icon
+                                            className={`h-4 w-4 ${stat.color}`}
+                                        />
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">{stat.value}</div>
+                                    <div className="text-2xl font-bold">
+                                        {stat.value}
+                                    </div>
                                     <p className="text-xs text-muted-foreground">
                                         {stat.description}
                                     </p>
@@ -196,47 +206,75 @@ export default function Dashboard({
                             {activeElection ? (
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <span className="font-semibold text-lg">
+                                        <span className="text-lg font-semibold">
                                             {activeElection.name}
                                         </span>
-                                        <Badge variant="default">
-                                            Active
-                                        </Badge>
+                                        <Badge variant="default">Active</Badge>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4 text-sm">
                                         <div>
-                                            <p className="text-muted-foreground">Code</p>
+                                            <p className="text-muted-foreground">
+                                                Code
+                                            </p>
                                             <code className="rounded bg-muted px-2 py-1">
                                                 {activeElection.election_code}
                                             </code>
                                         </div>
                                         <div>
-                                            <p className="text-muted-foreground">Ends</p>
+                                            <p className="text-muted-foreground">
+                                                Ends
+                                            </p>
                                             <p>
                                                 {activeElection.end_time
-                                                    ? new Date(activeElection.end_time).toLocaleDateString()
+                                                    ? new Date(
+                                                          activeElection.end_time,
+                                                      ).toLocaleDateString()
                                                     : 'No end date'}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-muted-foreground">Positions</p>
-                                            <p className="font-medium">{activeElection.positions_count}</p>
+                                            <p className="text-muted-foreground">
+                                                Positions
+                                            </p>
+                                            <p className="font-medium">
+                                                {activeElection.positions_count}
+                                            </p>
                                         </div>
                                         <div>
-                                            <p className="text-muted-foreground">Candidates</p>
-                                            <p className="font-medium">{activeElection.candidates_count}</p>
+                                            <p className="text-muted-foreground">
+                                                Candidates
+                                            </p>
+                                            <p className="font-medium">
+                                                {
+                                                    activeElection.candidates_count
+                                                }
+                                            </p>
                                         </div>
                                         <div>
-                                            <p className="text-muted-foreground">Voters</p>
-                                            <p className="font-medium">{activeElection.voters_count}</p>
+                                            <p className="text-muted-foreground">
+                                                Voters
+                                            </p>
+                                            <p className="font-medium">
+                                                {activeElection.voters_count}
+                                            </p>
                                         </div>
                                         <div>
-                                            <p className="text-muted-foreground">Votes Cast</p>
-                                            <p className="font-medium">{activeElection.votes_count}</p>
+                                            <p className="text-muted-foreground">
+                                                Votes Cast
+                                            </p>
+                                            <p className="font-medium">
+                                                {activeElection.votes_count}
+                                            </p>
                                         </div>
                                     </div>
-                                    <Link href={`/voting/admin/elections/${activeElection.id}`}>
-                                        <Button variant="outline" className="w-full" size="sm">
+                                    <Link
+                                        href={`/voting/admin/elections/${activeElection.id}`}
+                                    >
+                                        <Button
+                                            variant="outline"
+                                            className="w-full"
+                                            size="sm"
+                                        >
                                             View Details
                                             <ArrowUpRight className="ml-2 h-4 w-4" />
                                         </Button>
@@ -245,12 +283,17 @@ export default function Dashboard({
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-8 text-center">
                                     <CheckCircle className="mb-4 h-12 w-12 text-muted-foreground" />
-                                    <p className="text-lg font-medium">No Active Election</p>
+                                    <p className="text-lg font-medium">
+                                        No Active Election
+                                    </p>
                                     <p className="text-sm text-muted-foreground">
                                         There is no election currently running.
                                     </p>
                                     {can('elections.create') && (
-                                        <Link href="/voting/admin/elections/create" className="mt-4">
+                                        <Link
+                                            href="/voting/admin/elections/create"
+                                            className="mt-4"
+                                        >
                                             <Button size="sm">
                                                 <Calendar className="mr-2 h-4 w-4" />
                                                 Create Election
@@ -277,9 +320,12 @@ export default function Dashboard({
                             <div className="space-y-4">
                                 <div className="flex items-center justify-center">
                                     <div className="relative h-32 w-32">
-                                        <svg className="h-32 w-32 -rotate-90" viewBox="0 0 120 120">
+                                        <svg
+                                            className="h-32 w-32 -rotate-90"
+                                            viewBox="0 0 120 120"
+                                        >
                                             <circle
-                                                className="text-muted stroke-current"
+                                                className="stroke-current text-muted"
                                                 strokeWidth="12"
                                                 fill="none"
                                                 r="50"
@@ -287,7 +333,7 @@ export default function Dashboard({
                                                 cy="60"
                                             />
                                             <circle
-                                                className="text-primary stroke-current"
+                                                className="stroke-current text-primary"
                                                 strokeWidth="12"
                                                 strokeLinecap="round"
                                                 fill="none"
@@ -304,18 +350,26 @@ export default function Dashboard({
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 text-center text-sm">
                                     <div>
-                                        <p className="text-muted-foreground">Total</p>
-                                        <p className="font-bold text-lg">{statistics.voters.total}</p>
+                                        <p className="text-muted-foreground">
+                                            Total
+                                        </p>
+                                        <p className="text-lg font-bold">
+                                            {statistics.voters.total}
+                                        </p>
                                     </div>
                                     <div>
-                                        <p className="text-muted-foreground">Voted</p>
-                                        <p className="font-bold text-lg text-green-600 dark:text-green-400">
+                                        <p className="text-muted-foreground">
+                                            Voted
+                                        </p>
+                                        <p className="text-lg font-bold text-green-600 dark:text-green-400">
                                             {statistics.voters.voted}
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-muted-foreground">Pending</p>
-                                        <p className="font-bold text-lg text-yellow-600 dark:text-yellow-400">
+                                        <p className="text-muted-foreground">
+                                            Pending
+                                        </p>
+                                        <p className="text-lg font-bold text-yellow-600 dark:text-yellow-400">
                                             {statistics.voters.pending}
                                         </p>
                                     </div>
@@ -337,7 +391,9 @@ export default function Dashboard({
                         {recentElections.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-8 text-center">
                                 <Calendar className="mb-4 h-12 w-12 text-muted-foreground" />
-                                <p className="text-lg font-medium">No Elections Yet</p>
+                                <p className="text-lg font-medium">
+                                    No Elections Yet
+                                </p>
                                 <p className="text-sm text-muted-foreground">
                                     Create your first election to get started.
                                 </p>
@@ -351,26 +407,34 @@ export default function Dashboard({
                                     >
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2">
-                                                <h4 className="font-medium">{election.name}</h4>
+                                                <h4 className="font-medium">
+                                                    {election.name}
+                                                </h4>
                                                 <Badge
                                                     variant={
-                                                        election.computed_status === 'active'
+                                                        election.computed_status ===
+                                                        'active'
                                                             ? 'default'
                                                             : 'secondary'
                                                     }
                                                 >
-                                                    {election.computed_status === 'active'
+                                                    {election.computed_status ===
+                                                    'active'
                                                         ? 'Active'
                                                         : 'Ended'}
                                                 </Badge>
                                             </div>
                                             <p className="mt-1 text-sm text-muted-foreground">
-                                                {election.positions_count} positions •{' '}
-                                                {election.candidates_count} candidates •{' '}
+                                                {election.positions_count}{' '}
+                                                positions •{' '}
+                                                {election.candidates_count}{' '}
+                                                candidates •{' '}
                                                 {election.voters_count} voters
                                             </p>
                                         </div>
-                                        <Link href={`/voting/admin/elections/${election.id}`}>
+                                        <Link
+                                            href={`/voting/admin/elections/${election.id}`}
+                                        >
                                             <Button variant="ghost" size="sm">
                                                 View
                                                 <ArrowUpRight className="ml-2 h-4 w-4" />

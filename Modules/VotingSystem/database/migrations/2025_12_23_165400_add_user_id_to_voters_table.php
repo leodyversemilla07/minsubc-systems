@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::table('voters', function (Blueprint $table) {
             // Add user_id column
             $table->foreignId('user_id')->nullable()->after('id')->constrained('users')->onDelete('cascade');
-            
+
             // Make school_id nullable since we'll use user relationship
             $table->string('school_id', 15)->nullable()->change();
-            
+
             // Drop password column - use User's password instead
             $table->dropColumn('password');
-            
+
             // Add index for user_id
             $table->index('user_id');
         });

@@ -9,8 +9,6 @@ declare(strict_types=1);
  */
 
 use App\Models\User;
-use Modules\Registrar\Models\DocumentRequest;
-use Modules\Registrar\Models\DocumentType;
 use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\actingAs;

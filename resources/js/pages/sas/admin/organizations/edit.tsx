@@ -20,7 +20,6 @@ import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-
 interface Adviser {
     id: number;
     first_name: string;
@@ -290,7 +289,9 @@ export default function OrganizationsEdit({ organization, advisers }: Props) {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="mission">Mission Statement</Label>
+                                <Label htmlFor="mission">
+                                    Mission Statement
+                                </Label>
                                 <Textarea
                                     id="mission"
                                     value={data.mission}
@@ -344,7 +345,10 @@ export default function OrganizationsEdit({ organization, advisers }: Props) {
                                         type="email"
                                         value={data.contact_email}
                                         onChange={(e) =>
-                                            setData('contact_email', e.target.value)
+                                            setData(
+                                                'contact_email',
+                                                e.target.value,
+                                            )
                                         }
                                     />
                                     {errors.contact_email && (
@@ -362,7 +366,10 @@ export default function OrganizationsEdit({ organization, advisers }: Props) {
                                         id="contact_phone"
                                         value={data.contact_phone}
                                         onChange={(e) =>
-                                            setData('contact_phone', e.target.value)
+                                            setData(
+                                                'contact_phone',
+                                                e.target.value,
+                                            )
                                         }
                                     />
                                     {errors.contact_phone && (
@@ -381,7 +388,10 @@ export default function OrganizationsEdit({ organization, advisers }: Props) {
                                     id="office_location"
                                     value={data.office_location}
                                     onChange={(e) =>
-                                        setData('office_location', e.target.value)
+                                        setData(
+                                            'office_location',
+                                            e.target.value,
+                                        )
                                     }
                                 />
                                 {errors.office_location && (

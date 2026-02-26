@@ -282,9 +282,7 @@ export default function Results({
                                     {/* Pie Chart */}
                                     <Card>
                                         <CardHeader>
-                                            <CardTitle>
-                                                Vote Share
-                                            </CardTitle>
+                                            <CardTitle>Vote Share</CardTitle>
                                             <CardDescription>
                                                 Percentage distribution of votes
                                             </CardDescription>
@@ -348,9 +346,7 @@ export default function Results({
                             {/* Candidate Details List */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>
-                                        Detailed Results
-                                    </CardTitle>
+                                    <CardTitle>Detailed Results</CardTitle>
                                     <CardDescription>
                                         Complete ranking with candidate
                                         information

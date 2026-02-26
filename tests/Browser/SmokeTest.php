@@ -6,7 +6,6 @@
  * These tests ensure all main public pages load without JavaScript errors
  * and no console errors. This is the first line of defense for browser testing.
  */
-
 describe('Public Pages Smoke Test', function () {
     it('loads the homepage without errors', function () {
         $page = visit('/');

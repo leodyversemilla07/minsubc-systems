@@ -125,7 +125,8 @@ export const spacing = {
 export const typography = {
     fontFamily: {
         sans: "Inter, 'Instrument Sans', ui-sans-serif, system-ui, sans-serif",
-        display: "Inter, 'Instrument Sans', ui-sans-serif, system-ui, sans-serif",
+        display:
+            "Inter, 'Instrument Sans', ui-sans-serif, system-ui, sans-serif",
         mono: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
     },
     fontSize: {
@@ -275,15 +276,18 @@ export const commonStyles = {
     glass: 'bg-background/80 backdrop-blur-sm border-border/50',
     glassStrong: 'bg-background/90 backdrop-blur-md border-border/60',
     /** Focus ring */
-    focusRing: 'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+    focusRing:
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     /** Truncate text with ellipsis */
     truncate: 'overflow-hidden text-ellipsis whitespace-nowrap',
     /** Gradient primary background */
     gradientPrimary: 'bg-gradient-to-br from-primary to-primary/80',
     /** Subtle background gradient */
-    gradientSubtle: 'bg-gradient-to-br from-background via-muted/30 to-background',
+    gradientSubtle:
+        'bg-gradient-to-br from-background via-muted/30 to-background',
     /** Text gradient */
-    textGradient: 'bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent',
+    textGradient:
+        'bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent',
 } as const;
 
 /**

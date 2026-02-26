@@ -1,11 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -163,7 +158,7 @@ export default function OrganizationsShow({ organization }: Props) {
                             </CardHeader>
                             <CardContent>
                                 {organization.currentOfficers &&
-                                    organization.currentOfficers.length > 0 ? (
+                                organization.currentOfficers.length > 0 ? (
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
@@ -225,7 +220,10 @@ export default function OrganizationsShow({ organization }: Props) {
                                                 Adviser
                                             </p>
                                             <p className="text-sm text-muted-foreground">
-                                                {organization.adviser.first_name}{' '}
+                                                {
+                                                    organization.adviser
+                                                        .first_name
+                                                }{' '}
                                                 {organization.adviser.last_name}
                                             </p>
                                         </div>
@@ -249,8 +247,8 @@ export default function OrganizationsShow({ organization }: Props) {
                                         <p className="text-sm text-muted-foreground">
                                             {organization.establishment_date
                                                 ? new Date(
-                                                    organization.establishment_date,
-                                                ).toLocaleDateString()
+                                                      organization.establishment_date,
+                                                  ).toLocaleDateString()
                                                 : 'N/A'}
                                         </p>
                                     </div>

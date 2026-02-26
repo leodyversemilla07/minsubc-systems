@@ -73,7 +73,7 @@ class AnalyticsController extends Controller
             'generatedAt' => now()->format('Y-m-d H:i:s'),
         ]);
 
-        return $pdf->download("registrar-analytics-report-{$period}-" . now()->format('Y-m-d') . '.pdf');
+        return $pdf->download("registrar-analytics-report-{$period}-".now()->format('Y-m-d').'.pdf');
     }
 
     /**

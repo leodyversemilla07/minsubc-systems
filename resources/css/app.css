@@ -38,7 +38,7 @@
         'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
-    
+
     --font-display:
         'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
 
@@ -78,7 +78,7 @@
     --color-border: var(--border);
     --color-input: var(--input);
     --color-ring: var(--ring);
-    
+
     /* Semantic Status Colors */
     --color-success: var(--success);
     --color-success-foreground: var(--success-foreground);
@@ -118,38 +118,38 @@
     /* Base Colors */
     --background: oklch(0.985 0.002 120);
     --foreground: oklch(0.205 0.015 120);
-    
+
     /* Card & Popover */
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.205 0.015 120);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.205 0.015 120);
-    
+
     /* Primary - MinSU Green */
     --primary: oklch(0.45 0.15 145);
     --primary-foreground: oklch(0.985 0.01 145);
-    
+
     /* Secondary - Soft Green/Gray */
     --secondary: oklch(0.96 0.015 145);
     --secondary-foreground: oklch(0.35 0.08 145);
-    
+
     /* Muted - Subtle backgrounds */
     --muted: oklch(0.965 0.01 145);
     --muted-foreground: oklch(0.45 0.03 145);
-    
+
     /* Accent - Gold/Amber for highlights */
     --accent: oklch(0.85 0.12 85);
     --accent-foreground: oklch(0.25 0.08 85);
-    
+
     /* Destructive - Error Red */
     --destructive: oklch(0.55 0.22 25);
     --destructive-foreground: oklch(0.98 0 0);
-    
+
     /* Borders & Input */
-    --border: oklch(0.90 0.01 145);
-    --input: oklch(0.90 0.01 145);
+    --border: oklch(0.9 0.01 145);
+    --input: oklch(0.9 0.01 145);
     --ring: oklch(0.45 0.15 145);
-    
+
     /* Semantic Status Colors */
     --success: oklch(0.55 0.18 145);
     --success-foreground: oklch(0.98 0 0);
@@ -157,17 +157,17 @@
     --warning-foreground: oklch(0.25 0.08 70);
     --info: oklch(0.55 0.15 240);
     --info-foreground: oklch(0.98 0 0);
-    
+
     /* Chart Palette - Harmonious greens and complementary colors */
-    --chart-1: oklch(0.50 0.16 145);
-    --chart-2: oklch(0.60 0.14 175);
+    --chart-1: oklch(0.5 0.16 145);
+    --chart-2: oklch(0.6 0.14 175);
     --chart-3: oklch(0.55 0.12 240);
-    --chart-4: oklch(0.70 0.14 85);
-    --chart-5: oklch(0.45 0.10 280);
-    
+    --chart-4: oklch(0.7 0.14 85);
+    --chart-5: oklch(0.45 0.1 280);
+
     /* Design Tokens */
     --radius: 0.5rem;
-    
+
     /* Sidebar */
     --sidebar: oklch(0.99 0.005 145);
     --sidebar-foreground: oklch(0.205 0.015 120);
@@ -191,60 +191,60 @@
     /* Base Colors */
     --background: oklch(0.145 0.015 145);
     --foreground: oklch(0.95 0.01 145);
-    
+
     /* Card & Popover */
     --card: oklch(0.18 0.015 145);
     --card-foreground: oklch(0.95 0.01 145);
     --popover: oklch(0.18 0.015 145);
     --popover-foreground: oklch(0.95 0.01 145);
-    
+
     /* Primary - Lighter green for dark mode */
     --primary: oklch(0.65 0.18 145);
     --primary-foreground: oklch(0.15 0.02 145);
-    
+
     /* Secondary */
     --secondary: oklch(0.25 0.02 145);
-    --secondary-foreground: oklch(0.90 0.01 145);
-    
+    --secondary-foreground: oklch(0.9 0.01 145);
+
     /* Muted */
     --muted: oklch(0.25 0.015 145);
     --muted-foreground: oklch(0.65 0.02 145);
-    
+
     /* Accent - Gold in dark mode */
-    --accent: oklch(0.70 0.14 85);
+    --accent: oklch(0.7 0.14 85);
     --accent-foreground: oklch(0.15 0.05 85);
-    
+
     /* Destructive */
-    --destructive: oklch(0.50 0.20 25);
+    --destructive: oklch(0.5 0.2 25);
     --destructive-foreground: oklch(0.95 0 0);
-    
+
     /* Borders & Input */
     --border: oklch(0.28 0.015 145);
     --input: oklch(0.28 0.015 145);
     --ring: oklch(0.65 0.18 145);
-    
+
     /* Semantic Status Colors */
-    --success: oklch(0.60 0.18 145);
+    --success: oklch(0.6 0.18 145);
     --success-foreground: oklch(0.15 0.02 145);
-    --warning: oklch(0.70 0.15 70);
+    --warning: oklch(0.7 0.15 70);
     --warning-foreground: oklch(0.15 0.05 70);
-    --info: oklch(0.60 0.15 240);
+    --info: oklch(0.6 0.15 240);
     --info-foreground: oklch(0.15 0.02 240);
-    
+
     /* Chart Palette */
-    --chart-1: oklch(0.60 0.16 145);
+    --chart-1: oklch(0.6 0.16 145);
     --chart-2: oklch(0.65 0.14 175);
-    --chart-3: oklch(0.60 0.14 240);
+    --chart-3: oklch(0.6 0.14 240);
     --chart-4: oklch(0.72 0.14 85);
     --chart-5: oklch(0.55 0.12 280);
-    
+
     /* Sidebar */
     --sidebar: oklch(0.16 0.015 145);
     --sidebar-foreground: oklch(0.95 0.01 145);
     --sidebar-primary: oklch(0.65 0.18 145);
     --sidebar-primary-foreground: oklch(0.15 0.02 145);
     --sidebar-accent: oklch(0.22 0.015 145);
-    --sidebar-accent-foreground: oklch(0.90 0.01 145);
+    --sidebar-accent-foreground: oklch(0.9 0.01 145);
     --sidebar-border: oklch(0.28 0.015 145);
     --sidebar-ring: oklch(0.65 0.18 145);
 }
@@ -309,7 +309,7 @@
 
     /* Scrollbar styling */
     ::-webkit-scrollbar {
-        @apply w-2 h-2;
+        @apply h-2 w-2;
     }
 
     ::-webkit-scrollbar-track {
@@ -317,7 +317,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        @apply bg-muted-foreground/20 rounded-full;
+        @apply rounded-full bg-muted-foreground/20;
     }
 
     ::-webkit-scrollbar-thumb:hover {
@@ -333,28 +333,28 @@
 @layer components {
     /* Status Badges */
     .status-active {
-        @apply bg-success/10 text-success border-success/20;
+        @apply border-success/20 bg-success/10 text-success;
     }
 
     .status-pending {
-        @apply bg-warning/10 text-warning border-warning/20;
+        @apply border-warning/20 bg-warning/10 text-warning;
     }
 
     .status-inactive {
-        @apply bg-muted text-muted-foreground border-muted;
+        @apply border-muted bg-muted text-muted-foreground;
     }
 
     .status-error {
-        @apply bg-destructive/10 text-destructive border-destructive/20;
+        @apply border-destructive/20 bg-destructive/10 text-destructive;
     }
 
     .status-info {
-        @apply bg-info/10 text-info border-info/20;
+        @apply border-info/20 bg-info/10 text-info;
     }
 
     /* Card Variants */
     .card-interactive {
-        @apply transition-all duration-200 hover:shadow-lg hover:border-primary/20 hover:-translate-y-0.5;
+        @apply transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg;
     }
 
     .card-highlighted {
@@ -372,11 +372,11 @@
 
     /* Container Widths */
     .container-narrow {
-        @apply max-w-3xl mx-auto px-4 sm:px-6;
+        @apply mx-auto max-w-3xl px-4 sm:px-6;
     }
 
     .container-wide {
-        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+        @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
     }
 
     /* Gradient Backgrounds */
@@ -399,11 +399,11 @@
 
     /* Glass Effect */
     .glass {
-        @apply bg-background/80 backdrop-blur-sm border-border/50;
+        @apply border-border/50 bg-background/80 backdrop-blur-sm;
     }
 
     .glass-strong {
-        @apply bg-background/90 backdrop-blur-md border-border/60;
+        @apply border-border/60 bg-background/90 backdrop-blur-md;
     }
 }
 

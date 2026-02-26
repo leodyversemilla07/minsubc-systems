@@ -1,3 +1,4 @@
+import { FilterField, SearchFilters } from '@/components/search-filters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,20 +25,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    FilterField,
-    SearchFilters,
-} from '@/components/search-filters';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Edit,
-    FileText,
-    MoreHorizontal,
-    Plus,
-    Trash2,
-} from 'lucide-react';
+import { Edit, FileText, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 interface Recipient {
@@ -273,11 +264,14 @@ export default function RecipientsIndex({
                                         <TableHead className="w-12">
                                             <Checkbox
                                                 checked={
-                                                    recipients.data.length > 0 &&
+                                                    recipients.data.length >
+                                                        0 &&
                                                     selectedIds.length ===
                                                         recipients.data.length
                                                 }
-                                                onCheckedChange={handleSelectAll}
+                                                onCheckedChange={
+                                                    handleSelectAll
+                                                }
                                             />
                                         </TableHead>
                                         <TableHead>Student</TableHead>
@@ -329,100 +323,112 @@ export default function RecipientsIndex({
                                                 <TableCell>
                                                     <div>
                                                         <div className="font-medium">
-                                                            {recipient.student.name}
+                                                            {
+                                                                recipient
+                                                                    .student
+                                                                    .name
+                                                            }
                                                         </div>
                                                         <div className="text-sm text-muted-foreground">
-                                                            {recipient.student.email}
+                                                            {
+                                                                recipient
+                                                                    .student
+                                                                    .email
+                                                            }
                                                         </div>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
-                                                    {recipient.scholarship.scholarship_name}
+                                                    {
+                                                        recipient.scholarship
+                                                            .scholarship_name
+                                                    }
                                                 </TableCell>
                                                 <TableCell>
                                                     {recipient.academic_year} -{' '}
                                                     {recipient.semester}
                                                 </TableCell>
                                                 <TableCell className="text-right font-medium">
-                                                    ₱{recipient.amount.toLocaleString()}
-                                            </TableCell>
-                                            <TableCell className="text-center">
-                                                <Badge
-                                                    className={getStatusColor(
-                                                        recipient.status,
-                                                    )}
-                                                >
-                                                    {recipient.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-center">
-                                                {recipient.requirements_complete ? (
-                                                    <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-                                                        Complete
-                                                    </Badge>
-                                                ) : (
-                                                    <Badge variant="secondary">
-                                                        Incomplete
-                                                    </Badge>
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger
-                                                        asChild
+                                                    ₱
+                                                    {recipient.amount.toLocaleString()}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    <Badge
+                                                        className={getStatusColor(
+                                                            recipient.status,
+                                                        )}
                                                     >
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuLabel>
-                                                            Actions
-                                                        </DropdownMenuLabel>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem
+                                                        {recipient.status}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {recipient.requirements_complete ? (
+                                                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                                                            Complete
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge variant="secondary">
+                                                            Incomplete
+                                                        </Badge>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger
                                                             asChild
                                                         >
-                                                            <Link
-                                                                href={`/sas/admin/scholarship-recipients/${recipient.id}/requirements`}
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
                                                             >
-                                                                <FileText className="mr-2 h-4 w-4" />
-                                                                Manage
-                                                                Requirements
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            asChild
-                                                        >
-                                                            <Link
-                                                                href={`/sas/admin/scholarship-recipients/${recipient.id}/edit`}
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuLabel>
+                                                                Actions
+                                                            </DropdownMenuLabel>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                asChild
                                                             >
-                                                                <Edit className="mr-2 h-4 w-4" />
-                                                                Edit
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem
-                                                            onClick={() =>
-                                                                confirm(
-                                                                    'Delete?',
-                                                                ) &&
-                                                                router.delete(
-                                                                    `/sas/admin/scholarship-recipients/${recipient.id}`,
-                                                                )
-                                                            }
-                                                            className="text-red-600"
-                                                        >
-                                                            <Trash2 className="mr-2 h-4 w-4" />
-                                                            Delete
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell>
-                                        </TableRow>
+                                                                <Link
+                                                                    href={`/sas/admin/scholarship-recipients/${recipient.id}/requirements`}
+                                                                >
+                                                                    <FileText className="mr-2 h-4 w-4" />
+                                                                    Manage
+                                                                    Requirements
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                asChild
+                                                            >
+                                                                <Link
+                                                                    href={`/sas/admin/scholarship-recipients/${recipient.id}/edit`}
+                                                                >
+                                                                    <Edit className="mr-2 h-4 w-4" />
+                                                                    Edit
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    confirm(
+                                                                        'Delete?',
+                                                                    ) &&
+                                                                    router.delete(
+                                                                        `/sas/admin/scholarship-recipients/${recipient.id}`,
+                                                                    )
+                                                                }
+                                                                className="text-red-600"
+                                                            >
+                                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                                Delete
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
                                         ))
                                     )}
                                 </TableBody>

@@ -1,51 +1,57 @@
-import React, { useMemo, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { dashboard, login, register } from '@/routes';
 import sas from '@/routes/sas';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, Moon, Sun, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
  * Theme Toggle Component
  */
 const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(false);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)',
+        ).matches;
 
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setIsDark(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDark(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            setIsDark(true);
+            document.documentElement.classList.add('dark');
+        } else {
+            setIsDark(false);
+            document.documentElement.classList.remove('dark');
+        }
+    }, []);
 
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      setIsDark(true);
-    }
-  };
+    const toggleTheme = () => {
+        if (isDark) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+            setIsDark(false);
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            setIsDark(true);
+        }
+    };
 
-  return (
-    <button
-      onClick={toggleTheme}
-      className="p-2 rounded-full text-slate-500 hover:text-green-700 dark:text-slate-400 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-slate-800 transition-colors focus:outline-none"
-      aria-label="Toggle Dark Mode"
-    >
-      {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-    </button>
-  );
+    return (
+        <button
+            onClick={toggleTheme}
+            className="rounded-full p-2 text-slate-500 transition-colors hover:bg-green-50 hover:text-green-700 focus:outline-none dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-green-400"
+            aria-label="Toggle Dark Mode"
+        >
+            {isDark ? (
+                <Sun className="h-5 w-5" />
+            ) : (
+                <Moon className="h-5 w-5" />
+            )}
+        </button>
+    );
 };
 
 export default function Header() {
@@ -107,10 +113,8 @@ export default function Header() {
     return (
         <nav className="fixed top-0 right-0 left-0 z-50 border-b border-green-100/50 bg-white/95 shadow-sm backdrop-blur-lg backdrop-saturate-150 transition-all duration-300 dark:border-slate-800/50 dark:bg-slate-950/95">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                
                 {/* Top row: Logo, Name, and Auth buttons */}
                 <div className="flex h-16 items-center justify-between">
-                    
                     {/* Logo Section */}
                     <Link
                         href={sas.index.url()}
@@ -254,7 +258,7 @@ export default function Header() {
                                 <div className="space-y-2">
                                     <Link
                                         href={login()}
-                                        className="block rounded-lg border-2 border-green-700 px-4 py-2 text-center text-sm font-medium text-green-900 transition-colors hover:bg-green-50 dark:text-slate-300 dark:border-green-600 dark:hover:bg-slate-800"
+                                        className="block rounded-lg border-2 border-green-700 px-4 py-2 text-center text-sm font-medium text-green-900 transition-colors hover:bg-green-50 dark:border-green-600 dark:text-slate-300 dark:hover:bg-slate-800"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         Log in

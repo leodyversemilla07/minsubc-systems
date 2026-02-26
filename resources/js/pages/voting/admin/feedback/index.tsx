@@ -424,7 +424,9 @@ export default function Index({
                                                 </TableCell>
                                                 <TableCell className="text-sm text-muted-foreground">
                                                     {format(
-                                                        new Date(item.created_at),
+                                                        new Date(
+                                                            item.created_at,
+                                                        ),
                                                         'MMM dd, yyyy',
                                                     )}
                                                 </TableCell>
@@ -432,7 +434,8 @@ export default function Index({
                                                     <Link
                                                         href={voting.admin.feedback.show.url(
                                                             {
-                                                                feedback: item.id,
+                                                                feedback:
+                                                                    item.id,
                                                             },
                                                         )}
                                                     >

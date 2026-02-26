@@ -50,7 +50,7 @@ export default function Login({
                         </Link>
                     </div>
 
-                    <h2 className="mb-2 text-gradient-primary text-3xl font-bold">
+                    <h2 className="text-gradient-primary mb-2 text-3xl font-bold">
                         Voter Login
                     </h2>
                     <p className="text-muted-foreground">
@@ -77,8 +77,9 @@ export default function Login({
                                     Welcome, {authenticatedUser.name}!
                                 </p>
                                 <p className="mt-1 text-sm">
-                                    You're logged in as {authenticatedUser.student_id}.
-                                    Select an election and confirm your password to vote.
+                                    You're logged in as{' '}
+                                    {authenticatedUser.student_id}. Select an
+                                    election and confirm your password to vote.
                                 </p>
                             </div>
                         </Alert>
@@ -249,7 +250,7 @@ export default function Login({
                                 <Alert className="border-primary/30 bg-primary/10 text-primary">
                                     <ShieldCheck className="h-4 w-4 text-primary" />
                                     <div>
-                                        <h5 className="mb-1 font-medium leading-none tracking-tight">
+                                        <h5 className="mb-1 leading-none font-medium tracking-tight">
                                             Secure Voting System
                                         </h5>
                                         <div className="text-sm opacity-90">
@@ -277,7 +278,7 @@ export default function Login({
                         </p>
                     </div>
                 </div>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 }

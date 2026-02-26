@@ -51,7 +51,9 @@ export default function EditDocument({ document }: Props) {
         document_type: document.document_type || '',
         file: null as File | null,
         reference_number: document.reference_number || '',
-        original_date: document.original_date ? document.original_date.split('T')[0] : '',
+        original_date: document.original_date
+            ? document.original_date.split('T')[0]
+            : '',
         academic_year: document.academic_year || '',
         related_entity_type: document.related_entity_type || '',
         related_entity_id: document.related_entity_id?.toString() || '',
@@ -80,7 +82,10 @@ export default function EditDocument({ document }: Props) {
             breadcrumbs={[
                 { title: 'SAS Admin', href: sas.admin.dashboard.url() },
                 { title: 'Documents', href: sas.admin.documents.index.url() },
-                { title: `Edit: ${document.document_title}`, href: sas.admin.documents.edit.url(document.id) },
+                {
+                    title: `Edit: ${document.document_title}`,
+                    href: sas.admin.documents.edit.url(document.id),
+                },
             ]}
         >
             <Head title={`Edit Document: ${document.document_title}`} />
@@ -104,19 +109,27 @@ export default function EditDocument({ document }: Props) {
                         <CardHeader>
                             <CardTitle>File Information</CardTitle>
                             <CardDescription>
-                                Current file: <span className="font-semibold text-foreground">{document.file_name}</span>.
-                                Upload a new file only if you want to replace it.
+                                Current file:{' '}
+                                <span className="font-semibold text-foreground">
+                                    {document.file_name}
+                                </span>
+                                . Upload a new file only if you want to replace
+                                it.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="file">Replace Document File (Optional)</Label>
+                                <Label htmlFor="file">
+                                    Replace Document File (Optional)
+                                </Label>
                                 <div className="flex items-center gap-4">
                                     <Button
                                         type="button"
                                         variant="outline"
                                         onClick={() =>
-                                            window.document.getElementById('file')?.click()
+                                            window.document
+                                                .getElementById('file')
+                                                ?.click()
                                         }
                                     >
                                         <Upload className="mr-2 h-4 w-4" />
@@ -175,7 +188,10 @@ export default function EditDocument({ document }: Props) {
                                     id="document_title"
                                     value={data.document_title}
                                     onChange={(e) =>
-                                        setData('document_title', e.target.value)
+                                        setData(
+                                            'document_title',
+                                            e.target.value,
+                                        )
                                     }
                                     placeholder="e.g., Scholarship Agreement 2024-2025"
                                     required
@@ -237,7 +253,10 @@ export default function EditDocument({ document }: Props) {
                                         id="document_type"
                                         value={data.document_type}
                                         onChange={(e) =>
-                                            setData('document_type', e.target.value)
+                                            setData(
+                                                'document_type',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="e.g., Agreement, Report, Form"
                                     />
@@ -281,7 +300,10 @@ export default function EditDocument({ document }: Props) {
                                         type="date"
                                         value={data.original_date}
                                         onChange={(e) =>
-                                            setData('original_date', e.target.value)
+                                            setData(
+                                                'original_date',
+                                                e.target.value,
+                                            )
                                         }
                                     />
                                     {errors.original_date && (
@@ -293,7 +315,9 @@ export default function EditDocument({ document }: Props) {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="academic_year">Academic Year</Label>
+                                <Label htmlFor="academic_year">
+                                    Academic Year
+                                </Label>
                                 <Input
                                     id="academic_year"
                                     value={data.academic_year}
@@ -375,7 +399,10 @@ export default function EditDocument({ document }: Props) {
                                     id="physical_location"
                                     value={data.physical_location}
                                     onChange={(e) =>
-                                        setData('physical_location', e.target.value)
+                                        setData(
+                                            'physical_location',
+                                            e.target.value,
+                                        )
                                     }
                                     placeholder="e.g., Cabinet A, Shelf 3, Box 12"
                                 />

@@ -280,12 +280,13 @@ export default function ResolutionsManagement({
 
     const handleStatusChange = (resolution: Resolution, newStatus: string) => {
         setUpdatingStatus(resolution.id.toString());
-        
+
         // Use the correct endpoint based on the action
-        const endpoint = newStatus === 'archived' 
-            ? `/usg/admin/resolutions/${resolution.id}/archive`
-            : `/usg/admin/resolutions/${resolution.id}/unarchive`;
-        
+        const endpoint =
+            newStatus === 'archived'
+                ? `/usg/admin/resolutions/${resolution.id}/archive`
+                : `/usg/admin/resolutions/${resolution.id}/unarchive`;
+
         router.patch(
             endpoint,
             {},
@@ -383,7 +384,7 @@ export default function ResolutionsManagement({
                 {/* Header with action buttons */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl dark:text-white">
                             Resolutions
                         </h1>
                         <p className="text-muted-foreground">
@@ -1211,8 +1212,8 @@ export default function ResolutionsManagement({
                         <AlertDialogTitle>Delete Resolution</AlertDialogTitle>
                         <AlertDialogDescription>
                             Are you sure you want to delete "
-                            {resolutionToDelete?.title}"? This action cannot
-                            be undone.
+                            {resolutionToDelete?.title}"? This action cannot be
+                            undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

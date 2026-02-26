@@ -1,3 +1,13 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,16 +27,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, router } from '@inertiajs/react';
@@ -72,7 +72,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || 'all');
     const [category, setCategory] = useState(filters.category || 'all');
-    const [activityToDelete, setActivityToDelete] = useState<Activity | null>(null);
+    const [activityToDelete, setActivityToDelete] = useState<Activity | null>(
+        null,
+    );
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     function handleFilter() {
@@ -105,13 +107,16 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
 
     function confirmDelete() {
         if (activityToDelete) {
-            router.delete(sas.admin.activities.destroy.url(activityToDelete.id), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setIsDeleteDialogOpen(false);
-                    setActivityToDelete(null);
+            router.delete(
+                sas.admin.activities.destroy.url(activityToDelete.id),
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        setIsDeleteDialogOpen(false);
+                        setActivityToDelete(null);
+                    },
                 },
-            });
+            );
         }
     }
 
@@ -176,7 +181,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -233,7 +240,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     <Input
                                         placeholder="Search activities..."
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         className="pl-9"
                                         onKeyDown={(e) =>
                                             e.key === 'Enter' && handleFilter()
@@ -246,7 +255,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     <SelectValue placeholder="All Statuses" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Statuses</SelectItem>
+                                    <SelectItem value="all">
+                                        All Statuses
+                                    </SelectItem>
                                     <SelectItem value="Scheduled">
                                         Scheduled
                                     </SelectItem>
@@ -258,20 +269,29 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
-                            <Select value={category} onValueChange={setCategory}>
+                            <Select
+                                value={category}
+                                onValueChange={setCategory}
+                            >
                                 <SelectTrigger className="w-full md:w-[180px]">
                                     <SelectValue placeholder="All Categories" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Categories</SelectItem>
-                                    <SelectItem value="Seminar">Seminar</SelectItem>
+                                    <SelectItem value="all">
+                                        All Categories
+                                    </SelectItem>
+                                    <SelectItem value="Seminar">
+                                        Seminar
+                                    </SelectItem>
                                     <SelectItem value="Workshop">
                                         Workshop
                                     </SelectItem>
                                     <SelectItem value="Training">
                                         Training
                                     </SelectItem>
-                                    <SelectItem value="Sports">Sports</SelectItem>
+                                    <SelectItem value="Sports">
+                                        Sports
+                                    </SelectItem>
                                     <SelectItem value="Cultural">
                                         Cultural
                                     </SelectItem>
@@ -324,7 +344,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                                 ).toLocaleDateString()}
                                             </TableCell>
                                             <TableCell>
-                                                {getStatusBadge(activity.status)}
+                                                {getStatusBadge(
+                                                    activity.status,
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
@@ -358,7 +380,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() =>
-                                                            handleDelete(activity)
+                                                            handleDelete(
+                                                                activity,
+                                                            )
                                                         }
                                                     >
                                                         <Trash2 className="h-4 w-4 text-destructive" />
@@ -376,7 +400,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     No activities found
                                 </p>
                                 <Button className="mt-4" asChild>
-                                    <Link href={sas.admin.activities.create.url()}>
+                                    <Link
+                                        href={sas.admin.activities.create.url()}
+                                    >
                                         <Plus className="mr-2 h-4 w-4" />
                                         Create First Activity
                                     </Link>
@@ -403,8 +429,14 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                         sas.admin.activities.index.url(),
                                         {
                                             page: activities.current_page - 1,
-                                            status: status === 'all' ? undefined : status,
-                                            category: category === 'all' ? undefined : category,
+                                            status:
+                                                status === 'all'
+                                                    ? undefined
+                                                    : status,
+                                            category:
+                                                category === 'all'
+                                                    ? undefined
+                                                    : category,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -417,15 +449,22 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 variant="outline"
                                 size="sm"
                                 disabled={
-                                    activities.current_page === activities.last_page
+                                    activities.current_page ===
+                                    activities.last_page
                                 }
                                 onClick={() =>
                                     router.get(
                                         sas.admin.activities.index.url(),
                                         {
                                             page: activities.current_page + 1,
-                                            status: status === 'all' ? undefined : status,
-                                            category: category === 'all' ? undefined : category,
+                                            status:
+                                                status === 'all'
+                                                    ? undefined
+                                                    : status,
+                                            category:
+                                                category === 'all'
+                                                    ? undefined
+                                                    : category,
                                             search: search || undefined,
                                         },
                                         { preserveState: true },
@@ -439,13 +478,18 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                 )}
             </div>
 
-            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <AlertDialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the
-                            activity{' '}
+                            This action cannot be undone. This will permanently
+                            delete the activity{' '}
                             <span className="font-semibold text-foreground">
                                 {activityToDelete?.activity_title}
                             </span>{' '}

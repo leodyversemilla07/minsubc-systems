@@ -1,7 +1,13 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import {
     Empty,
     EmptyContent,
@@ -114,7 +120,7 @@ interface DashboardProps {
         payment_status: string;
         created_at?: string;
     };
-    // USG Stats  
+    // USG Stats
     usgStats?: {
         recent_announcements: number;
         upcoming_events: number;
@@ -240,7 +246,10 @@ export default function Dashboard({
                                 USG Portal
                             </Link>
                         </Button>
-                        <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+                        <Button
+                            asChild
+                            className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        >
                             <Link href={create()}>
                                 <Plus className="mr-2 h-4 w-4" />
                                 New Request
@@ -259,25 +268,43 @@ export default function Dashboard({
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
                                     <FileText className="h-5 w-5 text-primary" />
                                 </div>
-                                <Badge variant="outline" className="dark:border-primary/50 dark:text-primary">
-                                    {stats.pending_payment + stats.processing} Active
+                                <Badge
+                                    variant="outline"
+                                    className="dark:border-primary/50 dark:text-primary"
+                                >
+                                    {stats.pending_payment + stats.processing}{' '}
+                                    Active
                                 </Badge>
                             </div>
                             <CardTitle className="text-lg">Registrar</CardTitle>
-                            <CardDescription>Document requests & records</CardDescription>
+                            <CardDescription>
+                                Document requests & records
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div className="rounded-lg bg-muted p-2 text-center">
-                                    <p className="text-2xl font-bold">{stats.total_requests}</p>
-                                    <p className="text-xs text-muted-foreground">Total</p>
+                                    <p className="text-2xl font-bold">
+                                        {stats.total_requests}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Total
+                                    </p>
                                 </div>
                                 <div className="rounded-lg bg-muted p-2 text-center">
-                                    <p className="text-2xl font-bold text-success">{stats.ready_for_claim}</p>
-                                    <p className="text-xs text-muted-foreground">Ready</p>
+                                    <p className="text-2xl font-bold text-success">
+                                        {stats.ready_for_claim}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Ready
+                                    </p>
                                 </div>
                             </div>
-                            <Button asChild variant="ghost" className="w-full justify-between text-primary hover:bg-primary/10">
+                            <Button
+                                asChild
+                                variant="ghost"
+                                className="w-full justify-between text-primary hover:bg-primary/10"
+                            >
                                 <Link href={index()}>
                                     View All Requests
                                     <ArrowRight className="h-4 w-4" />
@@ -294,26 +321,47 @@ export default function Dashboard({
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
                                     <GraduationCap className="h-5 w-5 text-primary" />
                                 </div>
-                                <Badge variant="outline" className="dark:border-primary/50 dark:text-primary">
+                                <Badge
+                                    variant="outline"
+                                    className="dark:border-primary/50 dark:text-primary"
+                                >
                                     {safeSasStats.active_scholarships} Active
                                 </Badge>
                             </div>
-                            <CardTitle className="text-lg">Student Affairs</CardTitle>
-                            <CardDescription>Scholarships & services</CardDescription>
+                            <CardTitle className="text-lg">
+                                Student Affairs
+                            </CardTitle>
+                            <CardDescription>
+                                Scholarships & services
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div className="rounded-lg bg-muted p-2 text-center">
-                                    <p className="text-2xl font-bold">{safeSasStats.total_scholarships}</p>
-                                    <p className="text-xs text-muted-foreground">Scholarships</p>
+                                    <p className="text-2xl font-bold">
+                                        {safeSasStats.total_scholarships}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Scholarships
+                                    </p>
                                 </div>
                                 <div className="rounded-lg bg-muted p-2 text-center">
-                                    <p className="text-2xl font-bold text-primary">{safeSasStats.organizations_joined}</p>
-                                    <p className="text-xs text-muted-foreground">Orgs</p>
+                                    <p className="text-2xl font-bold text-primary">
+                                        {safeSasStats.organizations_joined}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Orgs
+                                    </p>
                                 </div>
                             </div>
-                            <Button asChild variant="ghost" className="w-full justify-between text-primary hover:bg-primary/10">
-                                <Link href={sas.student.scholarships.index.url()}>
+                            <Button
+                                asChild
+                                variant="ghost"
+                                className="w-full justify-between text-primary hover:bg-primary/10"
+                            >
+                                <Link
+                                    href={sas.student.scholarships.index.url()}
+                                >
                                     View Scholarships
                                     <ArrowRight className="h-4 w-4" />
                                 </Link>
@@ -329,25 +377,44 @@ export default function Dashboard({
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
                                     <Users className="h-5 w-5 text-primary" />
                                 </div>
-                                <Badge variant="outline" className="dark:border-primary/50 dark:text-primary">
+                                <Badge
+                                    variant="outline"
+                                    className="dark:border-primary/50 dark:text-primary"
+                                >
                                     {safeUsgStats.upcoming_events} Events
                                 </Badge>
                             </div>
-                            <CardTitle className="text-lg">USG Portal</CardTitle>
-                            <CardDescription>News, events & resolutions</CardDescription>
+                            <CardTitle className="text-lg">
+                                USG Portal
+                            </CardTitle>
+                            <CardDescription>
+                                News, events & resolutions
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div className="rounded-lg bg-muted p-2 text-center">
-                                    <p className="text-2xl font-bold">{safeUsgStats.recent_announcements}</p>
-                                    <p className="text-xs text-muted-foreground">News</p>
+                                    <p className="text-2xl font-bold">
+                                        {safeUsgStats.recent_announcements}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        News
+                                    </p>
                                 </div>
                                 <div className="rounded-lg bg-muted p-2 text-center">
-                                    <p className="text-2xl font-bold text-primary">{safeUsgStats.new_resolutions}</p>
-                                    <p className="text-xs text-muted-foreground">Resolutions</p>
+                                    <p className="text-2xl font-bold text-primary">
+                                        {safeUsgStats.new_resolutions}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Resolutions
+                                    </p>
                                 </div>
                             </div>
-                            <Button asChild variant="ghost" className="w-full justify-between text-primary hover:bg-primary/10">
+                            <Button
+                                asChild
+                                variant="ghost"
+                                className="w-full justify-between text-primary hover:bg-primary/10"
+                            >
                                 <Link href={usg.index.url()}>
                                     Visit USG Portal
                                     <ArrowRight className="h-4 w-4" />
@@ -370,18 +437,22 @@ export default function Dashboard({
                                         Active
                                     </Badge>
                                 ) : (
-                                    <Badge variant="outline">
-                                        No Election
-                                    </Badge>
+                                    <Badge variant="outline">No Election</Badge>
                                 )}
                             </div>
-                            <CardTitle className="text-lg">Voting System</CardTitle>
-                            <CardDescription>Elections & participation</CardDescription>
+                            <CardTitle className="text-lg">
+                                Voting System
+                            </CardTitle>
+                            <CardDescription>
+                                Elections & participation
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-3">
                             {safeVotingStats.active_election ? (
                                 <div className="rounded-lg bg-primary/5 p-3 text-center dark:bg-primary/10">
-                                    <p className="mb-1 text-sm font-medium text-primary">{safeVotingStats.election_name}</p>
+                                    <p className="mb-1 text-sm font-medium text-primary">
+                                        {safeVotingStats.election_name}
+                                    </p>
                                     {safeVotingStats.has_voted ? (
                                         <Badge className="bg-success/10 text-success">
                                             <CheckCircle className="mr-1 h-3 w-3" />
@@ -400,10 +471,16 @@ export default function Dashboard({
                                 </div>
                             ) : (
                                 <div className="rounded-lg bg-muted p-3 text-center">
-                                    <p className="text-sm text-muted-foreground">No active elections</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        No active elections
+                                    </p>
                                 </div>
                             )}
-                            <Button asChild variant="ghost" className="w-full justify-between text-primary hover:bg-primary/10">
+                            <Button
+                                asChild
+                                variant="ghost"
+                                className="w-full justify-between text-primary hover:bg-primary/10"
+                            >
                                 <Link href={voting.index.url()}>
                                     Go to Voting
                                     <ArrowRight className="h-4 w-4" />
@@ -428,7 +505,9 @@ export default function Dashboard({
                             <CardContent className="pt-0">
                                 <div className="space-y-3">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">Completed Requests</span>
+                                        <span className="text-muted-foreground">
+                                            Completed Requests
+                                        </span>
                                         <span>
                                             {stats.completed} of {totalRequests}
                                         </span>
@@ -438,7 +517,8 @@ export default function Dashboard({
                                         className="h-2 w-full"
                                     />
                                     <p className="text-xs text-muted-foreground">
-                                        {completedPercentage.toFixed(1)}% completion rate
+                                        {completedPercentage.toFixed(1)}%
+                                        completion rate
                                     </p>
                                 </div>
                             </CardContent>
@@ -448,38 +528,54 @@ export default function Dashboard({
                         <div className="grid gap-4 md:grid-cols-4">
                             <Card className="transition-shadow hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Total</CardTitle>
+                                    <CardTitle className="text-sm font-medium">
+                                        Total
+                                    </CardTitle>
                                     <FileText className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent className="pt-0">
-                                    <div className="text-2xl font-bold">{stats.total_requests}</div>
+                                    <div className="text-2xl font-bold">
+                                        {stats.total_requests}
+                                    </div>
                                 </CardContent>
                             </Card>
                             <Card className="transition-shadow hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                                    <CardTitle className="text-sm font-medium">
+                                        Pending
+                                    </CardTitle>
                                     <CreditCard className="h-4 w-4 text-primary" />
                                 </CardHeader>
                                 <CardContent className="pt-0">
-                                    <div className="text-2xl font-bold text-primary">{stats.pending_payment}</div>
+                                    <div className="text-2xl font-bold text-primary">
+                                        {stats.pending_payment}
+                                    </div>
                                 </CardContent>
                             </Card>
                             <Card className="transition-shadow hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Processing</CardTitle>
+                                    <CardTitle className="text-sm font-medium">
+                                        Processing
+                                    </CardTitle>
                                     <Clock className="h-4 w-4 text-primary" />
                                 </CardHeader>
                                 <CardContent className="pt-0">
-                                    <div className="text-2xl font-bold text-primary">{stats.processing}</div>
+                                    <div className="text-2xl font-bold text-primary">
+                                        {stats.processing}
+                                    </div>
                                 </CardContent>
                             </Card>
                             <Card className="transition-shadow hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Ready</CardTitle>
+                                    <CardTitle className="text-sm font-medium">
+                                        Ready
+                                    </CardTitle>
                                     <CheckCircle className="h-4 w-4 text-success" />
                                 </CardHeader>
                                 <CardContent className="pt-0">
-                                    <div className="text-2xl font-bold text-success">{stats.ready_for_claim}</div>
+                                    <div className="text-2xl font-bold text-success">
+                                        {stats.ready_for_claim}
+                                    </div>
                                 </CardContent>
                             </Card>
                         </div>
@@ -488,8 +584,15 @@ export default function Dashboard({
                         <Card className="transition-shadow hover:shadow-md">
                             <CardHeader className="pb-4">
                                 <div className="flex items-center justify-between">
-                                    <CardTitle className="text-lg">Recent Document Requests</CardTitle>
-                                    <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary/80">
+                                    <CardTitle className="text-lg">
+                                        Recent Document Requests
+                                    </CardTitle>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        asChild
+                                        className="text-primary hover:text-primary/80"
+                                    >
                                         <Link href={index()}>
                                             <Eye className="mr-2 h-4 w-4" />
                                             View All
@@ -500,34 +603,57 @@ export default function Dashboard({
                             <CardContent className="pt-0">
                                 {recent_requests.length > 0 ? (
                                     <div className="space-y-3">
-                                        {recent_requests.slice(0, 4).map((request) => (
-                                            <div
-                                                key={request.id}
-                                                className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
-                                            >
-                                                <div className="flex items-center space-x-3">
-                                                    <div className="text-muted-foreground">
-                                                        {getStatusIcon(request.status)}
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-medium">
-                                                            {request.request_number}
-                                                        </p>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            {request.document_type} • ₱{request.amount}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <Badge
-                                                    className={
-                                                        statusColors[request.status as keyof typeof statusColors] ||
-                                                        'bg-muted text-muted-foreground'
-                                                    }
+                                        {recent_requests
+                                            .slice(0, 4)
+                                            .map((request) => (
+                                                <div
+                                                    key={request.id}
+                                                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
                                                 >
-                                                    {request.status.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-                                                </Badge>
-                                            </div>
-                                        ))}
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="text-muted-foreground">
+                                                            {getStatusIcon(
+                                                                request.status,
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium">
+                                                                {
+                                                                    request.request_number
+                                                                }
+                                                            </p>
+                                                            <p className="text-sm text-muted-foreground">
+                                                                {
+                                                                    request.document_type
+                                                                }{' '}
+                                                                • ₱
+                                                                {request.amount}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <Badge
+                                                        className={
+                                                            statusColors[
+                                                                request.status as keyof typeof statusColors
+                                                            ] ||
+                                                            'bg-muted text-muted-foreground'
+                                                        }
+                                                    >
+                                                        {request.status
+                                                            .split('_')
+                                                            .map(
+                                                                (w) =>
+                                                                    w
+                                                                        .charAt(
+                                                                            0,
+                                                                        )
+                                                                        .toUpperCase() +
+                                                                    w.slice(1),
+                                                            )
+                                                            .join(' ')}
+                                                    </Badge>
+                                                </div>
+                                            ))}
                                     </div>
                                 ) : (
                                     <Empty>
@@ -535,9 +661,12 @@ export default function Dashboard({
                                             <EmptyMedia variant="icon">
                                                 <FileText className="h-8 w-8" />
                                             </EmptyMedia>
-                                            <EmptyTitle>No requests yet</EmptyTitle>
+                                            <EmptyTitle>
+                                                No requests yet
+                                            </EmptyTitle>
                                             <EmptyDescription>
-                                                Create your first document request to get started.
+                                                Create your first document
+                                                request to get started.
                                             </EmptyDescription>
                                         </EmptyHeader>
                                         <EmptyContent>
@@ -564,8 +693,15 @@ export default function Dashboard({
                                         <Megaphone className="mr-2 h-5 w-5 text-primary" />
                                         USG Updates
                                     </CardTitle>
-                                    <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary/80">
-                                        <Link href={usg.announcements.index.url()}>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        asChild
+                                        className="text-primary hover:text-primary/80"
+                                    >
+                                        <Link
+                                            href={usg.announcements.index.url()}
+                                        >
                                             View All
                                         </Link>
                                     </Button>
@@ -574,28 +710,43 @@ export default function Dashboard({
                             <CardContent>
                                 {safeRecentAnnouncements.length > 0 ? (
                                     <div className="space-y-3">
-                                        {safeRecentAnnouncements.slice(0, 3).map((announcement) => (
-                                            <Link
-                                                key={announcement.id}
-                                                href={usg.announcements.show.url({ slug: announcement.slug })}
-                                                className="block rounded-lg border p-3 transition-colors hover:border-primary/50"
-                                            >
-                                                <p className="line-clamp-2 font-medium">
-                                                    {announcement.title}
-                                                </p>
-                                                <div className="mt-2 flex items-center gap-2">
-                                                    <Badge variant="outline" className="text-xs">
-                                                        {announcement.category}
-                                                    </Badge>
-                                                    <span className="text-xs text-muted-foreground">
-                                                        {new Date(announcement.publish_date).toLocaleDateString()}
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        ))}
+                                        {safeRecentAnnouncements
+                                            .slice(0, 3)
+                                            .map((announcement) => (
+                                                <Link
+                                                    key={announcement.id}
+                                                    href={usg.announcements.show.url(
+                                                        {
+                                                            slug: announcement.slug,
+                                                        },
+                                                    )}
+                                                    className="block rounded-lg border p-3 transition-colors hover:border-primary/50"
+                                                >
+                                                    <p className="line-clamp-2 font-medium">
+                                                        {announcement.title}
+                                                    </p>
+                                                    <div className="mt-2 flex items-center gap-2">
+                                                        <Badge
+                                                            variant="outline"
+                                                            className="text-xs"
+                                                        >
+                                                            {
+                                                                announcement.category
+                                                            }
+                                                        </Badge>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            {new Date(
+                                                                announcement.publish_date,
+                                                            ).toLocaleDateString()}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            ))}
                                     </div>
                                 ) : (
-                                    <p className="py-4 text-center text-sm text-muted-foreground">No recent announcements</p>
+                                    <p className="py-4 text-center text-sm text-muted-foreground">
+                                        No recent announcements
+                                    </p>
                                 )}
                             </CardContent>
                         </Card>
@@ -608,7 +759,12 @@ export default function Dashboard({
                                         <Calendar className="mr-2 h-5 w-5 text-primary" />
                                         Upcoming Events
                                     </CardTitle>
-                                    <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary/80">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        asChild
+                                        className="text-primary hover:text-primary/80"
+                                    >
                                         <Link href={usg.events.index.url()}>
                                             View All
                                         </Link>
@@ -618,28 +774,42 @@ export default function Dashboard({
                             <CardContent>
                                 {safeUpcomingEvents.length > 0 ? (
                                     <div className="space-y-3">
-                                        {safeUpcomingEvents.slice(0, 3).map((event) => (
-                                            <Link
-                                                key={event.id}
-                                                href={usg.events.show.url({ slug: event.slug })}
-                                                className="block rounded-lg border p-3 transition-colors hover:border-primary/50"
-                                            >
-                                                <p className="font-medium">{event.title}</p>
-                                                <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                                                    <Calendar className="h-3 w-3" />
-                                                    {new Date(event.start_date).toLocaleDateString()}
-                                                    {event.location && (
-                                                        <>
-                                                            <span>•</span>
-                                                            <span>{event.location}</span>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </Link>
-                                        ))}
+                                        {safeUpcomingEvents
+                                            .slice(0, 3)
+                                            .map((event) => (
+                                                <Link
+                                                    key={event.id}
+                                                    href={usg.events.show.url({
+                                                        slug: event.slug,
+                                                    })}
+                                                    className="block rounded-lg border p-3 transition-colors hover:border-primary/50"
+                                                >
+                                                    <p className="font-medium">
+                                                        {event.title}
+                                                    </p>
+                                                    <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+                                                        <Calendar className="h-3 w-3" />
+                                                        {new Date(
+                                                            event.start_date,
+                                                        ).toLocaleDateString()}
+                                                        {event.location && (
+                                                            <>
+                                                                <span>•</span>
+                                                                <span>
+                                                                    {
+                                                                        event.location
+                                                                    }
+                                                                </span>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </Link>
+                                            ))}
                                     </div>
                                 ) : (
-                                    <p className="py-4 text-center text-sm text-muted-foreground">No upcoming events</p>
+                                    <p className="py-4 text-center text-sm text-muted-foreground">
+                                        No upcoming events
+                                    </p>
                                 )}
                             </CardContent>
                         </Card>
@@ -647,28 +817,50 @@ export default function Dashboard({
                         {/* Quick Services */}
                         <Card>
                             <CardHeader className="pb-3">
-                                <CardTitle className="text-lg">Quick Services</CardTitle>
+                                <CardTitle className="text-lg">
+                                    Quick Services
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <Button asChild variant="ghost" className="w-full justify-start">
-                                    <Link href={sas.student.scholarships.index.url()}>
+                                <Button
+                                    asChild
+                                    variant="ghost"
+                                    className="w-full justify-start"
+                                >
+                                    <Link
+                                        href={sas.student.scholarships.index.url()}
+                                    >
                                         <Award className="mr-3 h-4 w-4 text-primary" />
                                         My Scholarships
                                     </Link>
                                 </Button>
-                                <Button asChild variant="ghost" className="w-full justify-start">
-                                    <Link href={sas.student.insurance.index.url()}>
+                                <Button
+                                    asChild
+                                    variant="ghost"
+                                    className="w-full justify-start"
+                                >
+                                    <Link
+                                        href={sas.student.insurance.index.url()}
+                                    >
                                         <Shield className="mr-3 h-4 w-4 text-primary" />
                                         Insurance Status
                                     </Link>
                                 </Button>
-                                <Button asChild variant="ghost" className="w-full justify-start">
+                                <Button
+                                    asChild
+                                    variant="ghost"
+                                    className="w-full justify-start"
+                                >
                                     <Link href={usg.officers.index.url()}>
                                         <Users className="mr-3 h-4 w-4 text-primary" />
                                         USG Officers
                                     </Link>
                                 </Button>
-                                <Button asChild variant="ghost" className="w-full justify-start">
+                                <Button
+                                    asChild
+                                    variant="ghost"
+                                    className="w-full justify-start"
+                                >
                                     <Link href={usg.transparency.index.url()}>
                                         <FileText className="mr-3 h-4 w-4 text-primary" />
                                         Transparency Reports
@@ -689,61 +881,99 @@ export default function Dashboard({
                                     <Award className="mr-2 h-5 w-5 text-primary" />
                                     My Scholarships
                                 </CardTitle>
-                                <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary/80">
-                                    <Link href={sas.student.scholarships.index.url()}>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    asChild
+                                    className="text-primary hover:text-primary/80"
+                                >
+                                    <Link
+                                        href={sas.student.scholarships.index.url()}
+                                    >
                                         View All
                                     </Link>
                                 </Button>
                             </div>
                             <CardDescription>
-                                {safeSasStats.active_scholarships} active of {safeSasStats.total_scholarships} total scholarships
+                                {safeSasStats.active_scholarships} active of{' '}
+                                {safeSasStats.total_scholarships} total
+                                scholarships
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             {safeScholarships.length > 0 ? (
                                 <div className="space-y-4">
-                                    {safeScholarships.slice(0, 3).map((scholarship) => (
-                                        <div
-                                            key={scholarship.id}
-                                            className="rounded-lg border p-4 transition-colors"
-                                        >
-                                            <div className="flex items-start justify-between">
-                                                <div className="space-y-1">
-                                                    <p className="font-medium">{scholarship.name}</p>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {scholarship.academic_year} • {scholarship.semester}
-                                                    </p>
-                                                </div>
-                                                <Badge
-                                                    className={
-                                                        scholarship.status === 'Active'
-                                                            ? 'bg-success/10 text-success'
-                                                            : scholarship.status === 'Pending'
-                                                            ? 'bg-primary/10 text-primary'
-                                                            : 'bg-muted text-muted-foreground'
-                                                    }
-                                                >
-                                                    {scholarship.status}
-                                                </Badge>
-                                            </div>
-                                            {scholarship.total_requirements > 0 && (
-                                                <div className="mt-3 space-y-1">
-                                                    <div className="flex justify-between text-xs">
-                                                        <span className="text-muted-foreground">Requirements</span>
-                                                        <span>
-                                                            {scholarship.completed_requirements}/{scholarship.total_requirements}
-                                                        </span>
+                                    {safeScholarships
+                                        .slice(0, 3)
+                                        .map((scholarship) => (
+                                            <div
+                                                key={scholarship.id}
+                                                className="rounded-lg border p-4 transition-colors"
+                                            >
+                                                <div className="flex items-start justify-between">
+                                                    <div className="space-y-1">
+                                                        <p className="font-medium">
+                                                            {scholarship.name}
+                                                        </p>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            {
+                                                                scholarship.academic_year
+                                                            }{' '}
+                                                            •{' '}
+                                                            {
+                                                                scholarship.semester
+                                                            }
+                                                        </p>
                                                     </div>
-                                                    <Progress value={scholarship.requirements_progress} className="h-1.5" />
+                                                    <Badge
+                                                        className={
+                                                            scholarship.status ===
+                                                            'Active'
+                                                                ? 'bg-success/10 text-success'
+                                                                : scholarship.status ===
+                                                                    'Pending'
+                                                                  ? 'bg-primary/10 text-primary'
+                                                                  : 'bg-muted text-muted-foreground'
+                                                        }
+                                                    >
+                                                        {scholarship.status}
+                                                    </Badge>
                                                 </div>
-                                            )}
-                                            {scholarship.amount > 0 && (
-                                                <p className="mt-2 text-sm font-medium text-primary">
-                                                    ₱{Number(scholarship.amount).toLocaleString()}
-                                                </p>
-                                            )}
-                                        </div>
-                                    ))}
+                                                {scholarship.total_requirements >
+                                                    0 && (
+                                                    <div className="mt-3 space-y-1">
+                                                        <div className="flex justify-between text-xs">
+                                                            <span className="text-muted-foreground">
+                                                                Requirements
+                                                            </span>
+                                                            <span>
+                                                                {
+                                                                    scholarship.completed_requirements
+                                                                }
+                                                                /
+                                                                {
+                                                                    scholarship.total_requirements
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                        <Progress
+                                                            value={
+                                                                scholarship.requirements_progress
+                                                            }
+                                                            className="h-1.5"
+                                                        />
+                                                    </div>
+                                                )}
+                                                {scholarship.amount > 0 && (
+                                                    <p className="mt-2 text-sm font-medium text-primary">
+                                                        ₱
+                                                        {Number(
+                                                            scholarship.amount,
+                                                        ).toLocaleString()}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ))}
                                 </div>
                             ) : (
                                 <div className="py-6 text-center">
@@ -766,7 +996,12 @@ export default function Dashboard({
                                     My Organizations
                                 </CardTitle>
                                 <CardDescription>
-                                    Member of {safeSasStats.organizations_joined} organization{safeSasStats.organizations_joined !== 1 ? 's' : ''}
+                                    Member of{' '}
+                                    {safeSasStats.organizations_joined}{' '}
+                                    organization
+                                    {safeSasStats.organizations_joined !== 1
+                                        ? 's'
+                                        : ''}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -779,12 +1014,20 @@ export default function Dashboard({
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                                                        {org.acronym || org.name.substring(0, 2).toUpperCase()}
+                                                        {org.acronym ||
+                                                            org.name
+                                                                .substring(0, 2)
+                                                                .toUpperCase()}
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium">{org.name}</p>
+                                                        <p className="font-medium">
+                                                            {org.name}
+                                                        </p>
                                                         <p className="text-xs text-muted-foreground">
-                                                            {org.type} • Since {org.membership_date}
+                                                            {org.type} • Since{' '}
+                                                            {
+                                                                org.membership_date
+                                                            }
                                                         </p>
                                                     </div>
                                                 </div>
@@ -819,7 +1062,10 @@ export default function Dashboard({
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <p className="text-sm text-muted-foreground">
-                                                    {insuranceRecord.academic_year} • {insuranceRecord.semester}
+                                                    {
+                                                        insuranceRecord.academic_year
+                                                    }{' '}
+                                                    • {insuranceRecord.semester}
                                                 </p>
                                                 <p className="mt-1 text-lg font-medium">
                                                     Student Insurance
@@ -827,11 +1073,15 @@ export default function Dashboard({
                                             </div>
                                             <Badge
                                                 className={
-                                                    insuranceRecord.status === 'Active' || insuranceRecord.status === 'Covered'
+                                                    insuranceRecord.status ===
+                                                        'Active' ||
+                                                    insuranceRecord.status ===
+                                                        'Covered'
                                                         ? 'bg-success/10 text-success'
-                                                        : insuranceRecord.status === 'Pending'
-                                                        ? 'bg-primary/10 text-primary'
-                                                        : 'bg-muted text-muted-foreground'
+                                                        : insuranceRecord.status ===
+                                                            'Pending'
+                                                          ? 'bg-primary/10 text-primary'
+                                                          : 'bg-muted text-muted-foreground'
                                                 }
                                             >
                                                 <Shield className="mr-1 h-3 w-3" />
@@ -840,13 +1090,26 @@ export default function Dashboard({
                                         </div>
                                         <div className="mt-3 grid grid-cols-2 gap-4 border-t pt-3">
                                             <div>
-                                                <p className="text-xs text-muted-foreground">Payment</p>
-                                                <p className="font-medium">{insuranceRecord.payment_status}</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Payment
+                                                </p>
+                                                <p className="font-medium">
+                                                    {
+                                                        insuranceRecord.payment_status
+                                                    }
+                                                </p>
                                             </div>
                                             {insuranceRecord.amount > 0 && (
                                                 <div>
-                                                    <p className="text-xs text-muted-foreground">Amount</p>
-                                                    <p className="font-medium">₱{Number(insuranceRecord.amount).toLocaleString()}</p>
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Amount
+                                                    </p>
+                                                    <p className="font-medium">
+                                                        ₱
+                                                        {Number(
+                                                            insuranceRecord.amount,
+                                                        ).toLocaleString()}
+                                                    </p>
                                                 </div>
                                             )}
                                         </div>
@@ -857,8 +1120,15 @@ export default function Dashboard({
                                         <p className="mt-2 text-sm text-muted-foreground">
                                             No insurance record found
                                         </p>
-                                        <Button asChild variant="outline" size="sm" className="mt-3">
-                                            <Link href={sas.student.insurance.index.url()}>
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-3"
+                                        >
+                                            <Link
+                                                href={sas.student.insurance.index.url()}
+                                            >
                                                 View Insurance
                                             </Link>
                                         </Button>

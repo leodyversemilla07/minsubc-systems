@@ -11,7 +11,7 @@ import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
 import type { Organization, PaginatedData } from '@/types/sas';
 import { Head, Link, router } from '@inertiajs/react';
-import { Search, Filter, Users, ArrowRight, X, Activity } from 'lucide-react';
+import { Activity, ArrowRight, Filter, Search, Users, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
@@ -83,7 +83,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
             <Head title="Student Organizations - SAS" />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white px-4 py-8 sm:py-16 text-slate-900 sm:px-6 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950 dark:text-white">
+            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white px-4 py-8 text-slate-900 sm:px-6 sm:py-16 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950 dark:text-white">
                 {/* Background Pattern */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
                     <svg
@@ -135,20 +135,27 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                         </h1>
 
                         <p className="mx-auto mb-10 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-                            Connect, collaborate, and grow. Explore the diverse student organizations at MinSU Bongabong Campus and find your community.
+                            Connect, collaborate, and grow. Explore the diverse
+                            student organizations at MinSU Bongabong Campus and
+                            find your community.
                         </p>
 
                         {/* Search Bar Container */}
                         <div className="mx-auto max-w-3xl">
                             <div className="relative rounded-2xl bg-white p-2 shadow-xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-800">
-                                <form onSubmit={handleSearch} className="flex flex-col gap-2 sm:flex-row">
+                                <form
+                                    onSubmit={handleSearch}
+                                    className="flex flex-col gap-2 sm:flex-row"
+                                >
                                     <div className="relative flex-1">
                                         <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400" />
                                         <Input
                                             type="text"
                                             placeholder="Search organizations..."
                                             value={search}
-                                            onChange={(e) => setSearch(e.target.value)}
+                                            onChange={(e) =>
+                                                setSearch(e.target.value)
+                                            }
                                             className="h-12 w-full rounded-xl border-0 bg-slate-50 pl-12 text-base text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-green-500 focus:outline-none dark:bg-slate-800 dark:text-white"
                                         />
                                     </div>
@@ -157,16 +164,20 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                             type="button"
                                             variant="outline"
                                             size="lg"
-                                            className={`h-12 rounded-xl border-slate-200 px-4 text-slate-700 hover:bg-slate-50 hover:text-green-700 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 ${showFilters ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400' : ''}`}
-                                            onClick={() => setShowFilters(!showFilters)}
+                                            className={`h-12 rounded-xl border-slate-200 px-4 text-slate-700 hover:bg-slate-50 hover:text-green-700 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 ${showFilters ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400' : ''}`}
+                                            onClick={() =>
+                                                setShowFilters(!showFilters)
+                                            }
                                         >
                                             <Filter className="h-5 w-5" />
-                                            <span className="ml-2 hidden sm:inline">Filters</span>
+                                            <span className="ml-2 hidden sm:inline">
+                                                Filters
+                                            </span>
                                         </Button>
                                         <Button
                                             type="submit"
                                             size="lg"
-                                            className="h-12 rounded-xl bg-gradient-to-r from-green-600 to-green-700 px-8 font-semibold text-white shadow-lg hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all duration-200"
+                                            className="h-12 rounded-xl bg-gradient-to-r from-green-600 to-green-700 px-8 font-semibold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-green-500/30"
                                         >
                                             Search
                                         </Button>
@@ -180,10 +191,10 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
             {/* Filters Section */}
             {showFilters && (
-                <section className="animate-in slide-in-from-top-2 bg-slate-50/50 border-y border-slate-200 dark:bg-slate-900/50 dark:border-slate-800">
+                <section className="border-y border-slate-200 bg-slate-50/50 animate-in slide-in-from-top-2 dark:border-slate-800 dark:bg-slate-900/50">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        <div className="mb-4 flex items-center justify-between">
+                            <h3 className="text-sm font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">
                                 Refine Results
                             </h3>
                             {hasActiveFilters && (
@@ -191,7 +202,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     variant="ghost"
                                     size="sm"
                                     onClick={clearFilters}
-                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 h-8"
+                                    className="h-8 text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-900/20"
                                 >
                                     <X className="mr-1 h-3 w-3" /> Clear All
                                 </Button>
@@ -210,7 +221,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                         handleFilterChange('type', value)
                                     }
                                 >
-                                    <SelectTrigger className="w-full h-11 rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white">
+                                    <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
                                         <SelectValue placeholder="All Types" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -238,7 +249,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                         handleFilterChange('category', value)
                                     }
                                 >
-                                    <SelectTrigger className="w-full h-11 rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white">
+                                    <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
                                         <SelectValue placeholder="All Categories" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -278,7 +289,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                         handleFilterChange('status', value)
                                     }
                                 >
-                                    <SelectTrigger className="w-full h-11 rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:bg-slate-800 dark:border-slate-700 dark:text-white">
+                                    <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
                                         <SelectValue placeholder="All Statuses" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -303,14 +314,20 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
             )}
 
             {/* Results Section */}
-            <section className="px-4 py-12 sm:px-6 lg:px-8 bg-slate-50/50 dark:bg-slate-900/50 min-h-[50vh]">
+            <section className="min-h-[50vh] bg-slate-50/50 px-4 py-12 sm:px-6 lg:px-8 dark:bg-slate-900/50">
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-8">
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                            {hasActiveFilters ? 'Search Results' : 'All Organizations'}
+                            {hasActiveFilters
+                                ? 'Search Results'
+                                : 'All Organizations'}
                         </h2>
-                        <p className="text-slate-600 dark:text-slate-400 mt-1">
-                            Found <span className="font-semibold text-green-600 dark:text-green-400">{organizations?.meta?.total || 0}</span> student organizations
+                        <p className="mt-1 text-slate-600 dark:text-slate-400">
+                            Found{' '}
+                            <span className="font-semibold text-green-600 dark:text-green-400">
+                                {organizations?.meta?.total || 0}
+                            </span>{' '}
+                            student organizations
                         </p>
                     </div>
 
@@ -319,10 +336,10 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             {organizations.data.map((organization) => (
                                 <div
                                     key={organization.id}
-                                    className="group relative flex flex-col h-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-green-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:hover:border-green-700 dark:hover:shadow-green-900/20"
+                                    className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-green-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:hover:border-green-700 dark:hover:shadow-green-900/20"
                                 >
                                     {/* Green Top Border Gradient */}
-                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                                    <div className="absolute top-0 left-0 h-1 w-full origin-left scale-x-0 transform bg-gradient-to-r from-green-500 to-emerald-500 transition-transform duration-300 group-hover:scale-x-100"></div>
 
                                     {/* Header */}
                                     <div className="mb-5 flex items-start justify-between">
@@ -330,8 +347,13 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                             <Users className="h-6 w-6" />
                                         </div>
                                         <div className="flex flex-col items-end gap-2">
-                                            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${organization.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400'}`}>
-                                                {organization.status === 'Active' && <span className="mr-1 h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>}
+                                            <span
+                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${organization.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400'}`}
+                                            >
+                                                {organization.status ===
+                                                    'Active' && (
+                                                    <span className="mr-1 h-1.5 w-1.5 animate-pulse rounded-full bg-green-500"></span>
+                                                )}
                                                 {organization.status}
                                             </span>
                                         </div>
@@ -339,8 +361,8 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
                                     {/* Content */}
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded">
+                                        <div className="mb-2 flex items-center gap-2">
+                                            <span className="rounded bg-blue-50 px-2 py-0.5 text-xs font-bold tracking-wider text-blue-600 uppercase dark:bg-blue-900/20 dark:text-blue-400">
                                                 {organization.organization_type}
                                             </span>
                                             <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -348,29 +370,39 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                             </span>
                                         </div>
 
-                                        <h3 className="mb-3 text-xl font-bold text-slate-900 transition-colors group-hover:text-green-700 dark:text-white dark:group-hover:text-green-400 line-clamp-2">
+                                        <h3 className="mb-3 line-clamp-2 text-xl font-bold text-slate-900 transition-colors group-hover:text-green-700 dark:text-white dark:group-hover:text-green-400">
                                             {organization.organization_name}
                                         </h3>
 
-                                        <p className="mb-4 line-clamp-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                            {organization.mission || 'No mission statement available.'}
+                                        <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                            {organization.mission ||
+                                                'No mission statement available.'}
                                         </p>
 
-                                        <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-4">
+                                        <div className="flex items-center gap-4 border-t border-slate-100 pt-4 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-500">
                                             <div className="flex items-center gap-1">
                                                 <Users className="h-3 w-3" />
-                                                <span className="font-semibold text-slate-700 dark:text-slate-300">{organization.members_count || 0}</span> Members
+                                                <span className="font-semibold text-slate-700 dark:text-slate-300">
+                                                    {organization.members_count ||
+                                                        0}
+                                                </span>{' '}
+                                                Members
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Activity className="h-3 w-3" />
-                                                <span className="font-semibold text-slate-700 dark:text-slate-300">High</span> Activity
+                                                <span className="font-semibold text-slate-700 dark:text-slate-300">
+                                                    High
+                                                </span>{' '}
+                                                Activity
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* View Details Link */}
                                     <Link
-                                        href={sas.organizations.show.url(organization.organization_code)}
+                                        href={sas.organizations.show.url(
+                                            organization.organization_code,
+                                        )}
                                         className="mt-6 flex items-center gap-2 text-sm font-bold text-green-700 transition-all hover:gap-3 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
                                     >
                                         View Details
@@ -380,7 +412,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white py-16 px-4 text-center dark:border-slate-700 dark:bg-slate-900">
+                        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
                             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800">
                                 <Users className="h-8 w-8 text-slate-400" />
                             </div>
@@ -388,10 +420,15 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 No organizations found
                             </h3>
                             <p className="mb-6 max-w-md text-slate-600 dark:text-slate-400">
-                                We couldn't find any organizations matching your criteria. Try adjusting your search or filters.
+                                We couldn't find any organizations matching your
+                                criteria. Try adjusting your search or filters.
                             </p>
                             {hasActiveFilters && (
-                                <Button onClick={clearFilters} variant="outline" className="border-slate-200 hover:bg-slate-50 dark:border-slate-700">
+                                <Button
+                                    onClick={clearFilters}
+                                    variant="outline"
+                                    className="border-slate-200 hover:bg-slate-50 dark:border-slate-700"
+                                >
                                     Clear All Filters
                                 </Button>
                             )}
@@ -406,19 +443,31 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             <div className="mt-12 flex items-center justify-center gap-2">
                                 {organizations?.links?.prev && (
                                     <Link href={organizations.links.prev}>
-                                        <Button variant="outline" className="rounded-xl">
+                                        <Button
+                                            variant="outline"
+                                            className="rounded-xl"
+                                        >
                                             Previous
                                         </Button>
                                     </Link>
                                 )}
 
                                 <span className="px-4 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    Page <span className="text-slate-900 dark:text-white font-bold">{organizations?.meta?.current_page || 1}</span> of {organizations?.meta?.last_page || 1}
+                                    Page{' '}
+                                    <span className="font-bold text-slate-900 dark:text-white">
+                                        {organizations?.meta?.current_page || 1}
+                                    </span>{' '}
+                                    of {organizations?.meta?.last_page || 1}
                                 </span>
 
                                 {organizations?.links?.next && (
                                     <Link href={organizations.links.next}>
-                                        <Button variant="outline" className="rounded-xl">Next</Button>
+                                        <Button
+                                            variant="outline"
+                                            className="rounded-xl"
+                                        >
+                                            Next
+                                        </Button>
                                     </Link>
                                 )}
                             </div>

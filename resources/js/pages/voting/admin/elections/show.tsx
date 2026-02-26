@@ -1,11 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
@@ -89,22 +84,28 @@ export default function Show({ election }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         Status
                                     </div>
                                     {election.computed_status === 'active' ? (
-                                        <Badge variant="default" className="mt-1">
+                                        <Badge
+                                            variant="default"
+                                            className="mt-1"
+                                        >
                                             Active
                                         </Badge>
                                     ) : (
-                                        <Badge variant="secondary" className="mt-1">
+                                        <Badge
+                                            variant="secondary"
+                                            className="mt-1"
+                                        >
                                             Ended
                                         </Badge>
                                     )}
                                 </div>
 
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         End Time
                                     </div>
                                     <div className="mt-1 text-sm font-medium text-foreground">
@@ -123,7 +124,7 @@ export default function Show({ election }: Props) {
                                 </div>
 
                                 <div>
-                                    <div className="text-xs uppercase text-muted-foreground">
+                                    <div className="text-xs text-muted-foreground uppercase">
                                         Created
                                     </div>
                                     <div className="mt-1 text-sm font-medium text-foreground">

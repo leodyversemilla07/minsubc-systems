@@ -125,7 +125,7 @@ export default function InsuranceShow({ insurance }: Props) {
 
     const daysUntilExpiration = Math.ceil(
         (new Date(insurance.expiration_date).getTime() - Date.now()) /
-        (1000 * 60 * 60 * 24),
+            (1000 * 60 * 60 * 24),
     );
 
     return (
@@ -285,11 +285,13 @@ export default function InsuranceShow({ insurance }: Props) {
                                                 </span>
                                                 <span className="font-medium">
                                                     {
-                                                        insurance.reviewed_by_user
+                                                        insurance
+                                                            .reviewed_by_user
                                                             .first_name
                                                     }{' '}
                                                     {
-                                                        insurance.reviewed_by_user
+                                                        insurance
+                                                            .reviewed_by_user
                                                             .last_name
                                                     }
                                                 </span>
@@ -383,7 +385,8 @@ export default function InsuranceShow({ insurance }: Props) {
                                                 daysUntilExpiration < 30 && (
                                                     <p className="mt-1 text-xs text-yellow-600">
                                                         Expires in{' '}
-                                                        {daysUntilExpiration} days
+                                                        {daysUntilExpiration}{' '}
+                                                        days
                                                     </p>
                                                 )}
                                             {daysUntilExpiration < 0 && (
@@ -397,36 +400,38 @@ export default function InsuranceShow({ insurance }: Props) {
 
                                 {(insurance.beneficiary_name ||
                                     insurance.beneficiary_relationship) && (
-                                        <div className="border-t pt-4">
-                                            <p className="mb-2 text-sm font-medium">
-                                                Beneficiary Information
-                                            </p>
-                                            <div className="grid gap-4 md:grid-cols-2">
-                                                {insurance.beneficiary_name && (
-                                                    <div>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            Name
-                                                        </p>
-                                                        <p className="font-medium">
-                                                            {insurance.beneficiary_name}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {insurance.beneficiary_relationship && (
-                                                    <div>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            Relationship
-                                                        </p>
-                                                        <p className="font-medium">
-                                                            {
-                                                                insurance.beneficiary_relationship
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
+                                    <div className="border-t pt-4">
+                                        <p className="mb-2 text-sm font-medium">
+                                            Beneficiary Information
+                                        </p>
+                                        <div className="grid gap-4 md:grid-cols-2">
+                                            {insurance.beneficiary_name && (
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Name
+                                                    </p>
+                                                    <p className="font-medium">
+                                                        {
+                                                            insurance.beneficiary_name
+                                                        }
+                                                    </p>
+                                                </div>
+                                            )}
+                                            {insurance.beneficiary_relationship && (
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Relationship
+                                                    </p>
+                                                    <p className="font-medium">
+                                                        {
+                                                            insurance.beneficiary_relationship
+                                                        }
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
 
@@ -470,12 +475,14 @@ export default function InsuranceShow({ insurance }: Props) {
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Name</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Name
+                                    </p>
                                     <p className="font-medium">
                                         {insurance.student.first_name}{' '}
                                         {insurance.student.middle_name &&
                                             insurance.student.middle_name[0] +
-                                            '.'}{' '}
+                                                '.'}{' '}
                                         {insurance.student.last_name}
                                     </p>
                                 </div>
@@ -488,7 +495,9 @@ export default function InsuranceShow({ insurance }: Props) {
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Email</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Email
+                                    </p>
                                     <p className="text-sm">
                                         {insurance.student.email}
                                     </p>

@@ -67,7 +67,10 @@ export default function Index({ scholarships, filters }: Props) {
         <AppLayout
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
-                { title: 'My Scholarships', href: sas.student.scholarships.index.url() },
+                {
+                    title: 'My Scholarships',
+                    href: sas.student.scholarships.index.url(),
+                },
             ]}
         >
             <Head title="My Scholarships - Student Portal" />
@@ -220,7 +223,7 @@ export default function Index({ scholarships, filters }: Props) {
                                                     <Badge
                                                         className={
                                                             statusColors[
-                                                            recipient.status
+                                                                recipient.status
                                                             ]
                                                         }
                                                     >
@@ -239,21 +242,21 @@ export default function Index({ scholarships, filters }: Props) {
                                                     Award Date:{' '}
                                                     {recipient.date_awarded
                                                         ? new Date(
-                                                            recipient.date_awarded,
-                                                        ).toLocaleDateString()
+                                                              recipient.date_awarded,
+                                                          ).toLocaleDateString()
                                                         : 'N/A'}
                                                 </span>
                                             </div>
 
                                             {recipient.scholarship
                                                 ?.description && (
-                                                    <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
-                                                        {
-                                                            recipient.scholarship
-                                                                .description
-                                                        }
-                                                    </p>
-                                                )}
+                                                <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+                                                    {
+                                                        recipient.scholarship
+                                                            .description
+                                                    }
+                                                </p>
+                                            )}
 
                                             <Link
                                                 href={sas.student.scholarships.show.url(

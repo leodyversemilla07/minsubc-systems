@@ -287,7 +287,7 @@ export default function OfficersManagement({
                 {/* Header with action button */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white md:text-3xl">
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl dark:text-white">
                             Officers
                         </h1>
                         <p className="text-muted-foreground">

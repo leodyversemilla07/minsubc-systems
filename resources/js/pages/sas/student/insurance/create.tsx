@@ -35,7 +35,10 @@ export default function Create() {
         <AppLayout
             breadcrumbs={[
                 { title: 'Dashboard', href: '/dashboard' },
-                { title: 'My Insurance', href: sas.student.insurance.index.url() },
+                {
+                    title: 'My Insurance',
+                    href: sas.student.insurance.index.url(),
+                },
                 { title: 'Submit New', href: '#' },
             ]}
         >

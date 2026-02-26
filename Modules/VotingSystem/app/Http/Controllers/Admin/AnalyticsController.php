@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Response as InertiaResponse;
-use Modules\VotingSystem\Models\Election;
 use Modules\VotingSystem\Models\Candidate;
-use Modules\VotingSystem\Models\Voter;
-use Modules\VotingSystem\Models\Vote;
-use Modules\VotingSystem\Models\Position;
+use Modules\VotingSystem\Models\Election;
 use Modules\VotingSystem\Models\Partylist;
+use Modules\VotingSystem\Models\Position;
+use Modules\VotingSystem\Models\Vote;
+use Modules\VotingSystem\Models\Voter;
 use Modules\VotingSystem\Models\VoterFeedback;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,7 +53,7 @@ class AnalyticsController extends Controller
             'generatedAt' => now()->format('Y-m-d H:i:s'),
         ]);
 
-        return $pdf->download("voting-analytics-report-{$period}-" . now()->format('Y-m-d') . '.pdf');
+        return $pdf->download("voting-analytics-report-{$period}-".now()->format('Y-m-d').'.pdf');
     }
 
     /**
@@ -88,22 +88,22 @@ class AnalyticsController extends Controller
             'total_elections' => Election::count(),
             'active_elections' => Election::where('status', true)->count(),
             'completed_elections' => Election::where('status', false)->count(),
-            
+
             'total_voters' => $totalVoters,
             'voters_who_voted' => $votedVoters,
             'voters_in_period' => Voter::where('created_at', '>=', $startDate)->count(),
             'voter_turnout' => $voterTurnout,
-            
+
             'total_candidates' => Candidate::count(),
             'total_positions' => Position::count(),
             'total_partylists' => Partylist::count(),
-            
+
             'total_votes' => Vote::count(),
             'votes_in_period' => Vote::where('created_at', '>=', $startDate)->count(),
-            
+
             'feedback_count' => VoterFeedback::count(),
             'avg_rating' => VoterFeedback::avg('rating') ?? 0,
-            
+
             'active_election' => Election::where('status', true)->first(),
         ];
     }
@@ -115,15 +115,15 @@ class AnalyticsController extends Controller
     {
         return [
             'votes_by_election' => Election::withCount('votes')->get()
-                ->map(fn($e) => ['name' => $e->title, 'count' => $e->votes_count]),
-            
+                ->map(fn ($e) => ['name' => $e->title, 'count' => $e->votes_count]),
+
             'candidates_by_position' => Position::withCount('candidates')->get()
-                ->map(fn($p) => ['name' => $p->name, 'count' => $p->candidates_count]),
-            
+                ->map(fn ($p) => ['name' => $p->name, 'count' => $p->candidates_count]),
+
             'voter_turnout_trend' => $this->getVoterTurnoutTrend(),
-            
+
             'votes_by_hour' => $this->getVotesByHour(),
-            
+
             'feedback_distribution' => VoterFeedback::query()
                 ->select('rating', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
                 ->groupBy('rating')
@@ -138,11 +138,11 @@ class AnalyticsController extends Controller
     protected function getVoterTurnoutTrend(): array
     {
         $elections = Election::where('status', false)->with('voters')->get();
-        
+
         return $elections->map(function ($election) {
             $total = $election->voters()->count();
             $voted = $election->voters()->where('has_voted', true)->count();
-            
+
             return [
                 'name' => $election->title,
                 'total' => $total,
@@ -159,7 +159,7 @@ class AnalyticsController extends Controller
     {
         return collect(range(0, 23))->map(function ($hour) {
             $count = Vote::whereHour('created_at', $hour)->count();
-            
+
             return [
                 'hour' => sprintf('%02d:00', $hour),
                 'count' => $count,

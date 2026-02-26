@@ -17,7 +17,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -34,12 +33,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
 import {
     AlertCircle,
-    Bell,
     Calendar,
     CheckCircle,
     GraduationCap,
@@ -479,9 +476,7 @@ export default function RenewalsIndex({
                                         </DialogHeader>
                                         <div className="space-y-4 py-4">
                                             <div className="space-y-2">
-                                                <Label>
-                                                    New Academic Year
-                                                </Label>
+                                                <Label>New Academic Year</Label>
                                                 <Select
                                                     value={
                                                         bulkRenewForm.data
@@ -600,7 +595,9 @@ export default function RenewalsIndex({
                                                     selectedIds.length ===
                                                         eligibleScholars.length
                                                 }
-                                                onCheckedChange={handleSelectAll}
+                                                onCheckedChange={
+                                                    handleSelectAll
+                                                }
                                             />
                                         </TableHead>
                                         <TableHead>Student</TableHead>
@@ -647,15 +644,24 @@ export default function RenewalsIndex({
                                                 <TableCell>
                                                     <div>
                                                         <div className="font-medium">
-                                                            {scholar.student.name}
+                                                            {
+                                                                scholar.student
+                                                                    .name
+                                                            }
                                                         </div>
                                                         <div className="text-sm text-muted-foreground">
-                                                            {scholar.student.email}
+                                                            {
+                                                                scholar.student
+                                                                    .email
+                                                            }
                                                         </div>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
-                                                    {scholar.scholarship.scholarship_name}
+                                                    {
+                                                        scholar.scholarship
+                                                            .scholarship_name
+                                                    }
                                                 </TableCell>
                                                 <TableCell>
                                                     {scholar.academic_year} -{' '}

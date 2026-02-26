@@ -20,7 +20,6 @@ import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-
 interface Adviser {
     id: number;
     first_name: string;
@@ -278,7 +277,9 @@ export default function OrganizationsCreate({ advisers }: Props) {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="mission">Mission Statement</Label>
+                                <Label htmlFor="mission">
+                                    Mission Statement
+                                </Label>
                                 <Textarea
                                     id="mission"
                                     value={data.mission}
@@ -334,7 +335,10 @@ export default function OrganizationsCreate({ advisers }: Props) {
                                         type="email"
                                         value={data.contact_email}
                                         onChange={(e) =>
-                                            setData('contact_email', e.target.value)
+                                            setData(
+                                                'contact_email',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="organization@minsu.edu.ph"
                                     />
@@ -353,7 +357,10 @@ export default function OrganizationsCreate({ advisers }: Props) {
                                         id="contact_phone"
                                         value={data.contact_phone}
                                         onChange={(e) =>
-                                            setData('contact_phone', e.target.value)
+                                            setData(
+                                                'contact_phone',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="+63 XXX XXX XXXX"
                                     />
@@ -373,7 +380,10 @@ export default function OrganizationsCreate({ advisers }: Props) {
                                     id="office_location"
                                     value={data.office_location}
                                     onChange={(e) =>
-                                        setData('office_location', e.target.value)
+                                        setData(
+                                            'office_location',
+                                            e.target.value,
+                                        )
                                     }
                                     placeholder="e.g., Room 301, Main Building"
                                 />

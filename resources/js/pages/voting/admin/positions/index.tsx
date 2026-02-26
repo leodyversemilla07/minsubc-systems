@@ -220,7 +220,9 @@ export default function Index({
                                     </TableHeader>
                                     <TableBody>
                                         {positions.map((position, index) => (
-                                            <TableRow key={position.position_id}>
+                                            <TableRow
+                                                key={position.position_id}
+                                            >
                                                 <TableCell>
                                                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
                                                         {position.priority}
@@ -238,11 +240,14 @@ export default function Index({
                                                     {position.election.name}
                                                 </TableCell>
                                                 <TableCell className="text-sm font-semibold text-foreground">
-                                                    {position.candidates_count || 0}
+                                                    {position.candidates_count ||
+                                                        0}
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        {can('positions.reorder') && (
+                                                        {can(
+                                                            'positions.reorder',
+                                                        ) && (
                                                             <>
                                                                 <Button
                                                                     variant="ghost"
@@ -252,7 +257,10 @@ export default function Index({
                                                                             position.position_id,
                                                                         )
                                                                     }
-                                                                    disabled={index === 0}
+                                                                    disabled={
+                                                                        index ===
+                                                                        0
+                                                                    }
                                                                     title="Move Up"
                                                                 >
                                                                     <ArrowUp className="h-4 w-4" />
@@ -267,7 +275,8 @@ export default function Index({
                                                                     }
                                                                     disabled={
                                                                         index ===
-                                                                        positions.length - 1
+                                                                        positions.length -
+                                                                            1
                                                                     }
                                                                     title="Move Down"
                                                                 >
@@ -290,7 +299,9 @@ export default function Index({
                                                                 <Eye className="h-4 w-4" />
                                                             </Button>
                                                         </Link>
-                                                        {can('positions.edit') && (
+                                                        {can(
+                                                            'positions.edit',
+                                                        ) && (
                                                             <Link
                                                                 href={voting.admin.positions.edit.url(
                                                                     {
@@ -307,9 +318,13 @@ export default function Index({
                                                                 </Button>
                                                             </Link>
                                                         )}
-                                                        {can('positions.delete') && (
+                                                        {can(
+                                                            'positions.delete',
+                                                        ) && (
                                                             <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
+                                                                <AlertDialogTrigger
+                                                                    asChild
+                                                                >
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="sm"
@@ -321,20 +336,48 @@ export default function Index({
                                                                 <AlertDialogContent>
                                                                     <AlertDialogHeader>
                                                                         <AlertDialogTitle>
-                                                                            Delete Position
+                                                                            Delete
+                                                                            Position
                                                                         </AlertDialogTitle>
                                                                         <AlertDialogDescription>
-                                                                            Are you sure you want to delete "{position.description}"? This action cannot be undone and will remove all associated candidates.
+                                                                            Are
+                                                                            you
+                                                                            sure
+                                                                            you
+                                                                            want
+                                                                            to
+                                                                            delete
+                                                                            "
+                                                                            {
+                                                                                position.description
+                                                                            }
+                                                                            "?
+                                                                            This
+                                                                            action
+                                                                            cannot
+                                                                            be
+                                                                            undone
+                                                                            and
+                                                                            will
+                                                                            remove
+                                                                            all
+                                                                            associated
+                                                                            candidates.
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogCancel>
+                                                                            Cancel
+                                                                        </AlertDialogCancel>
                                                                         <AlertDialogAction
                                                                             onClick={() =>
                                                                                 router.delete(
-                                                                                    voting.admin.positions.destroy.url({
-                                                                                        position: position.position_id,
-                                                                                    }),
+                                                                                    voting.admin.positions.destroy.url(
+                                                                                        {
+                                                                                            position:
+                                                                                                position.position_id,
+                                                                                        },
+                                                                                    ),
                                                                                 )
                                                                             }
                                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
