@@ -423,7 +423,7 @@ Enable users to find information quickly and efficiently.
 ## 7. System Architecture
 
 ### 7.1 Technology Stack
-- **Backend:** Laravel 12.34.0 (PHP 8.3.27)
+- **Backend:** Laravel 13.0.0 (PHP 8.3.27)
 - **Frontend:** React 19.1.1 with Inertia.js 2.1.4
 - **UI Framework:** Tailwind CSS 4.1.12 with shadcn/ui components
 - **Database:** MySQL
@@ -598,7 +598,7 @@ resources/js/pages/usg/
 - ✅ Code passes linting standards (Pint, ESLint, Prettier)
 - ✅ Comprehensive test coverage (215 tests, 744 assertions)
 - ✅ All tests passing (100% success rate)
-- ✅ Laravel 12 best practices followed
+- ✅ Laravel 13 best practices followed
 - ✅ Type-safe React components
 
 ### 9.3 User Acceptance - ✅ PASSED

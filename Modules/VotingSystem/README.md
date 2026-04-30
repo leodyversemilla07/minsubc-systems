@@ -1,6 +1,6 @@
 # VotingSystem Module
 
-A modern, secure electronic voting system built with Laravel 12, Inertia.js, and React. This module provides comprehensive election management capabilities for educational institutions and organizations.
+A modern, secure electronic voting system built with Laravel 13, Inertia.js, and React. This module provides comprehensive election management capabilities for educational institutions and organizations.
 
 ## 🚀 Features
 
@@ -25,7 +25,7 @@ A modern, secure electronic voting system built with Laravel 12, Inertia.js, and
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Laravel 12
+- **Backend**: Laravel 13
 - **Frontend**: React 19 + TypeScript
 - **SPA Framework**: Inertia.js v2
 - **Styling**: Tailwind CSS v4
@@ -284,7 +284,7 @@ This module is a complete rewrite of the legacy PHP voting system with the follo
 - Interactive shadcn charts (bar and pie) for results visualization
 
 ### 🗑️ Legacy Code Removed
-All legacy PHP files, Blade views, and old assets have been completely removed. The module now runs entirely on Laravel 12 + Inertia.js + React.
+All legacy PHP files, Blade views, and old assets have been completely removed. The module now runs entirely on Laravel 13 + Inertia.js + React.
 
 ## 👥 Development Team
 
@@ -298,6 +298,6 @@ All legacy PHP files, Blade views, and old assets have been completely removed. 
 
 ---
 
-**Module Version**: 2.0.0  
-**Laravel Version**: 12.x  
-**Last Updated**: November 2025
+**Module Version**: 3.0.0  
+**Laravel Version**: 13.x  
+**Last Updated**: April 30, 2026

@@ -2,9 +2,9 @@
 
 **Project:** Mindoro State University Bongabong Campus Systems  
 **Architecture Type:** Monorepo Modular Monolith (Laravel Modules)  
-**Version:** 2.0  
-**Last Updated:** November 3, 2025  
-**Module Package:** nwidart/laravel-modules v12.0.4
+**Version:** 3.0  
+**Last Updated:** April 30, 2026  
+**Module Package:** nwidart/laravel-modules v13.0.0
 
 > **Complete architecture documentation** - includes system architecture, directory structure, and database organization.
 
@@ -44,7 +44,7 @@ The MinSU BC Systems employs a **Monorepo Modular Monolith** architecture using 
 ✅ **Simplified Development:** Single codebase, unified tooling, and deployment  
 ✅ **Gradual Migration Path:** Can evolve to microservices if needed  
 ✅ **Team Independence:** Different teams can work on different modules  
-✅ **Industry Standards:** Follows Laravel ecosystem best practices  
+✅ **Industry Standards:** Follows Laravel 13 best practices  
 ✅ **Auto-Discovery:** Modules are automatically registered and loaded
 
 ### Architecture Diagram

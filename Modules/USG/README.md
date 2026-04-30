@@ -175,7 +175,7 @@ The **USG Information and Transparency Portal** is a Laravel-based module design
 ## 🛠 Technology Stack
 
 ### Backend
-- **Framework:** Laravel 12.34.0
+- **Framework:** Laravel 13.0.0
 - **Language:** PHP 8.3.27
 - **Database:** MySQL
 - **Authentication:** Laravel Fortify 1.31.1

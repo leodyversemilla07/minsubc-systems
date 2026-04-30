@@ -50,7 +50,7 @@ The **MinSU BC Systems Platform** is a modern, modular monorepo application buil
 
 - **🎯 Unified Experience**: Single authentication, consistent UI/UX across all modules
 - **🔒 Secure & Compliant**: Built with security best practices, role-based access control
-- **📱 Modern Stack**: Latest Laravel 12, React 19, TypeScript, and Tailwind CSS 4
+- **📱 Modern Stack**: Latest Laravel 13, React 19, TypeScript, and Tailwind CSS 4
 - **🚀 High Performance**: Optimized for speed with Vite, SSR support, and efficient caching
 - **♿ Accessible**: WCAG compliant, responsive design, dark mode support
 - **🧩 Modular Architecture**: Independent modules that can evolve separately
@@ -934,7 +934,7 @@ All comprehensive documentation is located in the **[`/docs`](docs/)** directory
 
 ### External Resources
 
-- [Laravel 12 Documentation](https://laravel.com/docs/12.x)
+- [Laravel 13 Documentation](https://laravel.com/docs/13.x)
 - [Laravel Modules Package](https://nwidart.com/laravel-modules)
 - [Inertia.js Documentation](https://inertiajs.com/)
 - [React Documentation](https://react.dev/)

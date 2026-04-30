@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the MinSU Systems Platform! This 
 
 ## About This Project
 
-The MinSU Systems Platform is a comprehensive web-based platform built with Laravel 12, Inertia.js v2, React 19, TypeScript, and Shadcn UI. It consists of four integrated systems serving different aspects of Mindoro State University operations:
+The MinSU Systems Platform is a comprehensive web-based platform built with Laravel 13, Inertia.js v2, React 19, TypeScript, and Shadcn UI. It consists of four integrated systems serving different aspects of Mindoro State University operations:
 
 - **📄 Document Request System (Registrar)**: Automates document request processing for the Registrar's Office
 - **📊 Student Affairs and Services (SAS)**: Student affairs and services management
