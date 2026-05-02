@@ -1,4 +1,11 @@
-import { DataTable } from '@/components/data-table';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { DatePicker } from '@/components/date-picker';
 import { ReleaseDocumentDialog } from '@/components/release-document-dialog';
 import {
@@ -26,7 +33,17 @@ import { dashboard } from '@/routes/registrar/admin';
 import { show } from '@/routes/registrar/admin/requests';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { ColumnDef } from '@tanstack/react-table';
+import {
+    ColumnDef,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+    SortingState,
+    ColumnFiltersState,
+} from '@tanstack/react-table';
 import {
     AlertCircle,
     Calendar,
@@ -132,6 +149,11 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
         requestNumber: '',
         studentName: '',
     });
+
+    // Table states
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [globalFilter, setGlobalFilter] = useState('');
 
     const hasActiveFilters = statusFilter !== 'all' || dateFrom || dateTo;
 
@@ -658,13 +680,76 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <DataTable
-                            data={requests.data}
-                            columns={columns}
-                            filterColumn="request_number"
-                            filterPlaceholder="Search by request number..."
-                            emptyMessage="No document requests found. Try adjusting your filters."
-                        />
+                        {(() => {
+                            const table = useReactTable({
+                                data: requests.data,
+                                columns,
+                                getCoreRowModel: getCoreRowModel(),
+                                getSortedRowModel: getSortedRowModel(),
+                                getFilteredRowModel: getFilteredRowModel(),
+                                getPaginationRowModel: getPaginationRowModel(),
+                                onSortingChange: setSorting,
+                                onColumnFiltersChange: setColumnFilters,
+                                onGlobalFilterChange: setGlobalFilter,
+                                state: {
+                                    sorting,
+                                    columnFilters,
+                                    globalFilter,
+                                },
+                            });
+                            return (
+                                <div className="w-full overflow-auto">
+                                    <Table>
+                                        <TableHeader>
+                                            {table.getHeaderGroups().map((headerGroup) => (
+                                                <TableRow key={headerGroup.id}>
+                                                    {headerGroup.headers.map((header) => (
+                                                        <TableHead key={header.id}>
+                                                            {header.isPlaceholder
+                                                                ? null
+                                                                : flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext(),
+                                                                )}
+                                                        </TableHead>
+                                                    ))}
+                                                </TableRow>
+                                            ))}
+                                        </TableHeader>
+                                        <TableBody>
+                                            {table.getRowModel().rows?.length ? (
+                                                table.getRowModel().rows.map((row) => (
+                                                    <TableRow
+                                                        key={row.id}
+                                                        data-state={
+                                                            row.getIsSelected() && 'selected'
+                                                        }
+                                                    >
+                                                        {row.getVisibleCells().map((cell) => (
+                                                            <TableCell key={cell.id}>
+                                                                {flexRender(
+                                                                    cell.column.columnDef.cell,
+                                                                    cell.getContext(),
+                                                                )}
+                                                            </TableCell>
+                                                        ))}
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell
+                                                        colSpan={columns.length}
+                                                        className="h-24 text-center"
+                                                    >
+                                                        No document requests found. Try adjusting your filters.
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            );
+                        })()}
                     </CardContent>
                 </Card>
             </div>
