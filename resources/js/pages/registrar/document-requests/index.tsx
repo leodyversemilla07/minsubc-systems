@@ -357,6 +357,24 @@ export default function Index({ requests }: Props) {
         },
     ];
 
+    // Table instance
+    const table = useReactTable({
+        data: filteredData,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        onGlobalFilterChange: setGlobalFilter,
+        state: {
+            sorting,
+            columnFilters,
+            globalFilter,
+        },
+    });
+
     return (
         <TooltipProvider>
             <AppLayout breadcrumbs={breadcrumbs}>
@@ -653,25 +671,7 @@ export default function Index({ requests }: Props) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-0">
-                            {(() => {
-                                const table = useReactTable({
-                                    data: filteredData,
-                                    columns,
-                                    getCoreRowModel: getCoreRowModel(),
-                                    getSortedRowModel: getSortedRowModel(),
-                                    getFilteredRowModel: getFilteredRowModel(),
-                                    getPaginationRowModel: getPaginationRowModel(),
-                                    onSortingChange: setSorting,
-                                    onColumnFiltersChange: setColumnFilters,
-                                    onGlobalFilterChange: setGlobalFilter,
-                                    state: {
-                                        sorting,
-                                        columnFilters,
-                                        globalFilter,
-                                    },
-                                });
-                                return (
-                                    <div className="w-full overflow-auto">
+                            <div className="w-full overflow-auto">
                                         <Table>
                                             <TableHeader>
                                                 {table.getHeaderGroups().map((headerGroup) => (
@@ -722,8 +722,6 @@ export default function Index({ requests }: Props) {
                                             </TableBody>
                                         </Table>
                                     </div>
-                                );
-                            })()}
                         </CardContent>
                     </Card>
 

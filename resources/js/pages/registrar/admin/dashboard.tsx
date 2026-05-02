@@ -357,6 +357,24 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
         },
     ];
 
+    // Table instance
+    const table = useReactTable({
+        data: requests.data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        onGlobalFilterChange: setGlobalFilter,
+        state: {
+            sorting,
+            columnFilters,
+            globalFilter,
+        },
+    });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Admin Dashboard" />
@@ -874,25 +892,7 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {(() => {
-                            const table = useReactTable({
-                                data: requests.data,
-                                columns,
-                                getCoreRowModel: getCoreRowModel(),
-                                getSortedRowModel: getSortedRowModel(),
-                                getFilteredRowModel: getFilteredRowModel(),
-                                getPaginationRowModel: getPaginationRowModel(),
-                                onSortingChange: setSorting,
-                                onColumnFiltersChange: setColumnFilters,
-                                onGlobalFilterChange: setGlobalFilter,
-                                state: {
-                                    sorting,
-                                    columnFilters,
-                                    globalFilter,
-                                },
-                            });
-                            return (
-                                <div className="w-full overflow-auto">
+                        <div className="w-full overflow-auto">
                                     <Table>
                                         <TableHeader>
                                             {table
@@ -970,8 +970,6 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                         </TableBody>
                                     </Table>
                                 </div>
-                            );
-                        })()}
                     </CardContent>
                 </Card>
             </div>
