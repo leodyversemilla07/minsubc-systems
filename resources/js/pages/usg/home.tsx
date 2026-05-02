@@ -271,15 +271,13 @@ export default function USGHomepage({
 
                     <div className="mt-12 text-center">
                         <Button
-                            asChild
                             variant="outline"
                             size="lg"
                             className="border-green-700 text-green-700 hover:bg-green-700 hover:text-white"
+                            render={<Link href={usg.officers.index.url()} />}
                         >
-                            <Link href={usg.officers.index.url()}>
-                                View All Officers
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
+                            View All Officers
+                            <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
                     </div>
                 </div>
@@ -376,14 +374,14 @@ export default function USGHomepage({
 
                     <div className="mt-12 text-center">
                         <Button
-                            asChild
                             size="lg"
                             className="bg-green-700 text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-800 hover:shadow-2xl dark:bg-green-600 dark:hover:bg-green-500"
+                            render={
+                                <Link href={usg.announcements.index.url()} />
+                            }
                         >
-                            <Link href={usg.announcements.index.url()}>
-                                View All Announcements
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
+                            View All Announcements
+                            <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
                     </div>
                 </div>
@@ -404,14 +402,14 @@ export default function USGHomepage({
                             reports, meeting minutes, and more.
                         </p>
                         <Button
-                            asChild
                             size="lg"
                             className="bg-green-800 hover:bg-green-900 dark:bg-green-700 dark:hover:bg-green-600"
+                            render={
+                                <Link href={usg.transparency.index.url()} />
+                            }
                         >
-                            <Link href={usg.transparency.index.url()}>
-                                Explore Transparency
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
+                            Explore Transparency
+                            <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
                     </div>
                 </div>

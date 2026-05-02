@@ -402,8 +402,8 @@ export default function AnalyticsDashboard({
                                         />
                                         <YAxis unit="%" />
                                         <Tooltip
-                                            formatter={(value: number) => [
-                                                `${value}%`,
+                                            formatter={(value) => [
+                                                `${Number(value ?? 0)}%`,
                                                 'Turnout',
                                             ]}
                                         />
@@ -441,7 +441,7 @@ export default function AnalyticsDashboard({
                                             cy="50%"
                                             outerRadius={100}
                                             label={({ name, percent }) =>
-                                                `${name} (${(percent * 100).toFixed(0)}%)`
+                                                `${name} (${((percent ?? 0) * 100).toFixed(0)}%)`
                                             }
                                         >
                                             {trends.candidates_by_position.map(

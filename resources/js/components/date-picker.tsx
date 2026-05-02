@@ -53,34 +53,32 @@ export function DatePicker({
             )}
 
             <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                    <Button
-                        variant="outline"
-                        disabled={disabled}
-                        className={cn(
-                            'h-10 w-full justify-start text-left font-normal',
-                            !date && 'text-muted-foreground',
-                            className,
-                        )}
-                    >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? (
-                            format(date, 'PPP')
-                        ) : (
-                            <span>{placeholder}</span>
-                        )}
-                        {date && showClearButton && (
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="ml-auto h-7 w-7 p-0 hover:bg-transparent"
-                                onClick={handleClear}
-                            >
-                                <X className="h-3.5 w-3.5" />
-                            </Button>
-                        )}
-                    </Button>
+                <PopoverTrigger
+                    render={
+                        <Button
+                            variant="outline"
+                            disabled={disabled}
+                            className={cn(
+                                'h-10 w-full justify-start text-left font-normal',
+                                !date && 'text-muted-foreground',
+                                className,
+                            )}
+                        />
+                    }
+                >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, 'PPP') : <span>{placeholder}</span>}
+                    {date && showClearButton && (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="ml-auto h-7 w-7 p-0 hover:bg-transparent"
+                            onClick={handleClear}
+                        >
+                            <X className="h-3.5 w-3.5" />
+                        </Button>
+                    )}
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                     <Calendar

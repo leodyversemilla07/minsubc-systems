@@ -163,11 +163,13 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             Manage SAS activities and events
                         </p>
                     </div>
-                    <Button asChild>
-                        <Link href={sas.admin.activities.create.url()}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Create Activity
-                        </Link>
+                    <Button
+                        render={
+                            <Link href={sas.admin.activities.create.url()} />
+                        }
+                    >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create Activity
                     </Button>
                 </div>
 
@@ -353,28 +355,28 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <Link
+                                                                href={sas.admin.activities.show.url(
+                                                                    activity.id,
+                                                                )}
+                                                            />
+                                                        }
                                                     >
-                                                        <Link
-                                                            href={sas.admin.activities.show.url(
-                                                                activity.id,
-                                                            )}
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Link>
+                                                        <Eye className="h-4 w-4" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <Link
+                                                                href={sas.admin.activities.edit.url(
+                                                                    activity.id,
+                                                                )}
+                                                            />
+                                                        }
                                                     >
-                                                        <Link
-                                                            href={sas.admin.activities.edit.url(
-                                                                activity.id,
-                                                            )}
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Link>
+                                                        <Edit className="h-4 w-4" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -399,13 +401,16 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 <p className="text-gray-600 dark:text-gray-400">
                                     No activities found
                                 </p>
-                                <Button className="mt-4" asChild>
-                                    <Link
-                                        href={sas.admin.activities.create.url()}
-                                    >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Create First Activity
-                                    </Link>
+                                <Button
+                                    className="mt-4"
+                                    render={
+                                        <Link
+                                            href={sas.admin.activities.create.url()}
+                                        />
+                                    }
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Create First Activity
                                 </Button>
                             </div>
                         )}

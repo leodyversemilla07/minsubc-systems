@@ -52,19 +52,21 @@ export function NotificationBell() {
 
     return (
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="group relative h-9 w-9"
-                >
-                    <Bell className="!size-5 opacity-80 group-hover:opacity-100" />
-                    {unreadCount > 0 && (
-                        <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
-                            {unreadCount > 9 ? '9+' : unreadCount}
-                        </span>
-                    )}
-                </Button>
+            <DropdownMenuTrigger
+                render={
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="group relative h-9 w-9"
+                    />
+                }
+            >
+                <Bell className="!size-5 opacity-80 group-hover:opacity-100" />
+                {unreadCount > 0 && (
+                    <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                )}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
                 <div className="flex items-center justify-between px-3 py-2">
@@ -103,13 +105,15 @@ export function NotificationBell() {
                         <DropdownMenuSeparator />
                     </>
                 )}
-                <DropdownMenuItem asChild>
-                    <Link
-                        href="/notifications"
-                        className="w-full cursor-pointer text-center text-sm font-medium"
-                    >
-                        View all notifications
-                    </Link>
+                <DropdownMenuItem
+                    render={
+                        <Link
+                            href="/notifications"
+                            className="w-full cursor-pointer text-center text-sm font-medium"
+                        />
+                    }
+                >
+                    View all notifications
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

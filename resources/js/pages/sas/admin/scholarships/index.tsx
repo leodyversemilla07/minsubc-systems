@@ -392,14 +392,14 @@ export default function ScholarshipsIndex({
                                                         <TableCell className="text-right">
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger
-                                                                    asChild
+                                                                    render={
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                        />
+                                                                    }
                                                                 >
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                    >
-                                                                        <MoreHorizontal className="h-4 w-4" />
-                                                                    </Button>
+                                                                    <MoreHorizontal className="h-4 w-4" />
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="end">
                                                                     <DropdownMenuLabel>
@@ -407,25 +407,25 @@ export default function ScholarshipsIndex({
                                                                     </DropdownMenuLabel>
                                                                     <DropdownMenuSeparator />
                                                                     <DropdownMenuItem
-                                                                        asChild
+                                                                        render={
+                                                                            <Link
+                                                                                href={`/sas/admin/scholarship-recipients?scholarship=${scholarship.id}`}
+                                                                            />
+                                                                        }
                                                                     >
-                                                                        <Link
-                                                                            href={`/sas/admin/scholarship-recipients?scholarship=${scholarship.id}`}
-                                                                        >
-                                                                            <Users className="mr-2 h-4 w-4" />
-                                                                            View
-                                                                            Recipients
-                                                                        </Link>
+                                                                        <Users className="mr-2 h-4 w-4" />
+                                                                        View
+                                                                        Recipients
                                                                     </DropdownMenuItem>
                                                                     <DropdownMenuItem
-                                                                        asChild
+                                                                        render={
+                                                                            <Link
+                                                                                href={`/sas/admin/scholarships/${scholarship.id}/edit`}
+                                                                            />
+                                                                        }
                                                                     >
-                                                                        <Link
-                                                                            href={`/sas/admin/scholarships/${scholarship.id}/edit`}
-                                                                        >
-                                                                            <Edit className="mr-2 h-4 w-4" />
-                                                                            Edit
-                                                                        </Link>
+                                                                        <Edit className="mr-2 h-4 w-4" />
+                                                                        Edit
                                                                     </DropdownMenuItem>
                                                                     <DropdownMenuSeparator />
                                                                     <DropdownMenuItem

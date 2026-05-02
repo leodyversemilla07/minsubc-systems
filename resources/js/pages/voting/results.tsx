@@ -305,8 +305,12 @@ export default function Results({
                                                         data={chartData}
                                                         dataKey="votes"
                                                         nameKey="fullname"
-                                                        label={(entry) =>
-                                                            `${entry.name}: ${entry.votes}`
+                                                        label={({
+                                                            name,
+                                                            payload,
+                                                            value,
+                                                        }) =>
+                                                            `${name}: ${payload?.votes ?? value}`
                                                         }
                                                         labelLine={false}
                                                     />

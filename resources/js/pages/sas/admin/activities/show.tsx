@@ -169,15 +169,18 @@ export default function ActivityShow({ activity }: Props) {
                                 </Button>
                             </>
                         )}
-                        <Button variant="secondary" asChild>
-                            <Link
-                                href={sas.admin.activities.edit.url(
-                                    activity.id,
-                                )}
-                            >
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                            </Link>
+                        <Button
+                            variant="secondary"
+                            render={
+                                <Link
+                                    href={sas.admin.activities.edit.url(
+                                        activity.id,
+                                    )}
+                                />
+                            }
+                        >
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
                         </Button>
                     </div>
                 </div>

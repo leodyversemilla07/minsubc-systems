@@ -149,11 +149,9 @@ export default function ManageOfficers({ organization, officers }: Props) {
                         open={isAddDialogOpen}
                         onOpenChange={setIsAddDialogOpen}
                     >
-                        <DialogTrigger asChild>
-                            <Button>
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add Officer
-                            </Button>
+                        <DialogTrigger render={<Button />}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Officer
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl">
                             <DialogHeader>
@@ -398,18 +396,20 @@ export default function ManageOfficers({ organization, officers }: Props) {
                                                     setEditingOfficer(null)
                                                 }
                                             >
-                                                <DialogTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            openEditDialog(
-                                                                officer,
-                                                            )
-                                                        }
-                                                    >
-                                                        <Edit className="h-4 w-4" />
-                                                    </Button>
+                                                <DialogTrigger
+                                                    render={
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                openEditDialog(
+                                                                    officer,
+                                                                )
+                                                            }
+                                                        />
+                                                    }
+                                                >
+                                                    <Edit className="h-4 w-4" />
                                                 </DialogTrigger>
                                                 <DialogContent className="max-w-2xl">
                                                     <DialogHeader>

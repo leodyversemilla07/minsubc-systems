@@ -37,21 +37,23 @@ export function PositionNavigator({
 
     return (
         <Popover>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="fixed right-6 bottom-6 z-50 h-14 w-14 rounded-full border-2 border-green-600 bg-white shadow-xl transition-all hover:scale-110 md:h-16 md:w-16 dark:border-green-500 dark:bg-gray-900"
-                >
-                    <div className="relative">
-                        <List className="h-6 w-6 text-green-600 dark:text-green-400" />
-                        {completedCount > 0 && (
-                            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white dark:bg-green-500">
-                                {completedCount}
-                            </span>
-                        )}
-                    </div>
-                </Button>
+            <PopoverTrigger
+                render={
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="fixed right-6 bottom-6 z-50 h-14 w-14 rounded-full border-2 border-green-600 bg-white shadow-xl transition-all hover:scale-110 md:h-16 md:w-16 dark:border-green-500 dark:bg-gray-900"
+                    />
+                }
+            >
+                <div className="relative">
+                    <List className="h-6 w-6 text-green-600 dark:text-green-400" />
+                    {completedCount > 0 && (
+                        <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white dark:bg-green-500">
+                            {completedCount}
+                        </span>
+                    )}
+                </div>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-80 p-0" sideOffset={10}>
                 <div className="border-b border-gray-200 px-4 py-3 dark:border-gray-700">

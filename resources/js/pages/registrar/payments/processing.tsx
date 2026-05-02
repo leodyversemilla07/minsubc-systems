@@ -269,13 +269,19 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                         >
                             Check Status
                         </Button>
-                        <Button variant="outline" asChild>
-                            <Link href={show(request.request_number).url}>
-                                View Request Details
-                            </Link>
+                        <Button
+                            variant="outline"
+                            render={
+                                <Link href={show(request.request_number).url} />
+                            }
+                        >
+                            View Request Details
                         </Button>
-                        <Button variant="outline" asChild>
-                            <Link href="/dashboard">Back to Dashboard</Link>
+                        <Button
+                            variant="outline"
+                            render={<Link href="/dashboard" />}
+                        >
+                            Back to Dashboard
                         </Button>
                     </div>
 

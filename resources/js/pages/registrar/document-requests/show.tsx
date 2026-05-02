@@ -145,19 +145,21 @@ export default function Show({ request }: Props) {
                         <div className="flex items-center gap-2 self-start sm:self-center">
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Badge
-                                            variant="outline"
-                                            className="gap-1 text-xs md:text-sm"
-                                        >
-                                            <FileText className="h-3 w-3" />
-                                            <span className="hidden sm:inline">
-                                                Viewing Request
-                                            </span>
-                                            <span className="sm:hidden">
-                                                Viewing
-                                            </span>
-                                        </Badge>
+                                    <TooltipTrigger
+                                        render={
+                                            <Badge
+                                                variant="outline"
+                                                className="gap-1 text-xs md:text-sm"
+                                            />
+                                        }
+                                    >
+                                        <FileText className="h-3 w-3" />
+                                        <span className="hidden sm:inline">
+                                            Viewing Request
+                                        </span>
+                                        <span className="sm:hidden">
+                                            Viewing
+                                        </span>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>
@@ -223,22 +225,24 @@ export default function Show({ request }: Props) {
                             <>
                                 <TooltipProvider>
                                     <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                variant="default"
-                                                asChild
-                                                size="lg"
-                                                className="h-11 w-full min-w-[160px] text-sm sm:w-auto md:h-12 md:text-base"
-                                            >
-                                                <Link
-                                                    href={method(
-                                                        request.request_number,
-                                                    )}
-                                                >
-                                                    <CreditCard className="mr-2 h-4 w-4" />
-                                                    Select Payment Method
-                                                </Link>
-                                            </Button>
+                                        <TooltipTrigger
+                                            render={
+                                                <Button
+                                                    variant="default"
+                                                    size="lg"
+                                                    className="h-11 w-full min-w-[160px] text-sm sm:w-auto md:h-12 md:text-base"
+                                                    render={
+                                                        <Link
+                                                            href={method(
+                                                                request.request_number,
+                                                            )}
+                                                        />
+                                                    }
+                                                />
+                                            }
+                                        >
+                                            <CreditCard className="mr-2 h-4 w-4" />
+                                            Select Payment Method
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>
@@ -251,22 +255,24 @@ export default function Show({ request }: Props) {
                                 </TooltipProvider>
                                 <TooltipProvider>
                                     <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                asChild
-                                                size="lg"
-                                                className="h-11 w-full min-w-[120px] text-sm sm:w-auto md:h-12 md:text-base"
-                                            >
-                                                <Link
-                                                    href={edit(
-                                                        request.request_number,
-                                                    )}
-                                                >
-                                                    <Edit className="mr-2 h-4 w-4" />
-                                                    Edit Request
-                                                </Link>
-                                            </Button>
+                                        <TooltipTrigger
+                                            render={
+                                                <Button
+                                                    variant="outline"
+                                                    size="lg"
+                                                    className="h-11 w-full min-w-[120px] text-sm sm:w-auto md:h-12 md:text-base"
+                                                    render={
+                                                        <Link
+                                                            href={edit(
+                                                                request.request_number,
+                                                            )}
+                                                        />
+                                                    }
+                                                />
+                                            }
+                                        >
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            Edit Request
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>
@@ -281,15 +287,17 @@ export default function Show({ request }: Props) {
                         {request.status === 'released' && (
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            size="lg"
-                                            className="h-11 w-full min-w-[140px] text-sm sm:w-auto md:h-12 md:text-base"
-                                        >
-                                            <Download className="mr-2 h-4 w-4" />
-                                            Download Document
-                                        </Button>
+                                    <TooltipTrigger
+                                        render={
+                                            <Button
+                                                variant="outline"
+                                                size="lg"
+                                                className="h-11 w-full min-w-[140px] text-sm sm:w-auto md:h-12 md:text-base"
+                                            />
+                                        }
+                                    >
+                                        <Download className="mr-2 h-4 w-4" />
+                                        Download Document
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Download your completed document</p>
@@ -558,32 +566,32 @@ export default function Show({ request }: Props) {
                                             <div className="mt-1">
                                                 <TooltipProvider>
                                                     <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Badge
-                                                                className={
-                                                                    statusColors[
-                                                                        request.status as keyof typeof statusColors
-                                                                    ] ||
-                                                                    'bg-muted text-muted-foreground'
-                                                                }
-                                                            >
-                                                                {request.status
-                                                                    .split('_')
-                                                                    .map(
-                                                                        (
-                                                                            word,
-                                                                        ) =>
-                                                                            word
-                                                                                .charAt(
-                                                                                    0,
-                                                                                )
-                                                                                .toUpperCase() +
-                                                                            word.slice(
-                                                                                1,
-                                                                            ),
-                                                                    )
-                                                                    .join(' ')}
-                                                            </Badge>
+                                                        <TooltipTrigger
+                                                            render={
+                                                                <Badge
+                                                                    className={
+                                                                        statusColors[
+                                                                            request.status as keyof typeof statusColors
+                                                                        ] ||
+                                                                        'bg-muted text-muted-foreground'
+                                                                    }
+                                                                />
+                                                            }
+                                                        >
+                                                            {request.status
+                                                                .split('_')
+                                                                .map(
+                                                                    (word) =>
+                                                                        word
+                                                                            .charAt(
+                                                                                0,
+                                                                            )
+                                                                            .toUpperCase() +
+                                                                        word.slice(
+                                                                            1,
+                                                                        ),
+                                                                )
+                                                                .join(' ')}
                                                         </TooltipTrigger>
                                                         <TooltipContent>
                                                             <p>

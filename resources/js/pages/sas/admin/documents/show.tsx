@@ -193,24 +193,32 @@ export default function ShowDocument({ document }: Props) {
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" asChild>
-                            <Link
-                                href={sas.admin.documents.edit.url(document.id)}
-                            >
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                            </Link>
+                        <Button
+                            variant="outline"
+                            render={
+                                <Link
+                                    href={sas.admin.documents.edit.url(
+                                        document.id,
+                                    )}
+                                />
+                            }
+                        >
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
                         </Button>
-                        <Button variant="outline" asChild>
-                            <a
-                                href={document.file_path}
-                                download
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Download className="mr-2 h-4 w-4" />
-                                Download
-                            </a>
+                        <Button
+                            variant="outline"
+                            render={
+                                <a
+                                    href={document.file_path}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                />
+                            }
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Download
                         </Button>
                         <Button variant="destructive" onClick={handleDelete}>
                             <Trash2 className="mr-2 h-4 w-4" />
@@ -250,14 +258,19 @@ export default function ShowDocument({ document }: Props) {
                                                     document.file_size,
                                                 )}
                                             </p>
-                                            <Button className="mt-4" asChild>
-                                                <a
-                                                    href={document.file_path}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    Open in New Tab
-                                                </a>
+                                            <Button
+                                                className="mt-4"
+                                                render={
+                                                    <a
+                                                        href={
+                                                            document.file_path
+                                                        }
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    />
+                                                }
+                                            >
+                                                Open in New Tab
                                             </Button>
                                         </div>
                                     </div>
@@ -381,10 +394,10 @@ export default function ShowDocument({ document }: Props) {
                                         open={isDisposalDialogOpen}
                                         onOpenChange={setIsDisposalDialogOpen}
                                     >
-                                        <DialogTrigger asChild>
-                                            <Button size="sm">
-                                                Update Status
-                                            </Button>
+                                        <DialogTrigger
+                                            render={<Button size="sm" />}
+                                        >
+                                            Update Status
                                         </DialogTrigger>
                                         <DialogContent>
                                             <form
@@ -594,16 +607,16 @@ export default function ShowDocument({ document }: Props) {
                                                             <Button
                                                                 size="sm"
                                                                 variant="ghost"
-                                                                asChild
+                                                                render={
+                                                                    <a
+                                                                        href={
+                                                                            version.file_path
+                                                                        }
+                                                                        download
+                                                                    />
+                                                                }
                                                             >
-                                                                <a
-                                                                    href={
-                                                                        version.file_path
-                                                                    }
-                                                                    download
-                                                                >
-                                                                    <Download className="h-4 w-4" />
-                                                                </a>
+                                                                <Download className="h-4 w-4" />
                                                             </Button>
                                                         </TableCell>
                                                     </TableRow>
@@ -705,16 +718,16 @@ export default function ShowDocument({ document }: Props) {
                                 <Button
                                     className="w-full"
                                     variant="outline"
-                                    asChild
+                                    render={
+                                        <Link
+                                            href={sas.admin.documents.edit.url(
+                                                document.id,
+                                            )}
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href={sas.admin.documents.edit.url(
-                                            document.id,
-                                        )}
-                                    >
-                                        <Edit className="mr-2 h-4 w-4" />
-                                        Edit Document
-                                    </Link>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit Document
                                 </Button>
                                 <Button
                                     className="w-full"

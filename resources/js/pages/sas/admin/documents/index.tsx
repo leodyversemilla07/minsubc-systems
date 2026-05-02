@@ -214,19 +214,24 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" asChild>
-                            <Link
-                                href={sas.admin.documents.manageDisposal.url()}
-                            >
-                                <AlertCircle className="mr-2 h-4 w-4" />
-                                Manage Disposal
-                            </Link>
+                        <Button
+                            variant="outline"
+                            render={
+                                <Link
+                                    href={sas.admin.documents.manageDisposal.url()}
+                                />
+                            }
+                        >
+                            <AlertCircle className="mr-2 h-4 w-4" />
+                            Manage Disposal
                         </Button>
-                        <Button asChild>
-                            <Link href={sas.admin.documents.create.url()}>
-                                <Upload className="mr-2 h-4 w-4" />
-                                Upload Document
-                            </Link>
+                        <Button
+                            render={
+                                <Link href={sas.admin.documents.create.url()} />
+                            }
+                        >
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload Document
                         </Button>
                     </div>
                 </div>
@@ -422,28 +427,28 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <Link
+                                                                href={sas.admin.documents.show.url(
+                                                                    doc.id,
+                                                                )}
+                                                            />
+                                                        }
                                                     >
-                                                        <Link
-                                                            href={sas.admin.documents.show.url(
-                                                                doc.id,
-                                                            )}
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Link>
+                                                        <Eye className="h-4 w-4" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <Link
+                                                                href={sas.admin.documents.edit.url(
+                                                                    doc.id,
+                                                                )}
+                                                            />
+                                                        }
                                                     >
-                                                        <Link
-                                                            href={sas.admin.documents.edit.url(
-                                                                doc.id,
-                                                            )}
-                                                        >
-                                                            <FileText className="h-4 w-4 text-blue-600" />
-                                                        </Link>
+                                                        <FileText className="h-4 w-4 text-blue-600" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -466,13 +471,16 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 <p className="text-gray-600 dark:text-gray-400">
                                     No documents found
                                 </p>
-                                <Button className="mt-4" asChild>
-                                    <Link
-                                        href={sas.admin.documents.create.url()}
-                                    >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Upload First Document
-                                    </Link>
+                                <Button
+                                    className="mt-4"
+                                    render={
+                                        <Link
+                                            href={sas.admin.documents.create.url()}
+                                        />
+                                    }
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Upload First Document
                                 </Button>
                             </div>
                         )}

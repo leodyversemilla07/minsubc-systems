@@ -392,10 +392,14 @@ export default function CreateActivity({ organizations }: Props) {
 
                     {/* Form Actions */}
                     <div className="flex justify-end gap-4">
-                        <Button type="button" variant="outline" asChild>
-                            <Link href={sas.admin.activities.index.url()}>
-                                Cancel
-                            </Link>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            render={
+                                <Link href={sas.admin.activities.index.url()} />
+                            }
+                        >
+                            Cancel
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Creating...' : 'Create Activity'}

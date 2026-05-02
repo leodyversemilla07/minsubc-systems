@@ -143,23 +143,25 @@ export default function SearchBar({
                 {/* Filter Button */}
                 {showFilters && (
                     <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="relative"
-                            >
-                                <SlidersHorizontal className="mr-2 h-4 w-4" />
-                                Filters
-                                {hasActiveFilters && (
-                                    <Badge
-                                        variant="secondary"
-                                        className="ml-2 h-5 w-5 p-0 text-xs"
-                                    >
-                                        {getActiveFilterCount()}
-                                    </Badge>
-                                )}
-                            </Button>
+                        <DropdownMenuTrigger
+                            render={
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="relative"
+                                />
+                            }
+                        >
+                            <SlidersHorizontal className="mr-2 h-4 w-4" />
+                            Filters
+                            {hasActiveFilters && (
+                                <Badge
+                                    variant="secondary"
+                                    className="ml-2 h-5 w-5 p-0 text-xs"
+                                >
+                                    {getActiveFilterCount()}
+                                </Badge>
+                            )}
                         </DropdownMenuTrigger>
 
                         <DropdownMenuContent align="end" className="w-56">

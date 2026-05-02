@@ -22,7 +22,6 @@ export function NavMain({ items = [], label = 'Navigation' }: NavMainProps) {
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
-                            asChild
                             isActive={(() => {
                                 const currentPath = page.url.split('?')[0];
                                 let itemHref: string;
@@ -53,11 +52,10 @@ export function NavMain({ items = [], label = 'Navigation' }: NavMainProps) {
                                 );
                             })()}
                             tooltip={{ children: item.title }}
+                            render={<Link href={item.href} prefetch />}
                         >
-                            <Link href={item.href} prefetch>
-                                {item.icon && <item.icon />}
-                                <span>{item.title}</span>
-                            </Link>
+                            {item.icon && <item.icon />}
+                            <span>{item.title}</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 ))}

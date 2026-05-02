@@ -128,11 +128,14 @@ export default function CashPaymentReference({ payment }: Props) {
                                 successfully
                             </p>
                         </div>
-                        <Button variant="outline" asChild>
-                            <Link href={show(request.request_number).url}>
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to Request
-                            </Link>
+                        <Button
+                            variant="outline"
+                            render={
+                                <Link href={show(request.request_number).url} />
+                            }
+                        >
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back to Request
                         </Button>
                     </div>
                 </div>
@@ -356,10 +359,13 @@ export default function CashPaymentReference({ payment }: Props) {
 
                 {/* Navigation */}
                 <div className="flex justify-center">
-                    <Button asChild size="lg">
-                        <Link href={show(request.request_number).url}>
-                            View Request Status
-                        </Link>
+                    <Button
+                        size="lg"
+                        render={
+                            <Link href={show(request.request_number).url} />
+                        }
+                    >
+                        View Request Status
                     </Button>
                 </div>
             </div>

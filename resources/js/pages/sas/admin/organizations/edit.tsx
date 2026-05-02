@@ -405,10 +405,16 @@ export default function OrganizationsEdit({ organization, advisers }: Props) {
 
                     {/* Submit Actions */}
                     <div className="flex justify-end gap-4">
-                        <Button variant="outline" type="button" asChild>
-                            <Link href={sas.admin.organizations.index.url()}>
-                                Cancel
-                            </Link>
+                        <Button
+                            variant="outline"
+                            type="button"
+                            render={
+                                <Link
+                                    href={sas.admin.organizations.index.url()}
+                                />
+                            }
+                        >
+                            Cancel
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Saving...' : 'Save Changes'}

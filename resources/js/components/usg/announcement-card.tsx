@@ -90,11 +90,14 @@ export default function AnnouncementCard({
             </CardContent>
 
             <CardFooter>
-                <Button asChild variant="outline" size="sm" className="w-full">
-                    <Link href={publicShow.url(announcement.slug)}>
-                        Read More
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    render={<Link href={publicShow.url(announcement.slug)} />}
+                >
+                    Read More
+                    <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
             </CardFooter>
         </Card>

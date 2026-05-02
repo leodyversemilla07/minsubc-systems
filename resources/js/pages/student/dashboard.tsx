@@ -240,20 +240,19 @@ export default function Dashboard({
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button asChild variant="outline">
-                            <Link href={usg.index.url()}>
-                                <Megaphone className="mr-2 h-4 w-4" />
-                                USG Portal
-                            </Link>
+                        <Button
+                            variant="outline"
+                            render={<Link href={usg.index.url()} />}
+                        >
+                            <Megaphone className="mr-2 h-4 w-4" />
+                            USG Portal
                         </Button>
                         <Button
-                            asChild
                             className="bg-primary text-primary-foreground hover:bg-primary/90"
+                            render={<Link href={create()} />}
                         >
-                            <Link href={create()}>
-                                <Plus className="mr-2 h-4 w-4" />
-                                New Request
-                            </Link>
+                            <Plus className="mr-2 h-4 w-4" />
+                            New Request
                         </Button>
                     </div>
                 </div>
@@ -301,14 +300,12 @@ export default function Dashboard({
                                 </div>
                             </div>
                             <Button
-                                asChild
                                 variant="ghost"
                                 className="w-full justify-between text-primary hover:bg-primary/10"
+                                render={<Link href={index()} />}
                             >
-                                <Link href={index()}>
-                                    View All Requests
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                View All Requests
+                                <ArrowRight className="h-4 w-4" />
                             </Button>
                         </CardContent>
                     </Card>
@@ -355,16 +352,16 @@ export default function Dashboard({
                                 </div>
                             </div>
                             <Button
-                                asChild
                                 variant="ghost"
                                 className="w-full justify-between text-primary hover:bg-primary/10"
+                                render={
+                                    <Link
+                                        href={sas.student.scholarships.index.url()}
+                                    />
+                                }
                             >
-                                <Link
-                                    href={sas.student.scholarships.index.url()}
-                                >
-                                    View Scholarships
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                View Scholarships
+                                <ArrowRight className="h-4 w-4" />
                             </Button>
                         </CardContent>
                     </Card>
@@ -411,14 +408,12 @@ export default function Dashboard({
                                 </div>
                             </div>
                             <Button
-                                asChild
                                 variant="ghost"
                                 className="w-full justify-between text-primary hover:bg-primary/10"
+                                render={<Link href={usg.index.url()} />}
                             >
-                                <Link href={usg.index.url()}>
-                                    Visit USG Portal
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                Visit USG Portal
+                                <ArrowRight className="h-4 w-4" />
                             </Button>
                         </CardContent>
                     </Card>
@@ -477,14 +472,12 @@ export default function Dashboard({
                                 </div>
                             )}
                             <Button
-                                asChild
                                 variant="ghost"
                                 className="w-full justify-between text-primary hover:bg-primary/10"
+                                render={<Link href={voting.index.url()} />}
                             >
-                                <Link href={voting.index.url()}>
-                                    Go to Voting
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                Go to Voting
+                                <ArrowRight className="h-4 w-4" />
                             </Button>
                         </CardContent>
                     </Card>
@@ -590,13 +583,11 @@ export default function Dashboard({
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        asChild
                                         className="text-primary hover:text-primary/80"
+                                        render={<Link href={index()} />}
                                     >
-                                        <Link href={index()}>
-                                            <Eye className="mr-2 h-4 w-4" />
-                                            View All
-                                        </Link>
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        View All
                                     </Button>
                                 </div>
                             </CardHeader>
@@ -670,11 +661,13 @@ export default function Dashboard({
                                             </EmptyDescription>
                                         </EmptyHeader>
                                         <EmptyContent>
-                                            <Button asChild>
-                                                <Link href={create()}>
-                                                    <Plus className="mr-2 h-4 w-4" />
-                                                    Create Request
-                                                </Link>
+                                            <Button
+                                                render={
+                                                    <Link href={create()} />
+                                                }
+                                            >
+                                                <Plus className="mr-2 h-4 w-4" />
+                                                Create Request
                                             </Button>
                                         </EmptyContent>
                                     </Empty>
@@ -696,14 +689,14 @@ export default function Dashboard({
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        asChild
                                         className="text-primary hover:text-primary/80"
+                                        render={
+                                            <Link
+                                                href={usg.announcements.index.url()}
+                                            />
+                                        }
                                     >
-                                        <Link
-                                            href={usg.announcements.index.url()}
-                                        >
-                                            View All
-                                        </Link>
+                                        View All
                                     </Button>
                                 </div>
                             </CardHeader>
@@ -762,12 +755,14 @@ export default function Dashboard({
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        asChild
                                         className="text-primary hover:text-primary/80"
+                                        render={
+                                            <Link
+                                                href={usg.events.index.url()}
+                                            />
+                                        }
                                     >
-                                        <Link href={usg.events.index.url()}>
-                                            View All
-                                        </Link>
+                                        View All
                                     </Button>
                                 </div>
                             </CardHeader>
@@ -823,48 +818,50 @@ export default function Dashboard({
                             </CardHeader>
                             <CardContent className="space-y-2">
                                 <Button
-                                    asChild
                                     variant="ghost"
                                     className="w-full justify-start"
+                                    render={
+                                        <Link
+                                            href={sas.student.scholarships.index.url()}
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href={sas.student.scholarships.index.url()}
-                                    >
-                                        <Award className="mr-3 h-4 w-4 text-primary" />
-                                        My Scholarships
-                                    </Link>
+                                    <Award className="mr-3 h-4 w-4 text-primary" />
+                                    My Scholarships
                                 </Button>
                                 <Button
-                                    asChild
                                     variant="ghost"
                                     className="w-full justify-start"
+                                    render={
+                                        <Link
+                                            href={sas.student.insurance.index.url()}
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href={sas.student.insurance.index.url()}
-                                    >
-                                        <Shield className="mr-3 h-4 w-4 text-primary" />
-                                        Insurance Status
-                                    </Link>
+                                    <Shield className="mr-3 h-4 w-4 text-primary" />
+                                    Insurance Status
                                 </Button>
                                 <Button
-                                    asChild
                                     variant="ghost"
                                     className="w-full justify-start"
+                                    render={
+                                        <Link href={usg.officers.index.url()} />
+                                    }
                                 >
-                                    <Link href={usg.officers.index.url()}>
-                                        <Users className="mr-3 h-4 w-4 text-primary" />
-                                        USG Officers
-                                    </Link>
+                                    <Users className="mr-3 h-4 w-4 text-primary" />
+                                    USG Officers
                                 </Button>
                                 <Button
-                                    asChild
                                     variant="ghost"
                                     className="w-full justify-start"
+                                    render={
+                                        <Link
+                                            href={usg.transparency.index.url()}
+                                        />
+                                    }
                                 >
-                                    <Link href={usg.transparency.index.url()}>
-                                        <FileText className="mr-3 h-4 w-4 text-primary" />
-                                        Transparency Reports
-                                    </Link>
+                                    <FileText className="mr-3 h-4 w-4 text-primary" />
+                                    Transparency Reports
                                 </Button>
                             </CardContent>
                         </Card>
@@ -884,14 +881,14 @@ export default function Dashboard({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    asChild
                                     className="text-primary hover:text-primary/80"
+                                    render={
+                                        <Link
+                                            href={sas.student.scholarships.index.url()}
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href={sas.student.scholarships.index.url()}
-                                    >
-                                        View All
-                                    </Link>
+                                    View All
                                 </Button>
                             </div>
                             <CardDescription>
@@ -1121,16 +1118,16 @@ export default function Dashboard({
                                             No insurance record found
                                         </p>
                                         <Button
-                                            asChild
                                             variant="outline"
                                             size="sm"
                                             className="mt-3"
+                                            render={
+                                                <Link
+                                                    href={sas.student.insurance.index.url()}
+                                                />
+                                            }
                                         >
-                                            <Link
-                                                href={sas.student.insurance.index.url()}
-                                            >
-                                                View Insurance
-                                            </Link>
+                                            View Insurance
                                         </Button>
                                     </div>
                                 )}

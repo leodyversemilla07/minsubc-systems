@@ -113,11 +113,15 @@ export default function Status({ request }: Props) {
                             Request {request.request_number}
                         </p>
                     </div>
-                    <Button variant="outline" size="sm" asChild>
-                        <Link href={show(request.request_number).url}>
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Request
-                        </Link>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        render={
+                            <Link href={show(request.request_number).url} />
+                        }
+                    >
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to Request
                     </Button>
                 </div>
 

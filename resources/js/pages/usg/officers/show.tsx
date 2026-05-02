@@ -54,14 +54,12 @@ export default function OfficerShow({ officer }: Props) {
                 <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mx-auto max-w-4xl">
                         <Button
-                            asChild
                             variant="ghost"
                             className="mb-6 text-white hover:bg-white/10"
+                            render={<Link href="/usg/officers" />}
                         >
-                            <Link href="/usg/officers">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to Officers
-                            </Link>
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back to Officers
                         </Button>
 
                         <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:text-left">

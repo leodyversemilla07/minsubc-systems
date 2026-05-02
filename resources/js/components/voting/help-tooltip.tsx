@@ -15,14 +15,16 @@ export function HelpTooltip({ content, side = 'top' }: HelpTooltipProps) {
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger asChild>
-                    <button
-                        type="button"
-                        className="inline-flex items-center justify-center text-gray-400 transition-colors hover:text-gray-600"
-                        aria-label="Help information"
-                    >
-                        <HelpCircle className="h-4 w-4" />
-                    </button>
+                <TooltipTrigger
+                    render={
+                        <button
+                            type="button"
+                            className="inline-flex items-center justify-center text-gray-400 transition-colors hover:text-gray-600"
+                            aria-label="Help information"
+                        />
+                    }
+                >
+                    <HelpCircle className="h-4 w-4" />
                 </TooltipTrigger>
                 <TooltipContent side={side} className="max-w-xs">
                     <p className="text-sm">{content}</p>

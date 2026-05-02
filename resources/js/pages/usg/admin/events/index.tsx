@@ -1041,32 +1041,32 @@ export default function EventsManagement({
                                                     {canManage && (
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger
-                                                                asChild
+                                                                render={
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="h-8 px-2"
+                                                                        disabled={
+                                                                            updatingEvents.has(
+                                                                                event.id,
+                                                                            ) ||
+                                                                            deletingEvents.has(
+                                                                                event.id,
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                }
                                                             >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    className="h-8 px-2"
-                                                                    disabled={
-                                                                        updatingEvents.has(
-                                                                            event.id,
-                                                                        ) ||
-                                                                        deletingEvents.has(
-                                                                            event.id,
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {updatingEvents.has(
-                                                                        event.id,
-                                                                    ) ||
-                                                                    deletingEvents.has(
-                                                                        event.id,
-                                                                    ) ? (
-                                                                        <Loader2 className="h-3 w-3 animate-spin" />
-                                                                    ) : (
-                                                                        <MoreVertical className="h-3 w-3" />
-                                                                    )}
-                                                                </Button>
+                                                                {updatingEvents.has(
+                                                                    event.id,
+                                                                ) ||
+                                                                deletingEvents.has(
+                                                                    event.id,
+                                                                ) ? (
+                                                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                                                ) : (
+                                                                    <MoreVertical className="h-3 w-3" />
+                                                                )}
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 <DropdownMenuItem
@@ -1431,31 +1431,31 @@ export default function EventsManagement({
 
                                                                         <DropdownMenu>
                                                                             <DropdownMenuTrigger
-                                                                                asChild
+                                                                                render={
+                                                                                    <Button
+                                                                                        variant="ghost"
+                                                                                        size="sm"
+                                                                                        disabled={
+                                                                                            updatingEvents.has(
+                                                                                                event.id,
+                                                                                            ) ||
+                                                                                            deletingEvents.has(
+                                                                                                event.id,
+                                                                                            )
+                                                                                        }
+                                                                                    />
+                                                                                }
                                                                             >
-                                                                                <Button
-                                                                                    variant="ghost"
-                                                                                    size="sm"
-                                                                                    disabled={
-                                                                                        updatingEvents.has(
-                                                                                            event.id,
-                                                                                        ) ||
-                                                                                        deletingEvents.has(
-                                                                                            event.id,
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    {updatingEvents.has(
-                                                                                        event.id,
-                                                                                    ) ||
-                                                                                    deletingEvents.has(
-                                                                                        event.id,
-                                                                                    ) ? (
-                                                                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                                                                    ) : (
-                                                                                        <MoreVertical className="h-4 w-4" />
-                                                                                    )}
-                                                                                </Button>
+                                                                                {updatingEvents.has(
+                                                                                    event.id,
+                                                                                ) ||
+                                                                                deletingEvents.has(
+                                                                                    event.id,
+                                                                                ) ? (
+                                                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                                                ) : (
+                                                                                    <MoreVertical className="h-4 w-4" />
+                                                                                )}
                                                                             </DropdownMenuTrigger>
                                                                             <DropdownMenuContent align="end">
                                                                                 {event.status ===

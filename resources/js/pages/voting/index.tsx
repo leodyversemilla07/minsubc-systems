@@ -72,10 +72,10 @@ export default function Index({ activeElection }: IndexPageProps) {
                     {/* Mobile Menu */}
                     <div className="flex sm:hidden">
                         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <Menu className="h-6 w-6" />
-                                </Button>
+                            <SheetTrigger
+                                render={<Button variant="ghost" size="icon" />}
+                            >
+                                <Menu className="h-6 w-6" />
                             </SheetTrigger>
                             <SheetContent className="border-l border-border bg-background/95 p-6 backdrop-blur-md">
                                 <div className="mt-8 flex flex-col gap-4">

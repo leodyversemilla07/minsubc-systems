@@ -366,13 +366,13 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    asChild
+                                                    render={
+                                                        <Link
+                                                            href={`/sas/admin/insurance/${insurance.id}`}
+                                                        />
+                                                    }
                                                 >
-                                                    <Link
-                                                        href={`/sas/admin/insurance/${insurance.id}`}
-                                                    >
-                                                        Review
-                                                    </Link>
+                                                    Review
                                                 </Button>
                                             </TableCell>
                                         </TableRow>

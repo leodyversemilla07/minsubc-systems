@@ -176,14 +176,12 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
 
                 <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <Button
-                        asChild
                         variant="ghost"
                         className="mb-6 text-white hover:bg-white/10"
+                        render={<Link href={usg.transparency.index.url()} />}
                     >
-                        <Link href={usg.transparency.index.url()}>
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Reports
-                        </Link>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to Reports
                     </Button>
 
                     <div className="flex items-start gap-4">
@@ -237,18 +235,18 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                             {/* Download Button */}
                             {report.file_path && (
                                 <Button
-                                    asChild
                                     size="lg"
                                     className="bg-white text-[var(--usg-primary)] hover:bg-gray-50"
+                                    render={
+                                        <Link
+                                            href={`/usg/transparency/${report.slug}/download`}
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href={`/usg/transparency/${report.slug}/download`}
-                                    >
-                                        <Download className="mr-2 h-5 w-5" />
-                                        Download Report
-                                        {report.formatted_file_size &&
-                                            ` (${report.formatted_file_size})`}
-                                    </Link>
+                                    <Download className="mr-2 h-5 w-5" />
+                                    Download Report
+                                    {report.formatted_file_size &&
+                                        ` (${report.formatted_file_size})`}
                                 </Button>
                             )}
                         </div>
@@ -334,27 +332,29 @@ export default function TransparencyShow({ report, relatedReports }: Props) {
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
                                 <Button
-                                    asChild
                                     size="lg"
                                     className="bg-white text-[var(--usg-primary)] hover:bg-gray-100"
+                                    render={
+                                        <Link
+                                            href={usg.transparency.index.url()}
+                                        />
+                                    }
                                 >
-                                    <Link href={usg.transparency.index.url()}>
-                                        View All Reports
-                                    </Link>
+                                    View All Reports
                                 </Button>
                                 {report.file_path && (
                                     <Button
-                                        asChild
                                         size="lg"
                                         variant="secondary"
                                         className="border-white/20 bg-white/10 text-white hover:bg-white/20"
+                                        render={
+                                            <Link
+                                                href={`/usg/transparency/${report.slug}/download`}
+                                            />
+                                        }
                                     >
-                                        <Link
-                                            href={`/usg/transparency/${report.slug}/download`}
-                                        >
-                                            <Download className="mr-2 h-5 w-5" />
-                                            Download This Report
-                                        </Link>
+                                        <Download className="mr-2 h-5 w-5" />
+                                        Download This Report
                                     </Button>
                                 )}
                             </div>

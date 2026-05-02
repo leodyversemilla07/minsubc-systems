@@ -191,7 +191,7 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
 
             {/* Filters Section */}
             {showFilters && (
-                <section className="border-y border-slate-200 bg-slate-50/50 animate-in slide-in-from-top-2 dark:border-slate-800 dark:bg-slate-900/50">
+                <section className="animate-in border-y border-slate-200 bg-slate-50/50 slide-in-from-top-2 dark:border-slate-800 dark:bg-slate-900/50">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         <div className="mb-4 flex items-center justify-between">
                             <h3 className="text-sm font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">

@@ -323,39 +323,41 @@ export default function TransparencyIndex({
 
                                         <CardFooter className="flex gap-2 bg-white dark:bg-gray-900">
                                             <Button
-                                                asChild
                                                 variant="outline"
                                                 size="sm"
                                                 className="flex-1"
-                                            >
-                                                <Link
-                                                    href={usg.transparency.show.url(
-                                                        { slug: report.slug },
-                                                    )}
-                                                >
-                                                    <Eye className="mr-2 h-4 w-4" />
-                                                    View Details
-                                                </Link>
-                                            </Button>
-                                            {report.file_path && (
-                                                <Button
-                                                    asChild
-                                                    size="sm"
-                                                    variant="default"
-                                                    className="flex-1"
-                                                >
+                                                render={
                                                     <Link
-                                                        href={usg.transparency.download.url(
+                                                        href={usg.transparency.show.url(
                                                             {
                                                                 slug: report.slug,
                                                             },
                                                         )}
-                                                    >
-                                                        <Download className="mr-2 h-4 w-4" />
-                                                        {report.formatted_file_size
-                                                            ? `Download (${report.formatted_file_size})`
-                                                            : 'Download'}
-                                                    </Link>
+                                                    />
+                                                }
+                                            >
+                                                <Eye className="mr-2 h-4 w-4" />
+                                                View Details
+                                            </Button>
+                                            {report.file_path && (
+                                                <Button
+                                                    size="sm"
+                                                    variant="default"
+                                                    className="flex-1"
+                                                    render={
+                                                        <Link
+                                                            href={usg.transparency.download.url(
+                                                                {
+                                                                    slug: report.slug,
+                                                                },
+                                                            )}
+                                                        />
+                                                    }
+                                                >
+                                                    <Download className="mr-2 h-4 w-4" />
+                                                    {report.formatted_file_size
+                                                        ? `Download (${report.formatted_file_size})`
+                                                        : 'Download'}
                                                 </Button>
                                             )}
                                         </CardFooter>

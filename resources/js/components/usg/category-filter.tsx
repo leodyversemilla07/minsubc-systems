@@ -173,23 +173,25 @@ export function CategoryFilter({
 
             {/* Filter Dropdown */}
             <Popover open={isOpen} onOpenChange={setIsOpen}>
-                <PopoverTrigger asChild>
-                    <Button
-                        variant="outline"
-                        className="flex min-w-fit items-center gap-2"
-                    >
-                        <Filter className="h-4 w-4" />
-                        Filters
-                        {activeFilterCount > 0 && (
-                            <Badge
-                                variant="destructive"
-                                className="ml-1 h-5 min-w-[20px] text-xs"
-                            >
-                                {activeFilterCount}
-                            </Badge>
-                        )}
-                        <ChevronDown className="h-4 w-4" />
-                    </Button>
+                <PopoverTrigger
+                    render={
+                        <Button
+                            variant="outline"
+                            className="flex min-w-fit items-center gap-2"
+                        />
+                    }
+                >
+                    <Filter className="h-4 w-4" />
+                    Filters
+                    {activeFilterCount > 0 && (
+                        <Badge
+                            variant="destructive"
+                            className="ml-1 h-5 min-w-[20px] text-xs"
+                        >
+                            {activeFilterCount}
+                        </Badge>
+                    )}
+                    <ChevronDown className="h-4 w-4" />
                 </PopoverTrigger>
                 <PopoverContent className="w-80" align="end">
                     <div className="space-y-4">

@@ -579,28 +579,28 @@ export default function OfficersManagement({
                                                 variant="outline"
                                                 size="sm"
                                                 className="h-8 flex-1 text-xs"
-                                                asChild
+                                                render={
+                                                    <a
+                                                        href={`mailto:${officer.email}`}
+                                                    />
+                                                }
                                             >
-                                                <a
-                                                    href={`mailto:${officer.email}`}
-                                                >
-                                                    <Mail className="mr-1.5 h-3 w-3" />
-                                                    Email
-                                                </a>
+                                                <Mail className="mr-1.5 h-3 w-3" />
+                                                Email
                                             </Button>
                                             {officer.phone && (
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
                                                     className="h-8 flex-1 text-xs"
-                                                    asChild
+                                                    render={
+                                                        <a
+                                                            href={`tel:${officer.phone}`}
+                                                        />
+                                                    }
                                                 >
-                                                    <a
-                                                        href={`tel:${officer.phone}`}
-                                                    >
-                                                        <Phone className="mr-1.5 h-3 w-3" />
-                                                        Call
-                                                    </a>
+                                                    <Phone className="mr-1.5 h-3 w-3" />
+                                                    Call
                                                 </Button>
                                             )}
                                         </div>
@@ -644,15 +644,17 @@ export default function OfficersManagement({
                                                     Edit
                                                 </Button>
                                                 <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                        >
-                                                            <Trash2 className="mr-1.5 h-3 w-3" />
-                                                            Delete
-                                                        </Button>
+                                                    <AlertDialogTrigger
+                                                        render={
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                            />
+                                                        }
+                                                    >
+                                                        <Trash2 className="mr-1.5 h-3 w-3" />
+                                                        Delete
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
@@ -802,13 +804,13 @@ export default function OfficersManagement({
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <a
+                                                                href={`mailto:${officer.email}`}
+                                                            />
+                                                        }
                                                     >
-                                                        <a
-                                                            href={`mailto:${officer.email}`}
-                                                        >
-                                                            <Mail className="h-4 w-4" />
-                                                        </a>
+                                                        <Mail className="h-4 w-4" />
                                                     </Button>
                                                     {canManage && (
                                                         <>
@@ -830,15 +832,15 @@ export default function OfficersManagement({
                                                             </Button>
                                                             <AlertDialog>
                                                                 <AlertDialogTrigger
-                                                                    asChild
+                                                                    render={
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950"
+                                                                        />
+                                                                    }
                                                                 >
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                        className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950"
-                                                                    >
-                                                                        <Trash2 className="h-4 w-4" />
-                                                                    </Button>
+                                                                    <Trash2 className="h-4 w-4" />
                                                                 </AlertDialogTrigger>
                                                                 <AlertDialogContent>
                                                                     <AlertDialogHeader>

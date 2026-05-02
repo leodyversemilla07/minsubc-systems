@@ -437,10 +437,14 @@ export default function EditDocument({ document }: Props) {
 
                     {/* Form Actions */}
                     <div className="flex justify-end gap-4">
-                        <Button type="button" variant="outline" asChild>
-                            <Link href={sas.admin.documents.index.url()}>
-                                Cancel
-                            </Link>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            render={
+                                <Link href={sas.admin.documents.index.url()} />
+                            }
+                        >
+                            Cancel
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Saving...' : 'Save Changes'}

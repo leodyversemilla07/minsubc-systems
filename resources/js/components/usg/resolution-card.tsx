@@ -117,11 +117,14 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
             </CardContent>
 
             <CardFooter className="flex gap-2">
-                <Button asChild variant="outline" size="sm" className="flex-1">
-                    <Link href={`/usg/resolutions/${resolution.id}`}>
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Details
-                    </Link>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                    render={<Link href={`/usg/resolutions/${resolution.id}`} />}
+                >
+                    <Eye className="mr-2 h-4 w-4" />
+                    View Details
                 </Button>
 
                 {resolution.file_path && (

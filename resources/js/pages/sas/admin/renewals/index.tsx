@@ -213,11 +213,9 @@ export default function RenewalsIndex({
                         open={isReminderDialogOpen}
                         onOpenChange={setIsReminderDialogOpen}
                     >
-                        <DialogTrigger asChild>
-                            <Button>
-                                <Send className="mr-2 h-4 w-4" />
-                                Send Reminders
-                            </Button>
+                        <DialogTrigger render={<Button />}>
+                            <Send className="mr-2 h-4 w-4" />
+                            Send Reminders
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
@@ -457,11 +455,11 @@ export default function RenewalsIndex({
                                     open={isBulkRenewDialogOpen}
                                     onOpenChange={setIsBulkRenewDialogOpen}
                                 >
-                                    <DialogTrigger asChild>
-                                        <Button size="sm">
-                                            <RefreshCw className="mr-2 h-4 w-4" />
-                                            Bulk Renew
-                                        </Button>
+                                    <DialogTrigger
+                                        render={<Button size="sm" />}
+                                    >
+                                        <RefreshCw className="mr-2 h-4 w-4" />
+                                        Bulk Renew
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>

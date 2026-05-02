@@ -118,11 +118,14 @@ export default function OfficerCard({ officer }: OfficerCardProps) {
             </CardContent>
 
             <CardFooter className="bg-white pt-0 dark:bg-gray-900">
-                <Button asChild variant="outline" size="sm" className="w-full">
-                    <Link href={`/usg/officers/${officer.id}`}>
-                        <User className="mr-2 h-4 w-4" />
-                        View Profile
-                    </Link>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    render={<Link href={`/usg/officers/${officer.id}`} />}
+                >
+                    <User className="mr-2 h-4 w-4" />
+                    View Profile
                 </Button>
             </CardFooter>
         </Card>

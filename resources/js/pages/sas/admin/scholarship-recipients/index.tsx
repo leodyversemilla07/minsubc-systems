@@ -375,14 +375,14 @@ export default function RecipientsIndex({
                                                 <TableCell className="text-right">
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger
-                                                            asChild
+                                                            render={
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                />
+                                                            }
                                                         >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                            >
-                                                                <MoreHorizontal className="h-4 w-4" />
-                                                            </Button>
+                                                            <MoreHorizontal className="h-4 w-4" />
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuLabel>
@@ -390,25 +390,25 @@ export default function RecipientsIndex({
                                                             </DropdownMenuLabel>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem
-                                                                asChild
+                                                                render={
+                                                                    <Link
+                                                                        href={`/sas/admin/scholarship-recipients/${recipient.id}/requirements`}
+                                                                    />
+                                                                }
                                                             >
-                                                                <Link
-                                                                    href={`/sas/admin/scholarship-recipients/${recipient.id}/requirements`}
-                                                                >
-                                                                    <FileText className="mr-2 h-4 w-4" />
-                                                                    Manage
-                                                                    Requirements
-                                                                </Link>
+                                                                <FileText className="mr-2 h-4 w-4" />
+                                                                Manage
+                                                                Requirements
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem
-                                                                asChild
+                                                                render={
+                                                                    <Link
+                                                                        href={`/sas/admin/scholarship-recipients/${recipient.id}/edit`}
+                                                                    />
+                                                                }
                                                             >
-                                                                <Link
-                                                                    href={`/sas/admin/scholarship-recipients/${recipient.id}/edit`}
-                                                                >
-                                                                    <Edit className="mr-2 h-4 w-4" />
-                                                                    Edit
-                                                                </Link>
+                                                                <Edit className="mr-2 h-4 w-4" />
+                                                                Edit
                                                             </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem

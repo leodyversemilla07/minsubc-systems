@@ -84,21 +84,21 @@ export default function Welcome() {
                             </CardContent>
                             <CardFooter className="relative pt-4">
                                 <Button
-                                    asChild
                                     className="gradient-primary w-full shadow-primary"
+                                    render={
+                                        <Link
+                                            href="/usg"
+                                            className="flex items-center justify-center"
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href="/usg"
-                                        className="flex items-center justify-center"
-                                    >
-                                        <span className="hidden sm:inline">
-                                            Visit USG Portal
-                                        </span>
-                                        <span className="sm:hidden">
-                                            USG Portal
-                                        </span>
-                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </Link>
+                                    <span className="hidden sm:inline">
+                                        Visit USG Portal
+                                    </span>
+                                    <span className="sm:hidden">
+                                        USG Portal
+                                    </span>
+                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -124,21 +124,19 @@ export default function Welcome() {
                             </CardContent>
                             <CardFooter className="relative pt-4">
                                 <Button
-                                    asChild
                                     className="gradient-primary w-full shadow-primary"
+                                    render={
+                                        <Link
+                                            href="/register"
+                                            className="flex items-center justify-center"
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href="/register"
-                                        className="flex items-center justify-center"
-                                    >
-                                        <span className="hidden sm:inline">
-                                            Access Registrar
-                                        </span>
-                                        <span className="sm:hidden">
-                                            Registrar
-                                        </span>
-                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </Link>
+                                    <span className="hidden sm:inline">
+                                        Access Registrar
+                                    </span>
+                                    <span className="sm:hidden">Registrar</span>
+                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -164,21 +162,21 @@ export default function Welcome() {
                             </CardContent>
                             <CardFooter className="relative pt-4">
                                 <Button
-                                    asChild
                                     className="gradient-primary w-full shadow-primary"
+                                    render={
+                                        <Link
+                                            href="/sas"
+                                            className="flex items-center justify-center"
+                                        />
+                                    }
                                 >
-                                    <Link
-                                        href="/sas"
-                                        className="flex items-center justify-center"
-                                    >
-                                        <span className="hidden sm:inline">
-                                            Visit SAS Portal
-                                        </span>
-                                        <span className="sm:hidden">
-                                            SAS Portal
-                                        </span>
-                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </Link>
+                                    <span className="hidden sm:inline">
+                                        Visit SAS Portal
+                                    </span>
+                                    <span className="sm:hidden">
+                                        SAS Portal
+                                    </span>
+                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -204,21 +202,21 @@ export default function Welcome() {
                             </CardContent>
                             <CardFooter className="relative pt-4">
                                 <Button
-                                    asChild
                                     className="w-full bg-accent text-accent-foreground shadow-lg hover:bg-accent/90"
+                                    render={
+                                        <a
+                                            href="/voting"
+                                            className="flex items-center justify-center"
+                                        />
+                                    }
                                 >
-                                    <a
-                                        href="/voting"
-                                        className="flex items-center justify-center"
-                                    >
-                                        <span className="hidden sm:inline">
-                                            Access Voting System
-                                        </span>
-                                        <span className="sm:hidden">
-                                            Voting System
-                                        </span>
-                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </a>
+                                    <span className="hidden sm:inline">
+                                        Access Voting System
+                                    </span>
+                                    <span className="sm:hidden">
+                                        Voting System
+                                    </span>
+                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </CardFooter>
                         </Card>

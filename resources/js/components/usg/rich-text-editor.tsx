@@ -516,16 +516,18 @@ export const RichTextEditor = forwardRef<EditorRef, RichTextEditorProps>(
                                                     setIsLinkDialogOpen
                                                 }
                                             >
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-8 w-8 p-0"
-                                                        title="Insert Link"
-                                                    >
-                                                        <Link className="h-4 w-4" />
-                                                    </Button>
+                                                <PopoverTrigger
+                                                    render={
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="h-8 w-8 p-0"
+                                                            title="Insert Link"
+                                                        />
+                                                    }
+                                                >
+                                                    <Link className="h-4 w-4" />
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-80">
                                                     <div className="space-y-3">
@@ -593,16 +595,18 @@ export const RichTextEditor = forwardRef<EditorRef, RichTextEditorProps>(
                                                         setIsImageDialogOpen
                                                     }
                                                 >
-                                                    <PopoverTrigger asChild>
-                                                        <Button
-                                                            type="button"
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="h-8 w-8 p-0"
-                                                            title="Insert Image"
-                                                        >
-                                                            <Image className="h-4 w-4" />
-                                                        </Button>
+                                                    <PopoverTrigger
+                                                        render={
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="h-8 w-8 p-0"
+                                                                title="Insert Image"
+                                                            />
+                                                        }
+                                                    >
+                                                        <Image className="h-4 w-4" />
                                                     </PopoverTrigger>
                                                     <PopoverContent className="w-80">
                                                         <div className="space-y-3">

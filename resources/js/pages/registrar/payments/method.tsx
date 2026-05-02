@@ -173,16 +173,20 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                         existingCashPayment.payment_reference_number
                                     }
                                 </code>
-                                <Button asChild variant="outline" size="sm">
-                                    <Link
-                                        href={
-                                            cashReference(
-                                                existingCashPayment.id,
-                                            ).url
-                                        }
-                                    >
-                                        View Payment Reference
-                                    </Link>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    render={
+                                        <Link
+                                            href={
+                                                cashReference(
+                                                    existingCashPayment.id,
+                                                ).url
+                                            }
+                                        />
+                                    }
+                                >
+                                    View Payment Reference
                                 </Button>
                             </div>
                         </AlertDescription>
@@ -301,19 +305,19 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                             <Button
                                                 variant="outline"
                                                 className="w-full"
-                                                asChild
                                                 size="lg"
+                                                render={
+                                                    <Link
+                                                        href={
+                                                            cashReference(
+                                                                existingCashPayment.id,
+                                                            ).url
+                                                        }
+                                                    />
+                                                }
                                             >
-                                                <Link
-                                                    href={
-                                                        cashReference(
-                                                            existingCashPayment.id,
-                                                        ).url
-                                                    }
-                                                >
-                                                    <CheckCircle className="mr-2 h-4 w-4" />
-                                                    View Payment Reference
-                                                </Link>
+                                                <CheckCircle className="mr-2 h-4 w-4" />
+                                                View Payment Reference
                                             </Button>
                                         ) : (
                                             <Button

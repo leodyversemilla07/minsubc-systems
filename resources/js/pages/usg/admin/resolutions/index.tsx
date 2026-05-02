@@ -717,16 +717,16 @@ export default function ResolutionsManagement({
 
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger
-                                                                asChild
+                                                                render={
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="h-8 w-8 touch-manipulation p-0"
+                                                                        title="More Actions"
+                                                                    />
+                                                                }
                                                             >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    className="h-8 w-8 touch-manipulation p-0"
-                                                                    title="More Actions"
-                                                                >
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </Button>
+                                                                <MoreVertical className="h-4 w-4" />
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 {resolution.status ===
@@ -1071,14 +1071,14 @@ export default function ResolutionsManagement({
 
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger
-                                                                    asChild
+                                                                    render={
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                        />
+                                                                    }
                                                                 >
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                    >
-                                                                        <MoreVertical className="h-4 w-4" />
-                                                                    </Button>
+                                                                    <MoreVertical className="h-4 w-4" />
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="end">
                                                                     {resolution.status ===

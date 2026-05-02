@@ -579,14 +579,14 @@ export default function TransparencyManagement({
 
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger
-                                                                asChild
+                                                                render={
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                    />
+                                                                }
                                                             >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                >
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </Button>
+                                                                <MoreVertical className="h-4 w-4" />
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 <DropdownMenuItem
@@ -715,14 +715,14 @@ export default function TransparencyManagement({
                                                             </Button>
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger
-                                                                    asChild
+                                                                    render={
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                        />
+                                                                    }
                                                                 >
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                    >
-                                                                        <MoreVertical className="h-4 w-4" />
-                                                                    </Button>
+                                                                    <MoreVertical className="h-4 w-4" />
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="end">
                                                                     <DropdownMenuItem

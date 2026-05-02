@@ -164,11 +164,13 @@ export default function InsuranceShow({ insurance }: Props) {
                                     open={isRejectDialogOpen}
                                     onOpenChange={setIsRejectDialogOpen}
                                 >
-                                    <DialogTrigger asChild>
-                                        <Button variant="destructive">
-                                            <XCircle className="mr-2 h-4 w-4" />
-                                            Reject
-                                        </Button>
+                                    <DialogTrigger
+                                        render={
+                                            <Button variant="destructive" />
+                                        }
+                                    >
+                                        <XCircle className="mr-2 h-4 w-4" />
+                                        Reject
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
@@ -448,15 +450,18 @@ export default function InsuranceShow({ insurance }: Props) {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Button variant="outline" asChild>
-                                        <a
-                                            href={`/storage/${insurance.policy_document_path}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <FileText className="mr-2 h-4 w-4" />
-                                            View Document
-                                        </a>
+                                    <Button
+                                        variant="outline"
+                                        render={
+                                            <a
+                                                href={`/storage/${insurance.policy_document_path}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            />
+                                        }
+                                    >
+                                        <FileText className="mr-2 h-4 w-4" />
+                                        View Document
                                     </Button>
                                 </CardContent>
                             </Card>

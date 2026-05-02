@@ -201,8 +201,13 @@ export default function EventCard({ event }: EventCardProps) {
             </CardContent>
 
             <CardFooter className="flex gap-2">
-                <Button asChild variant="outline" size="sm" className="flex-1">
-                    <Link href={getEventUrl()}>View Details</Link>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                    render={<Link href={getEventUrl()} />}
+                >
+                    View Details
                 </Button>
 
                 {isRegistrationOpen() &&

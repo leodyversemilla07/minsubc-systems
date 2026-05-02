@@ -223,11 +223,13 @@ export default function Show({ voter }: Props) {
                                         {can('voters.reset-vote') &&
                                             voter.has_voted && (
                                                 <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button variant="outline">
-                                                            <RotateCcw className="mr-2 h-4 w-4" />
-                                                            Reset Vote
-                                                        </Button>
+                                                    <AlertDialogTrigger
+                                                        render={
+                                                            <Button variant="outline" />
+                                                        }
+                                                    >
+                                                        <RotateCcw className="mr-2 h-4 w-4" />
+                                                        Reset Vote
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
@@ -265,11 +267,13 @@ export default function Show({ voter }: Props) {
                                         {/* Delete Voter */}
                                         {can('voters.delete') && (
                                             <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button variant="destructive">
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Delete Voter
-                                                    </Button>
+                                                <AlertDialogTrigger
+                                                    render={
+                                                        <Button variant="destructive" />
+                                                    }
+                                                >
+                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    Delete Voter
                                                 </AlertDialogTrigger>
                                                 <AlertDialogContent>
                                                     <AlertDialogHeader>

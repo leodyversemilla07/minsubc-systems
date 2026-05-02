@@ -262,15 +262,17 @@ export default function Index({ requests }: Props) {
 
                 return (
                     <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 touch-manipulation p-0"
-                            >
-                                <span className="sr-only">Open menu</span>
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
+                        <DropdownMenuTrigger
+                            render={
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 w-8 touch-manipulation p-0"
+                                />
+                            }
+                        >
+                            <span className="sr-only">Open menu</span>
+                            <MoreVertical className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuLabel className="text-xs">
@@ -350,42 +352,40 @@ export default function Index({ requests }: Props) {
                         </div>
                         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
                             <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="w-full touch-manipulation sm:w-auto"
-                                    >
-                                        <Download className="mr-2 h-4 w-4" />
-                                        <span className="hidden sm:inline">
-                                            Export Data
-                                        </span>
-                                        <span className="sm:hidden">
-                                            Export
-                                        </span>
-                                    </Button>
+                                <TooltipTrigger
+                                    render={
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="w-full touch-manipulation sm:w-auto"
+                                        />
+                                    }
+                                >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    <span className="hidden sm:inline">
+                                        Export Data
+                                    </span>
+                                    <span className="sm:hidden">Export</span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Export requests to CSV or PDF format</p>
                                 </TooltipContent>
                             </Tooltip>
                             <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        asChild
-                                        size="sm"
-                                        className="w-full touch-manipulation sm:w-auto"
-                                    >
-                                        <Link href={create()}>
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            <span className="hidden sm:inline">
-                                                New Request
-                                            </span>
-                                            <span className="sm:hidden">
-                                                New
-                                            </span>
-                                        </Link>
-                                    </Button>
+                                <TooltipTrigger
+                                    render={
+                                        <Button
+                                            size="sm"
+                                            className="w-full touch-manipulation sm:w-auto"
+                                            render={<Link href={create()} />}
+                                        />
+                                    }
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    <span className="hidden sm:inline">
+                                        New Request
+                                    </span>
+                                    <span className="sm:hidden">New</span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Create a new document request</p>
@@ -397,23 +397,25 @@ export default function Index({ requests }: Props) {
                     {/* Statistics Dashboard - Student View */}
                     <div className="xs:grid-cols-2 grid grid-cols-1 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-4">
                         <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Card className="cursor-help touch-manipulation transition-all hover:shadow-md">
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
-                                        <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
-                                            My Requests
-                                        </CardTitle>
-                                        <FileText className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
-                                    </CardHeader>
-                                    <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
-                                        <div className="text-xl font-bold sm:text-2xl">
-                                            {stats.total}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Total requests
-                                        </p>
-                                    </CardContent>
-                                </Card>
+                            <TooltipTrigger
+                                render={
+                                    <Card className="cursor-help touch-manipulation transition-all hover:shadow-md" />
+                                }
+                            >
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
+                                    <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
+                                        My Requests
+                                    </CardTitle>
+                                    <FileText className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
+                                </CardHeader>
+                                <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
+                                    <div className="text-xl font-bold sm:text-2xl">
+                                        {stats.total}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Total requests
+                                    </p>
+                                </CardContent>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Total number of your document requests</p>
@@ -421,23 +423,25 @@ export default function Index({ requests }: Props) {
                         </Tooltip>
 
                         <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Card className="cursor-help touch-manipulation transition-all hover:shadow-md">
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
-                                        <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
-                                            Pending Payment
-                                        </CardTitle>
-                                        <CreditCard className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
-                                    </CardHeader>
-                                    <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
-                                        <div className="text-xl font-bold text-orange-600 sm:text-2xl">
-                                            {stats.pendingPayment}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Awaiting payment
-                                        </p>
-                                    </CardContent>
-                                </Card>
+                            <TooltipTrigger
+                                render={
+                                    <Card className="cursor-help touch-manipulation transition-all hover:shadow-md" />
+                                }
+                            >
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
+                                    <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
+                                        Pending Payment
+                                    </CardTitle>
+                                    <CreditCard className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
+                                </CardHeader>
+                                <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
+                                    <div className="text-xl font-bold text-orange-600 sm:text-2xl">
+                                        {stats.pendingPayment}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Awaiting payment
+                                    </p>
+                                </CardContent>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Requests waiting for your payment</p>
@@ -445,23 +449,25 @@ export default function Index({ requests }: Props) {
                         </Tooltip>
 
                         <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Card className="cursor-help touch-manipulation transition-all hover:shadow-md">
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
-                                        <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
-                                            Processing
-                                        </CardTitle>
-                                        <TrendingUp className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
-                                    </CardHeader>
-                                    <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
-                                        <div className="text-xl font-bold text-blue-600 sm:text-2xl">
-                                            {stats.processing}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Currently processing
-                                        </p>
-                                    </CardContent>
-                                </Card>
+                            <TooltipTrigger
+                                render={
+                                    <Card className="cursor-help touch-manipulation transition-all hover:shadow-md" />
+                                }
+                            >
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
+                                    <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
+                                        Processing
+                                    </CardTitle>
+                                    <TrendingUp className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
+                                </CardHeader>
+                                <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
+                                    <div className="text-xl font-bold text-blue-600 sm:text-2xl">
+                                        {stats.processing}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Currently processing
+                                    </p>
+                                </CardContent>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Requests currently being prepared</p>
@@ -469,23 +475,25 @@ export default function Index({ requests }: Props) {
                         </Tooltip>
 
                         <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Card className="cursor-help touch-manipulation transition-all hover:shadow-md">
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
-                                        <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
-                                            Ready to Claim
-                                        </CardTitle>
-                                        <Users className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
-                                    </CardHeader>
-                                    <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
-                                        <div className="text-xl font-bold text-green-600 sm:text-2xl">
-                                            {stats.readyForClaim}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Available for pickup
-                                        </p>
-                                    </CardContent>
-                                </Card>
+                            <TooltipTrigger
+                                render={
+                                    <Card className="cursor-help touch-manipulation transition-all hover:shadow-md" />
+                                }
+                            >
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3 pb-2 md:px-6 md:py-4">
+                                    <CardTitle className="truncate pr-2 text-xs font-medium sm:text-sm">
+                                        Ready to Claim
+                                    </CardTitle>
+                                    <Users className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
+                                </CardHeader>
+                                <CardContent className="px-4 pb-3 md:px-6 md:pb-4">
+                                    <div className="text-xl font-bold text-green-600 sm:text-2xl">
+                                        {stats.readyForClaim}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Available for pickup
+                                    </p>
+                                </CardContent>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Documents ready for you to claim</p>

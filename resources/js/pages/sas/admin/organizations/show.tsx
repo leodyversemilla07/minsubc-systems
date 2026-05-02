@@ -110,15 +110,17 @@ export default function OrganizationsShow({ organization }: Props) {
                             {organization.organization_type} Organization
                         </p>
                     </div>
-                    <Button asChild>
-                        <Link
-                            href={sas.admin.organizations.edit.url(
-                                organization.id,
-                            )}
-                        >
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit Organization
-                        </Link>
+                    <Button
+                        render={
+                            <Link
+                                href={sas.admin.organizations.edit.url(
+                                    organization.id,
+                                )}
+                            />
+                        }
+                    >
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit Organization
                     </Button>
                 </div>
 

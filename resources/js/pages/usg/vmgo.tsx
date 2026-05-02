@@ -218,45 +218,45 @@ export default function VMGOPage({ vmgo }: Props) {
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         <Button
-                            asChild
                             size="lg"
                             className="bg-white text-[var(--usg-primary)] shadow-xl hover:bg-[var(--usg-light)] hover:shadow-2xl"
+                            render={
+                                <Link
+                                    href={usg.events.index.url()}
+                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
+                                />
+                            }
                         >
-                            <Link
-                                href={usg.events.index.url()}
-                                className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                            >
-                                View Events
-                                <ArrowRight className="h-5 w-5" />
-                            </Link>
+                            View Events
+                            <ArrowRight className="h-5 w-5" />
                         </Button>
                         <Button
-                            asChild
                             size="lg"
                             variant="outline"
                             className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]"
+                            render={
+                                <Link
+                                    href={usg.officers.index.url()}
+                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
+                                />
+                            }
                         >
-                            <Link
-                                href={usg.officers.index.url()}
-                                className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                            >
-                                Meet Our Team
-                                <Users className="h-5 w-5" />
-                            </Link>
+                            Meet Our Team
+                            <Users className="h-5 w-5" />
                         </Button>
                         <Button
-                            asChild
                             size="lg"
                             variant="outline"
                             className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]"
+                            render={
+                                <Link
+                                    href={usg.announcements.index.url()}
+                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
+                                />
+                            }
                         >
-                            <Link
-                                href={usg.announcements.index.url()}
-                                className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                            >
-                                Latest Updates
-                                <Megaphone className="h-5 w-5" />
-                            </Link>
+                            Latest Updates
+                            <Megaphone className="h-5 w-5" />
                         </Button>
                     </div>
                 </div>

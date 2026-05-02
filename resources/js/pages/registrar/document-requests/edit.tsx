@@ -227,10 +227,10 @@ export default function Edit({ request, documentTypes }: Props) {
                                                         </h3>
                                                         <Tooltip>
                                                             <TooltipTrigger
-                                                                asChild
-                                                            >
-                                                                <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground md:h-4 md:w-4" />
-                                                            </TooltipTrigger>
+                                                                render={
+                                                                    <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground md:h-4 md:w-4" />
+                                                                }
+                                                            ></TooltipTrigger>
                                                             <TooltipContent>
                                                                 <p className="text-xs md:text-sm">
                                                                     Select the
@@ -330,10 +330,10 @@ export default function Edit({ request, documentTypes }: Props) {
                                                         </h3>
                                                         <Tooltip>
                                                             <TooltipTrigger
-                                                                asChild
-                                                            >
-                                                                <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground md:h-4 md:w-4" />
-                                                            </TooltipTrigger>
+                                                                render={
+                                                                    <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground md:h-4 md:w-4" />
+                                                                }
+                                                            ></TooltipTrigger>
                                                             <TooltipContent>
                                                                 <p className="text-xs md:text-sm">
                                                                     Specify how
@@ -400,10 +400,10 @@ export default function Edit({ request, documentTypes }: Props) {
                                                         </h3>
                                                         <Tooltip>
                                                             <TooltipTrigger
-                                                                asChild
-                                                            >
-                                                                <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground md:h-4 md:w-4" />
-                                                            </TooltipTrigger>
+                                                                render={
+                                                                    <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground md:h-4 md:w-4" />
+                                                                }
+                                                            ></TooltipTrigger>
                                                             <TooltipContent>
                                                                 <p className="text-xs md:text-sm">
                                                                     Select or

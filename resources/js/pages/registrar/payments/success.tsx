@@ -250,11 +250,14 @@ export default function PaymentSuccess({
 
                     {/* Actions */}
                     <div className="flex justify-center gap-4">
-                        <Button asChild>
-                            <Link href={index().url}>View My Requests</Link>
+                        <Button render={<Link href={index().url} />}>
+                            View My Requests
                         </Button>
-                        <Button variant="outline" asChild>
-                            <Link href="/dashboard">Back to Dashboard</Link>
+                        <Button
+                            variant="outline"
+                            render={<Link href="/dashboard" />}
+                        >
+                            Back to Dashboard
                         </Button>
                     </div>
                 </div>

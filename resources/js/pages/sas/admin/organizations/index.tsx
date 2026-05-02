@@ -174,11 +174,13 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             Manage student organizations and their activities
                         </p>
                     </div>
-                    <Button asChild>
-                        <Link href={sas.admin.organizations.create.url()}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Organization
-                        </Link>
+                    <Button
+                        render={
+                            <Link href={sas.admin.organizations.create.url()} />
+                        }
+                    >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Organization
                     </Button>
                 </div>
 
@@ -354,28 +356,28 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <Link
+                                                                href={sas.admin.organizations.show.url(
+                                                                    org.id,
+                                                                )}
+                                                            />
+                                                        }
                                                     >
-                                                        <Link
-                                                            href={sas.admin.organizations.show.url(
-                                                                org.id,
-                                                            )}
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Link>
+                                                        <Eye className="h-4 w-4" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        asChild
+                                                        render={
+                                                            <Link
+                                                                href={sas.admin.organizations.edit.url(
+                                                                    org.id,
+                                                                )}
+                                                            />
+                                                        }
                                                     >
-                                                        <Link
-                                                            href={sas.admin.organizations.edit.url(
-                                                                org.id,
-                                                            )}
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Link>
+                                                        <Edit className="h-4 w-4" />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -398,13 +400,16 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 <p className="text-muted-foreground">
                                     No organizations found
                                 </p>
-                                <Button className="mt-4" asChild>
-                                    <Link
-                                        href={sas.admin.organizations.create.url()}
-                                    >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Create First Organization
-                                    </Link>
+                                <Button
+                                    className="mt-4"
+                                    render={
+                                        <Link
+                                            href={sas.admin.organizations.create.url()}
+                                        />
+                                    }
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Create First Organization
                                 </Button>
                             </div>
                         )}

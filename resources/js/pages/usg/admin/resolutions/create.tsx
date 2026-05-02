@@ -231,31 +231,33 @@ export default function CreateResolution({
                                                 }
                                             />
                                             <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        type="button"
-                                                        variant="outline"
-                                                        className={cn(
-                                                            'w-full justify-start text-left font-normal',
-                                                            !selectedDate &&
-                                                                'text-muted-foreground',
-                                                            errors.date_passed &&
-                                                                'border-destructive',
-                                                        )}
-                                                        disabled={!canManage}
-                                                    >
-                                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                                        {selectedDate ? (
-                                                            format(
-                                                                selectedDate,
-                                                                'PPP',
-                                                            )
-                                                        ) : (
-                                                            <span>
-                                                                Pick a date
-                                                            </span>
-                                                        )}
-                                                    </Button>
+                                                <PopoverTrigger
+                                                    render={
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            className={cn(
+                                                                'w-full justify-start text-left font-normal',
+                                                                !selectedDate &&
+                                                                    'text-muted-foreground',
+                                                                errors.date_passed &&
+                                                                    'border-destructive',
+                                                            )}
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                        />
+                                                    }
+                                                >
+                                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                                    {selectedDate ? (
+                                                        format(
+                                                            selectedDate,
+                                                            'PPP',
+                                                        )
+                                                    ) : (
+                                                        <span>Pick a date</span>
+                                                    )}
                                                 </PopoverTrigger>
                                                 <PopoverContent
                                                     className="w-auto p-0"

@@ -100,24 +100,26 @@ export default function Create({ errors = {} }: Props) {
                                         open={datePickerOpen}
                                         onOpenChange={setDatePickerOpen}
                                     >
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                id="end_date"
-                                                type="button"
-                                                className={cn(
-                                                    'justify-start text-left font-normal',
-                                                    !endDate &&
-                                                        'text-muted-foreground',
-                                                    errors.end_time &&
-                                                        'border-destructive',
-                                                )}
-                                            >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {endDate
-                                                    ? format(endDate, 'PPP')
-                                                    : 'Pick a date'}
-                                            </Button>
+                                        <PopoverTrigger
+                                            render={
+                                                <Button
+                                                    variant="outline"
+                                                    id="end_date"
+                                                    type="button"
+                                                    className={cn(
+                                                        'justify-start text-left font-normal',
+                                                        !endDate &&
+                                                            'text-muted-foreground',
+                                                        errors.end_time &&
+                                                            'border-destructive',
+                                                    )}
+                                                />
+                                            }
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {endDate
+                                                ? format(endDate, 'PPP')
+                                                : 'Pick a date'}
                                         </PopoverTrigger>
                                         <PopoverContent
                                             className="w-auto p-0"

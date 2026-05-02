@@ -690,14 +690,14 @@ export default function AnnouncementsManagement({
 
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger
-                                                                asChild
+                                                                render={
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                    />
+                                                                }
                                                             >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                >
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </Button>
+                                                                <MoreVertical className="h-4 w-4" />
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 {announcement.status ===
@@ -889,14 +889,14 @@ export default function AnnouncementsManagement({
                                                             </Button>
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger
-                                                                    asChild
+                                                                    render={
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                        />
+                                                                    }
                                                                 >
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                    >
-                                                                        <MoreVertical className="h-4 w-4" />
-                                                                    </Button>
+                                                                    <MoreVertical className="h-4 w-4" />
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="end">
                                                                     {announcement.status ===
