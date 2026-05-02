@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -118,15 +118,17 @@ export default function OfficerCard({ officer }: OfficerCardProps) {
             </CardContent>
 
             <CardFooter className="bg-white pt-0 dark:bg-gray-900">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    render={<Link href={`/usg/officers/${officer.id}`} />}
+                <Link
+                    href={`/usg/officers/${officer.id}`}
+                    className={buttonVariants({
+                        variant: 'outline',
+                        size: 'sm',
+                        className: 'w-full',
+                    })}
                 >
                     <User className="mr-2 h-4 w-4" />
                     View Profile
-                </Button>
+                </Link>
             </CardFooter>
         </Card>
     );

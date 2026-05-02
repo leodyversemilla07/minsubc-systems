@@ -9,7 +9,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
@@ -169,19 +169,13 @@ export default function ActivityShow({ activity }: Props) {
                                 </Button>
                             </>
                         )}
-                        <Button
-                            variant="secondary"
-                            render={
-                                <Link
-                                    href={sas.admin.activities.edit.url(
-                                        activity.id,
-                                    )}
-                                />
-                            }
+                        <Link
+                            href={sas.admin.activities.edit.url(activity.id)}
+                            className={buttonVariants({ variant: 'secondary' })}
                         >
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
-                        </Button>
+                        </Link>
                     </div>
                 </div>
 

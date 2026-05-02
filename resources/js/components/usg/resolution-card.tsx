@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -117,15 +117,17 @@ export default function ResolutionCard({ resolution }: ResolutionCardProps) {
             </CardContent>
 
             <CardFooter className="flex gap-2">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    render={<Link href={`/usg/resolutions/${resolution.id}`} />}
+                <Link
+                    href={`/usg/resolutions/${resolution.id}`}
+                    className={buttonVariants({
+                        variant: 'outline',
+                        size: 'sm',
+                        className: 'flex-1',
+                    })}
                 >
                     <Eye className="mr-2 h-4 w-4" />
                     View Details
-                </Button>
+                </Link>
 
                 {resolution.file_path && (
                     <Button

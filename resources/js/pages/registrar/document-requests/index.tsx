@@ -1,4 +1,11 @@
 import { DataTable } from '@/components/data-table';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,13 +18,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import {
     Tooltip,
@@ -536,10 +536,10 @@ export default function Index({ requests }: Props) {
                                     </label>
                                     <Select
                                         value={statusFilter}
-                                        onValueChange={setStatusFilter}
+                                        onValueChange={(value) => setStatusFilter(value || '')} items={[{ value: "all", label: "All My Requests" }, { value: "pending_payment", label: "Pending Payment" }, { value: "processing", label: "Processing" }, { value: "ready_for_claim", label: "Ready for Claim" }, { value: "claimed", label: "Claimed" }]}
                                     >
                                         <SelectTrigger className="h-10 md:h-9">
-                                            <SelectValue placeholder="All Statuses" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="all">

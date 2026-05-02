@@ -1,7 +1,3 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -9,6 +5,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -244,9 +244,9 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                     />
                                 </div>
                             </div>
-                            <Select value={status} onValueChange={setStatus}>
+                            <Select value={status} onValueChange={(value) => setStatus(value || '')} items={[{ value: "all", label: "All Statuses" }, { value: "Pending", label: "Pending" }, { value: "Approved", label: "Approved" }, { value: "Rejected", label: "Rejected" }]}>
                                 <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="All Statuses" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -265,10 +265,10 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                             </Select>
                             <Select
                                 value={policyType}
-                                onValueChange={setPolicyType}
+                                onValueChange={(value) => setPolicyType(value || '')} items={[{ value: "all", label: "All Types" }, { value: "Health", label: "Health" }, { value: "Life", label: "Life" }, { value: "Accident", label: "Accident" }, { value: "Travel", label: "Travel" }]}
                             >
                                 <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="All Types" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -363,17 +363,15 @@ export default function InsuranceIndex({ insuranceRecords, filters }: Props) {
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-right">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    render={
-                                                        <Link
-                                                            href={`/sas/admin/insurance/${insurance.id}`}
-                                                        />
-                                                    }
+                                                <Link
+                                                    href={`/sas/admin/insurance/${insurance.id}`}
+                                                    className={buttonVariants({
+                                                        variant: 'ghost',
+                                                        size: 'sm',
+                                                    })}
                                                 >
                                                     Review
-                                                </Button>
+                                                </Link>
                                             </TableCell>
                                         </TableRow>
                                     ))}

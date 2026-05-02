@@ -2,12 +2,6 @@ import EventController from '@/actions/Modules/USG/Http/Controllers/Admin/EventC
 import { DatePicker } from '@/components/date-picker';
 import { FileUpload } from '@/components/file-upload';
 import { PageHeader } from '@/components/page-header';
-import { TimePicker } from '@/components/time-picker';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -15,6 +9,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { TimePicker } from '@/components/time-picker';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
@@ -201,9 +201,9 @@ export default function EditEvent({
                                         <Select
                                             value={category}
                                             onValueChange={(value) =>
-                                                setCategory(value)
+                                                setCategory(value || '')
                                             }
-                                            disabled={!canManage}
+                                            disabled={!canManage} items={categories.map((category) => ({ value: category, label: category }))}
                                         >
                                             <SelectTrigger
                                                 className={

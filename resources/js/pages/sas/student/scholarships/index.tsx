@@ -1,6 +1,3 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Select,
     SelectContent,
@@ -8,6 +5,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { PaginatedData, ScholarshipRecipient } from '@/types/sas';
@@ -161,10 +161,10 @@ export default function Index({ scholarships, filters }: Props) {
                                 value={selectedStatus || 'all'}
                                 onValueChange={(value) => {
                                     const filterValue =
-                                        value === 'all' ? '' : value;
+                                        !value || value === 'all' ? '' : value;
                                     setSelectedStatus(filterValue);
                                     handleFilter('status', filterValue);
-                                }}
+                                }} items={[{ value: "all", label: "All Status" }, { value: "Active", label: "Active" }, { value: "Completed", label: "Completed" }, { value: "Suspended", label: "Suspended" }, { value: "Revoked", label: "Revoked" }]}
                             >
                                 <SelectTrigger className="w-[180px]">
                                     <SelectValue placeholder="All Status" />

@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,13 +18,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -192,7 +192,8 @@ export default function SystemSettings({
                             </div>
                             <Select
                                 value={selectedType}
-                                onValueChange={handleTypeFilter}
+                                onValueChange={(value) => handleTypeFilter(value || '')} items={types.map((type) => ({ value: type, label: type.charAt(0).toUpperCase() +
+                                                                                type.slice(1) }))}
                             >
                                 <SelectTrigger className="w-full md:w-[180px]">
                                     <SelectValue placeholder="Filter by type" />

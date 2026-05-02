@@ -1,12 +1,6 @@
 import AnnouncementController from '@/actions/Modules/USG/Http/Controllers/Admin/AnnouncementController';
 import { DatePicker } from '@/components/date-picker';
 import { PageHeader } from '@/components/page-header';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -14,6 +8,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes/usg/admin';
@@ -528,9 +528,9 @@ export default function EditAnnouncement({
                                                 </FieldLabel>
                                                 <Select
                                                     value={category}
-                                                    onValueChange={setCategory}
+                                                    onValueChange={(value) => setCategory(value || '')}
                                                     disabled={!canManage}
-                                                    name="category"
+                                                    name="category" items={categories.map((category) => ({ value: category, label: category }))}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -1040,7 +1040,7 @@ export default function EditAnnouncement({
                                                             value === 'true',
                                                         )
                                                     }
-                                                    disabled={!canManage}
+                                                    disabled={!canManage} items={[{ value: "true", label: "Published" }, { value: "false", label: "Draft" }]}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -1082,7 +1082,7 @@ export default function EditAnnouncement({
                                                             value === 'true',
                                                         )
                                                     }
-                                                    disabled={!canManage}
+                                                    disabled={!canManage} items={[{ value: "false", label: "Normal" }, { value: "true", label: "Pinned" }]}
                                                 >
                                                     <SelectTrigger
                                                         className={

@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -27,13 +34,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
@@ -862,8 +862,8 @@ export default function EventsManagement({
                             <div>
                                 <Select
                                     value={selectedCategory}
-                                    onValueChange={handleCategoryFilter}
-                                    disabled={isFiltering}
+                                    onValueChange={(value) => handleCategoryFilter(value || '')}
+                                    disabled={isFiltering} items={safeCategories.map((category) => ({ value: category, label: category }))}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="All Categories" />
@@ -887,8 +887,8 @@ export default function EventsManagement({
                             <div>
                                 <Select
                                     value={selectedStatus}
-                                    onValueChange={handleStatusFilter}
-                                    disabled={isFiltering}
+                                    onValueChange={(value) => handleStatusFilter(value || '')}
+                                    disabled={isFiltering} items={[{ value: "all", label: "All Status" }, { value: "scheduled", label: "Scheduled" }, { value: "ongoing", label: "Ongoing" }, { value: "completed", label: "Completed" }, { value: "cancelled", label: "Cancelled" }]}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="All Status" />
@@ -916,8 +916,8 @@ export default function EventsManagement({
                             <div>
                                 <Select
                                     value={selectedMonth}
-                                    onValueChange={handleMonthFilter}
-                                    disabled={isFiltering}
+                                    onValueChange={(value) => handleMonthFilter(value || '')}
+                                    disabled={isFiltering} items={getMonthOptions().map((month) => ({ value: month.value, label: month.label }))}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="All Months" />

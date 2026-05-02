@@ -1,3 +1,11 @@
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,13 +24,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
@@ -428,20 +429,26 @@ export default function TransparencyManagement({
                             <div>
                                 <Select
                                     value={selectedType}
-                                    onValueChange={handleTypeFilter}
+                                    onValueChange={(value) => handleTypeFilter(value || '')}
+                                    items={[
+                                        { value: 'all', label: 'All Types' },
+                                        ...safeTypes.map((type) => ({ value: type, label: type })),
+                                    ]}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="All Types" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Types
-                                        </SelectItem>
-                                        {safeTypes.map((type) => (
-                                            <SelectItem key={type} value={type}>
-                                                {type}
+                                        <SelectGroup>
+                                            <SelectItem value="all">
+                                                All Types
                                             </SelectItem>
-                                        ))}
+                                            {safeTypes.map((type) => (
+                                                <SelectItem key={type} value={type}>
+                                                    {type}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -449,21 +456,24 @@ export default function TransparencyManagement({
                             <div>
                                 <Select
                                     value={selectedStatus}
-                                    onValueChange={handleStatusFilter}
+                                    onValueChange={(value) => handleStatusFilter(value || '')}
+                                    items={[{ value: "all", label: "All Status" }, { value: "published", label: "Published" }, { value: "draft", label: "Draft" }]}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="All Status" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Status
-                                        </SelectItem>
-                                        <SelectItem value="published">
-                                            Published
-                                        </SelectItem>
-                                        <SelectItem value="draft">
-                                            Draft
-                                        </SelectItem>
+                                        <SelectGroup>
+                                            <SelectItem value="all">
+                                                All Status
+                                            </SelectItem>
+                                            <SelectItem value="published">
+                                                Published
+                                            </SelectItem>
+                                            <SelectItem value="draft">
+                                                Draft
+                                            </SelectItem>
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -471,23 +481,29 @@ export default function TransparencyManagement({
                             <div>
                                 <Select
                                     value={selectedYear}
-                                    onValueChange={handleYearFilter}
+                                    onValueChange={(value) => handleYearFilter(value || '')}
+                                    items={[
+                                        { value: 'all', label: 'All Years' },
+                                        ...safeYears.map((year) => ({ value: year.toString(), label: year })),
+                                    ]}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="All Years" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Years
-                                        </SelectItem>
-                                        {safeYears.map((year) => (
-                                            <SelectItem
-                                                key={year}
-                                                value={year.toString()}
-                                            >
-                                                {year}
+                                        <SelectGroup>
+                                            <SelectItem value="all">
+                                                All Years
                                             </SelectItem>
-                                        ))}
+                                            {safeYears.map((year) => (
+                                                <SelectItem
+                                                    key={year}
+                                                    value={year.toString()}
+                                                >
+                                                    {year}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>

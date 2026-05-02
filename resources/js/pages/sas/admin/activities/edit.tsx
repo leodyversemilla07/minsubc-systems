@@ -1,4 +1,12 @@
-import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -9,13 +17,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
@@ -137,37 +138,53 @@ export default function EditActivity({ activity, organizations }: Props) {
                                     <Select
                                         value={data.category}
                                         onValueChange={(value) =>
-                                            setData('category', value)
+                                            setData('category', value || '')
                                         }
+                                        items={[
+                                            { value: null, label: "Select category" },
+                                            { value: "Seminar", label: "Seminar" },
+                                            { value: "Workshop", label: "Workshop" },
+                                            { value: "Training", label: "Training" },
+                                            { value: "Sports", label: "Sports" },
+                                            { value: "Cultural", label: "Cultural" },
+                                            { value: "Social", label: "Social" },
+                                            { value: "Leadership", label: "Leadership" },
+                                            { value: "Community Service", label: "Community Service" },
+                                        ]}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select category" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Seminar">
-                                                Seminar
-                                            </SelectItem>
-                                            <SelectItem value="Workshop">
-                                                Workshop
-                                            </SelectItem>
-                                            <SelectItem value="Training">
-                                                Training
-                                            </SelectItem>
-                                            <SelectItem value="Sports">
-                                                Sports
-                                            </SelectItem>
-                                            <SelectItem value="Cultural">
-                                                Cultural
-                                            </SelectItem>
-                                            <SelectItem value="Social">
-                                                Social
-                                            </SelectItem>
-                                            <SelectItem value="Leadership">
-                                                Leadership
-                                            </SelectItem>
-                                            <SelectItem value="Community Service">
-                                                Community Service
-                                            </SelectItem>
+                                            <SelectGroup>
+                                                <SelectItem value={null}>
+                                                    Select category
+                                                </SelectItem>
+                                                <SelectItem value="Seminar">
+                                                    Seminar
+                                                </SelectItem>
+                                                <SelectItem value="Workshop">
+                                                    Workshop
+                                                </SelectItem>
+                                                <SelectItem value="Training">
+                                                    Training
+                                                </SelectItem>
+                                                <SelectItem value="Sports">
+                                                    Sports
+                                                </SelectItem>
+                                                <SelectItem value="Cultural">
+                                                    Cultural
+                                                </SelectItem>
+                                                <SelectItem value="Social">
+                                                    Social
+                                                </SelectItem>
+                                                <SelectItem value="Leadership">
+                                                    Leadership
+                                                </SelectItem>
+                                                <SelectItem value="Community Service">
+                                                    Community Service
+                                                </SelectItem>
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {errors.category && (
@@ -184,30 +201,36 @@ export default function EditActivity({ activity, organizations }: Props) {
                                     <Select
                                         value={
                                             data.organization_id?.toString() ||
-                                            'none'
+                                            null
                                         }
                                         onValueChange={(value) =>
                                             setData(
                                                 'organization_id',
-                                                value === 'none' ? '' : value,
+                                                value || '',
                                             )
                                         }
+                                        items={[
+                                            { value: null, label: "Select organization" },
+                                            ...organizations.map((org) => ({ value: org.id.toString(), label: org.name })),
+                                        ]}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select organization" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="none">
-                                                None
-                                            </SelectItem>
-                                            {organizations.map((org) => (
-                                                <SelectItem
-                                                    key={org.id}
-                                                    value={org.id.toString()}
-                                                >
-                                                    {org.name}
+                                            <SelectGroup>
+                                                <SelectItem value={null}>
+                                                    None
                                                 </SelectItem>
-                                            ))}
+                                                {organizations.map((org) => (
+                                                    <SelectItem
+                                                        key={org.id}
+                                                        value={org.id.toString()}
+                                                    >
+                                                        {org.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {errors.organization_id && (
@@ -410,15 +433,13 @@ export default function EditActivity({ activity, organizations }: Props) {
 
                     {/* Form Actions */}
                     <div className="flex justify-end gap-4">
-                        <Button
+                        <Link
                             type="button"
-                            variant="outline"
-                            render={
-                                <Link href={sas.admin.activities.index.url()} />
-                            }
+                            href={sas.admin.activities.index.url()}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             Cancel
-                        </Button>
+                        </Link>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Updating...' : 'Update Activity'}
                         </Button>

@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -21,13 +28,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
@@ -390,7 +390,7 @@ export default function OfficersManagement({
                             <div>
                                 <Select
                                     value={selectedDepartment}
-                                    onValueChange={handleDepartmentChange}
+                                    onValueChange={(value) => handleDepartmentChange(value || '')} items={safeDepartments.map((dept) => ({ value: dept, label: dept }))}
                                 >
                                     <SelectTrigger className="h-10 w-full">
                                         <SelectValue placeholder="All Departments" />
@@ -408,7 +408,7 @@ export default function OfficersManagement({
                             <div>
                                 <Select
                                     value={selectedStatus}
-                                    onValueChange={handleStatusChange}
+                                    onValueChange={(value) => handleStatusChange(value || '')} items={[{ value: "active", label: "Active" }, { value: "inactive", label: "Inactive" }]}
                                 >
                                     <SelectTrigger className="h-10 w-full">
                                         <SelectValue placeholder="All Status" />

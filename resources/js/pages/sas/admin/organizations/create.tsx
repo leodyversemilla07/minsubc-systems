@@ -1,4 +1,12 @@
-import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -8,13 +16,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
@@ -140,20 +141,30 @@ export default function OrganizationsCreate({ advisers }: Props) {
                                     <Select
                                         value={data.organization_type}
                                         onValueChange={(value) =>
-                                            setData('organization_type', value)
+                                            setData('organization_type', value || '')
                                         }
                                         required
+                                        items={[
+                                            { value: null, label: "Select type" },
+                                            { value: "Major", label: "Major" },
+                                            { value: "Minor", label: "Minor" },
+                                        ]}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select type" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Major">
-                                                Major
-                                            </SelectItem>
-                                            <SelectItem value="Minor">
-                                                Minor
-                                            </SelectItem>
+                                            <SelectGroup>
+                                                <SelectItem value={null}>
+                                                    Select type
+                                                </SelectItem>
+                                                <SelectItem value="Major">
+                                                    Major
+                                                </SelectItem>
+                                                <SelectItem value="Minor">
+                                                    Minor
+                                                </SelectItem>
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {errors.organization_type && (
@@ -209,22 +220,31 @@ export default function OrganizationsCreate({ advisers }: Props) {
                                     <Select
                                         value={data.adviser_id}
                                         onValueChange={(value) =>
-                                            setData('adviser_id', value)
+                                            setData('adviser_id', value || '')
                                         }
+                                        items={[
+                                            { value: null, label: "Select adviser" },
+                                            ...advisers.map((adviser) => ({ value: adviser.id.toString(), label: `${adviser.first_name} ${adviser.last_name}` })),
+                                        ]}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select adviser" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {advisers.map((adviser) => (
-                                                <SelectItem
-                                                    key={adviser.id}
-                                                    value={adviser.id.toString()}
-                                                >
-                                                    {adviser.first_name}{' '}
-                                                    {adviser.last_name}
+                                            <SelectGroup>
+                                                <SelectItem value={null}>
+                                                    Select adviser
                                                 </SelectItem>
-                                            ))}
+                                                {advisers.map((adviser) => (
+                                                    <SelectItem
+                                                        key={adviser.id}
+                                                        value={adviser.id.toString()}
+                                                    >
+                                                        {adviser.first_name}{' '}
+                                                        {adviser.last_name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {errors.adviser_id && (
@@ -239,22 +259,33 @@ export default function OrganizationsCreate({ advisers }: Props) {
                                     <Select
                                         value={data.status}
                                         onValueChange={(value) =>
-                                            setData('status', value)
+                                            setData('status', value || '')
                                         }
+                                        items={[
+                                            { value: null, label: "Select status" },
+                                            { value: "Active", label: "Active" },
+                                            { value: "Inactive", label: "Inactive" },
+                                            { value: "Suspended", label: "Suspended" },
+                                        ]}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select status" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Active">
-                                                Active
-                                            </SelectItem>
-                                            <SelectItem value="Inactive">
-                                                Inactive
-                                            </SelectItem>
-                                            <SelectItem value="Suspended">
-                                                Suspended
-                                            </SelectItem>
+                                            <SelectGroup>
+                                                <SelectItem value={null}>
+                                                    Select status
+                                                </SelectItem>
+                                                <SelectItem value="Active">
+                                                    Active
+                                                </SelectItem>
+                                                <SelectItem value="Inactive">
+                                                    Inactive
+                                                </SelectItem>
+                                                <SelectItem value="Suspended">
+                                                    Suspended
+                                                </SelectItem>
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {errors.status && (
@@ -398,17 +429,13 @@ export default function OrganizationsCreate({ advisers }: Props) {
 
                     {/* Submit Actions */}
                     <div className="flex justify-end gap-4">
-                        <Button
-                            variant="outline"
+                        <Link
                             type="button"
-                            render={
-                                <Link
-                                    href={sas.admin.organizations.index.url()}
-                                />
-                            }
+                            href={sas.admin.organizations.index.url()}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             Cancel
-                        </Button>
+                        </Link>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Creating...' : 'Create Organization'}
                         </Button>

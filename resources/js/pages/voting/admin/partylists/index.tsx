@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -25,13 +32,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -120,7 +120,7 @@ export default function Index({
                 <div className="flex gap-3">
                     <Select
                         value={selectedElectionId?.toString() || 'all'}
-                        onValueChange={handleElectionChange}
+                        onValueChange={(value) => handleElectionChange(value || '')} items={elections.map((election) => ({ value: election.id.toString(), label: election.name }))}
                     >
                         <SelectTrigger className="w-64">
                             <SelectValue placeholder="All Elections" />

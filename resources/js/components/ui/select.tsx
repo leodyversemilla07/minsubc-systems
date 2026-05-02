@@ -6,59 +6,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "@/lib/utils"
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from "lucide-react"
 
-type SelectProps = Omit<
-  SelectPrimitive.Root.Props<unknown, unknown>,
-  "onValueChange"
-> & {
-  onValueChange?: (value: string) => void
-}
-
-function Select({ children, items, onValueChange, ...props }: SelectProps) {
-  const resolvedItems = React.useMemo(
-    () => items ?? getSelectItemsFromChildren(children),
-    [children, items]
-  )
-
-  return (
-    <SelectPrimitive.Root
-      items={resolvedItems}
-      onValueChange={(value) => {
-        if (value !== null) {
-          onValueChange?.(String(value))
-        }
-      }}
-      {...props}
-    >
-      {children}
-    </SelectPrimitive.Root>
-  )
-}
-
-function getSelectItemsFromChildren(children: React.ReactNode) {
-  const items: Array<{ label: React.ReactNode; value: unknown }> = []
-
-  function visit(node: React.ReactNode) {
-    React.Children.forEach(node, (child) => {
-      if (!React.isValidElement<{ children?: React.ReactNode; value?: unknown }>(child)) {
-        return
-      }
-
-      if (child.type === SelectItem && child.props.value !== undefined) {
-        items.push({
-          label: child.props.children ?? String(child.props.value),
-          value: child.props.value,
-        })
-        return
-      }
-
-      visit(child.props.children)
-    })
-  }
-
-  visit(children)
-
-  return items.length > 0 ? items : undefined
-}
+const Select = SelectPrimitive.Root
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (

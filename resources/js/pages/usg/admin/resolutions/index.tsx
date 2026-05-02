@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -27,13 +34,6 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty';
 import { Progress } from '@/components/ui/progress';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
@@ -534,7 +534,7 @@ export default function ResolutionsManagement({
                             <div>
                                 <Select
                                     value={selectedStatus}
-                                    onValueChange={handleStatusFilter}
+                                    onValueChange={(value) => handleStatusFilter(value || '')} items={[{ value: "all", label: "All Status" }, { value: "published", label: "Published" }, { value: "archived", label: "Archived" }]}
                                 >
                                     <SelectTrigger className="h-10 w-full">
                                         <SelectValue placeholder="All Status" />
@@ -556,7 +556,7 @@ export default function ResolutionsManagement({
                             <div>
                                 <Select
                                     value={selectedCategory}
-                                    onValueChange={handleCategoryFilter}
+                                    onValueChange={(value) => handleCategoryFilter(value || '')} items={safeCategories.map((category) => ({ value: category, label: category }))}
                                 >
                                     <SelectTrigger className="h-10 w-full">
                                         <SelectValue placeholder="All Categories" />
@@ -580,7 +580,7 @@ export default function ResolutionsManagement({
                             <div>
                                 <Select
                                     value={selectedYear}
-                                    onValueChange={handleYearFilter}
+                                    onValueChange={(value) => handleYearFilter(value || '')} items={safeYears.map((year) => ({ value: year, label: year }))}
                                 >
                                     <SelectTrigger className="h-10 w-full">
                                         <SelectValue placeholder="All Years" />

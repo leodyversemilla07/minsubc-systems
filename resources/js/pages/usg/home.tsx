@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Carousel from '@/components/usg/carousel';
 import { OfficerCardSkeleton } from '@/components/usg/skeleton';
@@ -270,15 +270,18 @@ export default function USGHomepage({
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            className="border-green-700 text-green-700 hover:bg-green-700 hover:text-white"
-                            render={<Link href={usg.officers.index.url()} />}
+                        <Link
+                            href={usg.officers.index.url()}
+                            className={buttonVariants({
+                                variant: 'outline',
+                                size: 'lg',
+                                className:
+                                    'border-green-700 text-green-700 hover:bg-green-700 hover:text-white',
+                            })}
                         >
                             View All Officers
                             <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -373,16 +376,17 @@ export default function USGHomepage({
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Button
-                            size="lg"
-                            className="bg-green-700 text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-800 hover:shadow-2xl dark:bg-green-600 dark:hover:bg-green-500"
-                            render={
-                                <Link href={usg.announcements.index.url()} />
-                            }
+                        <Link
+                            href={usg.announcements.index.url()}
+                            className={buttonVariants({
+                                size: 'lg',
+                                className:
+                                    'bg-green-700 text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-green-800 hover:shadow-2xl dark:bg-green-600 dark:hover:bg-green-500',
+                            })}
                         >
                             View All Announcements
                             <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -401,16 +405,17 @@ export default function USGHomepage({
                             We believe in open governance. Access our financial
                             reports, meeting minutes, and more.
                         </p>
-                        <Button
-                            size="lg"
-                            className="bg-green-800 hover:bg-green-900 dark:bg-green-700 dark:hover:bg-green-600"
-                            render={
-                                <Link href={usg.transparency.index.url()} />
-                            }
+                        <Link
+                            href={usg.transparency.index.url()}
+                            className={buttonVariants({
+                                size: 'lg',
+                                className:
+                                    'bg-green-800 hover:bg-green-900 dark:bg-green-700 dark:hover:bg-green-600',
+                            })}
                         >
                             Explore Transparency
                             <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </section>

@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import {
     Card,
@@ -6,13 +13,6 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
@@ -168,7 +168,7 @@ export default function Analytics({
                     <div className="flex items-center gap-2">
                         <Select
                             value={period}
-                            onValueChange={handlePeriodChange}
+                            onValueChange={(value) => handlePeriodChange(value || '')} items={[{ value: "7", label: "Last 7 days" }, { value: "30", label: "Last 30 days" }, { value: "90", label: "Last 90 days" }, { value: "365", label: "Last year" }]}
                         >
                             <SelectTrigger className="w-45">
                                 <SelectValue placeholder="Select period" />

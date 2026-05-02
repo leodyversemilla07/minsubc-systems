@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -83,14 +83,12 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button
-                                    className="gradient-primary w-full shadow-primary"
-                                    render={
-                                        <Link
-                                            href="/usg"
-                                            className="flex items-center justify-center"
-                                        />
-                                    }
+                                <Link
+                                    href="/usg"
+                                    className={buttonVariants({
+                                        className:
+                                            'gradient-primary flex w-full items-center justify-center shadow-primary',
+                                    })}
                                 >
                                     <span className="hidden sm:inline">
                                         Visit USG Portal
@@ -99,7 +97,7 @@ export default function Welcome() {
                                         USG Portal
                                     </span>
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </Button>
+                                </Link>
                             </CardFooter>
                         </Card>
 
@@ -123,21 +121,19 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button
-                                    className="gradient-primary w-full shadow-primary"
-                                    render={
-                                        <Link
-                                            href="/register"
-                                            className="flex items-center justify-center"
-                                        />
-                                    }
+                                <Link
+                                    href="/register"
+                                    className={buttonVariants({
+                                        className:
+                                            'gradient-primary flex w-full items-center justify-center shadow-primary',
+                                    })}
                                 >
                                     <span className="hidden sm:inline">
                                         Access Registrar
                                     </span>
                                     <span className="sm:hidden">Registrar</span>
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </Button>
+                                </Link>
                             </CardFooter>
                         </Card>
 
@@ -161,14 +157,12 @@ export default function Welcome() {
                                 </CardDescription>
                             </CardContent>
                             <CardFooter className="relative pt-4">
-                                <Button
-                                    className="gradient-primary w-full shadow-primary"
-                                    render={
-                                        <Link
-                                            href="/sas"
-                                            className="flex items-center justify-center"
-                                        />
-                                    }
+                                <Link
+                                    href="/sas"
+                                    className={buttonVariants({
+                                        className:
+                                            'gradient-primary flex w-full items-center justify-center shadow-primary',
+                                    })}
                                 >
                                     <span className="hidden sm:inline">
                                         Visit SAS Portal
@@ -177,7 +171,7 @@ export default function Welcome() {
                                         SAS Portal
                                     </span>
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </Button>
+                                </Link>
                             </CardFooter>
                         </Card>
 

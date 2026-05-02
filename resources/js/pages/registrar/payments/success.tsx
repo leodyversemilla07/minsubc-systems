@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -250,15 +250,15 @@ export default function PaymentSuccess({
 
                     {/* Actions */}
                     <div className="flex justify-center gap-4">
-                        <Button render={<Link href={index().url} />}>
+                        <Link href={index().url} className={buttonVariants()}>
                             View My Requests
-                        </Button>
-                        <Button
-                            variant="outline"
-                            render={<Link href="/dashboard" />}
+                        </Link>
+                        <Link
+                            href="/dashboard"
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             Back to Dashboard
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -1,3 +1,11 @@
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,13 +24,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -233,37 +234,46 @@ export default function ScholarshipsIndex({
                             </div>
                             <Select
                                 value={typeFilter}
-                                onValueChange={setTypeFilter}
+                                onValueChange={(value) => setTypeFilter(value || '')}
+                                items={[
+                                    { value: 'all', label: 'All Types' },
+                                    ...scholarshipTypes.map((type) => ({ value: type, label: type })),
+                                ]}
                             >
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="Type" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">
-                                        All Types
-                                    </SelectItem>
-                                    {scholarshipTypes.map((type) => (
-                                        <SelectItem key={type} value={type}>
-                                            {type}
+                                    <SelectGroup>
+                                        <SelectItem value="all">
+                                            All Types
                                         </SelectItem>
-                                    ))}
+                                        {scholarshipTypes.map((type) => (
+                                            <SelectItem key={type} value={type}>
+                                                {type}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                             <Select
                                 value={statusFilter}
-                                onValueChange={setStatusFilter}
+                                onValueChange={(value) => setStatusFilter(value || '')}
+                                items={[{ value: "all", label: "All Status" }, { value: "active", label: "Active" }, { value: "inactive", label: "Inactive" }]}
                             >
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="Status" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All</SelectItem>
-                                    <SelectItem value="active">
-                                        Active
-                                    </SelectItem>
-                                    <SelectItem value="inactive">
-                                        Inactive
-                                    </SelectItem>
+                                    <SelectGroup>
+                                        <SelectItem value="all">All Status</SelectItem>
+                                        <SelectItem value="active">
+                                            Active
+                                        </SelectItem>
+                                        <SelectItem value="inactive">
+                                            Inactive
+                                        </SelectItem>
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                             <Button onClick={handleSearch}>

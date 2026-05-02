@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,13 +27,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -250,7 +250,7 @@ export default function Users({ users, roles, filters }: UsersProps) {
                             </div>
                             <Select
                                 value={selectedRole}
-                                onValueChange={handleRoleFilter}
+                                onValueChange={(value) => handleRoleFilter(value || '')} items={roles.map((role) => ({ value: role.name, label: role.display_name }))}
                             >
                                 <SelectTrigger className="w-full md:w-[180px]">
                                     <SelectValue placeholder="Filter by role" />
@@ -271,7 +271,7 @@ export default function Users({ users, roles, filters }: UsersProps) {
                             </Select>
                             <Select
                                 value={selectedStatus}
-                                onValueChange={handleStatusFilter}
+                                onValueChange={(value) => handleStatusFilter(value || '')} items={[{ value: "all", label: "All Status" }, { value: "active", label: "Active" }, { value: "unverified", label: "Unverified" }]}
                             >
                                 <SelectTrigger className="w-full md:w-[180px]">
                                     <SelectValue placeholder="Filter by status" />

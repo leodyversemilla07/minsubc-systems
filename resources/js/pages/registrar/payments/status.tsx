@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
@@ -113,16 +113,16 @@ export default function Status({ request }: Props) {
                             Request {request.request_number}
                         </p>
                     </div>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        render={
-                            <Link href={show(request.request_number).url} />
-                        }
+                    <Link
+                        href={show(request.request_number).url}
+                        className={buttonVariants({
+                            variant: 'outline',
+                            size: 'sm',
+                        })}
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Request
-                    </Button>
+                    </Link>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

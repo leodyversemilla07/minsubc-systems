@@ -1,4 +1,12 @@
-import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -9,13 +17,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -211,31 +212,45 @@ export default function EditDocument({ document }: Props) {
                                     <Select
                                         value={data.document_category}
                                         onValueChange={(value) =>
-                                            setData('document_category', value)
+                                            setData('document_category', value || '')
                                         }
+                                        items={[
+                                            { value: null, label: "Select category" },
+                                            { value: "Scholarship", label: "Scholarship" },
+                                            { value: "Insurance", label: "Insurance" },
+                                            { value: "Organization", label: "Organization" },
+                                            { value: "Activity", label: "Activity" },
+                                            { value: "Administrative", label: "Administrative" },
+                                            { value: "Other", label: "Other" },
+                                        ]}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select category" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Scholarship">
-                                                Scholarship
-                                            </SelectItem>
-                                            <SelectItem value="Insurance">
-                                                Insurance
-                                            </SelectItem>
-                                            <SelectItem value="Organization">
-                                                Organization
-                                            </SelectItem>
-                                            <SelectItem value="Activity">
-                                                Activity
-                                            </SelectItem>
-                                            <SelectItem value="Administrative">
-                                                Administrative
-                                            </SelectItem>
-                                            <SelectItem value="Other">
-                                                Other
-                                            </SelectItem>
+                                            <SelectGroup>
+                                                <SelectItem value={null}>
+                                                    Select category
+                                                </SelectItem>
+                                                <SelectItem value="Scholarship">
+                                                    Scholarship
+                                                </SelectItem>
+                                                <SelectItem value="Insurance">
+                                                    Insurance
+                                                </SelectItem>
+                                                <SelectItem value="Organization">
+                                                    Organization
+                                                </SelectItem>
+                                                <SelectItem value="Activity">
+                                                    Activity
+                                                </SelectItem>
+                                                <SelectItem value="Administrative">
+                                                    Administrative
+                                                </SelectItem>
+                                                <SelectItem value="Other">
+                                                    Other
+                                                </SelectItem>
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {errors.document_category && (
@@ -437,15 +452,13 @@ export default function EditDocument({ document }: Props) {
 
                     {/* Form Actions */}
                     <div className="flex justify-end gap-4">
-                        <Button
+                        <Link
                             type="button"
-                            variant="outline"
-                            render={
-                                <Link href={sas.admin.documents.index.url()} />
-                            }
+                            href={sas.admin.documents.index.url()}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             Cancel
-                        </Button>
+                        </Link>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Saving...' : 'Save Changes'}
                         </Button>

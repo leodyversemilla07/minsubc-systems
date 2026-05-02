@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import USGLayout from '@/layouts/usg-layout';
 import usg from '@/routes/usg';
 import { Head, Link } from '@inertiajs/react';
@@ -217,47 +217,41 @@ export default function VMGOPage({ vmgo }: Props) {
                         student welfare.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Button
-                            size="lg"
-                            className="bg-white text-[var(--usg-primary)] shadow-xl hover:bg-[var(--usg-light)] hover:shadow-2xl"
-                            render={
-                                <Link
-                                    href={usg.events.index.url()}
-                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                                />
-                            }
+                        <Link
+                            href={usg.events.index.url()}
+                            className={buttonVariants({
+                                size: 'lg',
+                                className:
+                                    'flex items-center gap-2 bg-white px-8 py-4 text-lg font-bold text-[var(--usg-primary)] shadow-xl hover:bg-[var(--usg-light)] hover:shadow-2xl',
+                            })}
                         >
                             View Events
                             <ArrowRight className="h-5 w-5" />
-                        </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]"
-                            render={
-                                <Link
-                                    href={usg.officers.index.url()}
-                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                                />
-                            }
+                        </Link>
+                        <Link
+                            href={usg.officers.index.url()}
+                            className={buttonVariants({
+                                variant: 'outline',
+                                size: 'lg',
+                                className:
+                                    'flex items-center gap-2 border-2 border-white bg-transparent px-8 py-4 text-lg font-bold text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]',
+                            })}
                         >
                             Meet Our Team
                             <Users className="h-5 w-5" />
-                        </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className="border-2 border-white bg-transparent text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]"
-                            render={
-                                <Link
-                                    href={usg.announcements.index.url()}
-                                    className="flex items-center gap-2 px-8 py-4 text-lg font-bold"
-                                />
-                            }
+                        </Link>
+                        <Link
+                            href={usg.announcements.index.url()}
+                            className={buttonVariants({
+                                variant: 'outline',
+                                size: 'lg',
+                                className:
+                                    'flex items-center gap-2 border-2 border-white bg-transparent px-8 py-4 text-lg font-bold text-white backdrop-blur-sm hover:bg-white hover:text-[var(--usg-primary)]',
+                            })}
                         >
                             Latest Updates
                             <Megaphone className="h-5 w-5" />
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </section>

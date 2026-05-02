@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Field,
@@ -6,13 +13,6 @@ import {
     FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
 import { type BreadcrumbItem } from '@/types';
@@ -87,7 +87,7 @@ export default function Create({
                                 />
                                 <Select
                                     value={selectedElection.toString()}
-                                    onValueChange={handleElectionChange}
+                                    onValueChange={(value) => handleElectionChange(value || '')} items={elections.map((election) => ({ value: election.id.toString(), label: election.name }))}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select election" />

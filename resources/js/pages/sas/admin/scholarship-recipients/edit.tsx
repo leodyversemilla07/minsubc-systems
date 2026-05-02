@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -8,13 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
@@ -127,8 +127,8 @@ export default function EditRecipient({ recipient }: Props) {
                                     <Select
                                         value={data.semester}
                                         onValueChange={(value) =>
-                                            setData('semester', value)
-                                        }
+                                            setData('semester', value || '')
+                                        } items={[{ value: "1st", label: "1st Semester" }, { value: "2nd", label: "2nd Semester" }, { value: "Summer", label: "Summer" }]}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
@@ -176,8 +176,8 @@ export default function EditRecipient({ recipient }: Props) {
                                     <Select
                                         value={data.status}
                                         onValueChange={(value) =>
-                                            setData('status', value)
-                                        }
+                                            setData('status', value || '')
+                                        } items={[{ value: "Active", label: "Active" }, { value: "Suspended", label: "Suspended" }, { value: "Completed", label: "Completed" }, { value: "Cancelled", label: "Cancelled" }]}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
@@ -247,8 +247,8 @@ export default function EditRecipient({ recipient }: Props) {
                                     <Select
                                         value={data.renewal_status}
                                         onValueChange={(value) =>
-                                            setData('renewal_status', value)
-                                        }
+                                            setData('renewal_status', value || '')
+                                        } items={[{ value: "Not Applicable", label: "Not Applicable" }, { value: "Pending", label: "Pending" }, { value: "Approved", label: "Approved" }, { value: "Denied", label: "Denied" }]}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />

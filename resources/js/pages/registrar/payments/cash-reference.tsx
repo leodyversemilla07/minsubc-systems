@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
@@ -128,15 +128,13 @@ export default function CashPaymentReference({ payment }: Props) {
                                 successfully
                             </p>
                         </div>
-                        <Button
-                            variant="outline"
-                            render={
-                                <Link href={show(request.request_number).url} />
-                            }
+                        <Link
+                            href={show(request.request_number).url}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Request
-                        </Button>
+                        </Link>
                     </div>
                 </div>
 
@@ -359,14 +357,12 @@ export default function CashPaymentReference({ payment }: Props) {
 
                 {/* Navigation */}
                 <div className="flex justify-center">
-                    <Button
-                        size="lg"
-                        render={
-                            <Link href={show(request.request_number).url} />
-                        }
+                    <Link
+                        href={show(request.request_number).url}
+                        className={buttonVariants({ size: 'lg' })}
                     >
                         View Request Status
-                    </Button>
+                    </Link>
                 </div>
             </div>
         </AppLayout>

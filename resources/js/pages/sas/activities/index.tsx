@@ -1,13 +1,14 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import SASLayout from '@/layouts/sas-layout';
 import { calendar, exportMethod, index, show } from '@/routes/sas/activities';
 import type { PaginatedData, SASActivity } from '@/types/sas';
@@ -352,21 +353,27 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 <Select
                                     value={typeFilter}
                                     onValueChange={(value) =>
-                                        handleFilterChange('type', value)
+                                        handleFilterChange('type', value || '')
                                     }
+                                    items={[
+                                        { value: 'all', label: 'All Types' },
+                                        ...ACTIVITY_TYPES.map((type) => ({ value: type, label: type })),
+                                    ]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                                        <SelectValue placeholder="All Types" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Types
-                                        </SelectItem>
-                                        {ACTIVITY_TYPES.map((type) => (
-                                            <SelectItem key={type} value={type}>
-                                                {type}
+                                        <SelectGroup>
+                                            <SelectItem value="all">
+                                                All Types
                                             </SelectItem>
-                                        ))}
+                                            {ACTIVITY_TYPES.map((type) => (
+                                                <SelectItem key={type} value={type}>
+                                                    {type}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -379,24 +386,30 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 <Select
                                     value={statusFilter}
                                     onValueChange={(value) =>
-                                        handleFilterChange('status', value)
+                                        handleFilterChange('status', value || '')
                                     }
+                                    items={[
+                                        { value: 'all', label: 'All Statuses' },
+                                        ...ACTIVITY_STATUSES.map((status) => ({ value: status, label: status })),
+                                    ]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                                        <SelectValue placeholder="All Statuses" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Statuses
-                                        </SelectItem>
-                                        {ACTIVITY_STATUSES.map((status) => (
-                                            <SelectItem
-                                                key={status}
-                                                value={status}
-                                            >
-                                                {status}
+                                        <SelectGroup>
+                                            <SelectItem value="all">
+                                                All Statuses
                                             </SelectItem>
-                                        ))}
+                                            {ACTIVITY_STATUSES.map((status) => (
+                                                <SelectItem
+                                                    key={status}
+                                                    value={status}
+                                                >
+                                                    {status}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>

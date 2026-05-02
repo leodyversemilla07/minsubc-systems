@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,13 +24,6 @@ import {
     ItemGroup,
     ItemMedia,
 } from '@/components/ui/item';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import {
     Tooltip,
@@ -270,7 +270,11 @@ export default function Edit({ request, documentTypes }: Props) {
                                                                     type ||
                                                                         null,
                                                                 );
-                                                            }}
+                                                            }} items={documentTypes.map((type) => ({ value: type.value, label: <>{
+                                                                                                                                            type.label
+                                                                                                                                        }{' '}-{' '}{
+                                                                                                                                            type.price_label
+                                                                                                                                        }</> }))}
                                                         >
                                                             <SelectTrigger className="h-10 md:h-11">
                                                                 <SelectValue />
@@ -432,7 +436,7 @@ export default function Edit({ request, documentTypes }: Props) {
                                                                 value,
                                                             ) => {
                                                                 setSelectedPurpose(
-                                                                    value,
+                                                                    value || '',
                                                                 );
                                                                 if (
                                                                     value !==
@@ -442,7 +446,7 @@ export default function Edit({ request, documentTypes }: Props) {
                                                                         '',
                                                                     );
                                                                 }
-                                                            }}
+                                                            }} items={purposeOptions.map((option) => ({ value: option, label: option }))}
                                                         >
                                                             <SelectTrigger className="h-10 md:h-11">
                                                                 <SelectValue />

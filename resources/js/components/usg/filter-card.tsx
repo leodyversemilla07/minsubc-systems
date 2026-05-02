@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -7,13 +14,6 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Filter, X } from 'lucide-react';
 import { ReactNode } from 'react';
 
@@ -124,7 +124,13 @@ export default function FilterCard({
                                 value={filter.value}
                                 onValueChange={(value) => {
                                     filter.onChange(value || undefined);
-                                }}
+                                }} items={filter.options.map((option) => ({ value: typeof option === 'string'
+                                                                                ? option
+                                                                                : option.value, label: typeof option === 'string'
+                                                                                ? filter.formatLabel
+                                                                                    ? filter.formatLabel(option)
+                                                                                    : option
+                                                                                : option.label }))}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue

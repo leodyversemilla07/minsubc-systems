@@ -1,6 +1,13 @@
 import OfficerController from '@/actions/Modules/USG/Http/Controllers/Admin/OfficerController';
 import { DatePicker } from '@/components/date-picker';
 import { PageHeader } from '@/components/page-header';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -14,13 +21,6 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes/usg/admin';
@@ -341,7 +341,7 @@ export default function EditOfficer({
                                                         officer.position
                                                     }
                                                     disabled={!canManage}
-                                                    required
+                                                    required items={positions.map((position) => ({ value: position, label: position }))}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -384,7 +384,7 @@ export default function EditOfficer({
                                                     defaultValue={
                                                         officer.department
                                                     }
-                                                    disabled={!canManage}
+                                                    disabled={!canManage} items={departments.map((dept) => ({ value: dept, label: dept }))}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -602,7 +602,7 @@ export default function EditOfficer({
                                                             value === 'true',
                                                         )
                                                     }
-                                                    disabled={!canManage}
+                                                    disabled={!canManage} items={[{ value: "true", label: "Active" }, { value: "false", label: "Inactive" }]}
                                                 >
                                                     <SelectTrigger
                                                         className={

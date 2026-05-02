@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,13 +25,6 @@ import {
     ItemMedia,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import {
@@ -294,7 +294,21 @@ export default function Create({
                                                             }}
                                                             disabled={
                                                                 hasReachedLimit
-                                                            }
+                                                            } items={documentTypes.map((type) => ({ value: type.value, label: <div className="flex w-full items-center justify-between">
+                                                                                                                                            <span>
+                                                                                                                                                {
+                                                                                                                                                    type.label
+                                                                                                                                                }
+                                                                                                                                            </span>
+                                                                                                                                            <Badge
+                                                                                                                                                variant="outline"
+                                                                                                                                                className="ml-2 text-xs"
+                                                                                                                                            >
+                                                                                                                                                {
+                                                                                                                                                    type.price_label
+                                                                                                                                                }
+                                                                                                                                            </Badge>
+                                                                                                                                        </div> }))}
                                                         >
                                                             <SelectTrigger
                                                                 id="document_type"
@@ -463,7 +477,7 @@ export default function Create({
                                                                 value,
                                                             ) => {
                                                                 setSelectedPurpose(
-                                                                    value,
+                                                                    value || '',
                                                                 );
                                                                 if (
                                                                     value !==
@@ -476,7 +490,7 @@ export default function Create({
                                                             }}
                                                             disabled={
                                                                 hasReachedLimit
-                                                            }
+                                                            } items={purposeOptions.map((option) => ({ value: option, label: option }))}
                                                         >
                                                             <SelectTrigger
                                                                 id="purpose"

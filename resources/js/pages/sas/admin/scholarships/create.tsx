@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -8,13 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
@@ -128,8 +128,8 @@ export default function CreateScholarship({ scholarshipTypes }: Props) {
                                     <Select
                                         value={data.scholarship_type}
                                         onValueChange={(value) =>
-                                            setData('scholarship_type', value)
-                                        }
+                                            setData('scholarship_type', value || '')
+                                        } items={scholarshipTypes.map((type) => ({ value: type, label: type }))}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select type" />

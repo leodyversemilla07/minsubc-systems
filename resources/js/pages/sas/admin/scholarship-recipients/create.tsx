@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -8,13 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -90,8 +90,8 @@ export default function CreateRecipient({ scholarships, students }: Props) {
                                     <Select
                                         value={data.student_id}
                                         onValueChange={(value) =>
-                                            setData('student_id', value)
-                                        }
+                                            setData('student_id', value || '')
+                                        } items={students.map((s) => ({ value: s.id.toString(), label: <>{s.name}({s.email})</> }))}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select student" />
@@ -119,8 +119,8 @@ export default function CreateRecipient({ scholarships, students }: Props) {
                                     <Select
                                         value={data.scholarship_id}
                                         onValueChange={(value) =>
-                                            setData('scholarship_id', value)
-                                        }
+                                            setData('scholarship_id', value || '')
+                                        } items={scholarships.map((s) => ({ value: s.id.toString(), label: s.scholarship_name }))}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select scholarship" />
@@ -167,8 +167,8 @@ export default function CreateRecipient({ scholarships, students }: Props) {
                                     <Select
                                         value={data.semester}
                                         onValueChange={(value) =>
-                                            setData('semester', value)
-                                        }
+                                            setData('semester', value || '')
+                                        } items={[{ value: "1st", label: "1st Semester" }, { value: "2nd", label: "2nd Semester" }, { value: "Summer", label: "Summer" }]}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select semester" />

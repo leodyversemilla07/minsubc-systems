@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
@@ -173,21 +173,18 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                         existingCashPayment.payment_reference_number
                                     }
                                 </code>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    render={
-                                        <Link
-                                            href={
-                                                cashReference(
-                                                    existingCashPayment.id,
-                                                ).url
-                                            }
-                                        />
+                                <Link
+                                    href={
+                                        cashReference(existingCashPayment.id)
+                                            .url
                                     }
+                                    className={buttonVariants({
+                                        variant: 'outline',
+                                        size: 'sm',
+                                    })}
                                 >
                                     View Payment Reference
-                                </Button>
+                                </Link>
                             </div>
                         </AlertDescription>
                     </Alert>
@@ -302,23 +299,21 @@ export default function PaymentMethod({ request, existingCashPayment }: Props) {
                                 {({ processing, errors }) => (
                                     <>
                                         {existingCashPayment ? (
-                                            <Button
-                                                variant="outline"
-                                                className="w-full"
-                                                size="lg"
-                                                render={
-                                                    <Link
-                                                        href={
-                                                            cashReference(
-                                                                existingCashPayment.id,
-                                                            ).url
-                                                        }
-                                                    />
+                                            <Link
+                                                href={
+                                                    cashReference(
+                                                        existingCashPayment.id,
+                                                    ).url
                                                 }
+                                                className={buttonVariants({
+                                                    variant: 'outline',
+                                                    size: 'lg',
+                                                    className: 'w-full',
+                                                })}
                                             >
                                                 <CheckCircle className="mr-2 h-4 w-4" />
                                                 View Payment Reference
-                                            </Button>
+                                            </Link>
                                         ) : (
                                             <Button
                                                 variant="outline"

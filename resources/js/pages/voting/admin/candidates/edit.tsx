@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Field,
@@ -6,13 +13,6 @@ import {
     FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import voting from '@/routes/voting';
@@ -115,7 +115,7 @@ export default function Edit({
                                 />
                                 <Select
                                     value={selectedPosition}
-                                    onValueChange={setSelectedPosition}
+                                    onValueChange={(value) => setSelectedPosition(value || '')} items={positions.map((position) => ({ value: position.position_id.toString(), label: position.description }))}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Position" />
@@ -216,7 +216,7 @@ export default function Edit({
                                 />
                                 <Select
                                     value={selectedPartylist}
-                                    onValueChange={setSelectedPartylist}
+                                    onValueChange={(value) => setSelectedPartylist(value || '')} items={partylists.map((partylist) => ({ value: partylist.partylist_id.toString(), label: partylist.name }))}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Independent" />

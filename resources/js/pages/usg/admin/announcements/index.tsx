@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -26,13 +33,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
     Table,
@@ -493,7 +493,7 @@ export default function AnnouncementsManagement({
                             <div>
                                 <Select
                                     value={selectedStatus}
-                                    onValueChange={handleStatusFilter}
+                                    onValueChange={(value) => handleStatusFilter(value || '')} items={[{ value: "all", label: "All Status" }, { value: "published", label: "Published" }, { value: "pending", label: "Pending" }, { value: "draft", label: "Draft" }, { value: "archived", label: "Archived" }]}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="All Status" />
@@ -521,7 +521,7 @@ export default function AnnouncementsManagement({
                             <div>
                                 <Select
                                     value={selectedPriority}
-                                    onValueChange={handlePriorityFilter}
+                                    onValueChange={(value) => handlePriorityFilter(value || '')} items={[{ value: "all", label: "All Priority" }, { value: "urgent", label: "Urgent" }, { value: "high", label: "High" }, { value: "medium", label: "Medium" }, { value: "low", label: "Low" }]}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="All Priority" />
@@ -547,7 +547,7 @@ export default function AnnouncementsManagement({
                             <div>
                                 <Select
                                     value={selectedCategory}
-                                    onValueChange={handleCategoryFilter}
+                                    onValueChange={(value) => handleCategoryFilter(value || '')} items={safeCategories.map((category) => ({ value: category, label: category }))}
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="All Categories" />

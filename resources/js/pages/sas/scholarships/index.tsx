@@ -1,12 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
 import type { PaginatedData } from '@/types/sas';
@@ -231,21 +232,27 @@ export default function ScholarshipsIndex({
                                 <Select
                                     value={filters?.type || 'all'}
                                     onValueChange={(value) =>
-                                        handleFilterChange('type', value)
+                                        handleFilterChange('type', value || '')
                                     }
+                                    items={[
+                                        { value: 'all', label: 'All Types' },
+                                        ...types.map((type) => ({ value: type, label: type })),
+                                    ]}
                                 >
                                     <SelectTrigger className="h-11 rounded-xl border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-                                        <SelectValue placeholder="All Types" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">
-                                            All Types
-                                        </SelectItem>
-                                        {types.map((type) => (
-                                            <SelectItem key={type} value={type}>
-                                                {type}
+                                        <SelectGroup>
+                                            <SelectItem value="all">
+                                                All Types
                                             </SelectItem>
-                                        ))}
+                                            {types.map((type) => (
+                                                <SelectItem key={type} value={type}>
+                                                    {type}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>

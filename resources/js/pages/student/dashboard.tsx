@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -45,7 +45,6 @@ import {
     Vote,
     XCircle,
 } from 'lucide-react';
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Student Portal',
@@ -240,20 +239,23 @@ export default function Dashboard({
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            render={<Link href={usg.index.url()} />}
+                        <Link
+                            href={usg.index.url()}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             <Megaphone className="mr-2 h-4 w-4" />
                             USG Portal
-                        </Button>
-                        <Button
-                            className="bg-primary text-primary-foreground hover:bg-primary/90"
-                            render={<Link href={create()} />}
+                        </Link>
+                        <Link
+                            href={create()}
+                            className={buttonVariants({
+                                className:
+                                    'bg-primary text-primary-foreground hover:bg-primary/90',
+                            })}
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             New Request
-                        </Button>
+                        </Link>
                     </div>
                 </div>
 
@@ -299,14 +301,17 @@ export default function Dashboard({
                                     </p>
                                 </div>
                             </div>
-                            <Button
-                                variant="ghost"
-                                className="w-full justify-between text-primary hover:bg-primary/10"
-                                render={<Link href={index()} />}
+                            <Link
+                                href={index()}
+                                className={buttonVariants({
+                                    variant: 'ghost',
+                                    className:
+                                        'w-full justify-between text-primary hover:bg-primary/10',
+                                })}
                             >
                                 View All Requests
                                 <ArrowRight className="h-4 w-4" />
-                            </Button>
+                            </Link>
                         </CardContent>
                     </Card>
 
@@ -351,18 +356,17 @@ export default function Dashboard({
                                     </p>
                                 </div>
                             </div>
-                            <Button
-                                variant="ghost"
-                                className="w-full justify-between text-primary hover:bg-primary/10"
-                                render={
-                                    <Link
-                                        href={sas.student.scholarships.index.url()}
-                                    />
-                                }
+                            <Link
+                                href={sas.student.scholarships.index.url()}
+                                className={buttonVariants({
+                                    variant: 'ghost',
+                                    className:
+                                        'w-full justify-between text-primary hover:bg-primary/10',
+                                })}
                             >
                                 View Scholarships
                                 <ArrowRight className="h-4 w-4" />
-                            </Button>
+                            </Link>
                         </CardContent>
                     </Card>
 
@@ -407,14 +411,17 @@ export default function Dashboard({
                                     </p>
                                 </div>
                             </div>
-                            <Button
-                                variant="ghost"
-                                className="w-full justify-between text-primary hover:bg-primary/10"
-                                render={<Link href={usg.index.url()} />}
+                            <Link
+                                href={usg.index.url()}
+                                className={buttonVariants({
+                                    variant: 'ghost',
+                                    className:
+                                        'w-full justify-between text-primary hover:bg-primary/10',
+                                })}
                             >
                                 Visit USG Portal
                                 <ArrowRight className="h-4 w-4" />
-                            </Button>
+                            </Link>
                         </CardContent>
                     </Card>
 
@@ -471,14 +478,17 @@ export default function Dashboard({
                                     </p>
                                 </div>
                             )}
-                            <Button
-                                variant="ghost"
-                                className="w-full justify-between text-primary hover:bg-primary/10"
-                                render={<Link href={voting.index.url()} />}
+                            <Link
+                                href={voting.index.url()}
+                                className={buttonVariants({
+                                    variant: 'ghost',
+                                    className:
+                                        'w-full justify-between text-primary hover:bg-primary/10',
+                                })}
                             >
                                 Go to Voting
                                 <ArrowRight className="h-4 w-4" />
-                            </Button>
+                            </Link>
                         </CardContent>
                     </Card>
                 </div>
@@ -580,15 +590,18 @@ export default function Dashboard({
                                     <CardTitle className="text-lg">
                                         Recent Document Requests
                                     </CardTitle>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="text-primary hover:text-primary/80"
-                                        render={<Link href={index()} />}
+                                    <Link
+                                        href={index()}
+                                        className={buttonVariants({
+                                            variant: 'ghost',
+                                            size: 'sm',
+                                            className:
+                                                'text-primary hover:text-primary/80',
+                                        })}
                                     >
                                         <Eye className="mr-2 h-4 w-4" />
                                         View All
-                                    </Button>
+                                    </Link>
                                 </div>
                             </CardHeader>
                             <CardContent className="pt-0">
@@ -661,14 +674,13 @@ export default function Dashboard({
                                             </EmptyDescription>
                                         </EmptyHeader>
                                         <EmptyContent>
-                                            <Button
-                                                render={
-                                                    <Link href={create()} />
-                                                }
+                                            <Link
+                                                href={create()}
+                                                className={buttonVariants()}
                                             >
                                                 <Plus className="mr-2 h-4 w-4" />
                                                 Create Request
-                                            </Button>
+                                            </Link>
                                         </EmptyContent>
                                     </Empty>
                                 )}
@@ -686,18 +698,17 @@ export default function Dashboard({
                                         <Megaphone className="mr-2 h-5 w-5 text-primary" />
                                         USG Updates
                                     </CardTitle>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="text-primary hover:text-primary/80"
-                                        render={
-                                            <Link
-                                                href={usg.announcements.index.url()}
-                                            />
-                                        }
+                                    <Link
+                                        href={usg.announcements.index.url()}
+                                        className={buttonVariants({
+                                            variant: 'ghost',
+                                            size: 'sm',
+                                            className:
+                                                'text-primary hover:text-primary/80',
+                                        })}
                                     >
                                         View All
-                                    </Button>
+                                    </Link>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -752,18 +763,17 @@ export default function Dashboard({
                                         <Calendar className="mr-2 h-5 w-5 text-primary" />
                                         Upcoming Events
                                     </CardTitle>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="text-primary hover:text-primary/80"
-                                        render={
-                                            <Link
-                                                href={usg.events.index.url()}
-                                            />
-                                        }
+                                    <Link
+                                        href={usg.events.index.url()}
+                                        className={buttonVariants({
+                                            variant: 'ghost',
+                                            size: 'sm',
+                                            className:
+                                                'text-primary hover:text-primary/80',
+                                        })}
                                     >
                                         View All
-                                    </Button>
+                                    </Link>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -817,52 +827,46 @@ export default function Dashboard({
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    render={
-                                        <Link
-                                            href={sas.student.scholarships.index.url()}
-                                        />
-                                    }
+                                <Link
+                                    href={sas.student.scholarships.index.url()}
+                                    className={buttonVariants({
+                                        variant: 'ghost',
+                                        className: 'w-full justify-start',
+                                    })}
                                 >
                                     <Award className="mr-3 h-4 w-4 text-primary" />
                                     My Scholarships
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    render={
-                                        <Link
-                                            href={sas.student.insurance.index.url()}
-                                        />
-                                    }
+                                </Link>
+                                <Link
+                                    href={sas.student.insurance.index.url()}
+                                    className={buttonVariants({
+                                        variant: 'ghost',
+                                        className: 'w-full justify-start',
+                                    })}
                                 >
                                     <Shield className="mr-3 h-4 w-4 text-primary" />
                                     Insurance Status
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    render={
-                                        <Link href={usg.officers.index.url()} />
-                                    }
+                                </Link>
+                                <Link
+                                    href={usg.officers.index.url()}
+                                    className={buttonVariants({
+                                        variant: 'ghost',
+                                        className: 'w-full justify-start',
+                                    })}
                                 >
                                     <Users className="mr-3 h-4 w-4 text-primary" />
                                     USG Officers
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    render={
-                                        <Link
-                                            href={usg.transparency.index.url()}
-                                        />
-                                    }
+                                </Link>
+                                <Link
+                                    href={usg.transparency.index.url()}
+                                    className={buttonVariants({
+                                        variant: 'ghost',
+                                        className: 'w-full justify-start',
+                                    })}
                                 >
                                     <FileText className="mr-3 h-4 w-4 text-primary" />
                                     Transparency Reports
-                                </Button>
+                                </Link>
                             </CardContent>
                         </Card>
                     </div>
@@ -878,18 +882,17 @@ export default function Dashboard({
                                     <Award className="mr-2 h-5 w-5 text-primary" />
                                     My Scholarships
                                 </CardTitle>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-primary hover:text-primary/80"
-                                    render={
-                                        <Link
-                                            href={sas.student.scholarships.index.url()}
-                                        />
-                                    }
+                                <Link
+                                    href={sas.student.scholarships.index.url()}
+                                    className={buttonVariants({
+                                        variant: 'ghost',
+                                        size: 'sm',
+                                        className:
+                                            'text-primary hover:text-primary/80',
+                                    })}
                                 >
                                     View All
-                                </Button>
+                                </Link>
                             </div>
                             <CardDescription>
                                 {safeSasStats.active_scholarships} active of{' '}
@@ -1117,18 +1120,16 @@ export default function Dashboard({
                                         <p className="mt-2 text-sm text-muted-foreground">
                                             No insurance record found
                                         </p>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="mt-3"
-                                            render={
-                                                <Link
-                                                    href={sas.student.insurance.index.url()}
-                                                />
-                                            }
+                                        <Link
+                                            href={sas.student.insurance.index.url()}
+                                            className={buttonVariants({
+                                                variant: 'outline',
+                                                size: 'sm',
+                                                className: 'mt-3',
+                                            })}
                                         >
                                             View Insurance
-                                        </Button>
+                                        </Link>
                                     </div>
                                 )}
                             </CardContent>

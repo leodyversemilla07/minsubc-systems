@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -90,15 +90,17 @@ export default function AnnouncementCard({
             </CardContent>
 
             <CardFooter>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    render={<Link href={publicShow.url(announcement.slug)} />}
+                <Link
+                    href={publicShow.url(announcement.slug)}
+                    className={buttonVariants({
+                        variant: 'outline',
+                        size: 'sm',
+                        className: 'w-full',
+                    })}
                 >
                     Read More
                     <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                </Link>
             </CardFooter>
         </Card>
     );

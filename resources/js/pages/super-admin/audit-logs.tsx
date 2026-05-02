@@ -1,7 +1,3 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -9,6 +5,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -221,9 +221,10 @@ export default function AuditLogs({
                                 onValueChange={(value) =>
                                     handleFilterChange(
                                         'action',
-                                        value === 'all' ? '' : value,
+                                        !value || value === 'all' ? '' : value,
                                     )
-                                }
+                                } items={actions.map((action) => ({ value: action, label: action.charAt(0).toUpperCase() +
+                                                                                action.slice(1) }))}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Filter by action" />
@@ -245,9 +246,9 @@ export default function AuditLogs({
                                 onValueChange={(value) =>
                                     handleFilterChange(
                                         'user_id',
-                                        value === 'all' ? '' : value,
+                                        !value || value === 'all' ? '' : value,
                                     )
-                                }
+                                } items={users.map((user) => ({ value: user.id.toString(), label: user.name }))}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Filter by user" />
@@ -271,9 +272,9 @@ export default function AuditLogs({
                                 onValueChange={(value) =>
                                     handleFilterChange(
                                         'model_type',
-                                        value === 'all' ? '' : value,
+                                        !value || value === 'all' ? '' : value,
                                     )
-                                }
+                                } items={modelTypes.map((type) => ({ value: type, label: formatModelType(type) }))}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Filter by model" />

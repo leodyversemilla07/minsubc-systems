@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -9,16 +16,9 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -214,25 +214,20 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        <Button
-                            variant="outline"
-                            render={
-                                <Link
-                                    href={sas.admin.documents.manageDisposal.url()}
-                                />
-                            }
+                        <Link
+                            href={sas.admin.documents.manageDisposal.url()}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             <AlertCircle className="mr-2 h-4 w-4" />
                             Manage Disposal
-                        </Button>
-                        <Button
-                            render={
-                                <Link href={sas.admin.documents.create.url()} />
-                            }
+                        </Link>
+                        <Link
+                            href={sas.admin.documents.create.url()}
+                            className={buttonVariants()}
                         >
                             <Upload className="mr-2 h-4 w-4" />
                             Upload Document
-                        </Button>
+                        </Link>
                     </div>
                 </div>
 
@@ -317,10 +312,10 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                             </div>
                             <Select
                                 value={category}
-                                onValueChange={setCategory}
+                                onValueChange={(value) => setCategory(value || '')} items={[{ value: "all", label: "All Categories" }, { value: "Scholarship", label: "Scholarship" }, { value: "Insurance", label: "Insurance" }, { value: "Organization", label: "Organization" }, { value: "Activity", label: "Activity" }, { value: "Administrative", label: "Administrative" }, { value: "Other", label: "Other" }]}
                             >
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="All Categories" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -346,10 +341,10 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                             </Select>
                             <Select
                                 value={disposalStatus}
-                                onValueChange={setDisposalStatus}
+                                onValueChange={(value) => setDisposalStatus(value || '')} items={[{ value: "all", label: "All Status" }, { value: "Physical Copy Exists", label: "Physical Copy" }, { value: "Pending Disposal Approval", label: "Pending Disposal" }, { value: "Approved for Disposal", label: "Approved" }, { value: "Disposed", label: "Disposed" }]}
                             >
                                 <SelectTrigger className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="All Status" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -424,32 +419,34 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        render={
-                                                            <Link
-                                                                href={sas.admin.documents.show.url(
-                                                                    doc.id,
-                                                                )}
-                                                            />
-                                                        }
+                                                    <Link
+                                                        href={sas.admin.documents.show.url(
+                                                            doc.id,
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            },
+                                                        )}
                                                     >
                                                         <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        render={
-                                                            <Link
-                                                                href={sas.admin.documents.edit.url(
-                                                                    doc.id,
-                                                                )}
-                                                            />
-                                                        }
+                                                    </Link>
+                                                    <Link
+                                                        href={sas.admin.documents.edit.url(
+                                                            doc.id,
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            },
+                                                        )}
                                                     >
                                                         <FileText className="h-4 w-4 text-blue-600" />
-                                                    </Button>
+                                                    </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
@@ -471,17 +468,15 @@ export default function DocumentsIndex({ documents, filters }: Props) {
                                 <p className="text-gray-600 dark:text-gray-400">
                                     No documents found
                                 </p>
-                                <Button
-                                    className="mt-4"
-                                    render={
-                                        <Link
-                                            href={sas.admin.documents.create.url()}
-                                        />
-                                    }
+                                <Link
+                                    href={sas.admin.documents.create.url()}
+                                    className={buttonVariants({
+                                        className: 'mt-4',
+                                    })}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Upload First Document
-                                </Button>
+                                </Link>
                             </div>
                         )}
                     </CardContent>

@@ -1,5 +1,12 @@
 import { DocumentViewer } from '@/components/sas/document-viewer';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -10,7 +17,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -29,13 +36,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -193,19 +193,13 @@ export default function ShowDocument({ document }: Props) {
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        <Button
-                            variant="outline"
-                            render={
-                                <Link
-                                    href={sas.admin.documents.edit.url(
-                                        document.id,
-                                    )}
-                                />
-                            }
+                        <Link
+                            href={sas.admin.documents.edit.url(document.id)}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
-                        </Button>
+                        </Link>
                         <Button
                             variant="outline"
                             render={
@@ -427,9 +421,9 @@ export default function ShowDocument({ document }: Props) {
                                                             ) =>
                                                                 setData(
                                                                     'disposal_status',
-                                                                    value,
+                                                                    value || '',
                                                                 )
-                                                            }
+                                                            } items={[{ value: "Physical Copy Exists", label: "Physical\r\n                                                                    Copy Exists" }, { value: "Pending Disposal Approval", label: "Pending\r\n                                                                    Disposal\r\n                                                                    Approval" }, { value: "Approved for Disposal", label: "Approved for\r\n                                                                    Disposal" }, { value: "Disposed", label: "Disposed" }]}
                                                         >
                                                             <SelectTrigger>
                                                                 <SelectValue />
@@ -715,20 +709,18 @@ export default function ShowDocument({ document }: Props) {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <Button
-                                    className="w-full"
-                                    variant="outline"
-                                    render={
-                                        <Link
-                                            href={sas.admin.documents.edit.url(
-                                                document.id,
-                                            )}
-                                        />
-                                    }
+                                <Link
+                                    href={sas.admin.documents.edit.url(
+                                        document.id,
+                                    )}
+                                    className={buttonVariants({
+                                        variant: 'outline',
+                                        className: 'w-full',
+                                    })}
                                 >
                                     <Edit className="mr-2 h-4 w-4" />
                                     Edit Document
-                                </Button>
+                                </Link>
                                 <Button
                                     className="w-full"
                                     variant="destructive"

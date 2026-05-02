@@ -1,12 +1,13 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import SASLayout from '@/layouts/sas-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import {
@@ -213,23 +214,29 @@ export default function YearlyTimeline({
                                     <Filter className="hidden h-4 w-4 shrink-0 text-slate-500 sm:block" />
                                     <Select
                                         value={selectedCategory}
-                                        onValueChange={handleCategoryChange}
+                                        onValueChange={(value) => handleCategoryChange(value || '')}
+                                        items={[
+                                            { value: 'all', label: 'All Categories' },
+                                            ...categories.map((category) => ({ value: category, label: category })),
+                                        ]}
                                     >
                                         <SelectTrigger className="w-full sm:w-[180px]">
-                                            <SelectValue placeholder="All Categories" />
+                                            <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="all">
-                                                All Categories
-                                            </SelectItem>
-                                            {categories.map((category) => (
-                                                <SelectItem
-                                                    key={category}
-                                                    value={category}
-                                                >
-                                                    {category}
+                                            <SelectGroup>
+                                                <SelectItem value="all">
+                                                    All Categories
                                                 </SelectItem>
-                                            ))}
+                                                {categories.map((category) => (
+                                                    <SelectItem
+                                                        key={category}
+                                                        value={category}
+                                                    >
+                                                        {category}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                     {selectedCategory !== 'all' && (

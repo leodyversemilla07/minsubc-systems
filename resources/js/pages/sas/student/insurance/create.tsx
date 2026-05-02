@@ -1,7 +1,3 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -9,6 +5,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
@@ -129,8 +129,8 @@ export default function Create() {
                                     <Select
                                         value={data.coverage_type}
                                         onValueChange={(value) =>
-                                            setData('coverage_type', value)
-                                        }
+                                            setData('coverage_type', value || '')
+                                        } items={[{ value: "Health", label: "Health" }, { value: "Life", label: "Life" }, { value: "Accident", label: "Accident" }, { value: "Disability", label: "Disability" }, { value: "Comprehensive", label: "Comprehensive" }, { value: "Other", label: "Other" }]}
                                     >
                                         <SelectTrigger className="mt-1">
                                             <SelectValue placeholder="Select coverage type" />

@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -201,14 +201,16 @@ export default function EventCard({ event }: EventCardProps) {
             </CardContent>
 
             <CardFooter className="flex gap-2">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    render={<Link href={getEventUrl()} />}
+                <Link
+                    href={getEventUrl()}
+                    className={buttonVariants({
+                        variant: 'outline',
+                        size: 'sm',
+                        className: 'flex-1',
+                    })}
                 >
                     View Details
-                </Button>
+                </Link>
 
                 {isRegistrationOpen() &&
                     isEventUpcoming() &&

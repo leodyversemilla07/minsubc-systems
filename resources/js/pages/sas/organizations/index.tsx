@@ -1,5 +1,3 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -7,6 +5,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import SASLayout from '@/layouts/sas-layout';
 import sas from '@/routes/sas';
 import type { Organization, PaginatedData } from '@/types/sas';
@@ -218,11 +218,12 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 <Select
                                     value={filters?.type || 'all'}
                                     onValueChange={(value) =>
-                                        handleFilterChange('type', value)
+                                        handleFilterChange('type', value || '')
                                     }
+                                    items={[{ value: "all", label: "All Types" }, { value: "Minor", label: "Minor" }, { value: "Major", label: "Major" }]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                                        <SelectValue placeholder="All Types" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">
@@ -246,11 +247,12 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 <Select
                                     value={filters?.category || 'all'}
                                     onValueChange={(value) =>
-                                        handleFilterChange('category', value)
+                                        handleFilterChange('category', value || '')
                                     }
+                                    items={[{ value: "all", label: "All Categories" }, { value: "Academic", label: "Academic" }, { value: "Sports", label: "Sports" }, { value: "Cultural", label: "Cultural" }, { value: "Religious", label: "Religious" }, { value: "Service", label: "Service" }, { value: "Other", label: "Other" }]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                                        <SelectValue placeholder="All Categories" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">
@@ -286,11 +288,12 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 <Select
                                     value={filters?.status || 'all'}
                                     onValueChange={(value) =>
-                                        handleFilterChange('status', value)
+                                        handleFilterChange('status', value || '')
                                     }
+                                    items={[{ value: "all", label: "All Statuses" }, { value: "Active", label: "Active" }, { value: "Inactive", label: "Inactive" }, { value: "Suspended", label: "Suspended" }]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                                        <SelectValue placeholder="All Statuses" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">

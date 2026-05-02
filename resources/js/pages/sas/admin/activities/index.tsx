@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -9,16 +16,9 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -163,14 +163,13 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             Manage SAS activities and events
                         </p>
                     </div>
-                    <Button
-                        render={
-                            <Link href={sas.admin.activities.create.url()} />
-                        }
+                    <Link
+                        href={sas.admin.activities.create.url()}
+                        className={buttonVariants()}
                     >
                         <Plus className="mr-2 h-4 w-4" />
                         Create Activity
-                    </Button>
+                    </Link>
                 </div>
 
                 {/* Stats Cards */}
@@ -252,9 +251,9 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     />
                                 </div>
                             </div>
-                            <Select value={status} onValueChange={setStatus}>
+                            <Select value={status} onValueChange={(value) => setStatus(value || '')} items={[{ value: "all", label: "All Statuses" }, { value: "Scheduled", label: "Scheduled" }, { value: "Completed", label: "Completed" }, { value: "Cancelled", label: "Cancelled" }]}>
                                 <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="All Statuses" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -273,10 +272,10 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             </Select>
                             <Select
                                 value={category}
-                                onValueChange={setCategory}
+                                onValueChange={(value) => setCategory(value || '')} items={[{ value: "all", label: "All Categories" }, { value: "Seminar", label: "Seminar" }, { value: "Workshop", label: "Workshop" }, { value: "Training", label: "Training" }, { value: "Sports", label: "Sports" }, { value: "Cultural", label: "Cultural" }]}
                             >
                                 <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="All Categories" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -352,32 +351,34 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        render={
-                                                            <Link
-                                                                href={sas.admin.activities.show.url(
-                                                                    activity.id,
-                                                                )}
-                                                            />
-                                                        }
+                                                    <Link
+                                                        href={sas.admin.activities.show.url(
+                                                            activity.id,
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            },
+                                                        )}
                                                     >
                                                         <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        render={
-                                                            <Link
-                                                                href={sas.admin.activities.edit.url(
-                                                                    activity.id,
-                                                                )}
-                                                            />
-                                                        }
+                                                    </Link>
+                                                    <Link
+                                                        href={sas.admin.activities.edit.url(
+                                                            activity.id,
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            },
+                                                        )}
                                                     >
                                                         <Edit className="h-4 w-4" />
-                                                    </Button>
+                                                    </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
@@ -401,17 +402,15 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 <p className="text-gray-600 dark:text-gray-400">
                                     No activities found
                                 </p>
-                                <Button
-                                    className="mt-4"
-                                    render={
-                                        <Link
-                                            href={sas.admin.activities.create.url()}
-                                        />
-                                    }
+                                <Link
+                                    href={sas.admin.activities.create.url()}
+                                    className={buttonVariants({
+                                        className: 'mt-4',
+                                    })}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create First Activity
-                                </Button>
+                                </Link>
                             </div>
                         )}
                     </CardContent>

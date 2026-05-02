@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
@@ -110,18 +110,13 @@ export default function OrganizationsShow({ organization }: Props) {
                             {organization.organization_type} Organization
                         </p>
                     </div>
-                    <Button
-                        render={
-                            <Link
-                                href={sas.admin.organizations.edit.url(
-                                    organization.id,
-                                )}
-                            />
-                        }
+                    <Link
+                        href={sas.admin.organizations.edit.url(organization.id)}
+                        className={buttonVariants()}
                     >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit Organization
-                    </Button>
+                    </Link>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-3">

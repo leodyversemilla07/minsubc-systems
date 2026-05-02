@@ -1,6 +1,13 @@
 import { DataTable } from '@/components/data-table';
 import { DatePicker } from '@/components/date-picker';
 import { ReleaseDocumentDialog } from '@/components/release-document-dialog';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,13 +20,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
 import { dashboard } from '@/routes/registrar/admin';
@@ -475,7 +475,36 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                     </Label>
                                     <Select
                                         value={statusFilter}
-                                        onValueChange={setStatusFilter}
+                                        onValueChange={(value) => setStatusFilter(value || '')} items={[{ value: "all", label: <span className="flex items-center gap-2">
+                                                                                            All Statuses
+                                                                                        </span> }, { value: "pending_payment", label: <span className="flex items-center gap-2">
+                                                                                            <Clock className="h-3.5 w-3.5" />
+                                                                                            Pending Payment
+                                                                                        </span> }, { value: "payment_expired", label: <span className="flex items-center gap-2">
+                                                                                            <XCircle className="h-3.5 w-3.5" />
+                                                                                            Payment Expired
+                                                                                        </span> }, { value: "paid", label: <span className="flex items-center gap-2">
+                                                                                            <DollarSign className="h-3.5 w-3.5" />
+                                                                                            Paid
+                                                                                        </span> }, { value: "processing", label: <span className="flex items-center gap-2">
+                                                                                            <Package className="h-3.5 w-3.5" />
+                                                                                            Processing
+                                                                                        </span> }, { value: "ready_for_claim", label: <span className="flex items-center gap-2">
+                                                                                            <CheckCircle className="h-3.5 w-3.5" />
+                                                                                            Ready for Claim
+                                                                                        </span> }, { value: "claimed", label: <span className="flex items-center gap-2">
+                                                                                            <CheckCircle className="h-3.5 w-3.5" />
+                                                                                            Claimed
+                                                                                        </span> }, { value: "released", label: <span className="flex items-center gap-2">
+                                                                                            <CheckCircle className="h-3.5 w-3.5" />
+                                                                                            Released
+                                                                                        </span> }, { value: "cancelled", label: <span className="flex items-center gap-2">
+                                                                                            <XCircle className="h-3.5 w-3.5" />
+                                                                                            Cancelled
+                                                                                        </span> }, { value: "rejected", label: <span className="flex items-center gap-2">
+                                                                                            <XCircle className="h-3.5 w-3.5" />
+                                                                                            Rejected
+                                                                                        </span> }]}
                                     >
                                         <SelectTrigger
                                             id="status"

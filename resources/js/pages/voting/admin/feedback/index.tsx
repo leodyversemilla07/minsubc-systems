@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,13 +21,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -189,8 +189,8 @@ export default function Index({
                     <Select
                         value={filters.election_id?.toString() || 'all'}
                         onValueChange={(value) =>
-                            handleFilterChange('election_id', value)
-                        }
+                            handleFilterChange('election_id', value || '')
+                        } items={elections.map((election) => ({ value: election.id.toString(), label: election.name }))}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Elections" />
@@ -211,8 +211,8 @@ export default function Index({
                     <Select
                         value={filters.rating?.toString() || 'all'}
                         onValueChange={(value) =>
-                            handleFilterChange('rating', value)
-                        }
+                            handleFilterChange('rating', value || '')
+                        } items={[5, 4, 3, 2, 1].map((rating) => ({ value: rating.toString(), label: <>{rating}Star{rating !== 1 ? 's' : ''}</> }))}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Ratings" />
@@ -233,8 +233,8 @@ export default function Index({
                     <Select
                         value={filters.experience || 'all'}
                         onValueChange={(value) =>
-                            handleFilterChange('experience', value)
-                        }
+                            handleFilterChange('experience', value || '')
+                        } items={[{ value: "all", label: "All Experiences" }, { value: "excellent", label: "Excellent" }, { value: "good", label: "Good" }, { value: "average", label: "Average" }, { value: "poor", label: "Poor" }]}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Experiences" />

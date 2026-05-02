@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -269,20 +269,18 @@ export default function PaymentProcessing({ request }: PaymentProcessingProps) {
                         >
                             Check Status
                         </Button>
-                        <Button
-                            variant="outline"
-                            render={
-                                <Link href={show(request.request_number).url} />
-                            }
+                        <Link
+                            href={show(request.request_number).url}
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             View Request Details
-                        </Button>
-                        <Button
-                            variant="outline"
-                            render={<Link href="/dashboard" />}
+                        </Link>
+                        <Link
+                            href="/dashboard"
+                            className={buttonVariants({ variant: 'outline' })}
                         >
                             Back to Dashboard
-                        </Button>
+                        </Link>
                     </div>
 
                     {/* Auto-refresh notice */}

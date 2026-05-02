@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,13 +23,6 @@ import {
     FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { release } from '@/routes/registrar/admin/requests';
 import { Form } from '@inertiajs/react';
 import { IdCard, Info, Package, User } from 'lucide-react';
@@ -123,9 +123,9 @@ export function ReleaseDocumentDialog({
                                 </FieldLabel>
                                 <Select
                                     value={idType}
-                                    onValueChange={setIdType}
+                                    onValueChange={(value) => setIdType(value || '')}
                                     disabled={processing}
-                                    required
+                                    required items={[{ value: "student_id", label: "Student ID" }, { value: "drivers_license", label: "Driver's License" }, { value: "passport", label: "Passport" }, { value: "others", label: "Others" }]}
                                 >
                                     <SelectTrigger
                                         id="released_id_type"

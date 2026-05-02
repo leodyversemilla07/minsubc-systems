@@ -1,6 +1,13 @@
 import ResolutionController from '@/actions/Modules/USG/Http/Controllers/Admin/ResolutionController';
 import { FileUpload } from '@/components/file-upload';
 import { PageHeader } from '@/components/page-header';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -17,13 +24,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
@@ -303,10 +303,8 @@ export default function CreateResolution({
                                             />
                                             <Select
                                                 value={selectedCategory}
-                                                onValueChange={
-                                                    setSelectedCategory
-                                                }
-                                                disabled={!canManage}
+                                                onValueChange={(value) => setSelectedCategory(value || '')}
+                                                disabled={!canManage} items={safeCategories.map((cat) => ({ value: cat, label: cat }))}
                                             >
                                                 <SelectTrigger
                                                     className={
@@ -348,10 +346,13 @@ export default function CreateResolution({
                                             />
                                             <Select
                                                 value={selectedStatus}
-                                                onValueChange={
-                                                    setSelectedStatus
-                                                }
-                                                disabled={!canManage}
+                                                onValueChange={(value) => setSelectedStatus(value || '')}
+                                                disabled={!canManage} items={safeStatuses.map((stat) => ({ value: stat, label: stat
+                                                                                                                    .charAt(0)
+                                                                                                                    .toUpperCase() +
+                                                                                                                    stat.slice(
+                                                                                                                        1,
+                                                                                                                    ) }))}
                                             >
                                                 <SelectTrigger
                                                     className={

@@ -1,4 +1,11 @@
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -9,16 +16,9 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -174,14 +174,13 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                             Manage student organizations and their activities
                         </p>
                     </div>
-                    <Button
-                        render={
-                            <Link href={sas.admin.organizations.create.url()} />
-                        }
+                    <Link
+                        href={sas.admin.organizations.create.url()}
+                        className={buttonVariants()}
                     >
                         <Plus className="mr-2 h-4 w-4" />
                         Add Organization
-                    </Button>
+                    </Link>
                 </div>
 
                 {/* Stats Cards */}
@@ -263,9 +262,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     />
                                 </div>
                             </div>
-                            <Select value={orgType} onValueChange={setOrgType}>
+                            <Select value={orgType} onValueChange={(value) => setOrgType(value || '')} items={[{ value: "all", label: "All Types" }, { value: "Major", label: "Major" }, { value: "Minor", label: "Minor" }]}>
                                 <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="All Types" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -275,9 +274,9 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                     <SelectItem value="Minor">Minor</SelectItem>
                                 </SelectContent>
                             </Select>
-                            <Select value={status} onValueChange={setStatus}>
+                            <Select value={status} onValueChange={(value) => setStatus(value || '') } items={[{ value: "all", label: "All Statuses" }, { value: "Active", label: "Active" }, { value: "Inactive", label: "Inactive" }, { value: "Suspended", label: "Suspended" }]}>
                                 <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="All Statuses" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">
@@ -353,32 +352,34 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        render={
-                                                            <Link
-                                                                href={sas.admin.organizations.show.url(
-                                                                    org.id,
-                                                                )}
-                                                            />
-                                                        }
+                                                    <Link
+                                                        href={sas.admin.organizations.show.url(
+                                                            org.id,
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            },
+                                                        )}
                                                     >
                                                         <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        render={
-                                                            <Link
-                                                                href={sas.admin.organizations.edit.url(
-                                                                    org.id,
-                                                                )}
-                                                            />
-                                                        }
+                                                    </Link>
+                                                    <Link
+                                                        href={sas.admin.organizations.edit.url(
+                                                            org.id,
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    'ghost',
+                                                                size: 'sm',
+                                                            },
+                                                        )}
                                                     >
                                                         <Edit className="h-4 w-4" />
-                                                    </Button>
+                                                    </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
@@ -400,17 +401,15 @@ export default function OrganizationsIndex({ organizations, filters }: Props) {
                                 <p className="text-muted-foreground">
                                     No organizations found
                                 </p>
-                                <Button
-                                    className="mt-4"
-                                    render={
-                                        <Link
-                                            href={sas.admin.organizations.create.url()}
-                                        />
-                                    }
+                                <Link
+                                    href={sas.admin.organizations.create.url()}
+                                    className={buttonVariants({
+                                        className: 'mt-4',
+                                    })}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create First Organization
-                                </Button>
+                                </Link>
                             </div>
                         )}
                     </CardContent>

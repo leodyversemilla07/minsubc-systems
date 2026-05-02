@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,13 +21,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -155,8 +155,8 @@ export default function Index({
                     <Select
                         value={filters.election_id?.toString() || 'all'}
                         onValueChange={(value) =>
-                            handleFilterChange('election_id', value)
-                        }
+                            handleFilterChange('election_id', value || '')
+                        } items={elections.map((election) => ({ value: election.id.toString(), label: election.name }))}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Elections" />
@@ -177,8 +177,8 @@ export default function Index({
                     <Select
                         value={filters.action || 'all'}
                         onValueChange={(value) =>
-                            handleFilterChange('action', value)
-                        }
+                            handleFilterChange('action', value || '')
+                        } items={Object.entries(actions).map(([key, label]) => ({ value: key, label: label }))}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Actions" />

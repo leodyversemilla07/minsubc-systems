@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -8,13 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
@@ -174,9 +174,9 @@ export default function Reports({ scholarships }: Props) {
                                             onValueChange={(value) =>
                                                 setScholarshipFilters({
                                                     ...scholarshipFilters,
-                                                    scholarship_id: value,
+                                                    scholarship_id: value || '',
                                                 })
-                                            }
+                                            } items={scholarships.map((scholarship) => ({ value: scholarship.id.toString(), label: scholarship.scholarship_name }))}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="All Scholarships" />
@@ -208,9 +208,9 @@ export default function Reports({ scholarships }: Props) {
                                             onValueChange={(value) =>
                                                 setScholarshipFilters({
                                                     ...scholarshipFilters,
-                                                    status: value,
+                                                    status: value || '',
                                                 })
-                                            }
+                                            } items={[{ value: "", label: "All Statuses" }, { value: "Active", label: "Active" }, { value: "Inactive", label: "Inactive" }]}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="All Statuses" />
@@ -238,9 +238,9 @@ export default function Reports({ scholarships }: Props) {
                                             onValueChange={(value) =>
                                                 setScholarshipFilters({
                                                     ...scholarshipFilters,
-                                                    semester: value,
+                                                    semester: value || '',
                                                 })
-                                            }
+                                            } items={[{ value: "", label: "All Semesters" }, { value: "1st Semester", label: "1st Semester" }, { value: "2nd Semester", label: "2nd Semester" }, { value: "Summer", label: "Summer" }]}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="All Semesters" />
@@ -444,9 +444,9 @@ export default function Reports({ scholarships }: Props) {
                                             onValueChange={(value) =>
                                                 setInsuranceFilters({
                                                     ...insuranceFilters,
-                                                    status: value,
+                                                    status: value || '',
                                                 })
-                                            }
+                                            } items={[{ value: "", label: "All Statuses" }, { value: "Active", label: "Active" }, { value: "Expired", label: "Expired" }]}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="All Statuses" />

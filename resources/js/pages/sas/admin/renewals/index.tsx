@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,13 +25,6 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -235,9 +235,9 @@ export default function RenewalsIndex({
                                         onValueChange={(v) =>
                                             reminderForm.setData(
                                                 'academic_year',
-                                                v,
+                                                v || '',
                                             )
-                                        }
+                                        } items={academicYearOptions.map((year) => ({ value: year, label: year }))}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
@@ -259,8 +259,8 @@ export default function RenewalsIndex({
                                     <Select
                                         value={reminderForm.data.semester}
                                         onValueChange={(v) =>
-                                            reminderForm.setData('semester', v)
-                                        }
+                                            reminderForm.setData('semester', v || '')
+                                        } items={[{ value: "1st", label: "1st Semester" }, { value: "2nd", label: "2nd Semester" }]}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
@@ -401,8 +401,8 @@ export default function RenewalsIndex({
                                 <Select
                                     value={filters.academic_year}
                                     onValueChange={(v) =>
-                                        handleFilterChange('academic_year', v)
-                                    }
+                                        handleFilterChange('academic_year', v || '')
+                                    } items={academicYearOptions.map((year) => ({ value: year, label: year }))}
                                 >
                                     <SelectTrigger>
                                         <SelectValue />
@@ -423,8 +423,8 @@ export default function RenewalsIndex({
                                 <Select
                                     value={filters.semester}
                                     onValueChange={(v) =>
-                                        handleFilterChange('semester', v)
-                                    }
+                                        handleFilterChange('semester', v || '')
+                                    } items={[{ value: "1st", label: "1st Semester" }, { value: "2nd", label: "2nd Semester" }]}
                                 >
                                     <SelectTrigger>
                                         <SelectValue />
@@ -483,9 +483,9 @@ export default function RenewalsIndex({
                                                     onValueChange={(v) =>
                                                         bulkRenewForm.setData(
                                                             'academic_year',
-                                                            v,
+                                                            v || '',
                                                         )
-                                                    }
+                                                    } items={academicYearOptions.map((year) => ({ value: year, label: year }))}
                                                 >
                                                     <SelectTrigger>
                                                         <SelectValue />
@@ -514,9 +514,9 @@ export default function RenewalsIndex({
                                                     onValueChange={(v) =>
                                                         bulkRenewForm.setData(
                                                             'semester',
-                                                            v,
+                                                            v || '',
                                                         )
-                                                    }
+                                                    } items={[{ value: "1st", label: "1st Semester" }, { value: "2nd", label: "2nd Semester" }]}
                                                 >
                                                     <SelectTrigger>
                                                         <SelectValue />

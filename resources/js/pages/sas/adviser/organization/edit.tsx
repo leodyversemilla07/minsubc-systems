@@ -1,3 +1,10 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -8,13 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import sas from '@/routes/sas';
@@ -147,8 +147,8 @@ export default function EditOrganization({ organization }: Props) {
                                 <Select
                                     value={data.organization_type}
                                     onValueChange={(value) =>
-                                        setData('organization_type', value)
-                                    }
+                                        setData('organization_type', value || '')
+                                    } items={[{ value: "Major", label: "Major" }, { value: "Minor", label: "Minor" }]}
                                 >
                                     <SelectTrigger>
                                         <SelectValue />
@@ -213,8 +213,8 @@ export default function EditOrganization({ organization }: Props) {
                                 <Select
                                     value={data.status}
                                     onValueChange={(value) =>
-                                        setData('status', value)
-                                    }
+                                        setData('status', value || '')
+                                    } items={[{ value: "Active", label: "Active" }, { value: "Inactive", label: "Inactive" }]}
                                 >
                                     <SelectTrigger>
                                         <SelectValue />
