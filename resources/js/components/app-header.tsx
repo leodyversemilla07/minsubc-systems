@@ -86,7 +86,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        className="mr-2 h-[34px] w-[34px]"
+                                        className="mr-2 h-8.5 w-8.5"
                                     />
                                 }
                             >
@@ -206,14 +206,11 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 size="icon"
                                 className="group h-9 w-9 cursor-pointer"
                             >
-                                <Search className="!size-5 opacity-80 group-hover:opacity-100" />
+                                <Search className="size-5! opacity-80 group-hover:opacity-100" />
                             </Button>
                             <div className="hidden lg:flex">
                                 {rightNavItems.map((item) => (
-                                    <TooltipProvider
-                                        key={item.title}
-                                        delayDuration={0}
-                                    >
+                                    <TooltipProvider key={item.title} delay={0}>
                                         <Tooltip>
                                             <TooltipTrigger>
                                                 <a

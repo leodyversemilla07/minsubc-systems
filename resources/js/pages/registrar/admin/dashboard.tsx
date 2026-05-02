@@ -1,22 +1,9 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import { DatePicker } from '@/components/date-picker';
+import { format } from 'date-fns';
+
 import { ReleaseDocumentDialog } from '@/components/release-document-dialog';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     DropdownMenu,
@@ -27,22 +14,43 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes/registrar/admin';
 import { show } from '@/routes/registrar/admin/requests';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import {
     ColumnDef,
+    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable,
     SortingState,
-    ColumnFiltersState,
+    useReactTable,
 } from '@tanstack/react-table';
 import {
     AlertCircle,
@@ -140,6 +148,8 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
     const [dateTo, setDateTo] = useState<Date | undefined>(
         filters.date_to ? new Date(filters.date_to) : undefined,
     );
+    const [dateFromOpen, setDateFromOpen] = useState(false);
+    const [dateToOpen, setDateToOpen] = useState(false);
     const [releaseDialog, setReleaseDialog] = useState<{
         open: boolean;
         requestNumber: string;
@@ -221,7 +231,7 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                     <div className="font-medium">
                         {row.original.document_type}
                     </div>
-                    <div className="line-clamp-2 text-sm break-words whitespace-pre-wrap text-muted-foreground">
+                    <div className="line-clamp-2 text-sm wrap-break-word whitespace-pre-wrap text-muted-foreground">
                         {row.original.purpose}
                     </div>
                 </div>
@@ -497,36 +507,100 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                     </Label>
                                     <Select
                                         value={statusFilter}
-                                        onValueChange={(value) => setStatusFilter(value || '')} items={[{ value: "all", label: <span className="flex items-center gap-2">
-                                                                                            All Statuses
-                                                                                        </span> }, { value: "pending_payment", label: <span className="flex items-center gap-2">
-                                                                                            <Clock className="h-3.5 w-3.5" />
-                                                                                            Pending Payment
-                                                                                        </span> }, { value: "payment_expired", label: <span className="flex items-center gap-2">
-                                                                                            <XCircle className="h-3.5 w-3.5" />
-                                                                                            Payment Expired
-                                                                                        </span> }, { value: "paid", label: <span className="flex items-center gap-2">
-                                                                                            <DollarSign className="h-3.5 w-3.5" />
-                                                                                            Paid
-                                                                                        </span> }, { value: "processing", label: <span className="flex items-center gap-2">
-                                                                                            <Package className="h-3.5 w-3.5" />
-                                                                                            Processing
-                                                                                        </span> }, { value: "ready_for_claim", label: <span className="flex items-center gap-2">
-                                                                                            <CheckCircle className="h-3.5 w-3.5" />
-                                                                                            Ready for Claim
-                                                                                        </span> }, { value: "claimed", label: <span className="flex items-center gap-2">
-                                                                                            <CheckCircle className="h-3.5 w-3.5" />
-                                                                                            Claimed
-                                                                                        </span> }, { value: "released", label: <span className="flex items-center gap-2">
-                                                                                            <CheckCircle className="h-3.5 w-3.5" />
-                                                                                            Released
-                                                                                        </span> }, { value: "cancelled", label: <span className="flex items-center gap-2">
-                                                                                            <XCircle className="h-3.5 w-3.5" />
-                                                                                            Cancelled
-                                                                                        </span> }, { value: "rejected", label: <span className="flex items-center gap-2">
-                                                                                            <XCircle className="h-3.5 w-3.5" />
-                                                                                            Rejected
-                                                                                        </span> }]}
+                                        onValueChange={(value) =>
+                                            setStatusFilter(value || '')
+                                        }
+                                        items={[
+                                            {
+                                                value: 'all',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        All Statuses
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'pending_payment',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <Clock className="h-3.5 w-3.5" />
+                                                        Pending Payment
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'payment_expired',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <XCircle className="h-3.5 w-3.5" />
+                                                        Payment Expired
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'paid',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <DollarSign className="h-3.5 w-3.5" />
+                                                        Paid
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'processing',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <Package className="h-3.5 w-3.5" />
+                                                        Processing
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'ready_for_claim',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <CheckCircle className="h-3.5 w-3.5" />
+                                                        Ready for Claim
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'claimed',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <CheckCircle className="h-3.5 w-3.5" />
+                                                        Claimed
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'released',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <CheckCircle className="h-3.5 w-3.5" />
+                                                        Released
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'cancelled',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <XCircle className="h-3.5 w-3.5" />
+                                                        Cancelled
+                                                    </span>
+                                                ),
+                                            },
+                                            {
+                                                value: 'rejected',
+                                                label: (
+                                                    <span className="flex items-center gap-2">
+                                                        <XCircle className="h-3.5 w-3.5" />
+                                                        Rejected
+                                                    </span>
+                                                ),
+                                            },
+                                        ]}
                                     >
                                         <SelectTrigger
                                             id="status"
@@ -607,12 +681,73 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                         <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                                         From Date
                                     </Label>
-                                    <DatePicker
-                                        date={dateFrom}
-                                        onDateChange={setDateFrom}
-                                        placeholder="Select start date"
-                                        maxDate={dateTo}
-                                    />
+                                    <div className="flex gap-2">
+                                        <Popover
+                                            open={dateFromOpen}
+                                            onOpenChange={setDateFromOpen}
+                                        >
+                                            <PopoverTrigger
+                                                render={
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        className={cn(
+                                                            'h-10 flex-1 justify-start text-left font-normal',
+                                                            !dateFrom &&
+                                                                'text-muted-foreground',
+                                                        )}
+                                                    />
+                                                }
+                                            >
+                                                <Calendar data-icon="inline-start" />
+                                                {dateFrom ? (
+                                                    format(dateFrom, 'PPP')
+                                                ) : (
+                                                    <span>
+                                                        Select start date
+                                                    </span>
+                                                )}
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                align="start"
+                                            >
+                                                <CalendarComponent
+                                                    mode="single"
+                                                    selected={dateFrom}
+                                                    defaultMonth={
+                                                        dateFrom || dateTo
+                                                    }
+                                                    onSelect={(date) => {
+                                                        setDateFrom(date);
+                                                        setDateFromOpen(false);
+                                                    }}
+                                                    disabled={(date) =>
+                                                        Boolean(
+                                                            dateTo &&
+                                                            date > dateTo,
+                                                        )
+                                                    }
+                                                    captionLayout="dropdown"
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        {dateFrom && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={() =>
+                                                    setDateFrom(undefined)
+                                                }
+                                            >
+                                                <X />
+                                                <span className="sr-only">
+                                                    Clear start date
+                                                </span>
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Date To Filter */}
@@ -624,12 +759,71 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                         <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                                         To Date
                                     </Label>
-                                    <DatePicker
-                                        date={dateTo}
-                                        onDateChange={setDateTo}
-                                        placeholder="Select end date"
-                                        minDate={dateFrom}
-                                    />
+                                    <div className="flex gap-2">
+                                        <Popover
+                                            open={dateToOpen}
+                                            onOpenChange={setDateToOpen}
+                                        >
+                                            <PopoverTrigger
+                                                render={
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        className={cn(
+                                                            'h-10 flex-1 justify-start text-left font-normal',
+                                                            !dateTo &&
+                                                                'text-muted-foreground',
+                                                        )}
+                                                    />
+                                                }
+                                            >
+                                                <Calendar data-icon="inline-start" />
+                                                {dateTo ? (
+                                                    format(dateTo, 'PPP')
+                                                ) : (
+                                                    <span>Select end date</span>
+                                                )}
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                align="start"
+                                            >
+                                                <CalendarComponent
+                                                    mode="single"
+                                                    selected={dateTo}
+                                                    defaultMonth={
+                                                        dateTo || dateFrom
+                                                    }
+                                                    onSelect={(date) => {
+                                                        setDateTo(date);
+                                                        setDateToOpen(false);
+                                                    }}
+                                                    disabled={(date) =>
+                                                        Boolean(
+                                                            dateFrom &&
+                                                            date < dateFrom,
+                                                        )
+                                                    }
+                                                    captionLayout="dropdown"
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        {dateTo && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={() =>
+                                                    setDateTo(undefined)
+                                                }
+                                            >
+                                                <X />
+                                                <span className="sr-only">
+                                                    Clear end date
+                                                </span>
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -701,47 +895,75 @@ export default function Dashboard({ requests, filters, stats }: RequestsProps) {
                                 <div className="w-full overflow-auto">
                                     <Table>
                                         <TableHeader>
-                                            {table.getHeaderGroups().map((headerGroup) => (
-                                                <TableRow key={headerGroup.id}>
-                                                    {headerGroup.headers.map((header) => (
-                                                        <TableHead key={header.id}>
-                                                            {header.isPlaceholder
-                                                                ? null
-                                                                : flexRender(
-                                                                    header.column.columnDef.header,
-                                                                    header.getContext(),
-                                                                )}
-                                                        </TableHead>
-                                                    ))}
-                                                </TableRow>
-                                            ))}
+                                            {table
+                                                .getHeaderGroups()
+                                                .map((headerGroup) => (
+                                                    <TableRow
+                                                        key={headerGroup.id}
+                                                    >
+                                                        {headerGroup.headers.map(
+                                                            (header) => (
+                                                                <TableHead
+                                                                    key={
+                                                                        header.id
+                                                                    }
+                                                                >
+                                                                    {header.isPlaceholder
+                                                                        ? null
+                                                                        : flexRender(
+                                                                              header
+                                                                                  .column
+                                                                                  .columnDef
+                                                                                  .header,
+                                                                              header.getContext(),
+                                                                          )}
+                                                                </TableHead>
+                                                            ),
+                                                        )}
+                                                    </TableRow>
+                                                ))}
                                         </TableHeader>
                                         <TableBody>
-                                            {table.getRowModel().rows?.length ? (
-                                                table.getRowModel().rows.map((row) => (
-                                                    <TableRow
-                                                        key={row.id}
-                                                        data-state={
-                                                            row.getIsSelected() && 'selected'
-                                                        }
-                                                    >
-                                                        {row.getVisibleCells().map((cell) => (
-                                                            <TableCell key={cell.id}>
-                                                                {flexRender(
-                                                                    cell.column.columnDef.cell,
-                                                                    cell.getContext(),
-                                                                )}
-                                                            </TableCell>
-                                                        ))}
-                                                    </TableRow>
-                                                ))
+                                            {table.getRowModel().rows
+                                                ?.length ? (
+                                                table
+                                                    .getRowModel()
+                                                    .rows.map((row) => (
+                                                        <TableRow
+                                                            key={row.id}
+                                                            data-state={
+                                                                row.getIsSelected() &&
+                                                                'selected'
+                                                            }
+                                                        >
+                                                            {row
+                                                                .getVisibleCells()
+                                                                .map((cell) => (
+                                                                    <TableCell
+                                                                        key={
+                                                                            cell.id
+                                                                        }
+                                                                    >
+                                                                        {flexRender(
+                                                                            cell
+                                                                                .column
+                                                                                .columnDef
+                                                                                .cell,
+                                                                            cell.getContext(),
+                                                                        )}
+                                                                    </TableCell>
+                                                                ))}
+                                                        </TableRow>
+                                                    ))
                                             ) : (
                                                 <TableRow>
                                                     <TableCell
                                                         colSpan={columns.length}
                                                         className="h-24 text-center"
                                                     >
-                                                        No document requests found. Try adjusting your filters.
+                                                        No document requests
+                                                        found. Try adjusting
+                                                        your filters.
                                                     </TableCell>
                                                 </TableRow>
                                             )}

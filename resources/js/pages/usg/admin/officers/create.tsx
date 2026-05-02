@@ -1,16 +1,9 @@
 import OfficerController from '@/actions/Modules/USG/Http/Controllers/Admin/OfficerController';
-import { DatePicker } from '@/components/date-picker';
 import { PageHeader } from '@/components/page-header';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Field,
@@ -21,11 +14,25 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes/usg/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, router } from '@inertiajs/react';
+import { format } from 'date-fns';
 import {
     AlertCircle,
     Calendar,
@@ -35,6 +42,7 @@ import {
     Upload,
     User,
     Users,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -62,6 +70,10 @@ export default function CreateOfficer({
     const [isActive, setIsActive] = useState(true);
     const [termStart, setTermStart] = useState('');
     const [termEnd, setTermEnd] = useState('');
+    const [termStartOpen, setTermStartOpen] = useState(false);
+    const [termEndOpen, setTermEndOpen] = useState(false);
+    const termStartDate = termStart ? new Date(termStart) : undefined;
+    const termEndDate = termEnd ? new Date(termEnd) : undefined;
     const [order, setOrder] = useState(0);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [userId, setUserId] = useState<number | null>(null);
@@ -281,7 +293,13 @@ export default function CreateOfficer({
                                                     }
                                                     disabled={!canManage}
                                                     name="position"
-                                                    required items={positions.map((position) => ({ value: position, label: position }))}
+                                                    required
+                                                    items={positions.map(
+                                                        (position) => ({
+                                                            value: position,
+                                                            label: position,
+                                                        }),
+                                                    )}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -322,10 +340,18 @@ export default function CreateOfficer({
                                                 <Select
                                                     value={department}
                                                     onValueChange={(value) =>
-                                                        setDepartment(value || '')
+                                                        setDepartment(
+                                                            value || '',
+                                                        )
                                                     }
                                                     disabled={!canManage}
-                                                    name="department" items={departments.map((dept) => ({ value: dept, label: dept }))}
+                                                    name="department"
+                                                    items={departments.map(
+                                                        (dept) => ({
+                                                            value: dept,
+                                                            label: dept,
+                                                        }),
+                                                    )}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -472,33 +498,95 @@ export default function CreateOfficer({
                                                 <FieldLabel htmlFor="term_start">
                                                     Term Start *
                                                 </FieldLabel>
-                                                <DatePicker
-                                                    date={
-                                                        termStart
-                                                            ? new Date(
-                                                                  termStart,
-                                                              )
-                                                            : undefined
-                                                    }
-                                                    onDateChange={(date) =>
-                                                        setTermStart(
-                                                            date
-                                                                ? date
-                                                                      .toISOString()
-                                                                      .split(
-                                                                          'T',
-                                                                      )[0]
-                                                                : '',
-                                                        )
-                                                    }
-                                                    placeholder="Select term start date"
-                                                    disabled={!canManage}
-                                                    className={
-                                                        errors.term_start
-                                                            ? 'border-destructive'
-                                                            : ''
-                                                    }
-                                                />
+                                                <div className="flex gap-2">
+                                                    <Popover
+                                                        open={termStartOpen}
+                                                        onOpenChange={
+                                                            setTermStartOpen
+                                                        }
+                                                    >
+                                                        <PopoverTrigger
+                                                            render={
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    disabled={
+                                                                        !canManage
+                                                                    }
+                                                                    className={cn(
+                                                                        'h-10 flex-1 justify-start text-left font-normal',
+                                                                        !termStartDate &&
+                                                                            'text-muted-foreground',
+                                                                        errors.term_start &&
+                                                                            'border-destructive',
+                                                                    )}
+                                                                />
+                                                            }
+                                                        >
+                                                            <Calendar data-icon="inline-start" />
+                                                            {termStartDate ? (
+                                                                format(
+                                                                    termStartDate,
+                                                                    'PPP',
+                                                                )
+                                                            ) : (
+                                                                <span>
+                                                                    Select term
+                                                                    start date
+                                                                </span>
+                                                            )}
+                                                        </PopoverTrigger>
+                                                        <PopoverContent
+                                                            className="w-auto p-0"
+                                                            align="start"
+                                                        >
+                                                            <CalendarComponent
+                                                                mode="single"
+                                                                selected={
+                                                                    termStartDate
+                                                                }
+                                                                defaultMonth={
+                                                                    termStartDate
+                                                                }
+                                                                onSelect={(
+                                                                    date,
+                                                                ) => {
+                                                                    setTermStart(
+                                                                        date
+                                                                            ? format(
+                                                                                  date,
+                                                                                  'yyyy-MM-dd',
+                                                                              )
+                                                                            : '',
+                                                                    );
+                                                                    setTermStartOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                                captionLayout="dropdown"
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    {termStartDate && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="icon"
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                            onClick={() =>
+                                                                setTermStart('')
+                                                            }
+                                                        >
+                                                            <X />
+                                                            <span className="sr-only">
+                                                                Clear term start
+                                                                date
+                                                            </span>
+                                                        </Button>
+                                                    )}
+                                                </div>
                                                 {errors.term_start && (
                                                     <FieldError>
                                                         {errors.term_start}
@@ -509,31 +597,105 @@ export default function CreateOfficer({
                                                 <FieldLabel htmlFor="term_end">
                                                     Term End
                                                 </FieldLabel>
-                                                <DatePicker
-                                                    date={
-                                                        termEnd
-                                                            ? new Date(termEnd)
-                                                            : undefined
-                                                    }
-                                                    onDateChange={(date) =>
-                                                        setTermEnd(
-                                                            date
-                                                                ? date
-                                                                      .toISOString()
-                                                                      .split(
-                                                                          'T',
-                                                                      )[0]
-                                                                : '',
-                                                        )
-                                                    }
-                                                    placeholder="Select term end date"
-                                                    disabled={!canManage}
-                                                    className={
-                                                        errors.term_end
-                                                            ? 'border-destructive'
-                                                            : ''
-                                                    }
-                                                />
+                                                <div className="flex gap-2">
+                                                    <Popover
+                                                        open={termEndOpen}
+                                                        onOpenChange={
+                                                            setTermEndOpen
+                                                        }
+                                                    >
+                                                        <PopoverTrigger
+                                                            render={
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    disabled={
+                                                                        !canManage
+                                                                    }
+                                                                    className={cn(
+                                                                        'h-10 flex-1 justify-start text-left font-normal',
+                                                                        !termEndDate &&
+                                                                            'text-muted-foreground',
+                                                                        errors.term_end &&
+                                                                            'border-destructive',
+                                                                    )}
+                                                                />
+                                                            }
+                                                        >
+                                                            <Calendar data-icon="inline-start" />
+                                                            {termEndDate ? (
+                                                                format(
+                                                                    termEndDate,
+                                                                    'PPP',
+                                                                )
+                                                            ) : (
+                                                                <span>
+                                                                    Select term
+                                                                    end date
+                                                                </span>
+                                                            )}
+                                                        </PopoverTrigger>
+                                                        <PopoverContent
+                                                            className="w-auto p-0"
+                                                            align="start"
+                                                        >
+                                                            <CalendarComponent
+                                                                mode="single"
+                                                                selected={
+                                                                    termEndDate
+                                                                }
+                                                                defaultMonth={
+                                                                    termEndDate ||
+                                                                    termStartDate
+                                                                }
+                                                                onSelect={(
+                                                                    date,
+                                                                ) => {
+                                                                    setTermEnd(
+                                                                        date
+                                                                            ? format(
+                                                                                  date,
+                                                                                  'yyyy-MM-dd',
+                                                                              )
+                                                                            : '',
+                                                                    );
+                                                                    setTermEndOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                                disabled={(
+                                                                    date,
+                                                                ) =>
+                                                                    Boolean(
+                                                                        termStartDate &&
+                                                                        date <
+                                                                            termStartDate,
+                                                                    )
+                                                                }
+                                                                captionLayout="dropdown"
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    {termEndDate && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="icon"
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                            onClick={() =>
+                                                                setTermEnd('')
+                                                            }
+                                                        >
+                                                            <X />
+                                                            <span className="sr-only">
+                                                                Clear term end
+                                                                date
+                                                            </span>
+                                                        </Button>
+                                                    )}
+                                                </div>
                                                 {errors.term_end && (
                                                     <FieldError>
                                                         {errors.term_end}
@@ -555,7 +717,17 @@ export default function CreateOfficer({
                                                             value === 'true',
                                                         )
                                                     }
-                                                    disabled={!canManage} items={[{ value: "true", label: "Active" }, { value: "false", label: "Inactive" }]}
+                                                    disabled={!canManage}
+                                                    items={[
+                                                        {
+                                                            value: 'true',
+                                                            label: 'Active',
+                                                        },
+                                                        {
+                                                            value: 'false',
+                                                            label: 'Inactive',
+                                                        },
+                                                    ]}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -645,7 +817,7 @@ export default function CreateOfficer({
                                         <Button
                                             type="submit"
                                             disabled={processing}
-                                            className="w-full sm:w-auto sm:min-w-[120px]"
+                                            className="w-full sm:w-auto sm:min-w-30"
                                         >
                                             {processing ? (
                                                 <>

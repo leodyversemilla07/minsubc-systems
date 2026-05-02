@@ -1,16 +1,9 @@
 import OfficerController from '@/actions/Modules/USG/Http/Controllers/Admin/OfficerController';
-import { DatePicker } from '@/components/date-picker';
 import { PageHeader } from '@/components/page-header';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Field,
@@ -21,11 +14,25 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes/usg/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, router, usePage } from '@inertiajs/react';
+import { format } from 'date-fns';
 import {
     AlertCircle,
     Calendar,
@@ -37,6 +44,7 @@ import {
     Upload,
     User,
     Users,
+    X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -88,6 +96,8 @@ export default function EditOfficer({
     const [termEnd, setTermEnd] = useState<Date | undefined>(
         officer.term_end ? new Date(officer.term_end) : undefined,
     );
+    const [termStartOpen, setTermStartOpen] = useState(false);
+    const [termEndOpen, setTermEndOpen] = useState(false);
     const [isActive, setIsActive] = useState<boolean>(officer.is_active);
 
     // Show toast notifications from flash messages
@@ -341,7 +351,13 @@ export default function EditOfficer({
                                                         officer.position
                                                     }
                                                     disabled={!canManage}
-                                                    required items={positions.map((position) => ({ value: position, label: position }))}
+                                                    required
+                                                    items={positions.map(
+                                                        (position) => ({
+                                                            value: position,
+                                                            label: position,
+                                                        }),
+                                                    )}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -384,7 +400,13 @@ export default function EditOfficer({
                                                     defaultValue={
                                                         officer.department
                                                     }
-                                                    disabled={!canManage} items={departments.map((dept) => ({ value: dept, label: dept }))}
+                                                    disabled={!canManage}
+                                                    items={departments.map(
+                                                        (dept) => ({
+                                                            value: dept,
+                                                            label: dept,
+                                                        }),
+                                                    )}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -521,19 +543,92 @@ export default function EditOfficer({
                                                 <FieldLabel htmlFor="term_start">
                                                     Term Start *
                                                 </FieldLabel>
-                                                <DatePicker
-                                                    date={termStart}
-                                                    onDateChange={(date) =>
-                                                        setTermStart(date)
-                                                    }
-                                                    placeholder="Select term start date"
-                                                    disabled={!canManage}
-                                                    className={
-                                                        errors.term_start
-                                                            ? 'border-destructive'
-                                                            : ''
-                                                    }
-                                                />
+                                                <div className="flex gap-2">
+                                                    <Popover
+                                                        open={termStartOpen}
+                                                        onOpenChange={
+                                                            setTermStartOpen
+                                                        }
+                                                    >
+                                                        <PopoverTrigger
+                                                            render={
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    disabled={
+                                                                        !canManage
+                                                                    }
+                                                                    className={cn(
+                                                                        'h-10 flex-1 justify-start text-left font-normal',
+                                                                        !termStart &&
+                                                                            'text-muted-foreground',
+                                                                        errors.term_start &&
+                                                                            'border-destructive',
+                                                                    )}
+                                                                />
+                                                            }
+                                                        >
+                                                            <Calendar data-icon="inline-start" />
+                                                            {termStart ? (
+                                                                format(
+                                                                    termStart,
+                                                                    'PPP',
+                                                                )
+                                                            ) : (
+                                                                <span>
+                                                                    Select term
+                                                                    start date
+                                                                </span>
+                                                            )}
+                                                        </PopoverTrigger>
+                                                        <PopoverContent
+                                                            className="w-auto p-0"
+                                                            align="start"
+                                                        >
+                                                            <CalendarComponent
+                                                                mode="single"
+                                                                selected={
+                                                                    termStart
+                                                                }
+                                                                defaultMonth={
+                                                                    termStart
+                                                                }
+                                                                onSelect={(
+                                                                    date,
+                                                                ) => {
+                                                                    setTermStart(
+                                                                        date,
+                                                                    );
+                                                                    setTermStartOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                                captionLayout="dropdown"
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    {termStart && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="icon"
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                            onClick={() =>
+                                                                setTermStart(
+                                                                    undefined,
+                                                                )
+                                                            }
+                                                        >
+                                                            <X />
+                                                            <span className="sr-only">
+                                                                Clear term start
+                                                                date
+                                                            </span>
+                                                        </Button>
+                                                    )}
+                                                </div>
                                                 {/* Hidden input for form submission */}
                                                 <input
                                                     type="hidden"
@@ -556,19 +651,102 @@ export default function EditOfficer({
                                                 <FieldLabel htmlFor="term_end">
                                                     Term End
                                                 </FieldLabel>
-                                                <DatePicker
-                                                    date={termEnd}
-                                                    onDateChange={(date) =>
-                                                        setTermEnd(date)
-                                                    }
-                                                    placeholder="Select term end date"
-                                                    disabled={!canManage}
-                                                    className={
-                                                        errors.term_end
-                                                            ? 'border-destructive'
-                                                            : ''
-                                                    }
-                                                />
+                                                <div className="flex gap-2">
+                                                    <Popover
+                                                        open={termEndOpen}
+                                                        onOpenChange={
+                                                            setTermEndOpen
+                                                        }
+                                                    >
+                                                        <PopoverTrigger
+                                                            render={
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    disabled={
+                                                                        !canManage
+                                                                    }
+                                                                    className={cn(
+                                                                        'h-10 flex-1 justify-start text-left font-normal',
+                                                                        !termEnd &&
+                                                                            'text-muted-foreground',
+                                                                        errors.term_end &&
+                                                                            'border-destructive',
+                                                                    )}
+                                                                />
+                                                            }
+                                                        >
+                                                            <Calendar data-icon="inline-start" />
+                                                            {termEnd ? (
+                                                                format(
+                                                                    termEnd,
+                                                                    'PPP',
+                                                                )
+                                                            ) : (
+                                                                <span>
+                                                                    Select term
+                                                                    end date
+                                                                </span>
+                                                            )}
+                                                        </PopoverTrigger>
+                                                        <PopoverContent
+                                                            className="w-auto p-0"
+                                                            align="start"
+                                                        >
+                                                            <CalendarComponent
+                                                                mode="single"
+                                                                selected={
+                                                                    termEnd
+                                                                }
+                                                                defaultMonth={
+                                                                    termEnd ||
+                                                                    termStart
+                                                                }
+                                                                onSelect={(
+                                                                    date,
+                                                                ) => {
+                                                                    setTermEnd(
+                                                                        date,
+                                                                    );
+                                                                    setTermEndOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                                disabled={(
+                                                                    date,
+                                                                ) =>
+                                                                    Boolean(
+                                                                        termStart &&
+                                                                        date <
+                                                                            termStart,
+                                                                    )
+                                                                }
+                                                                captionLayout="dropdown"
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    {termEnd && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="icon"
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                            onClick={() =>
+                                                                setTermEnd(
+                                                                    undefined,
+                                                                )
+                                                            }
+                                                        >
+                                                            <X />
+                                                            <span className="sr-only">
+                                                                Clear term end
+                                                                date
+                                                            </span>
+                                                        </Button>
+                                                    )}
+                                                </div>
                                                 {/* Hidden input for form submission */}
                                                 <input
                                                     type="hidden"
@@ -602,7 +780,17 @@ export default function EditOfficer({
                                                             value === 'true',
                                                         )
                                                     }
-                                                    disabled={!canManage} items={[{ value: "true", label: "Active" }, { value: "false", label: "Inactive" }]}
+                                                    disabled={!canManage}
+                                                    items={[
+                                                        {
+                                                            value: 'true',
+                                                            label: 'Active',
+                                                        },
+                                                        {
+                                                            value: 'false',
+                                                            label: 'Inactive',
+                                                        },
+                                                    ]}
                                                 >
                                                     <SelectTrigger
                                                         className={
@@ -737,7 +925,7 @@ export default function EditOfficer({
                                         <Button
                                             type="submit"
                                             disabled={processing}
-                                            className="w-full sm:w-auto sm:min-w-[120px]"
+                                            className="w-full sm:w-auto sm:min-w-30"
                                         >
                                             {processing ? (
                                                 <>

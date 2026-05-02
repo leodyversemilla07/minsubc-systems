@@ -1,10 +1,3 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -15,6 +8,13 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { router } from '@inertiajs/react';
 import { Filter, RotateCcw, Search } from 'lucide-react';
 import { useCallback, useState } from 'react';
@@ -114,7 +114,13 @@ export function SearchFilters({
                                     value={localFilters[field.name] || 'all'}
                                     onValueChange={(value) =>
                                         handleChange(field.name, value || '')
-                                    } items={field.options.map((option) => ({ value: option.value, label: option.label }))}
+                                    }
+                                    items={(field.options ?? []).map(
+                                        (option) => ({
+                                            value: option.value,
+                                            label: option.label,
+                                        }),
+                                    )}
                                 >
                                     <SelectTrigger id={field.name}>
                                         <SelectValue

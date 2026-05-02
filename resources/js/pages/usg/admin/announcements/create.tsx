@@ -1,6 +1,17 @@
 import AnnouncementController from '@/actions/Modules/USG/Http/Controllers/Admin/AnnouncementController';
-import { DatePicker } from '@/components/date-picker';
 import { PageHeader } from '@/components/page-header';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
 import {
     Select,
     SelectContent,
@@ -8,17 +19,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes/usg/admin';
 import { index } from '@/routes/usg/admin/announcements';
 import { Form, Head, router } from '@inertiajs/react';
+import { format } from 'date-fns';
 import {
     AlertCircle,
     Calendar,
@@ -57,6 +64,8 @@ export default function CreateAnnouncement({
     const [isPinned, setIsPinned] = useState(false);
     const [publishAt, setPublishAt] = useState<Date>(new Date());
     const [expiresAt, setExpiresAt] = useState<Date | undefined>();
+    const [publishAtOpen, setPublishAtOpen] = useState(false);
+    const [expiresAtOpen, setExpiresAtOpen] = useState(false);
     const [attachments, setAttachments] = useState<AttachmentFile[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [title, setTitle] = useState('');
@@ -442,9 +451,17 @@ export default function CreateAnnouncement({
                                             </FieldLabel>
                                             <Select
                                                 value={category}
-                                                onValueChange={(value) => setCategory(value || '')}
+                                                onValueChange={(value) =>
+                                                    setCategory(value || '')
+                                                }
                                                 disabled={!canManage}
-                                                name="category" items={categories.map((category) => ({ value: category, label: category }))}
+                                                name="category"
+                                                items={categories.map(
+                                                    (category) => ({
+                                                        value: category,
+                                                        label: category,
+                                                    }),
+                                                )}
                                             >
                                                 <SelectTrigger
                                                     className={
@@ -572,7 +589,7 @@ export default function CreateAnnouncement({
                                                     alt="Featured image preview"
                                                     className="h-48 w-full object-cover transition-transform group-hover:scale-105 sm:h-56 md:h-64"
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                                                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                                                 {canManage && (
                                                     <Button
                                                         type="button"
@@ -789,17 +806,63 @@ export default function CreateAnnouncement({
                                             <FieldLabel htmlFor="publish_at">
                                                 Publish Date *
                                             </FieldLabel>
-                                            <DatePicker
-                                                date={publishAt}
-                                                onDateChange={(date) =>
-                                                    setPublishAt(
-                                                        date || new Date(),
-                                                    )
-                                                }
+                                            <Popover
+                                                open={publishAtOpen}
+                                                onOpenChange={setPublishAtOpen}
+                                            >
+                                                <PopoverTrigger
+                                                    render={
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                            className={cn(
+                                                                'h-10 w-full justify-start text-left font-normal',
+                                                                !publishAt &&
+                                                                    'text-muted-foreground',
+                                                            )}
+                                                        />
+                                                    }
+                                                >
+                                                    <Calendar data-icon="inline-start" />
+                                                    {publishAt ? (
+                                                        format(publishAt, 'PPP')
+                                                    ) : (
+                                                        <span>
+                                                            Select publish date
+                                                        </span>
+                                                    )}
+                                                </PopoverTrigger>
+                                                <PopoverContent
+                                                    className="w-auto p-0"
+                                                    align="start"
+                                                >
+                                                    <CalendarComponent
+                                                        mode="single"
+                                                        selected={publishAt}
+                                                        defaultMonth={publishAt}
+                                                        onSelect={(date) => {
+                                                            setPublishAt(
+                                                                date ||
+                                                                    new Date(),
+                                                            );
+                                                            setPublishAtOpen(
+                                                                false,
+                                                            );
+                                                        }}
+                                                        captionLayout="dropdown"
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                            <input
+                                                type="hidden"
                                                 name="publish_at"
-                                                placeholder="Select publish date"
-                                                disabled={!canManage}
-                                                showClearButton={false}
+                                                value={format(
+                                                    publishAt,
+                                                    'yyyy-MM-dd',
+                                                )}
                                             />
                                             {errors.publish_at && (
                                                 <p className="text-sm text-red-600">
@@ -812,15 +875,105 @@ export default function CreateAnnouncement({
                                             <FieldLabel htmlFor="expires_at">
                                                 Expiration Date
                                             </FieldLabel>
-                                            <DatePicker
-                                                date={expiresAt}
-                                                onDateChange={setExpiresAt}
-                                                name="expires_at"
-                                                placeholder="Select expiration date (optional)"
-                                                disabled={!canManage}
-                                                minDate={publishAt}
-                                                showClearButton={true}
-                                            />
+                                            <div className="flex gap-2">
+                                                <Popover
+                                                    open={expiresAtOpen}
+                                                    onOpenChange={
+                                                        setExpiresAtOpen
+                                                    }
+                                                >
+                                                    <PopoverTrigger
+                                                        render={
+                                                            <Button
+                                                                type="button"
+                                                                variant="outline"
+                                                                disabled={
+                                                                    !canManage
+                                                                }
+                                                                className={cn(
+                                                                    'h-10 flex-1 justify-start text-left font-normal',
+                                                                    !expiresAt &&
+                                                                        'text-muted-foreground',
+                                                                )}
+                                                            />
+                                                        }
+                                                    >
+                                                        <Calendar data-icon="inline-start" />
+                                                        {expiresAt ? (
+                                                            format(
+                                                                expiresAt,
+                                                                'PPP',
+                                                            )
+                                                        ) : (
+                                                            <span>
+                                                                Select
+                                                                expiration date
+                                                                (optional)
+                                                            </span>
+                                                        )}
+                                                    </PopoverTrigger>
+                                                    <PopoverContent
+                                                        className="w-auto p-0"
+                                                        align="start"
+                                                    >
+                                                        <CalendarComponent
+                                                            mode="single"
+                                                            selected={expiresAt}
+                                                            defaultMonth={
+                                                                expiresAt ||
+                                                                publishAt
+                                                            }
+                                                            onSelect={(
+                                                                date,
+                                                            ) => {
+                                                                setExpiresAt(
+                                                                    date,
+                                                                );
+                                                                setExpiresAtOpen(
+                                                                    false,
+                                                                );
+                                                            }}
+                                                            disabled={(date) =>
+                                                                Boolean(
+                                                                    publishAt &&
+                                                                    date <
+                                                                        publishAt,
+                                                                )
+                                                            }
+                                                            captionLayout="dropdown"
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
+                                                {expiresAt && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="icon"
+                                                        disabled={!canManage}
+                                                        onClick={() =>
+                                                            setExpiresAt(
+                                                                undefined,
+                                                            )
+                                                        }
+                                                    >
+                                                        <X />
+                                                        <span className="sr-only">
+                                                            Clear expiration
+                                                            date
+                                                        </span>
+                                                    </Button>
+                                                )}
+                                            </div>
+                                            {expiresAt && (
+                                                <input
+                                                    type="hidden"
+                                                    name="expires_at"
+                                                    value={format(
+                                                        expiresAt,
+                                                        'yyyy-MM-dd',
+                                                    )}
+                                                />
+                                            )}
                                             <FieldDescription>
                                                 Leave empty if announcement
                                                 doesn't expire
@@ -849,7 +1002,17 @@ export default function CreateAnnouncement({
                                                         value === 'true',
                                                     )
                                                 }
-                                                disabled={!canManage} items={[{ value: "true", label: "Published" }, { value: "false", label: "Draft" }]}
+                                                disabled={!canManage}
+                                                items={[
+                                                    {
+                                                        value: 'true',
+                                                        label: 'Published',
+                                                    },
+                                                    {
+                                                        value: 'false',
+                                                        label: 'Draft',
+                                                    },
+                                                ]}
                                             >
                                                 <SelectTrigger
                                                     className={
@@ -889,7 +1052,17 @@ export default function CreateAnnouncement({
                                                         value === 'true',
                                                     )
                                                 }
-                                                disabled={!canManage} items={[{ value: "false", label: "Normal" }, { value: "true", label: "Pinned" }]}
+                                                disabled={!canManage}
+                                                items={[
+                                                    {
+                                                        value: 'false',
+                                                        label: 'Normal',
+                                                    },
+                                                    {
+                                                        value: 'true',
+                                                        label: 'Pinned',
+                                                    },
+                                                ]}
                                             >
                                                 <SelectTrigger
                                                     className={
@@ -938,7 +1111,7 @@ export default function CreateAnnouncement({
                                     <Button
                                         type="submit"
                                         disabled={processing}
-                                        className="w-full sm:w-auto sm:min-w-[120px]"
+                                        className="w-full sm:w-auto sm:min-w-30"
                                     >
                                         {processing ? (
                                             <>

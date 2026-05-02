@@ -1,7 +1,18 @@
 import EventController from '@/actions/Modules/USG/Http/Controllers/Admin/EventController';
-import { DatePicker } from '@/components/date-picker';
 import { FileUpload } from '@/components/file-upload';
 import { PageHeader } from '@/components/page-header';
+import { TimePicker } from '@/components/time-picker';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
 import {
     Select,
     SelectContent,
@@ -9,15 +20,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { TimePicker } from '@/components/time-picker';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes/usg/admin';
 import { Form, Head, router } from '@inertiajs/react';
 import { format } from 'date-fns';
@@ -28,6 +34,7 @@ import {
     FileImage,
     MapPin,
     Save,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -73,6 +80,11 @@ export default function EditEvent({
     const [endTime, setEndTime] = useState<string>(
         event.end_time ? event.end_time.substring(0, 5) : '',
     );
+    const [eventDateOpen, setEventDateOpen] = useState(false);
+    const [endDateOpen, setEndDateOpen] = useState(false);
+    const eventDateValue = eventDate ? new Date(eventDate) : undefined;
+    const endDateValue = endDate ? new Date(endDate) : undefined;
+
     const [location, setLocation] = useState<string>(event.location || '');
     const [venueDetails, setVenueDetails] = useState<string>(
         event.venue_details || '',
@@ -203,7 +215,13 @@ export default function EditEvent({
                                             onValueChange={(value) =>
                                                 setCategory(value || '')
                                             }
-                                            disabled={!canManage} items={categories.map((category) => ({ value: category, label: category }))}
+                                            disabled={!canManage}
+                                            items={categories.map(
+                                                (category) => ({
+                                                    value: category,
+                                                    label: category,
+                                                }),
+                                            )}
                                         >
                                             <SelectTrigger
                                                 className={
@@ -253,27 +271,67 @@ export default function EditEvent({
                                             <Label htmlFor="event_date">
                                                 Event Date *
                                             </Label>
-                                            <DatePicker
-                                                date={
-                                                    eventDate
-                                                        ? new Date(eventDate)
-                                                        : undefined
-                                                }
-                                                onDateChange={(date) =>
-                                                    setEventDate(
-                                                        date
-                                                            ? format(
-                                                                  date,
-                                                                  'yyyy-MM-dd',
-                                                              )
-                                                            : '',
-                                                    )
-                                                }
-                                                name="event_date_picker"
-                                                placeholder="Select event date"
-                                                disabled={!canManage}
-                                                showClearButton={false}
-                                            />
+                                            <Popover
+                                                open={eventDateOpen}
+                                                onOpenChange={setEventDateOpen}
+                                            >
+                                                <PopoverTrigger
+                                                    render={
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            disabled={
+                                                                !canManage
+                                                            }
+                                                            className={cn(
+                                                                'h-10 w-full justify-start text-left font-normal',
+                                                                !eventDateValue &&
+                                                                    'text-muted-foreground',
+                                                            )}
+                                                        />
+                                                    }
+                                                >
+                                                    <Calendar data-icon="inline-start" />
+                                                    {eventDateValue ? (
+                                                        format(
+                                                            eventDateValue,
+                                                            'PPP',
+                                                        )
+                                                    ) : (
+                                                        <span>
+                                                            Select event date
+                                                        </span>
+                                                    )}
+                                                </PopoverTrigger>
+                                                <PopoverContent
+                                                    className="w-auto p-0"
+                                                    align="start"
+                                                >
+                                                    <CalendarComponent
+                                                        mode="single"
+                                                        selected={
+                                                            eventDateValue
+                                                        }
+                                                        defaultMonth={
+                                                            eventDateValue
+                                                        }
+                                                        onSelect={(date) => {
+                                                            setEventDate(
+                                                                date
+                                                                    ? format(
+                                                                          date,
+                                                                          'yyyy-MM-dd',
+                                                                      )
+                                                                    : '',
+                                                            );
+                                                            setEventDateOpen(
+                                                                false,
+                                                            );
+                                                        }}
+                                                        captionLayout="dropdown"
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
                                             <input
                                                 type="hidden"
                                                 name="event_date"
@@ -319,32 +377,98 @@ export default function EditEvent({
                                             <Label htmlFor="end_date">
                                                 End Date
                                             </Label>
-                                            <DatePicker
-                                                date={
-                                                    endDate
-                                                        ? new Date(endDate)
-                                                        : undefined
-                                                }
-                                                onDateChange={(date) =>
-                                                    setEndDate(
-                                                        date
-                                                            ? format(
-                                                                  date,
-                                                                  'yyyy-MM-dd',
-                                                              )
-                                                            : '',
-                                                    )
-                                                }
-                                                name="end_date_picker"
-                                                placeholder="Select end date (optional)"
-                                                disabled={!canManage}
-                                                minDate={
-                                                    eventDate
-                                                        ? new Date(eventDate)
-                                                        : undefined
-                                                }
-                                                showClearButton={true}
-                                            />
+                                            <div className="flex gap-2">
+                                                <Popover
+                                                    open={endDateOpen}
+                                                    onOpenChange={
+                                                        setEndDateOpen
+                                                    }
+                                                >
+                                                    <PopoverTrigger
+                                                        render={
+                                                            <Button
+                                                                type="button"
+                                                                variant="outline"
+                                                                disabled={
+                                                                    !canManage
+                                                                }
+                                                                className={cn(
+                                                                    'h-10 flex-1 justify-start text-left font-normal',
+                                                                    !endDateValue &&
+                                                                        'text-muted-foreground',
+                                                                )}
+                                                            />
+                                                        }
+                                                    >
+                                                        <Calendar data-icon="inline-start" />
+                                                        {endDateValue ? (
+                                                            format(
+                                                                endDateValue,
+                                                                'PPP',
+                                                            )
+                                                        ) : (
+                                                            <span>
+                                                                Select end date
+                                                                (optional)
+                                                            </span>
+                                                        )}
+                                                    </PopoverTrigger>
+                                                    <PopoverContent
+                                                        className="w-auto p-0"
+                                                        align="start"
+                                                    >
+                                                        <CalendarComponent
+                                                            mode="single"
+                                                            selected={
+                                                                endDateValue
+                                                            }
+                                                            defaultMonth={
+                                                                endDateValue ||
+                                                                eventDateValue
+                                                            }
+                                                            onSelect={(
+                                                                date,
+                                                            ) => {
+                                                                setEndDate(
+                                                                    date
+                                                                        ? format(
+                                                                              date,
+                                                                              'yyyy-MM-dd',
+                                                                          )
+                                                                        : '',
+                                                                );
+                                                                setEndDateOpen(
+                                                                    false,
+                                                                );
+                                                            }}
+                                                            disabled={(date) =>
+                                                                Boolean(
+                                                                    eventDateValue &&
+                                                                    date <
+                                                                        eventDateValue,
+                                                                )
+                                                            }
+                                                            captionLayout="dropdown"
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
+                                                {endDateValue && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="icon"
+                                                        disabled={!canManage}
+                                                        onClick={() =>
+                                                            setEndDate('')
+                                                        }
+                                                    >
+                                                        <X />
+                                                        <span className="sr-only">
+                                                            Clear end date
+                                                        </span>
+                                                    </Button>
+                                                )}
+                                            </div>
                                             <input
                                                 type="hidden"
                                                 name="end_date"
@@ -554,7 +678,7 @@ export default function EditEvent({
                                     <Button
                                         type="submit"
                                         disabled={processing}
-                                        className="w-full sm:w-auto sm:min-w-[120px]"
+                                        className="w-full sm:w-auto sm:min-w-30"
                                     >
                                         {processing ? (
                                             <>
