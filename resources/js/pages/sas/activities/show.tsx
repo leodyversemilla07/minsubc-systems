@@ -122,7 +122,7 @@ export default function ActivityShow({ activity }: Props) {
             <Head title={`${activity.activity_title} - SAS`} />
 
             {/* --- Hero / Header Section --- */}
-            <section className="relative overflow-hidden border-b border-green-100 bg-gradient-to-br from-white via-green-50/50 to-white pt-12 pb-12 sm:px-6 lg:px-8 dark:border-slate-800 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950">
+            <section className="relative overflow-hidden border-b border-slate-200/70 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.18),transparent_34%),linear-gradient(135deg,#f8fafc_0%,#ecfdf5_45%,#f8fafc_100%)] px-4 py-12 text-slate-900 sm:px-6 sm:py-14 lg:px-8 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.22),transparent_34%),linear-gradient(135deg,#020617_0%,#03130c_48%,#020617_100%)] dark:text-white">
                 {/* Background Pattern */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
                     <svg
@@ -235,7 +235,7 @@ export default function ActivityShow({ activity }: Props) {
             </section>
 
             {/* --- Content Section --- */}
-            <section className="bg-slate-50/50 px-4 py-12 sm:px-6 lg:px-8 dark:bg-slate-900/50">
+            <section className="bg-slate-50 px-4 py-12 sm:px-6 lg:px-8 dark:bg-slate-950">
                 <div className="mx-auto max-w-7xl">
                     <div className="grid gap-8 lg:grid-cols-3">
                         {/* Main Content Column */}

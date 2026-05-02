@@ -1,3 +1,6 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -6,9 +9,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import SASLayout from '@/layouts/sas-layout';
 import { calendar, exportMethod, index, show } from '@/routes/sas/activities';
 import type { PaginatedData, SASActivity } from '@/types/sas';
@@ -183,7 +183,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
             <Head title="Activities & Events - SAS" />
 
             {/* --- Hero Section --- */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-white via-green-50/50 to-white px-4 py-8 text-slate-900 sm:px-6 sm:py-16 lg:px-8 dark:from-slate-950 dark:via-green-950/20 dark:to-slate-950 dark:text-white">
+            <section className="relative overflow-hidden border-b border-slate-200/70 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.18),transparent_34%),linear-gradient(135deg,#f8fafc_0%,#ecfdf5_45%,#f8fafc_100%)] px-4 py-14 text-slate-900 sm:px-6 sm:py-16 lg:px-8 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.22),transparent_34%),linear-gradient(135deg,#020617_0%,#03130c_48%,#020617_100%)] dark:text-white">
                 {/* Background Pattern */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
                     <svg
@@ -278,7 +278,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
 
                     {/* Search Bar Container */}
                     <div className="mx-auto max-w-3xl">
-                        <div className="relative rounded-2xl bg-white p-2 shadow-xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-800">
+                        <div className="relative rounded-3xl border border-white/70 bg-white/80 p-2 shadow-2xl ring-1 shadow-slate-900/10 ring-slate-200/50 backdrop-blur dark:border-slate-800 dark:bg-slate-950/70 dark:ring-slate-800">
                             <form
                                 onSubmit={handleSearch}
                                 className="flex flex-col gap-2 sm:flex-row"
@@ -357,7 +357,10 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                     }
                                     items={[
                                         { value: 'all', label: 'All Types' },
-                                        ...ACTIVITY_TYPES.map((type) => ({ value: type, label: type })),
+                                        ...ACTIVITY_TYPES.map((type) => ({
+                                            value: type,
+                                            label: type,
+                                        })),
                                     ]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
@@ -369,7 +372,10 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                                 All Types
                                             </SelectItem>
                                             {ACTIVITY_TYPES.map((type) => (
-                                                <SelectItem key={type} value={type}>
+                                                <SelectItem
+                                                    key={type}
+                                                    value={type}
+                                                >
                                                     {type}
                                                 </SelectItem>
                                             ))}
@@ -386,11 +392,17 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                                 <Select
                                     value={statusFilter}
                                     onValueChange={(value) =>
-                                        handleFilterChange('status', value || '')
+                                        handleFilterChange(
+                                            'status',
+                                            value || '',
+                                        )
                                     }
                                     items={[
                                         { value: 'all', label: 'All Statuses' },
-                                        ...ACTIVITY_STATUSES.map((status) => ({ value: status, label: status })),
+                                        ...ACTIVITY_STATUSES.map((status) => ({
+                                            value: status,
+                                            label: status,
+                                        })),
                                     ]}
                                 >
                                     <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
@@ -441,7 +453,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             {filteredActivities.map((activity) => (
                                 <div
                                     key={activity.id}
-                                    className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-green-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:hover:border-green-700 dark:hover:shadow-green-900/20"
+                                    className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-300 hover:shadow-2xl hover:shadow-green-600/10 dark:border-slate-800 dark:bg-slate-950/70 dark:hover:border-green-700 dark:hover:shadow-green-900/20"
                                 >
                                     {/* Green Top Border Gradient */}
                                     <div className="absolute top-0 left-0 h-1 w-full origin-left scale-x-0 transform bg-gradient-to-r from-green-500 to-emerald-500 transition-transform duration-300 group-hover:scale-x-100"></div>
@@ -517,7 +529,7 @@ export default function ActivitiesIndex({ activities, filters }: Props) {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
+                        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-white/80 px-4 py-16 text-center shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-950/60">
                             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800">
                                 <Calendar className="h-8 w-8 text-slate-400" />
                             </div>

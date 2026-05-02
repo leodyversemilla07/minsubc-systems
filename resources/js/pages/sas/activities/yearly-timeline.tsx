@@ -1,3 +1,5 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Select,
     SelectContent,
@@ -6,8 +8,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import SASLayout from '@/layouts/sas-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import {
@@ -178,7 +178,7 @@ export default function YearlyTimeline({
 
             <main>
                 {/* --- Header Section --- */}
-                <section className="border-b border-slate-200 bg-white px-4 py-6 sm:py-8 dark:border-slate-800 dark:bg-slate-900">
+                <section className="border-b border-slate-200/70 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.16),transparent_34%),linear-gradient(135deg,#f8fafc_0%,#ecfdf5_45%,#f8fafc_100%)] px-4 py-8 sm:py-12 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.2),transparent_34%),linear-gradient(135deg,#020617_0%,#03130c_48%,#020617_100%)]">
                     <div className="mx-auto max-w-7xl">
                         <div className="flex flex-col gap-4 sm:gap-6">
                             {/* Title & Navigation */}
@@ -214,10 +214,18 @@ export default function YearlyTimeline({
                                     <Filter className="hidden h-4 w-4 shrink-0 text-slate-500 sm:block" />
                                     <Select
                                         value={selectedCategory}
-                                        onValueChange={(value) => handleCategoryChange(value || '')}
+                                        onValueChange={(value) =>
+                                            handleCategoryChange(value || '')
+                                        }
                                         items={[
-                                            { value: 'all', label: 'All Categories' },
-                                            ...categories.map((category) => ({ value: category, label: category })),
+                                            {
+                                                value: 'all',
+                                                label: 'All Categories',
+                                            },
+                                            ...categories.map((category) => ({
+                                                value: category,
+                                                label: category,
+                                            })),
                                         ]}
                                     >
                                         <SelectTrigger className="w-full sm:w-[180px]">
@@ -280,7 +288,7 @@ export default function YearlyTimeline({
                 </section>
 
                 {/* --- Year Overview Section --- */}
-                <section className="border-b border-slate-200 bg-slate-50 px-3 py-4 sm:px-4 sm:py-6 dark:border-slate-800 dark:bg-slate-950">
+                <section className="border-b border-slate-200 bg-white/70 px-3 py-4 backdrop-blur sm:px-4 sm:py-6 dark:border-slate-800 dark:bg-slate-950/80">
                     <div className="mx-auto max-w-7xl">
                         <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 sm:gap-2 md:grid-cols-12">
                             {yearlyData.map((month) => (
@@ -325,7 +333,7 @@ export default function YearlyTimeline({
                 </section>
 
                 {/* --- Timeline Section --- */}
-                <section className="min-h-[60vh] bg-white px-3 py-6 sm:px-4 sm:py-8 md:px-6 lg:px-8 dark:bg-slate-900">
+                <section className="min-h-[60vh] bg-slate-50 px-3 py-8 sm:px-4 sm:py-10 md:px-6 lg:px-8 dark:bg-slate-950">
                     <div className="mx-auto max-w-7xl">
                         {/* Timeline */}
                         <div className="relative">

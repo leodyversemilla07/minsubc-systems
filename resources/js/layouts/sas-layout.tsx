@@ -7,11 +7,10 @@ interface SASLayoutProps {
 
 export default function SASLayout({ children }: SASLayoutProps) {
     return (
-        <div className="flex min-h-screen flex-col bg-background">
+        <div className="flex min-h-screen flex-col bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
             <Header />
 
-            {/* Main content - updated padding for taller header */}
-            <main className="flex-1 pt-16 sm:pt-28">{children}</main>
+            <main className="flex-1 pt-16">{children}</main>
 
             <Footer />
         </div>

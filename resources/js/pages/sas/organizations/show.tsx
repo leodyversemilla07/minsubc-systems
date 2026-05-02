@@ -52,7 +52,7 @@ export default function OrganizationShow({ organization }: Props) {
             <Head title={`${organization.organization_name} - SAS`} />
 
             {/* Hero / Header Section */}
-            <section className="relative overflow-hidden border-b border-green-100 bg-gradient-to-br from-white via-green-50/50 to-white pt-8 pb-12 dark:border-gray-800 dark:from-gray-900 dark:via-green-950/20 dark:to-gray-900">
+            <section className="relative overflow-hidden border-b border-slate-200/70 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.18),transparent_34%),linear-gradient(135deg,#f8fafc_0%,#ecfdf5_45%,#f8fafc_100%)] px-4 py-12 text-slate-900 sm:px-6 sm:py-14 lg:px-8 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.22),transparent_34%),linear-gradient(135deg,#020617_0%,#03130c_48%,#020617_100%)] dark:text-white">
                 {/* Background Pattern */}
                 <div className="pointer-events-none absolute inset-0 opacity-[0.15] dark:opacity-[0.07]">
                     <svg
@@ -141,7 +141,7 @@ export default function OrganizationShow({ organization }: Props) {
             </section>
 
             {/* Content Section */}
-            <section className="min-h-[60vh] bg-gray-50/50 px-4 py-8 dark:bg-gray-800/50">
+            <section className="min-h-[60vh] bg-slate-50 px-4 py-10 dark:bg-slate-950">
                 <div className="mx-auto max-w-7xl">
                     {/* Tabs Navigation */}
                     <Tabs defaultValue="about" className="w-full">

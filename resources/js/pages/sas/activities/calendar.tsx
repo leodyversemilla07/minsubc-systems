@@ -223,7 +223,7 @@ export default function ActivitiesCalendar({
 
             <main>
                 {/* --- Header Section --- */}
-                <section className="border-b border-slate-200 bg-white px-3 py-4 sm:px-4 sm:py-8 dark:border-slate-800 dark:bg-slate-900">
+                <section className="border-b border-slate-200/70 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.16),transparent_34%),linear-gradient(135deg,#f8fafc_0%,#ecfdf5_45%,#f8fafc_100%)] px-3 py-6 sm:px-4 sm:py-10 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.2),transparent_34%),linear-gradient(135deg,#020617_0%,#03130c_48%,#020617_100%)]">
                     <div className="mx-auto max-w-7xl">
                         <div className="flex flex-col gap-4 sm:gap-6">
                             {/* Title & Navigation */}
@@ -301,7 +301,7 @@ export default function ActivitiesCalendar({
                 </section>
 
                 {/* --- Calendar Grid Section --- */}
-                <section className="min-h-[60vh] bg-slate-50 px-2 py-4 sm:px-4 sm:py-8 md:px-6 lg:px-8 dark:bg-slate-950">
+                <section className="min-h-[60vh] bg-slate-50 px-2 py-6 sm:px-4 sm:py-10 md:px-6 lg:px-8 dark:bg-slate-950">
                     <div className="mx-auto max-w-7xl">
                         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg sm:rounded-2xl sm:shadow-xl md:rounded-3xl dark:border-slate-800 dark:bg-slate-900">
                             {/* Weekday Headers */}
