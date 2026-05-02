@@ -4,7 +4,7 @@
 
 **A comprehensive web platform for Mindoro State University - Bongabong Campus**
 
-![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat&logo=laravel&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat&logo=laravel&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=flat)
@@ -52,7 +52,7 @@ The **MinSU BC Systems Platform** is a modular web application that consolidates
 
 | Category | Technology |
 |----------|------------|
-| **Backend** | Laravel 12, PHP 8.2+ |
+| **Backend** | Laravel 13, PHP 8.3+ |
 | **Frontend** | React 19, TypeScript, Inertia.js |
 | **Styling** | Tailwind CSS 4, Shadcn UI |
 | **Database** | MySQL 8.0 |
