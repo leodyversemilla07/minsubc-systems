@@ -48,6 +48,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return redirect()->route('sas.admin.dashboard');
         }
 
+        // Redirect admission admins and staff to admission admin dashboard
+        if (array_intersect($userRoles, ['admission-admin', 'admission-staff'])) {
+            return redirect()->route('admission.admin.dashboard');
+        }
+
         // Redirect voting admins and managers to voting admin dashboard
         if (array_intersect($userRoles, ['voting-admin', 'voting-manager'])) {
             return redirect()->route('voting.admin.dashboard');

@@ -2,5 +2,6 @@
     "Registrar": true,
     "USG": true,
     "SAS": true,
-    "VotingSystem": true
+    "VotingSystem": true,
+    "Admission": true
 }

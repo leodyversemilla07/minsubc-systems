@@ -17,6 +17,7 @@ import sas from '@/routes/sas';
 import superAdmin from '@/routes/super-admin';
 import usg from '@/routes/usg';
 import voting from '@/routes/voting';
+import admission from '@/routes/admission';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -196,6 +197,32 @@ export function AppSidebar() {
             );
         }
 
+        // Admission Admin/Staff Navigation
+        else if (hasAnyRole(['admission-admin', 'admission-staff'])) {
+            items.push(
+                {
+                    title: 'Admission Dashboard',
+                    href: route('admission.admin.dashboard'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Applicants',
+                    href: route('admission.admin.applicants.index'),
+                    icon: Users,
+                },
+                {
+                    title: 'Enrollments',
+                    href: route('admission.admin.enrollments.index'),
+                    icon: ListChecks,
+                },
+                {
+                    title: 'Programs',
+                    href: route('admission.admin.programs.index'),
+                    icon: BookOpen,
+                },
+            );
+        }
+
         // SAS Admin/Staff Navigation
         else if (hasAnyRole(['sas-admin', 'sas-staff'])) {
             items.push(
@@ -308,6 +335,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['voting-admin', 'voting-manager'])) {
             return 'Voting Management';
+        }
+        if (hasAnyRole(['admission-admin', 'admission-staff'])) {
+            return 'Admission Management';
         }
         if (hasAnyRole(['sas-admin', 'sas-staff'])) {
             return 'SAS Management';
