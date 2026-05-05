@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/dialog';
 import { Kbd } from '@/components/ui/kbd';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import admission, { track as trackRoute } from '@/routes/admission';
+import admission, { index as indexRoute, track as trackRoute } from '@/routes/admission';
 import { router } from '@inertiajs/react';
 import { FileText, GraduationCap, Search, ClipboardCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,13 @@ interface SearchResult {
 }
 
 const staticPages: SearchResult[] = [
+    {
+        type: 'page',
+        title: 'Home',
+        description: 'Admission home page',
+        href: indexRoute.url(),
+        icon: <GraduationCap className="h-4 w-4" />,
+    },
     {
         type: 'page',
         title: 'Apply for Admission',

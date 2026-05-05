@@ -24,7 +24,7 @@ export interface NavItem {
 }
 
 export interface PageProps extends Record<string, unknown> {
-    auth: Auth;
+    auth?: Auth;
     [key: string]: unknown;
 }
 

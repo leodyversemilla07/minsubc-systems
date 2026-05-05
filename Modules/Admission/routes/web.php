@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 // ==================== PUBLIC ROUTES ====================
 Route::prefix('admission')->name('admission.')->group(function () {
 
+    Route::get('/', [\Modules\Admission\Http\Controllers\PageController::class, 'index'])
+        ->name('index');
+
     Route::get('/apply', [\Modules\Admission\Http\Controllers\ApplicationController::class, 'create'])
         ->name('application.create');
     Route::post('/apply', [\Modules\Admission\Http\Controllers\ApplicationController::class, 'store'])
