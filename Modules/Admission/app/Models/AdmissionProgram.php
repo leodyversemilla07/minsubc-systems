@@ -2,12 +2,16 @@
 
 namespace Modules\Admission\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Admission\Database\Factories\AdmissionProgramFactory;
 
 class AdmissionProgram extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'course_id', 'academic_year', 'semester', 'name', 'description',
         'slots', 'slots_filled', 'application_start', 'application_end', 'status',
@@ -21,6 +25,11 @@ class AdmissionProgram extends Model
             'application_start' => 'date',
             'application_end' => 'date',
         ];
+    }
+
+    protected static function newFactory(): AdmissionProgramFactory
+    {
+        return AdmissionProgramFactory::new();
     }
 
     public function course(): BelongsTo

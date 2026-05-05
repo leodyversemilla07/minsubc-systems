@@ -17,7 +17,6 @@ import sas from '@/routes/sas';
 import superAdmin from '@/routes/super-admin';
 import usg from '@/routes/usg';
 import voting from '@/routes/voting';
-import admission from '@/routes/admission';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {

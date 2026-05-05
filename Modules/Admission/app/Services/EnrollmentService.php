@@ -61,7 +61,9 @@ class EnrollmentService
                     'status' => 'active',
                 ]);
 
-                $enrollment->update(['student_id' => $data['student_id']]);
+                if (isset($data['student_id'])) {
+                    $enrollment->update(['student_id' => $data['student_id']]);
+                }
             }
 
             $this->applicationService->updateStatus(

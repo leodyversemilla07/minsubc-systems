@@ -3,16 +3,20 @@
 namespace Modules\Admission\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Admission\Database\Factories\ApplicantFactory;
 use Modules\Admission\Enums\ApplicantStatus;
 
 class Applicant extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'admission_applicants';
 
     protected $fillable = [
         'application_number', 'program_id', 'user_id',
@@ -32,6 +36,11 @@ class Applicant extends Model
             'accepted_at' => 'datetime',
             'enrolled_at' => 'datetime',
         ];
+    }
+
+    protected static function newFactory(): ApplicantFactory
+    {
+        return ApplicantFactory::new();
     }
 
     public function program(): BelongsTo { return $this->belongsTo(AdmissionProgram::class, 'program_id'); }
