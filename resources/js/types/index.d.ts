@@ -23,6 +23,11 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface PageProps extends Record<string, unknown> {
+    auth: Auth;
+    [key: string]: unknown;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };

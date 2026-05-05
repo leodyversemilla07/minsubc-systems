@@ -54,9 +54,10 @@ export default function Dashboard({ stats, enrollmentStats, programs, recentAppl
     ];
 
     return (
-        <Head title="Admission Dashboard" />
+        <>
+            <Head title="Admission Dashboard" />
 
-        <div className="space-y-8">
+            <div className="space-y-8">
             <div>
                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Admission Dashboard</h1>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -138,6 +139,7 @@ export default function Dashboard({ stats, enrollmentStats, programs, recentAppl
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

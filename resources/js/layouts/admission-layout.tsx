@@ -1,0 +1,51 @@
+import { type ReactNode, useEffect, useState } from 'react';
+import Header from '@/components/admission/header';
+import Footer from '@/components/admission/footer';
+
+interface AdmissionLayoutProps {
+    children: ReactNode;
+}
+
+export default function AdmissionLayout({ children }: AdmissionLayoutProps) {
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        const storedTheme = localStorage.getItem('theme');
+        if (
+            storedTheme === 'dark' ||
+            (!storedTheme &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            setIsDark(true);
+            document.documentElement.classList.add('dark');
+        } else {
+            setIsDark(false);
+            document.documentElement.classList.remove('dark');
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        setIsDark((prev) => {
+            const newMode = !prev;
+            if (newMode) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+            return newMode;
+        });
+    };
+
+    return (
+        <div className="flex min-h-screen flex-col bg-gradient-to-b from-blue-50 to-white text-slate-900 transition-colors duration-300 dark:from-gray-950 dark:to-gray-900 dark:text-slate-100">
+            <Header isDark={isDark} toggleTheme={toggleTheme} />
+
+            {/* Main content */}
+            <main className="flex-1 pt-16 md:pt-28">{children}</main>
+
+            <Footer />
+        </div>
+    );
+}
