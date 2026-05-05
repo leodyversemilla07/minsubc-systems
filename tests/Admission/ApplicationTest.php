@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Modules\Admission\Enums\ApplicantStatus;
 use Modules\Admission\Models\AdmissionProgram;
 use Modules\Admission\Models\Applicant;
@@ -31,8 +30,7 @@ it('can generate a unique application number', function () {
     $number1 = $service->generateApplicationNumber();
     expect($number1)->toMatch('/^ADM\d{4}-\d{5}$/');
 
-    // Create an applicant to test sequence increment
-    $applicant1 = $service->createApplication([
+    $service->createApplication([
         'program_id' => $this->program->id,
         'first_name' => 'First',
         'last_name' => 'Applicant',
@@ -74,7 +72,6 @@ it('can submit a draft application', function () {
     ]);
 
     $submitted = $service->submitApplication($applicant);
-
     expect($submitted->status)->toBe(ApplicantStatus::Submitted);
     expect($submitted->submitted_at)->not->toBeNull();
 });
@@ -115,7 +112,89 @@ it('generates audit logs on status change', function () {
     ]);
 
     $service->updateStatus($applicant, ApplicantStatus::Accepted);
-
     expect($applicant->auditLogs()->count())->toBe(1);
     expect($applicant->auditLogs()->first()->action)->toBe('status_changed');
+});
+
+// ───── Edge Case Validations ─────
+
+it('prevents duplicate email for the same program semester', function () {
+    $service = app(ApplicationService::class);
+
+    $service->createApplication([
+        'program_id' => $this->program->id,
+        'first_name' => 'First',
+        'last_name' => 'User',
+        'email' => 'duplicate@example.com',
+        'phone' => '09170000001',
+        'date_of_birth' => '2000-01-01',
+    ]);
+
+    expect(fn () => $service->createApplication([
+        'program_id' => $this->program->id,
+        'first_name' => 'Second',
+        'last_name' => 'User',
+        'email' => 'duplicate@example.com',
+        'phone' => '09170000002',
+        'date_of_birth' => '2000-02-02',
+    ]))->toThrow(\RuntimeException::class, 'already exists');
+});
+
+it('allows same email for different semesters', function () {
+    $service = app(ApplicationService::class);
+
+    $service->createApplication([
+        'program_id' => $this->program->id,
+        'first_name' => 'First',
+        'last_name' => 'User',
+        'email' => 'different-sem@example.com',
+        'phone' => '09170000001',
+        'date_of_birth' => '2000-01-01',
+    ]);
+
+    $otherCourse = Course::factory()->create(['code' => 'BSCS']);
+    $otherProgram = AdmissionProgram::factory()->create([
+        'course_id' => $otherCourse->id,
+        'academic_year' => '2025-2026',
+        'semester' => '2nd',
+        'status' => 'open',
+        'application_start' => now()->subMonth(),
+        'application_end' => now()->addMonth(),
+        'slots' => 50,
+    ]);
+
+    $result = $service->createApplication([
+        'program_id' => $otherProgram->id,
+        'first_name' => 'First',
+        'last_name' => 'User',
+        'email' => 'different-sem@example.com',
+        'phone' => '09170000002',
+        'date_of_birth' => '2000-01-01',
+    ]);
+
+    expect($result->id)->not->toBeNull();
+});
+
+it('rejects application when program is closed', function () {
+    $service = app(ApplicationService::class);
+
+    $closedCourse = Course::factory()->create(['code' => 'BSBA']);
+    $closedProgram = AdmissionProgram::factory()->create([
+        'course_id' => $closedCourse->id,
+        'academic_year' => '2025-2026',
+        'semester' => '1st',
+        'status' => 'closed',
+        'application_start' => now()->subMonth(),
+        'application_end' => now()->addMonth(),
+        'slots' => 50,
+    ]);
+
+    expect(fn () => $service->createApplication([
+        'program_id' => $closedProgram->id,
+        'first_name' => 'Test',
+        'last_name' => 'User',
+        'email' => 'closed@example.com',
+        'phone' => '09170000001',
+        'date_of_birth' => '2000-01-01',
+    ]))->toThrow(\RuntimeException::class, 'no longer accepting');
 });

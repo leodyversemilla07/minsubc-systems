@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Modules\Admission\Enums\ApplicantStatus;
 use Modules\Admission\Models\AdmissionAuditLog;
+use Modules\Admission\Models\AdmissionProgram;
 use Modules\Admission\Models\Applicant;
 use Modules\Admission\Models\ApplicantDocument;
 
@@ -28,6 +29,28 @@ class ApplicationService
     public function createApplication(array $data): Applicant
     {
         return DB::transaction(function () use ($data) {
+            // Prevent duplicate email for the same academic year & semester
+            $program = AdmissionProgram::findOrFail($data['program_id']);
+
+            $existing = Applicant::where('email', $data['email'])
+                ->whereHas('program', function ($q) use ($program) {
+                    $q->where('academic_year', $program->academic_year)
+                      ->where('semester', $program->semester);
+                })
+                ->whereNull('deleted_at')
+                ->first();
+
+            if ($existing) {
+                throw new \RuntimeException(
+                    'An application for this email already exists for the ' . $program->academic_year . ' ' . $program->semester . ' semester.'
+                );
+            }
+
+            // Verify program is still open for applications
+            if (!$program->is_open) {
+                throw new \RuntimeException('This program is no longer accepting applications.');
+            }
+
             $data['application_number'] = $this->generateApplicationNumber();
             $data['status'] = ApplicantStatus::Draft;
 
@@ -39,6 +62,13 @@ class ApplicationService
     {
         if ($applicant->status !== ApplicantStatus::Draft) {
             throw new \RuntimeException('Only draft applications can be submitted.');
+        }
+
+        // Re-verify the program is still open at time of submission
+        if (!$applicant->program?->is_open) {
+            throw new \RuntimeException(
+                'This program is no longer accepting applications. The application period may have ended.'
+            );
         }
 
         return DB::transaction(function () use ($applicant) {

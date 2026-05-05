@@ -16,6 +16,16 @@ class EvaluationService
     public function evaluate(Applicant $applicant, array $data): Evaluation
     {
         return DB::transaction(function () use ($applicant, $data) {
+            // Check slot limits before accepting
+            if ($data['decision'] === 'accepted') {
+                $program = $applicant->program;
+                if ($program && $program->slots_available <= 0) {
+                    throw new \RuntimeException(
+                        "Cannot accept applicant. The program '{$program->name}' has no available slots."
+                    );
+                }
+            }
+
             $evaluation = Evaluation::create([
                 'applicant_id' => $applicant->id,
                 'evaluator_id' => auth()->id(),
@@ -36,6 +46,11 @@ class EvaluationService
                 $applicant, $newStatus, $data['notes'] ?? null,
                 ['evaluation_id' => $evaluation->id]
             );
+
+            // Increment slots_filled when accepted
+            if ($data['decision'] === 'accepted' && $applicant->program) {
+                $applicant->program->increment('slots_filled');
+            }
 
             return $evaluation;
         });

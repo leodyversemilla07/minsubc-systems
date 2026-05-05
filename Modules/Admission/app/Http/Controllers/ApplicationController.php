@@ -37,6 +37,10 @@ class ApplicationController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'gpa' => $request->filled('gpa') ? (float) $request->gpa : null,
+        ]);
+
         $validated = $request->validate([
             'program_id' => ['required', 'exists:admission_programs,id'],
             'first_name' => ['required', 'string', 'max:100'],
@@ -55,10 +59,14 @@ class ApplicationController extends Controller
             'gpa' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
 
-        $applicant = $this->applicationService->createApplication($validated);
+        try {
+            $applicant = $this->applicationService->createApplication($validated);
 
-        return redirect()->route('admission.application.show', $applicant->application_number)
-            ->with('success', 'Application draft created successfully.');
+            return redirect()->route('admission.application.show', $applicant->application_number)
+                ->with('success', 'Application draft created successfully.');
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function show(string $applicationNumber): Response
