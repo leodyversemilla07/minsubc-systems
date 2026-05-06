@@ -39,7 +39,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Node Dependencies
-        run: npm i
+        run: npm ci
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -54,6 +54,9 @@ jobs:
         run: |
           touch database/database.sqlite
           php artisan migrate --force --no-interaction
+
+      - name: Build Assets
+        run: npm run build
 
       - name: Tests
         run: ./vendor/bin/pest
