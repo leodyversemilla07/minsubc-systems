@@ -50,8 +50,10 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Build Assets
-        run: npm run build
+      - name: Setup Database
+        run: |
+          touch database/database.sqlite
+          php artisan migrate --force --no-interaction
 
       - name: Tests
-        run: ./vendor/bin/phpunit
+        run: ./vendor/bin/pest
