@@ -48,6 +48,8 @@
         }
     },
     "scripts": {
+        "lint": "vendor/bin/pint",
+        "test": "./vendor/bin/phpunit",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

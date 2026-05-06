@@ -5,10 +5,14 @@ on:
     branches:
       - develop
       - main
+      - master
+      - workos
   pull_request:
     branches:
       - develop
       - main
+      - master
+      - workos
 
 permissions:
   contents: write
@@ -18,44 +22,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
 
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           npm install
 
-      - name: Setup Laravel Environment
-        run: |
-          cp .env.example .env
-          php artisan key:generate --ansi
-          touch database/database.sqlite
-          echo "DB_DATABASE=${{ github.workspace }}/database/database.sqlite" >> .env
-          php artisan migrate --force --no-interaction
-
       - name: Run Pint
-        run: vendor/bin/pint
+        run: composer lint
 
       - name: Format Frontend
         run: npm run format
 
-      - name: Lint Frontend (changed files only)
-        run: |
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref || 'main' }}...HEAD -- '*.ts' '*.tsx' '*.vue' | tr '\n' ' ')
-          if [ -n "$CHANGED_FILES" ]; then
-            npx eslint $CHANGED_FILES --max-warnings=0
-          else
-            echo "No TypeScript/Vue files changed, skipping lint"
-          fi
+      - name: Lint Frontend
+        run: npm run lint
 
       # - name: Commit Changes
-      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   uses: stefanzweifel/git-auto-commit-action@v7
       #   with:
       #     commit_message: fix code style
       #     commit_options: '--no-verify'
