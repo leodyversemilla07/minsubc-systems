@@ -7,13 +7,16 @@ use Illuminate\Database\Seeder;
 class AdmissionDatabaseSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed the application's database.
      */
     public function run(): void
     {
         $this->call([
             CourseSeeder::class,
             AdmissionPermissionsSeeder::class,
+            AcademicTermSeeder::class,
+            SubjectSeeder::class,
+            EnrollmentFeeSeeder::class,
         ]);
     }
 }

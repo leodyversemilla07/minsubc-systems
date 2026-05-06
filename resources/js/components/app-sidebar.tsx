@@ -202,7 +202,7 @@ export function AppSidebar() {
                 {
                     title: 'Admission Dashboard',
                     href: route('admission.admin.dashboard'),
-                    icon: ClipboardList,
+                    icon: LayoutGrid,
                 },
                 {
                     title: 'Applicants',
@@ -218,6 +218,36 @@ export function AppSidebar() {
                     title: 'Programs',
                     href: route('admission.admin.programs.index'),
                     icon: BookOpen,
+                },
+                {
+                    title: 'Academic Terms',
+                    href: route('admission.admin.terms.index'),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Subjects',
+                    href: route('admission.admin.subjects.index'),
+                    icon: FileText,
+                },
+                {
+                    title: 'Sections',
+                    href: route('admission.admin.sections.index'),
+                    icon: Building2,
+                },
+                {
+                    title: 'Schedules',
+                    href: route('admission.admin.schedules.index'),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Grade Management',
+                    href: route('admission.admin.grades.index'),
+                    icon: GraduationCap,
+                },
+                {
+                    title: 'Transcripts',
+                    href: route('admission.admin.transcripts.index'),
+                    icon: FileText,
                 },
             );
         }

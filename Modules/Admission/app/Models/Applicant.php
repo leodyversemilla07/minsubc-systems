@@ -43,18 +43,93 @@ class Applicant extends Model
         return ApplicantFactory::new();
     }
 
-    public function program(): BelongsTo { return $this->belongsTo(AdmissionProgram::class, 'program_id'); }
-    public function user(): BelongsTo { return $this->belongsTo(User::class); }
-    public function documents(): HasMany { return $this->hasMany(ApplicantDocument::class, 'applicant_id'); }
-    public function evaluations(): HasMany { return $this->hasMany(Evaluation::class, 'applicant_id'); }
-    public function enrollment(): HasOne { return $this->hasOne(Enrollment::class, 'applicant_id'); }
-    public function auditLogs(): HasMany { return $this->hasMany(AdmissionAuditLog::class, 'applicant_id'); }
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(AdmissionProgram::class, 'program_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(ApplicantDocument::class, 'applicant_id');
+    }
+
+    public function evaluations(): HasMany
+    {
+        return $this->hasMany(Evaluation::class, 'applicant_id');
+    }
+
+    public function enrollment(): HasOne
+    {
+        return $this->hasOne(Enrollment::class, 'applicant_id');
+    }
+
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AdmissionAuditLog::class, 'applicant_id');
+    }
 
     public function getFullNameAttribute(): string
     {
         return trim(implode(' ', array_filter([$this->first_name, $this->middle_name, $this->last_name])));
     }
 
-    public function scopeByStatus($query, ApplicantStatus $status) { return $query->where('status', $status); }
-    public function scopeSubmitted($query) { return $query->whereNotNull('submitted_at'); }
+    public function scopeByStatus($query, ApplicantStatus $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    public function scopeSubmitted($query)
+    {
+        return $query->whereNotNull('submitted_at');
+    }
+
+    public function scopePendingReview($query)
+    {
+        return $query->where('status', ApplicantStatus::Submitted);
+    }
+
+    public function scopeAccepted($query)
+    {
+        return $query->where('status', ApplicantStatus::Accepted);
+    }
+
+    public function scopeEnrolled($query)
+    {
+        return $query->where('status', ApplicantStatus::Enrolled);
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->where('status', ApplicantStatus::Rejected);
+    }
+
+    public function getIsEnrolledAttribute(): bool
+    {
+        return $this->status === ApplicantStatus::Enrolled;
+    }
+
+    public function getRequiredDocumentsCountAttribute(): int
+    {
+        return $this->program?->requirements?->where('is_required', true)->count() ?? 0;
+    }
+
+    public function getUploadedDocumentsCountAttribute(): int
+    {
+        return $this->documents()->where('status', 'approved')->count();
+    }
+
+    public function getDocumentsCompleteAttribute(): bool
+    {
+        return $this->uploaded_documents_count >= $this->required_documents_count;
+    }
+
+    public function getAgeAttribute(): int
+    {
+        return $this->date_of_birth ? $this->date_of_birth->age : 0;
+    }
 }
