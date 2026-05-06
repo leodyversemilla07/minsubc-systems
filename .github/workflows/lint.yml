@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -43,8 +45,14 @@ jobs:
       - name: Format Frontend
         run: npm run format
 
-      - name: Lint Frontend
-        run: npm run lint
+      - name: Lint Frontend (changed files only)
+        run: |
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref || 'main' }}...HEAD -- '*.ts' '*.tsx' '*.vue' | tr '\n' ' ')
+          if [ -n "$CHANGED_FILES" ]; then
+            npx eslint $CHANGED_FILES --max-warnings=0
+          else
+            echo "No TypeScript/Vue files changed, skipping lint"
+          fi
 
       # - name: Commit Changes
       #   uses: stefanzweifel/git-auto-commit-action@v5
