@@ -8,7 +8,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import {
     FileText,
     Download,
@@ -17,6 +17,7 @@ import {
     Search,
     User,
 } from 'lucide-react';
+import { type PageProps } from '@/types';
 
 interface Student {
     id: number;
@@ -31,13 +32,19 @@ interface Student {
     year_level: number | null;
 }
 
-export default function TranscriptsIndex() {
-    const { students, courses, filters } = usePage<{
-        students: { data: Student[]; links: any[] };
-        courses: string[];
-        filters: Record<string, string>;
-    }>().props;
+interface TranscriptLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
 
+interface TranscriptsPageProps extends PageProps {
+    students: { data: Student[]; links: TranscriptLink[] };
+    courses: string[];
+    filters: Record<string, string>;
+}
+
+export default function TranscriptsIndex({ students, courses, filters }: TranscriptsPageProps) {
     const handleFilter = (key: string, value: string) => {
         router.get(route('admission.admin.transcripts.index'), {
             ...filters,
@@ -252,7 +259,7 @@ export default function TranscriptsIndex() {
                             </p>
                             <div className="flex gap-1">
                                 {students.links.map(
-                                    (link: any, index: number) => (
+                                    (link, index) => (
                                         <Button
                                             key={index}
                                             variant={

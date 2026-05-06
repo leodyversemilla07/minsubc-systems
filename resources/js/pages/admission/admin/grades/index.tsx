@@ -8,16 +8,16 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import {
     GraduationCap,
     Download,
-    Upload,
     Users,
     CheckCircle,
     XCircle,
     TrendingUp,
 } from 'lucide-react';
+import { type PageProps } from '@/types';
 
 interface Grade {
     id: number;
@@ -52,21 +52,27 @@ interface Section {
     course?: { name: string };
 }
 
-export default function GradesIndex() {
-    const { enrollments, academicYears, sections, stats, filters } = usePage<{
-        enrollments: { data: Enrollment[]; links: any[] };
-        academicYears: string[];
-        sections: Section[];
-        stats: {
-            total_students: number;
-            total_grades: number;
-            passed: number;
-            failed: number;
-            pass_rate: number;
-        };
-        filters: Record<string, string>;
-    }>().props;
+interface GradeLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
 
+interface GradesPageProps extends PageProps {
+    enrollments: { data: Enrollment[]; links: GradeLink[] };
+    academicYears: string[];
+    sections: Section[];
+    stats: {
+        total_students: number;
+        total_grades: number;
+        passed: number;
+        failed: number;
+        pass_rate: number;
+    };
+    filters: Record<string, string>;
+}
+
+export default function GradesIndex({ enrollments, academicYears, sections, stats, filters }: GradesPageProps) {
     const handleFilter = (key: string, value: string) => {
         router.get(route('admission.admin.grades.index'), {
             ...filters,
@@ -378,7 +384,7 @@ export default function GradesIndex() {
                             </p>
                             <div className="flex gap-1">
                                 {enrollments.links.map(
-                                    (link: any, index: number) => (
+                                    (link, index) => (
                                         <Button
                                             key={index}
                                             variant={

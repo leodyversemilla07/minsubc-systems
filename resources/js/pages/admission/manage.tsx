@@ -1,4 +1,4 @@
-import { Head, Link, usePage, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import AdmissionLayout from '@/layouts/admission-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,7 +52,7 @@ export default function Manage({ applicant, requirements }: ManagePageProps) {
 Manage.layout = (page: React.ReactNode) => <AdmissionLayout>{page}</AdmissionLayout>;
 
 function ManageContent({ applicant, requirements }: ManagePageProps) {
-    const { data, setData, post, processing, errors } = useForm<{
+    const { data, setData, post, processing } = useForm<{
         document_type: string;
         file: File | null;
     }>({
@@ -61,7 +61,6 @@ function ManageContent({ applicant, requirements }: ManagePageProps) {
     });
 
     const isDraft = applicant.status === 'draft';
-    const isSubmitted = applicant.status !== 'draft';
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
