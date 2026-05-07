@@ -61,7 +61,7 @@ class GradeService
     /**
      * Convert numeric grade to grade points.
      */
-    protected function gradeToPoints(float $grade): float
+    public function gradeToPoints(float $grade): float
     {
         if ($grade >= 98) return 4.0;
         if ($grade >= 95) return 3.9;

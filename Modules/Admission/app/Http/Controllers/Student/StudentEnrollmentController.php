@@ -4,27 +4,31 @@ namespace Modules\Admission\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Models\AcademicTerm;
 use Modules\Admission\Models\Enrollment;
 use Modules\Admission\Models\EnrollmentFee;
-use Modules\Admission\Models\EnrollmentPayment;
 use Modules\Admission\Models\EnrollmentSubject;
 use Modules\Admission\Models\Section;
 use Modules\Admission\Models\Subject;
 use Modules\Admission\Services\EnrollmentService;
+use Modules\Admission\Services\GradeService;
+use Modules\Admission\Services\ScheduleService;
 use Illuminate\Support\Facades\Auth;
 
 class StudentEnrollmentController extends Controller
 {
     public function __construct(
-        private EnrollmentService $enrollmentService
+        private EnrollmentService $enrollmentService,
+        private GradeService $gradeService,
+        private ScheduleService $scheduleService
     ) {}
 
     /**
      * Display student's enrollment dashboard.
      */
-    public function index(): View
+    public function index(): Response
     {
         $user = Auth::user();
         
@@ -32,42 +36,55 @@ class StudentEnrollmentController extends Controller
             ->whereIn('status', ['confirmed', 'enrolled'])
             ->orderBy('created_at', 'desc')
             ->with(['section.course', 'academicTerm'])
-            ->first();
+            ->first()
+            ?->loadCount('subjects');
 
         $enrollmentHistory = Enrollment::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->with(['section.course', 'academicTerm'])
             ->get();
 
-        // Check if user can re-enroll
         $activeTerm = AcademicTerm::active()
             ->where('status', 'enrollment')
             ->first();
 
         $canReEnroll = $activeTerm && !$currentEnrollment;
 
-        // Get grades for current enrollment
-        $grades = [];
         if ($currentEnrollment) {
-            $enrollmentSubjects = EnrollmentSubject::where('enrollment_id', $currentEnrollment->id)
-                ->with('subject')
-                ->get();
-            
-            $grades = [
-                'subjects' => $enrollmentSubjects,
-                'total_units' => $enrollmentSubjects->sum(fn ($es) => $es->subject?->units ?? 0),
-                'average' => $enrollmentSubjects->whereNotNull('grade')->avg('grade'),
-                'passed' => $enrollmentSubjects->filter(fn ($es) => $es->grade >= 75)->count(),
-                'failed' => $enrollmentSubjects->filter(fn ($es) => $es->grade && $es->grade < 75)->count(),
-            ];
+            $currentEnrollment->load(['subjects.subject', 'payments']);
+            $feeInfo = $this->enrollmentService->calculateFees($currentEnrollment);
         }
 
-        return view('admission::student.index', [
-            'currentEnrollment' => $currentEnrollment,
-            'enrollmentHistory' => $enrollmentHistory,
-            'activeTerm' => $activeTerm,
+        return Inertia::render('student/admission/index', [
+            'currentEnrollment' => $currentEnrollment ? [
+                'id' => $currentEnrollment->id,
+                'academic_year' => $currentEnrollment->academic_year,
+                'semester' => $currentEnrollment->semester,
+                'year_level' => (string) $currentEnrollment->year_level,
+                'status' => $currentEnrollment->status,
+                'program' => $currentEnrollment->section?->course?->name ?? $currentEnrollment->program,
+                'section_name' => $currentEnrollment->section?->name ?? 'Not Assigned',
+                'total_subjects' => $currentEnrollment->subjects_count ?? $currentEnrollment->subjects->count(),
+                'total_units' => $currentEnrollment->subjects->sum(fn ($es) => $es->subject?->units ?? 0),
+                'total_fees' => $feeInfo['total_amount'] ?? 0,
+                'balance' => $feeInfo['balance'] ?? 0,
+                'gpa' => $currentEnrollment->gpa,
+            ] : null,
+            'enrollmentHistory' => $enrollmentHistory->map(fn ($e) => [
+                'id' => $e->id,
+                'academic_year' => $e->academic_year,
+                'semester' => $e->semester,
+                'program' => $e->section?->course?->name ?? $e->program,
+                'status' => $e->status,
+                'gpa' => $e->gpa,
+            ]),
             'canReEnroll' => $canReEnroll,
-            'grades' => $grades,
+            'stats' => $currentEnrollment ? [
+                'average' => $currentEnrollment->subjects->whereNotNull('grade')->avg('grade'),
+                'passed' => $currentEnrollment->subjects->filter(fn ($es) => $es->grade >= 75)->count(),
+                'failed' => $currentEnrollment->subjects->filter(fn ($es) => $es->grade && $es->grade < 75)->count(),
+                'total' => $currentEnrollment->subjects->count(),
+            ] : null,
         ]);
     }
 
@@ -290,7 +307,7 @@ class StudentEnrollmentController extends Controller
     /**
      * Show payment form.
      */
-    public function payment(Enrollment $enrollment): View
+    public function payment(Enrollment $enrollment): Response
     {
         $user = Auth::user();
 
@@ -301,9 +318,32 @@ class StudentEnrollmentController extends Controller
         $enrollment->load(['payments', 'section.course', 'academicTerm']);
         $feesBreakdown = $this->enrollmentService->calculateFees($enrollment);
 
-        return view('admission::student.payment', [
-            'enrollment' => $enrollment,
-            'feesBreakdown' => $feesBreakdown,
+        $totalPaid = $enrollment->payments->where('status', 'verified')->sum('amount');
+        $totalFees = $feesBreakdown['total'] ?? 0;
+        $balance = max(0, $totalFees - $totalPaid);
+
+        return Inertia::render('student/admission/payment', [
+            'enrollment' => [
+                'id' => $enrollment->id,
+                'academic_year' => $enrollment->academic_year,
+                'semester' => $enrollment->semester,
+                'status' => $enrollment->status,
+            ],
+            'fees' => collect($feesBreakdown['items'] ?? [])->map(fn ($item) => [
+                'name' => $item['name'],
+                'amount' => (float) $item['amount'],
+            ]),
+            'totalFees' => (float) $totalFees,
+            'totalPaid' => (float) $totalPaid,
+            'balance' => (float) $balance,
+            'payments' => $enrollment->payments->map(fn ($p) => [
+                'id' => $p->id,
+                'amount' => (float) $p->amount,
+                'reference_number' => $p->reference_number,
+                'payment_method' => $p->payment_method,
+                'status' => $p->status,
+                'created_at' => $p->created_at->format('M d, Y H:i'),
+            ]),
         ]);
     }
 
@@ -351,7 +391,7 @@ class StudentEnrollmentController extends Controller
     /**
      * Get grades.
      */
-    public function grades(): View
+    public function grades(): Response
     {
         $user = Auth::user();
 
@@ -362,15 +402,50 @@ class StudentEnrollmentController extends Controller
             ->orderBy('semester', 'desc')
             ->get();
 
-        return view('admission::student.grades', [
-            'enrollments' => $enrollments,
+        $gradeRecords = $enrollments->map(function ($e) {
+            $subjects = $e->subjects->map(function ($es) {
+                $subject = $es->subject;
+                $points = $es->grade ? $this->gradeService->gradeToPoints($es->grade) : null;
+                return [
+                    'code' => $subject->code,
+                    'name' => $subject->name,
+                    'units' => $subject->units,
+                    'grade' => $es->grade,
+                    'points' => $points,
+                    'status' => $es->grade ? ($es->grade >= 75 ? 'passed' : 'failed') : 'incomplete',
+                ];
+            });
+
+            return [
+                'id' => $e->id,
+                'academic_year' => $e->academic_year,
+                'semester' => $e->semester,
+                'section' => $e->section?->name,
+                'gpa' => $e->gpa ?? 0,
+                'average' => $subjects->whereNotNull('grade')->avg('grade'),
+                'subjects' => $subjects->toArray(),
+            ];
+        });
+
+        $stats = [
+            'passed' => $gradeRecords->sum(fn ($r) => collect($r['subjects'])->where('status', 'passed')->count()),
+            'failed' => $gradeRecords->sum(fn ($r) => collect($r['subjects'])->where('status', 'failed')->count()),
+            'total' => $gradeRecords->sum(fn ($r) => count($r['subjects'])),
+            'average' => $gradeRecords->whereNotNull('average')->avg('average'),
+            'academic_standing' => $this->gradeService->getAcademicStanding($enrollments->avg('gpa') ?? 0),
+        ];
+
+        return Inertia::render('student/admission/grades', [
+            'gradeRecords' => $gradeRecords,
+            'cumulativeGPA' => $enrollments->avg('gpa') ?? 0,
+            'stats' => $stats,
         ]);
     }
 
     /**
      * Get class schedule.
      */
-    public function schedule(): View
+    public function schedule(): Response
     {
         $user = Auth::user();
 
@@ -381,19 +456,54 @@ class StudentEnrollmentController extends Controller
             ->first();
 
         if (!$currentEnrollment?->section) {
-            return view('admission::student.schedule', [
-                'schedule' => null,
-                'enrollment' => $currentEnrollment,
+            return Inertia::render('student/admission/schedule', [
+                'scheduleDetails' => [],
+                'subjectColors' => [],
+                'stats' => null,
             ]);
         }
 
         $schedules = $currentEnrollment->section->schedules
-            ->sortBy(fn ($s) => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']->indexOf($s->day))
+            ->sortBy(fn ($s) => array_search($s->day, ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']))
             ->sortBy('start_time');
 
-        return view('admission::student.schedule', [
-            'schedule' => $schedules,
-            'enrollment' => $currentEnrollment,
+        $colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+        $subjectColors = [];
+        $colorIdx = 0;
+        foreach ($schedules as $s) {
+            $subjName = $s->subject?->name ?? 'Unknown';
+            if (!isset($subjectColors[$subjName])) {
+                $subjectColors[$subjName] = $colors[$colorIdx % count($colors)];
+                $colorIdx++;
+            }
+        }
+
+        $scheduleDetails = $schedules->map(fn ($s) => [
+            'subject' => $s->subject?->name ?? 'Unknown',
+            'subject_code' => $s->subject?->code ?? '',
+            'day' => $s->day,
+            'start_time' => substr($s->start_time, 0, 5),
+            'end_time' => substr($s->end_time, 0, 5),
+            'room' => $s->room,
+            'instructor' => $s->instructor?->full_name ?? $s->instructor?->name,
+            'color' => $subjectColors[$s->subject?->name ?? 'Unknown'] ?? '#3B82F6',
+        ]);
+
+        $totalHours = 0;
+        foreach ($schedules as $s) {
+            $start = strtotime($s->start_time);
+            $end = strtotime($s->end_time);
+            $totalHours += ($end - $start) / 3600;
+        }
+
+        return Inertia::render('student/admission/schedule', [
+            'scheduleDetails' => $scheduleDetails,
+            'subjectColors' => $subjectColors,
+            'stats' => [
+                'total_subjects' => $schedules->pluck('subject_id')->unique()->count(),
+                'total_units' => $schedules->sum(fn ($s) => $s->subject?->units ?? 0),
+                'total_hours' => $totalHours,
+            ],
         ]);
     }
 }
