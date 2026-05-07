@@ -1,14 +1,9 @@
 import { Head, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useForm } from '@inertiajs/react';
-import { type PageProps } from '@/types';
+
 import AppLayout from '@/layouts/app-layout';
 
-interface Program {
+export default function ProgramsIndex({ programs }: { programs: { data: Array<{
     id: number;
     name: string;
     course: string;
@@ -21,44 +16,7 @@ interface Program {
     status: string;
     applicants_count: number;
     application_period: string;
-}
-
-interface Course {
-    id: number;
-    code: string;
-    name: string;
-}
-
-interface ProgramsPageProps extends PageProps {
-    programs: { data: Program[] };
-    courses: Course[];
-}
-
-export default function ProgramsIndex({ programs }: ProgramsPageProps) {
-    const { data, setData, post } = useForm({
-        course_id: '',
-        academic_year: '',
-        semester: '1st',
-        name: '',
-        description: '',
-        slots: '30',
-        application_start: '',
-        application_end: '',
-        status: 'open',
-    });
-
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        post(route('admission.admin.programs.store'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                setData({
-                    course_id: '', academic_year: '', semester: '1st', name: '',
-                    description: '', slots: '30', application_start: '', application_end: '', status: 'open',
-                });
-            },
-        });
-    }
+}> } }) {
 
     return (
         <>

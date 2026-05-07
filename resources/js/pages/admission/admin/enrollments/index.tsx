@@ -21,7 +21,6 @@ import {
     Clock,
     CheckCircle,
     XCircle,
-    Download,
     FileText,
 } from 'lucide-react';
 
@@ -47,8 +46,14 @@ interface Stats {
     by_year_level: Record<string, number>;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
 interface EnrollmentsPageProps extends PageProps {
-    enrollments: { data: Enrollment[]; links: any[] };
+    enrollments: { data: Enrollment[]; links: PaginationLink[] };
     terms: Array<{ id: number; academic_year: string; semester: string; is_active: boolean }>;
     academicYears: string[];
     statuses: string[];
@@ -73,7 +78,7 @@ export default function EnrollmentsIndex({
         filters.academic_year || terms.find((t) => t.is_active)?.academic_year || ''
     );
     const [semester, setSemester] = useState(filters.semester || '1st');
-    const [yearLevel] = useState('1');
+    const yearLevel = '1';
     const [submitting, setSubmitting] = useState(false);
 
     function handleFilter(key: string, value: string) {

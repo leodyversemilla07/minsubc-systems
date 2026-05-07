@@ -2,26 +2,21 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
+
 import { Separator } from '@/components/ui/separator';
 import { type PageProps } from '@/types';
 import AppLayout from '@/layouts/app-layout';
 import {
     ArrowLeft,
-    User,
     BookOpen,
     CreditCard,
     Calendar,
     CheckCircle,
     Clock,
     XCircle,
-    AlertCircle,
-    DollarSign,
-    Users,
     Edit,
-    Trash2,
     RefreshCw,
 } from 'lucide-react';
 

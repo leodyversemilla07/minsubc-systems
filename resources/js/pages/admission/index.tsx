@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import admission from '@/routes/admission';
 import AdmissionLayout from '@/layouts/admission-layout';
 import { Button } from '@/components/ui/button';
