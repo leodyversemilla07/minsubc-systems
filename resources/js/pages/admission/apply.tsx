@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import AdmissionLayout from '@/layouts/admission-layout';
 import { ApplicationForm } from '@/components/admission/application-form';
 import { type PageProps } from '@/types';

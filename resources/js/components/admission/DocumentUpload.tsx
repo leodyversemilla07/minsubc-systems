@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { router, usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -38,9 +38,6 @@ interface DocumentUploadProps {
     onUploadComplete?: () => void;
 }
 
-type UploadProgress = {
-    [fileId: string]: number;
-};
 
 type UploadingFile = {
     id: string;
@@ -60,32 +57,8 @@ export function DocumentUpload({
     const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
     const [draggedOver, setDraggedOver] = useState<number | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const getRequirementForFile = (file: File): number | null => {
-        const fileName = file.name.toLowerCase();
-        const ext = fileName.split('.').pop();
-
-        // Auto-match based on file type
-        if (ext === 'pdf') {
-            const match = requirements.find((r) =>
-                r.name.toLowerCase().includes('form') ||
-                r.name.toLowerCase().includes('card')
-            );
-            if (match) return match.id;
-        }
-
-        if (['jpg', 'jpeg', 'png'].includes(ext || '')) {
-            const match = requirements.find((r) =>
-                r.name.toLowerCase().includes('photo') ||
-                r.name.toLowerCase().includes('image')
-            );
-            if (match) return match.id;
-        }
-
-        return requirements[0]?.id ?? null;
-    };
-
     const uploadFile = useCallback(
+
         (file: File, requirementId: number) => {
             const tempId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 

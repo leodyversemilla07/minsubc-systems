@@ -1,8 +1,8 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import { type PageProps } from '@/types';
@@ -34,8 +34,8 @@ interface ProgramsPageProps extends PageProps {
     courses: Course[];
 }
 
-export default function ProgramsIndex({ programs, courses }: ProgramsPageProps) {
-    const { data, setData, post, processing, errors } = useForm({
+export default function ProgramsIndex({ programs }: ProgramsPageProps) {
+    const { data, setData, post } = useForm({
         course_id: '',
         academic_year: '',
         semester: '1st',

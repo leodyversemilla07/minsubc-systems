@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -96,7 +96,7 @@ interface EnrollmentShowPageProps extends PageProps {
     availableSubjects: Subject[];
 }
 
-export default function EnrollmentShow({ enrollment, feesBreakdown, availableSubjects }: EnrollmentShowPageProps) {
+export default function EnrollmentShow({ enrollment, feesBreakdown }: EnrollmentShowPageProps) {
     const [showPaymentForm, setShowPaymentForm] = useState(false);
     const [showSubjectForm, setShowSubjectForm] = useState(false);
     const [paymentAmount, setPaymentAmount] = useState('');

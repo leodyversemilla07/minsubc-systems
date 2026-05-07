@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { router } from '@inertiajs/react';
+
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,7 +23,7 @@ interface ApplicationFormProps {
 }
 
 export function ApplicationForm({ programs }: ApplicationFormProps) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         program_id: '',
         first_name: '',
         middle_name: '',

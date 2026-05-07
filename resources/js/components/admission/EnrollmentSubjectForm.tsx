@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
+import { router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { BookOpen, Clock, Hash, Check } from 'lucide-react';
 
 interface Subject {
     id: number;
@@ -25,7 +24,6 @@ interface Subject {
 interface EnrollmentSubjectFormProps {
     enrollmentId: number;
     enrollmentYearLevel: number;
-    enrollmentSemester: string;
     existingSubjects: number[];
     availableSubjects: Subject[];
     onUpdate?: () => void;
@@ -34,7 +32,6 @@ interface EnrollmentSubjectFormProps {
 export function EnrollmentSubjectForm({
     enrollmentId,
     enrollmentYearLevel,
-    enrollmentSemester,
     existingSubjects,
     availableSubjects,
     onUpdate,

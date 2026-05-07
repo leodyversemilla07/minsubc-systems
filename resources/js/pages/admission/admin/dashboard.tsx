@@ -44,7 +44,7 @@ interface DashboardPageProps extends PageProps {
     recentApplicants: RecentApplicant[];
 }
 
-export default function Dashboard({ stats, enrollmentStats, programs, recentApplicants }: DashboardPageProps) {
+export default function Dashboard({ stats, programs, recentApplicants }: DashboardPageProps) {
     const cards = [
         { label: 'Total Applicants', value: stats.total_applicants, color: 'bg-blue-500' },
         { label: 'Pending Review', value: stats.pending_review, color: 'bg-yellow-500' },

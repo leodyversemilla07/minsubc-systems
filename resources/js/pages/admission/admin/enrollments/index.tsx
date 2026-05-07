@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -73,7 +73,7 @@ export default function EnrollmentsIndex({
         filters.academic_year || terms.find((t) => t.is_active)?.academic_year || ''
     );
     const [semester, setSemester] = useState(filters.semester || '1st');
-    const [yearLevel, setYearLevel] = useState('1');
+    const [yearLevel] = useState('1');
     const [submitting, setSubmitting] = useState(false);
 
     function handleFilter(key: string, value: string) {
