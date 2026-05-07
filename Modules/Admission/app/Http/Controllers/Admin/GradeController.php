@@ -5,7 +5,8 @@ namespace Modules\Admission\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Models\Enrollment;
 use Modules\Admission\Models\EnrollmentSubject;
 use Modules\Admission\Models\Subject;
@@ -62,14 +63,34 @@ class GradeController extends Controller
     /**
      * Show grade entry form for a section.
      */
-    public function sectionGrades(\Modules\Admission\Models\Section $section): View
+    public function sectionGrades(\Modules\Admission\Models\Section $section): Response
     {
         $section->load(['course', 'enrollments.user', 'enrollments.subjects.subject']);
 
         $enrollments = $section->enrollments()
             ->whereIn('status', ['confirmed', 'enrolled'])
             ->with(['user', 'subjects' => fn ($q) => $q->where('status', 'enrolled')])
-            ->get();
+            ->get()
+            ->map(fn ($e) => [
+                'id' => $e->id,
+                'full_name' => $e->user?->full_name ?? $e->full_name ?? 'Unknown',
+                'student_id' => $e->student_id,
+                'status' => $e->status,
+                'gpa' => $e->gpa,
+                'subjects' => $e->subjects->map(fn ($es) => [
+                    'id' => $es->id,
+                    'subject_id' => $es->subject_id,
+                    'grade' => $es->grade,
+                    'status' => $es->status,
+                    'remarks' => $es->remarks,
+                    'subject' => $es->subject ? [
+                        'id' => $es->subject->id,
+                        'code' => $es->subject->code,
+                        'name' => $es->subject->name,
+                        'units' => $es->subject->units,
+                    ] : null,
+                ]),
+            ]);
 
         // Get all subjects for this section
         $subjects = $section->schedules()
@@ -78,10 +99,22 @@ class GradeController extends Controller
             ->pluck('subject')
             ->filter()
             ->unique('id')
-            ->values();
+            ->values()
+            ->map(fn ($s) => [
+                'id' => $s->id,
+                'code' => $s->code,
+                'name' => $s->name,
+                'units' => $s->units,
+            ]);
 
-        return view('admission::admin.grades.section', [
-            'section' => $section,
+        return Inertia::render('admission/admin/grades/section', [
+            'section' => [
+                'id' => $section->id,
+                'name' => $section->name,
+                'academic_year' => $section->academic_year,
+                'semester' => $section->semester,
+                'course' => $section->course ? ['name' => $section->course->name] : null,
+            ],
             'enrollments' => $enrollments,
             'subjects' => $subjects,
         ]);

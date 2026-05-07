@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Modules\Admission\Services\TranscriptService;
 use Modules\Registrar\Models\Student;
 
@@ -20,7 +21,7 @@ class TranscriptController extends Controller
     /**
      * Display transcript management page.
      */
-    public function index(Request $request): View
+    public function index(Request $request): InertiaResponse
     {
         $query = Student::with('user');
 
@@ -111,12 +112,12 @@ class TranscriptController extends Controller
     /**
      * Verify a transcript.
      */
-    public function verify(Request $request): View|RedirectResponse
+    public function verify(Request $request): Response|\Illuminate\Http\RedirectResponse
     {
         $studentId = $request->get('student_id');
 
         if (!$studentId) {
-            return view('admission::admin.transcripts.verify');
+            return Inertia::render('admission/admin/transcripts/verify');
         }
 
         $result = $this->transcriptService->verify($studentId);
@@ -127,7 +128,7 @@ class TranscriptController extends Controller
                 ->with('error', $result['message']);
         }
 
-        return view('admission::admin.transcripts.verify', [
+        return Inertia::render('admission/admin/transcripts/verify', [
             'verification' => $result,
         ]);
     }
