@@ -5,7 +5,8 @@ namespace Modules\Admission\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Models\Schedule;
 use Modules\Admission\Models\Section;
 use Modules\Admission\Models\Subject;
@@ -17,10 +18,7 @@ class ScheduleController extends Controller
         private ScheduleService $scheduleService
     ) {}
 
-    /**
-     * Display a listing of schedules.
-     */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $query = Schedule::with(['section.course', 'subject', 'instructor'])
             ->when($request->section_id, fn ($q, $id) => $q->where('section_id', $id))
@@ -30,11 +28,11 @@ class ScheduleController extends Controller
 
         $schedules = $query->orderBy('day')->orderBy('start_time')->paginate(20)->withQueryString();
 
-        $sections = Section::with('course')->get();
-        $instructors = \App\Models\User::role(['faculty'])->orderBy('first_name')->get();
+        $sections = Section::with('course')->get(['id', 'name']);
+        $instructors = \App\Models\User::role(['faculty'])->orderBy('first_name')->get(['id', 'name']);
         $rooms = Schedule::whereNotNull('room')->distinct()->pluck('room');
 
-        return view('admission::admin.schedules.index', [
+        return Inertia::render('admission/admin/schedules/index', [
             'schedules' => $schedules,
             'sections' => $sections,
             'instructors' => $instructors,
@@ -43,17 +41,13 @@ class ScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new schedule.
-     */
-    public function create(Request $request): View
+    public function create(Request $request): Response
     {
-        $sections = Section::with('course')->get();
-        $subjects = Subject::active()->orderBy('code')->get();
+        $sections = Section::with('course:id,code,name')->get(['id', 'name', 'course_id']);
+        $subjects = Subject::active()->orderBy('code')->get(['id', 'code', 'name', 'units']);
+        $selectedSection = $request->section_id ? Section::with('course:id,code,name')->find($request->section_id, ['id', 'name', 'course_id']) : null;
 
-        $selectedSection = $request->section_id ? Section::with('course')->find($request->section_id) : null;
-
-        return view('admission::admin.schedules.create', [
+        return Inertia::render('admission/admin/schedules/create', [
             'sections' => $sections,
             'subjects' => $subjects,
             'selectedSection' => $selectedSection,
@@ -61,9 +55,6 @@ class ScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created schedule.
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -82,42 +73,38 @@ class ScheduleController extends Controller
 
         try {
             $this->scheduleService->addSchedule($section, $validated);
-            $message = 'Schedule created successfully.';
+            return redirect()
+                ->route('admission.admin.sections.show', $section)
+                ->with('success', 'Schedule created successfully.');
         } catch (\RuntimeException $e) {
             return redirect()
                 ->route('admission.admin.schedules.create')
                 ->with('error', $e->getMessage())
                 ->withInput();
         }
-
-        return redirect()
-            ->route('admission.admin.sections.show', $section)
-            ->with('success', $message);
     }
 
-    /**
-     * Display the specified schedule.
-     */
-    public function show(Schedule $schedule): View
+    public function show(Schedule $schedule): Response
     {
         $schedule->load(['section.course', 'subject', 'instructor']);
 
-        return view('admission::admin.schedules.show', [
-            'schedule' => $schedule,
+        return Inertia::render('admission/admin/schedules/show', [
+            'schedule' => $schedule->toArray() + [
+                'section' => $schedule->section ? $schedule->section->toArray() + ['course' => $schedule->section->course?->toArray()] : null,
+                'subject' => $schedule->subject?->toArray(),
+                'instructor' => $schedule->instructor ? ['id' => $schedule->instructor->id, 'name' => $schedule->instructor->name] : null,
+            ],
         ]);
     }
 
-    /**
-     * Show the form for editing the specified schedule.
-     */
-    public function edit(Schedule $schedule): View
+    public function edit(Schedule $schedule): Response
     {
-        $sections = Section::with('course')->get();
-        $subjects = Subject::active()->orderBy('code')->get();
-        $instructors = \App\Models\User::role(['faculty'])->orderBy('first_name')->get();
+        $sections = Section::with('course:id,code,name')->get(['id', 'name', 'course_id']);
+        $subjects = Subject::active()->orderBy('code')->get(['id', 'code', 'name', 'units']);
+        $instructors = \App\Models\User::role(['faculty'])->orderBy('first_name')->get(['id', 'name']);
 
-        return view('admission::admin.schedules.edit', [
-            'schedule' => $schedule,
+        return Inertia::render('admission/admin/schedules/edit', [
+            'schedule' => $schedule->load('section'),
             'sections' => $sections,
             'subjects' => $subjects,
             'instructors' => $instructors,
@@ -125,9 +112,6 @@ class ScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified schedule.
-     */
     public function update(Request $request, Schedule $schedule): RedirectResponse
     {
         $validated = $request->validate([
@@ -144,22 +128,17 @@ class ScheduleController extends Controller
 
         try {
             $this->scheduleService->updateSchedule($schedule, $validated);
-            $message = 'Schedule updated successfully.';
+            return redirect()
+                ->route('admission.admin.sections.show', $schedule->section)
+                ->with('success', 'Schedule updated successfully.');
         } catch (\RuntimeException $e) {
             return redirect()
                 ->route('admission.admin.schedules.edit', $schedule)
                 ->with('error', $e->getMessage())
                 ->withInput();
         }
-
-        return redirect()
-            ->route('admission.admin.sections.show', $schedule->section)
-            ->with('success', $message);
     }
 
-    /**
-     * Remove the specified schedule.
-     */
     public function destroy(Schedule $schedule): RedirectResponse
     {
         $section = $schedule->section;
@@ -170,23 +149,23 @@ class ScheduleController extends Controller
             ->with('success', 'Schedule deleted successfully.');
     }
 
-    /**
-     * Get instructor's schedule.
-     */
-    public function instructorSchedule(Request $request, int $instructorId): View
+    public function instructorSchedule(Request $request, int $instructorId): Response
     {
         $schedules = $this->scheduleService->getInstructorSchedule($instructorId, $request->term_id);
-
-        $instructor = \App\Models\User::find($instructorId);
+        $instructor = \App\Models\User::find($instructorId, ['id', 'name']);
 
         $scheduleByDay = [];
         foreach ($schedules as $schedule) {
-            $scheduleByDay[$schedule->day][] = $schedule;
+            $scheduleByDay[$schedule->day][] = $schedule->toArray() + [
+                'section' => $schedule->section ? ['id' => $schedule->section->id, 'name' => $schedule->section->name, 'course' => $schedule->section->course ? $schedule->section->course->toArray() : null] : null,
+                'subject' => $schedule->subject?->toArray(),
+                'instructor' => $schedule->instructor ? ['id' => $schedule->instructor->id, 'name' => $schedule->instructor->name] : null,
+            ];
         }
 
-        $terms = \Modules\Admission\Models\AcademicTerm::orderBy('academic_year', 'desc')->get();
+        $terms = \Modules\Admission\Models\AcademicTerm::orderBy('academic_year', 'desc')->get(['id', 'academic_year', 'semester']);
 
-        return view('admission::admin.schedules.instructor', [
+        return Inertia::render('admission/admin/schedules/instructor', [
             'instructor' => $instructor,
             'scheduleByDay' => $scheduleByDay,
             'terms' => $terms,
@@ -194,21 +173,22 @@ class ScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Get room schedule.
-     */
-    public function roomSchedule(Request $request, string $room): View
+    public function roomSchedule(Request $request, string $room): Response
     {
         $schedules = $this->scheduleService->getRoomSchedule($room, $request->term_id);
 
         $scheduleByDay = [];
         foreach ($schedules as $schedule) {
-            $scheduleByDay[$schedule->day][] = $schedule;
+            $scheduleByDay[$schedule->day][] = $schedule->toArray() + [
+                'section' => $schedule->section ? ['id' => $schedule->section->id, 'name' => $schedule->section->name, 'course' => $schedule->section->course ? $schedule->section->course->toArray() : null] : null,
+                'subject' => $schedule->subject?->toArray(),
+                'instructor' => $schedule->instructor ? ['id' => $schedule->instructor->id, 'name' => $schedule->instructor->name] : null,
+            ];
         }
 
-        $terms = \Modules\Admission\Models\AcademicTerm::orderBy('academic_year', 'desc')->get();
+        $terms = \Modules\Admission\Models\AcademicTerm::orderBy('academic_year', 'desc')->get(['id', 'academic_year', 'semester']);
 
-        return view('admission::admin.schedules.room', [
+        return Inertia::render('admission/admin/schedules/room', [
             'room' => $room,
             'scheduleByDay' => $scheduleByDay,
             'terms' => $terms,
