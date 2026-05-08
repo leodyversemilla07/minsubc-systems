@@ -5,7 +5,8 @@ namespace Modules\Admission\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Models\Subject;
 use Modules\Admission\Models\Course;
 
@@ -14,22 +15,24 @@ class SubjectController extends Controller
     /**
      * Display a listing of subjects.
      */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $subjects = Subject::with('course')
             ->when($request->course_id, fn ($q, $id) => $q->where('course_id', $id))
             ->when($request->year_level, fn ($q, $lvl) => $q->where('year_level', $lvl))
             ->when($request->semester, fn ($q, $sem) => $q->where('semester', $sem))
-            ->when($request->search, fn ($q, $s) => $q->where('code', 'like', "%{$s}%")->orWhere('name', 'like', "%{$s}%"))
+            ->when($request->search, fn ($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('code', 'like', "%{$s}%")->orWhere('name', 'like', "%{$s}%");
+            }))
             ->orderBy('course_id')
             ->orderBy('year_level')
             ->orderBy('code')
             ->paginate(15)
             ->withQueryString();
 
-        $courses = Course::orderBy('name')->get();
+        $courses = Course::orderBy('name')->get(['id', 'code', 'name']);
 
-        return view('admission::admin.subjects.index', [
+        return Inertia::render('admission/admin/subjects/index', [
             'subjects' => $subjects,
             'courses' => $courses,
             'filters' => $request->only(['course_id', 'year_level', 'semester', 'search']),
@@ -39,12 +42,12 @@ class SubjectController extends Controller
     /**
      * Show the form for creating a new subject.
      */
-    public function create(Request $request): View
+    public function create(Request $request): Response
     {
-        $courses = Course::orderBy('name')->get();
-        $selectedCourse = $request->course_id ? Course::find($request->course_id) : null;
+        $courses = Course::orderBy('name')->get(['id', 'code', 'name']);
+        $selectedCourse = $request->course_id ? Course::find($request->course_id, ['id', 'code', 'name']) : null;
 
-        return view('admission::admin.subjects.create', [
+        return Inertia::render('admission/admin/subjects/create', [
             'courses' => $courses,
             'selectedCourse' => $selectedCourse,
         ]);
@@ -79,13 +82,15 @@ class SubjectController extends Controller
     /**
      * Display the specified subject.
      */
-    public function show(Subject $subject): View
+    public function show(Subject $subject): Response
     {
         $subject->load('course');
-        $schedules = $subject->schedules->load(['section', 'instructor']);
+        $schedules = $subject->schedules()->with(['section:id,name', 'instructor:id,name'])->get();
 
-        return view('admission::admin.subjects.show', [
-            'subject' => $subject,
+        return Inertia::render('admission/admin/subjects/show', [
+            'subject' => $subject->toArray() + [
+                'course' => $subject->course ? $subject->course->toArray() : null,
+            ],
             'schedules' => $schedules,
         ]);
     }
@@ -93,12 +98,15 @@ class SubjectController extends Controller
     /**
      * Show the form for editing the specified subject.
      */
-    public function edit(Subject $subject): View
+    public function edit(Subject $subject): Response
     {
-        $courses = Course::orderBy('name')->get();
+        $courses = Course::orderBy('name')->get(['id', 'code', 'name']);
+        $subject->load('course');
 
-        return view('admission::admin.subjects.edit', [
-            'subject' => $subject,
+        return Inertia::render('admission/admin/subjects/edit', [
+            'subject' => $subject->toArray() + [
+                'course' => $subject->course ? $subject->course->toArray() : null,
+            ],
             'courses' => $courses,
         ]);
     }
