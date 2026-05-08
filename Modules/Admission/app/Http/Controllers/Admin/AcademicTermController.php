@@ -21,7 +21,7 @@ class AcademicTermController extends Controller
             ->when($request->search, fn ($q, $s) => $q->where('academic_year', 'like', "%{$s}%"))
             ->when($request->status, fn ($q, $s) => $q->where('status', $s))
             ->orderBy('academic_year', 'desc')
-            ->orderByRaw("FIELD(semester, '1st', '2nd', 'Summer')")
+            ->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END")
             ->paginate(10)
             ->withQueryString();
 
