@@ -12,6 +12,8 @@ class Section extends Model
 {
     use HasFactory;
 
+    protected $table = 'admission_sections';
+
     protected $fillable = [
         'academic_term_id',
         'course_id',
