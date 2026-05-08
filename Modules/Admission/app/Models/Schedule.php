@@ -11,6 +11,8 @@ class Schedule extends Model
 {
     use HasFactory;
 
+    protected $table = 'admission_schedules';
+
     protected $fillable = [
         'section_id',
         'subject_id',
