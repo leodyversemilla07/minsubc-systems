@@ -152,7 +152,10 @@ Route::prefix('admission')->name('admission.')->group(function () {
             Route::post('/batch-print', [TranscriptController::class, 'batchPrint'])->name('batch-print');
         });
 
-        // ==================== PAYMONGO WEBHOOK ====================
-        Route::post('/webhook/paymongo', [PayMongoWebhookController::class, 'handle'])->name('webhook.paymongo');
-    });
+        });
+});
+
+// ==================== PAYMONGO WEBHOOK ====================
+Route::prefix('admission')->name('admission.')->group(function () {
+    Route::post('/webhook/paymongo', [PayMongoWebhookController::class, 'handle'])->name('webhook.paymongo');
 });
