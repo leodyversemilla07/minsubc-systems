@@ -5,7 +5,8 @@ namespace Modules\Admission\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Models\AcademicTerm;
 use Modules\Admission\Models\Enrollment;
 
@@ -14,7 +15,7 @@ class AcademicTermController extends Controller
     /**
      * Display a listing of academic terms.
      */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $terms = AcademicTerm::query()
             ->when($request->search, fn ($q, $s) => $q->where('academic_year', 'like', "%{$s}%"))
@@ -24,7 +25,7 @@ class AcademicTermController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admission::admin.academic-terms.index', [
+        return Inertia::render('admission/admin/academic-terms/index', [
             'terms' => $terms,
             'filters' => $request->only(['search', 'status']),
         ]);
@@ -33,9 +34,9 @@ class AcademicTermController extends Controller
     /**
      * Show the form for creating a new academic term.
      */
-    public function create(): View
+    public function create(): Response
     {
-        return view('admission::admin.academic-terms.create');
+        return Inertia::render('admission/admin/academic-terms/create');
     }
 
     /**
@@ -55,7 +56,6 @@ class AcademicTermController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Deactivate other terms if setting this one as active
         if (!empty($validated['is_active'])) {
             AcademicTerm::where('is_active', true)->update(['is_active' => false]);
         }
@@ -70,12 +70,9 @@ class AcademicTermController extends Controller
     /**
      * Display the specified academic term.
      */
-    public function show(AcademicTerm $term): View
+    public function show(AcademicTerm $term): Response
     {
-        $term->load([
-            'sections.course',
-            'fees',
-        ]);
+        $term->load(['sections.course', 'fees']);
 
         $stats = [
             'total_sections' => $term->sections->count(),
@@ -84,8 +81,11 @@ class AcademicTermController extends Controller
             'total_fees' => $term->fees->count(),
         ];
 
-        return view('admission::admin.academic-terms.show', [
-            'term' => $term,
+        return Inertia::render('admission/admin/academic-terms/show', [
+            'term' => $term->toArray() + [
+                'sections' => $term->sections->toArray(),
+                'fees' => $term->fees->toArray(),
+            ],
             'stats' => $stats,
         ]);
     }
@@ -93,9 +93,9 @@ class AcademicTermController extends Controller
     /**
      * Show the form for editing the specified academic term.
      */
-    public function edit(AcademicTerm $term): View
+    public function edit(AcademicTerm $term): Response
     {
-        return view('admission::admin.academic-terms.edit', [
+        return Inertia::render('admission/admin/academic-terms/edit', [
             'term' => $term,
         ]);
     }
@@ -117,7 +117,6 @@ class AcademicTermController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Deactivate other terms if setting this one as active
         if (!empty($validated['is_active'])) {
             AcademicTerm::where('id', '!=', $term->id)->update(['is_active' => false]);
         }
@@ -134,7 +133,6 @@ class AcademicTermController extends Controller
      */
     public function destroy(AcademicTerm $term): RedirectResponse
     {
-        // Check if there are enrollments
         if ($term->sections()->exists() || Enrollment::where('academic_term_id', $term->id)->exists()) {
             return redirect()
                 ->route('admission.admin.terms.show', $term)
