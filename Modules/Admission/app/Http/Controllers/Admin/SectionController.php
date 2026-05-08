@@ -5,7 +5,8 @@ namespace Modules\Admission\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Models\Section;
 use Modules\Admission\Models\Course;
 use Modules\Admission\Models\AcademicTerm;
@@ -17,10 +18,7 @@ class SectionController extends Controller
         private ScheduleService $scheduleService
     ) {}
 
-    /**
-     * Display a listing of sections.
-     */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $query = Section::with(['course', 'academicTerm', 'adviser'])
             ->when($request->term_id, fn ($q, $id) => $q->where('academic_term_id', $id))
@@ -31,12 +29,13 @@ class SectionController extends Controller
 
         $sections = $query->orderBy('name')->paginate(15)->withQueryString();
 
-        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("FIELD(semester, '1st', '2nd', 'Summer') DESC")->get();
-        $courses = Course::orderBy('name')->get();
-
+        $terms = AcademicTerm::orderBy('academic_year', 'desc')
+            ->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END DESC")
+            ->get();
+        $courses = Course::orderBy('name')->get(['id', 'code', 'name']);
         $stats = $this->scheduleService->getSectionStats($request->term_id);
 
-        return view('admission::admin.sections.index', [
+        return Inertia::render('admission/admin/sections/index', [
             'sections' => $sections,
             'terms' => $terms,
             'courses' => $courses,
@@ -45,18 +44,16 @@ class SectionController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new section.
-     */
-    public function create(Request $request): View
+    public function create(Request $request): Response
     {
-        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("FIELD(semester, '1st', '2nd', 'Summer') DESC")->get();
-        $courses = Course::orderBy('name')->get();
-
+        $terms = AcademicTerm::orderBy('academic_year', 'desc')
+            ->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END DESC")
+            ->get();
+        $courses = Course::orderBy('name')->get(['id', 'code', 'name']);
         $selectedTerm = $request->term_id ? AcademicTerm::find($request->term_id) : AcademicTerm::active()->first();
-        $selectedCourse = $request->course_id ? Course::find($request->course_id) : null;
+        $selectedCourse = $request->course_id ? Course::find($request->course_id, ['id', 'code', 'name']) : null;
 
-        return view('admission::admin.sections.create', [
+        return Inertia::render('admission/admin/sections/create', [
             'terms' => $terms,
             'courses' => $courses,
             'selectedTerm' => $selectedTerm,
@@ -64,9 +61,6 @@ class SectionController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created section.
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -75,7 +69,6 @@ class SectionController extends Controller
             'name' => 'required|string|max:50',
             'year_level' => 'required|integer|min:1|max:10',
             'max_students' => 'nullable|integer|min:1|max:200',
-            'adviser_id' => 'nullable|exists:users,id',
             'room' => 'nullable|string|max:100',
             'notes' => 'nullable|string',
         ]);
@@ -87,10 +80,7 @@ class SectionController extends Controller
             ->with('success', 'Section created successfully.');
     }
 
-    /**
-     * Display the specified section.
-     */
-    public function show(Section $section): View
+    public function show(Section $section): Response
     {
         $section->load([
             'course',
@@ -108,35 +98,40 @@ class SectionController extends Controller
             $section->academicTerm?->semester ?? '1st'
         );
 
-        return view('admission::admin.sections.show', [
-            'section' => $section,
+        return Inertia::render('admission/admin/sections/show', [
+            'section' => $section->toArray() + [
+                'course' => $section->course?->toArray(),
+                'academic_term' => $section->academicTerm?->toArray(),
+                'adviser' => $section->adviser ? ['id' => $section->adviser->id, 'name' => $section->adviser->name] : null,
+                'enrollments' => $section->enrollments->map(fn ($e) => [
+                    'id' => $e->id,
+                    'student_id' => $e->student_id,
+                    'user' => $e->user ? ['id' => $e->user->id, 'name' => $e->user->name] : null,
+                ]),
+            ],
             'scheduleByDay' => $scheduleByDay,
             'availableSubjects' => $availableSubjects,
         ]);
     }
 
-    /**
-     * Show the form for editing the specified section.
-     */
-    public function edit(Section $section): View
+    public function edit(Section $section): Response
     {
-        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("FIELD(semester, '1st', '2nd', 'Summer') DESC")->get();
-        $courses = Course::orderBy('name')->get();
+        $terms = AcademicTerm::orderBy('academic_year', 'desc')
+            ->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END DESC")
+            ->get();
+        $courses = Course::orderBy('name')->get(['id', 'code', 'name']);
         $advisers = \App\Models\User::role(['faculty', 'admission-admin', 'registrar-admin'])
             ->orderBy('first_name')
-            ->get();
+            ->get(['id', 'name']);
 
-        return view('admission::admin.sections.edit', [
-            'section' => $section,
+        return Inertia::render('admission/admin/sections/edit', [
+            'section' => $section->load('course', 'academicTerm'),
             'terms' => $terms,
             'courses' => $courses,
             'advisers' => $advisers,
         ]);
     }
 
-    /**
-     * Update the specified section.
-     */
     public function update(Request $request, Section $section): RedirectResponse
     {
         $validated = $request->validate([
@@ -157,9 +152,6 @@ class SectionController extends Controller
             ->with('success', 'Section updated successfully.');
     }
 
-    /**
-     * Remove the specified section.
-     */
     public function destroy(Section $section): RedirectResponse
     {
         if ($section->current_students > 0) {
@@ -175,9 +167,6 @@ class SectionController extends Controller
             ->with('success', 'Section deleted successfully.');
     }
 
-    /**
-     * Add a schedule to the section.
-     */
     public function addSchedule(Request $request, Section $section): RedirectResponse
     {
         $validated = $request->validate([
@@ -192,21 +181,16 @@ class SectionController extends Controller
 
         try {
             $this->scheduleService->addSchedule($section, $validated);
-            $message = 'Schedule added successfully.';
+            return redirect()
+                ->route('admission.admin.sections.show', $section)
+                ->with('success', 'Schedule added successfully.');
         } catch (\RuntimeException $e) {
             return redirect()
                 ->route('admission.admin.sections.show', $section)
                 ->with('error', $e->getMessage());
         }
-
-        return redirect()
-            ->route('admission.admin.sections.show', $section)
-            ->with('success', $message);
     }
 
-    /**
-     * Remove a schedule from the section.
-     */
     public function removeSchedule(\Modules\Admission\Models\Schedule $schedule): RedirectResponse
     {
         $section = $schedule->section;
@@ -217,9 +201,6 @@ class SectionController extends Controller
             ->with('success', 'Schedule removed successfully.');
     }
 
-    /**
-     * Get available subjects for a section.
-     */
     public function availableSubjects(Section $section): \Illuminate\Http\JsonResponse
     {
         $semester = $section->academicTerm?->semester ?? '1st';
