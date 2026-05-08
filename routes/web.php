@@ -229,6 +229,51 @@ Route::middleware(['auth', 'verified'])->group(function () {
             }
         }
 
+        // Admission Enrollment
+        $currentEnrollment = null;
+        $pendingNotification = null;
+        if (class_exists(\Modules\Admission\Models\Enrollment::class)) {
+            $enrollment = \Modules\Admission\Models\Enrollment::where('user_id', $user->id)
+                ->whereIn('status', ['confirmed', 'enrolled'])
+                ->with(['section', 'subjects.subject', 'payments'])
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($enrollment) {
+                $totalUnits = $enrollment->subjects->sum(fn ($es) => $es->subject?->units ?? 0);
+                $totalPaid = $enrollment->payments->where('status', 'verified')->sum('amount');
+                $totalFees = $enrollment->subjects->count() > 0
+                    ? \Modules\Admission\Models\EnrollmentFee::where('academic_term_id', $enrollment->academic_term_id)
+                        ->active()
+                        ->get()
+                        ->sum(fn ($fee) => $fee->calculateAmount($totalUnits, $enrollment->subjects->count()))
+                    : 0;
+
+                $currentEnrollment = [
+                    'id' => $enrollment->id,
+                    'academic_year' => $enrollment->academic_year,
+                    'semester' => $enrollment->semester,
+                    'year_level' => (string) $enrollment->year_level,
+                    'status' => $enrollment->status,
+                    'section_name' => $enrollment->section?->name ?? 'Not Assigned',
+                    'student_id' => $enrollment->student_id,
+                    'total_subjects' => $enrollment->subjects->count(),
+                    'total_units' => $totalUnits,
+                    'balance' => max(0, $totalFees - $totalPaid),
+                    'gpa' => $enrollment->gpa,
+                ];
+
+                // Check for pending payment notifications
+                $pendingCount = $enrollment->payments->where('status', 'pending')->count();
+                if ($pendingCount > 0) {
+                    $pendingNotification = [
+                        'count' => $pendingCount,
+                        'message' => "You have {$pendingCount} payment(s) awaiting verification.",
+                    ];
+                }
+            }
+        }
+
         return Inertia::render('student/dashboard', [
             'user' => [
                 'first_name' => $user->first_name,
@@ -250,6 +295,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'recentAnnouncements' => $recentAnnouncements,
             'upcomingEvents' => $upcomingEvents,
             'votingStats' => $votingStats,
+            'currentEnrollment' => $currentEnrollment ?? null,
+            'hasPendingNotification' => !empty($pendingNotification),
         ]);
     })->name('dashboard');
 });

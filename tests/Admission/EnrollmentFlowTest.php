@@ -97,7 +97,7 @@ beforeEach(function () {
         'name' => 'Tuition Fee',
         'type' => 'tuition',
         'amount' => 1500.00,
-        'unit' => 'per_unit',
+        'unit' => 'per unit',
         'is_required' => true,
         'priority' => 1,
         'status' => 'active',
@@ -542,6 +542,6 @@ it('enrollment service returns comprehensive fee breakdown', function () {
 
     expect($fees)->toHaveKeys(['fees', 'total_amount', 'total_paid', 'balance', 'total_units']);
     expect($fees['total_units'])->toBe(3);
-    expect($fees['fees'])->toHaveCount(2); // 2 required fees (tuition per_unit excluded)
+    expect($fees['fees'])->toHaveCount(2); // tuition + misc (both required, per unit/per subject fees excluded)
     expect($fees['total_paid'])->toBe(0);
 });

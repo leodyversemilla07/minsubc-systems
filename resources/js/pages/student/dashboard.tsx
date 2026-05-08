@@ -146,6 +146,21 @@ interface DashboardProps {
         has_voted: boolean;
         can_vote: boolean;
     };
+    // Admission Enrollment
+    currentEnrollment?: {
+        id: number;
+        academic_year: string;
+        semester: string;
+        year_level: string;
+        status: string;
+        section_name: string;
+        student_id: string;
+        total_subjects: number;
+        total_units: number;
+        balance: number;
+        gpa: number | null;
+    } | null;
+    hasPendingNotification: boolean;
 }
 
 export default function Dashboard({
@@ -160,6 +175,8 @@ export default function Dashboard({
     recentAnnouncements,
     upcomingEvents,
     votingStats,
+    currentEnrollment,
+    hasPendingNotification,
 }: DashboardProps) {
     // Default values for optional props
     const safeSasStats = sasStats ?? {
@@ -258,6 +275,83 @@ export default function Dashboard({
                         </Link>
                     </div>
                 </div>
+
+                {/* Current Enrollment Card */}
+                {currentEnrollment && (
+                    <Card className="overflow-hidden border-blue-200 bg-gradient-to-r from-blue-50/50 to-indigo-50/30 dark:border-blue-800 dark:from-blue-950/20 dark:to-indigo-950/10">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 border-b border-blue-100 dark:border-blue-900/50">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50">
+                                    <GraduationCap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold">Current Enrollment</h3>
+                                    <p className="text-sm text-muted-foreground">{currentEnrollment.academic_year} — {currentEnrollment.semester} Semester</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 mt-2 sm:mt-0">
+                                <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                                    {currentEnrollment.student_id}
+                                </Badge>
+                                <Badge variant={currentEnrollment.status === 'enrolled' ? 'secondary' : currentEnrollment.status === 'confirmed' ? 'default' : 'secondary'}>
+                                    {currentEnrollment.status.charAt(0).toUpperCase() + currentEnrollment.status.slice(1)}
+                                </Badge>
+                            </div>
+                        </div>
+                        <CardContent className="p-6">
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <div>
+                                    <p className="text-xs text-muted-foreground">Section</p>
+                                    <p className="text-sm font-semibold">{currentEnrollment.section_name}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground">Year Level</p>
+                                    <p className="text-sm font-semibold">{currentEnrollment.year_level}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground">Subjects / Units</p>
+                                    <p className="text-sm font-semibold">{currentEnrollment.total_subjects} subjects / {currentEnrollment.total_units} units</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground">Balance</p>
+                                    <p className={`text-sm font-semibold ${currentEnrollment.balance > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
+                                        ₱{currentEnrollment.balance.toLocaleString()}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                <Link
+                                    href={route('student.enrollment.show', currentEnrollment.id)}
+                                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
+                                >
+                                    <Eye className="mr-1.5 h-3.5 w-3.5" />
+                                    View Details
+                                </Link>
+                                <Link
+                                    href={route('student.enrollment.schedule')}
+                                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
+                                >
+                                    <Calendar className="mr-1.5 h-3.5 w-3.5" />
+                                    Schedule
+                                </Link>
+                                <Link
+                                    href={route('student.enrollment.payment', currentEnrollment.id)}
+                                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
+                                >
+                                    <CreditCard className="mr-1.5 h-3.5 w-3.5" />
+                                    Payments
+                                </Link>
+                                <Link
+                                    href={route('student.enrollment.grades')}
+                                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
+                                >
+                                    <TrendingUp className="mr-1.5 h-3.5 w-3.5" />
+                                    Grades
+                                </Link>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
 
                 {/* Quick Access Grid - 4 Systems */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
