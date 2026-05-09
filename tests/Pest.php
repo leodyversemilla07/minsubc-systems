@@ -13,8 +13,10 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature')
-    ->in('Admission')
+    ->in('Feature');
+
+pest()->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Library');
 
 pest()->extend(Tests\TestCase::class)
