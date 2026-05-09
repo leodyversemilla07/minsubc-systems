@@ -11,6 +11,14 @@ class Vote extends Model
     use HasFactory;
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Modules\VotingSystem\Database\Factories\VoteFactory
+    {
+        return \Modules\VotingSystem\Database\Factories\VoteFactory::new();
+    }
+
+    /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [

@@ -12,6 +12,14 @@ class Partylist extends Model
     use HasFactory;
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Modules\VotingSystem\Database\Factories\PartylistFactory
+    {
+        return \Modules\VotingSystem\Database\Factories\PartylistFactory::new();
+    }
+
+    /**
      * The primary key associated with the table.
      */
     protected $primaryKey = 'partylist_id';

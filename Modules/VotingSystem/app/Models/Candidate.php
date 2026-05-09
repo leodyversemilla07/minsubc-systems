@@ -13,6 +13,14 @@ class Candidate extends Model
     use HasFactory;
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Modules\VotingSystem\Database\Factories\CandidateFactory
+    {
+        return \Modules\VotingSystem\Database\Factories\CandidateFactory::new();
+    }
+
+    /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [

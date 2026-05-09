@@ -12,6 +12,14 @@ class Position extends Model
     use HasFactory;
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Modules\VotingSystem\Database\Factories\PositionFactory
+    {
+        return \Modules\VotingSystem\Database\Factories\PositionFactory::new();
+    }
+
+    /**
      * The primary key associated with the table.
      */
     protected $primaryKey = 'position_id';

@@ -40,6 +40,8 @@ abstract class TestCase extends BaseTestCase
             'super-admin',
             'usg-admin',
             'usg-officer',
+            'voting-admin',
+            'voting-manager',
         ];
 
         foreach ($roles as $roleName) {
