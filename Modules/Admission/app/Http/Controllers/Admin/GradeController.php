@@ -21,7 +21,7 @@ class GradeController extends Controller
     /**
      * Display grades listing.
      */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $query = Enrollment::with(['user', 'section.course', 'subjects.subject'])
             ->whereIn('status', ['confirmed', 'enrolled']);
@@ -51,7 +51,7 @@ class GradeController extends Controller
 
         $stats = $this->gradeService->getStatistics($request->section_id, $request->academic_year);
 
-        return view('admission::admin.grades.index', [
+        return Inertia::render('admission/admin/grades/index', [
             'enrollments' => $enrollments,
             'academicYears' => $academicYears,
             'sections' => $sections,

@@ -65,12 +65,10 @@ export default function TranscriptsIndex({ students, courses, filters }: Transcr
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" asChild>
-                        <Link href={route('admission.admin.transcripts.verify')}>
+                    <Link href={route('admission.admin.transcripts.verify')} className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent">
                             <Shield className="mr-2 h-4 w-4" />
                             Verify Transcript
-                        </Link>
-                    </Button>
+                    </Link>
                 </div>
             </div>
 
@@ -100,7 +98,7 @@ export default function TranscriptsIndex({ students, courses, filters }: Transcr
                             </label>
                             <Select
                                 value={filters.course || ''}
-                                onValueChange={(v) => handleFilter('course', v)}
+                                onValueChange={(v: string | null) => handleFilter('course', v ?? '')}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="All Courses" />
@@ -187,48 +185,37 @@ export default function TranscriptsIndex({ students, courses, filters }: Transcr
                                     </td>
                                     <td className="px-4 py-3 text-right">
                                         <div className="flex justify-end gap-2">
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                asChild
+                                            <a
+                                                href={route(
+                                                    'admission.admin.transcripts.preview',
+                                                    student.student_id
+                                                )}
+                                                target="_blank"
+                                                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-2.5 py-1.5 text-sm font-medium hover:bg-accent"
                                             >
-                                                <a
-                                                    href={route(
-                                                        'admission.admin.transcripts.preview',
-                                                        student.student_id
-                                                    )}
-                                                    target="_blank"
-                                                >
-                                                    <Eye className="mr-1 h-4 w-4" />
-                                                    Preview
-                                                </a>
-                                            </Button>
-                                            <Button size="sm" asChild>
-                                                <a
-                                                    href={route(
-                                                        'admission.admin.transcripts.download',
-                                                        student.student_id
-                                                    )}
-                                                >
-                                                    <Download className="mr-1 h-4 w-4" />
-                                                    Download
-                                                </a>
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="secondary"
-                                                asChild
+                                                <Eye className="mr-1 h-4 w-4" />
+                                                Preview
+                                            </a>
+                                            <a
+                                                href={route(
+                                                    'admission.admin.transcripts.download',
+                                                    student.student_id
+                                                )}
+                                                className="inline-flex items-center justify-center rounded-md bg-primary px-2.5 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                                             >
-                                                <a
-                                                    href={route(
-                                                        'admission.admin.transcripts.true-copy',
-                                                        student.student_id
-                                                    )}
-                                                >
-                                                    <FileText className="mr-1 h-4 w-4" />
-                                                    TCOG
-                                                </a>
-                                            </Button>
+                                                <Download className="mr-1 h-4 w-4" />
+                                                Download
+                                            </a>
+                                            <a
+                                                href={route(
+                                                    'admission.admin.transcripts.true-copy',
+                                                    student.student_id
+                                                )}
+                                                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-2.5 py-1.5 text-sm font-medium hover:bg-accent"
+                                            >
+                                                <FileText className="mr-1 h-4 w-4" />
+                                                TCOG
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -267,6 +254,7 @@ export default function TranscriptsIndex({ students, courses, filters }: Transcr
                                             }
                                             size="sm"
                                             disabled={!link.url}
+                                            className={!link.active ? 'hover:bg-accent' : ''}
                                             onClick={() => {
                                                 if (link.url) {
                                                     router.get(link.url);

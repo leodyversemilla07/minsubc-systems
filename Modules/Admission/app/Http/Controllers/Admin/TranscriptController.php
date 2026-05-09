@@ -7,9 +7,11 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 use Modules\Admission\Services\TranscriptService;
+use Modules\Admission\Models\Enrollment;
 use Modules\Registrar\Models\Student;
 
 class TranscriptController extends Controller
@@ -40,7 +42,7 @@ class TranscriptController extends Controller
 
         $courses = Student::distinct()->pluck('course')->filter()->sort();
 
-        return view('admission::admin.transcripts.index', [
+        return Inertia::render('admission/admin/transcripts/index', [
             'students' => $students,
             'courses' => $courses,
             'filters' => $request->only(['search', 'course']),
