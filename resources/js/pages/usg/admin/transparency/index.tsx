@@ -1,839 +1,116 @@
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import SearchBar from '@/components/usg/search-bar';
-import { ViewToggle } from '@/components/view-toggle';
-import AppLayout from '@/layouts/app-layout';
-import { cn } from '@/lib/utils';
 import { Head, Link, router } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Calendar,
-    Download,
-    Edit,
-    Eye,
-    FileText,
-    MoreVertical,
-    Plus,
-    Trash2,
-} from 'lucide-react';
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
+import {
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { type PageProps } from '@/types';
+import { Plus, Pencil, Eye, Search, Download, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
-interface TransparencyReport {
-    id: number;
-    title: string;
-    slug: string;
-    description?: string;
-    type: string;
-    status: 'draft' | 'published';
-    report_period_start: string;
-    report_period_end: string;
-    file_name: string;
-    formatted_file_size: string;
-    created_by_name?: string;
-    published_at?: string;
-    created_at: string;
-    download_count: number;
-    view_count: number;
+interface ReportData {
+    id: number; title: string; slug: string; type: string; status: string; year: number;
+    period_start: string; period_end: string; downloads: number; created_at: string;
 }
 
-interface Props {
-    reports?: TransparencyReport[] | { data: TransparencyReport[] };
-    filters?: {
-        search?: string;
-        type?: string;
-        status?: string;
-        year?: string;
-    };
-    types?: string[];
-    years?: number[];
-    statistics?: {
-        total: number;
-        published: number;
-        draft: number;
-        total_downloads: number;
-        total_views: number;
-    };
-    canManage?: boolean;
+interface Props extends PageProps {
+    reports: { data: ReportData[] };
+    types: string[];
+    years: number[];
+    statistics: any;
+    filters: { search?: string; type?: string; status?: string; year?: string };
 }
 
-// Skeleton Loaders
-function TransparencyGridSkeleton() {
-    return (
-        <div className="space-y-4">
-            {[...Array(6)].map((_, i) => (
-                <Card key={i} className="overflow-hidden">
-                    <CardContent className="p-6">
-                        <div className="flex items-start justify-between">
-                            <div className="min-w-0 flex-1 space-y-2">
-                                <Skeleton className="h-5 w-3/4" />
-                                <Skeleton className="h-4 w-full" />
-                                <div className="flex items-center gap-4 pt-2">
-                                    <Skeleton className="h-4 w-24" />
-                                    <Skeleton className="h-4 w-32" />
-                                    <Skeleton className="h-4 w-20" />
-                                </div>
-                            </div>
-                            <div className="ml-4 flex shrink-0 items-center gap-2">
-                                <Skeleton className="h-6 w-20" />
-                                <Skeleton className="h-8 w-8" />
-                                <Skeleton className="h-8 w-8" />
-                                <Skeleton className="h-8 w-8" />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
-    );
-}
+export default function TransparencyIndex({ reports, types, years, statistics, filters }: Props) {
+    const [search, setSearch] = useState(filters?.search ?? '');
+    const [type, setType] = useState(filters?.type ?? '');
+    const [status, setStatus] = useState(filters?.status ?? '');
 
-function TransparencyTableSkeleton() {
-    return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>
-                        <Skeleton className="h-4 w-32" />
-                    </TableHead>
-                    <TableHead>
-                        <Skeleton className="h-4 w-20" />
-                    </TableHead>
-                    <TableHead>
-                        <Skeleton className="h-4 w-20" />
-                    </TableHead>
-                    <TableHead>
-                        <Skeleton className="h-4 w-24" />
-                    </TableHead>
-                    <TableHead>
-                        <Skeleton className="h-4 w-20" />
-                    </TableHead>
-                    <TableHead className="w-[100px]">
-                        <Skeleton className="h-4 w-16" />
-                    </TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {[...Array(8)].map((_, i) => (
-                    <TableRow key={i}>
-                        <TableCell>
-                            <div className="space-y-1">
-                                <Skeleton className="h-4 w-64" />
-                                <Skeleton className="h-3 w-32" />
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <Skeleton className="h-5 w-16" />
-                        </TableCell>
-                        <TableCell>
-                            <Skeleton className="h-5 w-20" />
-                        </TableCell>
-                        <TableCell>
-                            <Skeleton className="h-4 w-24" />
-                        </TableCell>
-                        <TableCell>
-                            <Skeleton className="h-4 w-20" />
-                        </TableCell>
-                        <TableCell>
-                            <div className="flex items-center justify-end gap-2">
-                                <Skeleton className="h-8 w-8" />
-                                <Skeleton className="h-8 w-8" />
-                                <Skeleton className="h-8 w-8" />
-                            </div>
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    );
-}
-
-export default function TransparencyManagement({
-    reports,
-    filters,
-    types,
-    years,
-    statistics,
-    canManage = true,
-}: Props) {
-    const safeReports: TransparencyReport[] = Array.isArray(reports)
-        ? reports
-        : reports?.data && Array.isArray(reports.data)
-          ? reports.data
-          : [];
-
-    const safeFilters = filters || {};
-    const safeTypes: string[] = Array.isArray(types) ? types : [];
-    const safeYears: number[] = Array.isArray(years) ? years : [];
-    const safeStatistics = statistics || {
-        total: 0,
-        published: 0,
-        draft: 0,
-        total_downloads: 0,
-        total_views: 0,
-    };
-
-    const [searchQuery, setSearchQuery] = useState(safeFilters.search || '');
-    const [selectedType, setSelectedType] = useState(safeFilters.type || '');
-    const [selectedStatus, setSelectedStatus] = useState(
-        safeFilters.status || '',
-    );
-    const [selectedYear, setSelectedYear] = useState(safeFilters.year || '');
-    const [view, setView] = useState<'grid' | 'table'>('grid');
-
-    const handleSearch = (query: string) => {
-        setSearchQuery(query);
-        applyFilters({ search: query });
-    };
-
-    const handleTypeFilter = (type: string) => {
-        const filterValue = type === 'all' ? '' : type;
-        setSelectedType(filterValue);
-        applyFilters({ type: filterValue });
-    };
-
-    const handleStatusFilter = (status: string) => {
-        const filterValue = status === 'all' ? '' : status;
-        setSelectedStatus(filterValue);
-        applyFilters({ status: filterValue });
-    };
-
-    const handleYearFilter = (year: string) => {
-        const filterValue = year === 'all' ? '' : year;
-        setSelectedYear(filterValue);
-        applyFilters({ year: filterValue });
-    };
-
-    const applyFilters = (newFilters: Partial<typeof filters>) => {
-        router.get(
-            '/usg/admin/transparency',
-            {
-                search: searchQuery,
-                type: selectedType,
-                status: selectedStatus,
-                year: selectedYear,
-                ...newFilters,
-            },
-            { preserveState: true },
-        );
-    };
-
-    const handleDelete = (report: TransparencyReport) => {
-        if (confirm(`Are you sure you want to delete "${report.title}"?`)) {
-            router.delete(`/usg/admin/transparency/${report.id}`);
-        }
-    };
-
-    const handlePublish = (report: TransparencyReport) => {
-        router.patch(`/usg/admin/transparency/${report.id}/publish`);
-    };
-
-    const handleUnpublish = (report: TransparencyReport) => {
-        router.patch(`/usg/admin/transparency/${report.id}/unpublish`);
-    };
-
-    const formatPeriod = (startDate: string, endDate: string) => {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        return `${start.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
-    };
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'published':
-                return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
-            case 'draft':
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
-            default:
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
-        }
-    };
+    const handleFilter = () => router.get(route('usg.admin.transparency.index'), { search, type, status }, { preserveState: true });
+    const handleDelete = (id: number) => { if (confirm('Delete this report?')) router.delete(route('usg.admin.transparency.destroy', id)); };
 
     return (
-        <AppLayout
-            breadcrumbs={[
-                { title: 'USG Admin', href: '/usg/admin' },
-                {
-                    title: 'Transparency Reports',
-                    href: '/usg/admin/transparency',
-                },
-            ]}
-        >
-            <Head title="Transparency Reports Management - USG Admin" />
-
-            <div className="flex-1 space-y-6 p-4 md:space-y-8 md:p-6 lg:p-8">
-                {/* Header with action button */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl dark:text-white">
-                            Transparency Reports
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Upload and manage USG transparency reports
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <ViewToggle view={view} onViewChange={setView} />
-                        {canManage && (
-                            <Link
-                                href="/usg/admin/transparency/create"
-                                className={cn(buttonVariants({ size: 'sm' }))}
-                            >
-                                <Plus className="mr-1 h-4 w-4" />
-                                New Report
-                            </Link>
-                        )}
-                    </div>
+        <AppLayout>
+            <Head title="Transparency Reports" />
+            <div className="flex flex-col gap-6 p-6">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-2xl font-bold">Transparency Reports</h1>
+                    <Link href={route('usg.admin.transparency.create')}><Button><Plus className="mr-2 h-4 w-4" /> New Report</Button></Link>
                 </div>
-
-                {/* Stats */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                    <Card className="transition-shadow hover:shadow-lg">
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4">
-                                <div className="rounded-full bg-indigo-100 p-3 dark:bg-indigo-900/20">
-                                    <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold">
-                                        {safeStatistics.total}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Total
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="transition-shadow hover:shadow-lg">
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4">
-                                <div className="rounded-full bg-green-100 p-3 dark:bg-green-900/20">
-                                    <Eye className="h-5 w-5 text-green-600 dark:text-green-400" />
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold">
-                                        {safeStatistics.published}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Published
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="transition-shadow hover:shadow-lg">
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4">
-                                <div className="rounded-full bg-gray-100 p-3 dark:bg-gray-800/50">
-                                    <Edit className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold">
-                                        {safeStatistics.draft}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Drafts
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="transition-shadow hover:shadow-lg">
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4">
-                                <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/20">
-                                    <Download className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold">
-                                        {safeStatistics.total_downloads}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Downloads
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="transition-shadow hover:shadow-lg">
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4">
-                                <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/20">
-                                    <Eye className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold">
-                                        {safeStatistics.total_views}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Views
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Filters */}
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
-                            <div className="md:col-span-2">
-                                <SearchBar
-                                    placeholder="Search transparency reports..."
-                                    value={searchQuery}
-                                    onChange={(query) => {
-                                        setSearchQuery(query);
-                                        handleSearch(query);
-                                    }}
-                                />
-                            </div>
-
-                            <div>
-                                <Select
-                                    value={selectedType}
-                                    onValueChange={(value) => handleTypeFilter(value || '')}
-                                    items={[
-                                        { value: 'all', label: 'All Types' },
-                                        ...safeTypes.map((type) => ({ value: type, label: type })),
-                                    ]}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="all">
-                                                All Types
-                                            </SelectItem>
-                                            {safeTypes.map((type) => (
-                                                <SelectItem key={type} value={type}>
-                                                    {type}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <div>
-                                <Select
-                                    value={selectedStatus}
-                                    onValueChange={(value) => handleStatusFilter(value || '')}
-                                    items={[{ value: "all", label: "All Status" }, { value: "published", label: "Published" }, { value: "draft", label: "Draft" }]}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="all">
-                                                All Status
-                                            </SelectItem>
-                                            <SelectItem value="published">
-                                                Published
-                                            </SelectItem>
-                                            <SelectItem value="draft">
-                                                Draft
-                                            </SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <div>
-                                <Select
-                                    value={selectedYear}
-                                    onValueChange={(value) => handleYearFilter(value || '')}
-                                    items={[
-                                        { value: 'all', label: 'All Years' },
-                                        ...safeYears.map((year) => ({ value: year.toString(), label: year })),
-                                    ]}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="all">
-                                                All Years
-                                            </SelectItem>
-                                            {safeYears.map((year) => (
-                                                <SelectItem
-                                                    key={year}
-                                                    value={year.toString()}
-                                                >
-                                                    {year}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Reports List */}
-                {reports === undefined ? (
-                    view === 'grid' ? (
-                        <TransparencyGridSkeleton />
-                    ) : (
-                        <Card>
-                            <CardContent className="p-0">
-                                <TransparencyTableSkeleton />
-                            </CardContent>
-                        </Card>
-                    )
-                ) : safeReports.length > 0 ? (
-                    view === 'grid' ? (
-                        <div className="space-y-4">
-                            {safeReports.map((report) => (
-                                <Card
-                                    key={report.id}
-                                    className="transition-shadow hover:shadow-lg"
-                                >
-                                    <CardContent className="p-6">
-                                        <div className="flex items-start justify-between">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="mb-2 flex items-center gap-3">
-                                                    <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-white">
-                                                        {report.title}
-                                                    </h3>
-                                                    <Badge
-                                                        className={getStatusColor(
-                                                            report.status,
-                                                        )}
-                                                    >
-                                                        {report.status.toUpperCase()}
-                                                    </Badge>
-                                                    <Badge variant="outline">
-                                                        {report.type}
-                                                    </Badge>
-                                                </div>
-
-                                                {report.description && (
-                                                    <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
-                                                        {report.description}
-                                                    </p>
-                                                )}
-
-                                                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                                                    <div className="flex items-center gap-1">
-                                                        <Calendar className="h-4 w-4" />
-                                                        {formatPeriod(
-                                                            report.report_period_start,
-                                                            report.report_period_end,
-                                                        )}
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <FileText className="h-4 w-4" />
-                                                        {
-                                                            report.formatted_file_size
-                                                        }
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <Download className="h-4 w-4" />
-                                                        {report.download_count}{' '}
-                                                        downloads
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-center gap-2">
-                                                {canManage && (
-                                                    <>
-                                                        <Link
-                                                            href={`/usg/admin/transparency/${report.id}/edit`}
-                                                            className={cn(
-                                                                buttonVariants({
-                                                                    variant:
-                                                                        'ghost',
-                                                                    size: 'sm',
-                                                                }),
-                                                            )}
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Link>
-
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger
-                                                                render={
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                    />
-                                                                }
-                                                            >
-                                                                <MoreVertical className="h-4 w-4" />
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        router.get(
-                                                                            `/usg/admin/transparency/${report.id}/download`,
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    <Download className="mr-2 h-4 w-4" />
-                                                                    Download
-                                                                </DropdownMenuItem>
-                                                                {report.status ===
-                                                                    'draft' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handlePublish(
-                                                                                report,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Publish
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                {report.status ===
-                                                                    'published' && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleUnpublish(
-                                                                                report,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Unpublish
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                <DropdownMenuSeparator />
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        handleDelete(
-                                                                            report,
-                                                                        )
-                                                                    }
-                                                                    className="text-red-600 focus:text-red-600"
-                                                                >
-                                                                    <Trash2 className="mr-2 h-4 w-4" />
-                                                                    Delete
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    ) : (
-                        <Card>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Type</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Period</TableHead>
-                                        <TableHead>Downloads</TableHead>
-                                        <TableHead className="text-right">
-                                            Actions
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {safeReports.map((report) => (
-                                        <TableRow key={report.id}>
-                                            <TableCell className="font-medium">
-                                                <div>
-                                                    <div className="font-medium">
-                                                        {report.title}
-                                                    </div>
-                                                    <div className="text-sm text-muted-foreground">
-                                                        {
-                                                            report.formatted_file_size
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant="outline">
-                                                    {report.type}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    className={getStatusColor(
-                                                        report.status,
-                                                    )}
-                                                >
-                                                    {report.status.toUpperCase()}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-sm">
-                                                {formatPeriod(
-                                                    report.report_period_start,
-                                                    report.report_period_end,
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {report.download_count}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {canManage && (
-                                                        <>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={() =>
-                                                                    router.visit(
-                                                                        `/usg/admin/transparency/${report.id}/edit`,
-                                                                    )
-                                                                }
-                                                            >
-                                                                <Edit className="h-4 w-4" />
-                                                            </Button>
-                                                            <DropdownMenu>
-                                                                <DropdownMenuTrigger
-                                                                    render={
-                                                                        <Button
-                                                                            variant="ghost"
-                                                                            size="sm"
-                                                                        />
-                                                                    }
-                                                                >
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end">
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            router.get(
-                                                                                `/usg/admin/transparency/${report.id}/download`,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <Download className="mr-2 h-4 w-4" />
-                                                                        Download
-                                                                    </DropdownMenuItem>
-                                                                    {report.status ===
-                                                                        'draft' && (
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handlePublish(
-                                                                                    report,
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Publish
-                                                                        </DropdownMenuItem>
-                                                                    )}
-                                                                    {report.status ===
-                                                                        'published' && (
-                                                                        <DropdownMenuItem
-                                                                            onClick={() =>
-                                                                                handleUnpublish(
-                                                                                    report,
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Unpublish
-                                                                        </DropdownMenuItem>
-                                                                    )}
-                                                                    <DropdownMenuSeparator />
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            handleDelete(
-                                                                                report,
-                                                                            )
-                                                                        }
-                                                                        className="text-red-600 focus:text-red-600"
-                                                                    >
-                                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                                        Delete
-                                                                    </DropdownMenuItem>
-                                                                </DropdownMenuContent>
-                                                            </DropdownMenu>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </Card>
-                    )
-                ) : (
-                    <Card>
-                        <CardContent className="p-12">
-                            <Empty>
-                                <EmptyHeader>
-                                    <EmptyMedia variant="icon">
-                                        <FileText className="h-12 w-12" />
-                                    </EmptyMedia>
-                                    <EmptyTitle>
-                                        No transparency reports found
-                                    </EmptyTitle>
-                                    <EmptyDescription>
-                                        {searchQuery ||
-                                        selectedType ||
-                                        selectedStatus ||
-                                        selectedYear
-                                            ? 'Try adjusting your search filters to see more results.'
-                                            : 'Get started by creating your first transparency report.'}
-                                    </EmptyDescription>
-                                </EmptyHeader>
-                                {canManage && (
-                                    <EmptyContent>
-                                        <Link
-                                            href="/usg/admin/transparency/create"
-                                            className={cn(buttonVariants())}
-                                        >
-                                            <Plus className="h-4 w-4" />
-                                            Create Report
-                                        </Link>
-                                    </EmptyContent>
-                                )}
-                            </Empty>
-                        </CardContent>
-                    </Card>
+                {statistics && (
+                    <div className="grid gap-4 md:grid-cols-4">
+                        <Card><CardContent className="p-4"><p className="text-sm text-muted-foreground">Total</p><p className="text-2xl font-bold">{statistics.total ?? 0}</p></CardContent></Card>
+                        <Card><CardContent className="p-4"><p className="text-sm text-muted-foreground">Published</p><p className="text-2xl font-bold">{statistics.published ?? 0}</p></CardContent></Card>
+                        <Card><CardContent className="p-4"><p className="text-sm text-muted-foreground">Total Views</p><p className="text-2xl font-bold">{statistics.total_views ?? 0}</p></CardContent></Card>
+                        <Card><CardContent className="p-4"><p className="text-sm text-muted-foreground">Total Downloads</p><p className="text-2xl font-bold">{statistics.total_downloads ?? 0}</p></CardContent></Card>
+                    </div>
                 )}
+                <Card>
+                    <CardHeader><CardTitle>Filters</CardTitle></CardHeader>
+                    <CardContent>
+                        <div className="flex flex-wrap gap-4">
+                            <Input placeholder="Search reports..." value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleFilter()} className="flex-1" />
+                            <Select value={type} onValueChange={v => { setType(v); router.get(route('usg.admin.transparency.index'), { ...filters, type: v }, { preserveState: true }); }}>
+                                <SelectTrigger className="w-40"><SelectValue placeholder="All Types" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="">All Types</SelectItem>
+                                    {types?.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                            <Select value={status} onValueChange={v => { setStatus(v); router.get(route('usg.admin.transparency.index'), { ...filters, status: v }, { preserveState: true }); }}>
+                                <SelectTrigger className="w-40"><SelectValue placeholder="All Status" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="">All Status</SelectItem>
+                                    <SelectItem value="published">Published</SelectItem>
+                                    <SelectItem value="draft">Draft</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button variant="outline" onClick={handleFilter}><Search className="mr-2 h-4 w-4" /> Search</Button>
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Title</TableHead>
+                                    <TableHead>Type</TableHead>
+                                    <TableHead>Year</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead>Period</TableHead>
+                                    <TableHead>Downloads</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {reports?.data?.map(r => (
+                                    <TableRow key={r.id}>
+                                        <TableCell className="font-medium">{r.title}</TableCell>
+                                        <TableCell><Badge variant="secondary">{r.type}</Badge></TableCell>
+                                        <TableCell>{r.year}</TableCell>
+                                        <TableCell><Badge variant={r.status === 'published' ? 'secondary' : 'outline'}>{r.status}</Badge></TableCell>
+                                        <TableCell className="text-sm">{r.period_start ? new Date(r.period_start).toLocaleDateString() : '-'} - {r.period_end ? new Date(r.period_end).toLocaleDateString() : '-'}</TableCell>
+                                        <TableCell>{r.downloads}</TableCell>
+                                        <TableCell className="text-right">
+                                            <div className="flex justify-end gap-2">
+                                                <Link href={route('usg.admin.transparency.show', r.id)}><Button variant="ghost" size="icon"><Eye className="h-4 w-4" /></Button></Link>
+                                                <Link href={route('usg.admin.transparency.edit', r.id)}><Button variant="ghost" size="icon"><Pencil className="h-4 w-4" /></Button></Link>
+                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(r.id)}><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );
