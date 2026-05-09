@@ -128,6 +128,8 @@ test('admin can create an officer', function () {
 
     $response = $this->actingAs($admin)->post(route('usg.admin.officers.store'), [
         'user_id' => $officer->id,
+        'firstname' => 'Juan',
+        'lastname' => 'Dela Cruz',
         'position' => 'President',
         'committee' => 'Executive',
     ]);
@@ -152,8 +154,9 @@ test('admin can create a resolution', function () {
 
     $response = $this->actingAs($admin)->post(route('usg.admin.resolutions.store'), [
         'title' => 'Resolution No. 1',
+        'description' => 'First resolution description',
         'content' => 'This is the first resolution.',
-        'category' => 'administrative',
+        'date_passed' => now()->format('Y-m-d'),
     ]);
 
     $response->assertSessionHas('success');
@@ -177,7 +180,10 @@ test('admin can create transparency report', function () {
     $response = $this->actingAs($admin)->post(route('usg.admin.transparency.store'), [
         'title' => 'Q1 Financial Report',
         'content' => 'Financial report for Q1.',
-        'category' => 'financial',
+        'report_type' => 'financial',
+        'status' => 'published',
+        'period_start' => now()->subMonths(3)->format('Y-m-d'),
+        'period_end' => now()->format('Y-m-d'),
     ]);
 
     $response->assertSessionHas('success');
