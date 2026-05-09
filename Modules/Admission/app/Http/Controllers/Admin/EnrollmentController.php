@@ -5,7 +5,8 @@ namespace Modules\Admission\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Admission\Enums\ApplicantStatus;
 use Modules\Admission\Models\AcademicTerm;
 use Modules\Admission\Models\Applicant;
@@ -26,10 +27,7 @@ class EnrollmentController extends Controller
         private NotificationService $notificationService
     ) {}
 
-    /**
-     * Display a listing of enrollments.
-     */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $query = Enrollment::with(['applicant.program.course', 'user', 'section', 'academicTerm'])
             ->when($request->term_id, fn ($q, $id) => $q->where('academic_term_id', $id))
@@ -46,13 +44,13 @@ class EnrollmentController extends Controller
 
         $enrollments = $query->latest()->paginate(15)->withQueryString();
 
-        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("FIELD(semester, '1st', '2nd', 'Summer') DESC")->get();
+        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END DESC")->get();
         $academicYears = Enrollment::distinct()->pluck('academic_year')->sort()->reverse();
         $statuses = ['pending', 'confirmed', 'enrolled', 'dropped', 'cancelled'];
 
         $stats = $this->enrollmentService->getStats($request->term_id);
 
-        return view('admission::admin.enrollments.index', [
+        return Inertia::render('admission/admin/enrollments/index', [
             'enrollments' => $enrollments,
             'terms' => $terms,
             'academicYears' => $academicYears,
@@ -65,19 +63,19 @@ class EnrollmentController extends Controller
     /**
      * Show the enrollment form for an accepted applicant.
      */
-    public function create(Request $request): View
+    public function create(Request $request): Response
     {
         $acceptedApplicants = Applicant::accepted()
             ->with('program.course')
             ->whereDoesntHave('enrollment', fn ($q) => $q->whereIn('status', ['confirmed', 'enrolled']))
             ->get();
 
-        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("FIELD(semester, '1st', '2nd', 'Summer') DESC")->get();
+        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END DESC")->get();
         $courses = Course::orderBy('name')->get();
 
         $selectedApplicant = $request->applicant_id ? Applicant::with('program.course')->find($request->applicant_id) : null;
 
-        return view('admission::admin.enrollments.create', [
+        return Inertia::render('admission/admin/enrollments/create', [
             'acceptedApplicants' => $acceptedApplicants,
             'terms' => $terms,
             'courses' => $courses,
@@ -127,7 +125,7 @@ class EnrollmentController extends Controller
     /**
      * Display the specified enrollment.
      */
-    public function show(Enrollment $enrollment): View
+    public function show(Enrollment $enrollment): Response
     {
         $enrollment->load([
             'applicant.program.course',
@@ -153,7 +151,7 @@ class EnrollmentController extends Controller
                 ->get();
         }
 
-        return view('admission::admin.enrollments.show', [
+        return Inertia::render('admission/admin/enrollments/show', [
             'enrollment' => $enrollment,
             'feesBreakdown' => $feesBreakdown,
             'availableSubjects' => $availableSubjects,
@@ -163,14 +161,14 @@ class EnrollmentController extends Controller
     /**
      * Show the form for editing the specified enrollment.
      */
-    public function edit(Enrollment $enrollment): View
+    public function edit(Enrollment $enrollment): Response
     {
         $terms = AcademicTerm::orderBy('academic_year', 'desc')->get();
         $sections = Section::where('course_id', $enrollment->section?->course_id)
             ->where('academic_term_id', $enrollment->academic_term_id)
             ->get();
 
-        return view('admission::admin.enrollments.edit', [
+        return Inertia::render('admission/admin/enrollments/edit', [
             'enrollment' => $enrollment,
             'terms' => $terms,
             'sections' => $sections,
@@ -340,17 +338,17 @@ class EnrollmentController extends Controller
     /**
      * Generate enrollment reports.
      */
-    public function reports(Request $request): View
+    public function reports(Request $request): Response
     {
         $reports = $this->enrollmentService->getReports(
             $request->term_id,
             $request->academic_year
         );
 
-        $terms = AcademicTerm::orderBy('academic_year', 'desc')->get();
+        $terms = AcademicTerm::orderBy('academic_year', 'desc')->orderByRaw("CASE semester WHEN '1st' THEN 1 WHEN '2nd' THEN 2 WHEN 'Summer' THEN 3 END DESC")->get();
         $academicYears = Enrollment::distinct()->pluck('academic_year')->sort()->reverse();
 
-        return view('admission::admin.enrollments.reports', [
+        return Inertia::render('admission/admin/enrollments/reports', [
             'reports' => $reports,
             'terms' => $terms,
             'academicYears' => $academicYears,

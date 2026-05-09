@@ -36,6 +36,7 @@ interface Enrollment {
     full_name: string;
     student_id: string | null;
     section: {
+        id: number;
         name: string;
         course?: { name: string };
     } | null;
@@ -93,15 +94,10 @@ export default function GradesIndex({ enrollments, academicYears, sections, stat
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        asChild
-                    >
-                        <a href={route('admission.admin.grades.export', filters)}>
+                    <a href={route('admission.admin.grades.export', filters)} className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent">
                             <Download className="mr-2 h-4 w-4" />
                             Export CSV
                         </a>
-                    </Button>
                 </div>
             </div>
 
@@ -115,8 +111,8 @@ export default function GradesIndex({ enrollments, academicYears, sections, stat
                             </label>
                             <Select
                                 value={filters.academic_year || ''}
-                                onValueChange={(v) =>
-                                    handleFilter('academic_year', v)
+                                onValueChange={(v: string | null) =>
+                                    handleFilter('academic_year', v ?? '')
                                 }
                             >
                                 <SelectTrigger>
@@ -138,8 +134,8 @@ export default function GradesIndex({ enrollments, academicYears, sections, stat
                             </label>
                             <Select
                                 value={filters.section_id || ''}
-                                onValueChange={(v) =>
-                                    handleFilter('section_id', v)
+                                onValueChange={(v: string | null) =>
+                                    handleFilter('section_id', v ?? '')
                                 }
                             >
                                 <SelectTrigger>
@@ -357,16 +353,15 @@ export default function GradesIndex({ enrollments, academicYears, sections, stat
                                             )}
                                         </td>
                                         <td className="px-4 py-3 text-right">
-                                            <Button size="sm" variant="ghost" asChild>
-                                                <Link
-                                                    href={route(
-                                                        'admission.admin.grades.section',
-                                                        enrollment.section?.id
-                                                    )}
-                                                >
-                                                    Enter Grades
-                                                </Link>
-                                            </Button>
+                                            <Link
+                                                href={route(
+                                                    'admission.admin.grades.section',
+                                                    enrollment.section?.id
+                                                )}
+                                                className="inline-flex items-center justify-center text-sm font-medium text-primary hover:underline"
+                                            >
+                                                Enter Grades
+                                            </Link>
                                         </td>
                                     </tr>
                                 );

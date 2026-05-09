@@ -117,23 +117,21 @@ export default function SectionGrades({ section, enrollments, subjects }: Sectio
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                            <a
-                                href={route('admission.admin.grades.sheet', section.id)}
-                                target="_blank"
-                            >
-                                <Printer className="mr-2 h-4 w-4" />
-                                Print Sheet
-                            </a>
-                        </Button>
-                        <Button variant="outline" size="sm" asChild>
-                            <a
-                                href={route('admission.admin.grades.export', { section_id: section.id })}
-                            >
-                                <Download className="mr-2 h-4 w-4" />
-                                Export CSV
-                            </a>
-                        </Button>
+                        <a
+                            href={route('admission.admin.grades.sheet', section.id)}
+                            target="_blank"
+                            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+                        >
+                            <Printer className="mr-2 h-4 w-4" />
+                            Print Sheet
+                        </a>
+                        <a
+                            href={route('admission.admin.grades.export', { section_id: section.id })}
+                            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Export CSV
+                        </a>
                     </div>
                 </div>
 
@@ -185,7 +183,7 @@ export default function SectionGrades({ section, enrollments, subjects }: Sectio
                                         <p className="text-xs text-muted-foreground">Current GPA</p>
                                         <p className="text-lg font-bold">{enrollment.gpa?.toFixed(2) ?? '0.00'}</p>
                                     </div>
-                                    <Badge variant={enrollment.status === 'enrolled' ? 'success' : 'default'}>
+                                    <Badge variant={enrollment.status === 'enrolled' ? 'default' : 'secondary'}>
                                         {enrollment.status.charAt(0).toUpperCase() + enrollment.status.slice(1)}
                                     </Badge>
                                 </div>

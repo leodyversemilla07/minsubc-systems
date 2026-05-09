@@ -1,8 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Select,
     SelectContent,
@@ -10,391 +9,121 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { type PageProps } from '@/types';
-import AppLayout from '@/layouts/app-layout';
 import {
-    Plus,
-    Search,
-    Filter,
-    ChevronRight,
-    Users,
-    Clock,
-    CheckCircle,
-    XCircle,
-    FileText,
-} from 'lucide-react';
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { type PageProps } from '@/types';
+import { Plus, Eye, Search, Users } from 'lucide-react';
 
 interface Enrollment {
     id: number;
-    application_number: string;
-    applicant_name: string;
     student_id: string | null;
-    program: string;
     academic_year: string;
     semester: string;
     year_level: string;
     status: string;
-    enrolled_at: string | null;
-    confirmed_at: string | null;
+    created_at: string;
+    applicant: { application_number: string; first_name: string; last_name: string } | null;
+    user: { id: number; name: string } | null;
+    section: { id: number; name: string; course: { code: string } } | null;
+    academic_term: { id: number; academic_year: string; semester: string } | null;
 }
 
-interface Stats {
-    total_enrolled: number;
-    pending_confirmation: number;
-    confirmed: number;
-    dropped: number;
-    by_year_level: Record<string, number>;
-}
-
-interface PaginationLink {
-    url: string | null;
-    label: string;
-    active: boolean;
-}
-
-interface EnrollmentsPageProps extends PageProps {
-    enrollments: { data: Enrollment[]; links: PaginationLink[] };
-    terms: Array<{ id: number; academic_year: string; semester: string; is_active: boolean }>;
+interface Term { id: number; academic_year: string; semester: string }
+interface Props extends PageProps {
+    enrollments: { data: Enrollment[]; links: any[] };
+    terms: Term[];
     academicYears: string[];
     statuses: string[];
-    stats: Stats;
-    filters: Record<string, string>;
+    stats: { total: number; pending: number; confirmed: number; enrolled: number };
+    filters: { term_id?: string; academic_year?: string; semester?: string; status?: string; year_level?: string; search?: string };
 }
 
-export default function EnrollmentsIndex({
-    enrollments,
-    terms,
-    academicYears,
-    statuses,
-    stats,
-    filters,
-}: EnrollmentsPageProps) {
-    const [search, setSearch] = useState(filters.search || '');
-    const [showNewForm, setShowNewForm] = useState(false);
-
-    // New enrollment form state
-    const [selectedApplicant, setSelectedApplicant] = useState('');
-    const [academicYear, setAcademicYear] = useState(
-        filters.academic_year || terms.find((t) => t.is_active)?.academic_year || ''
-    );
-    const [semester, setSemester] = useState(filters.semester || '1st');
-    const yearLevel = '1';
-    const [submitting, setSubmitting] = useState(false);
-
-    function handleFilter(key: string, value: string) {
-        router.get(route('admission.admin.enrollments.index'), {
-            ...filters,
-            [key]: value || undefined,
-        });
-    }
-
-    function handleSearch(e: React.FormEvent) {
-        e.preventDefault();
-        handleFilter('search', search);
-    }
-
-    function handleCreateEnrollment(e: React.FormEvent) {
-        e.preventDefault();
-        if (!selectedApplicant) return;
-
-        setSubmitting(true);
-        router.post(
-            route('admission.admin.enrollments.store'),
-            {
-                applicant_id: selectedApplicant,
-                academic_year: academicYear,
-                semester,
-                year_level: yearLevel,
-            },
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setShowNewForm(false);
-                    setSelectedApplicant('');
-                    setSubmitting(false);
-                },
-                onError: () => setSubmitting(false),
-            }
-        );
-    }
-
-    const getStatusBadge = (status: string) => {
-        const styles: Record<string, string> = {
-            pending: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-400',
-            confirmed: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-400',
-            enrolled: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-400',
-            dropped: 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-400',
-            cancelled: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-400',
-        };
-
-        return (
-            <span
-                className={`rounded-full px-2 py-0.5 text-xs font-medium ${styles[status] || ''}`}
-            >
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-            </span>
-        );
+export default function EnrollmentIndex({ enrollments, terms, academicYears, statuses, stats, filters }: Props) {
+    const handleFilter = (key: string, value: string) => {
+        router.get(route('admission.admin.enrollments.index'), { ...filters, [key]: value || undefined }, { preserveState: true, preserveScroll: true });
     };
 
     return (
         <>
             <Head title="Enrollments" />
-
-            <div className="space-y-6">
-                {/* Header */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Enrollments
-                        </h1>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Manage student enrollments, subjects, and payments
-                        </p>
-                    </div>
-                    <div className="flex gap-2">
-                        <Link href={route('admission.admin.enrollments.reports')}>
-                            <Button variant="outline" size="sm">
-                                <FileText className="mr-2 h-4 w-4" />
-                                Reports
-                            </Button>
-                        </Link>
-                        <Button size="sm" onClick={() => setShowNewForm(!showNewForm)}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            New Enrollment
-                        </Button>
-                    </div>
+            <div className="space-y-6 p-6">
+                <div className="flex items-center justify-between">
+                    <div><h1 className="text-2xl font-bold tracking-tight">Enrollments</h1><p className="text-muted-foreground">Manage student enrollments</p></div>
+                    <Link href={route('admission.admin.enrollments.create')} className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"><Plus className="mr-2 h-4 w-4" /> New Enrollment</Link>
                 </div>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                    <div className="rounded-xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-blue-100 p-2 dark:bg-blue-900">
-                                <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-bold">{stats.total_enrolled}</p>
-                                <p className="text-xs text-gray-500">Enrolled</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="rounded-xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-yellow-100 p-2 dark:bg-yellow-900">
-                                <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-bold">{stats.pending_confirmation}</p>
-                                <p className="text-xs text-gray-500">Pending</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="rounded-xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-green-100 p-2 dark:bg-green-900">
-                                <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-bold">{stats.confirmed}</p>
-                                <p className="text-xs text-gray-500">Confirmed</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="rounded-xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-orange-100 p-2 dark:bg-orange-900">
-                                <XCircle className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-bold">{stats.dropped}</p>
-                                <p className="text-xs text-gray-500">Dropped</p>
-                            </div>
-                        </div>
-                    </div>
+                <div className="grid gap-4 md:grid-cols-4">
+                    <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Total</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold">{stats.total}</p></CardContent></Card>
+                    <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Pending</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-yellow-600">{stats.pending}</p></CardContent></Card>
+                    <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Confirmed</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-blue-600">{stats.confirmed}</p></CardContent></Card>
+                    <Card><CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Enrolled</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-green-600">{stats.enrolled}</p></CardContent></Card>
                 </div>
 
-                {/* New Enrollment Form */}
-                {showNewForm && (
-                    <div className="rounded-xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-900 dark:bg-blue-950">
-                        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                            Create New Enrollment
-                        </h2>
-                        <form onSubmit={handleCreateEnrollment} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                            <div className="lg:col-span-2">
-                                <Label htmlFor="applicant">Accepted Applicant</Label>
-                                <Input
-                                    id="applicant"
-                                    placeholder="Search by name or application #..."
-                                    className="mt-1"
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="academic_year">Academic Year</Label>
-                                <Select value={academicYear} onValueChange={setAcademicYear}>
-                                    <SelectTrigger id="academic_year" className="mt-1">
-                                        <SelectValue placeholder="Select AY" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {academicYears.map((ay) => (
-                                            <SelectItem key={ay} value={ay}>{ay}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div>
-                                <Label htmlFor="semester">Semester</Label>
-                                <Select value={semester} onValueChange={setSemester}>
-                                    <SelectTrigger id="semester" className="mt-1">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="1st">1st Semester</SelectItem>
-                                        <SelectItem value="2nd">2nd Semester</SelectItem>
-                                        <SelectItem value="Summer">Summer</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="flex items-end gap-2 lg:col-span-4">
-                                <Button type="submit" disabled={!selectedApplicant || submitting}>
-                                    {submitting ? 'Creating...' : 'Create Enrollment'}
-                                </Button>
-                                <Button type="button" variant="outline" onClick={() => setShowNewForm(false)}>
-                                    Cancel
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-                )}
-
-                {/* Filters */}
-                <div className="flex flex-wrap items-center gap-3 rounded-xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                    <form onSubmit={handleSearch} className="flex flex-1 items-center gap-2">
-                        <div className="relative flex-1 max-w-md">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <Input
-                                placeholder="Search by name, student ID, or app #..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="pl-9"
-                            />
-                        </div>
-                        <Button type="submit" size="sm" variant="secondary">Search</Button>
-                    </form>
-
-                    <div className="flex items-center gap-2">
-                        <Filter className="h-4 w-4 text-gray-400" />
-                        <Select value={filters.term_id || ''} onValueChange={(v) => handleFilter('term_id', v)}>
-                            <SelectTrigger className="w-40">
-                                <SelectValue placeholder="All Terms" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="">All Terms</SelectItem>
-                                {terms.map((term) => (
-                                    <SelectItem key={term.id} value={String(term.id)}>
-                                        {term.academic_year} ({term.semester})
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
+                <Card>
+                    <CardContent className="p-4 flex flex-wrap gap-3">
+                        <div className="relative flex-1 min-w-[200px]"><Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input placeholder="Search name, ID, app no..." className="pl-9" defaultValue={filters.search ?? ''} onChange={(e) => handleFilter('search', e.target.value)} /></div>
+                        <Select value={filters.term_id ?? ''} onValueChange={(v: string | null) => handleFilter('term_id', v ?? '')}>
+                            <SelectTrigger className="w-[200px]"><SelectValue placeholder="Term" /></SelectTrigger>
+                            <SelectContent><SelectItem value="">All</SelectItem>{terms.map((t) => (<SelectItem key={t.id} value={String(t.id)}>{t.academic_year} — {t.semester}</SelectItem>))}</SelectContent>
                         </Select>
-                        <Select value={filters.status || ''} onValueChange={(v) => handleFilter('status', v)}>
-                            <SelectTrigger className="w-32">
-                                <SelectValue placeholder="All Status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="">All Status</SelectItem>
-                                {statuses.map((status) => (
-                                    <SelectItem key={status} value={status}>
-                                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
+                        <Select value={filters.status ?? ''} onValueChange={(v: string | null) => handleFilter('status', v ?? '')}>
+                            <SelectTrigger className="w-[140px]"><SelectValue placeholder="Status" /></SelectTrigger>
+                            <SelectContent><SelectItem value="">All</SelectItem>{statuses.map((s) => (<SelectItem key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</SelectItem>))}</SelectContent>
                         </Select>
-                        {(filters.search || filters.status || filters.term_id) && (
-                            <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => router.get(route('admission.admin.enrollments.index'))}
-                            >
-                                Clear
-                            </Button>
-                        )}
-                    </div>
-                </div>
+                        <Select value={filters.academic_year ?? ''} onValueChange={(v: string | null) => handleFilter('academic_year', v ?? '')}>
+                            <SelectTrigger className="w-[130px]"><SelectValue placeholder="Year" /></SelectTrigger>
+                            <SelectContent><SelectItem value="">All</SelectItem>{academicYears.map((y) => (<SelectItem key={y} value={y}>{y}</SelectItem>))}</SelectContent>
+                        </Select>
+                    </CardContent>
+                </Card>
 
-                {/* Enrollments Table */}
-                <div className="overflow-hidden rounded-xl border bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-                        <thead className="bg-gray-50 dark:bg-gray-900">
-                            <tr>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Student</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Student ID</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Program</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Period</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
-                                <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                            {enrollments.data.map((enrollment) => (
-                                <tr key={enrollment.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                                    <td className="px-4 py-3">
-                                        <p className="font-medium text-gray-900 dark:text-white">{enrollment.applicant_name}</p>
-                                        <p className="text-xs text-gray-500">{enrollment.application_number}</p>
-                                    </td>
-                                    <td className="px-4 py-3 font-mono text-sm text-gray-500">
-                                        {enrollment.student_id || '—'}
-                                    </td>
-                                    <td className="px-4 py-3 text-sm text-gray-500">
-                                        {enrollment.program || '—'}
-                                    </td>
-                                    <td className="px-4 py-3 text-sm text-gray-500">
-                                        <p>{enrollment.academic_year}</p>
-                                        <p className="text-xs text-gray-400">{enrollment.semester} Sem • Year {enrollment.year_level}</p>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        {getStatusBadge(enrollment.status)}
-                                    </td>
-                                    <td className="px-4 py-3 text-right">
-                                        <Link
-                                            href={route('admission.admin.enrollments.show', enrollment.id)}
-                                            className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
-                                        >
-                                            View <ChevronRight className="h-4 w-4" />
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))}
-                            {enrollments.data.length === 0 && (
-                                <tr>
-                                    <td colSpan={6} className="py-12 text-center text-sm text-gray-500">
-                                        No enrollments found.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                <Card><CardHeader><CardTitle>All Enrollments</CardTitle></CardHeader>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Student</TableHead>
+                                    <TableHead>Student ID</TableHead>
+                                    <TableHead>Course / Section</TableHead>
+                                    <TableHead>Term</TableHead>
+                                    <TableHead className="text-center">Year</TableHead>
+                                    <TableHead className="text-center">Status</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {enrollments.data.length === 0 ? (
+                                    <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No enrollments found</TableCell></TableRow>
+                                ) : enrollments.data.map((e) => (
+                                    <TableRow key={e.id}>
+                                        <TableCell className="font-medium">{e.applicant ? `${e.applicant.first_name} ${e.applicant.last_name}` : e.user?.name ?? '-'}</TableCell>
+                                        <TableCell className="font-mono text-sm">{e.student_id ?? '-'}</TableCell>
+                                        <TableCell className="text-sm">{e.section?.course?.code ?? '-'} — {e.section?.name ?? 'N/A'}</TableCell>
+                                        <TableCell className="text-sm">{e.academic_term?.academic_year ?? e.academic_year}</TableCell>
+                                        <TableCell className="text-center">{e.year_level}</TableCell>
+                                        <TableCell className="text-center"><Badge variant={e.status === 'enrolled' ? 'default' : e.status === 'confirmed' ? 'default' : 'secondary'}>{e.status}</Badge></TableCell>
+                                        <TableCell className="text-right">
+                                            <Link href={route('admission.admin.enrollments.show', e.id)} className="inline-flex items-center justify-center p-2 hover:bg-accent rounded-md"><Eye className="h-4 w-4" /></Link>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
 
-                {/* Pagination */}
-                {enrollments.links && enrollments.data.length > 0 && (
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500">
-                            Showing {enrollments.data.length} of enrollments
-                        </p>
-                        <div className="flex gap-1">
-                            {enrollments.links.map((link, index) => (
-                                <Link
-                                    key={index}
-                                    href={link.url || '#'}
-                                    className={`rounded-md px-3 py-1.5 text-sm ${
-                                        link.active
-                                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-400'
-                                            : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'
-                                    }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
-                        </div>
+                {enrollments.links && enrollments.links.length > 3 && (
+                    <div className="flex justify-center gap-1">
+                        {enrollments.links.map((link: any, i: number) => (
+                            <Link key={i} href={link.url || '#'} className={`inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm ${link.active ? 'bg-primary text-primary-foreground' : 'border border-input bg-background hover:bg-accent'}`} dangerouslySetInnerHTML={{ __html: link.label }} />
+                        ))}
                     </div>
                 )}
             </div>
@@ -402,4 +131,4 @@ export default function EnrollmentsIndex({
     );
 }
 
-EnrollmentsIndex.layout = (page: React.ReactNode) => <AppLayout>{page}</AppLayout>;
+EnrollmentIndex.layout = (page: React.ReactNode) => <AppLayout children={page} />;
