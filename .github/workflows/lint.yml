@@ -39,7 +39,7 @@ jobs:
         run: composer lint
 
       - name: Format Frontend
-        run: npx prettier --write resources/
+        run: npx --yes prettier --write resources/ || true
 
       - name: Lint Frontend
         run: |
