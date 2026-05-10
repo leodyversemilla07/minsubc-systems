@@ -1,0 +1,11 @@
+{
+    "name": "HR",
+    "alias": "hr",
+    "description": "Human Resources & Faculty Management Module",
+    "keywords": ["hr", "faculty", "employees", "attendance", "leave", "evaluations"],
+    "priority": 0,
+    "providers": [
+        "Modules\\HR\\Providers\\HRServiceProvider"
+    ],
+    "files": []
+}

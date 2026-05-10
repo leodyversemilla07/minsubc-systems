@@ -1,0 +1,27 @@
+{
+    "name": "nwidart/hr",
+    "description": "HR/Faculty Management Module for MinSU BC Systems",
+    "authors": [
+        {
+            "name": "MinSU BC Systems"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\HR\\": "app/",
+            "Modules\\HR\\Database\\Factories\\": "database/factories/",
+            "Modules\\HR\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\HR\\Tests\\": "tests/"
+        }
+    }
+}
