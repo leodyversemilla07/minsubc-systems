@@ -2,11 +2,20 @@
 
 namespace Modules\HR\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\HR\Database\Factories\PositionFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Position extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): PositionFactory
+    {
+        return PositionFactory::new();
+    }
+
     protected $table = 'hr_positions';
 
     protected $fillable = ['title', 'category', 'employment_type', 'description', 'salary_grade_min', 'salary_grade_max', 'is_active'];

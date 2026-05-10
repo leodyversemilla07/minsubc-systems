@@ -3,6 +3,7 @@
 namespace Modules\HR\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\HR\Database\Factories\EmployeeFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Employee extends Model
 {
     use HasFactory;
+
+    protected static function newFactory(): EmployeeFactory
+    {
+        return EmployeeFactory::new();
+    }
 
     protected $table = 'hr_employees';
 

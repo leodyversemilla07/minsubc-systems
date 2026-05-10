@@ -85,8 +85,8 @@ class AttendanceController extends Controller
                 ['employee_id' => $record['employee_id'], 'date' => $record['date']],
                 [
                     'status' => $record['status'],
-                    'time_in' => $record['time_in'] ? now()->parse($record['time_in']) : null,
-                    'time_out' => $record['time_out'] ? now()->parse($record['time_out']) : null,
+                    'time_in' => isset($record['time_in']) && $record['time_in'] ? now()->parse($record['time_in']) : null,
+                    'time_out' => isset($record['time_out']) && $record['time_out'] ? now()->parse($record['time_out']) : null,
                     'remarks' => $record['remarks'] ?? null,
                 ]
             );
