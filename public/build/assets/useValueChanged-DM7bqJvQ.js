@@ -1,0 +1,1 @@
+import{p as e,u as t}from"./jsx-runtime-DYhCm6LW.js";import{_ as n,h as r}from"./button-8VfbK6Kx.js";var i=e(t());function a(e,t){let a=i.useRef(e),o=n(t);r(()=>{a.current!==e&&o(a.current)},[e,o]),r(()=>{a.current=e},[e])}export{a as t};

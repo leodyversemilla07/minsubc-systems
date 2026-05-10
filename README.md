@@ -1,166 +1,137 @@
-<div align="center">
-
 # MinSU BC Systems Platform
 
-**A comprehensive web platform for Mindoro State University - Bongabong Campus**
+A modular campus management system built with Laravel 13, React 19, Inertia.js, and Tailwind CSS 4.
 
-![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat&logo=laravel&logoColor=white)
-![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=flat)
+## 🏛 Modules
 
-[Features](#features) • [Tech Stack](#tech-stack) • [Quick Start](#quick-start) • [Modules](#modules) • [Docs](#documentation)
+| Module | Purpose | Admin Pages | Tests |
+|--------|---------|:-:|:-:|
+| **Admission** | Application, enrollment, grades, transcripts, payments | 32 React | 84 |
+| **Registrar** | Student records, document requests, cashier, analytics | 19 React | 29 |
+| **SAS** | Student orgs, activities, scholarships, insurance | 35+ React | 41 |
+| **USG** | Announcements, events, documents, officers, resolutions | 18 React | 18 |
+| **VotingSystem** | Elections, candidates, ballots, results, analytics | 26 React | 41 |
+| **Library** | Books, categories, borrowing, fines, reports | 13 React | 37 |
 
-</div>
+**Total: ~200+ tests | ~420 routes | 60+ React pages**
 
----
+## 🚀 Tech Stack
 
-## Overview
+- **Backend:** PHP 8.3+, Laravel 13, nwidart/laravel-modules
+- **Frontend:** React 19, Inertia.js, TypeScript, Tailwind CSS 4
+- **UI:** shadcn/ui, Lucide icons, Recharts
+- **Database:** MySQL (production) / SQLite (testing)
+- **Auth:** Laravel Jetstream, Spatie Permissions, Better Auth
+- **Payments:** PayMongo (GCash, card, bank transfer)
+- **PDF:** DomPDF
+- **CI/CD:** GitHub Actions (lint + tests)
 
-The **MinSU BC Systems Platform** is a modular web application that consolidates four critical university systems into a unified platform:
-
-- **Registrar** - Document request and management system
-- **USG** - University Student Government portal
-- **SAS** - Student Affairs and Services
-- **VotingSystem** - Student elections and voting
-
----
-
-## Features
-
-### Core Platform
-- Unified authentication with 2FA support
-- Role-based access control (RBAC)
-- Real-time notifications (email/SMS)
-- Payment integration (PayMongo + Cash)
-- Dark mode support
-- Full TypeScript implementation
-- Comprehensive audit logging
-
-### Modules
-
-| Module | Status | Purpose |
-|--------|--------|---------|
-| **Registrar** | ✅ Active | Document requests (TOR, COE, Grades), payment processing, cashier reports |
-| **USG** | ✅ Active | Officers directory, announcements, events, transparency reports |
-| **SAS** | ✅ Active | Organizations, scholarships, insurance, renewals |
-| **VotingSystem** | ✅ Active | Elections, candidates, voters, party lists, positions |
-
----
-
-## Tech Stack
-
-| Category | Technology |
-|----------|------------|
-| **Backend** | Laravel 13, PHP 8.3+ |
-| **Frontend** | React 19, TypeScript, Inertia.js |
-| **Styling** | Tailwind CSS 4, Shadcn UI |
-| **Database** | MySQL 8.0 |
-| **Testing** | Pest, PHPUnit |
-| **Routing** | Laravel Wayfinder |
-
----
-
-## Quick Start
-
-### Prerequisites
-- PHP >= 8.2, Composer, Node.js >= 20.x, MySQL >= 8.0
-
-### Installation
+## ⚡ Quick Start
 
 ```bash
-# Clone and install
-git clone https://github.com/leodyversemilla07/minsubc-systems.git
-cd minsubc-systems
-
 # Install dependencies
 composer install
 npm install
 
-# Setup
+# Copy environment
 cp .env.example .env
 php artisan key:generate
+
+# Database
+touch database/database.sqlite
 php artisan migrate --seed
 
-# Run
-composer run dev
+# Build frontend
+npm run build
+
+# Run locally
+php artisan serve
+npm run dev
 ```
 
-### Docker (Alternative)
+## 🧪 Testing
 
 ```bash
-./vendor/bin/sail up
+# Run all tests
+composer test
+
+# Run specific module
+php vendor/bin/pest tests/Admission/
+php vendor/bin/pest tests/Library/LibraryModuleTest.php
+
+# Run with coverage (requires Xdebug/PCOV)
+php -d pcov.enabled=1 vendor/bin/pest --coverage
 ```
 
----
-
-## Project Structure
+## 📁 Module Structure
 
 ```
-minsubc-systems/
-├── app/                    # Laravel application
-├── Modules/                # Modular modules (Registrar, USG, SAS, VotingSystem)
-├── resources/js/           # React frontend
-│   ├── pages/              # Page components by module
-│   └── components/         # Shared UI components
-├── database/               # Migrations and seeders
-├── tests/                  # Test suites
-└── docs/                  # Documentation
+Modules/{ModuleName}/
+├── app/
+│   ├── Enums/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Admin/
+│   │   │   └── Student/
+│   │   └── Requests/
+│   ├── Models/
+│   ├── Notifications/
+│   ├── Providers/
+│   └── Services/
+├── config/
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+├── routes/
+│   ├── web.php
+│   ├── student.php
+│   └── api.php
 ```
 
----
+## 🖥 Frontend Structure
 
-## Commands
-
-```bash
-# Development
-composer run dev           # Start dev server
-npm run dev               # Vite dev server
-
-# Testing
-composer test             # Run all tests
-php artisan test          # Laravel tests
-
-# Code Quality
-vendor/bin/pint           # PHP formatting
-npm run format            # JS/TS formatting
-npm run lint              # Linting
+```
+resources/js/
+├── components/       # Shared UI components
+│   ├── ui/          # shadcn/ui components
+│   └── admission/   # Module-specific components
+├── layouts/          # App layouts
+├── pages/            # Inertia page components
+│   ├── admission/
+│   ├── library/
+│   ├── registrar/
+│   ├── sas/
+│   ├── student/
+│   ├── usg/
+│   └── voting/
+├── routes/           # Wayfinder-generated route helpers
+└── types/            # TypeScript type definitions
 ```
 
----
+## 🔐 Roles & Permissions
 
-## Documentation
+| Role | Scope |
+|------|-------|
+| `super-admin` | Full system access |
+| `registrar-admin` | Registrar management |
+| `registrar-staff` | Registrar operations |
+| `cashier` | Payment processing |
+| `sas-admin` | Student affairs management |
+| `usg-admin` | Student government management |
+| `voting-admin` | Election management |
+| `voting-manager` | Election operations |
+| `library-admin` | Library management |
+| `library-staff` | Library operations |
+| `student` | Student portal |
+| `org_adviser` | Organization advising |
 
-For detailed documentation, see:
+## 📊 CI/CD
 
-| Doc | Description |
-|-----|-------------|
-| [docs/README.md](docs/README.md) | Full documentation index |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture |
-| [docs/TECHNICAL.md](docs/TECHNICAL.md) | Technical details |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide |
+GitHub Actions runs on every push:
+- **Linter:** PHP Pint + ESLint (changed files only)
+- **Tests:** Full Pest test suite (SQLite in-memory)
 
----
+## 📄 License
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make changes and write tests
-4. Run `composer test` and `npm run lint`
-5. Commit and submit a Pull Request
-
----
-
-## License
-
-MIT License - See [LICENSE](LICENSE) file for details.
-
----
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/leodyversemilla07/minsubc-systems/issues)
-- **Email**: support@minsubc.edu.ph
-
-</div>
+MinSU BC Systems Platform &copy; 2026

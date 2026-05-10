@@ -3,5 +3,6 @@
     "USG": true,
     "SAS": true,
     "VotingSystem": true,
-    "Admission": true
+    "Admission": true,
+    "Library": true
 }

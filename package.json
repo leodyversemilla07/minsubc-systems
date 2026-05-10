@@ -8,7 +8,11 @@
         "format": "prettier --write resources/",
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix",
-        "types": "tsc --noEmit"
+        "types": "tsc --noEmit",
+        "test": "php vendor/bin/pest",
+        "test:admission": "php vendor/bin/pest tests/Admission/",
+        "test:library": "php vendor/bin/pest tests/Library/",
+        "test:feature": "php vendor/bin/pest tests/Feature/"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",

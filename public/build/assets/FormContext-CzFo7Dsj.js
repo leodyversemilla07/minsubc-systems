@@ -1,0 +1,1 @@
+import{p as e,u as t}from"./jsx-runtime-DYhCm6LW.js";import{s as n}from"./button-8VfbK6Kx.js";var r=e(t()),i=r.createContext({formRef:{current:{fields:new Map}},errors:{},clearErrors:n,validationMode:`onSubmit`,submitAttemptedRef:{current:!1}});function a(){return r.useContext(i)}export{a as t};
