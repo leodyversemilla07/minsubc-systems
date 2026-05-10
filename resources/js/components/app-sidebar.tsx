@@ -21,11 +21,15 @@ import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
+    BookCheck,
     BookOpen,
     Building2,
     Calendar,
+    CalendarCheck,
     CheckSquare,
     ClipboardList,
+    Clock,
+    DollarSign,
     FileText,
     GraduationCap,
     LayoutGrid,
@@ -34,6 +38,8 @@ import {
     RefreshCw,
     Settings,
     Shield,
+    Star,
+    Tags,
     Target,
     Users,
     Vote,
@@ -315,6 +321,73 @@ export function AppSidebar() {
                 });
             }
         }
+        // HR Admin Navigation
+        else if (hasAnyRole(['hr-admin', 'hr-staff'])) {
+            items.push(
+                {
+                    title: 'HR Dashboard',
+                    href: route('hr.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Employees',
+                    href: route('hr.admin.employees.index'),
+                    icon: Users,
+                },
+                {
+                    title: 'Departments',
+                    href: route('hr.admin.departments.index'),
+                    icon: Building2,
+                },
+                {
+                    title: 'Attendance',
+                    href: route('hr.admin.attendance.index'),
+                    icon: Clock,
+                },
+                {
+                    title: 'Leave Requests',
+                    href: route('hr.admin.leave.index'),
+                    icon: CalendarCheck,
+                },
+                {
+                    title: 'Evaluations',
+                    href: route('hr.admin.evaluations.index'),
+                    icon: Star,
+                },
+            );
+        }
+
+        // Library Admin Navigation
+        else if (hasAnyRole(['library-admin', 'library-staff'])) {
+            items.push(
+                {
+                    title: 'Library Dashboard',
+                    href: route('library.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Books',
+                    href: route('library.admin.books.index'),
+                    icon: BookOpen,
+                },
+                {
+                    title: 'Categories',
+                    href: route('library.admin.categories.index'),
+                    icon: Tags,
+                },
+                {
+                    title: 'Borrowings',
+                    href: route('library.admin.borrowings.index'),
+                    icon: BookCheck,
+                },
+                {
+                    title: 'Fines',
+                    href: route('library.admin.fines.index'),
+                    icon: DollarSign,
+                },
+            );
+        }
+
         // Student/Default Navigation - Unified 4 Systems
         else {
             items.push(
@@ -348,6 +421,11 @@ export function AppSidebar() {
                     href: voting.index.url(),
                     icon: Vote,
                 },
+                {
+                    title: 'Library',
+                    href: route('library.index'),
+                    icon: BookOpen,
+                },
             );
         }
 
@@ -370,6 +448,12 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['sas-admin', 'sas-staff'])) {
             return 'SAS Management';
+        }
+        if (hasAnyRole(['hr-admin', 'hr-staff'])) {
+            return 'HR Management';
+        }
+        if (hasAnyRole(['library-admin', 'library-staff'])) {
+            return 'Library Management';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';
