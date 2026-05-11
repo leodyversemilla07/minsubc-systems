@@ -2,11 +2,20 @@
 
 namespace Modules\Accounting\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Accounting\Database\Factories\AssessmentLineFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AssessmentLine extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): AssessmentLineFactory
+    {
+        return AssessmentLineFactory::new();
+    }
+
     protected $table = 'acc_assessment_lines';
 
     protected $fillable = ['assessment_id', 'fee_item_id', 'amount', 'paid_amount', 'notes'];
