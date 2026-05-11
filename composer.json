@@ -42,13 +42,17 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\HR\\": "Modules/HR/app/",
             "Modules\\HR\\Database\\Factories\\": "Modules/HR/database/factories/",
-            "Modules\\HR\\Database\\Seeders\\": "Modules/HR/database/seeders/"
+            "Modules\\HR\\Database\\Seeders\\": "Modules/HR/database/seeders/",
+            "Modules\\Accounting\\": "Modules/Accounting/app/",
+            "Modules\\Accounting\\Database\\Factories\\": "Modules/Accounting/database/factories/",
+            "Modules\\Accounting\\Database\\Seeders\\": "Modules/Accounting/database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Modules\\HR\\Tests\\": "Modules/HR/tests/"
+            "Modules\\HR\\Tests\\": "Modules/HR/tests/",
+            "Modules\\Accounting\\Tests\\": "Modules/Accounting/tests/"
         }
     },
     "scripts": {

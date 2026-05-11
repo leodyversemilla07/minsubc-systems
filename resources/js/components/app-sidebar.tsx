@@ -35,6 +35,7 @@ import {
     LayoutGrid,
     ListChecks,
     Megaphone,
+    Percent,
     RefreshCw,
     Settings,
     Shield,
@@ -388,6 +389,52 @@ export function AppSidebar() {
             );
         }
 
+        // Accounting Admin Navigation
+        else if (hasAnyRole(['accounting-admin', 'accounting-staff'])) {
+            items.push(
+                {
+                    title: 'Accounting Dashboard',
+                    href: route('accounting.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Assessments',
+                    href: route('accounting.admin.assessments.index'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Payments',
+                    href: route('accounting.admin.payments.index'),
+                    icon: DollarSign,
+                },
+                {
+                    title: 'Fee Categories',
+                    href: route('accounting.admin.fee-categories.index'),
+                    icon: Tags,
+                },
+                {
+                    title: 'Fee Items',
+                    href: route('accounting.admin.fee-items.index'),
+                    icon: ListChecks,
+                },
+                {
+                    title: 'Invoices',
+                    href: route('accounting.admin.invoices.index'),
+                    icon: FileText,
+                },
+                {
+                    title: 'Chart of Accounts',
+                    href: route('accounting.admin.chart-accounts.index'),
+                    icon: BarChart3,
+                },
+                {
+                    title: 'Discounts',
+                    href: route('accounting.admin.discounts.index'),
+                    icon: Percent,
+                },
+            );
+        }
+
         // Student/Default Navigation - Unified 4 Systems
         else {
             items.push(
@@ -454,6 +501,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['library-admin', 'library-staff'])) {
             return 'Library Management';
+        }
+        if (hasAnyRole(['accounting-admin', 'accounting-staff'])) {
+            return 'Accounting Management';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

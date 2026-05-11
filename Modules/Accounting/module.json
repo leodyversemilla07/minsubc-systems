@@ -1,0 +1,11 @@
+{
+    "name": "Accounting",
+    "alias": "accounting",
+    "description": "Accounting & Finance Module — fee management, payments, invoicing, and general ledger",
+    "keywords": ["accounting", "finance", "fees", "payments", "invoicing", "ledger"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Accounting\\Providers\\AccountingServiceProvider"
+    ],
+    "files": []
+}
