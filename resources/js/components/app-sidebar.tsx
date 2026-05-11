@@ -391,46 +391,56 @@ export function AppSidebar() {
 
         // Accounting Admin Navigation
         else if (hasAnyRole(['accounting-admin', 'accounting-staff'])) {
+            // ... accounting items
+        }
+
+        // Guidance Admin Navigation
+        else if (hasAnyRole(['guidance-admin', 'guidance-counselor'])) {
             items.push(
                 {
-                    title: 'Accounting Dashboard',
-                    href: route('accounting.admin.dashboard'),
+                    title: 'Guidance Dashboard',
+                    href: route('guidance.admin.dashboard'),
                     icon: LayoutGrid,
                 },
                 {
-                    title: 'Assessments',
-                    href: route('accounting.admin.assessments.index'),
+                    title: 'Counselors',
+                    href: route('guidance.admin.counselors.index'),
+                    icon: Users,
+                },
+                {
+                    title: 'Appointments',
+                    href: route('guidance.admin.appointments.index'),
+                    icon: CalendarCheck,
+                },
+                {
+                    title: 'Sessions',
+                    href: route('guidance.admin.sessions.index'),
                     icon: ClipboardList,
                 },
                 {
-                    title: 'Payments',
-                    href: route('accounting.admin.payments.index'),
-                    icon: DollarSign,
+                    title: 'Appointment Slots',
+                    href: route('guidance.admin.slots.index'),
+                    icon: Clock,
                 },
                 {
-                    title: 'Fee Categories',
-                    href: route('accounting.admin.fee-categories.index'),
-                    icon: Tags,
-                },
-                {
-                    title: 'Fee Items',
-                    href: route('accounting.admin.fee-items.index'),
-                    icon: ListChecks,
-                },
-                {
-                    title: 'Invoices',
-                    href: route('accounting.admin.invoices.index'),
+                    title: 'Assessments',
+                    href: route('guidance.admin.assessments.index'),
                     icon: FileText,
                 },
                 {
-                    title: 'Chart of Accounts',
-                    href: route('accounting.admin.chart-accounts.index'),
-                    icon: BarChart3,
+                    title: 'Referrals',
+                    href: route('guidance.admin.referrals.index'),
+                    icon: Share2,
                 },
                 {
-                    title: 'Discounts',
-                    href: route('accounting.admin.discounts.index'),
-                    icon: Percent,
+                    title: 'Interventions',
+                    href: route('guidance.admin.interventions.index'),
+                    icon: Star,
+                },
+                {
+                    title: 'Incident Reports',
+                    href: route('guidance.admin.incident-reports.index'),
+                    icon: AlertTriangle,
                 },
             );
         }
@@ -504,6 +514,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['accounting-admin', 'accounting-staff'])) {
             return 'Accounting Management';
+        }
+        if (hasAnyRole(['guidance-admin', 'guidance-counselor'])) {
+            return 'Guidance Management';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';
