@@ -5,5 +5,8 @@
     "VotingSystem": true,
     "Admission": true,
     "Library": true,
-    "HR": true
+    "HR": true,
+    "Accounting": true,
+    "Guidance": true,
+    "Curriculum": true
 }

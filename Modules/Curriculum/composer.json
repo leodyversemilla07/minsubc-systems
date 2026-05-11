@@ -1,0 +1,16 @@
+{
+    "name": "nwidart/curriculum",
+    "description": "Curriculum & Syllabus Management Module",
+    "authors": [{"name": "MinSU BC Systems"}],
+    "extra": {"laravel": {"providers": [], "aliases": {}}},
+    "autoload": {
+        "psr-4": {
+            "Modules\\Curriculum\\": "app/",
+            "Modules\\Curriculum\\Database\\Factories\\": "database/factories/",
+            "Modules\\Curriculum\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { "Modules\\Curriculum\\Tests\\": "tests/" }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Curriculum",
+    "alias": "curriculum",
+    "description": "Curriculum & Syllabus Management — programs, courses, syllabi, outcomes, textbooks",
+    "keywords": ["curriculum", "syllabus", "program", "course", "outcome"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Curriculum\\Providers\\CurriculumServiceProvider"
+    ],
+    "files": []
+}

@@ -518,6 +518,9 @@ export function AppSidebar() {
         if (hasAnyRole(['guidance-admin', 'guidance-counselor'])) {
             return 'Guidance Management';
         }
+        if (hasAnyRole(['curriculum-admin', 'curriculum-staff'])) {
+            return 'Curriculum Management';
+        }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';
         }
