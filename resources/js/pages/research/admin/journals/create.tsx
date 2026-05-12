@@ -1,9 +1,65 @@
-import React from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Save } from 'lucide-react';
+
+import AppLayout from '@/layouts/app-layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function Create() {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Create</h1>
-    </div>
-  );
+    const { data, setData, post, processing, errors } = useForm({
+        title: '',
+        issn: '',
+        description: '',
+    });
+
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(route('research.admin.journals.store'));
+    };
+
+    return (
+        <AppLayout>
+            <Head title="Create Journal" />
+            <div className="space-y-6 p-6">
+                <div className="flex items-center gap-4">
+                    <Link href={route('research.admin.journals.index')}>
+                        <Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button>
+                    </Link>
+                    <h1 className="text-2xl font-bold">Create Journal</h1>
+                </div>
+
+                <Card className="max-w-2xl">
+                    <CardHeader><CardTitle>Journal Details</CardTitle></CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit} className="space-y-4">
+                            <div>
+                                <Label htmlFor="title">Title</Label>
+                                <Input id="title" value={data.title} onChange={(e) => setData('title', e.target.value)} placeholder="Journal title" />
+                                {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+                            </div>
+                            <div>
+                                <Label htmlFor="issn">ISSN</Label>
+                                <Input id="issn" value={data.issn} onChange={(e) => setData('issn', e.target.value)} placeholder="XXXX-XXXX" />
+                                {errors.issn && <p className="mt-1 text-sm text-red-600">{errors.issn}</p>}
+                            </div>
+                            <div>
+                                <Label htmlFor="description">Description</Label>
+                                <Textarea id="description" value={data.description} onChange={(e) => setData('description', e.target.value)} rows={4} placeholder="Journal description and scope" />
+                                {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
+                            </div>
+                            <div className="flex gap-2">
+                                <Button type="submit" disabled={processing}><Save className="mr-2 h-4 w-4" /> Save</Button>
+                                <Link href={route('research.admin.journals.index')}>
+                                    <Button variant="outline">Cancel</Button>
+                                </Link>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
+        </AppLayout>
+    );
 }
