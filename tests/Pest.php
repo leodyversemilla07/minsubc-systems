@@ -51,7 +51,7 @@ pest()->extend(\PHPUnit\Framework\TestCase::class)
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('../Modules/*/tests/Feature');
+    ->in('Integration');
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
