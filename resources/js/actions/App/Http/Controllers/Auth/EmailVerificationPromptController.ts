@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
  * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
@@ -41,4 +41,40 @@ EmailVerificationPromptController.head = (options?: RouteQueryOptions): RouteDef
     url: EmailVerificationPromptController.url(options),
     method: 'head',
 })
+
+    /**
+* @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
+ * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
+ * @route '/verify-email'
+ */
+    const EmailVerificationPromptControllerForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: EmailVerificationPromptController.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
+ * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
+ * @route '/verify-email'
+ */
+        EmailVerificationPromptControllerForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: EmailVerificationPromptController.url(options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
+ * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
+ * @route '/verify-email'
+ */
+        EmailVerificationPromptControllerForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: EmailVerificationPromptController.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    EmailVerificationPromptController.form = EmailVerificationPromptControllerForm
 export default EmailVerificationPromptController

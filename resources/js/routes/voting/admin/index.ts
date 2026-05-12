@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 import analytics72d765 from './analytics'
 import elections from './elections'
 import candidates from './candidates'
@@ -50,6 +50,41 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/voting/admin/dashboard'
+ */
+    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/voting/admin/dashboard'
+ */
+        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/voting/admin/dashboard'
+ */
+        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dashboard.form = dashboardForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::analytics
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
@@ -92,6 +127,42 @@ analytics.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: analytics.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::analytics
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
+ * @route '/voting/admin/analytics'
+ */
+    const analyticsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: analytics.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::analytics
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
+ * @route '/voting/admin/analytics'
+ */
+        analyticsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: analytics.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::analytics
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
+ * @route '/voting/admin/analytics'
+ */
+        analyticsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: analytics.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    analytics.form = analyticsForm
 const admin = {
     dashboard: Object.assign(dashboard, dashboard),
 analytics: Object.assign(analytics, analytics72d765),

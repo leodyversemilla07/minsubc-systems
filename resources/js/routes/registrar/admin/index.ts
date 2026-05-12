@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 import requests from './requests'
 import auditLogs5bd45d from './audit-logs'
 import analytics72d765 from './analytics'
@@ -46,6 +46,41 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::dashboard
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:23
+ * @route '/admin'
+ */
+    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::dashboard
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:23
+ * @route '/admin'
+ */
+        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::dashboard
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:23
+ * @route '/admin'
+ */
+        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dashboard.form = dashboardForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AdminController::auditLogs
  * @see Modules/Registrar/app/Http/Controllers/AdminController.php:215
@@ -89,6 +124,41 @@ auditLogs.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::auditLogs
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:215
+ * @route '/admin/audit-logs'
+ */
+    const auditLogsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: auditLogs.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::auditLogs
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:215
+ * @route '/admin/audit-logs'
+ */
+        auditLogsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: auditLogs.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::auditLogs
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:215
+ * @route '/admin/audit-logs'
+ */
+        auditLogsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: auditLogs.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    auditLogs.form = auditLogsForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::analytics
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
@@ -131,6 +201,42 @@ analytics.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: analytics.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::analytics
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
+ * @route '/admin/analytics'
+ */
+    const analyticsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: analytics.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::analytics
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
+ * @route '/admin/analytics'
+ */
+        analyticsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: analytics.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::analytics
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
+ * @route '/admin/analytics'
+ */
+        analyticsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: analytics.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    analytics.form = analyticsForm
 const admin = {
     dashboard: Object.assign(dashboard, dashboard),
 requests: Object.assign(requests, requests),

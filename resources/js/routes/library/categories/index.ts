@@ -1,10 +1,10 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\LibraryController::show
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-export const show = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -19,7 +19,7 @@ show.definition = {
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-show.url = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+show.url = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { category: args }
     }
@@ -52,7 +52,7 @@ show.url = (args: { category: string | number | { id: string | number } } | [cat
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-show.get = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -61,10 +61,46 @@ show.get = (args: { category: string | number | { id: string | number } } | [cat
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-show.head = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\LibraryController::show
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
+ * @route '/library/categories/{category}'
+ */
+    const showForm = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::show
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
+ * @route '/library/categories/{category}'
+ */
+        showForm.get = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::show
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
+ * @route '/library/categories/{category}'
+ */
+        showForm.head = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 const categories = {
     show: Object.assign(show, show),
 }

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\PageController::data
  * @see Modules/USG/app/Http/Controllers/PageController.php:250
@@ -41,6 +41,42 @@ data.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: data.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::data
+ * @see Modules/USG/app/Http/Controllers/PageController.php:250
+ * @route '/usg/events/calendar/data'
+ */
+    const dataForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: data.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::data
+ * @see Modules/USG/app/Http/Controllers/PageController.php:250
+ * @route '/usg/events/calendar/data'
+ */
+        dataForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: data.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::data
+ * @see Modules/USG/app/Http/Controllers/PageController.php:250
+ * @route '/usg/events/calendar/data'
+ */
+        dataForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: data.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    data.form = dataForm
 const calendar = {
     data: Object.assign(data, data),
 }

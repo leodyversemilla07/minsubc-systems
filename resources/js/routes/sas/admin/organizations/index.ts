@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::index
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:25
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:25
+ * @route '/sas/admin/organizations'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:25
+ * @route '/sas/admin/organizations'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:25
+ * @route '/sas/admin/organizations'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::create
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:42
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:42
+ * @route '/sas/admin/organizations/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:42
+ * @route '/sas/admin/organizations/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:42
+ * @route '/sas/admin/organizations/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::store
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:57
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:57
+ * @route '/sas/admin/organizations'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:57
+ * @route '/sas/admin/organizations'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::show
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:68
@@ -181,6 +272,41 @@ show.head = (args: { organization: string | number } | [organization: string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:68
+ * @route '/sas/admin/organizations/{organization}'
+ */
+    const showForm = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:68
+ * @route '/sas/admin/organizations/{organization}'
+ */
+        showForm.get = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:68
+ * @route '/sas/admin/organizations/{organization}'
+ */
+        showForm.head = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::edit
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:80
@@ -243,6 +369,41 @@ edit.head = (args: { organization: string | number } | [organization: string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:80
+ * @route '/sas/admin/organizations/{organization}/edit'
+ */
+    const editForm = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:80
+ * @route '/sas/admin/organizations/{organization}/edit'
+ */
+        editForm.get = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:80
+ * @route '/sas/admin/organizations/{organization}/edit'
+ */
+        editForm.head = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::update
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:98
@@ -305,6 +466,51 @@ update.patch = (args: { organization: string | number } | [organization: string 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:98
+ * @route '/sas/admin/organizations/{organization}'
+ */
+    const updateForm = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:98
+ * @route '/sas/admin/organizations/{organization}'
+ */
+        updateForm.put = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:98
+ * @route '/sas/admin/organizations/{organization}'
+ */
+        updateForm.patch = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::destroy
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:111
@@ -358,6 +564,37 @@ destroy.delete = (args: { organization: string | number } | [organization: strin
     method: 'delete',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:111
+ * @route '/sas/admin/organizations/{organization}'
+ */
+    const destroyForm = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:111
+ * @route '/sas/admin/organizations/{organization}'
+ */
+        destroyForm.delete = (args: { organization: string | number } | [organization: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::compliance
  * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:124
@@ -400,6 +637,42 @@ compliance.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: compliance.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::compliance
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:124
+ * @route '/sas/admin/organizations-compliance'
+ */
+    const complianceForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: compliance.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::compliance
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:124
+ * @route '/sas/admin/organizations-compliance'
+ */
+        complianceForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: compliance.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\OrganizationController::compliance
+ * @see Modules/SAS/app/Http/Controllers/Admin/OrganizationController.php:124
+ * @route '/sas/admin/organizations-compliance'
+ */
+        complianceForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: compliance.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    compliance.form = complianceForm
 const organizations = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::index
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:19
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:19
+ * @route '/voting/admin/voters'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:19
+ * @route '/voting/admin/voters'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:19
+ * @route '/voting/admin/voters'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::create
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:41
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:41
+ * @route '/voting/admin/voters/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:41
+ * @route '/voting/admin/voters/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:41
+ * @route '/voting/admin/voters/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::store
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:64
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:64
+ * @route '/voting/admin/voters'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:64
+ * @route '/voting/admin/voters'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::show
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:104
@@ -186,6 +277,41 @@ show.head = (args: { voter: number | { id: number } } | [voter: number | { id: n
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:104
+ * @route '/voting/admin/voters/{voter}'
+ */
+    const showForm = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:104
+ * @route '/voting/admin/voters/{voter}'
+ */
+        showForm.get = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:104
+ * @route '/voting/admin/voters/{voter}'
+ */
+        showForm.head = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::update
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:0
@@ -239,6 +365,37 @@ update.put = (args: { voter: string | number } | [voter: string | number ] | str
     method: 'put',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:0
+ * @route '/voting/admin/voters/{voter}'
+ */
+    const updateForm = (args: { voter: string | number } | [voter: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:0
+ * @route '/voting/admin/voters/{voter}'
+ */
+        updateForm.put = (args: { voter: string | number } | [voter: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::destroy
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:128
@@ -297,6 +454,37 @@ destroy.delete = (args: { voter: number | { id: number } } | [voter: number | { 
     method: 'delete',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:128
+ * @route '/voting/admin/voters/{voter}'
+ */
+    const destroyForm = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:128
+ * @route '/voting/admin/voters/{voter}'
+ */
+        destroyForm.delete = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::resetVote
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:114
@@ -355,6 +543,27 @@ resetVote.post = (args: { voter: number | { id: number } } | [voter: number | { 
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::resetVote
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:114
+ * @route '/voting/admin/voters/{voter}/reset-vote'
+ */
+    const resetVoteForm = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: resetVote.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::resetVote
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:114
+ * @route '/voting/admin/voters/{voter}/reset-vote'
+ */
+        resetVoteForm.post = (args: { voter: number | { id: number } } | [voter: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: resetVote.url(args, options),
+            method: 'post',
+        })
+    
+    resetVote.form = resetVoteForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::exportMethod
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:140
@@ -421,6 +630,42 @@ exportMethod.head = (args: { election: number | { id: number } } | [election: nu
     url: exportMethod.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::exportMethod
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:140
+ * @route '/voting/admin/voters/{election}/export'
+ */
+    const exportMethodForm = (args: { election: number | { id: number } } | [election: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportMethod.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::exportMethod
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:140
+ * @route '/voting/admin/voters/{election}/export'
+ */
+        exportMethodForm.get = (args: { election: number | { id: number } } | [election: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportMethod.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\VoterManagementController::exportMethod
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/VoterManagementController.php:140
+ * @route '/voting/admin/voters/{election}/export'
+ */
+        exportMethodForm.head = (args: { election: number | { id: number } } | [election: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportMethod.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportMethod.form = exportMethodForm
 const voters = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

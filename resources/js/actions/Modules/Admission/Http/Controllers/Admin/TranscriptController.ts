@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:26
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:26
+ * @route '/admission/admin/transcripts'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:26
+ * @route '/admission/admin/transcripts'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:26
+ * @route '/admission/admin/transcripts'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::verify
  * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:117
@@ -85,6 +120,41 @@ verify.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::verify
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:117
+ * @route '/admission/admin/transcripts/verify'
+ */
+    const verifyForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: verify.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::verify
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:117
+ * @route '/admission/admin/transcripts/verify'
+ */
+        verifyForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: verify.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::verify
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:117
+ * @route '/admission/admin/transcripts/verify'
+ */
+        verifyForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: verify.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    verify.form = verifyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::preview
  * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:74
@@ -147,6 +217,41 @@ preview.head = (args: { studentId: string | number } | [studentId: string | numb
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::preview
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:74
+ * @route '/admission/admin/transcripts/{studentId}'
+ */
+    const previewForm = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: preview.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::preview
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:74
+ * @route '/admission/admin/transcripts/{studentId}'
+ */
+        previewForm.get = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: preview.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::preview
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:74
+ * @route '/admission/admin/transcripts/{studentId}'
+ */
+        previewForm.head = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: preview.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    preview.form = previewForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::download
  * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:55
@@ -209,6 +314,41 @@ download.head = (args: { studentId: string | number } | [studentId: string | num
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::download
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:55
+ * @route '/admission/admin/transcripts/{studentId}/download'
+ */
+    const downloadForm = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: download.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::download
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:55
+ * @route '/admission/admin/transcripts/{studentId}/download'
+ */
+        downloadForm.get = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::download
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:55
+ * @route '/admission/admin/transcripts/{studentId}/download'
+ */
+        downloadForm.head = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    download.form = downloadForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::trueCopy
  * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:98
@@ -271,6 +411,41 @@ trueCopy.head = (args: { studentId: string | number } | [studentId: string | num
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::trueCopy
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:98
+ * @route '/admission/admin/transcripts/{studentId}/tcos'
+ */
+    const trueCopyForm = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: trueCopy.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::trueCopy
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:98
+ * @route '/admission/admin/transcripts/{studentId}/tcos'
+ */
+        trueCopyForm.get = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: trueCopy.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::trueCopy
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:98
+ * @route '/admission/admin/transcripts/{studentId}/tcos'
+ */
+        trueCopyForm.head = (args: { studentId: string | number } | [studentId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: trueCopy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    trueCopy.form = trueCopyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::batchPrint
  * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:141
@@ -304,6 +479,28 @@ batchPrint.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: batchPrint.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::batchPrint
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:141
+ * @route '/admission/admin/transcripts/batch-print'
+ */
+    const batchPrintForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: batchPrint.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\TranscriptController::batchPrint
+ * @see Modules/Admission/app/Http/Controllers/Admin/TranscriptController.php:141
+ * @route '/admission/admin/transcripts/batch-print'
+ */
+        batchPrintForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: batchPrint.url(options),
+            method: 'post',
+        })
+    
+    batchPrint.form = batchPrintForm
 const TranscriptController = { index, verify, preview, download, trueCopy, batchPrint }
 
 export default TranscriptController

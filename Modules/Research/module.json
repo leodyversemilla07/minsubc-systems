@@ -1,0 +1,1 @@
+{"name":"Research","alias":"research","description":"Research & Thesis Management","keywords":["research","thesis"],"priority":0,"providers":["Modules\\Research\\Providers\\ResearchServiceProvider"],"files":[]}

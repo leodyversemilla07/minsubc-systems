@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::index
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:13
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:13
+ * @route '/library/admin/categories'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:13
+ * @route '/library/admin/categories'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:13
+ * @route '/library/admin/categories'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::create
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:19
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::create
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:19
+ * @route '/library/admin/categories/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::create
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:19
+ * @route '/library/admin/categories/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::create
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:19
+ * @route '/library/admin/categories/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::store
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:24
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::store
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:24
+ * @route '/library/admin/categories'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::store
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:24
+ * @route '/library/admin/categories'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::show
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:0
@@ -181,12 +272,47 @@ show.head = (args: { category: string | number } | [category: string | number ] 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::show
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:0
+ * @route '/library/admin/categories/{category}'
+ */
+    const showForm = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::show
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:0
+ * @route '/library/admin/categories/{category}'
+ */
+        showForm.get = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::show
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:0
+ * @route '/library/admin/categories/{category}'
+ */
+        showForm.head = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::edit
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
  * @route '/library/admin/categories/{category}/edit'
  */
-export const edit = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const edit = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
     method: 'get',
 })
@@ -201,7 +327,7 @@ edit.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
  * @route '/library/admin/categories/{category}/edit'
  */
-edit.url = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+edit.url = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { category: args }
     }
@@ -234,7 +360,7 @@ edit.url = (args: { category: string | number | { id: string | number } } | [cat
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
  * @route '/library/admin/categories/{category}/edit'
  */
-edit.get = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+edit.get = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
     method: 'get',
 })
@@ -243,17 +369,52 @@ edit.get = (args: { category: string | number | { id: string | number } } | [cat
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
  * @route '/library/admin/categories/{category}/edit'
  */
-edit.head = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+edit.head = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: edit.url(args, options),
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::edit
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
+ * @route '/library/admin/categories/{category}/edit'
+ */
+    const editForm = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::edit
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
+ * @route '/library/admin/categories/{category}/edit'
+ */
+        editForm.get = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::edit
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:37
+ * @route '/library/admin/categories/{category}/edit'
+ */
+        editForm.head = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::update
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
  * @route '/library/admin/categories/{category}'
  */
-export const update = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+export const update = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
     method: 'put',
 })
@@ -268,7 +429,7 @@ update.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
  * @route '/library/admin/categories/{category}'
  */
-update.url = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+update.url = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { category: args }
     }
@@ -301,7 +462,7 @@ update.url = (args: { category: string | number | { id: string | number } } | [c
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
  * @route '/library/admin/categories/{category}'
  */
-update.put = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+update.put = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
     method: 'put',
 })
@@ -310,17 +471,62 @@ update.put = (args: { category: string | number | { id: string | number } } | [c
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
  * @route '/library/admin/categories/{category}'
  */
-update.patch = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
+update.patch = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: update.url(args, options),
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::update
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
+ * @route '/library/admin/categories/{category}'
+ */
+    const updateForm = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::update
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
+ * @route '/library/admin/categories/{category}'
+ */
+        updateForm.put = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::update
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:42
+ * @route '/library/admin/categories/{category}'
+ */
+        updateForm.patch = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::destroy
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:56
  * @route '/library/admin/categories/{category}'
  */
-export const destroy = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+export const destroy = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
     method: 'delete',
 })
@@ -335,7 +541,7 @@ destroy.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:56
  * @route '/library/admin/categories/{category}'
  */
-destroy.url = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+destroy.url = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { category: args }
     }
@@ -368,10 +574,42 @@ destroy.url = (args: { category: string | number | { id: string | number } } | [
  * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:56
  * @route '/library/admin/categories/{category}'
  */
-destroy.delete = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+destroy.delete = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::destroy
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:56
+ * @route '/library/admin/categories/{category}'
+ */
+    const destroyForm = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::destroy
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:56
+ * @route '/library/admin/categories/{category}'
+ */
+        destroyForm.delete = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const categories = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

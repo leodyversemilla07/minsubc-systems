@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\FineController::index
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:13
@@ -42,12 +42,47 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:13
+ * @route '/library/admin/fines'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:13
+ * @route '/library/admin/fines'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:13
+ * @route '/library/admin/fines'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\FineController::pay
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:34
  * @route '/library/admin/fines/{fine}/pay'
  */
-export const pay = (args: { fine: string | number | { id: string | number } } | [fine: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const pay = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: pay.url(args, options),
     method: 'post',
 })
@@ -62,7 +97,7 @@ pay.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:34
  * @route '/library/admin/fines/{fine}/pay'
  */
-pay.url = (args: { fine: string | number | { id: string | number } } | [fine: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+pay.url = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { fine: args }
     }
@@ -95,17 +130,38 @@ pay.url = (args: { fine: string | number | { id: string | number } } | [fine: st
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:34
  * @route '/library/admin/fines/{fine}/pay'
  */
-pay.post = (args: { fine: string | number | { id: string | number } } | [fine: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+pay.post = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: pay.url(args, options),
     method: 'post',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::pay
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:34
+ * @route '/library/admin/fines/{fine}/pay'
+ */
+    const payForm = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: pay.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::pay
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:34
+ * @route '/library/admin/fines/{fine}/pay'
+ */
+        payForm.post = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: pay.url(args, options),
+            method: 'post',
+        })
+    
+    pay.form = payForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\FineController::waive
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:50
  * @route '/library/admin/fines/{fine}/waive'
  */
-export const waive = (args: { fine: string | number | { id: string | number } } | [fine: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const waive = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: waive.url(args, options),
     method: 'post',
 })
@@ -120,7 +176,7 @@ waive.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:50
  * @route '/library/admin/fines/{fine}/waive'
  */
-waive.url = (args: { fine: string | number | { id: string | number } } | [fine: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+waive.url = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { fine: args }
     }
@@ -153,10 +209,32 @@ waive.url = (args: { fine: string | number | { id: string | number } } | [fine: 
  * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:50
  * @route '/library/admin/fines/{fine}/waive'
  */
-waive.post = (args: { fine: string | number | { id: string | number } } | [fine: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+waive.post = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: waive.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::waive
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:50
+ * @route '/library/admin/fines/{fine}/waive'
+ */
+    const waiveForm = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: waive.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\FineController::waive
+ * @see Modules/Library/app/Http/Controllers/Admin/FineController.php:50
+ * @route '/library/admin/fines/{fine}/waive'
+ */
+        waiveForm.post = (args: { fine: number | { id: number } } | [fine: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: waive.url(args, options),
+            method: 'post',
+        })
+    
+    waive.form = waiveForm
 const FineController = { index, pay, waive }
 
 export default FineController

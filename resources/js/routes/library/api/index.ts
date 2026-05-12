@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 import books from './books'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::categories
@@ -42,6 +42,42 @@ categories.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: categories.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::categories
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:68
+ * @route '/api/library/categories'
+ */
+    const categoriesForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: categories.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::categories
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:68
+ * @route '/api/library/categories'
+ */
+        categoriesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: categories.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookCategoryController::categories
+ * @see Modules/Library/app/Http/Controllers/Admin/BookCategoryController.php:68
+ * @route '/api/library/categories'
+ */
+        categoriesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: categories.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    categories.form = categoriesForm
 const api = {
     books: Object.assign(books, books),
 categories: Object.assign(categories, categories),

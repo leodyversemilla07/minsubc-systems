@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
@@ -42,12 +42,47 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
+ * @route '/library/student/borrowings'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
+ * @route '/library/student/borrowings'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
+ * @route '/library/student/borrowings'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-export const show = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -62,7 +97,7 @@ show.definition = {
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-show.url = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+show.url = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { borrowing: args }
     }
@@ -95,7 +130,7 @@ show.url = (args: { borrowing: string | number | { id: string | number } } | [bo
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-show.get = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -104,11 +139,46 @@ show.get = (args: { borrowing: string | number | { id: string | number } } | [bo
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-show.head = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
+ * @route '/library/student/borrowings/{borrowing}'
+ */
+    const showForm = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
+ * @route '/library/student/borrowings/{borrowing}'
+ */
+        showForm.get = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
+ * @route '/library/student/borrowings/{borrowing}'
+ */
+        showForm.head = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reservations
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:46
@@ -152,12 +222,47 @@ reservations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reservations
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:46
+ * @route '/library/student/reservations'
+ */
+    const reservationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: reservations.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reservations
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:46
+ * @route '/library/student/reservations'
+ */
+        reservationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: reservations.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reservations
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:46
+ * @route '/library/student/reservations'
+ */
+        reservationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: reservations.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    reservations.form = reservationsForm
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reserve
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
  * @route '/library/student/books/{book}/reserve'
  */
-export const reserve = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const reserve = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: reserve.url(args, options),
     method: 'post',
 })
@@ -172,7 +277,7 @@ reserve.definition = {
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
  * @route '/library/student/books/{book}/reserve'
  */
-reserve.url = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+reserve.url = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { book: args }
     }
@@ -205,17 +310,38 @@ reserve.url = (args: { book: string | number | { id: string | number } } | [book
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
  * @route '/library/student/books/{book}/reserve'
  */
-reserve.post = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+reserve.post = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: reserve.url(args, options),
     method: 'post',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reserve
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
+ * @route '/library/student/books/{book}/reserve'
+ */
+    const reserveForm = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reserve.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reserve
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
+ * @route '/library/student/books/{book}/reserve'
+ */
+        reserveForm.post = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reserve.url(args, options),
+            method: 'post',
+        })
+    
+    reserve.form = reserveForm
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::cancelReservation
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:83
  * @route '/library/student/reservations/{reservation}'
  */
-export const cancelReservation = (args: { reservation: string | number | { id: string | number } } | [reservation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+export const cancelReservation = (args: { reservation: number | { id: number } } | [reservation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: cancelReservation.url(args, options),
     method: 'delete',
 })
@@ -230,7 +356,7 @@ cancelReservation.definition = {
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:83
  * @route '/library/student/reservations/{reservation}'
  */
-cancelReservation.url = (args: { reservation: string | number | { id: string | number } } | [reservation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+cancelReservation.url = (args: { reservation: number | { id: number } } | [reservation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { reservation: args }
     }
@@ -263,11 +389,42 @@ cancelReservation.url = (args: { reservation: string | number | { id: string | n
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:83
  * @route '/library/student/reservations/{reservation}'
  */
-cancelReservation.delete = (args: { reservation: string | number | { id: string | number } } | [reservation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+cancelReservation.delete = (args: { reservation: number | { id: number } } | [reservation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: cancelReservation.url(args, options),
     method: 'delete',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::cancelReservation
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:83
+ * @route '/library/student/reservations/{reservation}'
+ */
+    const cancelReservationForm = (args: { reservation: number | { id: number } } | [reservation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: cancelReservation.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::cancelReservation
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:83
+ * @route '/library/student/reservations/{reservation}'
+ */
+        cancelReservationForm.delete = (args: { reservation: number | { id: number } } | [reservation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: cancelReservation.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    cancelReservation.form = cancelReservationForm
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::fines
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:95
@@ -310,6 +467,42 @@ fines.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: fines.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::fines
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:95
+ * @route '/library/student/fines'
+ */
+    const finesForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: fines.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::fines
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:95
+ * @route '/library/student/fines'
+ */
+        finesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: fines.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::fines
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:95
+ * @route '/library/student/fines'
+ */
+        finesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: fines.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    fines.form = finesForm
 const StudentBorrowingController = { index, show, reservations, reserve, cancelReservation, fines }
 
 export default StudentBorrowingController

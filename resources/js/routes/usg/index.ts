@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 import vmgo from './vmgo'
 import officers from './officers'
 import announcements from './announcements'
@@ -50,6 +50,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:35
+ * @route '/usg'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:35
+ * @route '/usg'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:35
+ * @route '/usg'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\SearchController::search
  * @see Modules/USG/app/Http/Controllers/SearchController.php:21
@@ -92,6 +127,42 @@ search.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: search.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\SearchController::search
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:21
+ * @route '/usg/search'
+ */
+    const searchForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: search.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::search
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:21
+ * @route '/usg/search'
+ */
+        searchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: search.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::search
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:21
+ * @route '/usg/search'
+ */
+        searchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: search.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    search.form = searchForm
 const usg = {
     index: Object.assign(index, index),
 vmgo: Object.assign(vmgo, vmgo),

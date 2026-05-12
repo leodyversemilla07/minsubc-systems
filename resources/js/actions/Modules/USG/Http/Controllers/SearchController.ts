@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\SearchController::index
  * @see Modules/USG/app/Http/Controllers/SearchController.php:21
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\SearchController::index
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:21
+ * @route '/usg/search'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::index
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:21
+ * @route '/usg/search'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::index
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:21
+ * @route '/usg/search'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\SearchController::suggestions
  * @see Modules/USG/app/Http/Controllers/SearchController.php:49
@@ -85,6 +120,41 @@ suggestions.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\SearchController::suggestions
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:49
+ * @route '/usg/search/suggestions'
+ */
+    const suggestionsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: suggestions.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::suggestions
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:49
+ * @route '/usg/search/suggestions'
+ */
+        suggestionsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: suggestions.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::suggestions
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:49
+ * @route '/usg/search/suggestions'
+ */
+        suggestionsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: suggestions.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    suggestions.form = suggestionsForm
 /**
 * @see \Modules\USG\Http\Controllers\SearchController::quickSearch
  * @see Modules/USG/app/Http/Controllers/SearchController.php:65
@@ -127,6 +197,42 @@ quickSearch.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: quickSearch.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\SearchController::quickSearch
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:65
+ * @route '/usg/search/quick'
+ */
+    const quickSearchForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: quickSearch.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::quickSearch
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:65
+ * @route '/usg/search/quick'
+ */
+        quickSearchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: quickSearch.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\SearchController::quickSearch
+ * @see Modules/USG/app/Http/Controllers/SearchController.php:65
+ * @route '/usg/search/quick'
+ */
+        quickSearchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: quickSearch.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    quickSearch.form = quickSearchForm
 const SearchController = { index, suggestions, quickSearch }
 
 export default SearchController

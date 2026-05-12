@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::index
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::index
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
+ * @route '/admin/analytics'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::index
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
+ * @route '/admin/analytics'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::index
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:23
+ * @route '/admin/analytics'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::getData
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
@@ -85,6 +120,41 @@ getData.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::getData
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
+ * @route '/admin/analytics/data'
+ */
+    const getDataForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: getData.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::getData
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
+ * @route '/admin/analytics/data'
+ */
+        getDataForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: getData.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::getData
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
+ * @route '/admin/analytics/data'
+ */
+        getDataForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: getData.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    getData.form = getDataForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollectionReport
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
@@ -128,6 +198,41 @@ dailyCollectionReport.head = (options?: RouteQueryOptions): RouteDefinition<'hea
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollectionReport
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
+ * @route '/admin/analytics/daily-collection'
+ */
+    const dailyCollectionReportForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dailyCollectionReport.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollectionReport
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
+ * @route '/admin/analytics/daily-collection'
+ */
+        dailyCollectionReportForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dailyCollectionReport.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollectionReport
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
+ * @route '/admin/analytics/daily-collection'
+ */
+        dailyCollectionReportForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dailyCollectionReport.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dailyCollectionReport.form = dailyCollectionReportForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportPdf
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:63
@@ -171,6 +276,41 @@ exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportPdf
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:63
+ * @route '/admin/analytics/export/pdf'
+ */
+    const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportPdf.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportPdf
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:63
+ * @route '/admin/analytics/export/pdf'
+ */
+        exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportPdf.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportPdf
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:63
+ * @route '/admin/analytics/export/pdf'
+ */
+        exportPdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportPdf.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportPdf.form = exportPdfForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportExcel
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:82
@@ -213,6 +353,42 @@ exportExcel.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: exportExcel.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportExcel
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:82
+ * @route '/admin/analytics/export/excel'
+ */
+    const exportExcelForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportExcel.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportExcel
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:82
+ * @route '/admin/analytics/export/excel'
+ */
+        exportExcelForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportExcel.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::exportExcel
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:82
+ * @route '/admin/analytics/export/excel'
+ */
+        exportExcelForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportExcel.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportExcel.form = exportExcelForm
 const AnalyticsController = { index, getData, dailyCollectionReport, exportPdf, exportExcel }
 
 export default AnalyticsController

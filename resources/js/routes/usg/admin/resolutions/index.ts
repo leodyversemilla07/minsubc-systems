@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::index
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:18
+ * @route '/usg/admin/resolutions'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:18
+ * @route '/usg/admin/resolutions'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:18
+ * @route '/usg/admin/resolutions'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::create
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:45
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:45
+ * @route '/usg/admin/resolutions/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:45
+ * @route '/usg/admin/resolutions/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:45
+ * @route '/usg/admin/resolutions/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::store
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:56
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:56
+ * @route '/usg/admin/resolutions'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:56
+ * @route '/usg/admin/resolutions'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::show
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:68
@@ -181,6 +272,41 @@ show.head = (args: { resolution: string | number } | [resolution: string | numbe
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:68
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+    const showForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:68
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+        showForm.get = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:68
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+        showForm.head = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::edit
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:77
@@ -243,6 +369,41 @@ edit.head = (args: { resolution: string | number } | [resolution: string | numbe
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:77
+ * @route '/usg/admin/resolutions/{resolution}/edit'
+ */
+    const editForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:77
+ * @route '/usg/admin/resolutions/{resolution}/edit'
+ */
+        editForm.get = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:77
+ * @route '/usg/admin/resolutions/{resolution}/edit'
+ */
+        editForm.head = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::update
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:90
@@ -305,6 +466,51 @@ update.patch = (args: { resolution: string | number } | [resolution: string | nu
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:90
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+    const updateForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:90
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+        updateForm.put = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:90
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+        updateForm.patch = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::destroy
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:104
@@ -358,6 +564,37 @@ destroy.delete = (args: { resolution: string | number } | [resolution: string | 
     method: 'delete',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:104
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+    const destroyForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:104
+ * @route '/usg/admin/resolutions/{resolution}'
+ */
+        destroyForm.delete = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::archive
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:114
@@ -411,6 +648,37 @@ archive.patch = (args: { resolution: string | number } | [resolution: string | n
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::archive
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:114
+ * @route '/usg/admin/resolutions/{resolution}/archive'
+ */
+    const archiveForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: archive.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::archive
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:114
+ * @route '/usg/admin/resolutions/{resolution}/archive'
+ */
+        archiveForm.patch = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: archive.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    archive.form = archiveForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\ResolutionController::unarchive
  * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:122
@@ -463,6 +731,38 @@ unarchive.patch = (args: { resolution: string | number } | [resolution: string |
     url: unarchive.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::unarchive
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:122
+ * @route '/usg/admin/resolutions/{resolution}/unarchive'
+ */
+    const unarchiveForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: unarchive.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\ResolutionController::unarchive
+ * @see Modules/USG/app/Http/Controllers/Admin/ResolutionController.php:122
+ * @route '/usg/admin/resolutions/{resolution}/unarchive'
+ */
+        unarchiveForm.patch = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: unarchive.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    unarchive.form = unarchiveForm
 const resolutions = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:21
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:21
+ * @route '/admission/admin/sections'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:21
+ * @route '/admission/admin/sections'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:21
+ * @route '/admission/admin/sections'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::create
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:47
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:47
+ * @route '/admission/admin/sections/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:47
+ * @route '/admission/admin/sections/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:47
+ * @route '/admission/admin/sections/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::store
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:64
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:64
+ * @route '/admission/admin/sections'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:64
+ * @route '/admission/admin/sections'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::show
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:83
@@ -186,6 +277,41 @@ show.head = (args: { section: number | { id: number } } | [section: number | { i
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:83
+ * @route '/admission/admin/sections/{section}'
+ */
+    const showForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:83
+ * @route '/admission/admin/sections/{section}'
+ */
+        showForm.get = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:83
+ * @route '/admission/admin/sections/{section}'
+ */
+        showForm.head = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::edit
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:117
@@ -253,6 +379,41 @@ edit.head = (args: { section: number | { id: number } } | [section: number | { i
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:117
+ * @route '/admission/admin/sections/{section}/edit'
+ */
+    const editForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:117
+ * @route '/admission/admin/sections/{section}/edit'
+ */
+        editForm.get = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:117
+ * @route '/admission/admin/sections/{section}/edit'
+ */
+        editForm.head = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::update
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:135
@@ -311,6 +472,37 @@ update.patch = (args: { section: number | { id: number } } | [section: number | 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:135
+ * @route '/admission/admin/sections/{section}'
+ */
+    const updateForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:135
+ * @route '/admission/admin/sections/{section}'
+ */
+        updateForm.patch = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::destroy
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:155
@@ -369,6 +561,37 @@ destroy.delete = (args: { section: number | { id: number } } | [section: number 
     method: 'delete',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:155
+ * @route '/admission/admin/sections/{section}'
+ */
+    const destroyForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:155
+ * @route '/admission/admin/sections/{section}'
+ */
+        destroyForm.delete = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::addSchedule
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:170
@@ -427,6 +650,27 @@ addSchedule.post = (args: { section: number | { id: number } } | [section: numbe
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::addSchedule
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:170
+ * @route '/admission/admin/sections/{section}/add-schedule'
+ */
+    const addScheduleForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: addSchedule.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::addSchedule
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:170
+ * @route '/admission/admin/sections/{section}/add-schedule'
+ */
+        addScheduleForm.post = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: addSchedule.url(args, options),
+            method: 'post',
+        })
+    
+    addSchedule.form = addScheduleForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::removeSchedule
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:194
@@ -480,6 +724,27 @@ removeSchedule.post = (args: { section: string | number, schedule: number | { id
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::removeSchedule
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:194
+ * @route '/admission/admin/sections/{section}/remove-schedule/{schedule}'
+ */
+    const removeScheduleForm = (args: { section: string | number, schedule: number | { id: number } } | [section: string | number, schedule: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: removeSchedule.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::removeSchedule
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:194
+ * @route '/admission/admin/sections/{section}/remove-schedule/{schedule}'
+ */
+        removeScheduleForm.post = (args: { section: string | number, schedule: number | { id: number } } | [section: string | number, schedule: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: removeSchedule.url(args, options),
+            method: 'post',
+        })
+    
+    removeSchedule.form = removeScheduleForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SectionController::availableSubjects
  * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:204
@@ -546,6 +811,42 @@ availableSubjects.head = (args: { section: number | { id: number } } | [section:
     url: availableSubjects.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::availableSubjects
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:204
+ * @route '/admission/admin/sections/{section}/available-subjects'
+ */
+    const availableSubjectsForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: availableSubjects.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::availableSubjects
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:204
+ * @route '/admission/admin/sections/{section}/available-subjects'
+ */
+        availableSubjectsForm.get = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: availableSubjects.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SectionController::availableSubjects
+ * @see Modules/Admission/app/Http/Controllers/Admin/SectionController.php:204
+ * @route '/admission/admin/sections/{section}/available-subjects'
+ */
+        availableSubjectsForm.head = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: availableSubjects.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    availableSubjects.form = availableSubjectsForm
 const sections = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

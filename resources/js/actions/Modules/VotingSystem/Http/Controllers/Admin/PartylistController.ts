@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::index
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:18
+ * @route '/voting/admin/partylists'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:18
+ * @route '/voting/admin/partylists'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:18
+ * @route '/voting/admin/partylists'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::create
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:40
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:40
+ * @route '/voting/admin/partylists/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:40
+ * @route '/voting/admin/partylists/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:40
+ * @route '/voting/admin/partylists/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::store
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:54
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:54
+ * @route '/voting/admin/partylists'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:54
+ * @route '/voting/admin/partylists'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::show
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:70
@@ -186,6 +277,41 @@ show.head = (args: { partylist: number | { partylist_id: number } } | [partylist
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:70
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+    const showForm = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:70
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+        showForm.get = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:70
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+        showForm.head = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::edit
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:80
@@ -253,6 +379,41 @@ edit.head = (args: { partylist: number | { partylist_id: number } } | [partylist
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:80
+ * @route '/voting/admin/partylists/{partylist}/edit'
+ */
+    const editForm = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:80
+ * @route '/voting/admin/partylists/{partylist}/edit'
+ */
+        editForm.get = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:80
+ * @route '/voting/admin/partylists/{partylist}/edit'
+ */
+        editForm.head = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::update
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:90
@@ -311,6 +472,37 @@ update.put = (args: { partylist: number | { partylist_id: number } } | [partylis
     method: 'put',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:90
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+    const updateForm = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:90
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+        updateForm.put = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::destroy
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:105
@@ -368,6 +560,38 @@ destroy.delete = (args: { partylist: number | { partylist_id: number } } | [part
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:105
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+    const destroyForm = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PartylistController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PartylistController.php:105
+ * @route '/voting/admin/partylists/{partylist}'
+ */
+        destroyForm.delete = (args: { partylist: number | { partylist_id: number } } | [partylist: number | { partylist_id: number } ] | number | { partylist_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const PartylistController = { index, create, store, show, edit, update, destroy }
 
 export default PartylistController

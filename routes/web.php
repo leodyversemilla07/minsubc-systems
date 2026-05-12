@@ -332,3 +332,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Module routes are auto-loaded via their Service Providers
 // See Modules/*/app/Providers/*ServiceProvider.php
+
+// Research Module Routes (loaded directly to avoid provider config issue)
+require __DIR__ . '/../Modules/Research/routes/web.php';

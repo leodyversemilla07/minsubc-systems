@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\SuperAdminController::show
  * @see app/Http/Controllers/SuperAdminController.php:124
@@ -66,6 +66,41 @@ show.head = (args: { user: number | { id: number } } | [user: number | { id: num
     method: 'head',
 })
 
+    /**
+* @see \App\Http\Controllers\SuperAdminController::show
+ * @see app/Http/Controllers/SuperAdminController.php:124
+ * @route '/super-admin/users/{user}'
+ */
+    const showForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\SuperAdminController::show
+ * @see app/Http/Controllers/SuperAdminController.php:124
+ * @route '/super-admin/users/{user}'
+ */
+        showForm.get = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\SuperAdminController::show
+ * @see app/Http/Controllers/SuperAdminController.php:124
+ * @route '/super-admin/users/{user}'
+ */
+        showForm.head = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \App\Http\Controllers\SuperAdminController::updateRoles
  * @see app/Http/Controllers/SuperAdminController.php:141
@@ -124,6 +159,37 @@ updateRoles.patch = (args: { user: number | { id: number } } | [user: number | {
     method: 'patch',
 })
 
+    /**
+* @see \App\Http\Controllers\SuperAdminController::updateRoles
+ * @see app/Http/Controllers/SuperAdminController.php:141
+ * @route '/super-admin/users/{user}/roles'
+ */
+    const updateRolesForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateRoles.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\SuperAdminController::updateRoles
+ * @see app/Http/Controllers/SuperAdminController.php:141
+ * @route '/super-admin/users/{user}/roles'
+ */
+        updateRolesForm.patch = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateRoles.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    updateRoles.form = updateRolesForm
 /**
 * @see \App\Http\Controllers\SuperAdminController::resetPassword
  * @see app/Http/Controllers/SuperAdminController.php:172
@@ -182,6 +248,37 @@ resetPassword.patch = (args: { user: number | { id: number } } | [user: number |
     method: 'patch',
 })
 
+    /**
+* @see \App\Http\Controllers\SuperAdminController::resetPassword
+ * @see app/Http/Controllers/SuperAdminController.php:172
+ * @route '/super-admin/users/{user}/reset-password'
+ */
+    const resetPasswordForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: resetPassword.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\SuperAdminController::resetPassword
+ * @see app/Http/Controllers/SuperAdminController.php:172
+ * @route '/super-admin/users/{user}/reset-password'
+ */
+        resetPasswordForm.patch = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: resetPassword.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    resetPassword.form = resetPasswordForm
 /**
 * @see \App\Http\Controllers\SuperAdminController::disable
  * @see app/Http/Controllers/SuperAdminController.php:200
@@ -240,6 +337,37 @@ disable.patch = (args: { user: number | { id: number } } | [user: number | { id:
     method: 'patch',
 })
 
+    /**
+* @see \App\Http\Controllers\SuperAdminController::disable
+ * @see app/Http/Controllers/SuperAdminController.php:200
+ * @route '/super-admin/users/{user}/disable'
+ */
+    const disableForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: disable.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\SuperAdminController::disable
+ * @see app/Http/Controllers/SuperAdminController.php:200
+ * @route '/super-admin/users/{user}/disable'
+ */
+        disableForm.patch = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: disable.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    disable.form = disableForm
 /**
 * @see \App\Http\Controllers\SuperAdminController::enable
  * @see app/Http/Controllers/SuperAdminController.php:232
@@ -297,6 +425,38 @@ enable.patch = (args: { user: number | { id: number } } | [user: number | { id: 
     url: enable.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \App\Http\Controllers\SuperAdminController::enable
+ * @see app/Http/Controllers/SuperAdminController.php:232
+ * @route '/super-admin/users/{user}/enable'
+ */
+    const enableForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: enable.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\SuperAdminController::enable
+ * @see app/Http/Controllers/SuperAdminController.php:232
+ * @route '/super-admin/users/{user}/enable'
+ */
+        enableForm.patch = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: enable.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    enable.form = enableForm
 const users = {
     show: Object.assign(show, show),
 updateRoles: Object.assign(updateRoles, updateRoles),

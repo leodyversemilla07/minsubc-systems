@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::index
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:25
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:25
+ * @route '/sas/admin/insurance'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:25
+ * @route '/sas/admin/insurance'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:25
+ * @route '/sas/admin/insurance'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::show
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:42
@@ -104,6 +139,41 @@ show.head = (args: { id: string | number } | [id: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:42
+ * @route '/sas/admin/insurance/{id}'
+ */
+    const showForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:42
+ * @route '/sas/admin/insurance/{id}'
+ */
+        showForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:42
+ * @route '/sas/admin/insurance/{id}'
+ */
+        showForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::edit
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:54
@@ -166,6 +236,41 @@ edit.head = (args: { id: string | number } | [id: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:54
+ * @route '/sas/admin/insurance/{id}/edit'
+ */
+    const editForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:54
+ * @route '/sas/admin/insurance/{id}/edit'
+ */
+        editForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:54
+ * @route '/sas/admin/insurance/{id}/edit'
+ */
+        editForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::update
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:66
@@ -219,6 +324,37 @@ update.put = (args: { id: string | number } | [id: string | number ] | string | 
     method: 'put',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:66
+ * @route '/sas/admin/insurance/{id}'
+ */
+    const updateForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:66
+ * @route '/sas/admin/insurance/{id}'
+ */
+        updateForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::destroy
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:124
@@ -272,6 +408,37 @@ destroy.delete = (args: { id: string | number } | [id: string | number ] | strin
     method: 'delete',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:124
+ * @route '/sas/admin/insurance/{id}'
+ */
+    const destroyForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:124
+ * @route '/sas/admin/insurance/{id}'
+ */
+        destroyForm.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::approve
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:79
@@ -325,6 +492,27 @@ approve.post = (args: { id: string | number } | [id: string | number ] | string 
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::approve
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:79
+ * @route '/sas/admin/insurance/{id}/approve'
+ */
+    const approveForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: approve.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::approve
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:79
+ * @route '/sas/admin/insurance/{id}/approve'
+ */
+        approveForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: approve.url(args, options),
+            method: 'post',
+        })
+    
+    approve.form = approveForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::reject
  * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:98
@@ -377,6 +565,28 @@ reject.post = (args: { id: string | number } | [id: string | number ] | string |
     url: reject.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::reject
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:98
+ * @route '/sas/admin/insurance/{id}/reject'
+ */
+    const rejectForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reject.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\InsuranceController::reject
+ * @see Modules/SAS/app/Http/Controllers/Admin/InsuranceController.php:98
+ * @route '/sas/admin/insurance/{id}/reject'
+ */
+        rejectForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reject.url(args, options),
+            method: 'post',
+        })
+    
+    reject.form = rejectForm
 const InsuranceController = { index, show, edit, update, destroy, approve, reject }
 
 export default InsuranceController

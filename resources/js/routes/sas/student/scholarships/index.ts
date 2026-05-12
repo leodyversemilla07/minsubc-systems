@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::index
  * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:20
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::index
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:20
+ * @route '/sas/student/scholarships'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::index
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:20
+ * @route '/sas/student/scholarships'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::index
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:20
+ * @route '/sas/student/scholarships'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::show
  * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:42
@@ -104,6 +139,41 @@ show.head = (args: { id: string | number } | [id: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::show
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:42
+ * @route '/sas/student/scholarships/{id}'
+ */
+    const showForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::show
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:42
+ * @route '/sas/student/scholarships/{id}'
+ */
+        showForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::show
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:42
+ * @route '/sas/student/scholarships/{id}'
+ */
+        showForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::requirements
  * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:61
@@ -166,6 +236,41 @@ requirements.head = (args: { id: string | number } | [id: string | number ] | st
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::requirements
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:61
+ * @route '/sas/student/scholarships/{id}/requirements'
+ */
+    const requirementsForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: requirements.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::requirements
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:61
+ * @route '/sas/student/scholarships/{id}/requirements'
+ */
+        requirementsForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: requirements.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::requirements
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:61
+ * @route '/sas/student/scholarships/{id}/requirements'
+ */
+        requirementsForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: requirements.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    requirements.form = requirementsForm
 /**
 * @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::uploadRequirement
  * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:96
@@ -218,6 +323,28 @@ uploadRequirement.post = (args: { id: string | number } | [id: string | number ]
     url: uploadRequirement.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::uploadRequirement
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:96
+ * @route '/sas/student/scholarships/{id}/upload-requirement'
+ */
+    const uploadRequirementForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: uploadRequirement.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Student\ScholarshipController::uploadRequirement
+ * @see Modules/SAS/app/Http/Controllers/Student/ScholarshipController.php:96
+ * @route '/sas/student/scholarships/{id}/upload-requirement'
+ */
+        uploadRequirementForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: uploadRequirement.url(args, options),
+            method: 'post',
+        })
+    
+    uploadRequirement.form = uploadRequirementForm
 const scholarships = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

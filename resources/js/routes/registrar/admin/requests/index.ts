@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\AdminController::show
  * @see Modules/Registrar/app/Http/Controllers/AdminController.php:67
@@ -66,6 +66,41 @@ show.head = (args: { documentRequest: string | { request_number: string } } | [d
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::show
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:67
+ * @route '/admin/requests/{documentRequest}'
+ */
+    const showForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::show
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:67
+ * @route '/admin/requests/{documentRequest}'
+ */
+        showForm.get = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::show
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:67
+ * @route '/admin/requests/{documentRequest}'
+ */
+        showForm.head = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AdminController::updateStatus
  * @see Modules/Registrar/app/Http/Controllers/AdminController.php:85
@@ -124,6 +159,37 @@ updateStatus.patch = (args: { documentRequest: string | { request_number: string
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::updateStatus
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:85
+ * @route '/admin/requests/{documentRequest}/status'
+ */
+    const updateStatusForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateStatus.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::updateStatus
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:85
+ * @route '/admin/requests/{documentRequest}/status'
+ */
+        updateStatusForm.patch = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateStatus.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    updateStatus.form = updateStatusForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AdminController::markReady
  * @see Modules/Registrar/app/Http/Controllers/AdminController.php:124
@@ -182,6 +248,27 @@ markReady.post = (args: { documentRequest: string | { request_number: string } }
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::markReady
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:124
+ * @route '/admin/requests/{documentRequest}/ready'
+ */
+    const markReadyForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: markReady.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::markReady
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:124
+ * @route '/admin/requests/{documentRequest}/ready'
+ */
+        markReadyForm.post = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: markReady.url(args, options),
+            method: 'post',
+        })
+    
+    markReady.form = markReadyForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AdminController::release
  * @see Modules/Registrar/app/Http/Controllers/AdminController.php:167
@@ -239,6 +326,28 @@ release.post = (args: { documentRequest: string | { request_number: string } } |
     url: release.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::release
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:167
+ * @route '/admin/requests/{documentRequest}/release'
+ */
+    const releaseForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: release.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::release
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:167
+ * @route '/admin/requests/{documentRequest}/release'
+ */
+        releaseForm.post = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: release.url(args, options),
+            method: 'post',
+        })
+    
+    release.form = releaseForm
 const requests = {
     show: Object.assign(show, show),
 updateStatus: Object.assign(updateStatus, updateStatus),

@@ -445,7 +445,99 @@ export function AppSidebar() {
             );
         }
 
-        // Student/Default Navigation - Unified 4 Systems
+        // Curriculum Admin Navigation
+        else if (hasAnyRole(['curriculum-admin', 'curriculum-staff'])) {
+            items.push(
+                {
+                    title: 'Curriculum Dashboard',
+                    href: route('curriculum.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Programs',
+                    href: route('curriculum.admin.programs.index'),
+                    icon: BookOpen,
+                },
+                {
+                    title: 'Courses',
+                    href: route('curriculum.admin.courses.index'),
+                    icon: FileText,
+                },
+                {
+                    title: 'Curricula',
+                    href: route('curriculum.admin.curricula.index'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Syllabi',
+                    href: route('curriculum.admin.syllabi.index'),
+                    icon: BookCheck,
+                },
+                {
+                    title: 'Textbooks',
+                    href: route('curriculum.admin.textbooks.index'),
+                    icon: BookOpen,
+                },
+                {
+                    title: 'Reports',
+                    href: route('curriculum.admin.reports'),
+                    icon: BarChart3,
+                },
+            );
+        }
+
+        // Research Admin Navigation
+        else if (hasAnyRole(['research-admin', 'research-panelist', 'research-adviser'])) {
+            items.push(
+                {
+                    title: 'Research Dashboard',
+                    href: route('research.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Research Types',
+                    href: route('research.admin.research-types.index'),
+                    icon: Tags,
+                },
+                {
+                    title: 'Proposals',
+                    href: route('research.admin.proposals.index'),
+                    icon: FileText,
+                },
+                {
+                    title: 'Defenses',
+                    href: route('research.admin.defenses.index'),
+                    icon: CalendarCheck,
+                },
+                {
+                    title: 'Grade Reports',
+                    href: route('research.admin.grade-reports.index'),
+                    icon: GraduationCap,
+                },
+                {
+                    title: 'Publications',
+                    href: route('research.admin.publications.index'),
+                    icon: BookOpen,
+                },
+                {
+                    title: 'Journals',
+                    href: route('research.admin.journals.index'),
+                    icon: BookCheck,
+                },
+                {
+                    title: 'Panelists',
+                    href: route('research.admin.panels.index'),
+                    icon: Users,
+                },
+                {
+                    title: 'Reports',
+                    href: route('research.admin.reports'),
+                    icon: BarChart3,
+                },
+            );
+        }
+
+// Student/Default Navigation - Unified 4 Systems
         else {
             items.push(
                 {
@@ -520,6 +612,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['curriculum-admin', 'curriculum-staff'])) {
             return 'Curriculum Management';
+        }
+        if (hasAnyRole(['research-admin', 'research-panelist', 'research-adviser'])) {
+            return 'Research Management';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

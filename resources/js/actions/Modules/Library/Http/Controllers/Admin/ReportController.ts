@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\ReportController::index
  * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:13
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:13
+ * @route '/library/admin/reports'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:13
+ * @route '/library/admin/reports'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:13
+ * @route '/library/admin/reports'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\ReportController::popularBooks
  * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:18
@@ -85,6 +120,41 @@ popularBooks.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::popularBooks
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:18
+ * @route '/library/admin/reports/popular-books'
+ */
+    const popularBooksForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: popularBooks.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::popularBooks
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:18
+ * @route '/library/admin/reports/popular-books'
+ */
+        popularBooksForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: popularBooks.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::popularBooks
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:18
+ * @route '/library/admin/reports/popular-books'
+ */
+        popularBooksForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: popularBooks.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    popularBooks.form = popularBooksForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\ReportController::borrowingTrends
  * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:29
@@ -127,6 +197,42 @@ borrowingTrends.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =>
     url: borrowingTrends.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::borrowingTrends
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:29
+ * @route '/library/admin/reports/borrowing-trends'
+ */
+    const borrowingTrendsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: borrowingTrends.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::borrowingTrends
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:29
+ * @route '/library/admin/reports/borrowing-trends'
+ */
+        borrowingTrendsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: borrowingTrends.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\ReportController::borrowingTrends
+ * @see Modules/Library/app/Http/Controllers/Admin/ReportController.php:29
+ * @route '/library/admin/reports/borrowing-trends'
+ */
+        borrowingTrendsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: borrowingTrends.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    borrowingTrends.form = borrowingTrendsForm
 const ReportController = { index, popularBooks, borrowingTrends }
 
 export default ReportController

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 import calendarFa95d0 from './calendar'
 /**
 * @see \Modules\USG\Http\Controllers\PageController::index
@@ -43,6 +43,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:195
+ * @route '/usg/events'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:195
+ * @route '/usg/events'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:195
+ * @route '/usg/events'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::calendar
  * @see Modules/USG/app/Http/Controllers/PageController.php:218
@@ -86,6 +121,41 @@ calendar.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::calendar
+ * @see Modules/USG/app/Http/Controllers/PageController.php:218
+ * @route '/usg/events/calendar'
+ */
+    const calendarForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: calendar.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::calendar
+ * @see Modules/USG/app/Http/Controllers/PageController.php:218
+ * @route '/usg/events/calendar'
+ */
+        calendarForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: calendar.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::calendar
+ * @see Modules/USG/app/Http/Controllers/PageController.php:218
+ * @route '/usg/events/calendar'
+ */
+        calendarForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: calendar.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    calendar.form = calendarForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::show
  * @see Modules/USG/app/Http/Controllers/PageController.php:234
@@ -153,6 +223,41 @@ show.head = (args: { event: string | number | { slug: string | number } } | [eve
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:234
+ * @route '/usg/events/{event}'
+ */
+    const showForm = (args: { event: string | number | { slug: string | number } } | [event: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:234
+ * @route '/usg/events/{event}'
+ */
+        showForm.get = (args: { event: string | number | { slug: string | number } } | [event: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:234
+ * @route '/usg/events/{event}'
+ */
+        showForm.head = (args: { event: string | number | { slug: string | number } } | [event: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::exportMethod
  * @see Modules/USG/app/Http/Controllers/PageController.php:263
@@ -219,6 +324,42 @@ exportMethod.head = (args: { event: string | number | { slug: string | number } 
     url: exportMethod.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::exportMethod
+ * @see Modules/USG/app/Http/Controllers/PageController.php:263
+ * @route '/usg/events/{event}/export.ics'
+ */
+    const exportMethodForm = (args: { event: string | number | { slug: string | number } } | [event: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportMethod.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::exportMethod
+ * @see Modules/USG/app/Http/Controllers/PageController.php:263
+ * @route '/usg/events/{event}/export.ics'
+ */
+        exportMethodForm.get = (args: { event: string | number | { slug: string | number } } | [event: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportMethod.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::exportMethod
+ * @see Modules/USG/app/Http/Controllers/PageController.php:263
+ * @route '/usg/events/{event}/export.ics'
+ */
+        exportMethodForm.head = (args: { event: string | number | { slug: string | number } } | [event: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportMethod.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportMethod.form = exportMethodForm
 const events = {
     index: Object.assign(index, index),
 calendar: Object.assign(calendar, calendarFa95d0),

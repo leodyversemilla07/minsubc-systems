@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::approve
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:56
@@ -33,6 +33,27 @@ approve.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::approve
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:56
+ * @route '/sas/admin/bulk/insurance/approve'
+ */
+    const approveForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: approve.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::approve
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:56
+ * @route '/sas/admin/bulk/insurance/approve'
+ */
+        approveForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: approve.url(options),
+            method: 'post',
+        })
+    
+    approve.form = approveForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::reject
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:75
@@ -67,6 +88,27 @@ reject.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::reject
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:75
+ * @route '/sas/admin/bulk/insurance/reject'
+ */
+    const rejectForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reject.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::reject
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:75
+ * @route '/sas/admin/bulk/insurance/reject'
+ */
+        rejectForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reject.url(options),
+            method: 'post',
+        })
+    
+    reject.form = rejectForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::deleteMethod
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:109
@@ -100,6 +142,38 @@ deleteMethod.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> =
     url: deleteMethod.url(options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::deleteMethod
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:109
+ * @route '/sas/admin/bulk/insurance/delete'
+ */
+    const deleteMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: deleteMethod.url({
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::deleteMethod
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:109
+ * @route '/sas/admin/bulk/insurance/delete'
+ */
+        deleteMethodForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: deleteMethod.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    deleteMethod.form = deleteMethodForm
 const insurance = {
     approve: Object.assign(approve, approve),
 reject: Object.assign(reject, reject),

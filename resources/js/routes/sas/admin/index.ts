@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 import scholarships from './scholarships'
 import scholarshipRecipients from './scholarship-recipients'
 import renewals from './renewals'
@@ -51,6 +51,41 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/sas/admin/dashboard'
+ */
+    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/sas/admin/dashboard'
+ */
+        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/sas/admin/dashboard'
+ */
+        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dashboard.form = dashboardForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DashboardController::statistics
  * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:120
@@ -93,6 +128,42 @@ statistics.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: statistics.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DashboardController::statistics
+ * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:120
+ * @route '/sas/admin/statistics'
+ */
+    const statisticsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: statistics.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DashboardController::statistics
+ * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:120
+ * @route '/sas/admin/statistics'
+ */
+        statisticsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DashboardController::statistics
+ * @see Modules/SAS/app/Http/Controllers/Admin/DashboardController.php:120
+ * @route '/sas/admin/statistics'
+ */
+        statisticsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    statistics.form = statisticsForm
 const admin = {
     dashboard: Object.assign(dashboard, dashboard),
 statistics: Object.assign(statistics, statistics),

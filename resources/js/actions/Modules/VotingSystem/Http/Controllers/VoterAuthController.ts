@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::showLogin
  * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:23
@@ -42,6 +42,41 @@ showLogin.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::showLogin
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:23
+ * @route '/voting/login'
+ */
+    const showLoginForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: showLogin.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::showLogin
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:23
+ * @route '/voting/login'
+ */
+        showLoginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: showLogin.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::showLogin
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:23
+ * @route '/voting/login'
+ */
+        showLoginForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: showLogin.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    showLogin.form = showLoginForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::login
  * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:83
@@ -76,6 +111,27 @@ login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::login
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:83
+ * @route '/voting/authenticate'
+ */
+    const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: login.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::login
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:83
+ * @route '/voting/authenticate'
+ */
+        loginForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: login.url(options),
+            method: 'post',
+        })
+    
+    login.form = loginForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::logout
  * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:266
@@ -109,6 +165,28 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::logout
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:266
+ * @route '/voting/logout'
+ */
+    const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: logout.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\VoterAuthController::logout
+ * @see Modules/VotingSystem/app/Http/Controllers/VoterAuthController.php:266
+ * @route '/voting/logout'
+ */
+        logoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: logout.url(options),
+            method: 'post',
+        })
+    
+    logout.form = logoutForm
 const VoterAuthController = { showLogin, login, logout }
 
 export default VoterAuthController

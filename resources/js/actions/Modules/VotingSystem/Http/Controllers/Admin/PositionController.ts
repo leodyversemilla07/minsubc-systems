@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::index
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:18
+ * @route '/voting/admin/positions'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:18
+ * @route '/voting/admin/positions'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:18
+ * @route '/voting/admin/positions'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::create
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:40
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:40
+ * @route '/voting/admin/positions/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:40
+ * @route '/voting/admin/positions/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:40
+ * @route '/voting/admin/positions/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::store
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:54
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:54
+ * @route '/voting/admin/positions'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:54
+ * @route '/voting/admin/positions'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::show
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:72
@@ -186,6 +277,41 @@ show.head = (args: { position: number | { position_id: number } } | [position: n
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:72
+ * @route '/voting/admin/positions/{position}'
+ */
+    const showForm = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:72
+ * @route '/voting/admin/positions/{position}'
+ */
+        showForm.get = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:72
+ * @route '/voting/admin/positions/{position}'
+ */
+        showForm.head = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::edit
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:82
@@ -253,6 +379,41 @@ edit.head = (args: { position: number | { position_id: number } } | [position: n
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:82
+ * @route '/voting/admin/positions/{position}/edit'
+ */
+    const editForm = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:82
+ * @route '/voting/admin/positions/{position}/edit'
+ */
+        editForm.get = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:82
+ * @route '/voting/admin/positions/{position}/edit'
+ */
+        editForm.head = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::update
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:92
@@ -311,6 +472,37 @@ update.put = (args: { position: number | { position_id: number } } | [position: 
     method: 'put',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:92
+ * @route '/voting/admin/positions/{position}'
+ */
+    const updateForm = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:92
+ * @route '/voting/admin/positions/{position}'
+ */
+        updateForm.put = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::destroy
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:109
@@ -369,6 +561,37 @@ destroy.delete = (args: { position: number | { position_id: number } } | [positi
     method: 'delete',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:109
+ * @route '/voting/admin/positions/{position}'
+ */
+    const destroyForm = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:109
+ * @route '/voting/admin/positions/{position}'
+ */
+        destroyForm.delete = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::moveUp
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:121
@@ -427,6 +650,27 @@ moveUp.post = (args: { position: number | { position_id: number } } | [position:
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::moveUp
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:121
+ * @route '/voting/admin/positions/{position}/move-up'
+ */
+    const moveUpForm = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: moveUp.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::moveUp
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:121
+ * @route '/voting/admin/positions/{position}/move-up'
+ */
+        moveUpForm.post = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: moveUp.url(args, options),
+            method: 'post',
+        })
+    
+    moveUp.form = moveUpForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::moveDown
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:145
@@ -484,6 +728,28 @@ moveDown.post = (args: { position: number | { position_id: number } } | [positio
     url: moveDown.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::moveDown
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:145
+ * @route '/voting/admin/positions/{position}/move-down'
+ */
+    const moveDownForm = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: moveDown.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\PositionController::moveDown
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/PositionController.php:145
+ * @route '/voting/admin/positions/{position}/move-down'
+ */
+        moveDownForm.post = (args: { position: number | { position_id: number } } | [position: number | { position_id: number } ] | number | { position_id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: moveDown.url(args, options),
+            method: 'post',
+        })
+    
+    moveDown.form = moveDownForm
 const PositionController = { index, create, store, show, edit, update, destroy, moveUp, moveDown }
 
 export default PositionController

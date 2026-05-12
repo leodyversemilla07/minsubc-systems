@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkApproveScholarships
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:17
@@ -33,6 +33,27 @@ bulkApproveScholarships.post = (options?: RouteQueryOptions): RouteDefinition<'p
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkApproveScholarships
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:17
+ * @route '/sas/admin/bulk/scholarships/approve'
+ */
+    const bulkApproveScholarshipsForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkApproveScholarships.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkApproveScholarships
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:17
+ * @route '/sas/admin/bulk/scholarships/approve'
+ */
+        bulkApproveScholarshipsForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkApproveScholarships.url(options),
+            method: 'post',
+        })
+    
+    bulkApproveScholarships.form = bulkApproveScholarshipsForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkRejectScholarships
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:36
@@ -67,6 +88,27 @@ bulkRejectScholarships.post = (options?: RouteQueryOptions): RouteDefinition<'po
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkRejectScholarships
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:36
+ * @route '/sas/admin/bulk/scholarships/reject'
+ */
+    const bulkRejectScholarshipsForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkRejectScholarships.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkRejectScholarships
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:36
+ * @route '/sas/admin/bulk/scholarships/reject'
+ */
+        bulkRejectScholarshipsForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkRejectScholarships.url(options),
+            method: 'post',
+        })
+    
+    bulkRejectScholarships.form = bulkRejectScholarshipsForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkUpdateScholarshipStatus
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:125
@@ -101,6 +143,27 @@ bulkUpdateScholarshipStatus.post = (options?: RouteQueryOptions): RouteDefinitio
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkUpdateScholarshipStatus
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:125
+ * @route '/sas/admin/bulk/scholarships/update-status'
+ */
+    const bulkUpdateScholarshipStatusForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkUpdateScholarshipStatus.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkUpdateScholarshipStatus
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:125
+ * @route '/sas/admin/bulk/scholarships/update-status'
+ */
+        bulkUpdateScholarshipStatusForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkUpdateScholarshipStatus.url(options),
+            method: 'post',
+        })
+    
+    bulkUpdateScholarshipStatus.form = bulkUpdateScholarshipStatusForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkDeleteScholarships
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:93
@@ -135,6 +198,37 @@ bulkDeleteScholarships.delete = (options?: RouteQueryOptions): RouteDefinition<'
     method: 'delete',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkDeleteScholarships
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:93
+ * @route '/sas/admin/bulk/scholarships/delete'
+ */
+    const bulkDeleteScholarshipsForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkDeleteScholarships.url({
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkDeleteScholarships
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:93
+ * @route '/sas/admin/bulk/scholarships/delete'
+ */
+        bulkDeleteScholarshipsForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkDeleteScholarships.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    bulkDeleteScholarships.form = bulkDeleteScholarshipsForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkApproveInsurance
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:56
@@ -169,6 +263,27 @@ bulkApproveInsurance.post = (options?: RouteQueryOptions): RouteDefinition<'post
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkApproveInsurance
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:56
+ * @route '/sas/admin/bulk/insurance/approve'
+ */
+    const bulkApproveInsuranceForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkApproveInsurance.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkApproveInsurance
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:56
+ * @route '/sas/admin/bulk/insurance/approve'
+ */
+        bulkApproveInsuranceForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkApproveInsurance.url(options),
+            method: 'post',
+        })
+    
+    bulkApproveInsurance.form = bulkApproveInsuranceForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkRejectInsurance
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:75
@@ -203,6 +318,27 @@ bulkRejectInsurance.post = (options?: RouteQueryOptions): RouteDefinition<'post'
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkRejectInsurance
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:75
+ * @route '/sas/admin/bulk/insurance/reject'
+ */
+    const bulkRejectInsuranceForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkRejectInsurance.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkRejectInsurance
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:75
+ * @route '/sas/admin/bulk/insurance/reject'
+ */
+        bulkRejectInsuranceForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkRejectInsurance.url(options),
+            method: 'post',
+        })
+    
+    bulkRejectInsurance.form = bulkRejectInsuranceForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkDeleteInsurance
  * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:109
@@ -236,6 +372,38 @@ bulkDeleteInsurance.delete = (options?: RouteQueryOptions): RouteDefinition<'del
     url: bulkDeleteInsurance.url(options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkDeleteInsurance
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:109
+ * @route '/sas/admin/bulk/insurance/delete'
+ */
+    const bulkDeleteInsuranceForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkDeleteInsurance.url({
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\BulkOperationsController::bulkDeleteInsurance
+ * @see Modules/SAS/app/Http/Controllers/Admin/BulkOperationsController.php:109
+ * @route '/sas/admin/bulk/insurance/delete'
+ */
+        bulkDeleteInsuranceForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkDeleteInsurance.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    bulkDeleteInsurance.form = bulkDeleteInsuranceForm
 const BulkOperationsController = { bulkApproveScholarships, bulkRejectScholarships, bulkUpdateScholarshipStatus, bulkDeleteScholarships, bulkApproveInsurance, bulkRejectInsurance, bulkDeleteInsurance }
 
 export default BulkOperationsController

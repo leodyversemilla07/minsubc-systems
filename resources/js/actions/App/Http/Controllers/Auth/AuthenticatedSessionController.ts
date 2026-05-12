@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::create
  * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:22
@@ -42,6 +42,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::create
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:22
+ * @route '/login'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::create
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:22
+ * @route '/login'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::create
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:22
+ * @route '/login'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::store
  * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:33
@@ -76,6 +111,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::store
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:33
+ * @route '/login'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::store
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:33
+ * @route '/login'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
  * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:101
@@ -109,6 +165,28 @@ destroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: destroy.url(options),
     method: 'post',
 })
+
+    /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:101
+ * @route '/logout'
+ */
+    const destroyForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
+ * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:101
+ * @route '/logout'
+ */
+        destroyForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(options),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const AuthenticatedSessionController = { create, store, destroy }
 
 export default AuthenticatedSessionController

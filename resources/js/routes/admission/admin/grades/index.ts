@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:24
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:24
+ * @route '/admission/admin/grades'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:24
+ * @route '/admission/admin/grades'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:24
+ * @route '/admission/admin/grades'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::section
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:66
@@ -109,6 +144,41 @@ section.head = (args: { section: number | { id: number } } | [section: number | 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::section
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:66
+ * @route '/admission/admin/grades/section/{section}'
+ */
+    const sectionForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: section.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::section
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:66
+ * @route '/admission/admin/grades/section/{section}'
+ */
+        sectionForm.get = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: section.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::section
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:66
+ * @route '/admission/admin/grades/section/{section}'
+ */
+        sectionForm.head = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: section.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    section.form = sectionForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::submit
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:126
@@ -167,6 +237,27 @@ submit.post = (args: { enrollment: number | { id: number } } | [enrollment: numb
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::submit
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:126
+ * @route '/admission/admin/grades/{enrollment}'
+ */
+    const submitForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: submit.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::submit
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:126
+ * @route '/admission/admin/grades/{enrollment}'
+ */
+        submitForm.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: submit.url(args, options),
+            method: 'post',
+        })
+    
+    submit.form = submitForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::update
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:161
@@ -225,6 +316,37 @@ update.patch = (args: { enrollmentSubject: number | { id: number } } | [enrollme
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:161
+ * @route '/admission/admin/grades/{enrollmentSubject}'
+ */
+    const updateForm = (args: { enrollmentSubject: number | { id: number } } | [enrollmentSubject: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:161
+ * @route '/admission/admin/grades/{enrollmentSubject}'
+ */
+        updateForm.patch = (args: { enrollmentSubject: number | { id: number } } | [enrollmentSubject: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::bulkUpload
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:184
@@ -259,6 +381,27 @@ bulkUpload.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::bulkUpload
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:184
+ * @route '/admission/admin/grades/bulk-upload'
+ */
+    const bulkUploadForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: bulkUpload.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::bulkUpload
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:184
+ * @route '/admission/admin/grades/bulk-upload'
+ */
+        bulkUploadForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: bulkUpload.url(options),
+            method: 'post',
+        })
+    
+    bulkUpload.form = bulkUploadForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::exportMethod
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:209
@@ -302,6 +445,41 @@ exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::exportMethod
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:209
+ * @route '/admission/admin/grades/export'
+ */
+    const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportMethod.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::exportMethod
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:209
+ * @route '/admission/admin/grades/export'
+ */
+        exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportMethod.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::exportMethod
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:209
+ * @route '/admission/admin/grades/export'
+ */
+        exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportMethod.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportMethod.form = exportMethodForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::gpa
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:228
@@ -369,6 +547,41 @@ gpa.head = (args: { enrollment: number | { id: number } } | [enrollment: number 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::gpa
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:228
+ * @route '/admission/admin/grades/{enrollment}/gpa'
+ */
+    const gpaForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: gpa.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::gpa
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:228
+ * @route '/admission/admin/grades/{enrollment}/gpa'
+ */
+        gpaForm.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: gpa.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::gpa
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:228
+ * @route '/admission/admin/grades/{enrollment}/gpa'
+ */
+        gpaForm.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: gpa.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    gpa.form = gpaForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\GradeController::sheet
  * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:242
@@ -435,6 +648,42 @@ sheet.head = (args: { section: number | { id: number } } | [section: number | { 
     url: sheet.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::sheet
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:242
+ * @route '/admission/admin/grades/sheet/{section}'
+ */
+    const sheetForm = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: sheet.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::sheet
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:242
+ * @route '/admission/admin/grades/sheet/{section}'
+ */
+        sheetForm.get = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: sheet.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\GradeController::sheet
+ * @see Modules/Admission/app/Http/Controllers/Admin/GradeController.php:242
+ * @route '/admission/admin/grades/sheet/{section}'
+ */
+        sheetForm.head = (args: { section: number | { id: number } } | [section: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: sheet.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    sheet.form = sheetForm
 const grades = {
     index: Object.assign(index, index),
 section: Object.assign(section, section),

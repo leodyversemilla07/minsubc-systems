@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::selectPaymentMethod
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:31
@@ -66,6 +66,41 @@ selectPaymentMethod.head = (args: { documentRequest: string | { request_number: 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::selectPaymentMethod
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:31
+ * @route '/document-requests/{documentRequest}/payment/method'
+ */
+    const selectPaymentMethodForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: selectPaymentMethod.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::selectPaymentMethod
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:31
+ * @route '/document-requests/{documentRequest}/payment/method'
+ */
+        selectPaymentMethodForm.get = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: selectPaymentMethod.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::selectPaymentMethod
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:31
+ * @route '/document-requests/{documentRequest}/payment/method'
+ */
+        selectPaymentMethodForm.head = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: selectPaymentMethod.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    selectPaymentMethod.form = selectPaymentMethodForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::generateCashPayment
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:49
@@ -124,6 +159,27 @@ generateCashPayment.post = (args: { documentRequest: string | { request_number: 
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::generateCashPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:49
+ * @route '/document-requests/{documentRequest}/payment/cash'
+ */
+    const generateCashPaymentForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: generateCashPayment.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::generateCashPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:49
+ * @route '/document-requests/{documentRequest}/payment/cash'
+ */
+        generateCashPaymentForm.post = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: generateCashPayment.url(args, options),
+            method: 'post',
+        })
+    
+    generateCashPayment.form = generateCashPaymentForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::showCashPaymentReference
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:106
@@ -191,6 +247,41 @@ showCashPaymentReference.head = (args: { payment: number | { id: number } } | [p
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::showCashPaymentReference
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:106
+ * @route '/payments/{payment}/cash-reference'
+ */
+    const showCashPaymentReferenceForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: showCashPaymentReference.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::showCashPaymentReference
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:106
+ * @route '/payments/{payment}/cash-reference'
+ */
+        showCashPaymentReferenceForm.get = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: showCashPaymentReference.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::showCashPaymentReference
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:106
+ * @route '/payments/{payment}/cash-reference'
+ */
+        showCashPaymentReferenceForm.head = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: showCashPaymentReference.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    showCashPaymentReference.form = showCashPaymentReferenceForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::paymentSuccess
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:179
@@ -258,6 +349,41 @@ paymentSuccess.head = (args: { documentRequest: string | { request_number: strin
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::paymentSuccess
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:179
+ * @route '/document-requests/{documentRequest}/payment/success'
+ */
+    const paymentSuccessForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: paymentSuccess.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::paymentSuccess
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:179
+ * @route '/document-requests/{documentRequest}/payment/success'
+ */
+        paymentSuccessForm.get = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: paymentSuccess.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::paymentSuccess
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:179
+ * @route '/document-requests/{documentRequest}/payment/success'
+ */
+        paymentSuccessForm.head = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: paymentSuccess.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    paymentSuccess.form = paymentSuccessForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::showPaymentStatus
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:128
@@ -325,6 +451,41 @@ showPaymentStatus.head = (args: { documentRequest: string | { request_number: st
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::showPaymentStatus
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:128
+ * @route '/document-requests/{documentRequest}/payment/status'
+ */
+    const showPaymentStatusForm = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: showPaymentStatus.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::showPaymentStatus
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:128
+ * @route '/document-requests/{documentRequest}/payment/status'
+ */
+        showPaymentStatusForm.get = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: showPaymentStatus.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::showPaymentStatus
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:128
+ * @route '/document-requests/{documentRequest}/payment/status'
+ */
+        showPaymentStatusForm.head = (args: { documentRequest: string | { request_number: string } } | [documentRequest: string | { request_number: string } ] | string | { request_number: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: showPaymentStatus.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    showPaymentStatus.form = showPaymentStatusForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::cashierDashboard
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
@@ -368,6 +529,41 @@ cashierDashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::cashierDashboard
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
+ * @route '/cashier'
+ */
+    const cashierDashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: cashierDashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::cashierDashboard
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
+ * @route '/cashier'
+ */
+        cashierDashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: cashierDashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::cashierDashboard
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
+ * @route '/cashier'
+ */
+        cashierDashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: cashierDashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    cashierDashboard.form = cashierDashboardForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::verifyPaymentReference
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:146
@@ -402,6 +598,27 @@ verifyPaymentReference.post = (options?: RouteQueryOptions): RouteDefinition<'po
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::verifyPaymentReference
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:146
+ * @route '/cashier/verify-payment'
+ */
+    const verifyPaymentReferenceForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: verifyPaymentReference.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::verifyPaymentReference
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:146
+ * @route '/cashier/verify-payment'
+ */
+        verifyPaymentReferenceForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: verifyPaymentReference.url(options),
+            method: 'post',
+        })
+    
+    verifyPaymentReference.form = verifyPaymentReferenceForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::confirmCashPayment
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:200
@@ -436,6 +653,27 @@ confirmCashPayment.post = (options?: RouteQueryOptions): RouteDefinition<'post'>
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::confirmCashPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:200
+ * @route '/cashier/confirm-payment'
+ */
+    const confirmCashPaymentForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: confirmCashPayment.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::confirmCashPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:200
+ * @route '/cashier/confirm-payment'
+ */
+        confirmCashPaymentForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: confirmCashPayment.url(options),
+            method: 'post',
+        })
+    
+    confirmCashPayment.form = confirmCashPaymentForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::printOfficialReceipt
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
@@ -503,6 +741,41 @@ printOfficialReceipt.head = (args: { payment: number | { id: number } } | [payme
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::printOfficialReceipt
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
+ * @route '/cashier/receipt/{payment}'
+ */
+    const printOfficialReceiptForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: printOfficialReceipt.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::printOfficialReceipt
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
+ * @route '/cashier/receipt/{payment}'
+ */
+        printOfficialReceiptForm.get = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: printOfficialReceipt.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::printOfficialReceipt
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
+ * @route '/cashier/receipt/{payment}'
+ */
+        printOfficialReceiptForm.head = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: printOfficialReceipt.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    printOfficialReceipt.form = printOfficialReceiptForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::getReceiptData
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
@@ -569,6 +842,42 @@ getReceiptData.head = (args: { payment: number | { id: number } } | [payment: nu
     url: getReceiptData.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::getReceiptData
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
+ * @route '/cashier/receipt/{payment}/data'
+ */
+    const getReceiptDataForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: getReceiptData.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::getReceiptData
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
+ * @route '/cashier/receipt/{payment}/data'
+ */
+        getReceiptDataForm.get = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: getReceiptData.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::getReceiptData
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
+ * @route '/cashier/receipt/{payment}/data'
+ */
+        getReceiptDataForm.head = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: getReceiptData.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    getReceiptData.form = getReceiptDataForm
 const PaymentController = { selectPaymentMethod, generateCashPayment, showCashPaymentReference, paymentSuccess, showPaymentStatus, cashierDashboard, verifyPaymentReference, confirmCashPayment, printOfficialReceipt, getReceiptData }
 
 export default PaymentController

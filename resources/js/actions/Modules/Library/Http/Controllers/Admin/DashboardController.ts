@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\DashboardController::index
  * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\DashboardController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:18
+ * @route '/library/admin/dashboard'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\DashboardController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:18
+ * @route '/library/admin/dashboard'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\DashboardController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:18
+ * @route '/library/admin/dashboard'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\DashboardController::statistics
  * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:29
@@ -84,6 +119,42 @@ statistics.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: statistics.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\DashboardController::statistics
+ * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:29
+ * @route '/library/admin/statistics'
+ */
+    const statisticsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: statistics.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\DashboardController::statistics
+ * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:29
+ * @route '/library/admin/statistics'
+ */
+        statisticsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\DashboardController::statistics
+ * @see Modules/Library/app/Http/Controllers/Admin/DashboardController.php:29
+ * @route '/library/admin/statistics'
+ */
+        statisticsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    statistics.form = statisticsForm
 const DashboardController = { index, statistics }
 
 export default DashboardController

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 import payments from './payments'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::index
@@ -43,6 +43,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:30
+ * @route '/admission/admin/enrollments'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:30
+ * @route '/admission/admin/enrollments'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:30
+ * @route '/admission/admin/enrollments'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::create
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:66
@@ -86,6 +121,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:66
+ * @route '/admission/admin/enrollments/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:66
+ * @route '/admission/admin/enrollments/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:66
+ * @route '/admission/admin/enrollments/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::store
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:89
@@ -120,6 +190,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:89
+ * @route '/admission/admin/enrollments'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:89
+ * @route '/admission/admin/enrollments'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::show
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:128
@@ -187,6 +278,41 @@ show.head = (args: { enrollment: number | { id: number } } | [enrollment: number
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:128
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+    const showForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:128
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+        showForm.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:128
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+        showForm.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::edit
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:164
@@ -254,6 +380,41 @@ edit.head = (args: { enrollment: number | { id: number } } | [enrollment: number
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:164
+ * @route '/admission/admin/enrollments/{enrollment}/edit'
+ */
+    const editForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:164
+ * @route '/admission/admin/enrollments/{enrollment}/edit'
+ */
+        editForm.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:164
+ * @route '/admission/admin/enrollments/{enrollment}/edit'
+ */
+        editForm.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::update
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:181
@@ -312,6 +473,37 @@ update.patch = (args: { enrollment: number | { id: number } } | [enrollment: num
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:181
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+    const updateForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:181
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+        updateForm.patch = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::destroy
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:211
@@ -370,6 +562,37 @@ destroy.delete = (args: { enrollment: number | { id: number } } | [enrollment: n
     method: 'delete',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:211
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+    const destroyForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:211
+ * @route '/admission/admin/enrollments/{enrollment}'
+ */
+        destroyForm.delete = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::confirm
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:375
@@ -428,6 +651,27 @@ confirm.post = (args: { enrollment: number | { id: number } } | [enrollment: num
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::confirm
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:375
+ * @route '/admission/admin/enrollments/{enrollment}/confirm'
+ */
+    const confirmForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: confirm.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::confirm
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:375
+ * @route '/admission/admin/enrollments/{enrollment}/confirm'
+ */
+        confirmForm.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: confirm.url(args, options),
+            method: 'post',
+        })
+    
+    confirm.form = confirmForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::assignSubjects
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:229
@@ -486,6 +730,27 @@ assignSubjects.post = (args: { enrollment: number | { id: number } } | [enrollme
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::assignSubjects
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:229
+ * @route '/admission/admin/enrollments/{enrollment}/assign-subjects'
+ */
+    const assignSubjectsForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: assignSubjects.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::assignSubjects
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:229
+ * @route '/admission/admin/enrollments/{enrollment}/assign-subjects'
+ */
+        assignSubjectsForm.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: assignSubjects.url(args, options),
+            method: 'post',
+        })
+    
+    assignSubjects.form = assignSubjectsForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::dropSubject
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:251
@@ -539,6 +804,27 @@ dropSubject.post = (args: { enrollment: number | { id: number }, subjectId: stri
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::dropSubject
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:251
+ * @route '/admission/admin/enrollments/{enrollment}/drop-subject/{subjectId}'
+ */
+    const dropSubjectForm = (args: { enrollment: number | { id: number }, subjectId: string | number } | [enrollment: number | { id: number }, subjectId: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: dropSubject.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::dropSubject
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:251
+ * @route '/admission/admin/enrollments/{enrollment}/drop-subject/{subjectId}'
+ */
+        dropSubjectForm.post = (args: { enrollment: number | { id: number }, subjectId: string | number } | [enrollment: number | { id: number }, subjectId: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: dropSubject.url(args, options),
+            method: 'post',
+        })
+    
+    dropSubject.form = dropSubjectForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::recordPayment
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:263
@@ -597,6 +883,27 @@ recordPayment.post = (args: { enrollment: number | { id: number } } | [enrollmen
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::recordPayment
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:263
+ * @route '/admission/admin/enrollments/{enrollment}/record-payment'
+ */
+    const recordPaymentForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: recordPayment.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::recordPayment
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:263
+ * @route '/admission/admin/enrollments/{enrollment}/record-payment'
+ */
+        recordPaymentForm.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: recordPayment.url(args, options),
+            method: 'post',
+        })
+    
+    recordPayment.form = recordPaymentForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reEnroll
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:313
@@ -655,6 +962,27 @@ reEnroll.post = (args: { enrollment: number | { id: number } } | [enrollment: nu
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reEnroll
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:313
+ * @route '/admission/admin/enrollments/{enrollment}/re-enroll'
+ */
+    const reEnrollForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reEnroll.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reEnroll
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:313
+ * @route '/admission/admin/enrollments/{enrollment}/re-enroll'
+ */
+        reEnrollForm.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reEnroll.url(args, options),
+            method: 'post',
+        })
+    
+    reEnroll.form = reEnrollForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
@@ -717,6 +1045,41 @@ bySection.head = (args: { sectionId: string | number } | [sectionId: string | nu
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
+ * @route '/admission/admin/enrollments/by-section/{sectionId}'
+ */
+    const bySectionForm = (args: { sectionId: string | number } | [sectionId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: bySection.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
+ * @route '/admission/admin/enrollments/by-section/{sectionId}'
+ */
+        bySectionForm.get = (args: { sectionId: string | number } | [sectionId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: bySection.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
+ * @route '/admission/admin/enrollments/by-section/{sectionId}'
+ */
+        bySectionForm.head = (args: { sectionId: string | number } | [sectionId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: bySection.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    bySection.form = bySectionForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reports
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:341
@@ -759,6 +1122,42 @@ reports.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: reports.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reports
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:341
+ * @route '/admission/admin/enrollments/reports'
+ */
+    const reportsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: reports.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reports
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:341
+ * @route '/admission/admin/enrollments/reports'
+ */
+        reportsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: reports.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reports
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:341
+ * @route '/admission/admin/enrollments/reports'
+ */
+        reportsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: reports.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    reports.form = reportsForm
 const enrollments = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

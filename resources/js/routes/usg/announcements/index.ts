@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\PageController::index
  * @see Modules/USG/app/Http/Controllers/PageController.php:126
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:126
+ * @route '/usg/announcements'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:126
+ * @route '/usg/announcements'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:126
+ * @route '/usg/announcements'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::show
  * @see Modules/USG/app/Http/Controllers/PageController.php:153
@@ -109,6 +144,41 @@ show.head = (args: { announcement: string | number | { slug: string | number } }
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:153
+ * @route '/usg/announcements/{announcement}'
+ */
+    const showForm = (args: { announcement: string | number | { slug: string | number } } | [announcement: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:153
+ * @route '/usg/announcements/{announcement}'
+ */
+        showForm.get = (args: { announcement: string | number | { slug: string | number } } | [announcement: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:153
+ * @route '/usg/announcements/{announcement}'
+ */
+        showForm.head = (args: { announcement: string | number | { slug: string | number } } | [announcement: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::category
  * @see Modules/USG/app/Http/Controllers/PageController.php:172
@@ -170,6 +240,42 @@ category.head = (args: { category: string | number } | [category: string | numbe
     url: category.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::category
+ * @see Modules/USG/app/Http/Controllers/PageController.php:172
+ * @route '/usg/announcements/category/{category}'
+ */
+    const categoryForm = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: category.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::category
+ * @see Modules/USG/app/Http/Controllers/PageController.php:172
+ * @route '/usg/announcements/category/{category}'
+ */
+        categoryForm.get = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: category.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::category
+ * @see Modules/USG/app/Http/Controllers/PageController.php:172
+ * @route '/usg/announcements/category/{category}'
+ */
+        categoryForm.head = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: category.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    category.form = categoryForm
 const announcements = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::index
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:17
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:17
+ * @route '/voting/admin/feedback'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:17
+ * @route '/voting/admin/feedback'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:17
+ * @route '/voting/admin/feedback'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::show
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:61
@@ -108,6 +143,42 @@ show.head = (args: { feedback: number | { id: number } } | [feedback: number | {
     url: show.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:61
+ * @route '/voting/admin/feedback/{feedback}'
+ */
+    const showForm = (args: { feedback: number | { id: number } } | [feedback: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:61
+ * @route '/voting/admin/feedback/{feedback}'
+ */
+        showForm.get = (args: { feedback: number | { id: number } } | [feedback: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\FeedbackController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/FeedbackController.php:61
+ * @route '/voting/admin/feedback/{feedback}'
+ */
+        showForm.head = (args: { feedback: number | { id: number } } | [feedback: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 const FeedbackController = { index, show }
 
 export default FeedbackController

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 import application from './application'
 import track5d0c32 from './track'
 import admin from './admin'
@@ -46,6 +46,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\PageController::index
+ * @see Modules/Admission/app/Http/Controllers/PageController.php:13
+ * @route '/admission'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\PageController::index
+ * @see Modules/Admission/app/Http/Controllers/PageController.php:13
+ * @route '/admission'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\PageController::index
+ * @see Modules/Admission/app/Http/Controllers/PageController.php:13
+ * @route '/admission'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::track
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
@@ -88,6 +123,42 @@ track.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: track.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::track
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
+ * @route '/admission/track'
+ */
+    const trackForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: track.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::track
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
+ * @route '/admission/track'
+ */
+        trackForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: track.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::track
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
+ * @route '/admission/track'
+ */
+        trackForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: track.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    track.form = trackForm
 const admission = {
     index: Object.assign(index, index),
 application: Object.assign(application, application),

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::index
  * @see Modules/SAS/app/Http/Controllers/PageController.php:32
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::index
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:32
+ * @route '/sas'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::index
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:32
+ * @route '/sas'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::index
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:32
+ * @route '/sas'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::organizations
  * @see Modules/SAS/app/Http/Controllers/PageController.php:76
@@ -85,6 +120,41 @@ organizations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::organizations
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:76
+ * @route '/sas/organizations'
+ */
+    const organizationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: organizations.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::organizations
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:76
+ * @route '/sas/organizations'
+ */
+        organizationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: organizations.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::organizations
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:76
+ * @route '/sas/organizations'
+ */
+        organizationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: organizations.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    organizations.form = organizationsForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::organizationShow
  * @see Modules/SAS/app/Http/Controllers/PageController.php:116
@@ -147,6 +217,41 @@ organizationShow.head = (args: { code: string | number } | [code: string | numbe
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::organizationShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:116
+ * @route '/sas/organizations/{code}'
+ */
+    const organizationShowForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: organizationShow.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::organizationShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:116
+ * @route '/sas/organizations/{code}'
+ */
+        organizationShowForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: organizationShow.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::organizationShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:116
+ * @route '/sas/organizations/{code}'
+ */
+        organizationShowForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: organizationShow.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    organizationShow.form = organizationShowForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::activities
  * @see Modules/SAS/app/Http/Controllers/PageController.php:156
@@ -190,6 +295,41 @@ activities.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::activities
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:156
+ * @route '/sas/activities'
+ */
+    const activitiesForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: activities.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::activities
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:156
+ * @route '/sas/activities'
+ */
+        activitiesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: activities.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::activities
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:156
+ * @route '/sas/activities'
+ */
+        activitiesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: activities.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    activities.form = activitiesForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::activitiesCalendar
  * @see Modules/SAS/app/Http/Controllers/PageController.php:193
@@ -233,6 +373,41 @@ activitiesCalendar.head = (options?: RouteQueryOptions): RouteDefinition<'head'>
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::activitiesCalendar
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:193
+ * @route '/sas/activities/calendar'
+ */
+    const activitiesCalendarForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: activitiesCalendar.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::activitiesCalendar
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:193
+ * @route '/sas/activities/calendar'
+ */
+        activitiesCalendarForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: activitiesCalendar.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::activitiesCalendar
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:193
+ * @route '/sas/activities/calendar'
+ */
+        activitiesCalendarForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: activitiesCalendar.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    activitiesCalendar.form = activitiesCalendarForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::yearlyTimeline
  * @see Modules/SAS/app/Http/Controllers/PageController.php:222
@@ -276,6 +451,41 @@ yearlyTimeline.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::yearlyTimeline
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:222
+ * @route '/sas/activities/yearly-timeline'
+ */
+    const yearlyTimelineForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: yearlyTimeline.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::yearlyTimeline
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:222
+ * @route '/sas/activities/yearly-timeline'
+ */
+        yearlyTimelineForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: yearlyTimeline.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::yearlyTimeline
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:222
+ * @route '/sas/activities/yearly-timeline'
+ */
+        yearlyTimelineForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: yearlyTimeline.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    yearlyTimeline.form = yearlyTimelineForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::exportCalendar
  * @see Modules/SAS/app/Http/Controllers/PageController.php:320
@@ -319,6 +529,41 @@ exportCalendar.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::exportCalendar
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:320
+ * @route '/sas/activities/export'
+ */
+    const exportCalendarForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportCalendar.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::exportCalendar
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:320
+ * @route '/sas/activities/export'
+ */
+        exportCalendarForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportCalendar.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::exportCalendar
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:320
+ * @route '/sas/activities/export'
+ */
+        exportCalendarForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportCalendar.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportCalendar.form = exportCalendarForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::activityShow
  * @see Modules/SAS/app/Http/Controllers/PageController.php:277
@@ -381,6 +626,41 @@ activityShow.head = (args: { slug: string | number } | [slug: string | number ] 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::activityShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:277
+ * @route '/sas/activities/{slug}'
+ */
+    const activityShowForm = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: activityShow.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::activityShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:277
+ * @route '/sas/activities/{slug}'
+ */
+        activityShowForm.get = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: activityShow.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::activityShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:277
+ * @route '/sas/activities/{slug}'
+ */
+        activityShowForm.head = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: activityShow.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    activityShow.form = activityShowForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::exportActivity
  * @see Modules/SAS/app/Http/Controllers/PageController.php:307
@@ -443,6 +723,41 @@ exportActivity.head = (args: { slug: string | number } | [slug: string | number 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::exportActivity
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:307
+ * @route '/sas/activities/{slug}/export'
+ */
+    const exportActivityForm = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportActivity.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::exportActivity
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:307
+ * @route '/sas/activities/{slug}/export'
+ */
+        exportActivityForm.get = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportActivity.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::exportActivity
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:307
+ * @route '/sas/activities/{slug}/export'
+ */
+        exportActivityForm.head = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportActivity.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportActivity.form = exportActivityForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::scholarships
  * @see Modules/SAS/app/Http/Controllers/PageController.php:372
@@ -486,6 +801,41 @@ scholarships.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::scholarships
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:372
+ * @route '/sas/scholarships'
+ */
+    const scholarshipsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: scholarships.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::scholarships
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:372
+ * @route '/sas/scholarships'
+ */
+        scholarshipsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarships.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::scholarships
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:372
+ * @route '/sas/scholarships'
+ */
+        scholarshipsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarships.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    scholarships.form = scholarshipsForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::scholarshipShow
  * @see Modules/SAS/app/Http/Controllers/PageController.php:410
@@ -547,6 +897,42 @@ scholarshipShow.head = (args: { id: string | number } | [id: string | number ] |
     url: scholarshipShow.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::scholarshipShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:410
+ * @route '/sas/scholarships/{id}'
+ */
+    const scholarshipShowForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: scholarshipShow.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::scholarshipShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:410
+ * @route '/sas/scholarships/{id}'
+ */
+        scholarshipShowForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarshipShow.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::scholarshipShow
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:410
+ * @route '/sas/scholarships/{id}'
+ */
+        scholarshipShowForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarshipShow.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    scholarshipShow.form = scholarshipShowForm
 const PageController = { index, organizations, organizationShow, activities, activitiesCalendar, yearlyTimeline, exportCalendar, activityShow, exportActivity, scholarships, scholarshipShow }
 
 export default PageController

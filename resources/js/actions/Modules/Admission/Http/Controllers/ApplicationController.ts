@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::create
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
@@ -42,6 +42,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::create
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
+ * @route '/admission/apply'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::create
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
+ * @route '/admission/apply'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::create
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
+ * @route '/admission/apply'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::store
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:38
@@ -76,6 +111,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::store
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:38
+ * @route '/admission/apply'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::store
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:38
+ * @route '/admission/apply'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::show
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
@@ -138,6 +194,41 @@ show.head = (args: { applicationNumber: string | number } | [applicationNumber: 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::show
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
+ * @route '/admission/apply/{applicationNumber}'
+ */
+    const showForm = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::show
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
+ * @route '/admission/apply/{applicationNumber}'
+ */
+        showForm.get = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::show
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
+ * @route '/admission/apply/{applicationNumber}'
+ */
+        showForm.head = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::submit
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:86
@@ -191,6 +282,27 @@ submit.post = (args: { applicationNumber: string | number } | [applicationNumber
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::submit
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:86
+ * @route '/admission/apply/{applicationNumber}/submit'
+ */
+    const submitForm = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: submit.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::submit
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:86
+ * @route '/admission/apply/{applicationNumber}/submit'
+ */
+        submitForm.post = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: submit.url(args, options),
+            method: 'post',
+        })
+    
+    submit.form = submitForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::uploadDocument
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:100
@@ -244,6 +356,27 @@ uploadDocument.post = (args: { applicationNumber: string | number } | [applicati
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::uploadDocument
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:100
+ * @route '/admission/apply/{applicationNumber}/documents'
+ */
+    const uploadDocumentForm = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: uploadDocument.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::uploadDocument
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:100
+ * @route '/admission/apply/{applicationNumber}/documents'
+ */
+        uploadDocumentForm.post = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: uploadDocument.url(args, options),
+            method: 'post',
+        })
+    
+    uploadDocument.form = uploadDocumentForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::deleteDocument
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:0
@@ -295,6 +428,37 @@ deleteDocument.delete = (args: { applicationNumber: string | number, documentId:
     method: 'delete',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::deleteDocument
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:0
+ * @route '/admission/apply/{applicationNumber}/documents/{documentId}'
+ */
+    const deleteDocumentForm = (args: { applicationNumber: string | number, documentId: string | number } | [applicationNumber: string | number, documentId: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: deleteDocument.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::deleteDocument
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:0
+ * @route '/admission/apply/{applicationNumber}/documents/{documentId}'
+ */
+        deleteDocumentForm.delete = (args: { applicationNumber: string | number, documentId: string | number } | [applicationNumber: string | number, documentId: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: deleteDocument.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    deleteDocument.form = deleteDocumentForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::trackForm
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
@@ -338,6 +502,41 @@ trackForm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::trackForm
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
+ * @route '/admission/track'
+ */
+    const trackFormForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: trackForm.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::trackForm
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
+ * @route '/admission/track'
+ */
+        trackFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: trackForm.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::trackForm
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:115
+ * @route '/admission/track'
+ */
+        trackFormForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: trackForm.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    trackForm.form = trackFormForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::trackStatus
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:120
@@ -371,6 +570,28 @@ trackStatus.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: trackStatus.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::trackStatus
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:120
+ * @route '/admission/track'
+ */
+    const trackStatusForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: trackStatus.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::trackStatus
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:120
+ * @route '/admission/track'
+ */
+        trackStatusForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: trackStatus.url(options),
+            method: 'post',
+        })
+    
+    trackStatus.form = trackStatusForm
 const ApplicationController = { create, store, show, submit, uploadDocument, deleteDocument, trackForm, trackStatus }
 
 export default ApplicationController

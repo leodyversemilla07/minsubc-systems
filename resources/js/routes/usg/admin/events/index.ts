@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::index
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:19
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:19
+ * @route '/usg/admin/events'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:19
+ * @route '/usg/admin/events'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:19
+ * @route '/usg/admin/events'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::create
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:54
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:54
+ * @route '/usg/admin/events/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:54
+ * @route '/usg/admin/events/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:54
+ * @route '/usg/admin/events/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::store
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:63
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:63
+ * @route '/usg/admin/events'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:63
+ * @route '/usg/admin/events'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::show
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:75
@@ -181,6 +272,41 @@ show.head = (args: { event: string | number } | [event: string | number ] | stri
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:75
+ * @route '/usg/admin/events/{event}'
+ */
+    const showForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:75
+ * @route '/usg/admin/events/{event}'
+ */
+        showForm.get = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:75
+ * @route '/usg/admin/events/{event}'
+ */
+        showForm.head = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::edit
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:84
@@ -243,6 +369,41 @@ edit.head = (args: { event: string | number } | [event: string | number ] | stri
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:84
+ * @route '/usg/admin/events/{event}/edit'
+ */
+    const editForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:84
+ * @route '/usg/admin/events/{event}/edit'
+ */
+        editForm.get = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:84
+ * @route '/usg/admin/events/{event}/edit'
+ */
+        editForm.head = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::update
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:95
@@ -305,6 +466,51 @@ update.patch = (args: { event: string | number } | [event: string | number ] | s
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:95
+ * @route '/usg/admin/events/{event}'
+ */
+    const updateForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:95
+ * @route '/usg/admin/events/{event}'
+ */
+        updateForm.put = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:95
+ * @route '/usg/admin/events/{event}'
+ */
+        updateForm.patch = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::destroy
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:109
@@ -358,6 +564,37 @@ destroy.delete = (args: { event: string | number } | [event: string | number ] |
     method: 'delete',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:109
+ * @route '/usg/admin/events/{event}'
+ */
+    const destroyForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:109
+ * @route '/usg/admin/events/{event}'
+ */
+        destroyForm.delete = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::publish
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:119
@@ -411,6 +648,37 @@ publish.patch = (args: { event: string | number } | [event: string | number ] | 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::publish
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:119
+ * @route '/usg/admin/events/{event}/publish'
+ */
+    const publishForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: publish.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::publish
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:119
+ * @route '/usg/admin/events/{event}/publish'
+ */
+        publishForm.patch = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: publish.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    publish.form = publishForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::cancel
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:127
@@ -464,6 +732,37 @@ cancel.patch = (args: { event: string | number } | [event: string | number ] | s
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::cancel
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:127
+ * @route '/usg/admin/events/{event}/cancel'
+ */
+    const cancelForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: cancel.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::cancel
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:127
+ * @route '/usg/admin/events/{event}/cancel'
+ */
+        cancelForm.patch = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: cancel.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    cancel.form = cancelForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\EventController::archive
  * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:135
@@ -516,6 +815,38 @@ archive.patch = (args: { event: string | number } | [event: string | number ] | 
     url: archive.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::archive
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:135
+ * @route '/usg/admin/events/{event}/archive'
+ */
+    const archiveForm = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: archive.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\EventController::archive
+ * @see Modules/USG/app/Http/Controllers/Admin/EventController.php:135
+ * @route '/usg/admin/events/{event}/archive'
+ */
+        archiveForm.patch = (args: { event: string | number } | [event: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: archive.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    archive.form = archiveForm
 const events = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

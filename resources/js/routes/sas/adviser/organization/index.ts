@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::dashboard
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:26
@@ -42,6 +42,41 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::dashboard
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:26
+ * @route '/sas/adviser/organization'
+ */
+    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::dashboard
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:26
+ * @route '/sas/adviser/organization'
+ */
+        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::dashboard
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:26
+ * @route '/sas/adviser/organization'
+ */
+        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dashboard.form = dashboardForm
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::edit
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:42
@@ -85,6 +120,41 @@ edit.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::edit
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:42
+ * @route '/sas/adviser/organization/edit'
+ */
+    const editForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::edit
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:42
+ * @route '/sas/adviser/organization/edit'
+ */
+        editForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::edit
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:42
+ * @route '/sas/adviser/organization/edit'
+ */
+        editForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::update
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:56
@@ -119,6 +189,37 @@ update.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     method: 'put',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::update
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:56
+ * @route '/sas/adviser/organization'
+ */
+    const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url({
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::update
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:56
+ * @route '/sas/adviser/organization'
+ */
+        updateForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::officers
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:71
@@ -162,6 +263,41 @@ officers.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::officers
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:71
+ * @route '/sas/adviser/organization/officers'
+ */
+    const officersForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: officers.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::officers
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:71
+ * @route '/sas/adviser/organization/officers'
+ */
+        officersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: officers.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::officers
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:71
+ * @route '/sas/adviser/organization/officers'
+ */
+        officersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: officers.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    officers.form = officersForm
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::storeOfficer
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:88
@@ -196,6 +332,27 @@ storeOfficer.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::storeOfficer
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:88
+ * @route '/sas/adviser/organization/officers'
+ */
+    const storeOfficerForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: storeOfficer.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::storeOfficer
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:88
+ * @route '/sas/adviser/organization/officers'
+ */
+        storeOfficerForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: storeOfficer.url(options),
+            method: 'post',
+        })
+    
+    storeOfficer.form = storeOfficerForm
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::updateOfficer
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:98
@@ -249,6 +406,37 @@ updateOfficer.put = (args: { id: string | number } | [id: string | number ] | st
     method: 'put',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::updateOfficer
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:98
+ * @route '/sas/adviser/organization/officers/{id}'
+ */
+    const updateOfficerForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateOfficer.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::updateOfficer
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:98
+ * @route '/sas/adviser/organization/officers/{id}'
+ */
+        updateOfficerForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateOfficer.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    updateOfficer.form = updateOfficerForm
 /**
 * @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::uploadDocument
  * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:110
@@ -282,6 +470,28 @@ uploadDocument.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
     url: uploadDocument.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::uploadDocument
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:110
+ * @route '/sas/adviser/organization/documents'
+ */
+    const uploadDocumentForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: uploadDocument.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Adviser\OrganizationController::uploadDocument
+ * @see Modules/SAS/app/Http/Controllers/Adviser/OrganizationController.php:110
+ * @route '/sas/adviser/organization/documents'
+ */
+        uploadDocumentForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: uploadDocument.url(options),
+            method: 'post',
+        })
+    
+    uploadDocument.form = uploadDocumentForm
 const organization = {
     dashboard: Object.assign(dashboard, dashboard),
 edit: Object.assign(edit, edit),

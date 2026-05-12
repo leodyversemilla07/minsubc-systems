@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::data
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
@@ -65,6 +65,42 @@ data.head = (args: { payment: number | { id: number } } | [payment: number | { i
     url: data.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::data
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
+ * @route '/cashier/receipt/{payment}/data'
+ */
+    const dataForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: data.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::data
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
+ * @route '/cashier/receipt/{payment}/data'
+ */
+        dataForm.get = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: data.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::data
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:288
+ * @route '/cashier/receipt/{payment}/data'
+ */
+        dataForm.head = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: data.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    data.form = dataForm
 const receipt = {
     data: Object.assign(data, data),
 }

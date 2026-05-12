@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SubjectController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:18
+ * @route '/api/admission/subjects'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:18
+ * @route '/api/admission/subjects'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:18
+ * @route '/api/admission/subjects'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourse
  * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:161
@@ -104,6 +139,41 @@ byCourse.head = (args: { courseId: string | number } | [courseId: string | numbe
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourse
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:161
+ * @route '/api/admission/subjects/by-course/{courseId}'
+ */
+    const byCourseForm = (args: { courseId: string | number } | [courseId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: byCourse.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourse
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:161
+ * @route '/api/admission/subjects/by-course/{courseId}'
+ */
+        byCourseForm.get = (args: { courseId: string | number } | [courseId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: byCourse.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourse
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:161
+ * @route '/api/admission/subjects/by-course/{courseId}'
+ */
+        byCourseForm.head = (args: { courseId: string | number } | [courseId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: byCourse.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    byCourse.form = byCourseForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourseLevel
  * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:175
@@ -146,6 +216,42 @@ byCourseLevel.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
     url: byCourseLevel.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourseLevel
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:175
+ * @route '/api/admission/subjects/by-course-level'
+ */
+    const byCourseLevelForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: byCourseLevel.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourseLevel
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:175
+ * @route '/api/admission/subjects/by-course-level'
+ */
+        byCourseLevelForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: byCourseLevel.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\SubjectController::byCourseLevel
+ * @see Modules/Admission/app/Http/Controllers/Admin/SubjectController.php:175
+ * @route '/api/admission/subjects/by-course-level'
+ */
+        byCourseLevelForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: byCourseLevel.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    byCourseLevel.form = byCourseLevelForm
 const subjects = {
     index: Object.assign(index, index),
 byCourse: Object.assign(byCourse, byCourse),

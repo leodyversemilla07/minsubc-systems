@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 import exportMethod from './export'
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::data
@@ -43,6 +43,41 @@ data.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::data
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
+ * @route '/admin/analytics/data'
+ */
+    const dataForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: data.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::data
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
+ * @route '/admin/analytics/data'
+ */
+        dataForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: data.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::data
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:40
+ * @route '/admin/analytics/data'
+ */
+        dataForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: data.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    data.form = dataForm
 /**
 * @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollection
  * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
@@ -85,6 +120,42 @@ dailyCollection.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =>
     url: dailyCollection.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollection
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
+ * @route '/admin/analytics/daily-collection'
+ */
+    const dailyCollectionForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dailyCollection.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollection
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
+ * @route '/admin/analytics/daily-collection'
+ */
+        dailyCollectionForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dailyCollection.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AnalyticsController::dailyCollection
+ * @see Modules/Registrar/app/Http/Controllers/AnalyticsController.php:53
+ * @route '/admin/analytics/daily-collection'
+ */
+        dailyCollectionForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dailyCollection.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dailyCollection.form = dailyCollectionForm
 const analytics = {
     data: Object.assign(data, data),
 dailyCollection: Object.assign(dailyCollection, dailyCollection),

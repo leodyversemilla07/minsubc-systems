@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\USGController::index
  * @see Modules/USG/app/Http/Controllers/USGController.php:13
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\USGController::index
+ * @see Modules/USG/app/Http/Controllers/USGController.php:13
+ * @route '/api/v1/usgs'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::index
+ * @see Modules/USG/app/Http/Controllers/USGController.php:13
+ * @route '/api/v1/usgs'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::index
+ * @see Modules/USG/app/Http/Controllers/USGController.php:13
+ * @route '/api/v1/usgs'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\USGController::store
  * @see Modules/USG/app/Http/Controllers/USGController.php:29
@@ -76,6 +111,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\USGController::store
+ * @see Modules/USG/app/Http/Controllers/USGController.php:29
+ * @route '/api/v1/usgs'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::store
+ * @see Modules/USG/app/Http/Controllers/USGController.php:29
+ * @route '/api/v1/usgs'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\USG\Http\Controllers\USGController::show
  * @see Modules/USG/app/Http/Controllers/USGController.php:34
@@ -138,6 +194,41 @@ show.head = (args: { usg: string | number } | [usg: string | number ] | string |
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\USGController::show
+ * @see Modules/USG/app/Http/Controllers/USGController.php:34
+ * @route '/api/v1/usgs/{usg}'
+ */
+    const showForm = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::show
+ * @see Modules/USG/app/Http/Controllers/USGController.php:34
+ * @route '/api/v1/usgs/{usg}'
+ */
+        showForm.get = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::show
+ * @see Modules/USG/app/Http/Controllers/USGController.php:34
+ * @route '/api/v1/usgs/{usg}'
+ */
+        showForm.head = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\USGController::update
  * @see Modules/USG/app/Http/Controllers/USGController.php:50
@@ -200,6 +291,51 @@ update.patch = (args: { usg: string | number } | [usg: string | number ] | strin
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\USGController::update
+ * @see Modules/USG/app/Http/Controllers/USGController.php:50
+ * @route '/api/v1/usgs/{usg}'
+ */
+    const updateForm = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::update
+ * @see Modules/USG/app/Http/Controllers/USGController.php:50
+ * @route '/api/v1/usgs/{usg}'
+ */
+        updateForm.put = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::update
+ * @see Modules/USG/app/Http/Controllers/USGController.php:50
+ * @route '/api/v1/usgs/{usg}'
+ */
+        updateForm.patch = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\USGController::destroy
  * @see Modules/USG/app/Http/Controllers/USGController.php:55
@@ -252,6 +388,38 @@ destroy.delete = (args: { usg: string | number } | [usg: string | number ] | str
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\USGController::destroy
+ * @see Modules/USG/app/Http/Controllers/USGController.php:55
+ * @route '/api/v1/usgs/{usg}'
+ */
+    const destroyForm = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\USGController::destroy
+ * @see Modules/USG/app/Http/Controllers/USGController.php:55
+ * @route '/api/v1/usgs/{usg}'
+ */
+        destroyForm.delete = (args: { usg: string | number } | [usg: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const usg = {
     index: Object.assign(index, index),
 store: Object.assign(store, store),

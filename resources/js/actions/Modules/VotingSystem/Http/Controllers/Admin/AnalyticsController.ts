@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::index
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
+ * @route '/voting/admin/analytics'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
+ * @route '/voting/admin/analytics'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:23
+ * @route '/voting/admin/analytics'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportPdf
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:41
@@ -85,6 +120,41 @@ exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportPdf
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:41
+ * @route '/voting/admin/analytics/export/pdf'
+ */
+    const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportPdf.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportPdf
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:41
+ * @route '/voting/admin/analytics/export/pdf'
+ */
+        exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportPdf.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportPdf
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:41
+ * @route '/voting/admin/analytics/export/pdf'
+ */
+        exportPdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportPdf.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportPdf.form = exportPdfForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportExcel
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:62
@@ -127,6 +197,42 @@ exportExcel.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: exportExcel.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportExcel
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:62
+ * @route '/voting/admin/analytics/export/excel'
+ */
+    const exportExcelForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: exportExcel.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportExcel
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:62
+ * @route '/voting/admin/analytics/export/excel'
+ */
+        exportExcelForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportExcel.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\AnalyticsController::exportExcel
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/AnalyticsController.php:62
+ * @route '/voting/admin/analytics/export/excel'
+ */
+        exportExcelForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: exportExcel.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    exportExcel.form = exportExcelForm
 const AnalyticsController = { index, exportPdf, exportExcel }
 
 export default AnalyticsController

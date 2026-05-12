@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 import documents from './documents'
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::create
@@ -43,6 +43,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::create
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
+ * @route '/admission/apply'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::create
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
+ * @route '/admission/apply'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::create
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:17
+ * @route '/admission/apply'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::store
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:38
@@ -77,6 +112,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::store
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:38
+ * @route '/admission/apply'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::store
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:38
+ * @route '/admission/apply'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::show
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
@@ -139,6 +195,41 @@ show.head = (args: { applicationNumber: string | number } | [applicationNumber: 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::show
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
+ * @route '/admission/apply/{applicationNumber}'
+ */
+    const showForm = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::show
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
+ * @route '/admission/apply/{applicationNumber}'
+ */
+        showForm.get = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::show
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:72
+ * @route '/admission/apply/{applicationNumber}'
+ */
+        showForm.head = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::submit
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:86
@@ -191,6 +282,28 @@ submit.post = (args: { applicationNumber: string | number } | [applicationNumber
     url: submit.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::submit
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:86
+ * @route '/admission/apply/{applicationNumber}/submit'
+ */
+    const submitForm = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: submit.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::submit
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:86
+ * @route '/admission/apply/{applicationNumber}/submit'
+ */
+        submitForm.post = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: submit.url(args, options),
+            method: 'post',
+        })
+    
+    submit.form = submitForm
 const application = {
     create: Object.assign(create, create),
 store: Object.assign(store, store),

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\LibraryController::index
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:17
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\LibraryController::index
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:17
+ * @route '/library'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::index
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:17
+ * @route '/library'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::index
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:17
+ * @route '/library'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\LibraryController::books
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:26
@@ -85,12 +120,47 @@ books.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\LibraryController::books
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:26
+ * @route '/library/books'
+ */
+    const booksForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: books.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::books
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:26
+ * @route '/library/books'
+ */
+        booksForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: books.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::books
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:26
+ * @route '/library/books'
+ */
+        booksForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: books.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    books.form = booksForm
 /**
 * @see \Modules\Library\Http\Controllers\LibraryController::bookShow
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
  * @route '/library/books/{book}'
  */
-export const bookShow = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const bookShow = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: bookShow.url(args, options),
     method: 'get',
 })
@@ -105,7 +175,7 @@ bookShow.definition = {
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
  * @route '/library/books/{book}'
  */
-bookShow.url = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+bookShow.url = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { book: args }
     }
@@ -138,7 +208,7 @@ bookShow.url = (args: { book: string | number | { id: string | number } } | [boo
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
  * @route '/library/books/{book}'
  */
-bookShow.get = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+bookShow.get = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: bookShow.url(args, options),
     method: 'get',
 })
@@ -147,17 +217,52 @@ bookShow.get = (args: { book: string | number | { id: string | number } } | [boo
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
  * @route '/library/books/{book}'
  */
-bookShow.head = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+bookShow.head = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: bookShow.url(args, options),
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\LibraryController::bookShow
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
+ * @route '/library/books/{book}'
+ */
+    const bookShowForm = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: bookShow.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::bookShow
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
+ * @route '/library/books/{book}'
+ */
+        bookShowForm.get = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: bookShow.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::bookShow
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:46
+ * @route '/library/books/{book}'
+ */
+        bookShowForm.head = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: bookShow.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    bookShow.form = bookShowForm
 /**
 * @see \Modules\Library\Http\Controllers\LibraryController::categoryShow
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-export const categoryShow = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const categoryShow = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: categoryShow.url(args, options),
     method: 'get',
 })
@@ -172,7 +277,7 @@ categoryShow.definition = {
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-categoryShow.url = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+categoryShow.url = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { category: args }
     }
@@ -205,7 +310,7 @@ categoryShow.url = (args: { category: string | number | { id: string | number } 
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-categoryShow.get = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+categoryShow.get = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: categoryShow.url(args, options),
     method: 'get',
 })
@@ -214,10 +319,46 @@ categoryShow.get = (args: { category: string | number | { id: string | number } 
  * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
  * @route '/library/categories/{category}'
  */
-categoryShow.head = (args: { category: string | number | { id: string | number } } | [category: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+categoryShow.head = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: categoryShow.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\LibraryController::categoryShow
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
+ * @route '/library/categories/{category}'
+ */
+    const categoryShowForm = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: categoryShow.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::categoryShow
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
+ * @route '/library/categories/{category}'
+ */
+        categoryShowForm.get = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: categoryShow.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\LibraryController::categoryShow
+ * @see Modules/Library/app/Http/Controllers/LibraryController.php:58
+ * @route '/library/categories/{category}'
+ */
+        categoryShowForm.head = (args: { category: number | { id: number } } | [category: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: categoryShow.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    categoryShow.form = categoryShowForm
 const LibraryController = { index, books, bookShow, categoryShow }
 
 export default LibraryController

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::verify
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:283
@@ -57,6 +57,27 @@ verify.post = (args: { payment: number | { id: number } } | [payment: number | {
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::verify
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:283
+ * @route '/admission/admin/enrollments/payments/{payment}/verify'
+ */
+    const verifyForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: verify.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::verify
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:283
+ * @route '/admission/admin/enrollments/payments/{payment}/verify'
+ */
+        verifyForm.post = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: verify.url(args, options),
+            method: 'post',
+        })
+    
+    verify.form = verifyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reject
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:296
@@ -114,6 +135,28 @@ reject.post = (args: { payment: number | { id: number } } | [payment: number | {
     url: reject.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reject
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:296
+ * @route '/admission/admin/enrollments/payments/{payment}/reject'
+ */
+    const rejectForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reject.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::reject
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:296
+ * @route '/admission/admin/enrollments/payments/{payment}/reject'
+ */
+        rejectForm.post = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reject.url(args, options),
+            method: 'post',
+        })
+    
+    reject.form = rejectForm
 const payments = {
     verify: Object.assign(verify, verify),
 reject: Object.assign(reject, reject),

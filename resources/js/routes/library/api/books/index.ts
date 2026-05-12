@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookController::search
  * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:118
@@ -42,6 +42,41 @@ search.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookController::search
+ * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:118
+ * @route '/api/library/books/search'
+ */
+    const searchForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: search.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookController::search
+ * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:118
+ * @route '/api/library/books/search'
+ */
+        searchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: search.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookController::search
+ * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:118
+ * @route '/api/library/books/search'
+ */
+        searchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: search.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    search.form = searchForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BookController::popular
  * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:132
@@ -84,6 +119,42 @@ popular.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: popular.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BookController::popular
+ * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:132
+ * @route '/api/library/books/popular'
+ */
+    const popularForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: popular.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookController::popular
+ * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:132
+ * @route '/api/library/books/popular'
+ */
+        popularForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: popular.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BookController::popular
+ * @see Modules/Library/app/Http/Controllers/Admin/BookController.php:132
+ * @route '/api/library/books/popular'
+ */
+        popularForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: popular.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    popular.form = popularForm
 const books = {
     search: Object.assign(search, search),
 popular: Object.assign(popular, popular),

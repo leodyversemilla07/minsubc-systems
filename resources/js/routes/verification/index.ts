@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
  * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
@@ -42,6 +42,41 @@ notice.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
+ * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
+ * @route '/verify-email'
+ */
+    const noticeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: notice.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
+ * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
+ * @route '/verify-email'
+ */
+        noticeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: notice.url(options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\Auth\EmailVerificationPromptController::__invoke
+ * @see app/Http/Controllers/Auth/EmailVerificationPromptController.php:16
+ * @route '/verify-email'
+ */
+        noticeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: notice.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    notice.form = noticeForm
 /**
 * @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
  * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
@@ -102,6 +137,41 @@ verify.head = (args: { id: string | number, hash: string | number } | [id: strin
     method: 'head',
 })
 
+    /**
+* @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
+ * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
+ * @route '/verify-email/{id}/{hash}'
+ */
+    const verifyForm = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: verify.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
+ * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
+ * @route '/verify-email/{id}/{hash}'
+ */
+        verifyForm.get = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: verify.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
+ * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
+ * @route '/verify-email/{id}/{hash}'
+ */
+        verifyForm.head = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: verify.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    verify.form = verifyForm
 /**
 * @see \App\Http\Controllers\Auth\EmailVerificationNotificationController::send
  * @see app/Http/Controllers/Auth/EmailVerificationNotificationController.php:14
@@ -135,6 +205,28 @@ send.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: send.url(options),
     method: 'post',
 })
+
+    /**
+* @see \App\Http\Controllers\Auth\EmailVerificationNotificationController::send
+ * @see app/Http/Controllers/Auth/EmailVerificationNotificationController.php:14
+ * @route '/email/verification-notification'
+ */
+    const sendForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: send.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\EmailVerificationNotificationController::send
+ * @see app/Http/Controllers/Auth/EmailVerificationNotificationController.php:14
+ * @route '/email/verification-notification'
+ */
+        sendForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: send.url(options),
+            method: 'post',
+        })
+    
+    send.form = sendForm
 const verification = {
     notice: Object.assign(notice, notice),
 verify: Object.assign(verify, verify),

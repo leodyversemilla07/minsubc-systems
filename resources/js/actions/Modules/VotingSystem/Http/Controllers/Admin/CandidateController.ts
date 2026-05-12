@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::index
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:21
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:21
+ * @route '/voting/admin/candidates'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:21
+ * @route '/voting/admin/candidates'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:21
+ * @route '/voting/admin/candidates'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::create
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:45
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:45
+ * @route '/voting/admin/candidates/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:45
+ * @route '/voting/admin/candidates/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::create
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:45
+ * @route '/voting/admin/candidates/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::store
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:68
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:68
+ * @route '/voting/admin/candidates'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::store
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:68
+ * @route '/voting/admin/candidates'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::show
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:94
@@ -186,6 +277,41 @@ show.head = (args: { candidate: number | { id: number } } | [candidate: number |
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:94
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+    const showForm = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:94
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+        showForm.get = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:94
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+        showForm.head = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::edit
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:104
@@ -253,6 +379,41 @@ edit.head = (args: { candidate: number | { id: number } } | [candidate: number |
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:104
+ * @route '/voting/admin/candidates/{candidate}/edit'
+ */
+    const editForm = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:104
+ * @route '/voting/admin/candidates/{candidate}/edit'
+ */
+        editForm.get = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::edit
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:104
+ * @route '/voting/admin/candidates/{candidate}/edit'
+ */
+        editForm.head = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::update
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:123
@@ -311,6 +472,37 @@ update.put = (args: { candidate: number | { id: number } } | [candidate: number 
     method: 'put',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:123
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+    const updateForm = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::update
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:123
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+        updateForm.put = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::destroy
  * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:152
@@ -368,6 +560,38 @@ destroy.delete = (args: { candidate: number | { id: number } } | [candidate: num
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:152
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+    const destroyForm = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\Admin\CandidateController::destroy
+ * @see Modules/VotingSystem/app/Http/Controllers/Admin/CandidateController.php:152
+ * @route '/voting/admin/candidates/{candidate}'
+ */
+        destroyForm.delete = (args: { candidate: number | { id: number } } | [candidate: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const CandidateController = { index, create, store, show, edit, update, destroy }
 
 export default CandidateController

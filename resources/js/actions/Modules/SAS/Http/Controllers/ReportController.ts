@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::index
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::index
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
+ * @route '/sas/admin/reports'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::index
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
+ * @route '/sas/admin/reports'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::index
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
+ * @route '/sas/admin/reports'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::scholarshipRecipients
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
@@ -85,6 +120,41 @@ scholarshipRecipients.head = (options?: RouteQueryOptions): RouteDefinition<'hea
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::scholarshipRecipients
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
+ * @route '/sas/admin/reports/scholarships/recipients'
+ */
+    const scholarshipRecipientsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: scholarshipRecipients.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::scholarshipRecipients
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
+ * @route '/sas/admin/reports/scholarships/recipients'
+ */
+        scholarshipRecipientsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarshipRecipients.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::scholarshipRecipients
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
+ * @route '/sas/admin/reports/scholarships/recipients'
+ */
+        scholarshipRecipientsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarshipRecipients.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    scholarshipRecipients.form = scholarshipRecipientsForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::approvedScholars
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
@@ -145,6 +215,41 @@ approvedScholars.head = (args: { semester: string | number, academicYear: string
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::approvedScholars
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
+ * @route '/sas/admin/reports/scholarships/approved/{semester}/{academicYear}'
+ */
+    const approvedScholarsForm = (args: { semester: string | number, academicYear: string | number } | [semester: string | number, academicYear: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: approvedScholars.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::approvedScholars
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
+ * @route '/sas/admin/reports/scholarships/approved/{semester}/{academicYear}'
+ */
+        approvedScholarsForm.get = (args: { semester: string | number, academicYear: string | number } | [semester: string | number, academicYear: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: approvedScholars.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::approvedScholars
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
+ * @route '/sas/admin/reports/scholarships/approved/{semester}/{academicYear}'
+ */
+        approvedScholarsForm.head = (args: { semester: string | number, academicYear: string | number } | [semester: string | number, academicYear: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: approvedScholars.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    approvedScholars.form = approvedScholarsForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::scholarshipStatistics
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
@@ -207,6 +312,41 @@ scholarshipStatistics.head = (args: { academicYear: string | number } | [academi
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::scholarshipStatistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
+ * @route '/sas/admin/reports/scholarships/statistics/{academicYear}'
+ */
+    const scholarshipStatisticsForm = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: scholarshipStatistics.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::scholarshipStatistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
+ * @route '/sas/admin/reports/scholarships/statistics/{academicYear}'
+ */
+        scholarshipStatisticsForm.get = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarshipStatistics.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::scholarshipStatistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
+ * @route '/sas/admin/reports/scholarships/statistics/{academicYear}'
+ */
+        scholarshipStatisticsForm.head = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: scholarshipStatistics.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    scholarshipStatistics.form = scholarshipStatisticsForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::insuranceRecords
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
@@ -250,6 +390,41 @@ insuranceRecords.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::insuranceRecords
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
+ * @route '/sas/admin/reports/insurance/records'
+ */
+    const insuranceRecordsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: insuranceRecords.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::insuranceRecords
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
+ * @route '/sas/admin/reports/insurance/records'
+ */
+        insuranceRecordsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: insuranceRecords.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::insuranceRecords
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
+ * @route '/sas/admin/reports/insurance/records'
+ */
+        insuranceRecordsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: insuranceRecords.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    insuranceRecords.form = insuranceRecordsForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::insuranceStatistics
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
@@ -311,6 +486,42 @@ insuranceStatistics.head = (args: { academicYear: string | number } | [academicY
     url: insuranceStatistics.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::insuranceStatistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
+ * @route '/sas/admin/reports/insurance/statistics/{academicYear}'
+ */
+    const insuranceStatisticsForm = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: insuranceStatistics.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::insuranceStatistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
+ * @route '/sas/admin/reports/insurance/statistics/{academicYear}'
+ */
+        insuranceStatisticsForm.get = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: insuranceStatistics.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::insuranceStatistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
+ * @route '/sas/admin/reports/insurance/statistics/{academicYear}'
+ */
+        insuranceStatisticsForm.head = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: insuranceStatistics.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    insuranceStatistics.form = insuranceStatisticsForm
 const ReportController = { index, scholarshipRecipients, approvedScholars, scholarshipStatistics, insuranceRecords, insuranceStatistics }
 
 export default ReportController

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::index
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:16
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:16
+ * @route '/library/admin/borrowings'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:16
+ * @route '/library/admin/borrowings'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:16
+ * @route '/library/admin/borrowings'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::active
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:40
@@ -85,6 +120,41 @@ active.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::active
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:40
+ * @route '/library/admin/borrowings/active'
+ */
+    const activeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: active.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::active
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:40
+ * @route '/library/admin/borrowings/active'
+ */
+        activeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: active.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::active
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:40
+ * @route '/library/admin/borrowings/active'
+ */
+        activeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: active.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    active.form = activeForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::overdue
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:45
@@ -128,6 +198,41 @@ overdue.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::overdue
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:45
+ * @route '/library/admin/borrowings/overdue'
+ */
+    const overdueForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: overdue.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::overdue
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:45
+ * @route '/library/admin/borrowings/overdue'
+ */
+        overdueForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: overdue.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::overdue
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:45
+ * @route '/library/admin/borrowings/overdue'
+ */
+        overdueForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: overdue.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    overdue.form = overdueForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::history
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:58
@@ -171,6 +276,41 @@ history.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::history
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:58
+ * @route '/library/admin/borrowings/history'
+ */
+    const historyForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: history.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::history
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:58
+ * @route '/library/admin/borrowings/history'
+ */
+        historyForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::history
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:58
+ * @route '/library/admin/borrowings/history'
+ */
+        historyForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    history.form = historyForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::create
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:63
@@ -214,6 +354,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::create
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:63
+ * @route '/library/admin/borrowings/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::create
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:63
+ * @route '/library/admin/borrowings/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::create
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:63
+ * @route '/library/admin/borrowings/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::store
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:69
@@ -248,12 +423,33 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::store
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:69
+ * @route '/library/admin/borrowings'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::store
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:69
+ * @route '/library/admin/borrowings'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::show
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
  * @route '/library/admin/borrowings/{borrowing}'
  */
-export const show = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -268,7 +464,7 @@ show.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
  * @route '/library/admin/borrowings/{borrowing}'
  */
-show.url = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+show.url = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { borrowing: args }
     }
@@ -301,7 +497,7 @@ show.url = (args: { borrowing: string | number | { id: string | number } } | [bo
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
  * @route '/library/admin/borrowings/{borrowing}'
  */
-show.get = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -310,17 +506,52 @@ show.get = (args: { borrowing: string | number | { id: string | number } } | [bo
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
  * @route '/library/admin/borrowings/{borrowing}'
  */
-show.head = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
+ * @route '/library/admin/borrowings/{borrowing}'
+ */
+    const showForm = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
+ * @route '/library/admin/borrowings/{borrowing}'
+ */
+        showForm.get = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:100
+ * @route '/library/admin/borrowings/{borrowing}'
+ */
+        showForm.head = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::approve
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:106
  * @route '/library/admin/borrowings/{borrowing}/approve'
  */
-export const approve = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const approve = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: approve.url(args, options),
     method: 'post',
 })
@@ -335,7 +566,7 @@ approve.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:106
  * @route '/library/admin/borrowings/{borrowing}/approve'
  */
-approve.url = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+approve.url = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { borrowing: args }
     }
@@ -368,17 +599,38 @@ approve.url = (args: { borrowing: string | number | { id: string | number } } | 
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:106
  * @route '/library/admin/borrowings/{borrowing}/approve'
  */
-approve.post = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+approve.post = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: approve.url(args, options),
     method: 'post',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::approve
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:106
+ * @route '/library/admin/borrowings/{borrowing}/approve'
+ */
+    const approveForm = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: approve.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::approve
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:106
+ * @route '/library/admin/borrowings/{borrowing}/approve'
+ */
+        approveForm.post = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: approve.url(args, options),
+            method: 'post',
+        })
+    
+    approve.form = approveForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::returnMethod
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:124
  * @route '/library/admin/borrowings/{borrowing}/return'
  */
-export const returnMethod = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const returnMethod = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: returnMethod.url(args, options),
     method: 'post',
 })
@@ -393,7 +645,7 @@ returnMethod.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:124
  * @route '/library/admin/borrowings/{borrowing}/return'
  */
-returnMethod.url = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+returnMethod.url = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { borrowing: args }
     }
@@ -426,17 +678,38 @@ returnMethod.url = (args: { borrowing: string | number | { id: string | number }
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:124
  * @route '/library/admin/borrowings/{borrowing}/return'
  */
-returnMethod.post = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+returnMethod.post = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: returnMethod.url(args, options),
     method: 'post',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::returnMethod
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:124
+ * @route '/library/admin/borrowings/{borrowing}/return'
+ */
+    const returnMethodForm = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: returnMethod.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::returnMethod
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:124
+ * @route '/library/admin/borrowings/{borrowing}/return'
+ */
+        returnMethodForm.post = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: returnMethod.url(args, options),
+            method: 'post',
+        })
+    
+    returnMethod.form = returnMethodForm
 /**
 * @see \Modules\Library\Http\Controllers\Admin\BorrowingController::markLost
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:151
  * @route '/library/admin/borrowings/{borrowing}/mark-lost'
  */
-export const markLost = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const markLost = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: markLost.url(args, options),
     method: 'post',
 })
@@ -451,7 +724,7 @@ markLost.definition = {
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:151
  * @route '/library/admin/borrowings/{borrowing}/mark-lost'
  */
-markLost.url = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+markLost.url = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { borrowing: args }
     }
@@ -484,10 +757,32 @@ markLost.url = (args: { borrowing: string | number | { id: string | number } } |
  * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:151
  * @route '/library/admin/borrowings/{borrowing}/mark-lost'
  */
-markLost.post = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+markLost.post = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: markLost.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::markLost
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:151
+ * @route '/library/admin/borrowings/{borrowing}/mark-lost'
+ */
+    const markLostForm = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: markLost.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Admin\BorrowingController::markLost
+ * @see Modules/Library/app/Http/Controllers/Admin/BorrowingController.php:151
+ * @route '/library/admin/borrowings/{borrowing}/mark-lost'
+ */
+        markLostForm.post = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: markLost.url(args, options),
+            method: 'post',
+        })
+    
+    markLost.form = markLostForm
 const borrowings = {
     index: Object.assign(index, index),
 active: Object.assign(active, active),

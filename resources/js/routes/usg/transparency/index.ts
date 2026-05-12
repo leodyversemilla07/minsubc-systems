@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\PageController::index
  * @see Modules/USG/app/Http/Controllers/PageController.php:398
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:398
+ * @route '/usg/transparency'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:398
+ * @route '/usg/transparency'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:398
+ * @route '/usg/transparency'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::show
  * @see Modules/USG/app/Http/Controllers/PageController.php:464
@@ -109,6 +144,41 @@ show.head = (args: { transparencyReport: string | { slug: string } } | [transpar
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:464
+ * @route '/usg/transparency/{transparencyReport}'
+ */
+    const showForm = (args: { transparencyReport: string | { slug: string } } | [transparencyReport: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:464
+ * @route '/usg/transparency/{transparencyReport}'
+ */
+        showForm.get = (args: { transparencyReport: string | { slug: string } } | [transparencyReport: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:464
+ * @route '/usg/transparency/{transparencyReport}'
+ */
+        showForm.head = (args: { transparencyReport: string | { slug: string } } | [transparencyReport: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::download
  * @see Modules/USG/app/Http/Controllers/PageController.php:484
@@ -175,6 +245,42 @@ download.head = (args: { transparencyReport: string | { slug: string } } | [tran
     url: download.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::download
+ * @see Modules/USG/app/Http/Controllers/PageController.php:484
+ * @route '/usg/transparency/{transparencyReport}/download'
+ */
+    const downloadForm = (args: { transparencyReport: string | { slug: string } } | [transparencyReport: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: download.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::download
+ * @see Modules/USG/app/Http/Controllers/PageController.php:484
+ * @route '/usg/transparency/{transparencyReport}/download'
+ */
+        downloadForm.get = (args: { transparencyReport: string | { slug: string } } | [transparencyReport: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::download
+ * @see Modules/USG/app/Http/Controllers/PageController.php:484
+ * @route '/usg/transparency/{transparencyReport}/download'
+ */
+        downloadForm.head = (args: { transparencyReport: string | { slug: string } } | [transparencyReport: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    download.form = downloadForm
 const transparency = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

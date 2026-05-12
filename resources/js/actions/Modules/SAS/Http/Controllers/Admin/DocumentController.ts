@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::index
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:24
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:24
+ * @route '/sas/admin/documents'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:24
+ * @route '/sas/admin/documents'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:24
+ * @route '/sas/admin/documents'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::create
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:43
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:43
+ * @route '/sas/admin/documents/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:43
+ * @route '/sas/admin/documents/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:43
+ * @route '/sas/admin/documents/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::store
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:51
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:51
+ * @route '/sas/admin/documents'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:51
+ * @route '/sas/admin/documents'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::show
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:65
@@ -181,6 +272,41 @@ show.head = (args: { id: string | number } | [id: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:65
+ * @route '/sas/admin/documents/{id}'
+ */
+    const showForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:65
+ * @route '/sas/admin/documents/{id}'
+ */
+        showForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:65
+ * @route '/sas/admin/documents/{id}'
+ */
+        showForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::edit
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:77
@@ -243,6 +369,41 @@ edit.head = (args: { id: string | number } | [id: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:77
+ * @route '/sas/admin/documents/{id}/edit'
+ */
+    const editForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:77
+ * @route '/sas/admin/documents/{id}/edit'
+ */
+        editForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:77
+ * @route '/sas/admin/documents/{id}/edit'
+ */
+        editForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::update
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:89
@@ -296,6 +457,37 @@ update.put = (args: { id: string | number } | [id: string | number ] | string | 
     method: 'put',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:89
+ * @route '/sas/admin/documents/{id}'
+ */
+    const updateForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:89
+ * @route '/sas/admin/documents/{id}'
+ */
+        updateForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::destroy
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:102
@@ -349,6 +541,37 @@ destroy.delete = (args: { id: string | number } | [id: string | number ] | strin
     method: 'delete',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:102
+ * @route '/sas/admin/documents/{id}'
+ */
+    const destroyForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:102
+ * @route '/sas/admin/documents/{id}'
+ */
+        destroyForm.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::manageDisposal
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:115
@@ -392,6 +615,41 @@ manageDisposal.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::manageDisposal
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:115
+ * @route '/sas/admin/documents-manage-disposal'
+ */
+    const manageDisposalForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: manageDisposal.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::manageDisposal
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:115
+ * @route '/sas/admin/documents-manage-disposal'
+ */
+        manageDisposalForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: manageDisposal.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::manageDisposal
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:115
+ * @route '/sas/admin/documents-manage-disposal'
+ */
+        manageDisposalForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: manageDisposal.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    manageDisposal.form = manageDisposalForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\DocumentController::updateDisposalStatus
  * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:127
@@ -444,6 +702,28 @@ updateDisposalStatus.post = (args: { id: string | number } | [id: string | numbe
     url: updateDisposalStatus.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::updateDisposalStatus
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:127
+ * @route '/sas/admin/documents/{id}/disposal-status'
+ */
+    const updateDisposalStatusForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateDisposalStatus.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\DocumentController::updateDisposalStatus
+ * @see Modules/SAS/app/Http/Controllers/Admin/DocumentController.php:127
+ * @route '/sas/admin/documents/{id}/disposal-status'
+ */
+        updateDisposalStatusForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateDisposalStatus.url(args, options),
+            method: 'post',
+        })
+    
+    updateDisposalStatus.form = updateDisposalStatusForm
 const DocumentController = { index, create, store, show, edit, update, destroy, manageDisposal, updateDisposalStatus }
 
 export default DocumentController

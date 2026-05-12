@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::index
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:26
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:26
+ * @route '/usg/admin/documents'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:26
+ * @route '/usg/admin/documents'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:26
+ * @route '/usg/admin/documents'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::create
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:56
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:56
+ * @route '/usg/admin/documents/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:56
+ * @route '/usg/admin/documents/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:56
+ * @route '/usg/admin/documents/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::store
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:68
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:68
+ * @route '/usg/admin/documents'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:68
+ * @route '/usg/admin/documents'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::show
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:83
@@ -186,6 +277,41 @@ show.head = (args: { document: number | { id: number } } | [document: number | {
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:83
+ * @route '/usg/admin/documents/{document}'
+ */
+    const showForm = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:83
+ * @route '/usg/admin/documents/{document}'
+ */
+        showForm.get = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:83
+ * @route '/usg/admin/documents/{document}'
+ */
+        showForm.head = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::edit
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:95
@@ -253,6 +379,41 @@ edit.head = (args: { document: number | { id: number } } | [document: number | {
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:95
+ * @route '/usg/admin/documents/{document}/edit'
+ */
+    const editForm = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:95
+ * @route '/usg/admin/documents/{document}/edit'
+ */
+        editForm.get = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:95
+ * @route '/usg/admin/documents/{document}/edit'
+ */
+        editForm.head = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::update
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:109
@@ -320,6 +481,51 @@ update.patch = (args: { document: number | { id: number } } | [document: number 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:109
+ * @route '/usg/admin/documents/{document}'
+ */
+    const updateForm = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:109
+ * @route '/usg/admin/documents/{document}'
+ */
+        updateForm.put = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:109
+ * @route '/usg/admin/documents/{document}'
+ */
+        updateForm.patch = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::destroy
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:121
@@ -378,6 +584,37 @@ destroy.delete = (args: { document: number | { id: number } } | [document: numbe
     method: 'delete',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:121
+ * @route '/usg/admin/documents/{document}'
+ */
+    const destroyForm = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:121
+ * @route '/usg/admin/documents/{document}'
+ */
+        destroyForm.delete = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\DocumentController::download
  * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:133
@@ -444,6 +681,42 @@ download.head = (args: { document: number | { id: number } } | [document: number
     url: download.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::download
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:133
+ * @route '/usg/admin/documents/{document}/download'
+ */
+    const downloadForm = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: download.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::download
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:133
+ * @route '/usg/admin/documents/{document}/download'
+ */
+        downloadForm.get = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\DocumentController::download
+ * @see Modules/USG/app/Http/Controllers/Admin/DocumentController.php:133
+ * @route '/usg/admin/documents/{document}/download'
+ */
+        downloadForm.head = (args: { document: number | { id: number } } | [document: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    download.form = downloadForm
 const documents = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

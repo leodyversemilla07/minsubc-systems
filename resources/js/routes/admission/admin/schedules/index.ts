@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:21
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:21
+ * @route '/admission/admin/schedules'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:21
+ * @route '/admission/admin/schedules'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:21
+ * @route '/admission/admin/schedules'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::create
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:44
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:44
+ * @route '/admission/admin/schedules/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:44
+ * @route '/admission/admin/schedules/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:44
+ * @route '/admission/admin/schedules/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::store
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:58
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:58
+ * @route '/admission/admin/schedules'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:58
+ * @route '/admission/admin/schedules'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::show
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:87
@@ -186,6 +277,41 @@ show.head = (args: { schedule: number | { id: number } } | [schedule: number | {
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:87
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+    const showForm = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:87
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+        showForm.get = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:87
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+        showForm.head = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::edit
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:100
@@ -253,6 +379,41 @@ edit.head = (args: { schedule: number | { id: number } } | [schedule: number | {
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:100
+ * @route '/admission/admin/schedules/{schedule}/edit'
+ */
+    const editForm = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:100
+ * @route '/admission/admin/schedules/{schedule}/edit'
+ */
+        editForm.get = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:100
+ * @route '/admission/admin/schedules/{schedule}/edit'
+ */
+        editForm.head = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::update
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:115
@@ -311,6 +472,37 @@ update.patch = (args: { schedule: number | { id: number } } | [schedule: number 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:115
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+    const updateForm = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:115
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+        updateForm.patch = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::destroy
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:142
@@ -369,6 +561,37 @@ destroy.delete = (args: { schedule: number | { id: number } } | [schedule: numbe
     method: 'delete',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:142
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+    const destroyForm = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:142
+ * @route '/admission/admin/schedules/{schedule}'
+ */
+        destroyForm.delete = (args: { schedule: number | { id: number } } | [schedule: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::instructor
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:152
@@ -431,6 +654,41 @@ instructor.head = (args: { instructorId: string | number } | [instructorId: stri
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::instructor
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:152
+ * @route '/admission/admin/schedules/instructor/{instructorId}'
+ */
+    const instructorForm = (args: { instructorId: string | number } | [instructorId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: instructor.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::instructor
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:152
+ * @route '/admission/admin/schedules/instructor/{instructorId}'
+ */
+        instructorForm.get = (args: { instructorId: string | number } | [instructorId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: instructor.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::instructor
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:152
+ * @route '/admission/admin/schedules/instructor/{instructorId}'
+ */
+        instructorForm.head = (args: { instructorId: string | number } | [instructorId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: instructor.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    instructor.form = instructorForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::room
  * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:176
@@ -492,6 +750,42 @@ room.head = (args: { room: string | number } | [room: string | number ] | string
     url: room.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::room
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:176
+ * @route '/admission/admin/schedules/room/{room}'
+ */
+    const roomForm = (args: { room: string | number } | [room: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: room.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::room
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:176
+ * @route '/admission/admin/schedules/room/{room}'
+ */
+        roomForm.get = (args: { room: string | number } | [room: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: room.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ScheduleController::room
+ * @see Modules/Admission/app/Http/Controllers/Admin/ScheduleController.php:176
+ * @route '/admission/admin/schedules/room/{room}'
+ */
+        roomForm.head = (args: { room: string | number } | [room: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: room.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    room.form = roomForm
 const schedules = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

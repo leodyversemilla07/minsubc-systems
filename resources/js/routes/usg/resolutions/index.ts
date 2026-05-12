@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\PageController::index
  * @see Modules/USG/app/Http/Controllers/PageController.php:298
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:298
+ * @route '/usg/resolutions'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:298
+ * @route '/usg/resolutions'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::index
+ * @see Modules/USG/app/Http/Controllers/PageController.php:298
+ * @route '/usg/resolutions'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::show
  * @see Modules/USG/app/Http/Controllers/PageController.php:341
@@ -104,6 +139,41 @@ show.head = (args: { resolution: string | number } | [resolution: string | numbe
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:341
+ * @route '/usg/resolutions/{resolution}'
+ */
+    const showForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:341
+ * @route '/usg/resolutions/{resolution}'
+ */
+        showForm.get = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::show
+ * @see Modules/USG/app/Http/Controllers/PageController.php:341
+ * @route '/usg/resolutions/{resolution}'
+ */
+        showForm.head = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::download
  * @see Modules/USG/app/Http/Controllers/PageController.php:357
@@ -166,6 +236,41 @@ download.head = (args: { resolution: string | number } | [resolution: string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::download
+ * @see Modules/USG/app/Http/Controllers/PageController.php:357
+ * @route '/usg/resolutions/{resolution}/download'
+ */
+    const downloadForm = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: download.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::download
+ * @see Modules/USG/app/Http/Controllers/PageController.php:357
+ * @route '/usg/resolutions/{resolution}/download'
+ */
+        downloadForm.get = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::download
+ * @see Modules/USG/app/Http/Controllers/PageController.php:357
+ * @route '/usg/resolutions/{resolution}/download'
+ */
+        downloadForm.head = (args: { resolution: string | number } | [resolution: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    download.form = downloadForm
 /**
 * @see \Modules\USG\Http\Controllers\PageController::category
  * @see Modules/USG/app/Http/Controllers/PageController.php:375
@@ -227,6 +332,42 @@ category.head = (args: { category: string | number } | [category: string | numbe
     url: category.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\PageController::category
+ * @see Modules/USG/app/Http/Controllers/PageController.php:375
+ * @route '/usg/resolutions/category/{category}'
+ */
+    const categoryForm = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: category.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::category
+ * @see Modules/USG/app/Http/Controllers/PageController.php:375
+ * @route '/usg/resolutions/category/{category}'
+ */
+        categoryForm.get = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: category.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\PageController::category
+ * @see Modules/USG/app/Http/Controllers/PageController.php:375
+ * @route '/usg/resolutions/category/{category}'
+ */
+        categoryForm.head = (args: { category: string | number } | [category: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: category.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    category.form = categoryForm
 const resolutions = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

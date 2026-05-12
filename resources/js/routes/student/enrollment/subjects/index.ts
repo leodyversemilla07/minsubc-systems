@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::update
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:283
@@ -56,6 +56,38 @@ update.patch = (args: { enrollment: number | { id: number } } | [enrollment: num
     url: update.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::update
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:283
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+    const updateForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::update
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:283
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+        updateForm.patch = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 const subjects = {
     update: Object.assign(update, update),
 }

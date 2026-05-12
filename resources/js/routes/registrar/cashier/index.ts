@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 import receipt24fea0 from './receipt'
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::dashboard
@@ -43,6 +43,41 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::dashboard
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
+ * @route '/cashier'
+ */
+    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::dashboard
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
+ * @route '/cashier'
+ */
+        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::dashboard
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:138
+ * @route '/cashier'
+ */
+        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dashboard.form = dashboardForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::verifyPayment
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:146
@@ -77,6 +112,27 @@ verifyPayment.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::verifyPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:146
+ * @route '/cashier/verify-payment'
+ */
+    const verifyPaymentForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: verifyPayment.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::verifyPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:146
+ * @route '/cashier/verify-payment'
+ */
+        verifyPaymentForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: verifyPayment.url(options),
+            method: 'post',
+        })
+    
+    verifyPayment.form = verifyPaymentForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::confirmPayment
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:200
@@ -111,6 +167,27 @@ confirmPayment.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::confirmPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:200
+ * @route '/cashier/confirm-payment'
+ */
+    const confirmPaymentForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: confirmPayment.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::confirmPayment
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:200
+ * @route '/cashier/confirm-payment'
+ */
+        confirmPaymentForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: confirmPayment.url(options),
+            method: 'post',
+        })
+    
+    confirmPayment.form = confirmPaymentForm
 /**
 * @see \Modules\Registrar\Http\Controllers\PaymentController::receipt
  * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
@@ -177,6 +254,42 @@ receipt.head = (args: { payment: number | { id: number } } | [payment: number | 
     url: receipt.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::receipt
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
+ * @route '/cashier/receipt/{payment}'
+ */
+    const receiptForm = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: receipt.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::receipt
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
+ * @route '/cashier/receipt/{payment}'
+ */
+        receiptForm.get = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: receipt.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\PaymentController::receipt
+ * @see Modules/Registrar/app/Http/Controllers/PaymentController.php:270
+ * @route '/cashier/receipt/{payment}'
+ */
+        receiptForm.head = (args: { payment: number | { id: number } } | [payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: receipt.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    receipt.form = receiptForm
 const cashier = {
     dashboard: Object.assign(dashboard, dashboard),
 verifyPayment: Object.assign(verifyPayment, verifyPayment),

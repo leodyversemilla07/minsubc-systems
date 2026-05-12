@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
@@ -42,12 +42,47 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
+ * @route '/library/student/borrowings'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
+ * @route '/library/student/borrowings'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::index
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:15
+ * @route '/library/student/borrowings'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-export const show = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -62,7 +97,7 @@ show.definition = {
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-show.url = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+show.url = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { borrowing: args }
     }
@@ -95,7 +130,7 @@ show.url = (args: { borrowing: string | number | { id: string | number } } | [bo
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-show.get = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -104,10 +139,46 @@ show.get = (args: { borrowing: string | number | { id: string | number } } | [bo
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
  * @route '/library/student/borrowings/{borrowing}'
  */
-show.head = (args: { borrowing: string | number | { id: string | number } } | [borrowing: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
+ * @route '/library/student/borrowings/{borrowing}'
+ */
+    const showForm = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
+ * @route '/library/student/borrowings/{borrowing}'
+ */
+        showForm.get = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::show
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:36
+ * @route '/library/student/borrowings/{borrowing}'
+ */
+        showForm.head = (args: { borrowing: number | { id: number } } | [borrowing: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 const borrowings = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

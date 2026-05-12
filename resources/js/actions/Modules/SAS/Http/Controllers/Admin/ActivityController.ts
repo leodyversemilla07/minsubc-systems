@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::index
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:25
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:25
+ * @route '/sas/admin/activities'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:25
+ * @route '/sas/admin/activities'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:25
+ * @route '/sas/admin/activities'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::create
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:43
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:43
+ * @route '/sas/admin/activities/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:43
+ * @route '/sas/admin/activities/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:43
+ * @route '/sas/admin/activities/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::store
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:55
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:55
+ * @route '/sas/admin/activities'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:55
+ * @route '/sas/admin/activities'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::show
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:71
@@ -181,6 +272,41 @@ show.head = (args: { activity: string | number } | [activity: string | number ] 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:71
+ * @route '/sas/admin/activities/{activity}'
+ */
+    const showForm = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:71
+ * @route '/sas/admin/activities/{activity}'
+ */
+        showForm.get = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:71
+ * @route '/sas/admin/activities/{activity}'
+ */
+        showForm.head = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::edit
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:83
@@ -243,6 +369,41 @@ edit.head = (args: { activity: string | number } | [activity: string | number ] 
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:83
+ * @route '/sas/admin/activities/{activity}/edit'
+ */
+    const editForm = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:83
+ * @route '/sas/admin/activities/{activity}/edit'
+ */
+        editForm.get = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:83
+ * @route '/sas/admin/activities/{activity}/edit'
+ */
+        editForm.head = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::update
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:97
@@ -305,6 +466,51 @@ update.patch = (args: { activity: string | number } | [activity: string | number
     method: 'patch',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:97
+ * @route '/sas/admin/activities/{activity}'
+ */
+    const updateForm = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:97
+ * @route '/sas/admin/activities/{activity}'
+ */
+        updateForm.put = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:97
+ * @route '/sas/admin/activities/{activity}'
+ */
+        updateForm.patch = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::destroy
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:110
@@ -358,6 +564,37 @@ destroy.delete = (args: { activity: string | number } | [activity: string | numb
     method: 'delete',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:110
+ * @route '/sas/admin/activities/{activity}'
+ */
+    const destroyForm = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:110
+ * @route '/sas/admin/activities/{activity}'
+ */
+        destroyForm.delete = (args: { activity: string | number } | [activity: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::complete
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:123
@@ -411,6 +648,27 @@ complete.post = (args: { id: string | number } | [id: string | number ] | string
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::complete
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:123
+ * @route '/sas/admin/activities/{id}/complete'
+ */
+    const completeForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: complete.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::complete
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:123
+ * @route '/sas/admin/activities/{id}/complete'
+ */
+        completeForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: complete.url(args, options),
+            method: 'post',
+        })
+    
+    complete.form = completeForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ActivityController::cancel
  * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:144
@@ -463,6 +721,28 @@ cancel.post = (args: { id: string | number } | [id: string | number ] | string |
     url: cancel.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::cancel
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:144
+ * @route '/sas/admin/activities/{id}/cancel'
+ */
+    const cancelForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: cancel.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ActivityController::cancel
+ * @see Modules/SAS/app/Http/Controllers/Admin/ActivityController.php:144
+ * @route '/sas/admin/activities/{id}/cancel'
+ */
+        cancelForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: cancel.url(args, options),
+            method: 'post',
+        })
+    
+    cancel.form = cancelForm
 const ActivityController = { index, create, store, show, edit, update, destroy, complete, cancel }
 
 export default ActivityController

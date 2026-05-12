@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::records
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
@@ -42,6 +42,41 @@ records.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::records
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
+ * @route '/sas/admin/reports/insurance/records'
+ */
+    const recordsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: records.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::records
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
+ * @route '/sas/admin/reports/insurance/records'
+ */
+        recordsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: records.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::records
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:64
+ * @route '/sas/admin/reports/insurance/records'
+ */
+        recordsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: records.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    records.form = recordsForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::statistics
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
@@ -103,6 +138,42 @@ statistics.head = (args: { academicYear: string | number } | [academicYear: stri
     url: statistics.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::statistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
+ * @route '/sas/admin/reports/insurance/statistics/{academicYear}'
+ */
+    const statisticsForm = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: statistics.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::statistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
+ * @route '/sas/admin/reports/insurance/statistics/{academicYear}'
+ */
+        statisticsForm.get = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::statistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:78
+ * @route '/sas/admin/reports/insurance/statistics/{academicYear}'
+ */
+        statisticsForm.head = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    statistics.form = statisticsForm
 const insurance = {
     records: Object.assign(records, records),
 statistics: Object.assign(statistics, statistics),

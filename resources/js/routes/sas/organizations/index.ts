@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::index
  * @see Modules/SAS/app/Http/Controllers/PageController.php:76
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::index
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:76
+ * @route '/sas/organizations'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::index
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:76
+ * @route '/sas/organizations'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::index
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:76
+ * @route '/sas/organizations'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\PageController::show
  * @see Modules/SAS/app/Http/Controllers/PageController.php:116
@@ -103,6 +138,42 @@ show.head = (args: { code: string | number } | [code: string | number ] | string
     url: show.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\PageController::show
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:116
+ * @route '/sas/organizations/{code}'
+ */
+    const showForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::show
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:116
+ * @route '/sas/organizations/{code}'
+ */
+        showForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\PageController::show
+ * @see Modules/SAS/app/Http/Controllers/PageController.php:116
+ * @route '/sas/organizations/{code}'
+ */
+        showForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 const organizations = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

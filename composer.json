@@ -40,23 +40,55 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
+            "Modules\\Accounting\\": "Modules/Accounting/app/",
+            "Modules\\Accounting\\Database\\Factories\\": "Modules/Accounting/database/factories/",
+            "Modules\\Accounting\\Database\\Seeders\\": "Modules/Accounting/database/seeders/",
+            "Modules\\Admission\\": "Modules/Admission/app/",
+            "Modules\\Admission\\Database\\Factories\\": "Modules/Admission/database/factories/",
+            "Modules\\Admission\\Database\\Seeders\\": "Modules/Admission/database/seeders/",
+            "Modules\\Curriculum\\": "Modules/Curriculum/app/",
+            "Modules\\Curriculum\\Database\\Factories\\": "Modules/Curriculum/database/factories/",
+            "Modules\\Curriculum\\Database\\Seeders\\": "Modules/Curriculum/database/seeders/",
+            "Modules\\Guidance\\": "Modules/Guidance/app/",
+            "Modules\\Guidance\\Database\\Factories\\": "Modules/Guidance/database/factories/",
+            "Modules\\Guidance\\Database\\Seeders\\": "Modules/Guidance/database/seeders/",
             "Modules\\HR\\": "Modules/HR/app/",
             "Modules\\HR\\Database\\Factories\\": "Modules/HR/database/factories/",
             "Modules\\HR\\Database\\Seeders\\": "Modules/HR/database/seeders/",
-            "Modules\\Accounting\\": "Modules/Accounting/app/",
-            "Modules\\Accounting\\Database\\Factories\\": "Modules/Accounting/database/factories/",
-            "Modules\\Accounting\\Database\\Seeders\\": "Modules/Accounting/database/seeders/"
+            "Modules\\Library\\": "Modules/Library/app/",
+            "Modules\\Library\\Database\\Factories\\": "Modules/Library/database/factories/",
+            "Modules\\Library\\Database\\Seeders\\": "Modules/Library/database/seeders/",
+            "Modules\\Registrar\\": "Modules/Registrar/app/",
+            "Modules\\Registrar\\Database\\Factories\\": "Modules/Registrar/database/factories/",
+            "Modules\\Registrar\\Database\\Seeders\\": "Modules/Registrar/database/seeders/",
+            "Modules\\Research\\": "Modules/Research/app/",
+            "Modules\\Research\\Database\\Factories\\": "Modules/Research/database/factories/",
+            "Modules\\Research\\Database\\Seeders\\": "Modules/Research/database/seeders/",
+            "Modules\\SAS\\": "Modules/SAS/app/",
+            "Modules\\SAS\\Database\\Factories\\": "Modules/SAS/database/factories/",
+            "Modules\\SAS\\Database\\Seeders\\": "Modules/SAS/database/seeders/",
+            "Modules\\USG\\": "Modules/USG/app/",
+            "Modules\\USG\\Database\\Factories\\": "Modules/USG/database/factories/",
+            "Modules\\USG\\Database\\Seeders\\": "Modules/USG/database/seeders/",
+            "Modules\\VotingSystem\\": "Modules/VotingSystem/app/",
+            "Modules\\VotingSystem\\Database\\Factories\\": "Modules/VotingSystem/database/factories/",
+            "Modules\\VotingSystem\\Database\\Seeders\\": "Modules/VotingSystem/database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Modules\\HR\\Tests\\": "Modules/HR/tests/",
             "Modules\\Accounting\\Tests\\": "Modules/Accounting/tests/",
-            "Modules\\Guidance\\": "Modules/Guidance/app/",
-            "Modules\\Guidance\\Database\\Factories\\": "Modules/Guidance/database/factories/",
-            "Modules\\Guidance\\Database\\Seeders\\": "Modules/Guidance/database/seeders/",
-            "Modules\\Guidance\\Tests\\": "Modules/Guidance/tests/"
+            "Modules\\Admission\\Tests\\": "Modules/Admission/tests/",
+            "Modules\\Curriculum\\Tests\\": "Modules/Curriculum/tests/",
+            "Modules\\Guidance\\Tests\\": "Modules/Guidance/tests/",
+            "Modules\\HR\\Tests\\": "Modules/HR/tests/",
+            "Modules\\Library\\Tests\\": "Modules/Library/tests/",
+            "Modules\\Registrar\\Tests\\": "Modules/Registrar/tests/",
+            "Modules\\Research\\Tests\\": "Modules/Research/tests/",
+            "Modules\\SAS\\Tests\\": "Modules/SAS/tests/",
+            "Modules\\USG\\Tests\\": "Modules/USG/tests/",
+            "Modules\\VotingSystem\\Tests\\": "Modules/VotingSystem/tests/"
         }
     },
     "scripts": {
@@ -88,8 +120,7 @@
             "npm run build:ssr",
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=server,queue,logs,ssr --kill-others"
-        ],
-        "test": "./vendor/bin/pest"
+        ]
     },
     "extra": {
         "laravel": {

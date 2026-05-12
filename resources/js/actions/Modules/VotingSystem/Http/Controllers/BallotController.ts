@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\BallotController::confirmation
  * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:223
@@ -42,6 +42,41 @@ confirmation.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::confirmation
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:223
+ * @route '/voting/confirmation'
+ */
+    const confirmationForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: confirmation.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::confirmation
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:223
+ * @route '/voting/confirmation'
+ */
+        confirmationForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: confirmation.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::confirmation
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:223
+ * @route '/voting/confirmation'
+ */
+        confirmationForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: confirmation.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    confirmation.form = confirmationForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\BallotController::receipt
  * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:250
@@ -85,6 +120,41 @@ receipt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::receipt
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:250
+ * @route '/voting/receipt'
+ */
+    const receiptForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: receipt.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::receipt
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:250
+ * @route '/voting/receipt'
+ */
+        receiptForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: receipt.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::receipt
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:250
+ * @route '/voting/receipt'
+ */
+        receiptForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: receipt.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    receipt.form = receiptForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\BallotController::show
  * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:21
@@ -128,6 +198,41 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:21
+ * @route '/voting/ballot'
+ */
+    const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:21
+ * @route '/voting/ballot'
+ */
+        showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::show
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:21
+ * @route '/voting/ballot'
+ */
+        showForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\BallotController::preview
  * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:50
@@ -162,6 +267,27 @@ preview.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::preview
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:50
+ * @route '/voting/preview'
+ */
+    const previewForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: preview.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::preview
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:50
+ * @route '/voting/preview'
+ */
+        previewForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: preview.url(options),
+            method: 'post',
+        })
+    
+    preview.form = previewForm
 /**
 * @see \Modules\VotingSystem\Http\Controllers\BallotController::submit
  * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:105
@@ -195,6 +321,28 @@ submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: submit.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::submit
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:105
+ * @route '/voting/vote'
+ */
+    const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: submit.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\BallotController::submit
+ * @see Modules/VotingSystem/app/Http/Controllers/BallotController.php:105
+ * @route '/voting/vote'
+ */
+        submitForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: submit.url(options),
+            method: 'post',
+        })
+    
+    submit.form = submitForm
 const BallotController = { confirmation, receipt, show, preview, submit }
 
 export default BallotController

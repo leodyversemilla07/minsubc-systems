@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 import applicants from './applicants'
 import evaluations from './evaluations'
 import enrollments from './enrollments'
@@ -51,6 +51,42 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: dashboard.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/Admission/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/admission/admin/dashboard'
+ */
+    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: dashboard.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/Admission/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/admission/admin/dashboard'
+ */
+        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\DashboardController::dashboard
+ * @see Modules/Admission/app/Http/Controllers/Admin/DashboardController.php:20
+ * @route '/admission/admin/dashboard'
+ */
+        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: dashboard.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    dashboard.form = dashboardForm
 const admin = {
     dashboard: Object.assign(dashboard, dashboard),
 applicants: Object.assign(applicants, applicants),

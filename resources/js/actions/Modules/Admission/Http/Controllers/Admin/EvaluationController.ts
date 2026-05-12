@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EvaluationController::store
  * @see Modules/Admission/app/Http/Controllers/Admin/EvaluationController.php:14
@@ -51,6 +51,28 @@ store.post = (args: { applicantId: string | number } | [applicantId: string | nu
     url: store.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EvaluationController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/EvaluationController.php:14
+ * @route '/admission/admin/applicants/{applicantId}/evaluate'
+ */
+    const storeForm = (args: { applicantId: string | number } | [applicantId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EvaluationController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/EvaluationController.php:14
+ * @route '/admission/admin/applicants/{applicantId}/evaluate'
+ */
+        storeForm.post = (args: { applicantId: string | number } | [applicantId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(args, options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 const EvaluationController = { store }
 
 export default EvaluationController

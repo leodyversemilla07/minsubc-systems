@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:17
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:17
+ * @route '/admission/admin/applicants'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:17
+ * @route '/admission/admin/applicants'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:17
+ * @route '/admission/admin/applicants'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::show
  * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:56
@@ -104,6 +139,41 @@ show.head = (args: { id: string | number } | [id: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:56
+ * @route '/admission/admin/applicants/{id}'
+ */
+    const showForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:56
+ * @route '/admission/admin/applicants/{id}'
+ */
+        showForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:56
+ * @route '/admission/admin/applicants/{id}'
+ */
+        showForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::updateStatus
  * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:71
@@ -157,6 +227,37 @@ updateStatus.patch = (args: { id: string | number } | [id: string | number ] | s
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::updateStatus
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:71
+ * @route '/admission/admin/applicants/{id}/status'
+ */
+    const updateStatusForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateStatus.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::updateStatus
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:71
+ * @route '/admission/admin/applicants/{id}/status'
+ */
+        updateStatusForm.patch = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateStatus.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    updateStatus.form = updateStatusForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::destroy
  * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:89
@@ -209,6 +310,38 @@ destroy.delete = (args: { id: string | number } | [id: string | number ] | strin
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:89
+ * @route '/admission/admin/applicants/{id}'
+ */
+    const destroyForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\ApplicantController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/ApplicantController.php:89
+ * @route '/admission/admin/applicants/{id}'
+ */
+        destroyForm.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const applicants = {
     index: Object.assign(index, index),
 show: Object.assign(show, show),

@@ -60,6 +60,10 @@ pest()->extend(Tests\TestCase::class)
 pest()->extend(Tests\TestCase::class)
     ->in('../Modules/*/tests/Unit');
 
+pest()->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('../Modules/*/tests/Feature');
+
 /*
 |--------------------------------------------------------------------------
 | Expectations

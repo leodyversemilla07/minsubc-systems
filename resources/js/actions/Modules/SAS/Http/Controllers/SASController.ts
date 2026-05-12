@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\SASController::index
  * @see Modules/SAS/app/Http/Controllers/SASController.php:13
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\SASController::index
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:13
+ * @route '/api/v1/sas'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::index
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:13
+ * @route '/api/v1/sas'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::index
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:13
+ * @route '/api/v1/sas'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\SASController::store
  * @see Modules/SAS/app/Http/Controllers/SASController.php:29
@@ -76,6 +111,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\SASController::store
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:29
+ * @route '/api/v1/sas'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::store
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:29
+ * @route '/api/v1/sas'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\SAS\Http\Controllers\SASController::show
  * @see Modules/SAS/app/Http/Controllers/SASController.php:34
@@ -138,6 +194,41 @@ show.head = (args: { sa: string | number } | [sa: string | number ] | string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\SASController::show
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:34
+ * @route '/api/v1/sas/{sa}'
+ */
+    const showForm = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::show
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:34
+ * @route '/api/v1/sas/{sa}'
+ */
+        showForm.get = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::show
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:34
+ * @route '/api/v1/sas/{sa}'
+ */
+        showForm.head = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\SASController::update
  * @see Modules/SAS/app/Http/Controllers/SASController.php:50
@@ -200,6 +291,51 @@ update.patch = (args: { sa: string | number } | [sa: string | number ] | string 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\SASController::update
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:50
+ * @route '/api/v1/sas/{sa}'
+ */
+    const updateForm = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::update
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:50
+ * @route '/api/v1/sas/{sa}'
+ */
+        updateForm.put = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::update
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:50
+ * @route '/api/v1/sas/{sa}'
+ */
+        updateForm.patch = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\SASController::destroy
  * @see Modules/SAS/app/Http/Controllers/SASController.php:55
@@ -252,6 +388,38 @@ destroy.delete = (args: { sa: string | number } | [sa: string | number ] | strin
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\SASController::destroy
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:55
+ * @route '/api/v1/sas/{sa}'
+ */
+    const destroyForm = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\SASController::destroy
+ * @see Modules/SAS/app/Http/Controllers/SASController.php:55
+ * @route '/api/v1/sas/{sa}'
+ */
+        destroyForm.delete = (args: { sa: string | number } | [sa: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const SASController = { index, store, show, update, destroy }
 
 export default SASController

@@ -1,10 +1,10 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reserve
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
  * @route '/library/student/books/{book}/reserve'
  */
-export const reserve = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const reserve = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: reserve.url(args, options),
     method: 'post',
 })
@@ -19,7 +19,7 @@ reserve.definition = {
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
  * @route '/library/student/books/{book}/reserve'
  */
-reserve.url = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+reserve.url = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { book: args }
     }
@@ -52,10 +52,32 @@ reserve.url = (args: { book: string | number | { id: string | number } } | [book
  * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
  * @route '/library/student/books/{book}/reserve'
  */
-reserve.post = (args: { book: string | number | { id: string | number } } | [book: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+reserve.post = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: reserve.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reserve
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
+ * @route '/library/student/books/{book}/reserve'
+ */
+    const reserveForm = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reserve.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Library\Http\Controllers\Student\StudentBorrowingController::reserve
+ * @see Modules/Library/app/Http/Controllers/Student/StudentBorrowingController.php:56
+ * @route '/library/student/books/{book}/reserve'
+ */
+        reserveForm.post = (args: { book: number | { id: number } } | [book: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reserve.url(args, options),
+            method: 'post',
+        })
+    
+    reserve.form = reserveForm
 const books = {
     reserve: Object.assign(reserve, reserve),
 }

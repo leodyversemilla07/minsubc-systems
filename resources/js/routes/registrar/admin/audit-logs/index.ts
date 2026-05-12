@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\AdminController::show
  * @see Modules/Registrar/app/Http/Controllers/AdminController.php:276
@@ -65,6 +65,42 @@ show.head = (args: { auditLog: number | { id: number } } | [auditLog: number | {
     url: show.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::show
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:276
+ * @route '/admin/audit-logs/{auditLog}'
+ */
+    const showForm = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::show
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:276
+ * @route '/admin/audit-logs/{auditLog}'
+ */
+        showForm.get = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\AdminController::show
+ * @see Modules/Registrar/app/Http/Controllers/AdminController.php:276
+ * @route '/admin/audit-logs/{auditLog}'
+ */
+        showForm.head = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 const auditLogs = {
     show: Object.assign(show, show),
 }

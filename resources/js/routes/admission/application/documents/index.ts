@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::upload
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:100
@@ -52,6 +52,27 @@ upload.post = (args: { applicationNumber: string | number } | [applicationNumber
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::upload
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:100
+ * @route '/admission/apply/{applicationNumber}/documents'
+ */
+    const uploadForm = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: upload.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::upload
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:100
+ * @route '/admission/apply/{applicationNumber}/documents'
+ */
+        uploadForm.post = (args: { applicationNumber: string | number } | [applicationNumber: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: upload.url(args, options),
+            method: 'post',
+        })
+    
+    upload.form = uploadForm
 /**
 * @see \Modules\Admission\Http\Controllers\ApplicationController::deleteMethod
  * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:0
@@ -102,6 +123,38 @@ deleteMethod.delete = (args: { applicationNumber: string | number, documentId: s
     url: deleteMethod.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::deleteMethod
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:0
+ * @route '/admission/apply/{applicationNumber}/documents/{documentId}'
+ */
+    const deleteMethodForm = (args: { applicationNumber: string | number, documentId: string | number } | [applicationNumber: string | number, documentId: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: deleteMethod.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\ApplicationController::deleteMethod
+ * @see Modules/Admission/app/Http/Controllers/ApplicationController.php:0
+ * @route '/admission/apply/{applicationNumber}/documents/{documentId}'
+ */
+        deleteMethodForm.delete = (args: { applicationNumber: string | number, documentId: string | number } | [applicationNumber: string | number, documentId: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: deleteMethod.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    deleteMethod.form = deleteMethodForm
 const documents = {
     upload: Object.assign(upload, upload),
 delete: Object.assign(deleteMethod, deleteMethod),

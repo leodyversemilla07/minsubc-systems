@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::recipients
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
@@ -42,6 +42,41 @@ recipients.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::recipients
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
+ * @route '/sas/admin/reports/scholarships/recipients'
+ */
+    const recipientsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: recipients.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::recipients
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
+ * @route '/sas/admin/reports/scholarships/recipients'
+ */
+        recipientsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: recipients.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::recipients
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:34
+ * @route '/sas/admin/reports/scholarships/recipients'
+ */
+        recipientsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: recipients.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    recipients.form = recipientsForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::approved
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
@@ -102,6 +137,41 @@ approved.head = (args: { semester: string | number, academicYear: string | numbe
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::approved
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
+ * @route '/sas/admin/reports/scholarships/approved/{semester}/{academicYear}'
+ */
+    const approvedForm = (args: { semester: string | number, academicYear: string | number } | [semester: string | number, academicYear: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: approved.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::approved
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
+ * @route '/sas/admin/reports/scholarships/approved/{semester}/{academicYear}'
+ */
+        approvedForm.get = (args: { semester: string | number, academicYear: string | number } | [semester: string | number, academicYear: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: approved.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::approved
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:48
+ * @route '/sas/admin/reports/scholarships/approved/{semester}/{academicYear}'
+ */
+        approvedForm.head = (args: { semester: string | number, academicYear: string | number } | [semester: string | number, academicYear: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: approved.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    approved.form = approvedForm
 /**
 * @see \Modules\SAS\Http\Controllers\ReportController::statistics
  * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
@@ -163,6 +233,42 @@ statistics.head = (args: { academicYear: string | number } | [academicYear: stri
     url: statistics.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::statistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
+ * @route '/sas/admin/reports/scholarships/statistics/{academicYear}'
+ */
+    const statisticsForm = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: statistics.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::statistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
+ * @route '/sas/admin/reports/scholarships/statistics/{academicYear}'
+ */
+        statisticsForm.get = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::statistics
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:56
+ * @route '/sas/admin/reports/scholarships/statistics/{academicYear}'
+ */
+        statisticsForm.head = (args: { academicYear: string | number } | [academicYear: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: statistics.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    statistics.form = statisticsForm
 const scholarships = {
     recipients: Object.assign(recipients, recipients),
 approved: Object.assign(approved, approved),

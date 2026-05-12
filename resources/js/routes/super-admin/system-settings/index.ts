@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\SuperAdminController::update
  * @see app/Http/Controllers/SuperAdminController.php:292
@@ -56,6 +56,38 @@ update.patch = (args: { systemSetting: number | { id: number } } | [systemSettin
     url: update.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \App\Http\Controllers\SuperAdminController::update
+ * @see app/Http/Controllers/SuperAdminController.php:292
+ * @route '/super-admin/system-settings/{systemSetting}'
+ */
+    const updateForm = (args: { systemSetting: number | { id: number } } | [systemSetting: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\SuperAdminController::update
+ * @see app/Http/Controllers/SuperAdminController.php:292
+ * @route '/super-admin/system-settings/{systemSetting}'
+ */
+        updateForm.patch = (args: { systemSetting: number | { id: number } } | [systemSetting: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 const systemSettings = {
     update: Object.assign(update, update),
 }

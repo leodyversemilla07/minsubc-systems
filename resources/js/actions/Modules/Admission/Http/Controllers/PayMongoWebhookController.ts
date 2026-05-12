@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\PayMongoWebhookController::handle
  * @see Modules/Admission/app/Http/Controllers/PayMongoWebhookController.php:20
@@ -32,6 +32,28 @@ handle.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: handle.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\PayMongoWebhookController::handle
+ * @see Modules/Admission/app/Http/Controllers/PayMongoWebhookController.php:20
+ * @route '/admission/webhook/paymongo'
+ */
+    const handleForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: handle.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\PayMongoWebhookController::handle
+ * @see Modules/Admission/app/Http/Controllers/PayMongoWebhookController.php:20
+ * @route '/admission/webhook/paymongo'
+ */
+        handleForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: handle.url(options),
+            method: 'post',
+        })
+    
+    handle.form = handleForm
 const PayMongoWebhookController = { handle }
 
 export default PayMongoWebhookController

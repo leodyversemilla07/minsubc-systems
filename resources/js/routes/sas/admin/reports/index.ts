@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 import scholarships from './scholarships'
 import insurance from './insurance'
 /**
@@ -43,6 +43,42 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\ReportController::index
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
+ * @route '/sas/admin/reports'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::index
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
+ * @route '/sas/admin/reports'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\ReportController::index
+ * @see Modules/SAS/app/Http/Controllers/ReportController.php:24
+ * @route '/sas/admin/reports'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 const reports = {
     index: Object.assign(index, index),
 scholarships: Object.assign(scholarships, scholarships),

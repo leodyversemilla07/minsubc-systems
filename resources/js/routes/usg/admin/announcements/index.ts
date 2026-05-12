@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::index
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:18
+ * @route '/usg/admin/announcements'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:18
+ * @route '/usg/admin/announcements'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:18
+ * @route '/usg/admin/announcements'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::create
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:48
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:48
+ * @route '/usg/admin/announcements/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:48
+ * @route '/usg/admin/announcements/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:48
+ * @route '/usg/admin/announcements/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::store
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:57
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:57
+ * @route '/usg/admin/announcements'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:57
+ * @route '/usg/admin/announcements'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::show
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:69
@@ -181,6 +272,41 @@ show.head = (args: { announcement: string | number } | [announcement: string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:69
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+    const showForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:69
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+        showForm.get = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:69
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+        showForm.head = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::edit
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:78
@@ -243,6 +369,41 @@ edit.head = (args: { announcement: string | number } | [announcement: string | n
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:78
+ * @route '/usg/admin/announcements/{announcement}/edit'
+ */
+    const editForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:78
+ * @route '/usg/admin/announcements/{announcement}/edit'
+ */
+        editForm.get = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:78
+ * @route '/usg/admin/announcements/{announcement}/edit'
+ */
+        editForm.head = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::update
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:89
@@ -305,6 +466,51 @@ update.patch = (args: { announcement: string | number } | [announcement: string 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:89
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+    const updateForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:89
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+        updateForm.put = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:89
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+        updateForm.patch = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::destroy
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:103
@@ -358,6 +564,37 @@ destroy.delete = (args: { announcement: string | number } | [announcement: strin
     method: 'delete',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:103
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+    const destroyForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:103
+ * @route '/usg/admin/announcements/{announcement}'
+ */
+        destroyForm.delete = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::preview
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:137
@@ -425,6 +662,41 @@ preview.head = (args: { announcement: string | number | { slug: string | number 
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::preview
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:137
+ * @route '/usg/admin/announcements/{announcement}/preview'
+ */
+    const previewForm = (args: { announcement: string | number | { slug: string | number } } | [announcement: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: preview.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::preview
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:137
+ * @route '/usg/admin/announcements/{announcement}/preview'
+ */
+        previewForm.get = (args: { announcement: string | number | { slug: string | number } } | [announcement: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: preview.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::preview
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:137
+ * @route '/usg/admin/announcements/{announcement}/preview'
+ */
+        previewForm.head = (args: { announcement: string | number | { slug: string | number } } | [announcement: string | number | { slug: string | number } ] | string | number | { slug: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: preview.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    preview.form = previewForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::publish
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:113
@@ -478,6 +750,37 @@ publish.patch = (args: { announcement: string | number } | [announcement: string
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::publish
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:113
+ * @route '/usg/admin/announcements/{announcement}/publish'
+ */
+    const publishForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: publish.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::publish
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:113
+ * @route '/usg/admin/announcements/{announcement}/publish'
+ */
+        publishForm.patch = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: publish.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    publish.form = publishForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::unpublish
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:121
@@ -531,6 +834,37 @@ unpublish.patch = (args: { announcement: string | number } | [announcement: stri
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::unpublish
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:121
+ * @route '/usg/admin/announcements/{announcement}/unpublish'
+ */
+    const unpublishForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: unpublish.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::unpublish
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:121
+ * @route '/usg/admin/announcements/{announcement}/unpublish'
+ */
+        unpublishForm.patch = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: unpublish.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    unpublish.form = unpublishForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::archive
  * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:129
@@ -583,6 +917,38 @@ archive.patch = (args: { announcement: string | number } | [announcement: string
     url: archive.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::archive
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:129
+ * @route '/usg/admin/announcements/{announcement}/archive'
+ */
+    const archiveForm = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: archive.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\AnnouncementController::archive
+ * @see Modules/USG/app/Http/Controllers/Admin/AnnouncementController.php:129
+ * @route '/usg/admin/announcements/{announcement}/archive'
+ */
+        archiveForm.patch = (args: { announcement: string | number } | [announcement: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: archive.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    archive.form = archiveForm
 const announcements = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

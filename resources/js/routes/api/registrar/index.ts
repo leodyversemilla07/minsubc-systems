@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\RegistrarController::index
  * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:13
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::index
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:13
+ * @route '/api/v1/registrars'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::index
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:13
+ * @route '/api/v1/registrars'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::index
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:13
+ * @route '/api/v1/registrars'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Registrar\Http\Controllers\RegistrarController::store
  * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:29
@@ -76,6 +111,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::store
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:29
+ * @route '/api/v1/registrars'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::store
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:29
+ * @route '/api/v1/registrars'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Registrar\Http\Controllers\RegistrarController::show
  * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:34
@@ -138,6 +194,41 @@ show.head = (args: { registrar: string | number } | [registrar: string | number 
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::show
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:34
+ * @route '/api/v1/registrars/{registrar}'
+ */
+    const showForm = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::show
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:34
+ * @route '/api/v1/registrars/{registrar}'
+ */
+        showForm.get = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::show
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:34
+ * @route '/api/v1/registrars/{registrar}'
+ */
+        showForm.head = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Registrar\Http\Controllers\RegistrarController::update
  * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:50
@@ -200,6 +291,51 @@ update.patch = (args: { registrar: string | number } | [registrar: string | numb
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::update
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:50
+ * @route '/api/v1/registrars/{registrar}'
+ */
+    const updateForm = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::update
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:50
+ * @route '/api/v1/registrars/{registrar}'
+ */
+        updateForm.put = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::update
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:50
+ * @route '/api/v1/registrars/{registrar}'
+ */
+        updateForm.patch = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Registrar\Http\Controllers\RegistrarController::destroy
  * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:55
@@ -252,6 +388,38 @@ destroy.delete = (args: { registrar: string | number } | [registrar: string | nu
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::destroy
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:55
+ * @route '/api/v1/registrars/{registrar}'
+ */
+    const destroyForm = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\RegistrarController::destroy
+ * @see Modules/Registrar/app/Http/Controllers/RegistrarController.php:55
+ * @route '/api/v1/registrars/{registrar}'
+ */
+        destroyForm.delete = (args: { registrar: string | number } | [registrar: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const registrar = {
     index: Object.assign(index, index),
 store: Object.assign(store, store),

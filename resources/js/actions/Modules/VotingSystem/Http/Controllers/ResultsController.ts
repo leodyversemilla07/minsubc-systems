@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\VotingSystem\Http\Controllers\ResultsController::index
  * @see Modules/VotingSystem/app/Http/Controllers/ResultsController.php:19
@@ -60,6 +60,42 @@ index.head = (args: { election: string | number } | [election: string | number ]
     url: index.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\VotingSystem\Http\Controllers\ResultsController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/ResultsController.php:19
+ * @route '/voting/results/{election}'
+ */
+    const indexForm = (args: { election: string | number } | [election: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\ResultsController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/ResultsController.php:19
+ * @route '/voting/results/{election}'
+ */
+        indexForm.get = (args: { election: string | number } | [election: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\VotingSystem\Http\Controllers\ResultsController::index
+ * @see Modules/VotingSystem/app/Http/Controllers/ResultsController.php:19
+ * @route '/voting/results/{election}'
+ */
+        indexForm.head = (args: { election: string | number } | [election: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 const ResultsController = { index }
 
 export default ResultsController

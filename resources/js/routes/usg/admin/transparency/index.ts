@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::index
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:26
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:26
+ * @route '/usg/admin/transparency'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:26
+ * @route '/usg/admin/transparency'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::index
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:26
+ * @route '/usg/admin/transparency'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::create
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:69
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:69
+ * @route '/usg/admin/transparency/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:69
+ * @route '/usg/admin/transparency/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::create
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:69
+ * @route '/usg/admin/transparency/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::store
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:81
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:81
+ * @route '/usg/admin/transparency'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::store
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:81
+ * @route '/usg/admin/transparency'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::show
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:96
@@ -186,6 +277,41 @@ show.head = (args: { transparencyReport: number | { id: number } } | [transparen
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:96
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+    const showForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:96
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+        showForm.get = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::show
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:96
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+        showForm.head = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::edit
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:108
@@ -253,6 +379,41 @@ edit.head = (args: { transparencyReport: number | { id: number } } | [transparen
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:108
+ * @route '/usg/admin/transparency/{transparencyReport}/edit'
+ */
+    const editForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:108
+ * @route '/usg/admin/transparency/{transparencyReport}/edit'
+ */
+        editForm.get = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:108
+ * @route '/usg/admin/transparency/{transparencyReport}/edit'
+ */
+        editForm.head = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::update
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:122
@@ -320,6 +481,51 @@ update.patch = (args: { transparencyReport: number | { id: number } } | [transpa
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:122
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+    const updateForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:122
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+        updateForm.put = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:122
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+        updateForm.patch = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::destroy
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:134
@@ -378,6 +584,37 @@ destroy.delete = (args: { transparencyReport: number | { id: number } } | [trans
     method: 'delete',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:134
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+    const destroyForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::destroy
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:134
+ * @route '/usg/admin/transparency/{transparencyReport}'
+ */
+        destroyForm.delete = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::download
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:166
@@ -445,6 +682,41 @@ download.head = (args: { transparencyReport: number | { id: number } } | [transp
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::download
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:166
+ * @route '/usg/admin/transparency/{transparencyReport}/download'
+ */
+    const downloadForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: download.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::download
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:166
+ * @route '/usg/admin/transparency/{transparencyReport}/download'
+ */
+        downloadForm.get = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::download
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:166
+ * @route '/usg/admin/transparency/{transparencyReport}/download'
+ */
+        downloadForm.head = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: download.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    download.form = downloadForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::publish
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:146
@@ -503,6 +775,37 @@ publish.patch = (args: { transparencyReport: number | { id: number } } | [transp
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::publish
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:146
+ * @route '/usg/admin/transparency/{transparencyReport}/publish'
+ */
+    const publishForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: publish.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::publish
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:146
+ * @route '/usg/admin/transparency/{transparencyReport}/publish'
+ */
+        publishForm.patch = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: publish.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    publish.form = publishForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::unpublish
  * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:156
@@ -560,6 +863,38 @@ unpublish.patch = (args: { transparencyReport: number | { id: number } } | [tran
     url: unpublish.url(args, options),
     method: 'patch',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::unpublish
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:156
+ * @route '/usg/admin/transparency/{transparencyReport}/unpublish'
+ */
+    const unpublishForm = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: unpublish.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\TransparencyReportController::unpublish
+ * @see Modules/USG/app/Http/Controllers/Admin/TransparencyReportController.php:156
+ * @route '/usg/admin/transparency/{transparencyReport}/unpublish'
+ */
+        unpublishForm.patch = (args: { transparencyReport: number | { id: number } } | [transparencyReport: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: unpublish.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    unpublish.form = unpublishForm
 const transparency = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

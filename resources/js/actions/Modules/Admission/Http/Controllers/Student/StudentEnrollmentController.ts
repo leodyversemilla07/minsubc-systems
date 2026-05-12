@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
@@ -45,6 +45,41 @@ indexf97572db3e834353f51c60eadb3c770f.head = (options?: RouteQueryOptions): Rout
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
+ * @route '/student/enrollment'
+ */
+    const indexf97572db3e834353f51c60eadb3c770fForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: indexf97572db3e834353f51c60eadb3c770f.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
+ * @route '/student/enrollment'
+ */
+        indexf97572db3e834353f51c60eadb3c770fForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: indexf97572db3e834353f51c60eadb3c770f.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
+ * @route '/student/enrollment'
+ */
+        indexf97572db3e834353f51c60eadb3c770fForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: indexf97572db3e834353f51c60eadb3c770f.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    indexf97572db3e834353f51c60eadb3c770f.form = indexf97572db3e834353f51c60eadb3c770fForm
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
  * @route '/my/enrollment'
  */
 const index1dd77f035d856d8a34d8fcefe7e4b470 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -84,6 +119,42 @@ index1dd77f035d856d8a34d8fcefe7e4b470.head = (options?: RouteQueryOptions): Rout
     url: index1dd77f035d856d8a34d8fcefe7e4b470.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
+ * @route '/my/enrollment'
+ */
+    const index1dd77f035d856d8a34d8fcefe7e4b470Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index1dd77f035d856d8a34d8fcefe7e4b470.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
+ * @route '/my/enrollment'
+ */
+        index1dd77f035d856d8a34d8fcefe7e4b470Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index1dd77f035d856d8a34d8fcefe7e4b470.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::index
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:31
+ * @route '/my/enrollment'
+ */
+        index1dd77f035d856d8a34d8fcefe7e4b470Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index1dd77f035d856d8a34d8fcefe7e4b470.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index1dd77f035d856d8a34d8fcefe7e4b470.form = index1dd77f035d856d8a34d8fcefe7e4b470Form
 
 export const index = {
     '/student/enrollment': indexf97572db3e834353f51c60eadb3c770f,
@@ -136,6 +207,41 @@ created142f6bbb973c8744f3f4ec8d946bd12.head = (options?: RouteQueryOptions): Rou
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
+ * @route '/student/enrollment/enroll'
+ */
+    const created142f6bbb973c8744f3f4ec8d946bd12Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: created142f6bbb973c8744f3f4ec8d946bd12.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
+ * @route '/student/enrollment/enroll'
+ */
+        created142f6bbb973c8744f3f4ec8d946bd12Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: created142f6bbb973c8744f3f4ec8d946bd12.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
+ * @route '/student/enrollment/enroll'
+ */
+        created142f6bbb973c8744f3f4ec8d946bd12Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: created142f6bbb973c8744f3f4ec8d946bd12.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    created142f6bbb973c8744f3f4ec8d946bd12.form = created142f6bbb973c8744f3f4ec8d946bd12Form
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
  * @route '/my/enrollment/enroll'
  */
 const create0c40118cd453a5f8a992644fec09121a = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -175,6 +281,42 @@ create0c40118cd453a5f8a992644fec09121a.head = (options?: RouteQueryOptions): Rou
     url: create0c40118cd453a5f8a992644fec09121a.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
+ * @route '/my/enrollment/enroll'
+ */
+    const create0c40118cd453a5f8a992644fec09121aForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create0c40118cd453a5f8a992644fec09121a.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
+ * @route '/my/enrollment/enroll'
+ */
+        create0c40118cd453a5f8a992644fec09121aForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create0c40118cd453a5f8a992644fec09121a.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::create
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:94
+ * @route '/my/enrollment/enroll'
+ */
+        create0c40118cd453a5f8a992644fec09121aForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create0c40118cd453a5f8a992644fec09121a.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create0c40118cd453a5f8a992644fec09121a.form = create0c40118cd453a5f8a992644fec09121aForm
 
 export const create = {
     '/student/enrollment/enroll': created142f6bbb973c8744f3f4ec8d946bd12,
@@ -218,6 +360,27 @@ stored142f6bbb973c8744f3f4ec8d946bd12.post = (options?: RouteQueryOptions): Rout
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::store
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:161
+ * @route '/student/enrollment/enroll'
+ */
+    const stored142f6bbb973c8744f3f4ec8d946bd12Form = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: stored142f6bbb973c8744f3f4ec8d946bd12.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::store
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:161
+ * @route '/student/enrollment/enroll'
+ */
+        stored142f6bbb973c8744f3f4ec8d946bd12Form.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: stored142f6bbb973c8744f3f4ec8d946bd12.url(options),
+            method: 'post',
+        })
+    
+    stored142f6bbb973c8744f3f4ec8d946bd12.form = stored142f6bbb973c8744f3f4ec8d946bd12Form
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::store
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:161
  * @route '/my/enrollment/enroll'
  */
 const store0c40118cd453a5f8a992644fec09121a = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -248,6 +411,28 @@ store0c40118cd453a5f8a992644fec09121a.post = (options?: RouteQueryOptions): Rout
     url: store0c40118cd453a5f8a992644fec09121a.url(options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::store
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:161
+ * @route '/my/enrollment/enroll'
+ */
+    const store0c40118cd453a5f8a992644fec09121aForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store0c40118cd453a5f8a992644fec09121a.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::store
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:161
+ * @route '/my/enrollment/enroll'
+ */
+        store0c40118cd453a5f8a992644fec09121aForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store0c40118cd453a5f8a992644fec09121a.url(options),
+            method: 'post',
+        })
+    
+    store0c40118cd453a5f8a992644fec09121a.form = store0c40118cd453a5f8a992644fec09121aForm
 
 export const store = {
     '/student/enrollment/enroll': stored142f6bbb973c8744f3f4ec8d946bd12,
@@ -324,6 +509,41 @@ show3b700bf2cfba44adf607a0a0530ed6a3.head = (args: { enrollment: number | { id: 
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
+ * @route '/student/enrollment/{enrollment}'
+ */
+    const show3b700bf2cfba44adf607a0a0530ed6a3Form = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show3b700bf2cfba44adf607a0a0530ed6a3.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
+ * @route '/student/enrollment/{enrollment}'
+ */
+        show3b700bf2cfba44adf607a0a0530ed6a3Form.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show3b700bf2cfba44adf607a0a0530ed6a3.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
+ * @route '/student/enrollment/{enrollment}'
+ */
+        show3b700bf2cfba44adf607a0a0530ed6a3Form.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show3b700bf2cfba44adf607a0a0530ed6a3.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show3b700bf2cfba44adf607a0a0530ed6a3.form = show3b700bf2cfba44adf607a0a0530ed6a3Form
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
  * @route '/my/enrollment/{enrollment}'
  */
 const show1f605a29cd1eca8220b8e17cd11d5e22 = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -387,6 +607,42 @@ show1f605a29cd1eca8220b8e17cd11d5e22.head = (args: { enrollment: number | { id: 
     url: show1f605a29cd1eca8220b8e17cd11d5e22.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
+ * @route '/my/enrollment/{enrollment}'
+ */
+    const show1f605a29cd1eca8220b8e17cd11d5e22Form = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show1f605a29cd1eca8220b8e17cd11d5e22.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
+ * @route '/my/enrollment/{enrollment}'
+ */
+        show1f605a29cd1eca8220b8e17cd11d5e22Form.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show1f605a29cd1eca8220b8e17cd11d5e22.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::show
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:210
+ * @route '/my/enrollment/{enrollment}'
+ */
+        show1f605a29cd1eca8220b8e17cd11d5e22Form.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show1f605a29cd1eca8220b8e17cd11d5e22.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show1f605a29cd1eca8220b8e17cd11d5e22.form = show1f605a29cd1eca8220b8e17cd11d5e22Form
 
 export const show = {
     '/student/enrollment/{enrollment}': show3b700bf2cfba44adf607a0a0530ed6a3,
@@ -460,6 +716,41 @@ subjects.head = (args: { enrollment: number | { id: number } } | [enrollment: nu
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::subjects
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:249
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+    const subjectsForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: subjects.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::subjects
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:249
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+        subjectsForm.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: subjects.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::subjects
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:249
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+        subjectsForm.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: subjects.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    subjects.form = subjectsForm
 /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::updateSubjects
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:283
@@ -518,6 +809,37 @@ updateSubjects.patch = (args: { enrollment: number | { id: number } } | [enrollm
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::updateSubjects
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:283
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+    const updateSubjectsForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateSubjects.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::updateSubjects
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:283
+ * @route '/student/enrollment/{enrollment}/subjects'
+ */
+        updateSubjectsForm.patch = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateSubjects.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    updateSubjects.form = updateSubjectsForm
 /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
@@ -588,6 +910,41 @@ paymentf7f2999a121c2abaa239355cd471e398.head = (args: { enrollment: number | { i
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
+ * @route '/student/enrollment/{enrollment}/payment'
+ */
+    const paymentf7f2999a121c2abaa239355cd471e398Form = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: paymentf7f2999a121c2abaa239355cd471e398.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
+ * @route '/student/enrollment/{enrollment}/payment'
+ */
+        paymentf7f2999a121c2abaa239355cd471e398Form.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: paymentf7f2999a121c2abaa239355cd471e398.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
+ * @route '/student/enrollment/{enrollment}/payment'
+ */
+        paymentf7f2999a121c2abaa239355cd471e398Form.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: paymentf7f2999a121c2abaa239355cd471e398.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    paymentf7f2999a121c2abaa239355cd471e398.form = paymentf7f2999a121c2abaa239355cd471e398Form
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
  * @route '/my/enrollment/{enrollment}/payment'
  */
 const paymentb7e41a0245c4ec88f5c98ce14cc1de8e = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -651,6 +1008,42 @@ paymentb7e41a0245c4ec88f5c98ce14cc1de8e.head = (args: { enrollment: number | { i
     url: paymentb7e41a0245c4ec88f5c98ce14cc1de8e.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
+ * @route '/my/enrollment/{enrollment}/payment'
+ */
+    const paymentb7e41a0245c4ec88f5c98ce14cc1de8eForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: paymentb7e41a0245c4ec88f5c98ce14cc1de8e.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
+ * @route '/my/enrollment/{enrollment}/payment'
+ */
+        paymentb7e41a0245c4ec88f5c98ce14cc1de8eForm.get = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: paymentb7e41a0245c4ec88f5c98ce14cc1de8e.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::payment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:310
+ * @route '/my/enrollment/{enrollment}/payment'
+ */
+        paymentb7e41a0245c4ec88f5c98ce14cc1de8eForm.head = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: paymentb7e41a0245c4ec88f5c98ce14cc1de8e.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    paymentb7e41a0245c4ec88f5c98ce14cc1de8e.form = paymentb7e41a0245c4ec88f5c98ce14cc1de8eForm
 
 export const payment = {
     '/student/enrollment/{enrollment}/payment': paymentf7f2999a121c2abaa239355cd471e398,
@@ -718,6 +1111,27 @@ submitPaymentf7f2999a121c2abaa239355cd471e398.post = (args: { enrollment: number
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::submitPayment
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:353
+ * @route '/student/enrollment/{enrollment}/payment'
+ */
+    const submitPaymentf7f2999a121c2abaa239355cd471e398Form = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: submitPaymentf7f2999a121c2abaa239355cd471e398.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::submitPayment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:353
+ * @route '/student/enrollment/{enrollment}/payment'
+ */
+        submitPaymentf7f2999a121c2abaa239355cd471e398Form.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: submitPaymentf7f2999a121c2abaa239355cd471e398.url(args, options),
+            method: 'post',
+        })
+    
+    submitPaymentf7f2999a121c2abaa239355cd471e398.form = submitPaymentf7f2999a121c2abaa239355cd471e398Form
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::submitPayment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:353
  * @route '/my/enrollment/{enrollment}/payment'
  */
 const submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8e = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -773,6 +1187,28 @@ submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8e.post = (args: { enrollment: number
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::submitPayment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:353
+ * @route '/my/enrollment/{enrollment}/payment'
+ */
+    const submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8eForm = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8e.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::submitPayment
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:353
+ * @route '/my/enrollment/{enrollment}/payment'
+ */
+        submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8eForm.post = (args: { enrollment: number | { id: number } } | [enrollment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8e.url(args, options),
+            method: 'post',
+        })
+    
+    submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8e.form = submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8eForm
+
 export const submitPayment = {
     '/student/enrollment/{enrollment}/payment': submitPaymentf7f2999a121c2abaa239355cd471e398,
     '/my/enrollment/{enrollment}/payment': submitPaymentb7e41a0245c4ec88f5c98ce14cc1de8e,
@@ -824,6 +1260,41 @@ history8c16b9cb0ba6db1e731cb166efc7dcfe.head = (options?: RouteQueryOptions): Ro
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
+ * @route '/student/enrollment/history'
+ */
+    const history8c16b9cb0ba6db1e731cb166efc7dcfeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: history8c16b9cb0ba6db1e731cb166efc7dcfe.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
+ * @route '/student/enrollment/history'
+ */
+        history8c16b9cb0ba6db1e731cb166efc7dcfeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history8c16b9cb0ba6db1e731cb166efc7dcfe.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
+ * @route '/student/enrollment/history'
+ */
+        history8c16b9cb0ba6db1e731cb166efc7dcfeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history8c16b9cb0ba6db1e731cb166efc7dcfe.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    history8c16b9cb0ba6db1e731cb166efc7dcfe.form = history8c16b9cb0ba6db1e731cb166efc7dcfeForm
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
  * @route '/my/enrollment/history'
  */
 const history4a6e928d5639e839139b333fd199bf5c = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -863,6 +1334,42 @@ history4a6e928d5639e839139b333fd199bf5c.head = (options?: RouteQueryOptions): Ro
     url: history4a6e928d5639e839139b333fd199bf5c.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
+ * @route '/my/enrollment/history'
+ */
+    const history4a6e928d5639e839139b333fd199bf5cForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: history4a6e928d5639e839139b333fd199bf5c.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
+ * @route '/my/enrollment/history'
+ */
+        history4a6e928d5639e839139b333fd199bf5cForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history4a6e928d5639e839139b333fd199bf5c.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::history
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:377
+ * @route '/my/enrollment/history'
+ */
+        history4a6e928d5639e839139b333fd199bf5cForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history4a6e928d5639e839139b333fd199bf5c.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    history4a6e928d5639e839139b333fd199bf5c.form = history4a6e928d5639e839139b333fd199bf5cForm
 
 export const history = {
     '/student/enrollment/history': history8c16b9cb0ba6db1e731cb166efc7dcfe,
@@ -915,6 +1422,41 @@ grades9780f51a692bc9e4cc0f0b58ab105b36.head = (options?: RouteQueryOptions): Rou
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
+ * @route '/student/enrollment/grades'
+ */
+    const grades9780f51a692bc9e4cc0f0b58ab105b36Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: grades9780f51a692bc9e4cc0f0b58ab105b36.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
+ * @route '/student/enrollment/grades'
+ */
+        grades9780f51a692bc9e4cc0f0b58ab105b36Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: grades9780f51a692bc9e4cc0f0b58ab105b36.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
+ * @route '/student/enrollment/grades'
+ */
+        grades9780f51a692bc9e4cc0f0b58ab105b36Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: grades9780f51a692bc9e4cc0f0b58ab105b36.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    grades9780f51a692bc9e4cc0f0b58ab105b36.form = grades9780f51a692bc9e4cc0f0b58ab105b36Form
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
  * @route '/my/enrollment/grades'
  */
 const grades4071faa3ea2d72317d29ea4e2ac02665 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -954,6 +1496,42 @@ grades4071faa3ea2d72317d29ea4e2ac02665.head = (options?: RouteQueryOptions): Rou
     url: grades4071faa3ea2d72317d29ea4e2ac02665.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
+ * @route '/my/enrollment/grades'
+ */
+    const grades4071faa3ea2d72317d29ea4e2ac02665Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: grades4071faa3ea2d72317d29ea4e2ac02665.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
+ * @route '/my/enrollment/grades'
+ */
+        grades4071faa3ea2d72317d29ea4e2ac02665Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: grades4071faa3ea2d72317d29ea4e2ac02665.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::grades
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:394
+ * @route '/my/enrollment/grades'
+ */
+        grades4071faa3ea2d72317d29ea4e2ac02665Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: grades4071faa3ea2d72317d29ea4e2ac02665.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    grades4071faa3ea2d72317d29ea4e2ac02665.form = grades4071faa3ea2d72317d29ea4e2ac02665Form
 
 export const grades = {
     '/student/enrollment/grades': grades9780f51a692bc9e4cc0f0b58ab105b36,
@@ -1006,6 +1584,41 @@ schedulee1cb81507712254d305e5c773adfbffb.head = (options?: RouteQueryOptions): R
     /**
 * @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
  * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
+ * @route '/student/enrollment/schedule'
+ */
+    const schedulee1cb81507712254d305e5c773adfbffbForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: schedulee1cb81507712254d305e5c773adfbffb.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
+ * @route '/student/enrollment/schedule'
+ */
+        schedulee1cb81507712254d305e5c773adfbffbForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: schedulee1cb81507712254d305e5c773adfbffb.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
+ * @route '/student/enrollment/schedule'
+ */
+        schedulee1cb81507712254d305e5c773adfbffbForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: schedulee1cb81507712254d305e5c773adfbffb.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    schedulee1cb81507712254d305e5c773adfbffb.form = schedulee1cb81507712254d305e5c773adfbffbForm
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
  * @route '/my/enrollment/schedule'
  */
 const schedule78d8db35483ac9af4955e5a7919f71c5 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1045,6 +1658,42 @@ schedule78d8db35483ac9af4955e5a7919f71c5.head = (options?: RouteQueryOptions): R
     url: schedule78d8db35483ac9af4955e5a7919f71c5.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
+ * @route '/my/enrollment/schedule'
+ */
+    const schedule78d8db35483ac9af4955e5a7919f71c5Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: schedule78d8db35483ac9af4955e5a7919f71c5.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
+ * @route '/my/enrollment/schedule'
+ */
+        schedule78d8db35483ac9af4955e5a7919f71c5Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: schedule78d8db35483ac9af4955e5a7919f71c5.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Student\StudentEnrollmentController::schedule
+ * @see Modules/Admission/app/Http/Controllers/Student/StudentEnrollmentController.php:448
+ * @route '/my/enrollment/schedule'
+ */
+        schedule78d8db35483ac9af4955e5a7919f71c5Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: schedule78d8db35483ac9af4955e5a7919f71c5.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    schedule78d8db35483ac9af4955e5a7919f71c5.form = schedule78d8db35483ac9af4955e5a7919f71c5Form
 
 export const schedule = {
     '/student/enrollment/schedule': schedulee1cb81507712254d305e5c773adfbffb,

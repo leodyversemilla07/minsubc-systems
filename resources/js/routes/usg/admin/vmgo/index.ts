@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \Modules\USG\Http\Controllers\Admin\VMGOController::edit
  * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:16
@@ -42,6 +42,41 @@ edit.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:16
+ * @route '/usg/admin/vmgo/edit'
+ */
+    const editForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:16
+ * @route '/usg/admin/vmgo/edit'
+ */
+        editForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::edit
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:16
+ * @route '/usg/admin/vmgo/edit'
+ */
+        editForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\VMGOController::update
  * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:25
@@ -76,6 +111,37 @@ update.patch = (options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     method: 'patch',
 })
 
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:25
+ * @route '/usg/admin/vmgo'
+ */
+    const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url({
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::update
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:25
+ * @route '/usg/admin/vmgo'
+ */
+        updateForm.patch = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\USG\Http\Controllers\Admin\VMGOController::history
  * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:40
@@ -118,6 +184,42 @@ history.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: history.url(options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::history
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:40
+ * @route '/usg/admin/vmgo/history'
+ */
+    const historyForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: history.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::history
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:40
+ * @route '/usg/admin/vmgo/history'
+ */
+        historyForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\USG\Http\Controllers\Admin\VMGOController::history
+ * @see Modules/USG/app/Http/Controllers/Admin/VMGOController.php:40
+ * @route '/usg/admin/vmgo/history'
+ */
+        historyForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: history.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    history.form = historyForm
 const vmgo = {
     edit: Object.assign(edit, edit),
 update: Object.assign(update, update),

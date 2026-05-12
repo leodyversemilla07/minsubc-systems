@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\BulkOperationsController::updateStatus
  * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:15
@@ -33,6 +33,27 @@ updateStatus.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::updateStatus
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:15
+ * @route '/admin/bulk/update-status'
+ */
+    const updateStatusForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: updateStatus.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::updateStatus
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:15
+ * @route '/admin/bulk/update-status'
+ */
+        updateStatusForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: updateStatus.url(options),
+            method: 'post',
+        })
+    
+    updateStatus.form = updateStatusForm
 /**
 * @see \Modules\Registrar\Http\Controllers\BulkOperationsController::assign
  * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:34
@@ -67,6 +88,27 @@ assign.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::assign
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:34
+ * @route '/admin/bulk/assign'
+ */
+    const assignForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: assign.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::assign
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:34
+ * @route '/admin/bulk/assign'
+ */
+        assignForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: assign.url(options),
+            method: 'post',
+        })
+    
+    assign.form = assignForm
 /**
 * @see \Modules\Registrar\Http\Controllers\BulkOperationsController::release
  * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:53
@@ -101,6 +143,27 @@ release.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::release
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:53
+ * @route '/admin/bulk/release'
+ */
+    const releaseForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: release.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::release
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:53
+ * @route '/admin/bulk/release'
+ */
+        releaseForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: release.url(options),
+            method: 'post',
+        })
+    
+    release.form = releaseForm
 /**
 * @see \Modules\Registrar\Http\Controllers\BulkOperationsController::reject
  * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:78
@@ -135,6 +198,27 @@ reject.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::reject
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:78
+ * @route '/admin/bulk/reject'
+ */
+    const rejectForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: reject.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::reject
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:78
+ * @route '/admin/bulk/reject'
+ */
+        rejectForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: reject.url(options),
+            method: 'post',
+        })
+    
+    reject.form = rejectForm
 /**
 * @see \Modules\Registrar\Http\Controllers\BulkOperationsController::deleteMethod
  * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:98
@@ -168,6 +252,38 @@ deleteMethod.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> =
     url: deleteMethod.url(options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::deleteMethod
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:98
+ * @route '/admin/bulk/delete'
+ */
+    const deleteMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: deleteMethod.url({
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\BulkOperationsController::deleteMethod
+ * @see Modules/Registrar/app/Http/Controllers/BulkOperationsController.php:98
+ * @route '/admin/bulk/delete'
+ */
+        deleteMethodForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: deleteMethod.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    deleteMethod.form = deleteMethodForm
 const bulk = {
     updateStatus: Object.assign(updateStatus, updateStatus),
 assign: Object.assign(assign, assign),

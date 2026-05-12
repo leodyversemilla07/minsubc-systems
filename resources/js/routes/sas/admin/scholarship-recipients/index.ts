@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::index
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:25
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:25
+ * @route '/sas/admin/scholarship-recipients'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:25
+ * @route '/sas/admin/scholarship-recipients'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::index
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:25
+ * @route '/sas/admin/scholarship-recipients'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::create
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:49
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:49
+ * @route '/sas/admin/scholarship-recipients/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:49
+ * @route '/sas/admin/scholarship-recipients/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::create
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:49
+ * @route '/sas/admin/scholarship-recipients/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::store
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:61
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:61
+ * @route '/sas/admin/scholarship-recipients'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::store
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:61
+ * @route '/sas/admin/scholarship-recipients'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::show
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:72
@@ -181,6 +272,41 @@ show.head = (args: { scholarship_recipient: string | number } | [scholarship_rec
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:72
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+    const showForm = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:72
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+        showForm.get = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::show
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:72
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+        showForm.head = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::edit
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:85
@@ -243,6 +369,41 @@ edit.head = (args: { scholarship_recipient: string | number } | [scholarship_rec
     method: 'head',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:85
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}/edit'
+ */
+    const editForm = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:85
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}/edit'
+ */
+        editForm.get = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::edit
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:85
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}/edit'
+ */
+        editForm.head = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::update
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:99
@@ -305,6 +466,51 @@ update.patch = (args: { scholarship_recipient: string | number } | [scholarship_
     method: 'patch',
 })
 
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:99
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+    const updateForm = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:99
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+        updateForm.put = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::update
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:99
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+        updateForm.patch = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::destroy
  * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:112
@@ -357,6 +563,38 @@ destroy.delete = (args: { scholarship_recipient: string | number } | [scholarshi
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:112
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+    const destroyForm = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\SAS\Http\Controllers\Admin\ScholarshipRecipientController::destroy
+ * @see Modules/SAS/app/Http/Controllers/Admin/ScholarshipRecipientController.php:112
+ * @route '/sas/admin/scholarship-recipients/{scholarship_recipient}'
+ */
+        destroyForm.delete = (args: { scholarship_recipient: string | number } | [scholarship_recipient: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const scholarshipRecipients = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

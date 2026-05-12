@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::index
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:18
+ * @route '/admission/admin/terms'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:18
+ * @route '/admission/admin/terms'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::index
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:18
+ * @route '/admission/admin/terms'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::create
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:37
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:37
+ * @route '/admission/admin/terms/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:37
+ * @route '/admission/admin/terms/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::create
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:37
+ * @route '/admission/admin/terms/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::store
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:45
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:45
+ * @route '/admission/admin/terms'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::store
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:45
+ * @route '/admission/admin/terms'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::show
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:73
@@ -186,6 +277,41 @@ show.head = (args: { term: number | { id: number } } | [term: number | { id: num
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:73
+ * @route '/admission/admin/terms/{term}'
+ */
+    const showForm = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:73
+ * @route '/admission/admin/terms/{term}'
+ */
+        showForm.get = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::show
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:73
+ * @route '/admission/admin/terms/{term}'
+ */
+        showForm.head = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::edit
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:96
@@ -253,6 +379,41 @@ edit.head = (args: { term: number | { id: number } } | [term: number | { id: num
     method: 'head',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:96
+ * @route '/admission/admin/terms/{term}/edit'
+ */
+    const editForm = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:96
+ * @route '/admission/admin/terms/{term}/edit'
+ */
+        editForm.get = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::edit
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:96
+ * @route '/admission/admin/terms/{term}/edit'
+ */
+        editForm.head = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::update
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:106
@@ -311,6 +472,37 @@ update.patch = (args: { term: number | { id: number } } | [term: number | { id: 
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:106
+ * @route '/admission/admin/terms/{term}'
+ */
+    const updateForm = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PATCH',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::update
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:106
+ * @route '/admission/admin/terms/{term}'
+ */
+        updateForm.patch = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::destroy
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:134
@@ -369,6 +561,37 @@ destroy.delete = (args: { term: number | { id: number } } | [term: number | { id
     method: 'delete',
 })
 
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:134
+ * @route '/admission/admin/terms/{term}'
+ */
+    const destroyForm = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::destroy
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:134
+ * @route '/admission/admin/terms/{term}'
+ */
+        destroyForm.delete = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::setActive
  * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:152
@@ -426,6 +649,28 @@ setActive.post = (args: { term: number | { id: number } } | [term: number | { id
     url: setActive.url(args, options),
     method: 'post',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::setActive
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:152
+ * @route '/admission/admin/terms/{term}/set-active'
+ */
+    const setActiveForm = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: setActive.url(args, options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\AcademicTermController::setActive
+ * @see Modules/Admission/app/Http/Controllers/Admin/AcademicTermController.php:152
+ * @route '/admission/admin/terms/{term}/set-active'
+ */
+        setActiveForm.post = (args: { term: number | { id: number } } | [term: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: setActive.url(args, options),
+            method: 'post',
+        })
+    
+    setActive.form = setActiveForm
 const terms = {
     index: Object.assign(index, index),
 create: Object.assign(create, create),

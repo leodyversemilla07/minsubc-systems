@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::index
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:18
@@ -42,6 +42,41 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::index
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:18
+ * @route '/students'
+ */
+    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: index.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::index
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:18
+ * @route '/students'
+ */
+        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::index
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:18
+ * @route '/students'
+ */
+        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: index.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    index.form = indexForm
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::create
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:47
@@ -85,6 +120,41 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::create
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:47
+ * @route '/students/create'
+ */
+    const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: create.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::create
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:47
+ * @route '/students/create'
+ */
+        createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url(options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::create
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:47
+ * @route '/students/create'
+ */
+        createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: create.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    create.form = createForm
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::store
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:55
@@ -119,6 +189,27 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::store
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:55
+ * @route '/students'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::store
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:55
+ * @route '/students'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::show
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:66
@@ -186,6 +277,41 @@ show.head = (args: { student: string | number | { id: string | number } } | [stu
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::show
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:66
+ * @route '/students/{student}'
+ */
+    const showForm = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: show.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::show
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:66
+ * @route '/students/{student}'
+ */
+        showForm.get = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::show
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:66
+ * @route '/students/{student}'
+ */
+        showForm.head = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: show.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    show.form = showForm
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::edit
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:80
@@ -253,6 +379,41 @@ edit.head = (args: { student: string | number | { id: string | number } } | [stu
     method: 'head',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::edit
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:80
+ * @route '/students/{student}/edit'
+ */
+    const editForm = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: edit.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::edit
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:80
+ * @route '/students/{student}/edit'
+ */
+        editForm.get = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::edit
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:80
+ * @route '/students/{student}/edit'
+ */
+        editForm.head = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: edit.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    edit.form = editForm
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::update
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:90
@@ -320,6 +481,51 @@ update.patch = (args: { student: string | number | { id: string | number } } | [
     method: 'patch',
 })
 
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::update
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:90
+ * @route '/students/{student}'
+ */
+    const updateForm = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: update.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'PUT',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::update
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:90
+ * @route '/students/{student}'
+ */
+        updateForm.put = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PUT',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::update
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:90
+ * @route '/students/{student}'
+ */
+        updateForm.patch = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: update.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'PATCH',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    update.form = updateForm
 /**
 * @see \Modules\Registrar\Http\Controllers\StudentController::destroy
  * @see Modules/Registrar/app/Http/Controllers/StudentController.php:101
@@ -377,6 +583,38 @@ destroy.delete = (args: { student: string | number | { id: string | number } } |
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+    /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::destroy
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:101
+ * @route '/students/{student}'
+ */
+    const destroyForm = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: destroy.url(args, {
+                    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                        _method: 'DELETE',
+                        ...(options?.query ?? options?.mergeQuery ?? {}),
+                    }
+                }),
+        method: 'post',
+    })
+
+            /**
+* @see \Modules\Registrar\Http\Controllers\StudentController::destroy
+ * @see Modules/Registrar/app/Http/Controllers/StudentController.php:101
+ * @route '/students/{student}'
+ */
+        destroyForm.delete = (args: { student: string | number | { id: string | number } } | [student: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: destroy.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'DELETE',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'post',
+        })
+    
+    destroy.form = destroyForm
 const StudentController = { index, create, store, show, edit, update, destroy }
 
 export default StudentController

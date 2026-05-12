@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
  * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
@@ -60,6 +60,42 @@ bySection.head = (args: { sectionId: string | number } | [sectionId: string | nu
     url: bySection.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
+ * @route '/api/admission/enrollments/by-section/{sectionId}'
+ */
+    const bySectionForm = (args: { sectionId: string | number } | [sectionId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: bySection.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
+ * @route '/api/admission/enrollments/by-section/{sectionId}'
+ */
+        bySectionForm.get = (args: { sectionId: string | number } | [sectionId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: bySection.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \Modules\Admission\Http\Controllers\Admin\EnrollmentController::bySection
+ * @see Modules/Admission/app/Http/Controllers/Admin/EnrollmentController.php:362
+ * @route '/api/admission/enrollments/by-section/{sectionId}'
+ */
+        bySectionForm.head = (args: { sectionId: string | number } | [sectionId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: bySection.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    bySection.form = bySectionForm
 const enrollments = {
     bySection: Object.assign(bySection, bySection),
 }

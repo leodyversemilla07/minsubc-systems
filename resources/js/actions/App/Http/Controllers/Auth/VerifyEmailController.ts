@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
  * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
@@ -58,4 +58,40 @@ VerifyEmailController.head = (args: { id: string | number, hash: string | number
     url: VerifyEmailController.url(args, options),
     method: 'head',
 })
+
+    /**
+* @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
+ * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
+ * @route '/verify-email/{id}/{hash}'
+ */
+    const VerifyEmailControllerForm = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: VerifyEmailController.url(args, options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
+ * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
+ * @route '/verify-email/{id}/{hash}'
+ */
+        VerifyEmailControllerForm.get = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: VerifyEmailController.url(args, options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\Auth\VerifyEmailController::__invoke
+ * @see app/Http/Controllers/Auth/VerifyEmailController.php:14
+ * @route '/verify-email/{id}/{hash}'
+ */
+        VerifyEmailControllerForm.head = (args: { id: string | number, hash: string | number } | [id: string | number, hash: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: VerifyEmailController.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    VerifyEmailController.form = VerifyEmailControllerForm
 export default VerifyEmailController
