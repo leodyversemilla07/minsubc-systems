@@ -5492,5 +5492,129 @@
         "file": "assets\/curriculum-view.js",
         "src": "resources\/js\/pages\/curriculum\/syllabi\/view.tsx",
         "isEntry": true
+    },
+    "resources\/js\/pages\/research\/admin\/dashboard\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/dashboard\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/defenses\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/defenses\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/defenses\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/defenses\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/defenses\/show.tsx": {
+        "file": "assets\/research-show-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/defenses\/show.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/grade-reports\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/grade-reports\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/grade-reports\/edit.tsx": {
+        "file": "assets\/research-edit-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/grade-reports\/edit.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/grade-reports\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/grade-reports\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/journals\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/journals\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/journals\/edit.tsx": {
+        "file": "assets\/research-edit-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/journals\/edit.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/journals\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/journals\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/journals\/issues\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/journals\/issues\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/journals\/issues\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/journals\/issues\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/journals\/show.tsx": {
+        "file": "assets\/research-show-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/journals\/show.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/panels\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/panels\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/panels\/show.tsx": {
+        "file": "assets\/research-show-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/panels\/show.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/proposals\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/proposals\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/proposals\/edit.tsx": {
+        "file": "assets\/research-edit-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/proposals\/edit.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/proposals\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/proposals\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/proposals\/show.tsx": {
+        "file": "assets\/research-show-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/proposals\/show.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/publications\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/publications\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/publications\/edit.tsx": {
+        "file": "assets\/research-edit-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/publications\/edit.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/publications\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/publications\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/publications\/show.tsx": {
+        "file": "assets\/research-show-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/publications\/show.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/reports\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/reports\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/research-types\/create.tsx": {
+        "file": "assets\/research-create-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/research-types\/create.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/research-types\/edit.tsx": {
+        "file": "assets\/research-edit-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/research-types\/edit.tsx"
+    },
+    "resources\/js\/pages\/research\/admin\/research-types\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/admin\/research-types\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/index.tsx": {
+        "file": "assets\/research-index-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/index.tsx"
+    },
+    "resources\/js\/pages\/research\/proposals.tsx": {
+        "file": "assets\/research-proposals-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/proposals.tsx"
+    },
+    "resources\/js\/pages\/research\/publications.tsx": {
+        "file": "assets\/research-publications-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/publications.tsx"
+    },
+    "resources\/js\/pages\/research\/theses\/view.tsx": {
+        "file": "assets\/research-view-Ctmp.js",
+        "src": "resources\/js\/pages\/research\/theses\/view.tsx"
     }
 }
