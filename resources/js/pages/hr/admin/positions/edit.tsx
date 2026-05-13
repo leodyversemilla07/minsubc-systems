@@ -1,104 +1,51 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Save } from 'lucide-react';
 
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import AppLayout from '@/layouts/app-layout';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface Position {
-    id: number;
-    title: string;
-    category: string;
-    employment_type: string;
-    description: string;
-    salary_grade_min: number;
-    salary_grade_max: number;
-    is_active: boolean;
-}
-
-export default function Edit({ position }: { position: Position }) {
-    const [form, setForm] = useState({
-        title: position.title,
-        category: position.category,
-        employment_type: position.employment_type,
-        description: position.description || '',
-        salary_grade_min: String(position.salary_grade_min || ''),
-        salary_grade_max: String(position.salary_grade_max || ''),
+export default function PositionEdit({ position }: { position: any }) {
+    const { data, setData, put, processing, errors } = useForm({
+        title: position.title, category: position.category ?? 'staff', description: position.description ?? '',
     });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.put(route('hr.admin.positions.update', position.id), form);
-    };
-
+    const submit = (e: React.FormEvent) => { e.preventDefault(); put(route('hr.admin.positions.update', position.id)); };
     return (
         <AppLayout>
             <Head title="Edit Position" />
             <div className="space-y-6 p-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route('hr.admin.positions.index')}><Button variant="outline" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
+                    <Link href={route('hr.admin.positions.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
                     <h1 className="text-2xl font-bold">Edit Position</h1>
                 </div>
-                <Card className="p-6">
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label>Title *</Label>
-                                <Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+                <Card className="max-w-xl">
+                    <CardHeader><CardTitle>Position Details</CardTitle></CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div><Label>Title</Label><Input value={data.title} onChange={(e) => setData('title', e.target.value)} />{errors.title && <p className="text-sm text-red-600">{errors.title}</p>}</div>
+                                <div>
+                                    <Label>Category</Label>
+                                    <Select value={data.category} onValueChange={(v) => setData('category', v)}>
+                                        <SelectTrigger><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="faculty">Faculty</SelectItem>
+                                            <SelectItem value="staff">Staff</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Category</Label>
-                                <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v ?? "" })}>
-                                    <SelectTrigger><SelectValue /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="faculty">Faculty</SelectItem>
-                                        <SelectItem value="staff">Staff</SelectItem>
-                                        <SelectItem value="executive">Executive</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                            <div><Label>Description</Label><Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} rows={3} /></div>
+                            <div className="flex gap-2">
+                                <Button type="submit" disabled={processing}><Save className="mr-2 h-4 w-4" /> Update</Button>
+                                <Link href={route('hr.admin.positions.index')}><Button variant="outline">Cancel</Button></Link>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Employment Type</Label>
-                                <Select value={form.employment_type} onValueChange={(v) => setForm({ ...form, employment_type: v ?? "" })}>
-                                    <SelectTrigger><SelectValue /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="full-time">Full Time</SelectItem>
-                                        <SelectItem value="part-time">Part Time</SelectItem>
-                                        <SelectItem value="contractual">Contractual</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label>Salary Grade Min</Label>
-                                <Input type="number" value={form.salary_grade_min} onChange={(e) => setForm({ ...form, salary_grade_min: e.target.value })} />
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Salary Grade Max</Label>
-                                <Input type="number" value={form.salary_grade_max} onChange={(e) => setForm({ ...form, salary_grade_max: e.target.value })} />
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Description</Label>
-                            <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-                        </div>
-                        <div className="flex justify-end gap-4">
-                            <Link href={route('hr.admin.positions.index')}><Button variant="outline">Cancel</Button></Link>
-                            <Button type="submit">Update</Button>
-                        </div>
-                    </form>
+                        </form>
+                    </CardContent>
                 </Card>
             </div>
         </AppLayout>

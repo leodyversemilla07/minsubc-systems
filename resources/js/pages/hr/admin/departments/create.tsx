@@ -1,86 +1,39 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Save } from 'lucide-react';
 
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import AppLayout from '@/layouts/app-layout';
+import { Textarea } from '@/components/ui/textarea';
 
-interface HeadOpt {
-    id: number;
-    first_name: string;
-    last_name: string;
-    employee_id: string;
-}
-
-export default function Create({ heads }: { heads: HeadOpt[] }) {
-    const [form, setForm] = useState({
-        code: '', name: '', type: 'academic', description: '', head_id: '',
-    });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.post(route('hr.admin.departments.store'), form);
-    };
-
+export default function DepartmentCreate() {
+    const { data, setData, post, processing, errors } = useForm({ code: '', name: '', description: '' });
+    const submit = (e: React.FormEvent) => { e.preventDefault(); post(route('hr.admin.departments.store')); };
     return (
         <AppLayout>
-            <Head title="Create Department" />
+            <Head title="Add Department" />
             <div className="space-y-6 p-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route('hr.admin.departments.index')}><Button variant="outline" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
-                    <h1 className="text-2xl font-bold">Create Department</h1>
+                    <Link href={route('hr.admin.departments.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
+                    <h1 className="text-2xl font-bold">Add Department</h1>
                 </div>
-                <Card className="p-6">
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label>Code *</Label>
-                                <Input required value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} placeholder="e.g. CAS, COE" />
+                <Card className="max-w-xl">
+                    <CardHeader><CardTitle>Department Details</CardTitle></CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div><Label>Code</Label><Input value={data.code} onChange={(e) => setData('code', e.target.value)} placeholder="e.g. CICS" />{errors.code && <p className="text-sm text-red-600">{errors.code}</p>}</div>
+                                <div><Label>Name</Label><Input value={data.name} onChange={(e) => setData('name', e.target.value)} placeholder="e.g. College of Information Technology" />{errors.name && <p className="text-sm text-red-600">{errors.name}</p>}</div>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Name *</Label>
-                                <Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                            <div><Label>Description</Label><Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} rows={3} /></div>
+                            <div className="flex gap-2">
+                                <Button type="submit" disabled={processing}><Save className="mr-2 h-4 w-4" /> Save</Button>
+                                <Link href={route('hr.admin.departments.index')}><Button variant="outline">Cancel</Button></Link>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Type</Label>
-                                <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v ?? "" })}>
-                                    <SelectTrigger><SelectValue /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="academic">Academic</SelectItem>
-                                        <SelectItem value="administrative">Administrative</SelectItem>
-                                        <SelectItem value="office">Office</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Department Head</Label>
-                                <Select value={form.head_id} onValueChange={(v) => setForm({ ...form, head_id: v ?? "" })}>
-                                    <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                                    <SelectContent>
-                                        {heads.map((h) => <SelectItem key={h.id} value={String(h.id)}>{h.first_name} {h.last_name} ({h.employee_id})</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2 md:col-span-2">
-                                <Label>Description</Label>
-                                <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-                            </div>
-                        </div>
-                        <div className="flex justify-end gap-4">
-                            <Link href={route('hr.admin.departments.index')}><Button variant="outline">Cancel</Button></Link>
-                            <Button type="submit">Create</Button>
-                        </div>
-                    </form>
+                        </form>
+                    </CardContent>
                 </Card>
             </div>
         </AppLayout>

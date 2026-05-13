@@ -1,79 +1,40 @@
-import { Head, Link } from '@inertiajs/react';
-import { BookOpen, Building2, Users } from 'lucide-react';
+import { Head } from '@inertiajs/react';
+import { Building2, Users, Briefcase } from 'lucide-react';
 
+import AppLayout from '@/layouts/app-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface Stat {
-    total_employees: number;
-    total_departments: number;
-    active_faculty: number;
-}
-
-interface Department {
-    id: number;
-    name: string;
-    code: string;
-    type: string;
-    employees_count?: number;
-}
-
-export default function Index({ stats, departments }: { stats: Stat; departments: Department[] }) {
+export default function Index() {
     return (
-        <>
-            <Head title="HR &amp; Faculty" />
-
-            <div className="space-y-8">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight">HR &amp; Faculty</h1>
-                    <p className="text-muted-foreground mt-2">Employee directory and human resources information.</p>
-                </div>
-
+        <AppLayout>
+            <Head title="HR" />
+            <div className="space-y-6 p-6">
+                <h1 className="text-2xl font-bold">Human Resources</h1>
+                <p className="text-muted-foreground">Employee management, attendance, leave, and evaluations.</p>
                 <div className="grid gap-6 md:grid-cols-3">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Total Employees</CardTitle>
-                            <Users className="text-muted-foreground h-4 w-4" />
-                        </CardHeader>
+                    <Card className="cursor-pointer transition-shadow hover:shadow-md" onClick={() => window.location.href = '/hr/directory'}>
+                        <CardHeader><CardTitle><Users className="h-8 w-8 text-blue-600" /></CardTitle></CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold">{stats.total_employees}</div>
+                            <h3 className="text-lg font-semibold">Employee Directory</h3>
+                            <p className="text-muted-foreground text-sm">Browse all employees and their information</p>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Departments</CardTitle>
-                            <Building2 className="text-muted-foreground h-4 w-4" />
-                        </CardHeader>
+                    <Card className="cursor-pointer transition-shadow hover:shadow-md" onClick={() => window.location.href = route('hr.admin.departments.index')}>
+                        <CardHeader><CardTitle><Building2 className="h-8 w-8 text-purple-600" /></CardTitle></CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold">{stats.total_departments}</div>
+                            <h3 className="text-lg font-semibold">Departments</h3>
+                            <p className="text-muted-foreground text-sm">View organizational structure</p>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Active Faculty</CardTitle>
-                            <BookOpen className="text-muted-foreground h-4 w-4" />
-                        </CardHeader>
+                    <Card className="cursor-pointer transition-shadow hover:shadow-md" onClick={() => window.location.href = route('hr.admin.positions.index')}>
+                        <CardHeader><CardTitle><Briefcase className="h-8 w-8 text-green-600" /></CardTitle></CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold">{stats.active_faculty}</div>
+                            <h3 className="text-lg font-semibold">Positions</h3>
+                            <p className="text-muted-foreground text-sm">View job positions and classifications</p>
                         </CardContent>
                     </Card>
-                </div>
-
-                <div>
-                    <h2 className="mb-4 text-xl font-semibold">Departments</h2>
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {departments.map((dept) => (
-                            <Link
-                                key={dept.id}
-                                href={`/hr/directory?department=${dept.id}`}
-                                className="hover:bg-accent rounded-lg border p-4 transition-colors"
-                            >
-                                <h3 className="font-medium">{dept.name}</h3>
-                                <p className="text-muted-foreground text-sm">{dept.code}</p>
-                            </Link>
-                        ))}
-                    </div>
                 </div>
             </div>
-        </>
+        </AppLayout>
     );
 }

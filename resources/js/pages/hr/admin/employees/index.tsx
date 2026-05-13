@@ -1,125 +1,71 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Plus, Search } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { Users, Plus, Edit, Trash2, Eye } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-interface Employee {
-    id: number;
-    employee_id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    employment_status: string;
-    department?: { id: number; name: string };
-    position?: { id: number; title: string };
-}
-
-interface Department {
-    id: number;
-    name: string;
-}
-
-interface Props {
-    employees: { data: Employee[]; links: any[] };
-    departments: Department[];
-    filters: { search?: string; department?: string; status?: string };
-}
-
-export default function Index({ employees, departments, filters }: Props) {
+export default function EmployeeIndex({ employees }: { employees: any[] }) {
     return (
         <AppLayout>
             <Head title="Employees" />
             <div className="space-y-6 p-6">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Employees</h1>
-                    <Link href={route('hr.admin.employees.create')}>
-                        <Button><Plus className="mr-2 h-4 w-4" />Add Employee</Button>
-                    </Link>
+                    <Link href={route('hr.admin.employees.create')}><Button><Plus className="mr-2 h-4 w-4" /> Add Employee</Button></Link>
                 </div>
-
-                <Card className="p-4">
-                    <div className="flex flex-wrap gap-4">
-                        <div className="flex-1">
-                            <Label>Search</Label>
-                            <Input
-                                placeholder="Search name, ID, or email..."
-                                defaultValue={filters.search}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        router.get(route('hr.admin.employees.index'), { ...filters, search: (e.target as HTMLInputElement).value }, { preserveState: true });
-                                    }
-                                }}
-                            />
-                        </div>
-                        <div className="w-48">
-                            <Label>Department</Label>
-                            <Select value={filters.department || ''} onValueChange={(v) => router.get(route('hr.admin.employees.index'), { ...filters, department: v }, { preserveState: true })}>
-                                <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="">All</SelectItem>
-                                    {departments.map((d) => <SelectItem key={d.id} value={String(d.id)}>{d.name}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="w-40">
-                            <Label>Status</Label>
-                            <Select value={filters.status || ''} onValueChange={(v) => router.get(route('hr.admin.employees.index'), { ...filters, status: v }, { preserveState: true })}>
-                                <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="">All</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
-                                    <SelectItem value="on-leave">On Leave</SelectItem>
-                                    <SelectItem value="resigned">Resigned</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
+                <Card>
+                    <CardHeader><CardTitle><Users className="mr-2 inline h-5 w-5" />All Employees</CardTitle></CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Employee</TableHead>
+                                    <TableHead>Department</TableHead>
+                                    <TableHead>Position</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="w-28">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {employees.map((e: any) => (
+                                    <TableRow key={e.id}>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">{e.first_name?.[0]}{e.last_name?.[0]}</span>
+                                                <div>
+                                                    <div className="font-medium">{e.first_name} {e.last_name}</div>
+                                                    <div className="text-muted-foreground text-xs">{e.email}</div>
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>{e.department?.name ?? '—'}</TableCell>
+                                        <TableCell>{e.position?.title ?? '—'}</TableCell>
+                                        <TableCell>
+                                            <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                                                e.employment_status === 'active' ? 'bg-green-100 text-green-800' :
+                                                e.employment_status === 'on-leave' ? 'bg-yellow-100 text-yellow-800' :
+                                                e.employment_status === 'terminated' ? 'bg-red-100 text-red-800' :
+                                                'bg-gray-100 text-gray-800'
+                                            }`}>{e.employment_status}</span>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex gap-1">
+                                                <Link href={route('hr.admin.employees.show', e.id)}><Button variant="ghost" size="icon"><Eye className="h-4 w-4" /></Button></Link>
+                                                <Link href={route('hr.admin.employees.edit', e.id)}><Button variant="ghost" size="icon"><Edit className="h-4 w-4" /></Button></Link>
+                                                <Link as="button" method="delete" href={route('hr.admin.employees.destroy', e.id)} onClick={(ev: any) => { if (!confirm('Delete?')) ev.preventDefault(); }}>
+                                                    <Button variant="ghost" size="icon" className="text-red-600"><Trash2 className="h-4 w-4" /></Button>
+                                                </Link>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {employees.length === 0 && <TableRow><TableCell colSpan={5} className="py-8 text-center text-muted-foreground">No employees found.</TableCell></TableRow>}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
                 </Card>
-
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Employee ID</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Department</TableHead>
-                            <TableHead>Position</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {employees.data.map((emp) => (
-                            <TableRow key={emp.id}>
-                                <TableCell className="font-mono text-sm">{emp.employee_id}</TableCell>
-                                <TableCell className="font-medium">{emp.first_name} {emp.last_name}</TableCell>
-                                <TableCell>{emp.email}</TableCell>
-                                <TableCell>{emp.department?.name || '—'}</TableCell>
-                                <TableCell>{emp.position?.title || '—'}</TableCell>
-                                <TableCell>{emp.employment_status}</TableCell>
-                                <TableCell>
-                                    <div className="flex gap-2">
-                                        <Link href={route('hr.admin.employees.show', emp.id)}><Button variant="outline" size="sm">View</Button></Link>
-                                        <Link href={route('hr.admin.employees.edit', emp.id)}><Button variant="outline" size="sm">Edit</Button></Link>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
             </div>
         </AppLayout>
     );

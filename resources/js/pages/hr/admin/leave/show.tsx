@@ -1,103 +1,54 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { Head, Link } from '@inertiajs/react';
+import { ArrowLeft, CalendarCheck } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import AppLayout from '@/layouts/app-layout';
 
-interface LeaveRequest {
-    id: number;
-    leave_code: string;
-    employee: { id: number; employee_id: string; first_name: string; last_name: string; department?: { name: string } };
-    leaveType: { name: string; code: string; is_paid: boolean };
-    start_date: string;
-    end_date: string;
-    total_days: number;
-    reason: string;
-    status: string;
-    approver?: { first_name: string; last_name: string };
-    approved_at: string;
-    approval_notes: string;
-}
-
-export default function Show({ leaveRequest }: { leaveRequest: LeaveRequest }) {
-    const [approvalNotes, setApprovalNotes] = useState('');
-
-    const handleApprove = () => {
-        router.post(route('hr.admin.leave.approve', leaveRequest.id), { approval_notes: approvalNotes });
-    };
-
-    const handleReject = () => {
-        if (!approvalNotes) { alert('Please provide notes for rejection.'); return; }
-        router.post(route('hr.admin.leave.reject', leaveRequest.id), { approval_notes: approvalNotes });
-    };
-
+export default function LeaveShow({ leaveRequest }: { leaveRequest: any }) {
     return (
         <AppLayout>
             <Head title="Leave Request" />
             <div className="space-y-6 p-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route('hr.admin.leave.index')}><Button variant="outline" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
-                    <h1 className="text-2xl font-bold">Leave Request: {leaveRequest.leave_code}</h1>
-                    <Badge variant={
-                        leaveRequest.status === 'approved' ? 'default' :
-                        leaveRequest.status === 'rejected' ? 'destructive' : 'secondary'
-                    }>{leaveRequest.status}</Badge>
+                    <Link href={route('hr.admin.leave.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
+                    <h1 className="text-2xl font-bold"><CalendarCheck className="mr-2 inline h-6 w-6" />Leave Request</h1>
+                    <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${leaveRequest.status === 'approved' ? 'bg-green-100 text-green-800' : leaveRequest.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>{leaveRequest.status}</span>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
                     <Card className="p-6">
-                        <h2 className="mb-4 text-lg font-semibold">Employee Details</h2>
-                        <dl className="space-y-3">
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Name</dt><dd className="font-medium">{leaveRequest.employee?.first_name} {leaveRequest.employee?.last_name}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">ID</dt><dd>{leaveRequest.employee?.employee_id}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Department</dt><dd>{leaveRequest.employee?.department?.name || '—'}</dd></div>
+                        <h2 className="mb-2 text-lg font-semibold">Details</h2>
+                        <dl className="space-y-2 text-sm">
+                            <div className="flex justify-between"><dt className="text-muted-foreground">Employee</dt><dd className="font-medium">{leaveRequest.employee?.first_name} {leaveRequest.employee?.last_name}</dd></div>
+                            <div className="flex justify-between"><dt className="text-muted-foreground">Type</dt><dd className="capitalize">{leaveRequest.leave_type?.name ?? leaveRequest.type ?? '—'}</dd></div>
+                            <div className="flex justify-between"><dt className="text-muted-foreground">Start Date</dt><dd>{leaveRequest.start_date}</dd></div>
+                            <div className="flex justify-between"><dt className="text-muted-foreground">End Date</dt><dd>{leaveRequest.end_date ?? '—'}</dd></div>
+                            <div className="flex justify-between"><dt className="text-muted-foreground">Total Days</dt><dd>{leaveRequest.total_days ?? '—'}</dd></div>
                         </dl>
                     </Card>
+
                     <Card className="p-6">
-                        <h2 className="mb-4 text-lg font-semibold">Leave Details</h2>
-                        <dl className="space-y-3">
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Type</dt><dd>{leaveRequest.leaveType?.name}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Paid Leave</dt><dd>{leaveRequest.leaveType?.is_paid ? 'Yes' : 'No'}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Start</dt><dd>{leaveRequest.start_date}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">End</dt><dd>{leaveRequest.end_date}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Total Days</dt><dd className="font-semibold">{leaveRequest.total_days}</dd></div>
-                        </dl>
+                        <h2 className="mb-2 text-lg font-semibold">Actions</h2>
+                        <div className="flex gap-2">
+                            {leaveRequest.status === 'pending' && (
+                                <>
+                                    <Link as="button" method="post" href={route('hr.admin.leave.approve', leaveRequest.id)}>
+                                        <Button className="bg-green-600 hover:bg-green-700">Approve</Button>
+                                    </Link>
+                                    <Link as="button" method="post" href={route('hr.admin.leave.reject', leaveRequest.id)}>
+                                        <Button variant="outline" className="text-red-600">Reject</Button>
+                                    </Link>
+                                </>
+                            )}
+                        </div>
                     </Card>
                 </div>
 
-                <Card className="p-6">
-                    <h2 className="mb-4 text-lg font-semibold">Reason</h2>
-                    <p>{leaveRequest.reason}</p>
-                </Card>
-
-                {leaveRequest.status === 'pending' && (
+                {leaveRequest.reason && (
                     <Card className="p-6">
-                        <h2 className="mb-4 text-lg font-semibold">Decision</h2>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="text-muted-foreground mb-1 block text-sm">Notes (required for rejection)</label>
-                                <Textarea value={approvalNotes} onChange={(e) => setApprovalNotes(e.target.value)} placeholder="Approval or rejection notes..." />
-                            </div>
-                            <div className="flex gap-4">
-                                <Button onClick={handleApprove} className="bg-green-600 hover:bg-green-700">Approve</Button>
-                                <Button onClick={handleReject} variant="destructive">Reject</Button>
-                            </div>
-                        </div>
-                    </Card>
-                )}
-
-                {leaveRequest.approved_at && (
-                    <Card className="p-6">
-                        <h2 className="mb-4 text-lg font-semibold">Approval Info</h2>
-                        <dl className="space-y-3">
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Approved By</dt><dd>{leaveRequest.approver?.first_name} {leaveRequest.approver?.last_name}</dd></div>
-                            <div className="flex justify-between"><dt className="text-muted-foreground">Approved At</dt><dd>{leaveRequest.approved_at}</dd></div>
-                            {leaveRequest.approval_notes && <div className="flex justify-between"><dt className="text-muted-foreground">Notes</dt><dd>{leaveRequest.approval_notes}</dd></div>}
-                        </dl>
+                        <h2 className="mb-2 text-lg font-semibold">Reason</h2>
+                        <p className="text-muted-foreground text-sm whitespace-pre-wrap">{leaveRequest.reason}</p>
                     </Card>
                 )}
             </div>

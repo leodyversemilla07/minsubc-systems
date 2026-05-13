@@ -1,115 +1,84 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Save, ClipboardList } from 'lucide-react';
 
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import AppLayout from '@/layouts/app-layout';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface Employee {
-    id: number;
-    employee_id: string;
-    first_name: string;
-    last_name: string;
-}
-
-export default function Create({ employees }: { employees: Employee[] }) {
-    const [form, setForm] = useState({
-        employee_id: '',
-        evaluator_id: '',
-        type: 'periodic',
-        period: '',
-        rating: '',
-        comments: '',
+export default function EvaluationCreate({ employees }: { employees: any[] }) {
+    const { data, setData, post, processing, errors } = useForm({
+        employee_id: '', evaluation_type: '', period: '', rating: '3', comments: '',
     });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.post(route('hr.admin.evaluations.store'), form);
-    };
+    const submit = (e: React.FormEvent) => { e.preventDefault(); post(route('hr.admin.evaluations.store')); };
 
     return (
         <AppLayout>
-            <Head title="New Evaluation" />
+            <Head title="Create Evaluation" />
             <div className="space-y-6 p-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route('hr.admin.evaluations.index')}><Button variant="outline" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
-                    <h1 className="text-2xl font-bold">New Evaluation</h1>
+                    <Link href={route('hr.admin.evaluations.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
+                    <h1 className="text-2xl font-bold">Create Evaluation</h1>
                 </div>
-                <Card className="p-6">
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label>Employee *</Label>
-                                <Select value={form.employee_id} onValueChange={(v) => setForm({ ...form, employee_id: v ?? "" })}>
-                                    <SelectTrigger><SelectValue placeholder="Select employee..." /></SelectTrigger>
-                                    <SelectContent>
-                                        {employees.map((e) => <SelectItem key={e.id} value={String(e.id)}>{e.first_name} {e.last_name}</SelectItem>)}
-                                    </SelectContent>
+                <Card className="max-w-xl">
+                    <CardHeader><CardTitle><ClipboardList className="mr-2 inline h-5 w-5" />Evaluation Details</CardTitle></CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit} className="space-y-4">
+                            <div>
+                                <Label>Employee</Label>
+                                <Select value={data.employee_id} onValueChange={(v) => setData('employee_id', v)}>
+                                    <SelectTrigger><SelectValue placeholder="Select employee" /></SelectTrigger>
+                                    <SelectContent>{employees.map((e: any) => <SelectItem key={e.id} value={String(e.id)}>{e.first_name} {e.last_name}</SelectItem>)}</SelectContent>
                                 </Select>
+                                {errors.employee_id && <p className="text-sm text-red-600">{errors.employee_id}</p>}
                             </div>
-                            <div className="space-y-2">
-                                <Label>Evaluator *</Label>
-                                <Select value={form.evaluator_id} onValueChange={(v) => setForm({ ...form, evaluator_id: v ?? "" })}>
-                                    <SelectTrigger><SelectValue placeholder="Select evaluator..." /></SelectTrigger>
-                                    <SelectContent>
-                                        {employees.map((e) => <SelectItem key={e.id} value={String(e.id)}>{e.first_name} {e.last_name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label>Type</Label>
+                                    <Select value={data.evaluation_type} onValueChange={(v) => setData('evaluation_type', v)}>
+                                        <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="annual">Annual</SelectItem>
+                                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                                            <SelectItem value="monthly">Monthly</SelectItem>
+                                            <SelectItem value="probationary">Probationary</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {errors.evaluation_type && <p className="text-sm text-red-600">{errors.evaluation_type}</p>}
+                                </div>
+                                <div>
+                                    <Label>Period</Label>
+                                    <Select value={data.period} onValueChange={(v) => setData('period', v)}>
+                                        <SelectTrigger><SelectValue placeholder="Select period" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Q1-2026">Q1 2026</SelectItem>
+                                            <SelectItem value="Q2-2026">Q2 2026</SelectItem>
+                                            <SelectItem value="Q3-2026">Q3 2026</SelectItem>
+                                            <SelectItem value="Q4-2026">Q4 2026</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {errors.period && <p className="text-sm text-red-600">{errors.period}</p>}
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Type</Label>
-                                <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v ?? "" })}>
+                            <div>
+                                <Label>Rating (1-5)</Label>
+                                <Select value={data.rating} onValueChange={(v) => setData('rating', v)}>
                                     <SelectTrigger><SelectValue /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="periodic">Periodic</SelectItem>
-                                        <SelectItem value="performance">Performance</SelectItem>
-                                        <SelectItem value="peer">Peer</SelectItem>
-                                        <SelectItem value="self">Self</SelectItem>
+                                        {[1, 2, 3, 4, 5].map((r) => <SelectItem key={r} value={String(r)}>{r} — {r === 5 ? 'Excellent' : r === 4 ? 'Good' : r === 3 ? 'Satisfactory' : r === 2 ? 'Needs Improvement' : 'Poor'}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
+                                {errors.rating && <p className="text-sm text-red-600">{errors.rating}</p>}
                             </div>
-                            <div className="space-y-2">
-                                <Label>Period *</Label>
-                                <Select value={form.period} onValueChange={(v) => setForm({ ...form, period: v ?? "" })}>
-                                    <SelectTrigger><SelectValue placeholder="Select period..." /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Q1 2026">Q1 2026</SelectItem>
-                                        <SelectItem value="Q2 2026">Q2 2026</SelectItem>
-                                        <SelectItem value="Q3 2026">Q3 2026</SelectItem>
-                                        <SelectItem value="Q4 2026">Q4 2026</SelectItem>
-                                        <SelectItem value="AY 2025-2026">AY 2025-2026</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                            <div><Label>Comments</Label><Textarea value={data.comments} onChange={(e) => setData('comments', e.target.value)} rows={4} placeholder="Evaluation comments..." />{errors.comments && <p className="text-sm text-red-600">{errors.comments}</p>}</div>
+                            <div className="flex gap-2">
+                                <Button type="submit" disabled={processing}><Save className="mr-2 h-4 w-4" /> Save</Button>
+                                <Link href={route('hr.admin.evaluations.index')}><Button variant="outline">Cancel</Button></Link>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Rating (1-5)</Label>
-                                <Select value={form.rating} onValueChange={(v) => setForm({ ...form, rating: v ?? "" })}>
-                                    <SelectTrigger><SelectValue placeholder="Rate..." /></SelectTrigger>
-                                    <SelectContent>
-                                        {[1, 2, 3, 4, 5].map((r) => <SelectItem key={r} value={String(r)}>{r}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Comments</Label>
-                            <Textarea value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
-                        </div>
-                        <div className="flex justify-end gap-4">
-                            <Link href={route('hr.admin.evaluations.index')}><Button variant="outline">Cancel</Button></Link>
-                            <Button type="submit">Create</Button>
-                        </div>
-                    </form>
+                        </form>
+                    </CardContent>
                 </Card>
             </div>
         </AppLayout>
