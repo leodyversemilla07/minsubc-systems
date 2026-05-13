@@ -5616,5 +5616,149 @@
     "resources\/js\/pages\/research\/theses\/view.tsx": {
         "file": "assets\/research-view-Ctmp.js",
         "src": "resources\/js\/pages\/research\/theses\/view.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/appointments\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/appointments\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/appointments\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/appointments\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/assessments\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/assessments\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/assessments\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/assessments\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/counselors\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/counselors\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/counselors\/edit.tsx": {
+        "file": "assets\/guidance-edit-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/counselors\/edit.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/counselors\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/counselors\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/dashboard\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/dashboard\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/incident-reports\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/incident-reports\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/incident-reports\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/incident-reports\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/incident-reports\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/incident-reports\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/interventions\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/interventions\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/interventions\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/interventions\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/interventions\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/interventions\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/referrals\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/referrals\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/referrals\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/referrals\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/reports\/appointments.tsx": {
+        "file": "assets\/guidance-appointments-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/reports\/appointments.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/reports\/incidents.tsx": {
+        "file": "assets\/guidance-incidents-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/reports\/incidents.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/reports\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/reports\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/reports\/sessions.tsx": {
+        "file": "assets\/guidance-sessions-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/reports\/sessions.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/sessions\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/sessions\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/sessions\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/sessions\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/sessions\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/sessions\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/slots\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/slots\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/slots\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/slots\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/admin\/slots\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/admin\/slots\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/counselor\/appointments.tsx": {
+        "file": "assets\/guidance-appointments-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/counselor\/appointments.tsx"
+    },
+    "resources\/js\/pages\/guidance\/counselor\/dashboard.tsx": {
+        "file": "assets\/guidance-dashboard-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/counselor\/dashboard.tsx"
+    },
+    "resources\/js\/pages\/guidance\/counselor\/students\/show.tsx": {
+        "file": "assets\/guidance-show-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/counselor\/students\/show.tsx"
+    },
+    "resources\/js\/pages\/guidance\/counselor\/students.tsx": {
+        "file": "assets\/guidance-students-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/counselor\/students.tsx"
+    },
+    "resources\/js\/pages\/guidance\/index.tsx": {
+        "file": "assets\/guidance-index-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/index.tsx"
+    },
+    "resources\/js\/pages\/guidance\/my\/appointments\/create.tsx": {
+        "file": "assets\/guidance-create-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/my\/appointments\/create.tsx"
+    },
+    "resources\/js\/pages\/guidance\/my\/appointments.tsx": {
+        "file": "assets\/guidance-appointments-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/my\/appointments.tsx"
+    },
+    "resources\/js\/pages\/guidance\/my\/assessments.tsx": {
+        "file": "assets\/guidance-assessments-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/my\/assessments.tsx"
+    },
+    "resources\/js\/pages\/guidance\/my\/counselors.tsx": {
+        "file": "assets\/guidance-counselors-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/my\/counselors.tsx"
+    },
+    "resources\/js\/pages\/guidance\/my\/dashboard.tsx": {
+        "file": "assets\/guidance-dashboard-Ctmp.js",
+        "src": "resources\/js\/pages\/guidance\/my\/dashboard.tsx"
     }
 }
