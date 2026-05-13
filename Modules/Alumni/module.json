@@ -1,0 +1,11 @@
+{
+    "name": "Alumni",
+    "alias": "alumni",
+    "description": "Alumni Relations & Tracer Management",
+    "keywords": ["alumni", "tracer", "donations", "employment", "graduates"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Alumni\\Providers\\AlumniServiceProvider"
+    ],
+    "files": []
+}
