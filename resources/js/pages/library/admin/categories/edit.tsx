@@ -1,55 +1,33 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import { type PageProps } from '@/types';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save } from 'lucide-react';
-import { useState } from 'react';
 
-interface Props extends PageProps {
-    category: { id: number; name: string; description: string | null; is_active: boolean };
-}
+import AppLayout from '@/layouts/app-layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
-export default function CategoryEdit({ category }: Props) {
-    const [form, setForm] = useState({
-        name: category.name, description: category.description ?? '', is_active: category.is_active,
-    });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.put(route('library.admin.categories.update', category.id), form);
-    };
-
+export default function CategoryEdit({ category }: { category: any }) {
+    const { data, setData, put, processing, errors } = useForm({ name: category.name, description: category.description ?? '' });
+    const submit = (e: React.FormEvent) => { e.preventDefault(); put(route('library.admin.categories.update', category.id)); };
     return (
         <AppLayout>
-            <Head title={`Edit ${category.name}`} />
-            <div className="flex flex-col gap-6 p-6">
+            <Head title="Edit Category" />
+            <div className="space-y-6 p-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route('library.admin.categories.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-5 w-5" /></Button></Link>
-                    <h1 className="text-2xl font-bold">Edit: {category.name}</h1>
+                    <Link href={route('library.admin.categories.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
+                    <h1 className="text-2xl font-bold">Edit Category</h1>
                 </div>
-                <Card>
-                    <CardContent className="pt-6">
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="name">Category Name *</Label>
-                                <Input id="name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="description">Description</Label>
-                                <Textarea id="description" rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Switch id="is_active" checked={form.is_active} onCheckedChange={v => setForm(f => ({ ...f, is_active: v }))} />
-                                <Label htmlFor="is_active">Active</Label>
-                            </div>
-                            <div className="flex justify-end gap-4 pt-4">
-                                <Link href={route('library.admin.categories.index')}><Button type="button" variant="outline">Cancel</Button></Link>
-                                <Button type="submit"><Save className="mr-2 h-4 w-4" /> Update</Button>
+                <Card className="max-w-xl">
+                    <CardHeader><CardTitle>Category Details</CardTitle></CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit} className="space-y-4">
+                            <div><Label>Name</Label><Input value={data.name} onChange={(e) => setData('name', e.target.value)} />{errors.name && <p className="text-sm text-red-600">{errors.name}</p>}</div>
+                            <div><Label>Description</Label><Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} rows={3} /></div>
+                            <div className="flex gap-2">
+                                <Button type="submit" disabled={processing}><Save className="mr-2 h-4 w-4" /> Update</Button>
+                                <Link href={route('library.admin.categories.index')}><Button variant="outline">Cancel</Button></Link>
                             </div>
                         </form>
                     </CardContent>

@@ -1,75 +1,44 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select';
-import { BookOpen, Search } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { BookOpen, BookCheck } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
-import { type PageProps } from '@/types';
-import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-interface Props extends PageProps {
-    books: { data: any[]; links: any[] };
-    categories: { id: number; name: string }[];
-    filters: { search?: string; category?: string | number };
-    selectedCategory?: { id: number; name: string };
-}
-
-export default function PublicBookIndex({ books, categories, filters, selectedCategory }: Props) {
-    const [search, setSearch] = useState(filters?.search ?? '');
-
+export default function BooksIndex({ books, categories }: { books: any[]; categories: any[] }) {
     return (
         <AppLayout>
-            <Head title={selectedCategory ? `${selectedCategory.name} Books` : 'Books'} />
-            <div className="flex flex-col gap-6 p-6">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold flex items-center gap-2">
-                        <BookOpen className="h-6 w-6" />
-                        {selectedCategory ? `${selectedCategory.name} Books` : 'All Books'}
-                    </h1>
-                    <div className="flex gap-2">
-                        {categories?.map(c => (
-                            <Link key={c.id} href={route('library.categories.show', c.id)}>
-                                <Button variant={selectedCategory?.id === c.id ? 'default' : 'outline'} size="sm">{c.name}</Button>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="flex gap-2 max-w-md">
-                    <Input placeholder="Search books..." value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && router.get(route('library.books.index'), { search }, { preserveState: true })} />
-                    <Button onClick={() => router.get(route('library.books.index'), { search }, { preserveState: true })}><Search className="h-4 w-4" /></Button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {books?.data?.map((b: any) => (
-                        <Link key={b.id} href={route('library.books.show', b.id)}>
-                            <Card className="hover:shadow-md transition-shadow h-full">
-                                <CardContent className="pt-6">
-                                    <BookOpen className="h-8 w-8 text-primary mb-2" />
-                                    <p className="font-semibold truncate">{b.title}</p>
-                                    <p className="text-sm text-muted-foreground">{b.author}</p>
-                                    <div className="flex items-center justify-between mt-3">
-                                        <Badge variant="outline">{b.category?.name}</Badge>
-                                        <Badge variant={b.available_copies > 0 ? 'secondary' : 'destructive'}>
-                                            {b.available_copies} available
-                                        </Badge>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    ))}
-                </div>
-
-                {(!books?.data || books.data.length === 0) && (
-                    <div className="text-center py-12">
-                        <BookOpen className="h-12 w-12 mx-auto text-muted-foreground" />
-                        <p className="text-lg text-muted-foreground mt-4">No books found.</p>
-                    </div>
-                )}
+            <Head title="Library Books" />
+            <div className="space-y-6 p-6">
+                <h1 className="text-2xl font-bold"><BookOpen className="mr-2 inline h-6 w-6" />Library Catalog</h1>
+                <Card>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Title</TableHead>
+                                    <TableHead>Author</TableHead>
+                                    <TableHead>Category</TableHead>
+                                    <TableHead className="text-right">Available</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {books.map((b: any) => (
+                                    <TableRow key={b.id}>
+                                        <TableCell className="max-w-xs truncate font-medium">
+                                            <Link href={route('library.books.show', b.id)} className="hover:text-blue-600 hover:underline">{b.title}</Link>
+                                        </TableCell>
+                                        <TableCell>{b.author ?? '—'}</TableCell>
+                                        <TableCell>{b.category?.name ?? '—'}</TableCell>
+                                        <TableCell className="text-right">
+                                            <span className={`font-bold ${b.available_copies > 0 ? 'text-green-600' : 'text-red-600'}`}>{b.available_copies}/{b.total_copies}</span>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {books.length === 0 && <TableRow><TableCell colSpan={4} className="py-8 text-center text-muted-foreground">No books found.</TableCell></TableRow>}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );

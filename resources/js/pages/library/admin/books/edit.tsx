@@ -1,108 +1,63 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import {
-    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Save } from 'lucide-react';
+
 import AppLayout from '@/layouts/app-layout';
-import { type PageProps } from '@/types';
-import { ArrowLeft, BookOpen, CheckCircle, XCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface Props extends PageProps {
-    book: {
-        id: number; isbn: string; title: string; author: string; publisher: string;
-        publication_year: number | null; edition: string | null; description: string | null;
-        category: { id: number; name: string } | null;
-        total_copies: number; available_copies: number;
-        shelf_location: string | null; is_active: boolean;
-    };
-    categories: { id: number; name: string }[];
-}
-
-export default function BookEdit({ book, categories }: Props) {
-    const [form, setForm] = useState({
-        isbn: book.isbn, title: book.title, author: book.author,
-        publisher: book.publisher ?? '', publication_year: book.publication_year?.toString() ?? '',
-        edition: book.edition ?? '', description: book.description ?? '',
-        category_id: book.category?.id?.toString() ?? '',
-        total_copies: book.total_copies.toString(),
-        available_copies: book.available_copies.toString(),
-        shelf_location: book.shelf_location ?? '', is_active: book.is_active,
+export default function BookEdit({ book, categories }: { book: any; categories: any[] }) {
+    const { data, setData, put, processing, errors } = useForm({
+        title: book.title, author: book.author ?? '', isbn: book.isbn ?? '', publisher: book.publisher ?? '',
+        publication_year: String(book.publication_year ?? ''), category_id: String(book.category_id ?? ''),
+        total_copies: String(book.total_copies), available_copies: String(book.available_copies),
+        description: book.description ?? '', is_active: book.is_active,
     });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.put(route('library.admin.books.update', book.id), form);
-    };
+    const submit = (e: React.FormEvent) => { e.preventDefault(); put(route('library.admin.books.update', book.id)); };
 
     return (
         <AppLayout>
-            <Head title={`Edit ${book.title}`} />
-            <div className="flex flex-col gap-6 p-6">
+            <Head title="Edit Book" />
+            <div className="space-y-6 p-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route('library.admin.books.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-5 w-5" /></Button></Link>
-                    <h1 className="text-2xl font-bold flex items-center gap-2"><BookOpen className="h-6 w-6" /> Edit: {book.title}</h1>
-                    <Badge variant={book.is_active ? 'secondary' : 'destructive'}>
-                        {book.is_active ? <><CheckCircle className="mr-1 h-3 w-3" /> Active</> : <><XCircle className="mr-1 h-3 w-3" /> Inactive</>}
-                    </Badge>
+                    <Link href={route('library.admin.books.index')}><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
+                    <h1 className="text-2xl font-bold">Edit Book</h1>
                 </div>
-
-                <Card>
+                <Card className="max-w-2xl">
                     <CardHeader><CardTitle>Book Details</CardTitle></CardHeader>
                     <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="isbn">ISBN *</Label>
-                                    <Input id="isbn" value={form.isbn} onChange={e => setForm(f => ({ ...f, isbn: e.target.value }))} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="category">Category</Label>
-                                    <Select value={form.category_id} onValueChange={v => setForm(f => ({ ...f, category_id: v }))}>
+                        <form onSubmit={submit} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div><Label>Title</Label><Input value={data.title} onChange={(e) => setData('title', e.target.value)} />{errors.title && <p className="text-sm text-red-600">{errors.title}</p>}</div>
+                                <div><Label>Author</Label><Input value={data.author} onChange={(e) => setData('author', e.target.value)} /></div>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div><Label>ISBN</Label><Input value={data.isbn} onChange={(e) => setData('isbn', e.target.value)} /></div>
+                                <div><Label>Publisher</Label><Input value={data.publisher} onChange={(e) => setData('publisher', e.target.value)} /></div>
+                                <div><Label>Year</Label><Input type="number" value={data.publication_year} onChange={(e) => setData('publication_year', e.target.value)} /></div>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div>
+                                    <Label>Category</Label>
+                                    <Select value={data.category_id} onValueChange={(v) => setData('category_id', v)}>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="">No Category</SelectItem>
-                                            {categories?.map(c => <SelectItem key={c.id} value={c.id.toString()}>{c.name}</SelectItem>)}
-                                        </SelectContent>
+                                        <SelectContent>{categories.map((c: any) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}</SelectContent>
                                     </Select>
                                 </div>
-                                <div className="md:col-span-2 space-y-2">
-                                    <Label htmlFor="title">Title *</Label>
-                                    <Input id="title" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="author">Author *</Label>
-                                    <Input id="author" value={form.author} onChange={e => setForm(f => ({ ...f, author: e.target.value }))} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="publisher">Publisher</Label>
-                                    <Input id="publisher" value={form.publisher} onChange={e => setForm(f => ({ ...f, publisher: e.target.value }))} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="total_copies">Total Copies *</Label>
-                                    <Input id="total_copies" type="number" min="1" value={form.total_copies} onChange={e => setForm(f => ({ ...f, total_copies: e.target.value }))} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="available_copies">Available Copies *</Label>
-                                    <Input id="available_copies" type="number" min="0" value={form.available_copies} onChange={e => setForm(f => ({ ...f, available_copies: e.target.value }))} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="shelf_location">Shelf Location</Label>
-                                    <Input id="shelf_location" value={form.shelf_location} onChange={e => setForm(f => ({ ...f, shelf_location: e.target.value }))} />
-                                </div>
-                                <div className="md:col-span-2 space-y-2">
-                                    <Label htmlFor="description">Description</Label>
-                                    <Textarea id="description" rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
-                                </div>
+                                <div><Label>Total Copies</Label><Input type="number" value={data.total_copies} onChange={(e) => setData('total_copies', e.target.value)} /></div>
+                                <div><Label>Available</Label><Input type="number" value={data.available_copies} onChange={(e) => setData('available_copies', e.target.value)} /></div>
                             </div>
-                            <div className="flex justify-end gap-4 pt-4">
-                                <Link href={route('library.admin.books.index')}><Button type="button" variant="outline">Cancel</Button></Link>
-                                <Button type="submit"><CheckCircle className="mr-2 h-4 w-4" /> Update Book</Button>
+                            <div><Label>Description</Label><Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} rows={3} /></div>
+                            <div className="flex items-center gap-2">
+                                <input type="checkbox" id="is_active" checked={data.is_active} onChange={(e) => setData('is_active', e.target.checked)} className="h-4 w-4 rounded border-gray-300" />
+                                <Label htmlFor="is_active">Active</Label>
+                            </div>
+                            <div className="flex gap-2">
+                                <Button type="submit" disabled={processing}><Save className="mr-2 h-4 w-4" /> Update</Button>
+                                <Link href={route('library.admin.books.index')}><Button variant="outline">Cancel</Button></Link>
                             </div>
                         </form>
                     </CardContent>
