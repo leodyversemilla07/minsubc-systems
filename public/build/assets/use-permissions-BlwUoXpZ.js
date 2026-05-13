@@ -1,0 +1,1 @@
+import{m as e}from"./app-DFiWVOci.js";function t(){let{auth:t}=e().props,n=t.permissions||[];return{can:e=>n.includes(e),canAny:e=>e.some(e=>n.includes(e)),canAll:e=>e.every(e=>n.includes(e)),permissions:n}}export{t};

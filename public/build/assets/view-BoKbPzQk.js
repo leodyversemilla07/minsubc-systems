@@ -1,0 +1,1 @@
+import{n as e,t}from"./jsx-runtime-DQh8jqAR.js";e();var n=t();function r(){return(0,n.jsx)(`div`,{className:`p-6`,children:(0,n.jsx)(`h1`,{className:`text-2xl font-bold`,children:`View`})})}export{r as default};

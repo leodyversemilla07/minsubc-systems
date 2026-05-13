@@ -1,1 +1,0 @@
-import{p as e,u as t}from"./jsx-runtime-DYhCm6LW.js";var n=e(t()),r=n.createContext(void 0);function i(){return n.useContext(r)?.direction??`ltr`}export{i as t};

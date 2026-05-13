@@ -1,1 +1,0 @@
-import{c as e}from"./jsx-runtime-DYhCm6LW.js";function t(){let{auth:t}=e().props,n=t.permissions||[];return{can:e=>n.includes(e),canAny:e=>e.some(e=>n.includes(e)),canAll:e=>e.every(e=>n.includes(e)),permissions:n}}export{t};

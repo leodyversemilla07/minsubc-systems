@@ -1,3 +1,4 @@
+import Research from './Research'
 import Accounting from './Accounting'
 import Admission from './Admission'
 import Curriculum from './Curriculum'
@@ -9,7 +10,8 @@ import SAS from './SAS'
 import USG from './USG'
 import VotingSystem from './VotingSystem'
 const Modules = {
-    Accounting: Object.assign(Accounting, Accounting),
+    Research: Object.assign(Research, Research),
+Accounting: Object.assign(Accounting, Accounting),
 Admission: Object.assign(Admission, Admission),
 Curriculum: Object.assign(Curriculum, Curriculum),
 Guidance: Object.assign(Guidance, Guidance),
