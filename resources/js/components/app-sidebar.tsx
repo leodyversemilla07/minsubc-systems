@@ -305,6 +305,47 @@ export function AppSidebar() {
             );
         }
 
+        // Alumni Admin Navigation
+        else if (hasAnyRole(['alumni-admin', 'alumni-staff'])) {
+            items.push(
+                {
+                    title: 'Alumni Dashboard',
+                    href: route('alumni.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Alumni',
+                    href: route('alumni.admin.alumni.index'),
+                    icon: Users,
+                },
+                {
+                    title: 'Events',
+                    href: route('alumni.admin.events.index'),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Donations',
+                    href: route('alumni.admin.donations.index'),
+                    icon: DollarSign,
+                },
+                {
+                    title: 'Employment Records',
+                    href: route('alumni.admin.employment-records.index'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Surveys',
+                    href: route('alumni.admin.surveys.index'),
+                    icon: FileText,
+                },
+                {
+                    title: 'Reports',
+                    href: route('alumni.admin.reports.index'),
+                    icon: BarChart3,
+                },
+            );
+        }
+
         // Registrar Navigation
         else if (
             hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
@@ -615,6 +656,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['research-admin', 'research-panelist', 'research-adviser'])) {
             return 'Research Management';
+        }
+        if (hasAnyRole(['alumni-admin', 'alumni-staff'])) {
+            return 'Alumni Management';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';
