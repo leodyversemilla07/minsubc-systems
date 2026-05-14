@@ -42,8 +42,10 @@ import {
     Star,
     Tags,
     Target,
+    Tool,
     Users,
     Vote,
+    Wrench,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -388,6 +390,37 @@ export function AppSidebar() {
                     title: 'Reports',
                     href: route('alumni.admin.reports.index'),
                     icon: BarChart3,
+                },
+            );
+        }
+
+        // Facilities Admin Navigation
+        else if (hasAnyRole(['facilities-admin', 'facilities-staff'])) {
+            items.push(
+                {
+                    title: 'Facilities Dashboard',
+                    href: route('facilities.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Facilities',
+                    href: route('facilities.admin.facilities.index'),
+                    icon: Building2,
+                },
+                {
+                    title: 'Equipment',
+                    href: route('facilities.admin.equipment.index'),
+                    icon: Tool,
+                },
+                {
+                    title: 'Reservations',
+                    href: route('facilities.admin.reservations.index'),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Maintenance',
+                    href: route('facilities.admin.maintenance.index'),
+                    icon: Wrench,
                 },
             );
         }

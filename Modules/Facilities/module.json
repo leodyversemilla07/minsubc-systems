@@ -1,0 +1,11 @@
+{
+    "name": "Facilities",
+    "alias": "facilities",
+    "description": "Facilities & Equipment Reservation Management",
+    "keywords": ["facilities", "rooms", "reservation", "equipment", "venue"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Facilities\\Providers\\FacilitiesServiceProvider"
+    ],
+    "files": []
+}
