@@ -305,6 +305,52 @@ export function AppSidebar() {
             );
         }
 
+        // Clinic Admin Navigation
+        else if (hasAnyRole(['clinic-admin', 'clinic-doctor', 'clinic-nurse'])) {
+            items.push(
+                {
+                    title: 'Clinic Dashboard',
+                    href: route('clinic.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Medical Records',
+                    href: route('clinic.admin.medical-records.index'),
+                    icon: Users,
+                },
+                {
+                    title: 'Consultations',
+                    href: route('clinic.admin.consultations.index'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Appointments',
+                    href: route('clinic.admin.appointments.index'),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Immunizations',
+                    href: route('clinic.admin.immunizations.index'),
+                    icon: Shield,
+                },
+                {
+                    title: 'Dental Records',
+                    href: route('clinic.admin.dental-records.index'),
+                    icon: Star,
+                },
+                {
+                    title: 'Physical Exams',
+                    href: route('clinic.admin.physical-exams.index'),
+                    icon: CheckSquare,
+                },
+                {
+                    title: 'Referrals',
+                    href: route('clinic.admin.referrals.index'),
+                    icon: Share2,
+                },
+            );
+        }
+
         // Alumni Admin Navigation
         else if (hasAnyRole(['alumni-admin', 'alumni-staff'])) {
             items.push(
@@ -656,6 +702,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['research-admin', 'research-panelist', 'research-adviser'])) {
             return 'Research Management';
+        }
+        if (hasAnyRole(['clinic-admin', 'clinic-doctor', 'clinic-nurse'])) {
+            return 'Clinic Management';
         }
         if (hasAnyRole(['alumni-admin', 'alumni-staff'])) {
             return 'Alumni Management';
