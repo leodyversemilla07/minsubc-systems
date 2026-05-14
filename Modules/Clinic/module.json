@@ -1,0 +1,11 @@
+{
+    "name": "Clinic",
+    "alias": "clinic",
+    "description": "Clinic & Health Services Management",
+    "keywords": ["clinic", "health", "medical", "consultation", "immunization", "dental"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Clinic\\Providers\\ClinicServiceProvider"
+    ],
+    "files": []
+}

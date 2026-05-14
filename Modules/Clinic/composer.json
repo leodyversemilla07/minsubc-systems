@@ -1,0 +1,21 @@
+{
+    "name": "Laravel",
+    "type": "library",
+    "description": "",
+    "require": {
+        "php": "^8.2",
+        "nwidart/laravel-modules": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Clinic\\": "app/",
+            "Modules\\Clinic\\Database\\Factories\\": "database/factories/",
+            "Modules\\Clinic\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": []
+        }
+    }
+}
