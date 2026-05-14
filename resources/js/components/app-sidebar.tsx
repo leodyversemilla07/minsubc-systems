@@ -42,7 +42,6 @@ import {
     Star,
     Tags,
     Target,
-    Tool,
     Users,
     Vote,
     Wrench,
@@ -410,7 +409,7 @@ export function AppSidebar() {
                 {
                     title: 'Equipment',
                     href: route('facilities.admin.equipment.index'),
-                    icon: Tool,
+                    icon: Wrench,
                 },
                 {
                     title: 'Reservations',

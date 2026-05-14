@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { Tool } from 'lucide-react';
+import { Wrench } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
