@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Alumni\app\Services;
+namespace Modules\Alumni\Services;
 
 use Modules\Alumni\Models\Alumnus;
 use Modules\Alumni\Models\AlumniEvent;
