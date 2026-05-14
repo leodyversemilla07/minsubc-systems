@@ -1,10 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { Activity, ArrowLeft } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Activity } from 'lucide-react';
-import AppLayout from '@/layouts/app-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export default function ConsultationsIndex({ consultations }: { consultations: any }) {
