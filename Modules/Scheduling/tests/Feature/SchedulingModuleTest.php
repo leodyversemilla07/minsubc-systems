@@ -8,10 +8,46 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    // Run Scheduling module migrations
-    $migrationPath = module_path('Scheduling', 'database/migrations');
-    if (is_dir($migrationPath)) {
-        $this->artisan('migrate', ['--path' => $migrationPath, '--force' => true]);
+    // Ensure Scheduling tables exist (handles fresh SQLite databases)
+    if (!Schema::hasTable('sch_events')) {
+        Schema::create('sch_events', function ($table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('event_type');
+            $table->dateTime('start_datetime');
+            $table->dateTime('end_datetime');
+            $table->boolean('all_day')->default(false);
+            $table->string('location')->nullable();
+            $table->foreignId('organizer_id')->constrained('users');
+            $table->string('color')->nullable();
+            $table->boolean('is_public')->default(true);
+            $table->string('status')->default('scheduled');
+            $table->string('recurrence_rule')->nullable();
+            $table->integer('max_participants')->nullable();
+            $table->timestamps();
+        });
+        Schema::create('sch_bookings', function ($table) {
+            $table->id();
+            $table->foreignId('event_id')->constrained('sch_events')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('status')->default('confirmed');
+            $table->text('notes')->nullable();
+            $table->dateTime('checked_in_at')->nullable();
+            $table->timestamps();
+            $table->unique(['event_id', 'user_id']);
+        });
+        Schema::create('sch_academic_schedules', function ($table) {
+            $table->id();
+            $table->string('academic_year');
+            $table->string('term');
+            $table->string('event_name');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->boolean('is_holiday')->default(false);
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
     }
     Role::firstOrCreate(['name' => 'scheduling-admin']);
     Role::firstOrCreate(['name' => 'scheduling-staff']);
