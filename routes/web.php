@@ -335,3 +335,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Research Module Routes (loaded directly to avoid provider config issue)
 require __DIR__ . '/../Modules/Research/routes/web.php';
+
+// Scheduling Module Routes (loaded directly for CI compatibility)
+require __DIR__ . '/../Modules/Scheduling/routes/web.php';

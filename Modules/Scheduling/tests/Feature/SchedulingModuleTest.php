@@ -114,20 +114,20 @@ test('can mark academic schedule as holiday', function () {
 test('can access admin dashboard', function () {
     $admin = User::factory()->create()->assignRole('scheduling-admin');
     $response = $this->actingAs($admin)
-        ->get(route('scheduling.admin.dashboard'));
+        ->get('/admin/scheduling/dashboard');
     expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
 });
 
 test('can list events', function () {
     $admin = User::factory()->create()->assignRole('scheduling-admin');
     $response = $this->actingAs($admin)
-        ->get(route('scheduling.admin.events.index'));
+        ->get('/admin/scheduling/events');
     expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
 });
 
 test('can list academic schedules', function () {
     $admin = User::factory()->create()->assignRole('scheduling-admin');
     $response = $this->actingAs($admin)
-        ->get(route('scheduling.admin.academic-schedules.index'));
+        ->get('/admin/scheduling/academic-schedules');
     expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
 });
