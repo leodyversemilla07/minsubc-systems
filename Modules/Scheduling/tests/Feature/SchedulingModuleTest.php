@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Modules\Scheduling\Models\CalendarEvent;
 use Modules\Scheduling\Models\Booking;
 use Modules\Scheduling\Models\AcademicSchedule;
@@ -7,6 +8,11 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
+    // Run Scheduling module migrations
+    $migrationPath = module_path('Scheduling', 'database/migrations');
+    if (is_dir($migrationPath)) {
+        $this->artisan('migrate', ['--path' => $migrationPath, '--force' => true]);
+    }
     Role::firstOrCreate(['name' => 'scheduling-admin']);
     Role::firstOrCreate(['name' => 'scheduling-staff']);
 });
