@@ -72,7 +72,16 @@
             "Modules\\USG\\Database\\Seeders\\": "Modules/USG/database/seeders/",
             "Modules\\VotingSystem\\": "Modules/VotingSystem/app/",
             "Modules\\VotingSystem\\Database\\Factories\\": "Modules/VotingSystem/database/factories/",
-            "Modules\\VotingSystem\\Database\\Seeders\\": "Modules/VotingSystem/database/seeders/"
+            "Modules\\VotingSystem\\Database\\Seeders\\": "Modules/VotingSystem/database/seeders/",
+            "Modules\\Scheduling\\": "Modules/Scheduling/app/",
+            "Modules\\Scheduling\\Database\\Factories\\": "Modules/Scheduling/database/factories/",
+            "Modules\\Scheduling\\Database\\Seeders\\": "Modules/Scheduling/database/seeders/",
+            "Modules\\Facilities\\": "Modules/Facilities/app/",
+            "Modules\\Facilities\\Database\\Factories\\": "Modules/Facilities/database/factories/",
+            "Modules\\Facilities\\Database\\Seeders\\": "Modules/Facilities/database/seeders/",
+            "Modules\\Discipline\\": "Modules/Discipline/app/",
+            "Modules\\Discipline\\Database\\Factories\\": "Modules/Discipline/database/factories/",
+            "Modules\\Discipline\\Database\\Seeders\\": "Modules/Discipline/database/seeders/"
         }
     },
     "autoload-dev": {
@@ -88,7 +97,10 @@
             "Modules\\Research\\Tests\\": "Modules/Research/tests/",
             "Modules\\SAS\\Tests\\": "Modules/SAS/tests/",
             "Modules\\USG\\Tests\\": "Modules/USG/tests/",
-            "Modules\\VotingSystem\\Tests\\": "Modules/VotingSystem/tests/"
+            "Modules\\VotingSystem\\Tests\\": "Modules/VotingSystem/tests/",
+            "Modules\\Scheduling\\Tests\\": "Modules/Scheduling/tests/",
+            "Modules\\Facilities\\Tests\\": "Modules/Facilities/tests/",
+            "Modules\\Discipline\\Tests\\": "Modules/Discipline/tests/"
         }
     },
     "scripts": {

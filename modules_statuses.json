@@ -12,5 +12,7 @@
     "Research": true,
     "Alumni": true,
     "Clinic": true,
-    "Facilities": true
+    "Facilities": true,
+    "Scheduling": true,
+    "Discipline": true
 }

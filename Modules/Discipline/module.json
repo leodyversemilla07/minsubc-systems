@@ -1,0 +1,11 @@
+{
+    "name": "Discipline",
+    "alias": "discipline",
+    "description": "Student Discipline & Conduct Management",
+    "keywords": ["discipline", "conduct", "offenses", "sanctions"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Discipline\\Providers\\DisciplineServiceProvider"
+    ],
+    "files": []
+}

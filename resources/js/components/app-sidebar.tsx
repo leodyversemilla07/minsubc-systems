@@ -446,6 +446,47 @@ export function AppSidebar() {
             );
         }
 
+        // Discipline Admin Navigation
+        else if (hasAnyRole(['discipline-admin', 'discipline-staff'])) {
+            items.push(
+                {
+                    title: 'Discipline Dashboard',
+                    href: route('discipline.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Offense Categories',
+                    href: route('discipline.admin.offense-categories.index'),
+                    icon: Tags,
+                },
+                {
+                    title: 'Offenses',
+                    href: route('discipline.admin.offenses.index'),
+                    icon: ListChecks,
+                },
+                {
+                    title: 'Incidents',
+                    href: route('discipline.admin.incidents.index'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Sanctions',
+                    href: route('discipline.admin.sanctions.index'),
+                    icon: Shield,
+                },
+                {
+                    title: 'Appeals',
+                    href: route('discipline.admin.appeals.index'),
+                    icon: RefreshCw,
+                },
+                {
+                    title: 'Reports',
+                    href: route('discipline.admin.reports.index'),
+                    icon: BarChart3,
+                },
+            );
+        }
+
         // Registrar Navigation
         else if (
             hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
@@ -765,6 +806,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['scheduling-admin', 'scheduling-staff'])) {
             return 'Scheduling';
+        }
+        if (hasAnyRole(['discipline-admin', 'discipline-staff'])) {
+            return 'Discipline Management';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

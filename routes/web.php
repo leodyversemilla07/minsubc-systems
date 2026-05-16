@@ -338,3 +338,6 @@ require __DIR__ . '/../Modules/Research/routes/web.php';
 
 // Scheduling Module Routes (loaded directly for CI compatibility)
 require __DIR__ . '/../Modules/Scheduling/routes/web.php';
+
+// Discipline Module Routes (loaded directly for CI compatibility)
+require __DIR__ . '/../Modules/Discipline/routes/web.php';
