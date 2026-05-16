@@ -1,0 +1,21 @@
+{
+    "name": "Laravel",
+    "type": "library",
+    "description": "",
+    "require": {
+        "php": "^8.2",
+        "nwidart/laravel-modules": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Scheduling\\": "app/",
+            "Modules\\Scheduling\\Database\\Factories\\": "database/factories/",
+            "Modules\\Scheduling\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": []
+        }
+    }
+}

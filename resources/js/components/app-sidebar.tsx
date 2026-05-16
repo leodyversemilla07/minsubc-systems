@@ -26,6 +26,7 @@ import {
     Building2,
     Calendar,
     CalendarCheck,
+    CalendarRange,
     CheckSquare,
     ClipboardList,
     Clock,
@@ -424,6 +425,27 @@ export function AppSidebar() {
             );
         }
 
+        // Scheduling Admin Navigation
+        else if (hasAnyRole(['scheduling-admin', 'scheduling-staff'])) {
+            items.push(
+                {
+                    title: 'Scheduling Dashboard',
+                    href: route('scheduling.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Events',
+                    href: route('scheduling.admin.events.index'),
+                    icon: Calendar,
+                },
+                {
+                    title: 'Academic Schedules',
+                    href: route('scheduling.admin.academic-schedules.index'),
+                    icon: CalendarRange,
+                },
+            );
+        }
+
         // Registrar Navigation
         else if (
             hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
@@ -740,6 +762,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['alumni-admin', 'alumni-staff'])) {
             return 'Alumni Management';
+        }
+        if (hasAnyRole(['scheduling-admin', 'scheduling-staff'])) {
+            return 'Scheduling';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

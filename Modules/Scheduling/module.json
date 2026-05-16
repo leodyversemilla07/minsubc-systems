@@ -1,0 +1,11 @@
+{
+    "name": "Scheduling",
+    "alias": "scheduling",
+    "description": "Centralized Scheduling & Calendar Management",
+    "keywords": ["scheduling", "calendar", "events", "booking"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Scheduling\\Providers\\SchedulingServiceProvider"
+    ],
+    "files": []
+}
