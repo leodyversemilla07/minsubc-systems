@@ -551,13 +551,20 @@ export function AppSidebar() {
 
         // Registrar Navigation
         else if (
-            hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
+            hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier', 'super-admin'])
         ) {
-            items.push({
-                title: 'Dashboard',
-                href: dashboard.url(),
-                icon: LayoutGrid,
-            });
+            items.push(
+                {
+                    title: 'Analytics',
+                    href: route('analytics.admin.dashboard'),
+                    icon: BarChart3,
+                },
+                {
+                    title: 'Dashboard',
+                    href: dashboard.url(),
+                    icon: LayoutGrid,
+                },
+            );
             if (hasAnyRole(['registrar-admin', 'super-admin'])) {
                 items.push({
                     title: 'Analytics',
@@ -877,6 +884,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['dormitory-admin', 'dormitory-warden'])) {
             return 'Dormitory';
+        }
+        if (hasAnyRole(['analytics-viewer'])) {
+            return 'Analytics';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

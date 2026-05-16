@@ -1,0 +1,17 @@
+{
+    "name": "ANALYTICS",
+    "type": "library",
+    "description": "Cross-module Analytics & Dashboard Module",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Analytics\\Providers\\AnalyticsServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Analytics\\": "app/"
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "name": "Analytics",
+    "alias": "analytics",
+    "description": "Cross-module Analytics Dashboard",
+    "priority": 0,
+    "providers": [
+        "Modules\\Analytics\\Providers\\AnalyticsServiceProvider"
+    ],
+    "files": []
+}

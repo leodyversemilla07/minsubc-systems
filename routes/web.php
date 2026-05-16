@@ -347,3 +347,6 @@ require __DIR__ . '/../Modules/Helpdesk/routes/web.php';
 
 // Dormitory Module Routes (loaded directly for CI compatibility)
 require __DIR__ . '/../Modules/Dormitory/routes/web.php';
+
+// Analytics Module Routes (loaded directly for CI compatibility)
+require __DIR__ . '/../Modules/Analytics/routes/web.php';
