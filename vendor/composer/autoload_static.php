@@ -277,6 +277,7 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             'Modules\\USG\\Database\\Seeders\\' => 29,
             'Modules\\USG\\Database\\Factories\\' => 31,
             'Modules\\USG\\' => 12,
+            'Modules\\Scheduling\\Tests\\' => 25,
             'Modules\\Scheduling\\Database\\Seeders\\' => 36,
             'Modules\\Scheduling\\Database\\Factories\\' => 38,
             'Modules\\Scheduling\\' => 19,
@@ -296,6 +297,10 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             'Modules\\Library\\Database\\Seeders\\' => 33,
             'Modules\\Library\\Database\\Factories\\' => 35,
             'Modules\\Library\\' => 16,
+            'Modules\\Helpdesk\\Tests\\' => 23,
+            'Modules\\Helpdesk\\Database\\Seeders\\' => 34,
+            'Modules\\Helpdesk\\Database\\Factories\\' => 36,
+            'Modules\\Helpdesk\\' => 17,
             'Modules\\HR\\Tests\\' => 17,
             'Modules\\HR\\Database\\Seeders\\' => 28,
             'Modules\\HR\\Database\\Factories\\' => 30,
@@ -304,9 +309,14 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             'Modules\\Guidance\\Database\\Seeders\\' => 34,
             'Modules\\Guidance\\Database\\Factories\\' => 36,
             'Modules\\Guidance\\' => 17,
+            'Modules\\Facilities\\Tests\\' => 25,
             'Modules\\Facilities\\Database\\Seeders\\' => 36,
             'Modules\\Facilities\\Database\\Factories\\' => 38,
             'Modules\\Facilities\\' => 19,
+            'Modules\\Discipline\\Tests\\' => 25,
+            'Modules\\Discipline\\Database\\Seeders\\' => 36,
+            'Modules\\Discipline\\Database\\Factories\\' => 38,
+            'Modules\\Discipline\\' => 19,
             'Modules\\Curriculum\\Tests\\' => 25,
             'Modules\\Curriculum\\Database\\Seeders\\' => 36,
             'Modules\\Curriculum\\Database\\Factories\\' => 38,
@@ -808,17 +818,24 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             0 => __DIR__ . '/../..' . '/Modules/USG/app',
             1 => __DIR__ . '/../..' . '/Modules/USG/app',
         ),
+        'Modules\\Scheduling\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Scheduling/tests',
+        ),
         'Modules\\Scheduling\\Database\\Seeders\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Scheduling/database/seeders',
+            1 => __DIR__ . '/../..' . '/Modules/Scheduling/database/seeders',
         ),
         'Modules\\Scheduling\\Database\\Factories\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Scheduling/database/factories',
+            1 => __DIR__ . '/../..' . '/Modules/Scheduling/database/factories',
         ),
         'Modules\\Scheduling\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Scheduling/app',
+            1 => __DIR__ . '/../..' . '/Modules/Scheduling/app',
         ),
         'Modules\\SAS\\Tests\\' =>
         array (
@@ -900,6 +917,25 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             0 => __DIR__ . '/../..' . '/Modules/Library/app',
             1 => __DIR__ . '/../..' . '/Modules/Library/app',
         ),
+        'Modules\\Helpdesk\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Helpdesk/tests',
+        ),
+        'Modules\\Helpdesk\\Database\\Seeders\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Helpdesk/database/seeders',
+            1 => __DIR__ . '/../..' . '/Modules/Helpdesk/database/seeders',
+        ),
+        'Modules\\Helpdesk\\Database\\Factories\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Helpdesk/database/factories',
+            1 => __DIR__ . '/../..' . '/Modules/Helpdesk/database/factories',
+        ),
+        'Modules\\Helpdesk\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Helpdesk/app',
+            1 => __DIR__ . '/../..' . '/Modules/Helpdesk/app',
+        ),
         'Modules\\HR\\Tests\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/HR/tests',
@@ -940,17 +976,43 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             0 => __DIR__ . '/../..' . '/Modules/Guidance/app',
             1 => __DIR__ . '/../..' . '/Modules/Guidance/app',
         ),
+        'Modules\\Facilities\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Facilities/tests',
+        ),
         'Modules\\Facilities\\Database\\Seeders\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Facilities/database/seeders',
+            1 => __DIR__ . '/../..' . '/Modules/Facilities/database/seeders',
         ),
         'Modules\\Facilities\\Database\\Factories\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Facilities/database/factories',
+            1 => __DIR__ . '/../..' . '/Modules/Facilities/database/factories',
         ),
         'Modules\\Facilities\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Facilities/app',
+            1 => __DIR__ . '/../..' . '/Modules/Facilities/app',
+        ),
+        'Modules\\Discipline\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Discipline/tests',
+        ),
+        'Modules\\Discipline\\Database\\Seeders\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Discipline/database/seeders',
+            1 => __DIR__ . '/../..' . '/Modules/Discipline/database/seeders',
+        ),
+        'Modules\\Discipline\\Database\\Factories\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Discipline/database/factories',
+            1 => __DIR__ . '/../..' . '/Modules/Discipline/database/factories',
+        ),
+        'Modules\\Discipline\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Discipline/app',
+            1 => __DIR__ . '/../..' . '/Modules/Discipline/app',
         ),
         'Modules\\Curriculum\\Tests\\' =>
         array (
@@ -6483,6 +6545,26 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
         'Modules\\Curriculum\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/Modules/Curriculum/app/Providers/EventServiceProvider.php',
         'Modules\\Curriculum\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Curriculum/app/Providers/RouteServiceProvider.php',
         'Modules\\Curriculum\\Services\\CurriculumService' => __DIR__ . '/../..' . '/Modules/Curriculum/app/Services/CurriculumService.php',
+        'Modules\\Discipline\\Database\\Factories\\IncidentFactory' => __DIR__ . '/../..' . '/Modules/Discipline/database/factories/IncidentFactory.php',
+        'Modules\\Discipline\\Database\\Factories\\OffenseCategoryFactory' => __DIR__ . '/../..' . '/Modules/Discipline/database/factories/OffenseCategoryFactory.php',
+        'Modules\\Discipline\\Database\\Factories\\OffenseFactory' => __DIR__ . '/../..' . '/Modules/Discipline/database/factories/OffenseFactory.php',
+        'Modules\\Discipline\\Database\\Factories\\SanctionFactory' => __DIR__ . '/../..' . '/Modules/Discipline/database/factories/SanctionFactory.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\AppealController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/AppealController.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/DashboardController.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\IncidentController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/IncidentController.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\OffenseCategoryController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/OffenseCategoryController.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\OffenseController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/OffenseController.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\ReportController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/ReportController.php',
+        'Modules\\Discipline\\Http\\Controllers\\Admin\\SanctionController' => __DIR__ . '/../..' . '/Modules/Discipline/app/Http/Controllers/Admin/SanctionController.php',
+        'Modules\\Discipline\\Models\\Appeal' => __DIR__ . '/../..' . '/Modules/Discipline/app/Models/Appeal.php',
+        'Modules\\Discipline\\Models\\Incident' => __DIR__ . '/../..' . '/Modules/Discipline/app/Models/Incident.php',
+        'Modules\\Discipline\\Models\\Offense' => __DIR__ . '/../..' . '/Modules/Discipline/app/Models/Offense.php',
+        'Modules\\Discipline\\Models\\OffenseCategory' => __DIR__ . '/../..' . '/Modules/Discipline/app/Models/OffenseCategory.php',
+        'Modules\\Discipline\\Models\\Sanction' => __DIR__ . '/../..' . '/Modules/Discipline/app/Models/Sanction.php',
+        'Modules\\Discipline\\Providers\\DisciplineServiceProvider' => __DIR__ . '/../..' . '/Modules/Discipline/app/Providers/DisciplineServiceProvider.php',
+        'Modules\\Discipline\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/Modules/Discipline/app/Providers/EventServiceProvider.php',
+        'Modules\\Discipline\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Discipline/app/Providers/RouteServiceProvider.php',
+        'Modules\\Discipline\\Services\\DisciplineService' => __DIR__ . '/../..' . '/Modules/Discipline/app/Services/DisciplineService.php',
         'Modules\\Facilities\\Database\\Factories\\EquipmentFactory' => __DIR__ . '/../..' . '/Modules/Facilities/database/factories/EquipmentFactory.php',
         'Modules\\Facilities\\Database\\Factories\\FacilityFactory' => __DIR__ . '/../..' . '/Modules/Facilities/database/factories/FacilityFactory.php',
         'Modules\\Facilities\\Database\\Factories\\ReservationFactory' => __DIR__ . '/../..' . '/Modules/Facilities/database/factories/ReservationFactory.php',
@@ -6563,6 +6645,20 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
         'Modules\\HR\\Providers\\HRServiceProvider' => __DIR__ . '/../..' . '/Modules/HR/app/Providers/HRServiceProvider.php',
         'Modules\\HR\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/HR/app/Providers/RouteServiceProvider.php',
         'Modules\\HR\\Services\\HRService' => __DIR__ . '/../..' . '/Modules/HR/app/Services/HRService.php',
+        'Modules\\Helpdesk\\Database\\Factories\\TicketCategoryFactory' => __DIR__ . '/../..' . '/Modules/Helpdesk/database/factories/TicketCategoryFactory.php',
+        'Modules\\Helpdesk\\Database\\Factories\\TicketCommentFactory' => __DIR__ . '/../..' . '/Modules/Helpdesk/database/factories/TicketCommentFactory.php',
+        'Modules\\Helpdesk\\Database\\Factories\\TicketFactory' => __DIR__ . '/../..' . '/Modules/Helpdesk/database/factories/TicketFactory.php',
+        'Modules\\Helpdesk\\Http\\Controllers\\Admin\\CategoryController' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Http/Controllers/Admin/CategoryController.php',
+        'Modules\\Helpdesk\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Http/Controllers/Admin/DashboardController.php',
+        'Modules\\Helpdesk\\Http\\Controllers\\Admin\\ReportController' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Http/Controllers/Admin/ReportController.php',
+        'Modules\\Helpdesk\\Http\\Controllers\\Admin\\TicketController' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Http/Controllers/Admin/TicketController.php',
+        'Modules\\Helpdesk\\Models\\Ticket' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Models/Ticket.php',
+        'Modules\\Helpdesk\\Models\\TicketCategory' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Models/TicketCategory.php',
+        'Modules\\Helpdesk\\Models\\TicketComment' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Models/TicketComment.php',
+        'Modules\\Helpdesk\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Providers/EventServiceProvider.php',
+        'Modules\\Helpdesk\\Providers\\HelpdeskServiceProvider' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Providers/HelpdeskServiceProvider.php',
+        'Modules\\Helpdesk\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Providers/RouteServiceProvider.php',
+        'Modules\\Helpdesk\\Services\\HelpdeskService' => __DIR__ . '/../..' . '/Modules/Helpdesk/app/Services/HelpdeskService.php',
         'Modules\\Library\\Database\\Factories\\BookBorrowingFactory' => __DIR__ . '/../..' . '/Modules/Library/database/factories/BookBorrowingFactory.php',
         'Modules\\Library\\Database\\Factories\\BookCategoryFactory' => __DIR__ . '/../..' . '/Modules/Library/database/factories/BookCategoryFactory.php',
         'Modules\\Library\\Database\\Factories\\BookFactory' => __DIR__ . '/../..' . '/Modules/Library/database/factories/BookFactory.php',
@@ -6748,6 +6844,9 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
         'Modules\\SAS\\Services\\ScholarshipRenewalService' => __DIR__ . '/../..' . '/Modules/SAS/app/Services/ScholarshipRenewalService.php',
         'Modules\\SAS\\Services\\ScholarshipReportService' => __DIR__ . '/../..' . '/Modules/SAS/app/Services/ScholarshipReportService.php',
         'Modules\\SAS\\Services\\ScholarshipService' => __DIR__ . '/../..' . '/Modules/SAS/app/Services/ScholarshipService.php',
+        'Modules\\Scheduling\\Database\\Factories\\AcademicScheduleFactory' => __DIR__ . '/../..' . '/Modules/Scheduling/database/factories/AcademicScheduleFactory.php',
+        'Modules\\Scheduling\\Database\\Factories\\BookingFactory' => __DIR__ . '/../..' . '/Modules/Scheduling/database/factories/BookingFactory.php',
+        'Modules\\Scheduling\\Database\\Factories\\CalendarEventFactory' => __DIR__ . '/../..' . '/Modules/Scheduling/database/factories/CalendarEventFactory.php',
         'Modules\\Scheduling\\Http\\Controllers\\Admin\\AcademicScheduleController' => __DIR__ . '/../..' . '/Modules/Scheduling/app/Http/Controllers/Admin/AcademicScheduleController.php',
         'Modules\\Scheduling\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/Modules/Scheduling/app/Http/Controllers/Admin/DashboardController.php',
         'Modules\\Scheduling\\Http\\Controllers\\Admin\\EventController' => __DIR__ . '/../..' . '/Modules/Scheduling/app/Http/Controllers/Admin/EventController.php',

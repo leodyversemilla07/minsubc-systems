@@ -81,7 +81,10 @@
             "Modules\\Facilities\\Database\\Seeders\\": "Modules/Facilities/database/seeders/",
             "Modules\\Discipline\\": "Modules/Discipline/app/",
             "Modules\\Discipline\\Database\\Factories\\": "Modules/Discipline/database/factories/",
-            "Modules\\Discipline\\Database\\Seeders\\": "Modules/Discipline/database/seeders/"
+            "Modules\\Discipline\\Database\\Seeders\\": "Modules/Discipline/database/seeders/",
+            "Modules\\Helpdesk\\": "Modules/Helpdesk/app/",
+            "Modules\\Helpdesk\\Database\\Factories\\": "Modules/Helpdesk/database/factories/",
+            "Modules\\Helpdesk\\Database\\Seeders\\": "Modules/Helpdesk/database/seeders/"
         }
     },
     "autoload-dev": {
@@ -100,7 +103,8 @@
             "Modules\\VotingSystem\\Tests\\": "Modules/VotingSystem/tests/",
             "Modules\\Scheduling\\Tests\\": "Modules/Scheduling/tests/",
             "Modules\\Facilities\\Tests\\": "Modules/Facilities/tests/",
-            "Modules\\Discipline\\Tests\\": "Modules/Discipline/tests/"
+            "Modules\\Discipline\\Tests\\": "Modules/Discipline/tests/",
+            "Modules\\Helpdesk\\Tests\\": "Modules/Helpdesk/tests/"
         }
     },
     "scripts": {

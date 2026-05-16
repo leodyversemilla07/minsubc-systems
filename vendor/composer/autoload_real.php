@@ -31,14 +31,6 @@ class ComposerAutoloaderInitfe63194705e4d8ec15a00e30757cd59b
         require __DIR__ . '/autoload_static.php';
         call_user_func(\Composer\Autoload\ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b::getInitializer($loader));
 
-        // Also load PSR-4 entries from autoload_psr4.php for modules not in static
-        $psr4Entries = require __DIR__ . '/autoload_psr4.php';
-        foreach ($psr4Entries as $prefix => $dirs) {
-            foreach ($dirs as $dir) {
-                $loader->addPsr4($prefix, $dir);
-            }
-        }
-
         $loader->register(true);
 
         $filesToLoad = \Composer\Autoload\ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b::$files;

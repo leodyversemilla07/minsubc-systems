@@ -487,6 +487,32 @@ export function AppSidebar() {
             );
         }
 
+        // Helpdesk Admin Navigation
+        else if (hasAnyRole(['helpdesk-admin', 'helpdesk-technician'])) {
+            items.push(
+                {
+                    title: 'Helpdesk Dashboard',
+                    href: route('helpdesk.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Support Tickets',
+                    href: route('helpdesk.admin.tickets.index'),
+                    icon: ClipboardList,
+                },
+                {
+                    title: 'Categories',
+                    href: route('helpdesk.admin.categories.index'),
+                    icon: Tags,
+                },
+                {
+                    title: 'Reports',
+                    href: route('helpdesk.admin.reports'),
+                    icon: BarChart3,
+                },
+            );
+        }
+
         // Registrar Navigation
         else if (
             hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
@@ -809,6 +835,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['discipline-admin', 'discipline-staff'])) {
             return 'Discipline Management';
+        }
+        if (hasAnyRole(['helpdesk-admin', 'helpdesk-technician'])) {
+            return 'Helpdesk';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

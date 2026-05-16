@@ -1,0 +1,24 @@
+{
+    "name": "HELPDESK",
+    "type": "library",
+    "description": "IT Helpdesk & Support Ticket Module",
+    "authors": [],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Helpdesk\\Providers\\HelpdeskServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Helpdesk\\": "app/",
+            "Modules\\Helpdesk\\Database\\Factories\\": "database/factories/",
+            "Modules\\Helpdesk\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "config": {
+        "name": "Helpdesk",
+        "description": "IT Helpdesk & Support Ticket Management"
+    }
+}
