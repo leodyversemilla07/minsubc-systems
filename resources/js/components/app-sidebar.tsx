@@ -513,6 +513,42 @@ export function AppSidebar() {
             );
         }
 
+        // Dormitory Admin Navigation
+        else if (hasAnyRole(['dormitory-admin', 'dormitory-warden'])) {
+            items.push(
+                {
+                    title: 'Dormitory Dashboard',
+                    href: route('dormitory.admin.dashboard'),
+                    icon: LayoutGrid,
+                },
+                {
+                    title: 'Halls',
+                    href: route('dormitory.admin.halls.index'),
+                    icon: Building2,
+                },
+                {
+                    title: 'Rooms',
+                    href: route('dormitory.admin.rooms.index'),
+                    icon: DoorOpen,
+                },
+                {
+                    title: 'Assignments',
+                    href: route('dormitory.admin.assignments.index'),
+                    icon: UserCheck,
+                },
+                {
+                    title: 'Maintenance',
+                    href: route('dormitory.admin.maintenance.index'),
+                    icon: Wrench,
+                },
+                {
+                    title: 'Reports',
+                    href: route('dormitory.admin.reports'),
+                    icon: BarChart3,
+                },
+            );
+        }
+
         // Registrar Navigation
         else if (
             hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])
@@ -838,6 +874,9 @@ export function AppSidebar() {
         }
         if (hasAnyRole(['helpdesk-admin', 'helpdesk-technician'])) {
             return 'Helpdesk';
+        }
+        if (hasAnyRole(['dormitory-admin', 'dormitory-warden'])) {
+            return 'Dormitory';
         }
         if (hasAnyRole(['registrar-staff', 'registrar-admin', 'cashier'])) {
             return 'Registrar';

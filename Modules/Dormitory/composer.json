@@ -1,0 +1,19 @@
+{
+    "name": "DORMITORY",
+    "type": "library",
+    "description": "Dormitory & Housing Management Module",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Dormitory\\Providers\\DormitoryServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Dormitory\\": "app/",
+            "Modules\\Dormitory\\Database\\Factories\\": "database/factories/",
+            "Modules\\Dormitory\\Database\\Seeders\\": "database/seeders/"
+        }
+    }
+}

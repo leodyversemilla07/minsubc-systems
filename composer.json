@@ -84,7 +84,10 @@
             "Modules\\Discipline\\Database\\Seeders\\": "Modules/Discipline/database/seeders/",
             "Modules\\Helpdesk\\": "Modules/Helpdesk/app/",
             "Modules\\Helpdesk\\Database\\Factories\\": "Modules/Helpdesk/database/factories/",
-            "Modules\\Helpdesk\\Database\\Seeders\\": "Modules/Helpdesk/database/seeders/"
+            "Modules\\Helpdesk\\Database\\Seeders\\": "Modules/Helpdesk/database/seeders/",
+            "Modules\\Dormitory\\": "Modules/Dormitory/app/",
+            "Modules\\Dormitory\\Database\\Factories\\": "Modules/Dormitory/database/factories/",
+            "Modules\\Dormitory\\Database\\Seeders\\": "Modules/Dormitory/database/seeders/"
         }
     },
     "autoload-dev": {
@@ -104,7 +107,8 @@
             "Modules\\Scheduling\\Tests\\": "Modules/Scheduling/tests/",
             "Modules\\Facilities\\Tests\\": "Modules/Facilities/tests/",
             "Modules\\Discipline\\Tests\\": "Modules/Discipline/tests/",
-            "Modules\\Helpdesk\\Tests\\": "Modules/Helpdesk/tests/"
+            "Modules\\Helpdesk\\Tests\\": "Modules/Helpdesk/tests/",
+            "Modules\\Dormitory\\Tests\\": "Modules/Dormitory/tests/"
         }
     },
     "scripts": {
