@@ -146,7 +146,8 @@ it('allows re-enrollment only when no current enrollment and term is open', func
 });
 
 it('returns enrollment history sorted by date', function () {
-    $historyEnrollment = Enrollment::create([
+    // Create an older enrollment with explicit timestamps
+    $oldEnrollment = Enrollment::create([
         'applicant_id' => $this->applicant->id,
         'user_id' => $this->student->id,
         'academic_term_id' => $this->term->id,
@@ -159,6 +160,7 @@ it('returns enrollment history sorted by date', function () {
         'confirmed_at' => now()->subYear(),
         'enrolled_at' => now()->subYear(),
         'created_at' => now()->subYear(),
+        'updated_at' => now()->subYear(),
     ]);
 
     $history = Enrollment::where('user_id', $this->student->id)
@@ -166,7 +168,9 @@ it('returns enrollment history sorted by date', function () {
         ->get();
 
     expect($history)->toHaveCount(2);
+    // Newer enrollment (setUp) should be first in desc order
     expect($history->first()->academic_year)->toBe('2025-2026');
+    expect($history->last()->academic_year)->toBe('2024-2025');
     expect($history->last()->academic_year)->toBe('2024-2025');
 });
 
