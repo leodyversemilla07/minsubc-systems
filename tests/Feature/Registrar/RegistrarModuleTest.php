@@ -39,7 +39,7 @@ test('admin can view students list', function () {
 test('admin can view analytics page', function () {
     $admin = User::factory()->create()->assignRole('registrar-admin');
 
-    $response = $this->actingAs($admin)->get(route('registrar.admin.analytics'));
+    $response = $this->actingAs($admin)->get('/admin/analytics');
     expect(in_array($response->status(), [200, 500]))->toBeTrue();
 });
 

@@ -141,7 +141,7 @@ it('returns analytics data via controller endpoint', function () {
     $this->admin->assignRole('registrar-admin');
 
     $response = $this->actingAs($this->admin)
-        ->get(route('registrar.admin.analytics'));
+        ->get('/admin/analytics');
 
     $response->assertSuccessful()
         ->assertInertia(
@@ -156,7 +156,7 @@ it('returns analytics JSON data for AJAX requests', function () {
     $this->admin->assignRole('registrar-admin');
 
     $response = $this->actingAs($this->admin)
-        ->get(route('registrar.admin.analytics.data', ['period' => 30]));
+        ->get('/admin/analytics/data?period=30');
 
     $response->assertSuccessful()
         ->assertJsonStructure([
@@ -166,7 +166,7 @@ it('returns analytics JSON data for AJAX requests', function () {
 });
 
 it('requires authentication to access analytics', function () {
-    $response = $this->get(route('registrar.admin.analytics'));
+    $response = $this->get('/admin/analytics');
 
     $response->assertRedirect(route('login'));
 });
