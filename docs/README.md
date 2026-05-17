@@ -1,6 +1,6 @@
-# MinSU BC Systems - Documentation
+# MinSU BC Systems — Documentation
 
-Quick links to help you find what you need.
+Quick links to find what you need.
 
 ---
 
@@ -8,19 +8,35 @@ Quick links to help you find what you need.
 
 | Doc | Description |
 |-----|-------------|
-| [README.md](../README.md) | Project overview and setup |
+| [README.md](../README.md) | Project overview, module list, setup |
+| [CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution guide, standards, testing |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture |
 
 ---
 
-## Modules
+## All Modules (19 Active)
 
-| Module | Spec File | Description |
-|--------|-----------|-------------|
-| **Registrar** | [DRS.md](DRS.md) | Document request system |
+| Module | Spec / Docs | Description |
+|--------|-------------|-------------|
+| **Registrar** | [DRS.md](DRS.md) | Student records, document requests, cashier |
+| **Admission** | — | Application, enrollment, grades, transcripts |
+| **SAS** | [SAS_SRS.md](SAS_SRS.md) | Student affairs, scholarships, insurance |
 | **USG** | [USG_INFORMATION_PORTAL_SRS.md](USG_INFORMATION_PORTAL_SRS.md) | Student government portal |
-| **SAS** | [SAS_SRS.md](SAS_SRS.md) | Student affairs services |
-| **Voting** | (in module) | Elections and voting |
+| **VotingSystem** | — | Elections, candidates, ballots, results |
+| **Library** | — | Books, borrowing, fines, reports |
+| **HR** | — | Employees, departments, attendance, leave |
+| **Accounting** | — | Fee items, assessments, invoices, payments |
+| **Guidance** | — | Counseling, appointments, assessments |
+| **Curriculum** | — | Programs, courses, syllabi, outcomes |
+| **Research** | — | Proposals, defenses, publications, journals |
+| **Alumni** | — | Alumni records, events, donations, surveys |
+| **Clinic** | — | Medical records, consultations, dental |
+| **Facilities** | — | Rooms, equipment, reservations, maintenance |
+| **Scheduling** | — | Events, bookings, academic schedules |
+| **Discipline** | — | Offenses, incidents, sanctions, appeals |
+| **Helpdesk** | — | Support tickets, categories, reports |
+| **Dormitory** | — | Halls, rooms, beds, assignments, maintenance |
+| **Analytics** | — | Cross-module dashboard, unified KPIs |
 
 ---
 
@@ -49,12 +65,33 @@ Quick links to help you find what you need.
 # Development
 composer run dev
 
-# Testing
+# Testing — all modules
 composer test
 
+# Testing — specific
+php vendor/bin/pest Modules/Library/tests/
+
 # Code quality
-vendor/bin/pint && npm run lint
+vendor/bin/pint
+npm run lint
+npm run format
+
+# Build
+npm run build
 ```
+
+---
+
+## Key Numbers
+
+| Metric | Count |
+|--------|:-----:|
+| Active modules | **19** |
+| React pages | **411** |
+| Passing tests | **949** |
+| Routes | **500+** |
+| DB tables | **100+** |
+| Roles | **24** |
 
 ---
 

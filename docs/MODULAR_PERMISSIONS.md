@@ -14,22 +14,25 @@ database/
     └── RolesAndPermissionsSeeder.php  # Core roles (Student, Super Admin)
 
 Modules/
-├── Registrar/
-│   └── database/
-│       └── seeders/
-│           └── RegistrarPermissionsSeeder.php
-├── USG/
-│   └── database/
-│       └── seeders/
-│           └── USGPermissionsSeeder.php
-├── SAS/
-│   └── database/
-│       └── seeders/
-│           └── SASPermissionsSeeder.php
-└── VotingSystem/
-    └── database/
-        └── seeders/
-            └── VotingSystemPermissionsSeeder.php
+├── Registrar/       → RegistrarPermissionsSeeder.php
+├── Admission/       → AdmissionPermissionsSeeder.php
+├── SAS/             → SASPermissionsSeeder.php
+├── USG/             → USGPermissionsSeeder.php
+├── VotingSystem/    → VotingSystemPermissionsSeeder.php
+├── Library/         → LibraryPermissionsSeeder.php
+├── HR/              → HRPermissionsSeeder.php
+├── Accounting/      → AccountingPermissionsSeeder.php
+├── Guidance/        → GuidancePermissionsSeeder.php
+├── Curriculum/      → CurriculumPermissionsSeeder.php
+├── Research/        → ResearchPermissionsSeeder.php
+├── Alumni/          → AlumniPermissionsSeeder.php
+├── Clinic/          → ClinicPermissionsSeeder.php
+├── Facilities/      → FacilitiesPermissionsSeeder.php
+├── Scheduling/      → SchedulingPermissionsSeeder.php
+├── Discipline/      → DisciplinePermissionsSeeder.php
+├── Helpdesk/        → HelpdeskPermissionsSeeder.php
+├── Dormitory/       → DormitoryPermissionsSeeder.php
+└── Analytics/       → (roles baked into Registrar permissions)
 ```
 
 ## Permission Naming Convention
@@ -165,6 +168,159 @@ Examples:
    - `voting.activity-logs.view`
    - `voting.feedback.view`
 
+### Library Module
+**Seeder:** `Modules/Library/Database/Seeders/LibraryPermissionsSeeder.php`
+
+**Roles:**
+1. **Library Admin**
+   - `library.books.view`, `library.books.create`, `library.books.edit`, `library.books.delete`
+   - `library.categories.view`, `library.categories.manage`
+   - `library.borrowings.view`, `library.borrowings.manage`
+   - `library.fines.view`, `library.fines.manage`
+   - `library.reports.view`
+
+2. **Library Staff**
+   - `library.books.view`, `library.books.create`, `library.books.edit`
+   - `library.categories.view`
+   - `library.borrowings.view`, `library.borrowings.manage`
+
+### HR Module
+**Seeder:** `Modules/HR/Database/Seeders/HRPermissionsSeeder.php`
+
+**Roles:**
+1. **HR Admin**
+   - `hr.employees.*`, `hr.departments.*`, `hr.positions.*`
+   - `hr.attendance.*`, `hr.leave.*`, `hr.evaluations.*`
+   - `hr.reports.view`
+
+2. **HR Staff**
+   - `hr.employees.view`, `hr.attendance.view`, `hr.leave.view`
+   - `hr.attendance.manage`, `hr.leave.manage`
+
+### Accounting Module
+**Seeder:** `Modules/Accounting/Database/Seeders/AccountingPermissionsSeeder.php`
+
+**Roles:**
+1. **Accounting Admin**
+   - `accounting.fee-categories.*`, `accounting.fee-items.*`
+   - `accounting.assessments.*`, `accounting.invoices.*`
+   - `accounting.payments.*`, `accounting.discounts.*`
+   - `accounting.journals.*`, `accounting.reports.*`
+
+2. **Accounting Staff**
+   - `accounting.assessments.view`, `accounting.invoices.view`
+   - `accounting.payments.manage`
+
+### Guidance Module
+**Seeder:** `Modules/Guidance/Database/Seeders/GuidancePermissionsSeeder.php`
+
+**Roles:**
+1. **Guidance Admin**
+   - `guidance.appointments.*`, `guidance.sessions.*`
+   - `guidance.assessments.*`, `guidance.referrals.*`
+   - `guidance.interventions.*`, `guidance.incidents.*`
+   - `guidance.counselors.*`, `guidance.reports.*`
+
+2. **Guidance Counselor**
+   - `guidance.appointments.view`, `guidance.sessions.manage`
+   - `guidance.assessments.view`, `guidance.referrals.manage`
+
+### Curriculum Module
+**Seeder:** `Modules/Curriculum/Database/Seeders/CurriculumPermissionsSeeder.php`
+
+**Roles:**
+1. **Curriculum Admin**
+   - `curriculum.programs.*`, `curriculum.courses.*`
+   - `curriculum.curricula.*`, `curriculum.syllabi.*`
+   - `curriculum.outcomes.*`, `curriculum.textbooks.*`
+   - `curriculum.reports.*`
+
+### Research Module
+**Seeder:** `Modules/Research/Database/Seeders/ResearchPermissionsSeeder.php`
+
+**Roles:**
+1. **Research Admin**
+   - `research.proposals.*`, `research.defenses.*`
+   - `research.publications.*`, `research.journals.*`
+   - `research.panels.*`, `research.types.*`
+   - `research.grades.*`, `research.reports.*`
+
+### Alumni Module
+**Seeder:** `Modules/Alumni/Database/Seeders/AlumniPermissionsSeeder.php`
+
+**Roles:**
+1. **Alumni Admin**
+   - `alumni.records.*`, `alumni.events.*`, `alumni.donations.*`
+   - `alumni.surveys.*`, `alumni.employment.*`
+   - `alumni.reports.*`
+
+### Clinic Module
+**Seeder:** `Modules/Clinic/Database/Seeders/ClinicPermissionsSeeder.php`
+
+**Roles:**
+1. **Clinic Admin**
+   - `clinic.medical-records.*`, `clinic.consultations.*`
+   - `clinic.dental.*`, `clinic.immunizations.*`
+   - `clinic.exams.*`, `clinic.appointments.*`
+   - `clinic.referrals.*`
+
+### Facilities Module
+**Seeder:** `Modules/Facilities/Database/Seeders/FacilitiesPermissionsSeeder.php`
+
+**Roles:**
+1. **Facilities Admin**
+   - `facilities.facilities.*`, `facilities.equipment.*`
+   - `facilities.reservations.*`, `facilities.maintenance.*`
+
+### Scheduling Module
+**Seeder:** `Modules/Scheduling/Database/Seeders/SchedulingPermissionsSeeder.php`
+
+**Roles:**
+1. **Scheduling Admin**
+   - `scheduling.events.*`, `scheduling.bookings.*`
+   - `scheduling.academic-schedules.*`
+
+### Discipline Module
+**Seeder:** `Modules/Discipline/Database/Seeders/DisciplinePermissionsSeeder.php`
+
+**Roles:**
+1. **Discipline Admin**
+   - `discipline.categories.*`, `discipline.offenses.*`
+   - `discipline.incidents.*`, `discipline.sanctions.*`
+   - `discipline.appeals.*`, `discipline.reports.*`
+
+2. **Discipline Staff**
+   - `discipline.incidents.view`, `discipline.incidents.report`
+   - `discipline.offenses.view`
+
+### Helpdesk Module
+**Seeder:** `Modules/Helpdesk/Database/Seeders/HelpdeskPermissionsSeeder.php`
+
+**Roles:**
+1. **Helpdesk Admin**
+   - `helpdesk.tickets.*`, `helpdesk.categories.*`
+   - `helpdesk.comments.*`, `helpdesk.reports.*`
+
+2. **Helpdesk Technician**
+   - `helpdesk.tickets.view`, `helpdesk.tickets.manage`
+   - `helpdesk.comments.create`
+
+### Dormitory Module
+**Seeder:** `Modules/Dormitory/Database/Seeders/DormitoryPermissionsSeeder.php`
+
+**Roles:**
+1. **Dormitory Admin**
+   - `dormitory.halls.*`, `dormitory.rooms.*`, `dormitory.beds.*`
+   - `dormitory.assignments.*`, `dormitory.maintenance.*`
+   - `dormitory.reports.*`
+
+2. **Dormitory Warden**
+   - `dormitory.rooms.view`, `dormitory.assignments.view`
+   - `dormitory.maintenance.manage`
+
+### Analytics Module
+**Roles baked into Registrar permissions.** The Analytics dashboard is accessible to `super-admin` and `registrar-admin` roles via sidebar. No separate role needed.
+
 ## Setup Instructions
 
 ### 1. Run All Permission Seeders
@@ -196,6 +352,45 @@ php artisan db:seed --class=Modules\\SAS\\Database\\Seeders\\SASPermissionsSeede
 
 # VotingSystem permissions
 php artisan db:seed --class=Modules\\VotingSystem\\Database\\Seeders\\VotingSystemPermissionsSeeder
+
+# Library permissions
+php artisan db:seed --class=Modules\\Library\\Database\\Seeders\\LibraryPermissionsSeeder
+
+# HR permissions
+php artisan db:seed --class=Modules\\HR\\Database\\Seeders\\HRPermissionsSeeder
+
+# Accounting permissions
+php artisan db:seed --class=Modules\\Accounting\\Database\\Seeders\\AccountingPermissionsSeeder
+
+# Guidance permissions
+php artisan db:seed --class=Modules\\Guidance\\Database\\Seeders\\GuidancePermissionsSeeder
+
+# Curriculum permissions
+php artisan db:seed --class=Modules\\Curriculum\\Database\\Seeders\\CurriculumPermissionsSeeder
+
+# Research permissions
+php artisan db:seed --class=Modules\\Research\\Database\\Seeders\\ResearchPermissionsSeeder
+
+# Alumni permissions
+php artisan db:seed --class=Modules\\Alumni\\Database\\Seeders\\AlumniPermissionsSeeder
+
+# Clinic permissions
+php artisan db:seed --class=Modules\\Clinic\\Database\\Seeders\\ClinicPermissionsSeeder
+
+# Facilities permissions
+php artisan db:seed --class=Modules\\Facilities\\Database\\Seeders\\FacilitiesPermissionsSeeder
+
+# Scheduling permissions
+php artisan db:seed --class=Modules\\Scheduling\\Database\\Seeders\\SchedulingPermissionsSeeder
+
+# Discipline permissions
+php artisan db:seed --class=Modules\\Discipline\\Database\\Seeders\\DisciplinePermissionsSeeder
+
+# Helpdesk permissions
+php artisan db:seed --class=Modules\\Helpdesk\\Database\\Seeders\\HelpdeskPermissionsSeeder
+
+# Dormitory permissions
+php artisan db:seed --class=Modules\\Dormitory\\Database\\Seeders\\DormitoryPermissionsSeeder
 ```
 
 ### 3. Assign Roles to Users
@@ -294,10 +489,24 @@ Add to `RolesAndPermissionsSeeder.php`:
 ```php
 $this->call([
     \Modules\Registrar\Database\Seeders\RegistrarPermissionsSeeder::class,
-    \Modules\USG\Database\Seeders\USGPermissionsSeeder::class,
+    \Modules\Admission\Database\Seeders\AdmissionPermissionsSeeder::class,
     \Modules\SAS\Database\Seeders\SASPermissionsSeeder::class,
+    \Modules\USG\Database\Seeders\USGPermissionsSeeder::class,
     \Modules\VotingSystem\Database\Seeders\VotingSystemPermissionsSeeder::class,
-    \Modules\YourModule\Database\Seeders\YourModulePermissionsSeeder::class, // Add here
+    \Modules\Library\Database\Seeders\LibraryPermissionsSeeder::class,
+    \Modules\HR\Database\Seeders\HRPermissionsSeeder::class,
+    \Modules\Accounting\Database\Seeders\AccountingPermissionsSeeder::class,
+    \Modules\Guidance\Database\Seeders\GuidancePermissionsSeeder::class,
+    \Modules\Curriculum\Database\Seeders\CurriculumPermissionsSeeder::class,
+    \Modules\Research\Database\Seeders\ResearchPermissionsSeeder::class,
+    \Modules\Alumni\Database\Seeders\AlumniPermissionsSeeder::class,
+    \Modules\Clinic\Database\Seeders\ClinicPermissionsSeeder::class,
+    \Modules\Facilities\Database\Seeders\FacilitiesPermissionsSeeder::class,
+    \Modules\Scheduling\Database\Seeders\SchedulingPermissionsSeeder::class,
+    \Modules\Discipline\Database\Seeders\DisciplinePermissionsSeeder::class,
+    \Modules\Helpdesk\Database\Seeders\HelpdeskPermissionsSeeder::class,
+    \Modules\Dormitory\Database\Seeders\DormitoryPermissionsSeeder::class,
+    \Modules\YourModule\Database\Seeders\YourModulePermissionsSeeder::class, // Add new modules here
 ]);
 ```
 
