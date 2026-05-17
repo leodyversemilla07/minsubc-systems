@@ -12,8 +12,21 @@ A modular campus management system built with Laravel 13, React 19, Inertia.js, 
 | **USG** | Announcements, events, documents, officers, resolutions | 18 React | 18 |
 | **VotingSystem** | Elections, candidates, ballots, results, analytics | 26 React | 41 |
 | **Library** | Books, categories, borrowing, fines, reports | 13 React | 37 |
+| **Accounting** | Assessments, fee categories, payments, discounts | 5 React | — |
+| **HR** | Employees, departments, leave, attendance, evaluations | 8 React | — |
+| **Guidance** | Counseling, appointments, assessments, incident reports | 10 React | — |
+| **Clinic** | Medical records, consultations, dental, immunizations | 8 React | — |
+| **Curriculum** | Programs, courses, syllabi, learning outcomes | 8 React | — |
+| **Research** | Proposals, defenses, journals, publications | 9 React | — |
+| **Facilities** | Equipment, reservations, maintenance | 5 React | — |
+| **Dormitory** | Halls, rooms, bed assignments, maintenance | 6 React | — |
+| **Helpdesk** | IT support tickets, assignments, comments | 6 React | — |
+| **Discipline** | Offenses, incidents, sanctions, appeals | 4 React | — |
+| **Scheduling** | Events, bookings, academic schedules | 6 React | — |
+| **Analytics** | Cross-module KPI dashboard with trends | 1 React | — |
+| **Alumni** | Alumni records and engagement | — | — |
 
-**Total: ~200+ tests | ~420 routes | 60+ React pages**
+**Total: ~250+ tests | 19 modules | ~130+ React pages**
 
 ## 🚀 Tech Stack
 
@@ -98,13 +111,20 @@ resources/js/
 │   └── admission/   # Module-specific components
 ├── layouts/          # App layouts
 ├── pages/            # Inertia page components
-│   ├── admission/
-│   ├── library/
-│   ├── registrar/
-│   ├── sas/
-│   ├── student/
-│   ├── usg/
-│   └── voting/
+│ ├── accounting/
+│ ├── admission/
+│ ├── clinic/
+│ ├── curriculum/
+│ ├── facilities/
+│ ├── guidance/
+│ ├── hr/
+│ ├── library/
+│ ├── registrar/
+│ ├── research/
+│ ├── sas/
+│ ├── student/
+│ ├── usg/
+│ └── voting/
 ├── routes/           # Wayfinder-generated route helpers
 └── types/            # TypeScript type definitions
 ```
@@ -134,4 +154,6 @@ GitHub Actions runs on every push:
 
 ## 📄 License
 
-MinSU BC Systems Platform &copy; 2026
+This project is licensed under the [MIT License](LICENSE).
+
+MinSU BC Systems Platform &copy; 2025-2026 Leodyver Semilla and contributors
