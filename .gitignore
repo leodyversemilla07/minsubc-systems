@@ -5,3 +5,38 @@ _ide_helper_models.php
 
 # Environment
 .env
+.env.backup
+.env.production
+
+# Composer
+composer.json.tmp
+/vendor
+
+# Node
+/node_modules
+
+# PHPUnit cache
+.phpunit.result.cache
+phpunit.xml
+
+# Laravel
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*.php
+
+# Module status (deployment-specific)
+modules_statuses.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+/public/build
+/public/hot
+
+# Temp/artifact files
+gatherMiddleware())
