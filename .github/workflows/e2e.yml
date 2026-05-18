@@ -32,19 +32,19 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
 
+      - name: Install PHP Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Copy Environment
-        run: |
-          cp .env.example .env
-          touch database/database.sqlite
+        run: cp .env.example .env
 
       - name: Generate Key
         run: php artisan key:generate
 
-      - name: Install PHP Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
       - name: Setup Database
-        run: php artisan migrate --force --seed --no-interaction
+        run: |
+          touch database/database.sqlite
+          php artisan migrate --force --seed --no-interaction
 
       - name: Build Assets
         run: npm run build
