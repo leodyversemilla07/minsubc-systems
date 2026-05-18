@@ -24,8 +24,8 @@ test.describe('Authentication', () => {
         await page.fill('input[name="password"]', 'wrongpassword');
         await page.click('button[type="submit"]');
         await page.waitForLoadState('networkidle');
-        // The error message could appear as an Inertia validation error or flash message
-        await expect(page.locator('[class*="error"], [role="alert"], .text-red-500, .text-destructive').first()).toBeVisible({ timeout: 10000 });
+        // The error message appears as an Inertia validation error
+        await expect(page.locator('p.text-red-600').first()).toBeVisible({ timeout: 10000 });
     });
 
     test('redirects authenticated users away from login', async ({ page }) => {
