@@ -313,6 +313,10 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             'Modules\\Facilities\\Database\\Seeders\\' => 36,
             'Modules\\Facilities\\Database\\Factories\\' => 38,
             'Modules\\Facilities\\' => 19,
+            'Modules\\Dormitory\\Tests\\' => 24,
+            'Modules\\Dormitory\\Database\\Seeders\\' => 35,
+            'Modules\\Dormitory\\Database\\Factories\\' => 37,
+            'Modules\\Dormitory\\' => 18,
             'Modules\\Discipline\\Tests\\' => 25,
             'Modules\\Discipline\\Database\\Seeders\\' => 36,
             'Modules\\Discipline\\Database\\Factories\\' => 38,
@@ -324,6 +328,8 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             'Modules\\Clinic\\Database\\Seeders\\' => 32,
             'Modules\\Clinic\\Database\\Factories\\' => 34,
             'Modules\\Clinic\\' => 15,
+            'Modules\\Analytics\\Tests\\' => 24,
+            'Modules\\Analytics\\' => 18,
             'Modules\\Alumni\\Database\\Seeders\\' => 32,
             'Modules\\Alumni\\Database\\Factories\\' => 34,
             'Modules\\Alumni\\' => 15,
@@ -995,6 +1001,25 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
             0 => __DIR__ . '/../..' . '/Modules/Facilities/app',
             1 => __DIR__ . '/../..' . '/Modules/Facilities/app',
         ),
+        'Modules\\Dormitory\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Dormitory/tests',
+        ),
+        'Modules\\Dormitory\\Database\\Seeders\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Dormitory/database/seeders',
+            1 => __DIR__ . '/../..' . '/Modules/Dormitory/database/seeders',
+        ),
+        'Modules\\Dormitory\\Database\\Factories\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories',
+            1 => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories',
+        ),
+        'Modules\\Dormitory\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Dormitory/app',
+            1 => __DIR__ . '/../..' . '/Modules/Dormitory/app',
+        ),
         'Modules\\Discipline\\Tests\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Discipline/tests',
@@ -1045,6 +1070,15 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
         'Modules\\Clinic\\' =>
         array (
             0 => __DIR__ . '/../..' . '/Modules/Clinic/app',
+        ),
+        'Modules\\Analytics\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Analytics/tests',
+        ),
+        'Modules\\Analytics\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/Modules/Analytics/app',
+            1 => __DIR__ . '/../..' . '/Modules/Analytics/app',
         ),
         'Modules\\Alumni\\Database\\Seeders\\' =>
         array (
@@ -6491,6 +6525,10 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
         'Modules\\Alumni\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/Modules/Alumni/app/Providers/EventServiceProvider.php',
         'Modules\\Alumni\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Alumni/app/Providers/RouteServiceProvider.php',
         'Modules\\Alumni\\Services\\AlumniService' => __DIR__ . '/../..' . '/Modules/Alumni/app/Services/AlumniService.php',
+        'Modules\\Analytics\\Http\\Controllers\\Admin\\AnalyticsController' => __DIR__ . '/../..' . '/Modules/Analytics/app/Http/Controllers/Admin/AnalyticsController.php',
+        'Modules\\Analytics\\Providers\\AnalyticsServiceProvider' => __DIR__ . '/../..' . '/Modules/Analytics/app/Providers/AnalyticsServiceProvider.php',
+        'Modules\\Analytics\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Analytics/app/Providers/RouteServiceProvider.php',
+        'Modules\\Analytics\\Services\\AnalyticsService' => __DIR__ . '/../..' . '/Modules/Analytics/app/Services/AnalyticsService.php',
         'Modules\\Clinic\\Database\\Factories\\ConsultationFactory' => __DIR__ . '/../..' . '/Modules/Clinic/database/factories/ConsultationFactory.php',
         'Modules\\Clinic\\Database\\Factories\\DentalRecordFactory' => __DIR__ . '/../..' . '/Modules/Clinic/database/factories/DentalRecordFactory.php',
         'Modules\\Clinic\\Database\\Factories\\ImmunizationFactory' => __DIR__ . '/../..' . '/Modules/Clinic/database/factories/ImmunizationFactory.php',
@@ -6565,6 +6603,26 @@ class ComposerStaticInitfe63194705e4d8ec15a00e30757cd59b
         'Modules\\Discipline\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/Modules/Discipline/app/Providers/EventServiceProvider.php',
         'Modules\\Discipline\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Discipline/app/Providers/RouteServiceProvider.php',
         'Modules\\Discipline\\Services\\DisciplineService' => __DIR__ . '/../..' . '/Modules/Discipline/app/Services/DisciplineService.php',
+        'Modules\\Dormitory\\Database\\Factories\\DormAssignmentFactory' => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories/DormAssignmentFactory.php',
+        'Modules\\Dormitory\\Database\\Factories\\DormBedFactory' => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories/DormBedFactory.php',
+        'Modules\\Dormitory\\Database\\Factories\\DormHallFactory' => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories/DormHallFactory.php',
+        'Modules\\Dormitory\\Database\\Factories\\DormMaintenanceFactory' => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories/DormMaintenanceFactory.php',
+        'Modules\\Dormitory\\Database\\Factories\\DormRoomFactory' => __DIR__ . '/../..' . '/Modules/Dormitory/database/factories/DormRoomFactory.php',
+        'Modules\\Dormitory\\Http\\Controllers\\Admin\\AssignmentController' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Http/Controllers/Admin/AssignmentController.php',
+        'Modules\\Dormitory\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Http/Controllers/Admin/DashboardController.php',
+        'Modules\\Dormitory\\Http\\Controllers\\Admin\\HallController' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Http/Controllers/Admin/HallController.php',
+        'Modules\\Dormitory\\Http\\Controllers\\Admin\\MaintenanceController' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Http/Controllers/Admin/MaintenanceController.php',
+        'Modules\\Dormitory\\Http\\Controllers\\Admin\\ReportController' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Http/Controllers/Admin/ReportController.php',
+        'Modules\\Dormitory\\Http\\Controllers\\Admin\\RoomController' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Http/Controllers/Admin/RoomController.php',
+        'Modules\\Dormitory\\Models\\DormAssignment' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Models/DormAssignment.php',
+        'Modules\\Dormitory\\Models\\DormBed' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Models/DormBed.php',
+        'Modules\\Dormitory\\Models\\DormHall' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Models/DormHall.php',
+        'Modules\\Dormitory\\Models\\DormMaintenanceRequest' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Models/DormMaintenanceRequest.php',
+        'Modules\\Dormitory\\Models\\DormRoom' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Models/DormRoom.php',
+        'Modules\\Dormitory\\Providers\\DormitoryServiceProvider' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Providers/DormitoryServiceProvider.php',
+        'Modules\\Dormitory\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Providers/EventServiceProvider.php',
+        'Modules\\Dormitory\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Providers/RouteServiceProvider.php',
+        'Modules\\Dormitory\\Services\\DormitoryService' => __DIR__ . '/../..' . '/Modules/Dormitory/app/Services/DormitoryService.php',
         'Modules\\Facilities\\Database\\Factories\\EquipmentFactory' => __DIR__ . '/../..' . '/Modules/Facilities/database/factories/EquipmentFactory.php',
         'Modules\\Facilities\\Database\\Factories\\FacilityFactory' => __DIR__ . '/../..' . '/Modules/Facilities/database/factories/FacilityFactory.php',
         'Modules\\Facilities\\Database\\Factories\\ReservationFactory' => __DIR__ . '/../..' . '/Modules/Facilities/database/factories/ReservationFactory.php',

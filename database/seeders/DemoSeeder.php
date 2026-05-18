@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Student;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +10,6 @@ use Illuminate\Support\Facades\Schema;
 
 class DemoSeeder extends Seeder
 {
-    private array $createdUserIds = [];
 
     public function run(): void
     {
@@ -70,97 +68,86 @@ class DemoSeeder extends Seeder
 
     private function seedUsers(): void
     {
-        // Super Admin
-        $superAdmin = User::factory()->create([
-            'name' => 'System Admin',
-            'email' => 'admin@minsubc.edu.ph',
-            'password' => Hash::make('password'),
-        ]);
-        $superAdmin->assignRole('super-admin');
-        $this->createdUserIds[] = $superAdmin->id;
-
-        // Registrar
-        $users = [
-            ['name' => 'Maria Santos', 'email' => 'registrar@minsubc.edu.ph', 'role' => 'registrar-admin'],
-            ['name' => 'Juan Cruz', 'email' => 'registrar.staff@minsubc.edu.ph', 'role' => 'registrar-staff'],
-            ['name' => 'Ana Reyes', 'email' => 'cashier@minsubc.edu.ph', 'role' => 'cashier'],
-        ];
-        foreach ($users as $u) {
+        $makeUser = function ($firstName, $lastName, $email, $role) {
             $user = User::factory()->create([
-                'name' => $u['name'],
-                'email' => $u['email'],
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $email,
                 'password' => Hash::make('password'),
             ]);
-            $user->assignRole($u['role']);
-            $this->createdUserIds[] = $user->id;
-        }
+            $user->assignRole($role);
+            return $user;
+        };
+
+        // Super Admin
+        $makeUser('System', 'Admin', 'admin@minsubc.edu.ph', 'super-admin');
+
+        // Registrar
+        $makeUser('Maria', 'Santos', 'registrar@minsubc.edu.ph', 'registrar-admin');
+        $makeUser('Juan', 'Cruz', 'registrar.staff@minsubc.edu.ph', 'registrar-staff');
+        $makeUser('Ana', 'Reyes', 'cashier@minsubc.edu.ph', 'cashier');
 
         // Admission
-        User::factory()->create(['name' => 'Pedro Lim', 'email' => 'admission@minsubc.edu.ph'])->assignRole('registrar-staff');
+        $makeUser('Pedro', 'Lim', 'admission@minsubc.edu.ph', 'registrar-staff');
 
         // Library
-        $libStaff = User::factory()->create(['name' => 'Luzviminda Gomez', 'email' => 'library@minsubc.edu.ph']);
-        $libStaff->assignRole('library-admin');
-        $this->createdUserIds[] = $libStaff->id;
-
-        User::factory()->create(['name' => 'Roberto Tan', 'email' => 'library.staff@minsubc.edu.ph'])->assignRole('library-staff');
+        $makeUser('Luzviminda', 'Gomez', 'library@minsubc.edu.ph', 'library-admin');
+        $makeUser('Roberto', 'Tan', 'library.staff@minsubc.edu.ph', 'library-staff');
 
         // HR
-        User::factory()->create(['name' => 'Cynthia Flores', 'email' => 'hr@minsubc.edu.ph'])->assignRole('hr-admin');
-        User::factory()->create(['name' => 'Mark Villanueva', 'email' => 'hr.staff@minsubc.edu.ph'])->assignRole('hr-staff');
+        $makeUser('Cynthia', 'Flores', 'hr@minsubc.edu.ph', 'hr-admin');
+        $makeUser('Mark', 'Villanueva', 'hr.staff@minsubc.edu.ph', 'hr-staff');
 
         // Accounting
-        User::factory()->create(['name' => 'Diana Mercado', 'email' => 'accounting@minsubc.edu.ph'])->assignRole('accounting-admin');
+        $makeUser('Diana', 'Mercado', 'accounting@minsubc.edu.ph', 'accounting-admin');
 
         // Guidance
-        User::factory()->create(['name' => 'Dr. Teresa Aquino', 'email' => 'guidance@minsubc.edu.ph'])->assignRole('guidance-admin');
-        User::factory()->create(['name' => 'Kevin Dela Cruz', 'email' => 'counselor@minsubc.edu.ph'])->assignRole('guidance-counselor');
+        $makeUser('Teresa', 'Aquino', 'guidance@minsubc.edu.ph', 'guidance-admin');
+        $makeUser('Kevin', 'Dela Cruz', 'counselor@minsubc.edu.ph', 'guidance-counselor');
 
         // Discipline
-        User::factory()->create(['name' => 'Col. Ricardo Santos', 'email' => 'discipline@minsubc.edu.ph'])->assignRole('discipline-admin');
-        User::factory()->create(['name' => 'Lt. Maria Rivera', 'email' => 'discipline.staff@minsubc.edu.ph'])->assignRole('discipline-staff');
+        $makeUser('Ricardo', 'Santos', 'discipline@minsubc.edu.ph', 'discipline-admin');
+        $makeUser('Maria', 'Rivera', 'discipline.staff@minsubc.edu.ph', 'discipline-staff');
 
         // Helpdesk
-        User::factory()->create(['name' => 'Paolo Garcia', 'email' => 'helpdesk@minsubc.edu.ph'])->assignRole('helpdesk-admin');
-        User::factory()->create(['name' => 'Jenny Morales', 'email' => 'tech@minsubc.edu.ph'])->assignRole('helpdesk-technician');
+        $makeUser('Paolo', 'Garcia', 'helpdesk@minsubc.edu.ph', 'helpdesk-admin');
+        $makeUser('Jenny', 'Morales', 'tech@minsubc.edu.ph', 'helpdesk-technician');
 
         // Dormitory
-        User::factory()->create(['name' => 'Ramon Castillo', 'email' => 'dormitory@minsubc.edu.ph'])->assignRole('dormitory-admin');
-        User::factory()->create(['name' => 'Grace Villar', 'email' => 'warden@minsubc.edu.ph'])->assignRole('dormitory-warden');
+        $makeUser('Ramon', 'Castillo', 'dormitory@minsubc.edu.ph', 'dormitory-admin');
+        $makeUser('Grace', 'Villar', 'warden@minsubc.edu.ph', 'dormitory-warden');
 
         // SAS
-        User::factory()->create(['name' => 'Angela Bautista', 'email' => 'sas@minsubc.edu.ph'])->assignRole('sas-admin');
-        User::factory()->create(['name' => 'Michael Sy', 'email' => 'sas.staff@minsubc.edu.ph'])->assignRole('sas-staff');
+        $makeUser('Angela', 'Bautista', 'sas@minsubc.edu.ph', 'sas-admin');
+        $makeUser('Michael', 'Sy', 'sas.staff@minsubc.edu.ph', 'sas-staff');
 
         // USG
-        User::factory()->create(['name' => 'Kyle Fernandez', 'email' => 'usg@minsubc.edu.ph'])->assignRole('usg-admin');
-        User::factory()->create(['name' => 'Sarah Lopez', 'email' => 'usg.officer@minsubc.edu.ph'])->assignRole('usg-officer');
+        $makeUser('Kyle', 'Fernandez', 'usg@minsubc.edu.ph', 'usg-admin');
+        $makeUser('Sarah', 'Lopez', 'usg.officer@minsubc.edu.ph', 'usg-officer');
 
         // Voting
-        User::factory()->create(['name' => 'Commissioner Reyes', 'email' => 'voting@minsubc.edu.ph'])->assignRole('voting-admin');
+        $makeUser('Reyes', 'Commissioner', 'voting@minsubc.edu.ph', 'voting-admin');
 
         // Clinic
-        User::factory()->create(['name' => 'Dr. Jose Rizal Jr.', 'email' => 'clinic@minsubc.edu.ph'])->assignRole('clinic-admin');
+        $makeUser('Jose', 'Rizal Jr.', 'clinic@minsubc.edu.ph', 'clinic-admin');
 
         // Curriculum
-        User::factory()->create(['name' => 'Dean Olivia Pascual', 'email' => 'curriculum@minsubc.edu.ph'])->assignRole('curriculum-admin');
+        $makeUser('Olivia', 'Pascual', 'curriculum@minsubc.edu.ph', 'curriculum-admin');
 
         // Research
-        User::factory()->create(['name' => 'Dr. Gregorio Santiago', 'email' => 'research@minsubc.edu.ph'])->assignRole('research-admin');
+        $makeUser('Gregorio', 'Santiago', 'research@minsubc.edu.ph', 'research-admin');
 
         // Facilities
-        User::factory()->create(['name' => 'Engineer Danilo Reyes', 'email' => 'facilities@minsubc.edu.ph'])->assignRole('facilities-admin');
+        $makeUser('Danilo', 'Reyes', 'facilities@minsubc.edu.ph', 'facilities-admin');
 
         // Scheduling
-        User::factory()->create(['name' => 'Martha Gonzales', 'email' => 'scheduling@minsubc.edu.ph'])->assignRole('scheduling-admin');
+        $makeUser('Martha', 'Gonzales', 'scheduling@minsubc.edu.ph', 'scheduling-admin');
 
         // Alumni
-        User::factory()->create(['name' => 'Bianca Navarro', 'email' => 'alumni@minsubc.edu.ph'])->assignRole('alumni-admin');
+        $makeUser('Bianca', 'Navarro', 'alumni@minsubc.edu.ph', 'alumni-admin');
 
         $this->command->info('  ✓ Users & roles');
     }
-
-    // ═══════════════════════════════════════════════════════════════
     // 2. ACADEMIC
     // ═══════════════════════════════════════════════════════════════
 
