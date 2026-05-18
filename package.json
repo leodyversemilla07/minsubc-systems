@@ -12,7 +12,9 @@
         "test": "php vendor/bin/pest",
         "test:admission": "php vendor/bin/pest tests/Admission/",
         "test:library": "php vendor/bin/pest tests/Library/",
-        "test:feature": "php vendor/bin/pest tests/Feature/"
+        "test:feature": "php vendor/bin/pest tests/Feature/",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",

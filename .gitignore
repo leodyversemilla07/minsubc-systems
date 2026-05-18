@@ -5,3 +5,6 @@ _ide_helper_models.php
 
 # Environment
 .env
+# Playwright
+playwright-report/
+test-results/
