@@ -4,6 +4,9 @@ import { login, SUPER_ADMIN, waitForInertia } from './helpers';
 test.describe('Global Search', () => {
     test.beforeEach(async ({ page }) => {
         await login(page, SUPER_ADMIN.email, SUPER_ADMIN.password);
+        await page.goto('/dashboard');
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1000);
     });
 
     test('opens command palette with Ctrl+K', async ({ page }) => {
@@ -43,6 +46,9 @@ test.describe('Global Search', () => {
 test.describe('Notifications', () => {
     test.beforeEach(async ({ page }) => {
         await login(page, SUPER_ADMIN.email, SUPER_ADMIN.password);
+        await page.goto('/dashboard');
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1000);
     });
 
     test('notification bell shows unread count', async ({ page }) => {
@@ -72,6 +78,9 @@ test.describe('Notifications', () => {
 test.describe('Dark Mode', () => {
     test.beforeEach(async ({ page }) => {
         await login(page, SUPER_ADMIN.email, SUPER_ADMIN.password);
+        await page.goto('/dashboard');
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(1000);
     });
 
     test('theme toggle button is visible', async ({ page }) => {
