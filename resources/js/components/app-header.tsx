@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import AppearanceToggleDropdown from '@/components/appearance-dropdown';
 import { GlobalSearch } from '@/components/global-search';
 import { Icon } from '@/components/icon';
 import { NotificationBell } from '@/components/notification-bell';
@@ -203,6 +204,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                     <div className="ml-auto flex items-center space-x-2">
                         <div className="relative flex items-center space-x-1">
                             <GlobalSearch />
+                            <AppearanceToggleDropdown />
                             <div className="hidden lg:flex">
                                 {rightNavItems.map((item) => (
                                     <TooltipProvider key={item.title} delay={0}>
