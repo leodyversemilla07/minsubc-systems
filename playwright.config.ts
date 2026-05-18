@@ -22,11 +22,11 @@ export default defineConfig({
         },
     ],
     webServer: process.env.CI
-        ? {
+        ? undefined
+        : {
               command: 'php artisan serve --port=8000 & npm run dev -- --port=5173',
               port: 8000,
               reuseExistingServer: false,
               timeout: 120000,
-          }
-        : undefined,
+          },
 });
