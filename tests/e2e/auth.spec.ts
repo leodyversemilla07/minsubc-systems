@@ -12,7 +12,9 @@ test.describe('Authentication', () => {
 
     test('logs in with valid credentials', async ({ page }) => {
         await login(page, STAFF.email, STAFF.password);
-        await expect(page.locator('h1').first()).toBeVisible({ timeout: 10000 });
+        // Check that we navigated away from login page
+        expect(page.url()).not.toContain('/login');
+        expect(page.url()).not.toContain('two-factor');
     });
 
     test('shows error with invalid credentials', async ({ page }) => {
@@ -30,8 +32,8 @@ test.describe('Authentication', () => {
         await login(page, STAFF.email, STAFF.password);
         await page.goto('/login');
         await page.waitForLoadState('networkidle');
-        const currentUrl = page.url();
-        expect(currentUrl).not.toContain('/login');
+        // Should be redirected away from login
+        expect(page.url()).not.toContain('/login');
     });
 });
 

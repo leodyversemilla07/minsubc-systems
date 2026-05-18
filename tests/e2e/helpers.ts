@@ -16,11 +16,15 @@ export const SUPER_ADMIN = {
 export async function login(page: Page, email: string, password: string) {
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
+    // Log the login page title for debugging
+    console.log('Login page title:', await page.title());
+    console.log('Login page URL:', page.url());
     await page.fill('input[name="email"]', email);
     await page.fill('input[name="password"]', password);
     await page.click('button[type="submit"]');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
+    console.log('After login URL:', page.url());
 }
 
 export async function assertPageLoaded(page: Page, urlPattern: RegExp) {
