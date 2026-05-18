@@ -350,3 +350,8 @@ require __DIR__ . '/../Modules/Dormitory/routes/web.php';
 
 // Analytics Module Routes (loaded directly for CI compatibility)
 require __DIR__ . '/../Modules/Analytics/routes/web.php';
+
+// Global Search
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/api/search', [\App\Http\Controllers\GlobalSearchController::class, 'search']);
+});
