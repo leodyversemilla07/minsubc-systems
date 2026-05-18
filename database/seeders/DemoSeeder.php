@@ -68,6 +68,29 @@ class DemoSeeder extends Seeder
 
     private function seedUsers(): void
     {
+        // Ensure all roles exist before assigning them
+        $roles = [
+            'super-admin', 'registrar-admin', 'registrar-staff', 'cashier',
+            'library-admin', 'library-staff', 'hr-admin', 'hr-staff',
+            'accounting-admin', 'guidance-admin', 'guidance-counselor',
+            'discipline-admin', 'discipline-staff', 'helpdesk-admin', 'helpdesk-technician',
+            'dormitory-admin', 'dormitory-warden',
+            'sas-admin', 'sas-staff', 'usg-admin', 'usg-officer',
+            'voting-admin', 'clinic-admin', 'curriculum-admin',
+            'research-admin', 'facilities-admin', 'scheduling-admin', 'alumni-admin',
+        ];
+        foreach ($roles as $role) {
+            \Spatie\Permission\Models\Role::firstOrCreate(['name' => $role]);
+        }
+
+        // Grant super-admin all permissions if not already done
+        $superAdminRole = \Spatie\Permission\Models\Role::where('name', 'super-admin')->first();
+        if ($superAdminRole && $superAdminRole->permissions()->count() === 0) {
+            $allPermissions = \Spatie\Permission\Models\Permission::pluck('name')->toArray();
+            // Give specific module permissions that need to be created first
+            $superAdminRole->givePermissionTo($allPermissions);
+        }
+
         $makeUser = function ($firstName, $lastName, $email, $role) {
             $user = User::factory()->create([
                 'first_name' => $firstName,
