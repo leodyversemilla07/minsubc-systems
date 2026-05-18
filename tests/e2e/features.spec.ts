@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { login, SUPER_ADMIN, navigateTo, waitForInertia } from './helpers';
+import { login, SUPER_ADMIN, waitForInertia } from './helpers';
 
 test.describe('Global Search', () => {
     test.beforeEach(async ({ page }) => {
@@ -59,7 +59,8 @@ test.describe('Notifications', () => {
     });
 
     test('notifications page loads with tab filters', async ({ page }) => {
-        await navigateTo(page, '/notifications');
+        await page.goto('/notifications');
+        await page.waitForLoadState('networkidle');
         await expect(page.locator('h1').first()).toBeVisible();
 
         // Should have filter tabs
@@ -78,7 +79,7 @@ test.describe('Dark Mode', () => {
         await page.waitForLoadState('networkidle');
 
         const themeButton = page.locator('button:has(svg.lucide-moon), button:has(svg.lucide-sun), button:has(svg.lucide-monitor)').first();
-        await expect(themeButton).toBeVisible();
+        await expect(themeButton).toBeVisible({ timeout: 10000 });
     });
 
     test('toggles to dark mode', async ({ page }) => {

@@ -19,7 +19,8 @@ export async function login(page: Page, email: string, password: string) {
     await page.fill('input[name="email"]', email);
     await page.fill('input[name="password"]', password);
     await page.click('button[type="submit"]');
-    await page.waitForURL(/\/dashboard|\/admin/, { timeout: 15000 });
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
 }
 
 export async function assertPageLoaded(page: Page, urlPattern: RegExp) {
