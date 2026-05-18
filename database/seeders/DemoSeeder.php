@@ -69,7 +69,7 @@ class DemoSeeder extends Seeder
     {
         try {
             $this->{$method}();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Throwable $e) {
             $this->command->warn("  ⚠ {$method} skipped: " . $e->getMessage());
         }
     }
