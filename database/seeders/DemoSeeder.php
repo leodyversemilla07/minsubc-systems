@@ -58,6 +58,9 @@ class DemoSeeder extends Seeder
         // ── 8. SUPPORT ─────────────────────────────────────────────
         $this->seedHelpdesk();
 
+        // ── 9. NOTIFICATIONS ───────────────────────────────────────
+        $this->seedNotifications();
+
         $this->command->info('✅ Demo seeding complete!');
     }
 
@@ -1127,5 +1130,54 @@ class DemoSeeder extends Seeder
             ]);
         }
         $this->command->info('  ✓ Helpdesk (categories, tickets)');
+    }
+
+    private function seedNotifications(): void
+    {
+        if (!Schema::hasTable('notifications')) return;
+
+        $admins = User::role(['super-admin', 'registrar-admin', 'helpdesk-admin', 'discipline-admin', 'dormitory-admin'])->get();
+        if ($admins->isEmpty()) return;
+
+        $notifications = [
+            ['title' => 'New Helpdesk Ticket', 'body' => 'A new support ticket has been opened by a student requiring attention.', 'module' => 'helpdesk', 'icon' => 'Ticket'],
+            ['title' => 'Discipline Incident Reported', 'body' => 'A new conduct incident has been reported and requires review.', 'module' => 'discipline', 'icon' => 'AlertTriangle'],
+            ['title' => 'Maintenance Request Submitted', 'body' => 'A dormitory maintenance request has been filed by a resident.', 'module' => 'dormitory', 'icon' => 'Wrench'],
+            ['title' => 'Payment Received', 'body' => 'A student payment has been processed successfully.', 'module' => 'accounting', 'icon' => 'Bell'],
+            ['title' => 'Overdue Book Return', 'body' => 'A borrowed book is now overdue and requires follow-up.', 'module' => 'library', 'icon' => 'BookOpen'],
+            ['title' => 'New Enrollment', 'body' => 'A new student has been enrolled for the current semester.', 'module' => 'admission', 'icon' => 'GraduationCap'],
+            ['title' => 'Counseling Session Scheduled', 'body' => 'A guidance counseling session has been booked.', 'module' => 'guidance', 'icon' => 'HeartPulse'],
+            ['title' => 'New USG Resolution', 'body' => 'A new resolution has been submitted for approval.', 'module' => 'usg', 'icon' => 'FileText'],
+            ['title' => 'Facility Reservation', 'body' => 'A new facility reservation request needs confirmation.', 'module' => 'facilities', 'icon' => 'Building2'],
+            ['title' => 'Election Period Starting', 'body' => 'The student election period is about to begin.', 'module' => 'voting', 'icon' => 'Vote'],
+        ];
+
+        foreach ($admins as $admin) {
+            foreach ($notifications as $i => $n) {
+                $createdAt = now()->subHours(rand(1, 72))->subMinutes(rand(0, 59));
+                $isRead = $i < 5;
+
+                DB::table('notifications')->insert([
+                    'id' => \Illuminate\Support\Str::uuid(),
+                    'type' => 'App\Notifications\ModuleNotification',
+                    'notifiable_type' => 'App\Models\User',
+                    'notifiable_id' => $admin->id,
+                    'data' => json_encode([
+                        'icon' => $n['icon'],
+                        'title' => $n['title'],
+                        'body' => $n['body'],
+                        'module' => $n['module'],
+                        'action_url' => null,
+                        'action_text' => null,
+                    ]),
+                    'read_at' => $isRead ? $createdAt : null,
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
+            }
+        }
+
+        $adminCount = $admins->count();
+        $this->command->info("  ✓ Notifications ({$adminCount} users × 10 notifications each)");
     }
 }

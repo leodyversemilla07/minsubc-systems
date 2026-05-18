@@ -326,6 +326,7 @@ Route::middleware(['auth', 'verified', 'permission:super_admin_access'])->prefix
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/api/notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+    Route::get('/api/notifications/recent', [App\Http\Controllers\NotificationController::class, 'recent'])->name('notifications.recent');
     Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
     Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 });
