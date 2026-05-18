@@ -16,50 +16,62 @@ class DemoSeeder extends Seeder
         $this->command->info('🌱 Seeding demo data for all 19 modules...');
 
         // ── 1. CORE USERS & ROLES ──────────────────────────────────
-        $this->seedUsers();
+        $this->seedWithCatch('seedUsers');
 
         // ── 2. ACADEMIC ────────────────────────────────────────────
-        $this->seedAcademicTerms();
-        $this->seedPrograms();
-        $this->seedCourses();
-        $this->seedStudents();
-        $this->seedSections();
-        $this->seedAdmissionSubjects();
-        $this->seedSchedules();
+        $this->seedWithCatch('seedAcademicTerms');
+        $this->seedWithCatch('seedPrograms');
+        $this->seedWithCatch('seedCourses');
+        $this->seedWithCatch('seedStudents');
+        $this->seedWithCatch('seedSections');
+        $this->seedWithCatch('seedAdmissionSubjects');
+        $this->seedWithCatch('seedSchedules');
 
         // ── 3. ENROLLMENT ──────────────────────────────────────────
-        $this->seedApplicants();
-        $this->seedEnrollments();
+        $this->seedWithCatch('seedApplicants');
+        $this->seedWithCatch('seedEnrollments');
 
         // ── 4. FINANCIAL ───────────────────────────────────────────
-        $this->seedAccounting();
+        $this->seedWithCatch('seedAccounting');
 
         // ── 5. OPERATIONS ──────────────────────────────────────────
-        $this->seedHR();
-        $this->seedLibrary();
-        $this->seedFacilities();
-        $this->seedDormitory();
+        $this->seedWithCatch('seedHR');
+        $this->seedWithCatch('seedLibrary');
+        $this->seedWithCatch('seedFacilities');
+        $this->seedWithCatch('seedDormitory');
 
         // ── 6. STUDENT SERVICES ────────────────────────────────────
-        $this->seedGuidance();
-        $this->seedDiscipline();
-        $this->seedClinic();
-        $this->seedCurriculum();
-        $this->seedResearch();
-        $this->seedAlumni();
+        $this->seedWithCatch('seedGuidance');
+        $this->seedWithCatch('seedDiscipline');
+        $this->seedWithCatch('seedClinic');
+        $this->seedWithCatch('seedCurriculum');
+        $this->seedWithCatch('seedResearch');
+        $this->seedWithCatch('seedAlumni');
 
         // ── 7. GOVERNANCE ──────────────────────────────────────────
-        $this->seedUSG();
-        $this->seedScheduling();
-        $this->seedVoting();
+        $this->seedWithCatch('seedUSG');
+        $this->seedWithCatch('seedScheduling');
+        $this->seedWithCatch('seedVoting');
 
         // ── 8. SUPPORT ─────────────────────────────────────────────
-        $this->seedHelpdesk();
+        $this->seedWithCatch('seedHelpdesk');
 
         // ── 9. NOTIFICATIONS ───────────────────────────────────────
-        $this->seedNotifications();
+        $this->seedWithCatch('seedNotifications');
 
         $this->command->info('✅ Demo seeding complete!');
+    }
+
+    /**
+     * Call a seed method and catch any database exceptions gracefully.
+     */
+    private function seedWithCatch(string $method): void
+    {
+        try {
+            $this->{$method}();
+        } catch (\Illuminate\Database\QueryException $e) {
+            $this->command->warn("  ⚠ {$method} skipped: " . $e->getMessage());
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -178,18 +190,28 @@ class DemoSeeder extends Seeder
     {
         if (!Schema::hasTable('academic_terms')) return;
 
-        $terms = ['1st Semester', '2nd Semester', 'Summer'];
+        $semesterLabels = ['1st', '2nd', 'Summer'];
         for ($sy = 2024; $sy <= 2026; $sy++) {
-            foreach ($terms as $i => $term) {
+            foreach ($semesterLabels as $i => $semester) {
+                $academicYear = "{$sy}-" . ($sy + 1);
+                $enrollmentStart = $i === 0 ? "{$sy}-07-01" : ($i === 1 ? ($sy+1) . "-12-01" : ($sy+1) . "-05-01");
+                $enrollmentEnd = $i === 0 ? "{$sy}-08-15" : ($i === 1 ? ($sy+1) . "-01-15" : ($sy+1) . "-06-15");
+                $classesStart = $i === 0 ? "{$sy}-08-01" : ($i === 1 ? ($sy+1) . "-01-01" : ($sy+1) . "-06-01");
+                $classesEnd = $i === 0 ? "{$sy}-12-20" : ($i === 1 ? ($sy+1) . "-05-15" : ($sy+1) . "-07-31");
+                $now = now();
+
                 DB::table('academic_terms')->insert([
-                    'name' => "AY {$sy}-" . ($sy + 1) . " - {$term}",
-                    'school_year' => "{$sy}-" . ($sy + 1),
-                    'semester' => $i + 1,
-                    'start_date' => $i === 0 ? "{$sy}-08-01" : ($i === 1 ? ($sy+1) . "-01-01" : ($sy+1) . "-06-01"),
-                    'end_date' => $i === 0 ? "{$sy}-12-20" : ($i === 1 ? ($sy+1) . "-05-15" : ($sy+1) . "-07-31"),
+                    'academic_year' => $academicYear,
+                    'semester' => $semester,
+                    'enrollment_start' => $enrollmentStart,
+                    'enrollment_end' => $enrollmentEnd,
+                    'classes_start' => $classesStart,
+                    'classes_end' => $classesEnd,
+                    'status' => ($sy === 2025 && $i === 0) ? 'enrollment' : 'upcoming',
                     'is_active' => ($sy === 2025 && $i === 0),
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'notes' => "AY {$academicYear} - {$semester} Semester",
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]);
             }
         }
