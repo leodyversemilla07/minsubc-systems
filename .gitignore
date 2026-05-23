@@ -8,3 +8,8 @@ _ide_helper_models.php
 # Playwright
 playwright-report/
 test-results/
+
+# Dependencies
+node_modules/
+vendor/
+node_modules/
