@@ -12,4 +12,6 @@ test-results/
 # Dependencies
 node_modules/
 vendor/
-node_modules/
+
+# Build outputs
+public/build/
