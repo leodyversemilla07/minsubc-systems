@@ -6,6 +6,10 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Modules\Registrar\Database\Seeders\RegistrarUsersSeeder;
+use Modules\SAS\Database\Seeders\SASUsersSeeder;
+use Modules\USG\Database\Seeders\USGUsersSeeder;
+use Modules\VotingSystem\Database\Seeders\VotingSystemUsersSeeder;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
@@ -15,6 +19,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        if (! app()->environment('local', 'development', 'testing')) {
+            $this->command?->warn('Demo users are only seeded in local, development, or testing environments.');
+
+            return;
+        }
+
         // Ensure required roles exist
         $requiredRoles = ['student', 'super-admin'];
 
@@ -189,10 +199,10 @@ class UserSeeder extends Seeder
 
         // Call module-specific user seeders
         $this->call([
-            \Modules\Registrar\Database\Seeders\RegistrarUsersSeeder::class,
-            \Modules\USG\Database\Seeders\USGUsersSeeder::class,
-            \Modules\SAS\Database\Seeders\SASUsersSeeder::class,
-            \Modules\VotingSystem\Database\Seeders\VotingSystemUsersSeeder::class,
+            RegistrarUsersSeeder::class,
+            USGUsersSeeder::class,
+            SASUsersSeeder::class,
+            VotingSystemUsersSeeder::class,
         ]);
 
         $this->command->info('');

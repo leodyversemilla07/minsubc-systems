@@ -1,14 +1,21 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+interface MedicalRecord {
+    id: number;
+    first_name: string;
+    last_name: string;
+    blood_type: string | null;
+    emergency_contact_name: string | null;
+    emergency_contact_phone: string | null;
+}
 
-export default function MedicalRecordEdit({ record }: { record: any }) {
-    const { data, setData, put, processing, errors } = useForm({
+export default function MedicalRecordEdit({ record }: { record: MedicalRecord }) {
+    const { data, setData, put, processing } = useForm({
         first_name: record.first_name, last_name: record.last_name,
         blood_type: record.blood_type ?? '',
         emergency_contact_name: record.emergency_contact_name ?? '',

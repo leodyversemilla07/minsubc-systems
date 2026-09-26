@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Facilities\Http\Controllers\Admin\DashboardController;
-use Modules\Facilities\Http\Controllers\Admin\FacilityController;
-use Modules\Facilities\Http\Controllers\Admin\ReservationController;
 use Modules\Facilities\Http\Controllers\Admin\EquipmentController;
+use Modules\Facilities\Http\Controllers\Admin\FacilityController;
 use Modules\Facilities\Http\Controllers\Admin\MaintenanceController;
+use Modules\Facilities\Http\Controllers\Admin\ReservationController;
 
-Route::prefix('admin/facilities')->name('facilities.admin.')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('admin/facilities')->name('facilities.admin.')->middleware(['web', 'auth', 'role:facilities-admin|facilities-staff|super-admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('facilities', FacilityController::class)->names([
         'index' => 'facilities.index',

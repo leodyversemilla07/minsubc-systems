@@ -1,14 +1,22 @@
-import { Head, Link, useForm } from '@inertiajs/react';
-import { Plus, ArrowLeft, Save, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { Plus, Users } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function AlumniIndex({ alumni }: { alumni: any }) {
+interface Alumnus {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    graduation_year: number | null;
+    degree_program: string | null;
+    is_employed: boolean;
+    is_verified: boolean;
+}
+
+export default function AlumniIndex({ alumni }: { alumni: { data: Alumnus[] } }) {
     return (
         <AppLayout>
             <Head title="Alumni" />
@@ -32,7 +40,7 @@ export default function AlumniIndex({ alumni }: { alumni: any }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {alumni.data?.map((a: any) => (
+                                {alumni.data?.map((a) => (
                                     <TableRow key={a.id}>
                                         <TableCell className="font-medium">{a.first_name} {a.last_name}</TableCell>
                                         <TableCell>{a.email}</TableCell>

@@ -1,0 +1,10 @@
+{
+    "name": "Dormitory",
+    "alias": "dormitory",
+    "description": "Dormitory & Housing Management Module",
+    "priority": 0,
+    "providers": [
+        "Modules\\Dormitory\\Providers\\DormitoryServiceProvider"
+    ],
+    "files": []
+}

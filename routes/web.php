@@ -1,10 +1,22 @@
 <?php
 
+use App\Http\Controllers\GlobalSearchController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Modules\Admission\Models\Enrollment;
+use Modules\Admission\Models\EnrollmentFee;
 use Modules\Registrar\Models\DocumentRequest;
+use Modules\SAS\Models\Insurance;
+use Modules\SAS\Models\OrganizationMember;
+use Modules\SAS\Models\ScholarshipRecipient;
+use Modules\USG\Models\Announcement;
+use Modules\USG\Models\Event;
+use Modules\USG\Models\Resolution;
+use Modules\VotingSystem\Models\Election;
+use Modules\VotingSystem\Models\Voter;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -105,7 +117,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         if ($user->id) {
             // Get scholarship recipients with details
-            $scholarshipRecipients = \Modules\SAS\Models\ScholarshipRecipient::with(['scholarship', 'requirements'])
+            $scholarshipRecipients = ScholarshipRecipient::with(['scholarship', 'requirements'])
                 ->where('student_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -113,10 +125,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $sasStats = [
                 'active_scholarships' => $scholarshipRecipients->where('status', 'Active')->count(),
                 'total_scholarships' => $scholarshipRecipients->count(),
-                'insurance_status' => \Modules\SAS\Models\Insurance::where('student_id', $user->id)
+                'insurance_status' => Insurance::where('student_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->value('status') ?? 'None',
-                'organizations_joined' => \Modules\SAS\Models\OrganizationMember::where('student_id', $user->id)
+                'organizations_joined' => OrganizationMember::where('student_id', $user->id)
                     ->where('status', 'Active')
                     ->count(),
             ];
@@ -145,7 +157,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             });
 
             // Get organization memberships
-            $orgMemberships = \Modules\SAS\Models\OrganizationMember::with('organization')
+            $orgMemberships = OrganizationMember::with('organization')
                 ->where('student_id', $user->id)
                 ->where('status', 'Active')
                 ->get();
@@ -162,7 +174,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             });
 
             // Get insurance record details
-            $insurance = \Modules\SAS\Models\Insurance::where('student_id', $user->id)
+            $insurance = Insurance::where('student_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -180,12 +192,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
 
         // USG Stats
-        $recentAnnouncements = \Modules\USG\Models\Announcement::published()
+        $recentAnnouncements = Announcement::published()
             ->orderBy('publish_date', 'desc')
             ->take(5)
             ->get(['id', 'title', 'slug', 'category', 'publish_date']);
 
-        $upcomingEvents = \Modules\USG\Models\Event::published()
+        $upcomingEvents = Event::published()
             ->upcoming()
             ->orderBy('start_date')
             ->take(5)
@@ -194,7 +206,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $usgStats = [
             'recent_announcements' => $recentAnnouncements->count(),
             'upcoming_events' => $upcomingEvents->count(),
-            'new_resolutions' => \Modules\USG\Models\Resolution::where('created_at', '>=', now()->subDays(30))->count(),
+            'new_resolutions' => Resolution::where('created_at', '>=', now()->subDays(30))->count(),
         ];
 
         // Voting Stats
@@ -206,8 +218,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ];
 
         // Check for active elections if VotingSystem module exists
-        if (class_exists(\Modules\VotingSystem\Models\Election::class)) {
-            $activeElection = \Modules\VotingSystem\Models\Election::where('status', true)
+        if (class_exists(Election::class)) {
+            $activeElection = Election::where('status', true)
                 ->where(function ($query) {
                     $query->whereNull('end_time')
                         ->orWhere('end_time', '>', now());
@@ -216,7 +228,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             if ($activeElection) {
                 // Check if user is a voter and has voted
-                $voter = \Modules\VotingSystem\Models\Voter::where('election_id', $activeElection->id)
+                $voter = Voter::where('election_id', $activeElection->id)
                     ->where('user_id', $user->id)
                     ->first();
 
@@ -232,8 +244,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Admission Enrollment
         $currentEnrollment = null;
         $pendingNotification = null;
-        if (class_exists(\Modules\Admission\Models\Enrollment::class)) {
-            $enrollment = \Modules\Admission\Models\Enrollment::where('user_id', $user->id)
+        if (class_exists(Enrollment::class)) {
+            $enrollment = Enrollment::where('user_id', $user->id)
                 ->whereIn('status', ['confirmed', 'enrolled'])
                 ->with(['section', 'subjects.subject', 'payments'])
                 ->orderBy('created_at', 'desc')
@@ -243,7 +255,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 $totalUnits = $enrollment->subjects->sum(fn ($es) => $es->subject?->units ?? 0);
                 $totalPaid = $enrollment->payments->where('status', 'verified')->sum('amount');
                 $totalFees = $enrollment->subjects->count() > 0
-                    ? \Modules\Admission\Models\EnrollmentFee::where('academic_term_id', $enrollment->academic_term_id)
+                    ? EnrollmentFee::where('academic_term_id', $enrollment->academic_term_id)
                         ->active()
                         ->get()
                         ->sum(fn ($fee) => $fee->calculateAmount($totalUnits, $enrollment->subjects->count()))
@@ -296,7 +308,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'upcomingEvents' => $upcomingEvents,
             'votingStats' => $votingStats,
             'currentEnrollment' => $currentEnrollment ?? null,
-            'hasPendingNotification' => !empty($pendingNotification),
+            'hasPendingNotification' => ! empty($pendingNotification),
         ]);
     })->name('dashboard');
 });
@@ -324,35 +336,17 @@ Route::middleware(['auth', 'verified', 'permission:super_admin_access'])->prefix
 
 // Notification Routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/api/notifications/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
-    Route::get('/api/notifications/recent', [App\Http\Controllers\NotificationController::class, 'recent'])->name('notifications.recent');
-    Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
-    Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/api/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+    Route::get('/api/notifications/recent', [NotificationController::class, 'recent'])->name('notifications.recent');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 });
 
-// Module routes are auto-loaded via their Service Providers
-// See Modules/*/app/Providers/*ServiceProvider.php
-
-// Research Module Routes (loaded directly to avoid provider config issue)
-require __DIR__ . '/../Modules/Research/routes/web.php';
-
-// Scheduling Module Routes (loaded directly for CI compatibility)
-require __DIR__ . '/../Modules/Scheduling/routes/web.php';
-
-// Discipline Module Routes (loaded directly for CI compatibility)
-require __DIR__ . '/../Modules/Discipline/routes/web.php';
-
-// Helpdesk Module Routes (loaded directly for CI compatibility)
-require __DIR__ . '/../Modules/Helpdesk/routes/web.php';
-
-// Dormitory Module Routes (loaded directly for CI compatibility)
-require __DIR__ . '/../Modules/Dormitory/routes/web.php';
-
-// Analytics Module Routes (loaded directly for CI compatibility)
-require __DIR__ . '/../Modules/Analytics/routes/web.php';
+// Module routes are loaded by their enabled module service providers.
+// See Modules/*/app/Providers/RouteServiceProvider.php.
 
 // Global Search
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/api/search', [\App\Http\Controllers\GlobalSearchController::class, 'search']);
+    Route::get('/api/search', [GlobalSearchController::class, 'search']);
 });

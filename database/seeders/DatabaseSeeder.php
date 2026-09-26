@@ -11,15 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Core setup (required for any environment)
-        $this->call([
-            RolesAndPermissionsSeeder::class,
-            UserSeeder::class,
-        ]);
+        $this->call(RolesAndPermissionsSeeder::class);
 
-        // Demo data (populates all 19 modules)
-        $this->call([
-            DemoSeeder::class,
-        ]);
+        // Never create accounts with published demo credentials outside development.
+        if (app()->environment('local', 'development', 'testing')) {
+            $this->call([UserSeeder::class, DemoSeeder::class]);
+        }
     }
 }

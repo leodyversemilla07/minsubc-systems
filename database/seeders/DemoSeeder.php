@@ -7,12 +7,20 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DemoSeeder extends Seeder
 {
-
     public function run(): void
     {
+        if (! app()->environment('local', 'development', 'testing')) {
+            $this->command?->warn('Demo data is only seeded in local, development, or testing environments.');
+
+            return;
+        }
+
         $this->command->info('🌱 Seeding demo data for all 19 modules...');
 
         // ── 1. CORE USERS & ROLES ──────────────────────────────────
@@ -70,7 +78,7 @@ class DemoSeeder extends Seeder
         try {
             $this->{$method}();
         } catch (\Throwable $e) {
-            $this->command->warn("  ⚠ {$method} skipped: " . $e->getMessage());
+            $this->command->warn("  ⚠ {$method} skipped: ".$e->getMessage());
         }
     }
 
@@ -92,13 +100,13 @@ class DemoSeeder extends Seeder
             'research-admin', 'facilities-admin', 'scheduling-admin', 'alumni-admin',
         ];
         foreach ($roles as $role) {
-            \Spatie\Permission\Models\Role::firstOrCreate(['name' => $role]);
+            Role::firstOrCreate(['name' => $role]);
         }
 
         // Grant super-admin all permissions if not already done
-        $superAdminRole = \Spatie\Permission\Models\Role::where('name', 'super-admin')->first();
+        $superAdminRole = Role::where('name', 'super-admin')->first();
         if ($superAdminRole && $superAdminRole->permissions()->count() === 0) {
-            $allPermissions = \Spatie\Permission\Models\Permission::pluck('name')->toArray();
+            $allPermissions = Permission::pluck('name')->toArray();
             // Give specific module permissions that need to be created first
             $superAdminRole->givePermissionTo($allPermissions);
         }
@@ -111,6 +119,7 @@ class DemoSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]);
             $user->assignRole($role);
+
             return $user;
         };
 
@@ -188,16 +197,18 @@ class DemoSeeder extends Seeder
 
     private function seedAcademicTerms(): void
     {
-        if (!Schema::hasTable('academic_terms')) return;
+        if (! Schema::hasTable('academic_terms')) {
+            return;
+        }
 
         $semesterLabels = ['1st', '2nd', 'Summer'];
         for ($sy = 2024; $sy <= 2026; $sy++) {
             foreach ($semesterLabels as $i => $semester) {
-                $academicYear = "{$sy}-" . ($sy + 1);
-                $enrollmentStart = $i === 0 ? "{$sy}-07-01" : ($i === 1 ? ($sy+1) . "-12-01" : ($sy+1) . "-05-01");
-                $enrollmentEnd = $i === 0 ? "{$sy}-08-15" : ($i === 1 ? ($sy+1) . "-01-15" : ($sy+1) . "-06-15");
-                $classesStart = $i === 0 ? "{$sy}-08-01" : ($i === 1 ? ($sy+1) . "-01-01" : ($sy+1) . "-06-01");
-                $classesEnd = $i === 0 ? "{$sy}-12-20" : ($i === 1 ? ($sy+1) . "-05-15" : ($sy+1) . "-07-31");
+                $academicYear = "{$sy}-".($sy + 1);
+                $enrollmentStart = $i === 0 ? "{$sy}-07-01" : ($i === 1 ? ($sy + 1).'-12-01' : ($sy + 1).'-05-01');
+                $enrollmentEnd = $i === 0 ? "{$sy}-08-15" : ($i === 1 ? ($sy + 1).'-01-15' : ($sy + 1).'-06-15');
+                $classesStart = $i === 0 ? "{$sy}-08-01" : ($i === 1 ? ($sy + 1).'-01-01' : ($sy + 1).'-06-01');
+                $classesEnd = $i === 0 ? "{$sy}-12-20" : ($i === 1 ? ($sy + 1).'-05-15' : ($sy + 1).'-07-31');
                 $now = now();
 
                 DB::table('academic_terms')->insert([
@@ -220,7 +231,9 @@ class DemoSeeder extends Seeder
 
     private function seedPrograms(): void
     {
-        if (!Schema::hasTable('cur_programs')) return;
+        if (! Schema::hasTable('cur_programs')) {
+            return;
+        }
 
         $programs = [
             ['code' => 'BSIT', 'name' => 'Bachelor of Science in Information Technology', 'years' => 4],
@@ -248,7 +261,9 @@ class DemoSeeder extends Seeder
 
     private function seedCourses(): void
     {
-        if (!Schema::hasTable('cur_courses')) return;
+        if (! Schema::hasTable('cur_courses')) {
+            return;
+        }
 
         $courses = [
             ['code' => 'IT101', 'name' => 'Introduction to Computing', 'units' => 3],
@@ -287,13 +302,15 @@ class DemoSeeder extends Seeder
 
     private function seedStudents(): void
     {
-        if (!Schema::hasTable('students')) return;
+        if (! Schema::hasTable('students')) {
+            return;
+        }
 
         $firstNames = ['Juan', 'Maria', 'Jose', 'Ana', 'Pedro', 'Rosa', 'Carlos', 'Elena', 'Miguel', 'Sofia',
-                        'Antonio', 'Carmen', 'Francisco', 'Isabella', 'Ramon', 'Luz', 'Manuel', 'Gloria', 'Jorge', 'Teresa'];
+            'Antonio', 'Carmen', 'Francisco', 'Isabella', 'Ramon', 'Luz', 'Manuel', 'Gloria', 'Jorge', 'Teresa'];
         $lastNames = ['Dela Cruz', 'Santos', 'Reyes', 'Bautista', 'Garcia', 'Mendoza', 'Flores', 'Gonzales',
-                       'Villanueva', 'Navarro', 'Lopez', 'Fernandez', 'Aquino', 'Castillo', 'Mercado', 'Rivera',
-                       'Gomez', 'Cruz', 'Tan', 'Lim'];
+            'Villanueva', 'Navarro', 'Lopez', 'Fernandez', 'Aquino', 'Castillo', 'Mercado', 'Rivera',
+            'Gomez', 'Cruz', 'Tan', 'Lim'];
 
         $yearLevels = [1, 1, 1, 2, 2, 2, 3, 3, 4, 4];
         $programIds = Schema::hasTable('cur_programs')
@@ -313,7 +330,7 @@ class DemoSeeder extends Seeder
                 'first_name' => $fn,
                 'last_name' => $ln,
                 'middle_name' => rand(0, 1) ? 'D.' : null,
-                'email' => strtolower($fn . '.' . $ln . $i . '@students.minsubc.edu.ph'),
+                'email' => strtolower($fn.'.'.$ln.$i.'@students.minsubc.edu.ph'),
                 'year_level' => $yearLevel,
                 'program_id' => $programId,
                 'status' => 'active',
@@ -327,7 +344,9 @@ class DemoSeeder extends Seeder
 
     private function seedSections(): void
     {
-        if (!Schema::hasTable('admission_sections')) return;
+        if (! Schema::hasTable('admission_sections')) {
+            return;
+        }
 
         $programs = DB::table('cur_programs')->get();
         foreach ($programs as $prog) {
@@ -349,7 +368,9 @@ class DemoSeeder extends Seeder
 
     private function seedAdmissionSubjects(): void
     {
-        if (!Schema::hasTable('admission_subjects')) return;
+        if (! Schema::hasTable('admission_subjects')) {
+            return;
+        }
         // Use curriculum courses as admission subjects
         if (Schema::hasTable('cur_courses')) {
             $courses = DB::table('cur_courses')->get();
@@ -368,7 +389,9 @@ class DemoSeeder extends Seeder
 
     private function seedSchedules(): void
     {
-        if (!Schema::hasTable('admission_schedules')) return;
+        if (! Schema::hasTable('admission_schedules')) {
+            return;
+        }
 
         $sections = DB::table('admission_sections')->get();
         $subjects = DB::table('admission_subjects')->get();
@@ -393,7 +416,7 @@ class DemoSeeder extends Seeder
                     'day' => $day,
                     'time_start' => $time['start'],
                     'time_end' => $time['end'],
-                    'room' => 'RM-' . str_pad((string)rand(101, 320), 3, '0', STR_PAD_LEFT),
+                    'room' => 'RM-'.str_pad((string) rand(101, 320), 3, '0', STR_PAD_LEFT),
                     'instructor' => fake()->name(),
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -409,7 +432,9 @@ class DemoSeeder extends Seeder
 
     private function seedApplicants(): void
     {
-        if (!Schema::hasTable('admission_applicants')) return;
+        if (! Schema::hasTable('admission_applicants')) {
+            return;
+        }
 
         $students = DB::table('students')->take(50)->get();
         $programs = DB::table('cur_programs')->get();
@@ -432,7 +457,9 @@ class DemoSeeder extends Seeder
 
     private function seedEnrollments(): void
     {
-        if (!Schema::hasTable('admission_enrollments')) return;
+        if (! Schema::hasTable('admission_enrollments')) {
+            return;
+        }
 
         $students = DB::table('students')->take(60)->get();
         $sections = DB::table('admission_sections')->get();
@@ -459,8 +486,9 @@ class DemoSeeder extends Seeder
 
     private function seedAccounting(): void
     {
-        if (!Schema::hasTable('acc_fee_categories')) {
+        if (! Schema::hasTable('acc_fee_categories')) {
             $this->command->info('  ⚡ Skipping Accounting (tables not found)');
+
             return;
         }
 
@@ -514,7 +542,7 @@ class DemoSeeder extends Seeder
             $totalAmount = rand(12, 21) * 350 + 3650; // ~12-21 units + misc
             DB::table('acc_invoices')->insert([
                 'student_id' => $student->student_id,
-                'invoice_number' => 'INV-' . date('Y') . '-' . str_pad((string)rand(1, 9999), 4, '0', STR_PAD_LEFT),
+                'invoice_number' => 'INV-'.date('Y').'-'.str_pad((string) rand(1, 9999), 4, '0', STR_PAD_LEFT),
                 'total_amount' => $totalAmount,
                 'status' => ['pending', 'paid', 'partially_paid', 'overdue'][array_rand(['pending', 'paid', 'paid', 'pending'])],
                 'due_date' => now()->addDays(rand(-30, 60)),
@@ -530,7 +558,7 @@ class DemoSeeder extends Seeder
                 'invoice_id' => $invoice->id,
                 'amount' => $invoice->total_amount,
                 'payment_method' => ['gcash', 'bank_transfer', 'cash', 'card'][array_rand(['gcash', 'bank_transfer', 'cash', 'card'])],
-                'reference_number' => 'PAY-' . date('Y') . str_pad((string)rand(1, 9999), 4, '0', STR_PAD_LEFT),
+                'reference_number' => 'PAY-'.date('Y').str_pad((string) rand(1, 9999), 4, '0', STR_PAD_LEFT),
                 'status' => 'completed',
                 'paid_at' => now()->subDays(rand(1, 30)),
                 'created_at' => now()->subDays(rand(1, 30)),
@@ -547,13 +575,15 @@ class DemoSeeder extends Seeder
 
     private function seedHR(): void
     {
-        if (!Schema::hasTable('hr_departments')) return;
+        if (! Schema::hasTable('hr_departments')) {
+            return;
+        }
 
         $depts = ['Registrar', 'Finance', 'Human Resources', 'Academic Affairs', 'Student Affairs',
-                   'Library', 'IT Services', 'Guidance Office', 'Clinic', 'Maintenance'];
+            'Library', 'IT Services', 'Guidance Office', 'Clinic', 'Maintenance'];
         foreach ($depts as $d) {
             DB::table('hr_departments')->insert([
-                'name' => $d . ' Department',
+                'name' => $d.' Department',
                 'code' => strtoupper(substr($d, 0, 3)),
                 'is_active' => true,
                 'created_at' => now(),
@@ -561,7 +591,9 @@ class DemoSeeder extends Seeder
             ]);
         }
 
-        if (!Schema::hasTable('hr_employees')) return;
+        if (! Schema::hasTable('hr_employees')) {
+            return;
+        }
         $departments = DB::table('hr_departments')->get();
         $positions = ['Professor', 'Instructor', 'Staff', 'Administrative Officer', 'Clerk', 'Director', 'Dean'];
         $empFirstNames = ['Antonio', 'Beatriz', 'Carlos', 'Diana', 'Eduardo', 'Fe', 'Gregorio', 'Helen'];
@@ -569,7 +601,7 @@ class DemoSeeder extends Seeder
 
         for ($i = 1; $i <= 25; $i++) {
             DB::table('hr_employees')->insert([
-                'employee_number' => 'EMP-' . str_pad((string)$i, 4, '0', STR_PAD_LEFT),
+                'employee_number' => 'EMP-'.str_pad((string) $i, 4, '0', STR_PAD_LEFT),
                 'first_name' => $empFirstNames[array_rand($empFirstNames)],
                 'last_name' => $empLastNames[array_rand($empLastNames)],
                 'email' => "employee{$i}@minsubc.edu.ph",
@@ -586,10 +618,12 @@ class DemoSeeder extends Seeder
 
     private function seedLibrary(): void
     {
-        if (!Schema::hasTable('book_categories')) return;
+        if (! Schema::hasTable('book_categories')) {
+            return;
+        }
 
         $cats = ['Fiction', 'Non-Fiction', 'Reference', 'Textbook', 'Science', 'Technology',
-                  'Engineering', 'Mathematics', 'Filipiniana', 'Periodicals'];
+            'Engineering', 'Mathematics', 'Filipiniana', 'Periodicals'];
         foreach ($cats as $cat) {
             DB::table('book_categories')->insert([
                 'name' => $cat,
@@ -599,7 +633,9 @@ class DemoSeeder extends Seeder
             ]);
         }
 
-        if (!Schema::hasTable('books')) return;
+        if (! Schema::hasTable('books')) {
+            return;
+        }
         $categories = DB::table('book_categories')->get();
         $bookTitles = [
             ['title' => 'Introduction to Algorithms', 'author' => 'Thomas H. Cormen'],
@@ -627,7 +663,7 @@ class DemoSeeder extends Seeder
             DB::table('books')->insert([
                 'title' => $book['title'],
                 'author' => $book['author'],
-                'isbn' => '978-' . rand(1, 9) . '-' . rand(10, 99) . '-' . rand(100000, 999999) . '-' . rand(0, 9),
+                'isbn' => '978-'.rand(1, 9).'-'.rand(10, 99).'-'.rand(100000, 999999).'-'.rand(0, 9),
                 'book_category_id' => $categories->random()->id,
                 'quantity' => rand(2, 10),
                 'available_quantity' => rand(0, 5),
@@ -641,7 +677,9 @@ class DemoSeeder extends Seeder
 
     private function seedFacilities(): void
     {
-        if (!Schema::hasTable('fac_facilities')) return;
+        if (! Schema::hasTable('fac_facilities')) {
+            return;
+        }
 
         $facilities = [
             ['name' => 'Main Lecture Hall', 'capacity' => 200, 'type' => 'lecture_hall'],
@@ -668,9 +706,11 @@ class DemoSeeder extends Seeder
         }
 
         // Equipment
-        if (!Schema::hasTable('fac_equipment')) return;
+        if (! Schema::hasTable('fac_equipment')) {
+            return;
+        }
         $equipment = ['Projector', 'Laptop', 'Speaker System', 'Microphone', 'Whiteboard',
-                       'Document Camera', 'TV Monitor', 'Sound Mixer', 'Extension Cord', 'Tripod'];
+            'Document Camera', 'TV Monitor', 'Sound Mixer', 'Extension Cord', 'Tripod'];
         foreach ($equipment as $eq) {
             DB::table('fac_equipment')->insert([
                 'name' => $eq,
@@ -687,7 +727,9 @@ class DemoSeeder extends Seeder
 
     private function seedDormitory(): void
     {
-        if (!Schema::hasTable('drm_halls')) return;
+        if (! Schema::hasTable('drm_halls')) {
+            return;
+        }
 
         $halls = [
             ['name' => 'Rizal Hall', 'gender' => 'male', 'floors' => 4],
@@ -708,7 +750,9 @@ class DemoSeeder extends Seeder
         }
 
         // Rooms & beds
-        if (!Schema::hasTable('drm_rooms') || !Schema::hasTable('drm_beds')) return;
+        if (! Schema::hasTable('drm_rooms') || ! Schema::hasTable('drm_beds')) {
+            return;
+        }
         $halls = DB::table('drm_halls')->get();
         $roomTypes = ['suite', 'standard', 'economy'];
         foreach ($halls as $hall) {
@@ -719,7 +763,7 @@ class DemoSeeder extends Seeder
                     $capacity = $type === 'suite' ? 2 : ($type === 'standard' ? 4 : 6);
                     DB::table('drm_rooms')->insert([
                         'dorm_hall_id' => $hall->id,
-                        'room_number' => (string)$roomNum,
+                        'room_number' => (string) $roomNum,
                         'room_type' => $type,
                         'capacity' => $capacity,
                         'floor' => $floor,
@@ -751,11 +795,13 @@ class DemoSeeder extends Seeder
 
     private function seedGuidance(): void
     {
-        if (!Schema::hasTable('gdn_counseling_sessions')) return;
+        if (! Schema::hasTable('gdn_counseling_sessions')) {
+            return;
+        }
 
         $students = DB::table('students')->get();
         $purposes = ['Academic Concern', 'Personal Issue', 'Career Guidance', 'Family Matter',
-                      'Stress Management', 'Peer Relationship', 'Mental Health', 'Academic Performance'];
+            'Stress Management', 'Peer Relationship', 'Mental Health', 'Academic Performance'];
         for ($i = 0; $i < 30; $i++) {
             $student = $students->random();
             $status = ['pending', 'completed', 'cancelled'][array_rand(['pending', 'completed', 'completed', 'pending'])];
@@ -774,7 +820,9 @@ class DemoSeeder extends Seeder
 
     private function seedDiscipline(): void
     {
-        if (!Schema::hasTable('dsc_offense_categories')) return;
+        if (! Schema::hasTable('dsc_offense_categories')) {
+            return;
+        }
 
         $categories = [
             ['name' => 'Academic Dishonesty', 'description' => 'Cheating, plagiarism, etc.', 'severity' => 'major'],
@@ -795,7 +843,9 @@ class DemoSeeder extends Seeder
         }
 
         // Offenses
-        if (!Schema::hasTable('dsc_offenses')) return;
+        if (! Schema::hasTable('dsc_offenses')) {
+            return;
+        }
         $cats = DB::table('dsc_offense_categories')->get();
         $offenses = [
             ['name' => 'Cheating during exam', 'penalty' => 'Warning + re-exam'],
@@ -818,7 +868,9 @@ class DemoSeeder extends Seeder
         }
 
         // Incidents
-        if (!Schema::hasTable('dsc_incidents') || !Schema::hasTable('students')) return;
+        if (! Schema::hasTable('dsc_incidents') || ! Schema::hasTable('students')) {
+            return;
+        }
         $students = DB::table('students')->take(20)->get();
         $offenseList = DB::table('dsc_offenses')->get();
         foreach ($students as $student) {
@@ -838,11 +890,13 @@ class DemoSeeder extends Seeder
 
     private function seedClinic(): void
     {
-        if (!Schema::hasTable('cls_medical_records') || !Schema::hasTable('students')) return;
+        if (! Schema::hasTable('cls_medical_records') || ! Schema::hasTable('students')) {
+            return;
+        }
 
         $students = DB::table('students')->take(30)->get();
         $conditions = ['Headache', 'Fever', 'Cough & Colds', 'Stomach Ache', 'Minor Injury',
-                        'Allergy', 'Dizziness', 'Sore Throat', 'Skin Rash', 'Eye Irritation'];
+            'Allergy', 'Dizziness', 'Sore Throat', 'Skin Rash', 'Eye Irritation'];
         foreach ($students as $student) {
             DB::table('cls_medical_records')->insert([
                 'student_id' => $student->student_id,
@@ -859,7 +913,9 @@ class DemoSeeder extends Seeder
 
     private function seedCurriculum(): void
     {
-        if (!Schema::hasTable('cur_syllabi')) return;
+        if (! Schema::hasTable('cur_syllabi')) {
+            return;
+        }
 
         $courses = DB::table('cur_courses')->get();
         $instructors = ['Prof. Santos', 'Dr. Cruz', 'Mr. Reyes', 'Ms. Bautista', 'Dr. Mercado'];
@@ -880,7 +936,9 @@ class DemoSeeder extends Seeder
 
     private function seedResearch(): void
     {
-        if (!Schema::hasTable('res_proposals')) return;
+        if (! Schema::hasTable('res_proposals')) {
+            return;
+        }
 
         $students = DB::table('students')->take(15)->get();
         $titles = [
@@ -909,7 +967,9 @@ class DemoSeeder extends Seeder
 
     private function seedAlumni(): void
     {
-        if (!Schema::hasTable('alm_alumni')) return;
+        if (! Schema::hasTable('alm_alumni')) {
+            return;
+        }
 
         $firstNames = ['Juan', 'Maria', 'Jose', 'Ana', 'Pedro', 'Rosa', 'Carlos', 'Elena'];
         $lastNames = ['Dela Cruz', 'Santos', 'Reyes', 'Bautista', 'Garcia', 'Mendoza', 'Flores'];
@@ -939,7 +999,9 @@ class DemoSeeder extends Seeder
 
     private function seedUSG(): void
     {
-        if (!Schema::hasTable('officers')) return;
+        if (! Schema::hasTable('officers')) {
+            return;
+        }
 
         $positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor', 'PIO', 'PRO'];
         $firstNames = ['Kyle', 'Sarah', 'Mark', 'Angel', 'Paolo', 'Jen', 'Ramon', 'Grace'];
@@ -947,7 +1009,7 @@ class DemoSeeder extends Seeder
 
         foreach ($positions as $pos) {
             DB::table('officers')->insert([
-                'name' => $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)],
+                'name' => $firstNames[array_rand($firstNames)].' '.$lastNames[array_rand($lastNames)],
                 'position' => $pos,
                 'term_start' => '2025-08-01',
                 'term_end' => '2026-05-31',
@@ -958,7 +1020,9 @@ class DemoSeeder extends Seeder
         }
 
         // Resolutions
-        if (!Schema::hasTable('resolutions')) return;
+        if (! Schema::hasTable('resolutions')) {
+            return;
+        }
         $resolutions = [
             'A Resolution Supporting the Digital Transformation Initiative',
             'A Resolution Establishing the Student Welfare Committee',
@@ -969,7 +1033,7 @@ class DemoSeeder extends Seeder
         ];
         foreach ($resolutions as $res) {
             DB::table('resolutions')->insert([
-                'resolution_number' => 'SRN-2025-' . str_pad((string)rand(1, 99), 2, '0', STR_PAD_LEFT),
+                'resolution_number' => 'SRN-2025-'.str_pad((string) rand(1, 99), 2, '0', STR_PAD_LEFT),
                 'title' => $res,
                 'author' => 'USG Officers',
                 'status' => ['draft', 'approved', 'adopted'][array_rand(['draft', 'approved', 'adopted'])],
@@ -979,7 +1043,9 @@ class DemoSeeder extends Seeder
         }
 
         // Announcements
-        if (!Schema::hasTable('announcements')) return;
+        if (! Schema::hasTable('announcements')) {
+            return;
+        }
         $announcements = [
             'General Assembly this Friday',
             'Scholarship Applications Now Open',
@@ -1003,7 +1069,9 @@ class DemoSeeder extends Seeder
 
     private function seedScheduling(): void
     {
-        if (!Schema::hasTable('sch_events')) return;
+        if (! Schema::hasTable('sch_events')) {
+            return;
+        }
 
         $events = [
             ['title' => 'Freshman Orientation', 'type' => 'academic', 'start' => '2025-08-05', 'end' => '2025-08-07'],
@@ -1032,7 +1100,9 @@ class DemoSeeder extends Seeder
         }
 
         // Academic schedules
-        if (!Schema::hasTable('sch_academic_schedules')) return;
+        if (! Schema::hasTable('sch_academic_schedules')) {
+            return;
+        }
         $sections = DB::table('admission_sections')->get();
         $subjects = DB::table('admission_subjects')->get();
         foreach ($sections->take(10) as $section) {
@@ -1043,7 +1113,7 @@ class DemoSeeder extends Seeder
                     'day' => ['M', 'T', 'W', 'Th', 'F', 'M/W', 'T/Th'][array_rand(['M', 'W', 'F', 'M/W', 'T/Th'])],
                     'time_start' => sprintf('%02d:00', rand(7, 16)),
                     'time_end' => sprintf('%02d:00', rand(9, 18)),
-                    'room' => 'RM-' . str_pad((string)rand(101, 320), 3, '0', STR_PAD_LEFT),
+                    'room' => 'RM-'.str_pad((string) rand(101, 320), 3, '0', STR_PAD_LEFT),
                     'instructor' => fake()->name(),
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -1055,7 +1125,9 @@ class DemoSeeder extends Seeder
 
     private function seedVoting(): void
     {
-        if (!Schema::hasTable('elections')) return;
+        if (! Schema::hasTable('elections')) {
+            return;
+        }
 
         DB::table('elections')->insert([
             'title' => 'USG General Elections 2026',
@@ -1068,7 +1140,9 @@ class DemoSeeder extends Seeder
         ]);
 
         // Positions
-        if (!Schema::hasTable('positions')) return;
+        if (! Schema::hasTable('positions')) {
+            return;
+        }
         $positions = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor', 'PIO'];
         foreach ($positions as $pos) {
             DB::table('positions')->insert([
@@ -1082,9 +1156,11 @@ class DemoSeeder extends Seeder
         }
 
         // Partylists
-        if (!Schema::hasTable('partylists')) return;
+        if (! Schema::hasTable('partylists')) {
+            return;
+        }
         $parties = ['Kilusang Bagong Sigla', 'Alyansang Mag-aaral', 'Samahang Nagkakaisa',
-                     'Tinig ng Kabataan', 'Pagsulong Coalition'];
+            'Tinig ng Kabataan', 'Pagsulong Coalition'];
         foreach ($parties as $party) {
             DB::table('partylists')->insert([
                 'name' => $party,
@@ -1096,7 +1172,9 @@ class DemoSeeder extends Seeder
         }
 
         // Candidates
-        if (!Schema::hasTable('candidates')) return;
+        if (! Schema::hasTable('candidates')) {
+            return;
+        }
         $students = DB::table('students')->take(18)->get();
         $positionIds = DB::table('positions')->pluck('id')->toArray();
         $partylistIds = DB::table('partylists')->pluck('id')->toArray();
@@ -1106,7 +1184,7 @@ class DemoSeeder extends Seeder
                 'position_id' => $positionIds[$i % count($positionIds)],
                 'partylist_id' => $partylistIds[array_rand($partylistIds)],
                 'election_id' => 1,
-                'platform' => 'Platform statement of candidate ' . $student->first_name,
+                'platform' => 'Platform statement of candidate '.$student->first_name,
                 'is_approved' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -1121,7 +1199,9 @@ class DemoSeeder extends Seeder
 
     private function seedHelpdesk(): void
     {
-        if (!Schema::hasTable('hlp_ticket_categories')) return;
+        if (! Schema::hasTable('hlp_ticket_categories')) {
+            return;
+        }
 
         $cats = ['IT Issue', 'Facility Problem', 'Account Concern', 'Document Request', 'Other'];
         foreach ($cats as $cat) {
@@ -1135,7 +1215,9 @@ class DemoSeeder extends Seeder
         }
 
         // Tickets
-        if (!Schema::hasTable('hlp_tickets') || !Schema::hasTable('students')) return;
+        if (! Schema::hasTable('hlp_tickets') || ! Schema::hasTable('students')) {
+            return;
+        }
         $students = DB::table('students')->take(20)->get();
         $categories = DB::table('hlp_ticket_categories')->get();
         $priorities = ['low', 'medium', 'high', 'urgent'];
@@ -1166,10 +1248,14 @@ class DemoSeeder extends Seeder
 
     private function seedNotifications(): void
     {
-        if (!Schema::hasTable('notifications')) return;
+        if (! Schema::hasTable('notifications')) {
+            return;
+        }
 
         $admins = User::role(['super-admin', 'registrar-admin', 'helpdesk-admin', 'discipline-admin', 'dormitory-admin'])->get();
-        if ($admins->isEmpty()) return;
+        if ($admins->isEmpty()) {
+            return;
+        }
 
         $notifications = [
             ['title' => 'New Helpdesk Ticket', 'body' => 'A new support ticket has been opened by a student requiring attention.', 'module' => 'helpdesk', 'icon' => 'Ticket'],
@@ -1190,7 +1276,7 @@ class DemoSeeder extends Seeder
                 $isRead = $i < 5;
 
                 DB::table('notifications')->insert([
-                    'id' => \Illuminate\Support\Str::uuid(),
+                    'id' => Str::uuid(),
                     'type' => 'App\Notifications\ModuleNotification',
                     'notifiable_type' => 'App\Models\User',
                     'notifiable_id' => $admin->id,

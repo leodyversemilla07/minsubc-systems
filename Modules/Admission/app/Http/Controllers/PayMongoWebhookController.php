@@ -4,9 +4,8 @@ namespace Modules\Admission\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Admission\Services\PayMongoService;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Crypt;
+use Modules\Admission\Services\PayMongoService;
 
 class PayMongoWebhookController extends Controller
 {
@@ -21,44 +20,45 @@ class PayMongoWebhookController extends Controller
     {
         $signature = $request->header('Paymongo-Signature');
 
-        if (!$signature) {
+        if (! $signature) {
             return response()->json(['error' => 'Missing signature'], 401);
         }
 
         $webhookSecret = config('services.paymongo.webhook_secret');
+        if (! is_string($webhookSecret) || $webhookSecret === '') {
+            Log::error('PayMongo webhook secret is not configured');
 
-        // Verify webhook signature
-        if ($webhookSecret) {
-            $computedSignature = hash_hmac('sha256', $request->getContent(), $webhookSecret);
-            
-            // PayMongo signature format: t=timestamp,v1=signature
-            $parts = explode(',', $signature);
-            $timestamp = null;
-            $sig = null;
+            return response()->json(['error' => 'Webhook unavailable'], 503);
+        }
 
-            foreach ($parts as $part) {
-                if (str_starts_with($part, 't=')) {
-                    $timestamp = substr($part, 2);
-                }
-                if (str_starts_with($part, 'v1=')) {
-                    $sig = substr($part, 3);
-                }
+        // PayMongo signature format: t=unix_timestamp,v1=signature
+        $parts = [];
+        foreach (explode(',', $signature) as $part) {
+            $pair = explode('=', trim($part), 2);
+            if (count($pair) === 2) {
+                $parts[$pair[0]] = $pair[1];
             }
+        }
 
-            $expectedSignature = hash_hmac('sha256', "{$timestamp}.{$request->getContent()}", $webhookSecret);
+        $timestamp = $parts['t'] ?? null;
+        $providedSignature = $parts['v1'] ?? null;
+        if (! is_string($timestamp) || ! ctype_digit($timestamp)
+            || abs(time() - (int) $timestamp) > 300
+            || ! is_string($providedSignature)
+            || ! preg_match('/^[a-f0-9]{64}$/i', $providedSignature)) {
+            return response()->json(['error' => 'Invalid signature'], 401);
+        }
 
-            if ($sig !== $expectedSignature) {
-                Log::warning('Invalid PayMongo webhook signature', [
-                    'expected' => $expectedSignature,
-                    'received' => $sig,
-                ]);
-                return response()->json(['error' => 'Invalid signature'], 401);
-            }
+        $expectedSignature = hash_hmac('sha256', "{$timestamp}.{$request->getContent()}", $webhookSecret);
+        if (! hash_equals($expectedSignature, $providedSignature)) {
+            Log::warning('Invalid PayMongo webhook signature');
+
+            return response()->json(['error' => 'Invalid signature'], 401);
         }
 
         try {
             $payload = $request->all();
-            
+
             Log::info('PayMongo webhook received', [
                 'event' => $payload['data']['attributes']['type'] ?? 'unknown',
             ]);

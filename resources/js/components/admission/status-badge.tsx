@@ -1,4 +1,4 @@
-export function ApplicationStatusBadge({ status }: { status: string }) {
+export function ApplicationStatusBadge({ status, label }: { status: string; label?: string }) {
     const colors: Record<string, string> = {
         draft: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
         submitted: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
@@ -23,7 +23,7 @@ export function ApplicationStatusBadge({ status }: { status: string }) {
 
     return (
         <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${colors[status] || colors.draft}`}>
-            {labels[status] || status}
+            {label || labels[status] || status}
         </span>
     );
 }

@@ -1,20 +1,32 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type PageProps } from '@/types';
-import { Archive, FileText, CheckCircle, XCircle } from 'lucide-react';
+import { Archive, CheckCircle, XCircle } from 'lucide-react';
+
+interface DisposalDocument {
+    id: number;
+    title?: string;
+    name?: string;
+    type?: string;
+    document_type?: string;
+    organization?: { name: string };
+    user?: { name: string };
+    disposal_status: string;
+}
 
 interface Props extends PageProps {
-    documents: { data: any[]; links: any[] };
+    documents: DisposalDocument[];
 }
 
 export default function ManageDisposal({ documents }: Props) {
-    const handleApprove = (id: number) => router.post(route('sas.admin.documents.update-disposal-status', id), { status: 'approved' });
+    const updateDisposalStatus = (id: number, disposal_status: string) =>
+        router.post(route('sas.admin.documents.update-disposal-status', id), { disposal_status });
 
     return (
         <AppLayout>
@@ -36,18 +48,18 @@ export default function ManageDisposal({ documents }: Props) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {documents?.data?.map((doc: any) => (
+                                {documents?.map((doc) => (
                                     <TableRow key={doc.id}>
                                         <TableCell className="font-medium">{doc.title ?? doc.name}</TableCell>
                                         <TableCell><Badge variant="outline">{doc.type ?? doc.document_type}</Badge></TableCell>
                                         <TableCell>{doc.organization?.name ?? '-'}</TableCell>
                                         <TableCell>{doc.user?.name ?? '-'}</TableCell>
-                                        <TableCell><Badge variant={doc.disposal_status === 'approved' ? 'secondary' : doc.disposal_status === 'pending' ? 'outline' : 'destructive'}>{doc.disposal_status}</Badge></TableCell>
+                                        <TableCell><Badge variant={doc.disposal_status === 'Approved for Disposal' ? 'secondary' : doc.disposal_status === 'Pending Disposal Approval' ? 'outline' : 'destructive'}>{doc.disposal_status}</Badge></TableCell>
                                         <TableCell className="text-right">
-                                            {doc.disposal_status === 'pending' && (
+                                            {doc.disposal_status === 'Pending Disposal Approval' && (
                                                 <div className="flex justify-end gap-1">
-                                                    <Button size="sm" variant="outline" onClick={() => handleApprove(doc.id)}><CheckCircle className="h-3 w-3 mr-1" />Approve</Button>
-                                                    <Button size="sm" variant="ghost" onClick={() => handleReject(doc.id)}><XCircle className="h-3 w-3 mr-1" />Reject</Button>
+                                                    <Button size="sm" variant="outline" onClick={() => updateDisposalStatus(doc.id, 'Approved for Disposal')}><CheckCircle className="h-3 w-3 mr-1" />Approve</Button>
+                                                    <Button size="sm" variant="ghost" onClick={() => updateDisposalStatus(doc.id, 'Physical Copy Exists')}><XCircle className="h-3 w-3 mr-1" />Reject</Button>
                                                 </div>
                                             )}
                                         </TableCell>

@@ -1,12 +1,15 @@
 <?php
 
 use App\Models\User;
+use Modules\Admission\Enums\ApplicantStatus;
 use Modules\Admission\Models\AcademicTerm;
+use Modules\Admission\Models\AdmissionProgram;
+use Modules\Admission\Models\Applicant;
+use Modules\Admission\Models\Course;
 use Modules\Admission\Models\Enrollment;
 use Modules\Admission\Models\EnrollmentFee;
 use Modules\Admission\Models\EnrollmentPayment;
 use Modules\Admission\Models\Section;
-use Modules\Admission\Services\EnrollmentService;
 use Modules\Admission\Services\PayMongoService;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -16,8 +19,8 @@ uses(TestCase::class);
 beforeEach(function () {
     $this->artisan('migrate:fresh');
 
-    $course = \Modules\Admission\Models\Course::factory()->create(['code' => 'BSIT']);
-    $program = \Modules\Admission\Models\AdmissionProgram::factory()->create([
+    $course = Course::factory()->create(['code' => 'BSIT']);
+    $program = AdmissionProgram::factory()->create([
         'course_id' => $course->id,
         'academic_year' => '2025-2026',
         'semester' => '1st',
@@ -48,9 +51,9 @@ beforeEach(function () {
     $student = User::factory()->create();
     $student->assignRole('student');
 
-    $applicant = \Modules\Admission\Models\Applicant::factory()->create([
+    $applicant = Applicant::factory()->create([
         'program_id' => $program->id,
-        'status' => \Modules\Admission\Enums\ApplicantStatus::Enrolled,
+        'status' => ApplicantStatus::Enrolled,
     ]);
 
     $this->enrollment = Enrollment::create([
@@ -368,9 +371,16 @@ it('returns 401 when webhook request has no signature header', function () {
     $response->assertJson(['error' => 'Missing signature']);
 });
 
+it('returns 503 when the webhook secret is not configured', function () {
+    config(['services.paymongo.webhook_secret' => null]);
+
+    $this->postJson(route('admission.webhook.paymongo'), [
+        'data' => ['attributes' => ['type' => 'payment_intent.succeeded']],
+    ], ['Paymongo-Signature' => 't='.time().',v1='.str_repeat('a', 64)])
+        ->assertStatus(503);
+});
+
 it('returns 200 when webhook signature is provided', function () {
-    // The controller uses config services.paymongo.webhook_secret
-    // which is likely null in test environment, skipping signature check
     config(['services.paymongo.webhook_secret' => 'test_secret']);
 
     $payload = [
@@ -402,6 +412,17 @@ it('returns 200 when webhook signature is provided', function () {
 
     $response->assertStatus(200);
     $response->assertJson(['received' => true]);
+});
+
+it('rejects a valid signature outside the allowed timestamp window', function () {
+    config(['services.paymongo.webhook_secret' => 'test_secret']);
+    $payload = ['data' => ['attributes' => ['type' => 'payment_intent.succeeded']]];
+    $timestamp = (string) (time() - 600);
+    $signature = hash_hmac('sha256', $timestamp.'.'.json_encode($payload), 'test_secret');
+
+    $this->postJson(route('admission.webhook.paymongo'), $payload, [
+        'Paymongo-Signature' => "t={$timestamp},v1={$signature}",
+    ])->assertStatus(401);
 });
 
 it('returns 401 when webhook signature is invalid', function () {

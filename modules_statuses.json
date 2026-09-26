@@ -14,5 +14,8 @@
     "Clinic": true,
     "Facilities": true,
     "Scheduling": true,
-    "Discipline": true
+    "Discipline": true,
+    "Helpdesk": true,
+    "Dormitory": true,
+    "Analytics": true
 }

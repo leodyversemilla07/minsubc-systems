@@ -25,7 +25,6 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
-import { cn } from '@/lib/utils';
 
 const iconMap: Record<string, React.ElementType> = {
     GraduationCap,
@@ -57,7 +56,7 @@ export function GlobalSearch() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<SearchResult[]>([]);
     const [loading, setLoading] = useState(false);
-    const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Toggle with Cmd+K / Ctrl+K
     useEffect(() => {

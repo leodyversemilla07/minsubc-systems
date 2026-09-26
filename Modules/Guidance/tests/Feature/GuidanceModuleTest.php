@@ -1,11 +1,13 @@
 <?php
 
-use App\Models\User;
 use App\Models\Student;
-use Modules\Guidance\Models\Counselor;
-use Modules\Guidance\Models\AppointmentSlot;
+use App\Models\User;
 use Modules\Guidance\Models\Appointment;
+use Modules\Guidance\Models\AppointmentSlot;
 use Modules\Guidance\Models\CounselingSession;
+use Modules\Guidance\Models\Counselor;
+use Modules\Guidance\Models\IncidentReport;
+use Modules\Guidance\Models\Intervention;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -17,7 +19,7 @@ beforeEach(function () {
 
 test('can create counselor', function () {
     $counselor = Counselor::factory()->create(['first_name' => 'Jane', 'specialization' => 'mental_health']);
-    expect($counselor->full_name)->toBe('Jane ' . $counselor->last_name);
+    expect($counselor->full_name)->toBe('Jane '.$counselor->last_name);
     expect($counselor->specialization)->toBe('mental_health');
     expect($counselor->is_available)->toBeTrue();
 });
@@ -128,6 +130,29 @@ test('admin can create slot', function () {
 
 // ─── Appointments ───────────────────────────────────
 
+test('student appointments use the string student ID', function () {
+    $user = User::factory()->create();
+    $student = Student::factory()->create(['user_id' => $user->id]);
+    $slot = AppointmentSlot::factory()->create(['date' => now()->addDay()]);
+
+    $this->actingAs($user)->post(route('guidance.my.appointments.store'), [
+        'slot_id' => $slot->id,
+        'reason' => 'Academic concern',
+    ])->assertRedirect(route('guidance.my.appointments'));
+
+    $appointment = Appointment::where('student_id', $student->student_id)->firstOrFail();
+    expect($appointment->slot_id)->toBe($slot->id);
+
+    $this->actingAs($user)->post(route('guidance.my.appointments.cancel', $appointment))
+        ->assertRedirect(route('guidance.my.appointments'));
+    expect($appointment->fresh()->status)->toBe('cancelled');
+    expect($slot->fresh()->booked_count)->toBe(0);
+
+    $this->actingAs($user)->post(route('guidance.my.appointments.cancel', $appointment))
+        ->assertSessionHas('error');
+    expect($slot->fresh()->booked_count)->toBe(0);
+});
+
 test('admin can view appointments', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.appointments.index'));
@@ -214,7 +239,7 @@ test('admin can create intervention', function () {
         'max_participants' => 30,
     ]);
     $response->assertRedirect(route('guidance.admin.interventions.index'));
-    expect(\Modules\Guidance\Models\Intervention::where('title', 'Stress Management Workshop')->exists())->toBeTrue();
+    expect(Intervention::where('title', 'Stress Management Workshop')->exists())->toBeTrue();
 });
 
 // ─── Incident Reports ──────────────────────────────
@@ -236,7 +261,7 @@ test('admin can create incident report', function () {
         'severity' => 'moderate',
     ]);
     $response->assertRedirect(route('guidance.admin.incident-reports.index'));
-    expect(\Modules\Guidance\Models\IncidentReport::where('student_id', $student->student_id)->exists())->toBeTrue();
+    expect(IncidentReport::where('student_id', $student->student_id)->exists())->toBeTrue();
 });
 
 // ─── Public Pages ─────────────────────────────────────

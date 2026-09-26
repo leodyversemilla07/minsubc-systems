@@ -1,11 +1,27 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Send, Plus, Trash2, ClipboardList } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, ClipboardList } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export default function CurriculaShow({ curriculum, curriculumCourses }: { curriculum: any; curriculumCourses: any[] }) {
+interface Curriculum {
+    id: number;
+    name: string;
+    status: string;
+    program?: { code: string; name: string };
+    version?: string;
+    description?: string;
+}
+
+interface CurriculumCourse {
+    id: number;
+    course?: { code: string; name: string; units: number };
+    semester?: string;
+    year_level?: number;
+}
+
+export default function CurriculaShow({ curriculum, curriculumCourses }: { curriculum: Curriculum; curriculumCourses: CurriculumCourse[] }) {
     return (
         <AppLayout>
             <Head title={curriculum.name} />
@@ -61,7 +77,7 @@ export default function CurriculaShow({ curriculum, curriculumCourses }: { curri
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {curriculumCourses.map((cc: any) => (
+                                {curriculumCourses.map((cc) => (
                                     <TableRow key={cc.id}>
                                         <TableCell className="font-mono text-sm">{cc.course?.code ?? '—'}</TableCell>
                                         <TableCell>{cc.course?.name ?? '—'}</TableCell>
@@ -69,7 +85,7 @@ export default function CurriculaShow({ curriculum, curriculumCourses }: { curri
                                         <TableCell>{cc.semester ?? '—'}</TableCell>
                                         <TableCell>{cc.year_level ?? '—'}</TableCell>
                                         <TableCell>
-                                            <Link as="button" method="delete" href={route('curriculum.admin.curricula.remove-course', [curriculum.id, cc.id])}>
+                                            <Link as="button" method="delete" href={route('curriculum.admin.curricula.remove-course', { curriculum: curriculum.id, curriculumCourse: cc.id })}>
                                                 <Button variant="ghost" size="icon" className="text-red-600"><Trash2 className="h-4 w-4" /></Button>
                                             </Link>
                                         </TableCell>

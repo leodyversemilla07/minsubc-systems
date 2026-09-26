@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Dormitory\Http\Controllers\Admin\AssignmentController;
 use Modules\Dormitory\Http\Controllers\Admin\DashboardController;
 use Modules\Dormitory\Http\Controllers\Admin\HallController;
-use Modules\Dormitory\Http\Controllers\Admin\RoomController;
-use Modules\Dormitory\Http\Controllers\Admin\AssignmentController;
 use Modules\Dormitory\Http\Controllers\Admin\MaintenanceController;
 use Modules\Dormitory\Http\Controllers\Admin\ReportController;
+use Modules\Dormitory\Http\Controllers\Admin\RoomController;
 
-Route::prefix('admin/dormitory')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('admin/dormitory')->middleware(['web', 'auth', 'role:dormitory-admin|dormitory-warden|super-admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dormitory.admin.dashboard');
     Route::resource('/halls', HallController::class, ['as' => 'dormitory.admin']);
     Route::resource('/rooms', RoomController::class, ['as' => 'dormitory.admin', 'except' => ['show', 'edit', 'update']]);
