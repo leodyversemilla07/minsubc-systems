@@ -1,12 +1,10 @@
 {
     "agents": [
-        "copilot"
+        "opencode"
     ],
-    "editors": [
-        "vscode"
-    ],
-    "guidelines": [
-        "laravel/fortify"
-    ],
-    "herd_mcp": true
+    "cloud": false,
+    "guidelines": true,
+    "packages": [
+        "spatie/laravel-permission"
+    ]
 }
