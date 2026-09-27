@@ -1,13 +1,14 @@
 <?php
 
 use App\Models\User;
-use Modules\HR\Models\Employee;
-use Modules\HR\Models\Department;
-use Modules\HR\Models\Position;
+use Illuminate\Database\QueryException;
 use Modules\HR\Models\Attendance;
-use Modules\HR\Models\LeaveType;
-use Modules\HR\Models\LeaveRequest;
+use Modules\HR\Models\Department;
+use Modules\HR\Models\Employee;
 use Modules\HR\Models\Evaluation;
+use Modules\HR\Models\LeaveRequest;
+use Modules\HR\Models\LeaveType;
+use Modules\HR\Models\Position;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -80,7 +81,7 @@ test('can create attendance record', function () {
 test('attendance prevents duplicate date', function () {
     $emp = Employee::factory()->create();
     Attendance::create(['employee_id' => $emp->id, 'date' => today(), 'status' => 'present']);
-    $this->expectException(Illuminate\Database\QueryException::class);
+    $this->expectException(QueryException::class);
     Attendance::create(['employee_id' => $emp->id, 'date' => today(), 'status' => 'late']);
 });
 
@@ -139,7 +140,7 @@ test('can create evaluation', function () {
 test('hr-admin can view dashboard', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('unauthorized user cannot access hr admin', function () {
@@ -157,13 +158,13 @@ test('admin can view employees list', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     Employee::factory()->count(3)->create();
     $response = $this->actingAs($admin)->get(route('hr.admin.employees.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view employee create page', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.employees.create'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create employee', function () {
@@ -186,14 +187,14 @@ test('admin can view employee details', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $emp = Employee::factory()->create();
     $response = $this->actingAs($admin)->get(route('hr.admin.employees.show', $emp));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can edit employee page', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $emp = Employee::factory()->create();
     $response = $this->actingAs($admin)->get(route('hr.admin.employees.edit', $emp));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can update employee', function () {
@@ -224,7 +225,7 @@ test('admin can delete employee', function () {
 test('admin can view departments', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.departments.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create department', function () {
@@ -265,7 +266,7 @@ test('admin cannot delete department with employees', function () {
 test('admin can view positions', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.positions.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create position', function () {
@@ -297,20 +298,20 @@ test('admin can update position', function () {
 test('admin can view attendance', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.attendance.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view attendance report', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.attendance.report'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view employee attendance', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $emp = Employee::factory()->create();
     $response = $this->actingAs($admin)->get(route('hr.admin.attendance.employee', $emp));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can bulk update attendance', function () {
@@ -330,14 +331,14 @@ test('admin can bulk update attendance', function () {
 test('admin can view leave requests', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.leave.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view leave details', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $leave = LeaveRequest::factory()->create();
     $response = $this->actingAs($admin)->get(route('hr.admin.leave.show', $leave));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can approve leave request', function () {
@@ -365,7 +366,7 @@ test('admin can reject leave request', function () {
 test('admin can view evaluations', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.evaluations.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create evaluation', function () {
@@ -387,7 +388,7 @@ test('admin can view evaluation details', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $eval = Evaluation::factory()->create();
     $response = $this->actingAs($admin)->get(route('hr.admin.evaluations.show', $eval));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Reports ──────────────────────────────────────────
@@ -395,31 +396,31 @@ test('admin can view evaluation details', function () {
 test('admin can view reports', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.reports.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view attendance report page', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.reports.attendance'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view leave report page', function () {
     $admin = User::factory()->create()->assignRole('hr-admin');
     $response = $this->actingAs($admin)->get(route('hr.admin.reports.leave'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Public Pages ─────────────────────────────────────
 
 test('public can view hr home', function () {
     $response = $this->get(route('hr.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('public can view employee directory', function () {
     $response = $this->get(route('hr.directory'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Permissions ──────────────────────────────────────
@@ -427,7 +428,7 @@ test('public can view employee directory', function () {
 test('hr-staff can access admin dashboard', function () {
     $staff = User::factory()->create()->assignRole('hr-staff');
     $response = $this->actingAs($staff)->get(route('hr.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── API Endpoints ────────────────────────────────────
@@ -435,7 +436,7 @@ test('hr-staff can access admin dashboard', function () {
 test('employee search API works', function () {
     Employee::factory()->create(['first_name' => 'Searchable', 'employee_id' => 'SRC-001']);
     $response = $this->getJson(route('hr.api.employees.search', ['q' => 'Searchable']));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('departments API works', function () {

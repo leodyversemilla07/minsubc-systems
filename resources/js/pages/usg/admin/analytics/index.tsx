@@ -1,10 +1,3 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -13,6 +6,13 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -129,7 +129,16 @@ export default function AnalyticsDashboard({
                     <div className="flex items-center gap-2">
                         <Select
                             value={period}
-                            onValueChange={(value) => handlePeriodChange(value || '')} items={[{ value: "7days", label: "Last 7 Days" }, { value: "30days", label: "Last 30 Days" }, { value: "90days", label: "Last 90 Days" }, { value: "year", label: "Last Year" }, { value: "all", label: "All Time" }]}
+                            onValueChange={(value) =>
+                                handlePeriodChange(value || '')
+                            }
+                            items={[
+                                { value: '7days', label: 'Last 7 Days' },
+                                { value: '30days', label: 'Last 30 Days' },
+                                { value: '90days', label: 'Last 90 Days' },
+                                { value: 'year', label: 'Last Year' },
+                                { value: 'all', label: 'All Time' },
+                            ]}
                         >
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select period" />
@@ -338,7 +347,7 @@ export default function AnalyticsDashboard({
                                         <Tooltip
                                             labelFormatter={(value) =>
                                                 new Date(
-                                                    value,
+                                                    String(value ?? ''),
                                                 ).toLocaleDateString()
                                             }
                                         />
@@ -386,7 +395,7 @@ export default function AnalyticsDashboard({
                                         <Tooltip
                                             labelFormatter={(value) =>
                                                 new Date(
-                                                    value,
+                                                    String(value ?? ''),
                                                 ).toLocaleDateString()
                                             }
                                         />

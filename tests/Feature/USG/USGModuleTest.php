@@ -132,10 +132,7 @@ test('admin can view resolutions list', function () {
 test('admin can view transparency reports list', function () {
     $admin = User::factory()->create()->assignRole('usg-admin');
 
-    $response = $this->actingAs($admin)->get(route('usg.admin.transparency.index'));
-
-    // May be 200 or 500 depending on whether USG frontend is fully built
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->actingAs($admin)->get(route('usg.admin.transparency.index'))->assertOk();
 });
 
 // ─── Documents ─────────────────────────────────────────────────

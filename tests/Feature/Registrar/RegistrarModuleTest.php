@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Modules\Registrar\Models\DocumentRequest;
 use Modules\Registrar\Models\Student;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -15,8 +15,7 @@ beforeEach(function () {
 
 test('registrar-admin can view dashboard', function () {
     $admin = User::factory()->create()->assignRole('registrar-admin');
-    $response = $this->actingAs($admin)->get(route('registrar.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->actingAs($admin)->get(route('registrar.admin.dashboard'))->assertOk();
 });
 
 test('unauthorized user cannot access registrar admin', function () {
@@ -30,8 +29,7 @@ test('admin can view students list', function () {
     $admin = User::factory()->create()->assignRole('registrar-admin');
     Student::factory()->count(3)->create();
 
-    $response = $this->actingAs($admin)->get(route('registrar.students.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->actingAs($admin)->get(route('registrar.students.index'))->assertOk();
 });
 
 // ─── Analytics ───────────────────────────────────────────
@@ -39,8 +37,7 @@ test('admin can view students list', function () {
 test('admin can view analytics page', function () {
     $admin = User::factory()->create()->assignRole('registrar-admin');
 
-    $response = $this->actingAs($admin)->get('/admin/analytics');
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/analytics')->assertOk();
 });
 
 // ─── Cashier Routes ───────────────────────────────────────────
@@ -48,8 +45,7 @@ test('admin can view analytics page', function () {
 test('cashier can access cashier dashboard', function () {
     $cashier = User::factory()->create()->assignRole('cashier');
 
-    $response = $this->actingAs($cashier)->get(route('registrar.cashier.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->actingAs($cashier)->get(route('registrar.cashier.dashboard'))->assertOk();
 });
 
 test('unauthorized user cannot access cashier', function () {
@@ -70,9 +66,15 @@ test('registrar-staff can access admin dashboard', function () {
 
 // ─── Document Requests ───────────────────────────────────
 
-test('registrar-admin can view document requests index', function () {
+test('user with view_own_requests permission can view document requests index', function () {
+    Permission::firstOrCreate(['name' => 'view_own_requests']);
+    $student = User::factory()->create()->givePermissionTo('view_own_requests');
+
+    $this->actingAs($student)->get(route('registrar.document-requests.index'))->assertOk();
+});
+
+test('user without view_own_requests permission is forbidden from document requests index', function () {
     $admin = User::factory()->create()->assignRole('registrar-admin');
 
-    $response = $this->actingAs($admin)->get(route('registrar.document-requests.index'));
-    expect(in_array($response->status(), [200, 403, 500]))->toBeTrue();
+    $this->actingAs($admin)->get(route('registrar.document-requests.index'))->assertForbidden();
 });

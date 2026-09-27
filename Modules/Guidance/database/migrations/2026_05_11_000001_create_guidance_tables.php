@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         // Counselors (guidance staff)
-        if (!Schema::hasTable('gdn_counselors')) {
+        if (! Schema::hasTable('gdn_counselors')) {
             Schema::create('gdn_counselors', function (Blueprint $table) {
                 $table->id();
                 $table->string('counselor_id', 20)->unique();
@@ -30,7 +30,7 @@ return new class extends Migration
         }
 
         // Appointment Slots
-        if (!Schema::hasTable('gdn_appointment_slots')) {
+        if (! Schema::hasTable('gdn_appointment_slots')) {
             Schema::create('gdn_appointment_slots', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('counselor_id')->constrained('gdn_counselors')->cascadeOnDelete();
@@ -43,12 +43,14 @@ return new class extends Migration
                 $table->string('type')->default('individual');
                 $table->boolean('is_available')->default(true);
                 $table->timestamps();
-                $table->unique(['counselor_id', 'date', 'start_time', 'end_time']);
+                // NOTE: explicit short name — the auto-generated one exceeds
+                // MySQL's 64-char identifier limit.
+                $table->unique(['counselor_id', 'date', 'start_time', 'end_time'], 'gdn_slots_counselor_datetime_unique');
             });
         }
 
         // Appointments
-        if (!Schema::hasTable('gdn_appointments')) {
+        if (! Schema::hasTable('gdn_appointments')) {
             Schema::create('gdn_appointments', function (Blueprint $table) {
                 $table->id();
                 $table->string('appointment_code', 20)->unique();
@@ -66,7 +68,7 @@ return new class extends Migration
         }
 
         // Counseling Sessions
-        if (!Schema::hasTable('gdn_counseling_sessions')) {
+        if (! Schema::hasTable('gdn_counseling_sessions')) {
             Schema::create('gdn_counseling_sessions', function (Blueprint $table) {
                 $table->id();
                 $table->string('session_code', 20)->unique();
@@ -90,7 +92,7 @@ return new class extends Migration
         }
 
         // Assessments
-        if (!Schema::hasTable('gdn_assessments')) {
+        if (! Schema::hasTable('gdn_assessments')) {
             Schema::create('gdn_assessments', function (Blueprint $table) {
                 $table->id();
                 $table->string('assessment_code', 20)->unique();
@@ -108,7 +110,7 @@ return new class extends Migration
         }
 
         // Referrals
-        if (!Schema::hasTable('gdn_referrals')) {
+        if (! Schema::hasTable('gdn_referrals')) {
             Schema::create('gdn_referrals', function (Blueprint $table) {
                 $table->id();
                 $table->string('referral_code', 20)->unique();
@@ -127,7 +129,7 @@ return new class extends Migration
         }
 
         // Interventions
-        if (!Schema::hasTable('gdn_interventions')) {
+        if (! Schema::hasTable('gdn_interventions')) {
             Schema::create('gdn_interventions', function (Blueprint $table) {
                 $table->id();
                 $table->string('title');
@@ -143,7 +145,7 @@ return new class extends Migration
         }
 
         // Intervention Participants
-        if (!Schema::hasTable('gdn_intervention_participants')) {
+        if (! Schema::hasTable('gdn_intervention_participants')) {
             Schema::create('gdn_intervention_participants', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('intervention_id')->constrained('gdn_interventions')->cascadeOnDelete();
@@ -156,7 +158,7 @@ return new class extends Migration
         }
 
         // Incident Reports
-        if (!Schema::hasTable('gdn_incident_reports')) {
+        if (! Schema::hasTable('gdn_incident_reports')) {
             Schema::create('gdn_incident_reports', function (Blueprint $table) {
                 $table->id();
                 $table->string('incident_code', 20)->unique();

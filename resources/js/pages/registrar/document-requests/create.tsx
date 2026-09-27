@@ -1,10 +1,3 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,8 +18,16 @@ import {
     ItemMedia,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from '@/components/ui/toast';
 import {
     Tooltip,
     TooltipContent,
@@ -49,7 +50,6 @@ import {
     Users,
 } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 interface DocumentTypeData {
     value: string;
@@ -241,9 +241,10 @@ export default function Create({
                                         action={store()}
                                         method="post"
                                         onSuccess={() =>
-                                            toast.success(
-                                                'Request submitted successfully!',
-                                            )
+                                            toast.add({
+                                                title: 'Request submitted successfully!',
+                                                type: 'success',
+                                            })
                                         }
                                     >
                                         {({ errors, processing }) => (
@@ -294,21 +295,29 @@ export default function Create({
                                                             }}
                                                             disabled={
                                                                 hasReachedLimit
-                                                            } items={documentTypes.map((type) => ({ value: type.value, label: <div className="flex w-full items-center justify-between">
-                                                                                                                                            <span>
-                                                                                                                                                {
-                                                                                                                                                    type.label
-                                                                                                                                                }
-                                                                                                                                            </span>
-                                                                                                                                            <Badge
-                                                                                                                                                variant="outline"
-                                                                                                                                                className="ml-2 text-xs"
-                                                                                                                                            >
-                                                                                                                                                {
-                                                                                                                                                    type.price_label
-                                                                                                                                                }
-                                                                                                                                            </Badge>
-                                                                                                                                        </div> }))}
+                                                            }
+                                                            items={documentTypes.map(
+                                                                (type) => ({
+                                                                    value: type.value,
+                                                                    label: (
+                                                                        <div className="flex w-full items-center justify-between">
+                                                                            <span>
+                                                                                {
+                                                                                    type.label
+                                                                                }
+                                                                            </span>
+                                                                            <Badge
+                                                                                variant="outline"
+                                                                                className="ml-2 text-xs"
+                                                                            >
+                                                                                {
+                                                                                    type.price_label
+                                                                                }
+                                                                            </Badge>
+                                                                        </div>
+                                                                    ),
+                                                                }),
+                                                            )}
                                                         >
                                                             <SelectTrigger
                                                                 id="document_type"
@@ -490,7 +499,13 @@ export default function Create({
                                                             }}
                                                             disabled={
                                                                 hasReachedLimit
-                                                            } items={purposeOptions.map((option) => ({ value: option, label: option }))}
+                                                            }
+                                                            items={purposeOptions.map(
+                                                                (option) => ({
+                                                                    value: option,
+                                                                    label: option,
+                                                                }),
+                                                            )}
                                                         >
                                                             <SelectTrigger
                                                                 id="purpose"

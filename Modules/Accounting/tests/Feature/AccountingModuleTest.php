@@ -1,15 +1,15 @@
 <?php
 
-use App\Models\User;
 use App\Models\Student;
-use Modules\Accounting\Models\FeeCategory;
-use Modules\Accounting\Models\FeeItem;
+use App\Models\User;
 use Modules\Accounting\Models\Assessment;
 use Modules\Accounting\Models\AssessmentLine;
-use Modules\Accounting\Models\Payment;
-use Modules\Accounting\Models\Invoice;
 use Modules\Accounting\Models\ChartAccount;
 use Modules\Accounting\Models\Discount;
+use Modules\Accounting\Models\FeeCategory;
+use Modules\Accounting\Models\FeeItem;
+use Modules\Accounting\Models\Invoice;
+use Modules\Accounting\Models\Payment;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -35,8 +35,8 @@ test('can create fee item under category', function () {
 test('can create assessment with lines', function () {
     $student = Student::factory()->create();
     $assessment = Assessment::create([
-        'assessment_code' => 'ASM-2026-' . rand(100000, 999999),
-        'assessable_type' => \App\Models\Student::class,
+        'assessment_code' => 'ASM-2026-'.rand(100000, 999999),
+        'assessable_type' => Student::class,
         'assessable_id' => $student->id,
         'total_amount' => 50000,
     ]);
@@ -86,7 +86,7 @@ test('can create chart account', function () {
 test('accounting-admin can view dashboard', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('unauthorized user cannot access accounting admin', function () {
@@ -103,7 +103,7 @@ test('guest cannot access accounting admin', function () {
 test('admin can view fee categories', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.fee-categories.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create fee category', function () {
@@ -142,7 +142,7 @@ test('admin can delete fee category', function () {
 test('admin can view fee items', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.fee-items.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create fee item', function () {
@@ -189,14 +189,14 @@ test('admin can delete fee item', function () {
 test('admin can view assessments', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.assessments.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view assessment details', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $assessment = Assessment::factory()->create();
     $response = $this->actingAs($admin)->get(route('accounting.admin.assessments.show', $assessment));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create assessment via service', function () {
@@ -214,12 +214,10 @@ test('admin can create assessment via service', function () {
             ['fee_item_id' => $feeItem->id, 'amount' => 30000],
         ],
     ]);
-    expect(in_array($response->status(), [302, 200, 500]))->toBeTrue();
+    $response->assertRedirect();
 
-    if ($response->status() === 302) {
-        expect(Assessment::where('assessable_id', $student->id)->exists())->toBeTrue();
-        expect(Invoice::whereHas('assessment', fn ($q) => $q->where('assessable_id', $student->id))->exists())->toBeTrue();
-    }
+    expect(Assessment::where('assessable_id', $student->id)->exists())->toBeTrue();
+    expect(Invoice::whereHas('assessment', fn ($q) => $q->where('assessable_id', $student->id))->exists())->toBeTrue();
 });
 
 // ─── Payments ───────────────────────────────────────
@@ -227,14 +225,14 @@ test('admin can create assessment via service', function () {
 test('admin can view payments', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.payments.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view payment details', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $payment = Payment::factory()->create();
     $response = $this->actingAs($admin)->get(route('accounting.admin.payments.show', $payment));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can record payment via service', function () {
@@ -248,7 +246,7 @@ test('admin can record payment via service', function () {
         'payment_date' => now()->format('Y-m-d'),
     ]);
 
-    expect(in_array($response->status(), [302, 200, 500]))->toBeTrue();
+    $response->assertRedirect();
 });
 
 // ─── Invoices ───────────────────────────────────────
@@ -256,14 +254,14 @@ test('admin can record payment via service', function () {
 test('admin can view invoices', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.invoices.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view invoice details', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $invoice = Invoice::factory()->create();
     $response = $this->actingAs($admin)->get(route('accounting.admin.invoices.show', $invoice));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Chart of Accounts ──────────────────────────────
@@ -271,7 +269,7 @@ test('admin can view invoice details', function () {
 test('admin can view chart of accounts', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.chart-accounts.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create chart account', function () {
@@ -290,7 +288,7 @@ test('admin can create chart account', function () {
 test('admin can view discounts', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.discounts.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create discount', function () {
@@ -324,26 +322,26 @@ test('admin can update discount', function () {
 test('admin can view reports page', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.reports.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view collections report', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.reports.collections'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view aging report', function () {
     $admin = User::factory()->create()->assignRole('accounting-admin');
     $response = $this->actingAs($admin)->get(route('accounting.admin.reports.aging'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Public Pages ───────────────────────────────────
 
 test('public can view accounting home', function () {
     $response = $this->get(route('accounting.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Permissions ─────────────────────────────────────
@@ -351,7 +349,7 @@ test('public can view accounting home', function () {
 test('accounting-staff can access admin dashboard', function () {
     $staff = User::factory()->create()->assignRole('accounting-staff');
     $response = $this->actingAs($staff)->get(route('accounting.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── API Endpoints ────────────────────────────────────
@@ -366,4 +364,19 @@ test('chart accounts API works', function () {
     ChartAccount::create(['account_code' => 'CASH', 'name' => 'Cash', 'type' => 'asset']);
     $response = $this->getJson(route('accounting.api.chart-accounts'));
     expect($response->status())->toBe(200);
+});
+
+test('admin can view assessment create page', function () {
+    $admin = User::factory()->create()->assignRole('accounting-admin');
+    $this->actingAs($admin)->get(route('accounting.admin.assessments.create'))->assertOk();
+});
+
+test('admin can view ledger report', function () {
+    $admin = User::factory()->create()->assignRole('accounting-admin');
+    $this->actingAs($admin)->get(route('accounting.admin.reports.ledger'))->assertOk();
+});
+
+test('admin can view journal report', function () {
+    $admin = User::factory()->create()->assignRole('accounting-admin');
+    $this->actingAs($admin)->get(route('accounting.admin.reports.journal'))->assertOk();
 });

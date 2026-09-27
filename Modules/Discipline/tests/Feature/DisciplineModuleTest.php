@@ -1,16 +1,16 @@
 <?php
 
-use Modules\Discipline\Models\OffenseCategory;
-use Modules\Discipline\Models\Offense;
-use Modules\Discipline\Models\Incident;
-use Modules\Discipline\Models\Sanction;
-use Modules\Discipline\Models\Appeal;
-use App\Models\User;
 use App\Models\Student;
+use App\Models\User;
+use Modules\Discipline\Models\Appeal;
+use Modules\Discipline\Models\Incident;
+use Modules\Discipline\Models\Offense;
+use Modules\Discipline\Models\OffenseCategory;
+use Modules\Discipline\Models\Sanction;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    if (!Schema::hasTable('dsc_offense_categories')) {
+    if (! Schema::hasTable('dsc_offense_categories')) {
         Schema::create('dsc_offense_categories', function ($table) {
             $table->id();
             $table->string('name');
@@ -144,21 +144,18 @@ test('can file appeals for incidents', function () {
 
 test('can access admin dashboard', function () {
     $admin = User::factory()->create()->assignRole('discipline-admin');
-    $response = $this->actingAs($admin)
-        ->get('/admin/discipline/dashboard');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get('/admin/discipline/dashboard')->assertOk();
 });
 
 test('can list offense categories', function () {
     $admin = User::factory()->create()->assignRole('discipline-admin');
-    $response = $this->actingAs($admin)
-        ->get('/admin/discipline/offense-categories');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get('/admin/discipline/offense-categories')->assertOk();
 });
 
 test('can list incidents', function () {
     $admin = User::factory()->create()->assignRole('discipline-admin');
-    $response = $this->actingAs($admin)
-        ->get('/admin/discipline/incidents');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get('/admin/discipline/incidents')->assertOk();
 });

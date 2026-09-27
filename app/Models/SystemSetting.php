@@ -74,13 +74,15 @@ class SystemSetting extends Model
      */
     public static function setValue(string $key, mixed $value, string $type = 'general', ?string $description = null, bool $encrypt = false): static
     {
+        // NOTE: 'is_encrypted' must precede 'value' — the value mutator
+        // reads it to decide whether to encrypt on fill().
         return static::updateOrCreate(
             ['setting_key' => $key],
             [
+                'is_encrypted' => $encrypt,
                 'value' => $value,
                 'type' => $type,
                 'description' => $description,
-                'is_encrypted' => $encrypt,
             ]
         );
     }

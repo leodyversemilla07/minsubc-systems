@@ -1,54 +1,73 @@
 <?php
 
-use Modules\Dormitory\Models\DormHall;
-use Modules\Dormitory\Models\DormRoom;
-use Modules\Dormitory\Models\DormBed;
-use Modules\Dormitory\Models\DormAssignment;
-use Modules\Dormitory\Models\DormMaintenanceRequest;
-use App\Models\User;
 use App\Models\Student;
+use App\Models\User;
+use Modules\Dormitory\Models\DormAssignment;
+use Modules\Dormitory\Models\DormBed;
+use Modules\Dormitory\Models\DormHall;
+use Modules\Dormitory\Models\DormMaintenanceRequest;
+use Modules\Dormitory\Models\DormRoom;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    if (!Schema::hasTable('drm_halls')) {
+    if (! Schema::hasTable('drm_halls')) {
         Schema::create('drm_halls', function ($t) {
-            $t->id(); $t->string('name'); $t->string('code')->unique();
-            $t->string('address')->nullable(); $t->integer('floors')->default(1);
+            $t->id();
+            $t->string('name');
+            $t->string('code')->unique();
+            $t->string('address')->nullable();
+            $t->integer('floors')->default(1);
             $t->string('gender')->default('coed');
-            $t->string('warden_name')->nullable(); $t->string('warden_phone')->nullable();
-            $t->boolean('is_active')->default(true); $t->timestamps();
+            $t->string('warden_name')->nullable();
+            $t->string('warden_phone')->nullable();
+            $t->boolean('is_active')->default(true);
+            $t->timestamps();
         });
         Schema::create('drm_rooms', function ($t) {
-            $t->id(); $t->foreignId('hall_id')->constrained('drm_halls')->cascadeOnDelete();
-            $t->string('room_number'); $t->integer('floor')->default(1);
+            $t->id();
+            $t->foreignId('hall_id')->constrained('drm_halls')->cascadeOnDelete();
+            $t->string('room_number');
+            $t->integer('floor')->default(1);
             $t->string('room_type')->default('standard');
-            $t->integer('capacity')->default(4); $t->integer('beds_count')->default(4);
-            $t->boolean('is_active')->default(true); $t->timestamps();
+            $t->integer('capacity')->default(4);
+            $t->integer('beds_count')->default(4);
+            $t->boolean('is_active')->default(true);
+            $t->timestamps();
             $t->unique(['hall_id', 'room_number']);
         });
         Schema::create('drm_beds', function ($t) {
-            $t->id(); $t->foreignId('room_id')->constrained('drm_rooms')->cascadeOnDelete();
-            $t->string('bed_label'); $t->string('position')->nullable();
-            $t->boolean('is_occupied')->default(false); $t->boolean('is_active')->default(true);
-            $t->timestamps(); $t->unique(['room_id', 'bed_label']);
+            $t->id();
+            $t->foreignId('room_id')->constrained('drm_rooms')->cascadeOnDelete();
+            $t->string('bed_label');
+            $t->string('position')->nullable();
+            $t->boolean('is_occupied')->default(false);
+            $t->boolean('is_active')->default(true);
+            $t->timestamps();
+            $t->unique(['room_id', 'bed_label']);
         });
         Schema::create('drm_assignments', function ($t) {
-            $t->id(); $t->foreignId('bed_id')->constrained('drm_beds');
+            $t->id();
+            $t->foreignId('bed_id')->constrained('drm_beds');
             $t->string('student_id');
-            $t->date('checkin_date'); $t->date('checkout_date')->nullable();
+            $t->date('checkin_date');
+            $t->date('checkout_date')->nullable();
             $t->string('status')->default('active');
             $t->decimal('fee_per_semester', 10, 2)->default(0);
-            $t->text('notes')->nullable(); $t->timestamps();
+            $t->text('notes')->nullable();
+            $t->timestamps();
         });
         Schema::create('drm_maintenance', function ($t) {
-            $t->id(); $t->foreignId('room_id')->constrained('drm_rooms');
+            $t->id();
+            $t->foreignId('room_id')->constrained('drm_rooms');
             $t->foreignId('reported_by')->constrained('users');
-            $t->string('issue_type'); $t->text('description');
+            $t->string('issue_type');
+            $t->text('description');
             $t->string('priority')->default('medium');
             $t->string('status')->default('pending');
             $t->foreignId('assigned_to')->nullable()->constrained('users');
             $t->dateTime('resolved_at')->nullable();
-            $t->text('notes')->nullable(); $t->timestamps();
+            $t->text('notes')->nullable();
+            $t->timestamps();
         });
     }
     Role::firstOrCreate(['name' => 'dormitory-admin']);
@@ -112,18 +131,15 @@ test('can report maintenance', function () {
 
 test('can access admin dashboard', function () {
     $admin = User::factory()->create()->assignRole('dormitory-admin');
-    $response = $this->actingAs($admin)->get('/admin/dormitory/dashboard');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/dormitory/dashboard')->assertOk();
 });
 
 test('can list halls', function () {
     $admin = User::factory()->create()->assignRole('dormitory-admin');
-    $response = $this->actingAs($admin)->get('/admin/dormitory/halls');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/dormitory/halls')->assertOk();
 });
 
 test('can list assignments', function () {
     $admin = User::factory()->create()->assignRole('dormitory-admin');
-    $response = $this->actingAs($admin)->get('/admin/dormitory/assignments');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/dormitory/assignments')->assertOk();
 });

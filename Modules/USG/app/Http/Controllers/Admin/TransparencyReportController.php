@@ -43,10 +43,15 @@ class TransparencyReportController extends Controller
         $types = $this->transparencyReportService->getTypes();
         $statistics = $this->transparencyReportService->getStatistics();
 
-        // Get available years from existing reports
-        $years = TransparencyReport::selectRaw('DISTINCT YEAR(report_period_start) as year')
-            ->orderBy('year', 'desc')
-            ->pluck('year')
+        // Get available years from existing reports (DB-agnostic: no YEAR() function)
+        $years = TransparencyReport::query()
+            ->select('report_period_start')
+            ->distinct()
+            ->orderBy('report_period_start', 'desc')
+            ->pluck('report_period_start')
+            ->map(fn ($date) => (int) $date->format('Y'))
+            ->unique()
+            ->values()
             ->toArray();
 
         return Inertia::render('usg/admin/transparency/index', [

@@ -2,8 +2,8 @@
 
 use App\Models\User;
 use Modules\Library\Models\Book;
-use Modules\Library\Models\BookCategory;
 use Modules\Library\Models\BookBorrowing;
+use Modules\Library\Models\BookCategory;
 use Modules\Library\Models\BookFine;
 use Spatie\Permission\Models\Role;
 
@@ -68,7 +68,7 @@ test('library-admin can view dashboard', function () {
     Role::firstOrCreate(['name' => 'library-admin']);
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('unauthorized user cannot access library admin', function () {
@@ -86,13 +86,13 @@ test('admin can view books list', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     Book::factory()->count(3)->create();
     $response = $this->actingAs($admin)->get(route('library.admin.books.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view book create page', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.books.create'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create book', function () {
@@ -114,14 +114,14 @@ test('admin can view book details', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $book = Book::factory()->create();
     $response = $this->actingAs($admin)->get(route('library.admin.books.show', $book));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can edit book', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $book = Book::factory()->create();
     $response = $this->actingAs($admin)->get(route('library.admin.books.edit', $book));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can update book', function () {
@@ -152,7 +152,7 @@ test('admin can delete book', function () {
 test('admin can view categories', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.categories.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create category', function () {
@@ -181,26 +181,26 @@ test('admin can update category', function () {
 test('admin can view borrowings', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.borrowings.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view active borrowings', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.borrowings.active'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view overdue borrowings', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.borrowings.overdue'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view borrowing details', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $borrowing = BookBorrowing::factory()->create();
     $response = $this->actingAs($admin)->get(route('library.admin.borrowings.show', $borrowing));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can process borrowing return', function () {
@@ -212,7 +212,7 @@ test('admin can process borrowing return', function () {
         'due_date' => now()->subDays(1),
     ]);
     $response = $this->actingAs($admin)->post(route('library.admin.borrowings.return', $borrowing));
-    expect(in_array($response->status(), [302, 200, 500]))->toBeTrue();
+    $response->assertRedirect();
 });
 
 // ─── Fines ────────────────────────────────────────────
@@ -220,39 +220,39 @@ test('admin can process borrowing return', function () {
 test('admin can view fines', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.fines.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can pay a fine', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $fine = BookFine::factory()->create(['status' => 'unpaid']);
     $response = $this->actingAs($admin)->post(route('library.admin.fines.pay', $fine));
-    expect(in_array($response->status(), [302, 200, 500]))->toBeTrue();
+    $response->assertRedirect();
 });
 
 test('admin can waive a fine', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $fine = BookFine::factory()->create(['status' => 'unpaid']);
     $response = $this->actingAs($admin)->post(route('library.admin.fines.waive', $fine));
-    expect(in_array($response->status(), [302, 200, 500]))->toBeTrue();
+    $response->assertRedirect();
 });
 
 // ─── Public Pages ─────────────────────────────────────
 
 test('public can view library home', function () {
     $response = $this->get(route('library.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('public can view books list', function () {
     $response = $this->get(route('library.books.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('public can view book details', function () {
     $book = Book::factory()->create();
     $response = $this->get(route('library.books.show', $book));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Reports ──────────────────────────────────────────
@@ -260,19 +260,19 @@ test('public can view book details', function () {
 test('admin can view reports', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.reports.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view popular books report', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.reports.popular-books'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view borrowing trends', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.reports.borrowing-trends'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Permissions ──────────────────────────────────────
@@ -280,11 +280,11 @@ test('admin can view borrowing trends', function () {
 test('library-staff can access admin dashboard', function () {
     $staff = User::factory()->create()->assignRole('library-staff');
     $response = $this->actingAs($staff)->get(route('library.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('library-admin can access statistics', function () {
     $admin = User::factory()->create()->assignRole('library-admin');
     $response = $this->actingAs($admin)->get(route('library.admin.statistics'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });

@@ -2,10 +2,13 @@
 
 namespace Modules\USG\Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use Modules\USG\Models\TransparencyReport;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\USG\Models\TransparencyReport>
+ * @extends Factory<TransparencyReport>
  */
 class TransparencyReportFactory extends Factory
 {
@@ -14,7 +17,7 @@ class TransparencyReportFactory extends Factory
      *
      * @var string
      */
-    protected $model = \Modules\USG\Models\TransparencyReport::class;
+    protected $model = TransparencyReport::class;
 
     /**
      * Define the model's default state.
@@ -28,9 +31,9 @@ class TransparencyReportFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => \Illuminate\Support\Str::slug($title),
+            'slug' => Str::slug($title),
             'description' => $this->faker->paragraph(),
-            'type' => $this->faker->randomElement(['financial', 'activity', 'annual', 'quarterly']),
+            'type' => $this->faker->randomElement(['financial', 'attendance', 'budget', 'expenditure', 'meeting_minutes', 'quarterly', 'annual', 'other']),
             'status' => 'published',
             'report_period_start' => now()->subMonths(3),
             'report_period_end' => now(),
@@ -42,7 +45,7 @@ class TransparencyReportFactory extends Factory
             'file_name' => $fileName,
             'file_size' => $this->faker->numberBetween(1024, 10485760), // 1KB to 10MB
             'mime_type' => 'application/pdf',
-            'created_by' => \App\Models\User::factory(),
+            'created_by' => User::factory(),
             'published_at' => now(),
             'download_count' => $this->faker->numberBetween(0, 200),
             'view_count' => $this->faker->numberBetween(0, 500),

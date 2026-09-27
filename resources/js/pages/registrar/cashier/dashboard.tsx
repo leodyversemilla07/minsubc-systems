@@ -19,6 +19,7 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from '@/components/ui/toast';
 import AppLayout from '@/layouts/app-layout';
 import { confirmPayment, verifyPayment } from '@/routes/registrar/cashier';
 import { type BreadcrumbItem } from '@/types';
@@ -34,7 +35,6 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
 interface PaymentDetails {
     id: number;
@@ -133,12 +133,16 @@ export default function Dashboard({ flash }: DashboardProps) {
                                 action={verifyPayment()}
                                 options={{ preserveScroll: true }}
                                 onSuccess={() => {
-                                    toast.success(
-                                        'Payment reference verified successfully',
-                                    );
+                                    toast.add({
+                                        title: 'Payment reference verified successfully',
+                                        type: 'success',
+                                    });
                                 }}
                                 onError={() => {
-                                    toast.error('Payment reference not found');
+                                    toast.add({
+                                        title: 'Payment reference not found',
+                                        type: 'error',
+                                    });
                                 }}
                             >
                                 {({ errors, processing }) => (
@@ -215,14 +219,16 @@ export default function Dashboard({ flash }: DashboardProps) {
                                             paymentDetails.reference,
                                     })}
                                     onSuccess={() => {
-                                        toast.success(
-                                            'Payment confirmed successfully',
-                                        );
+                                        toast.add({
+                                            title: 'Payment confirmed successfully',
+                                            type: 'success',
+                                        });
                                     }}
                                     onError={() => {
-                                        toast.error(
-                                            'Failed to confirm payment',
-                                        );
+                                        toast.add({
+                                            title: 'Failed to confirm payment',
+                                            type: 'error',
+                                        });
                                     }}
                                 >
                                     {({ errors, processing }) => (

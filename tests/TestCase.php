@@ -4,7 +4,6 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Role;
 
 abstract class TestCase extends BaseTestCase
@@ -47,6 +46,32 @@ abstract class TestCase extends BaseTestCase
             'research-admin',
             'research-panelist',
             'research-adviser',
+            'accounting-admin',
+            'accounting-staff',
+            'admission-admin',
+            'admission-staff',
+            'alumni-admin',
+            'alumni-staff',
+            'analytics-viewer',
+            'clinic-admin',
+            'clinic-doctor',
+            'clinic-nurse',
+            'discipline-admin',
+            'discipline-staff',
+            'dormitory-admin',
+            'dormitory-warden',
+            'facilities-admin',
+            'facilities-staff',
+            'guidance-admin',
+            'guidance-counselor',
+            'helpdesk-admin',
+            'helpdesk-technician',
+            'hr-admin',
+            'hr-staff',
+            'library-admin',
+            'library-staff',
+            'scheduling-admin',
+            'scheduling-staff',
         ];
 
         foreach ($roles as $roleName) {

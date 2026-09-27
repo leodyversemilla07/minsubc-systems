@@ -88,6 +88,12 @@
             "Modules\\Dormitory\\": "Modules/Dormitory/app/",
             "Modules\\Dormitory\\Database\\Factories\\": "Modules/Dormitory/database/factories/",
             "Modules\\Dormitory\\Database\\Seeders\\": "Modules/Dormitory/database/seeders/",
+            "Modules\\Alumni\\": "Modules/Alumni/app/",
+            "Modules\\Alumni\\Database\\Factories\\": "Modules/Alumni/database/factories/",
+            "Modules\\Alumni\\Database\\Seeders\\": "Modules/Alumni/database/seeders/",
+            "Modules\\Clinic\\": "Modules/Clinic/app/",
+            "Modules\\Clinic\\Database\\Factories\\": "Modules/Clinic/database/factories/",
+            "Modules\\Clinic\\Database\\Seeders\\": "Modules/Clinic/database/seeders/",
             "Modules\\Analytics\\": "Modules/Analytics/app/"
         }
     },
@@ -110,6 +116,8 @@
             "Modules\\Discipline\\Tests\\": "Modules/Discipline/tests/",
             "Modules\\Helpdesk\\Tests\\": "Modules/Helpdesk/tests/",
             "Modules\\Dormitory\\Tests\\": "Modules/Dormitory/tests/",
+            "Modules\\Alumni\\Tests\\": "Modules/Alumni/tests/",
+            "Modules\\Clinic\\Tests\\": "Modules/Clinic/tests/",
             "Modules\\Analytics\\Tests\\": "Modules/Analytics/tests/"
         }
     },

@@ -2,6 +2,7 @@
 
 namespace Modules\Analytics\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -26,29 +27,20 @@ class AnalyticsService
 
     private function safeCountWhere(string $table, string $column, $value): int
     {
-        if (!Schema::hasTable($table)) return 0;
+        if (! Schema::hasTable($table)) {
+            return 0;
+        }
+
         return DB::table($table)->where($column, $value)->count() ?? 0;
     }
 
     private function safeSum(string $table, string $column): float
     {
-        if (!Schema::hasTable($table)) return 0;
-        return DB::table($table)->sum($column) ?? 0;
-    }
-
-    private function safeRaw(string $table, string $select, string $groupBy, string $orderBy, int $months = 12)
-    {
-        if (!Schema::hasTable($table)) return collect();
-        try {
-            return DB::table($table)
-                ->selectRaw($select)
-                ->where('created_at', '>=', now()->subMonths($months))
-                ->groupBy(DB::raw($groupBy))
-                ->orderBy(DB::raw($orderBy))
-                ->get();
-        } catch (\Exception $e) {
-            return collect();
+        if (! Schema::hasTable($table)) {
+            return 0;
         }
+
+        return DB::table($table)->sum($column) ?? 0;
     }
 
     private function getAcademicStats(): array
@@ -67,6 +59,7 @@ class AnalyticsService
     {
         $totalInvoiced = $this->safeSum('acc_invoices', 'total_amount');
         $totalCollected = $this->safeSum('acc_payments', 'amount');
+
         return [
             'total_invoiced' => round($totalInvoiced, 2),
             'total_collected' => round($totalCollected, 2),
@@ -129,25 +122,44 @@ class AnalyticsService
 
     private function getTrends(): array
     {
-        $trends = [];
-        $trends['enrollment'] = $this->safeRaw(
-            'admission_enrollments',
-            "strftime('%Y-%m', created_at) as month, count(*) as count",
-            "strftime('%Y-%m', created_at)",
-            "strftime('%Y-%m', created_at)"
-        );
-        $trends['revenue'] = $this->safeRaw(
-            'acc_payments',
-            "strftime('%Y-%m', created_at) as month, sum(amount) as total",
-            "strftime('%Y-%m', created_at)",
-            "strftime('%Y-%m', created_at)"
-        );
-        $trends['incidents'] = $this->safeRaw(
-            'dsc_incidents',
-            "strftime('%Y-%m', created_at) as month, count(*) as count",
-            "strftime('%Y-%m', created_at)",
-            "strftime('%Y-%m', created_at)"
-        );
-        return $trends;
+        // Grouped in PHP (DB-agnostic: strftime is SQLite-only).
+        // safeRaw() silently swallowed the MySQL error and returned empty trends.
+        return [
+            'enrollment' => $this->safeMonthlyCount('admission_enrollments'),
+            'revenue' => $this->safeMonthlySum('acc_payments', 'amount'),
+            'incidents' => $this->safeMonthlyCount('dsc_incidents'),
+        ];
+    }
+
+    private function safeMonthlyCount(string $table, int $months = 12)
+    {
+        if (! Schema::hasTable($table)) {
+            return collect();
+        }
+
+        return DB::table($table)
+            ->where('created_at', '>=', now()->subMonths($months))
+            ->orderBy('created_at')
+            ->pluck('created_at')
+            ->map(fn ($date) => Carbon::parse($date)->format('Y-m'))
+            ->countBy()
+            ->map(fn ($count, $month) => ['month' => $month, 'count' => $count])
+            ->values();
+    }
+
+    private function safeMonthlySum(string $table, string $column, int $months = 12)
+    {
+        if (! Schema::hasTable($table)) {
+            return collect();
+        }
+
+        return DB::table($table)
+            ->where('created_at', '>=', now()->subMonths($months))
+            ->orderBy('created_at')
+            ->get(['created_at', $column])
+            ->groupBy(fn ($row) => Carbon::parse($row->created_at)->format('Y-m'))
+            ->map(fn ($group, $month) => ['month' => $month, 'total' => $group->sum($column)])
+            ->sortKeys()
+            ->values();
     }
 }
