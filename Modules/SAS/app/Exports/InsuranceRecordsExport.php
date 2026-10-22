@@ -2,6 +2,7 @@
 
 namespace Modules\SAS\Exports;
 
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -13,7 +14,7 @@ class InsuranceRecordsExport implements FromQuery, WithHeadings, WithMapping, Wi
 {
     public function __construct(protected array $filters = []) {}
 
-    public function query()
+    public function query(): Builder
     {
         $query = InsuranceRecord::query()
             ->with(['student']);
@@ -39,7 +40,7 @@ class InsuranceRecordsExport implements FromQuery, WithHeadings, WithMapping, Wi
             $query->whereDate('effective_date', '<=', $this->filters['date_to']);
         }
 
-        return $query->latest('effective_date');
+        return $query->latest('effective_date')->orderBy('id');
     }
 
     public function headings(): array
@@ -62,7 +63,7 @@ class InsuranceRecordsExport implements FromQuery, WithHeadings, WithMapping, Wi
         ];
     }
 
-    public function map($record): array
+    public function map(mixed $record): array
     {
         return [
             $record->id,
@@ -82,7 +83,7 @@ class InsuranceRecordsExport implements FromQuery, WithHeadings, WithMapping, Wi
         ];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): array
     {
         return [
             // Style the first row as bold header

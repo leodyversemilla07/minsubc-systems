@@ -2,6 +2,7 @@
 
 namespace Modules\SAS\Exports;
 
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -13,7 +14,7 @@ class ScholarshipRecipientsExport implements FromQuery, WithHeadings, WithMappin
 {
     public function __construct(protected array $filters = []) {}
 
-    public function query()
+    public function query(): Builder
     {
         $query = ScholarshipRecipient::query()
             ->with(['student', 'scholarship']);
@@ -43,7 +44,7 @@ class ScholarshipRecipientsExport implements FromQuery, WithHeadings, WithMappin
             $query->whereDate('date_awarded', '<=', $this->filters['date_to']);
         }
 
-        return $query->latest('date_awarded');
+        return $query->latest('date_awarded')->orderBy('id');
     }
 
     public function headings(): array
@@ -66,7 +67,7 @@ class ScholarshipRecipientsExport implements FromQuery, WithHeadings, WithMappin
         ];
     }
 
-    public function map($recipient): array
+    public function map(mixed $recipient): array
     {
         return [
             $recipient->id,
@@ -86,7 +87,7 @@ class ScholarshipRecipientsExport implements FromQuery, WithHeadings, WithMappin
         ];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): array
     {
         return [
             // Style the first row as bold header
