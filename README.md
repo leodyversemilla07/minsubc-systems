@@ -176,4 +176,6 @@ GitHub Actions runs on every push to `main`:
 
 ## 📄 License
 
-MinSU BC Systems Platform &copy; 2026 — Mindoro State University
+This project is licensed under the [MIT License](LICENSE).
+
+MinSU BC Systems Platform &copy; 2025-2026 Leodyver Semilla and contributors.

@@ -5,6 +5,9 @@ _ide_helper_models.php
 
 # Environment
 .env
+.env.backup
+.env.production
+
 # Playwright
 playwright-report/
 test-results/
@@ -13,8 +16,12 @@ test-results/
 node_modules/
 vendor/
 
+# Composer artifacts
+composer.json.tmp
+
 # Build outputs
 public/build/
+public/hot
 
 # Generated SSR bundle (rebuilt by `npm run build:ssr`)
 # See: https://github.com/laravel/react-starter-kit/blob/main/.gitignore
@@ -25,3 +32,18 @@ public/build/
 /resources/js/actions
 /resources/js/routes
 /resources/js/wayfinder
+
+# PHPUnit cache
+.phpunit.result.cache
+
+# Laravel runtime files
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*.php
+
+# OS files
+.DS_Store
+Thumbs.db
