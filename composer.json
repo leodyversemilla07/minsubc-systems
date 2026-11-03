@@ -17,7 +17,7 @@
         "laravel/scout": "^11.0",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.9",
-        "maatwebsite/excel": "^3.1",
+        "maatwebsite/excel": "^4.0",
         "nwidart/laravel-modules": "^13.0",
         "spatie/icalendar-generator": "^3.1",
         "spatie/laravel-permission": "^7.0"
@@ -25,7 +25,7 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.6",
         "fakerphp/faker": "^1.23",
-        "laravel/boost": "^2.0",
+        "laravel/boost": "^2.4",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.18",
         "laravel/sail": "^1.41",
@@ -88,6 +88,12 @@
             "Modules\\Dormitory\\": "Modules/Dormitory/app/",
             "Modules\\Dormitory\\Database\\Factories\\": "Modules/Dormitory/database/factories/",
             "Modules\\Dormitory\\Database\\Seeders\\": "Modules/Dormitory/database/seeders/",
+            "Modules\\Alumni\\": "Modules/Alumni/app/",
+            "Modules\\Alumni\\Database\\Factories\\": "Modules/Alumni/database/factories/",
+            "Modules\\Alumni\\Database\\Seeders\\": "Modules/Alumni/database/seeders/",
+            "Modules\\Clinic\\": "Modules/Clinic/app/",
+            "Modules\\Clinic\\Database\\Factories\\": "Modules/Clinic/database/factories/",
+            "Modules\\Clinic\\Database\\Seeders\\": "Modules/Clinic/database/seeders/",
             "Modules\\Analytics\\": "Modules/Analytics/app/"
         }
     },
@@ -110,21 +116,25 @@
             "Modules\\Discipline\\Tests\\": "Modules/Discipline/tests/",
             "Modules\\Helpdesk\\Tests\\": "Modules/Helpdesk/tests/",
             "Modules\\Dormitory\\Tests\\": "Modules/Dormitory/tests/",
+            "Modules\\Alumni\\Tests\\": "Modules/Alumni/tests/",
+            "Modules\\Clinic\\Tests\\": "Modules/Clinic/tests/",
             "Modules\\Analytics\\Tests\\": "Modules/Analytics/tests/"
         }
     },
     "scripts": {
         "lint": "vendor/bin/pint",
         "test": "./vendor/bin/pest",
+        "ide-helper": [
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:models --nowrite",
+            "@php artisan ide-helper:meta"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:models --nowrite",
-            "@php artisan ide-helper:meta"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

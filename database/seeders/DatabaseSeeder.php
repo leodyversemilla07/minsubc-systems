@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\SAS\Database\Seeders\SASDatabaseSeeder;
-use Modules\USG\Database\Seeders\USGDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,20 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed roles, users, and system settings
-        $this->call([
-            RolesAndPermissionsSeeder::class,
-            UserSeeder::class,
-        ]);
+        $this->call(RolesAndPermissionsSeeder::class);
 
-        // Seed USG module data
-        $this->call([
-            USGDatabaseSeeder::class,
-        ]);
-
-        // Seed SAS module data
-        $this->call([
-            SASDatabaseSeeder::class,
-        ]);
+        // Never create accounts with published demo credentials outside development.
+        if (app()->environment('local', 'development', 'testing')) {
+            $this->call([UserSeeder::class, DemoSeeder::class]);
+        }
     }
 }

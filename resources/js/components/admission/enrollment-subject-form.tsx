@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Check, Clock } from 'lucide-react';
 
 interface Subject {
     id: number;

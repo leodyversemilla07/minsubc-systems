@@ -1,354 +1,297 @@
-import { Badge } from '@/components/ui/badge';
+import { Head, Link, router } from '@inertiajs/react';
+import { useState } from 'react';
+import AppLayout from '@/layouts/app-layout';
+import {
+    AlertTriangle,
+    Bell,
+    BookOpen,
+    Building2,
+    Calendar,
+    Check,
+    CheckCheck,
+    FileText,
+    FlaskConical,
+    GraduationCap,
+    HeartPulse,
+    Megaphone,
+    Ticket,
+    UserCheck,
+    UserPlus,
+    Vote,
+    Wrench,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from '@/components/ui/empty';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
-import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
-import {
-    AlertCircle,
-    AlertTriangle,
-    Award,
-    Bell,
-    CheckCircle,
-    Clock,
-    RefreshCw,
-    ShieldCheck,
-} from 'lucide-react';
-import { type ReactNode } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-    {
-        title: 'Notifications',
-        href: '/notifications',
-    },
-];
+const iconMap: Record<string, React.ElementType> = {
+    Bell,
+    AlertTriangle,
+    BookOpen,
+    Building2,
+    Calendar,
+    FileText,
+    FlaskConical,
+    GraduationCap,
+    HeartPulse,
+    Megaphone,
+    Ticket,
+    UserCheck,
+    UserPlus,
+    Vote,
+    Wrench,
+};
+
+const moduleColors: Record<string, string> = {
+    helpdesk: 'text-blue-500 bg-blue-50 dark:bg-blue-950',
+    discipline: 'text-red-500 bg-red-50 dark:bg-red-950',
+    dormitory: 'text-purple-500 bg-purple-50 dark:bg-purple-950',
+    accounting: 'text-green-500 bg-green-50 dark:bg-green-950',
+    library: 'text-amber-500 bg-amber-50 dark:bg-amber-950',
+    hr: 'text-cyan-500 bg-cyan-50 dark:bg-cyan-950',
+    admission: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950',
+    usg: 'text-orange-500 bg-orange-50 dark:bg-orange-950',
+    voting: 'text-rose-500 bg-rose-50 dark:bg-rose-950',
+    clinic: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950',
+    guidance: 'text-teal-500 bg-teal-50 dark:bg-teal-950',
+    facilities: 'text-slate-500 bg-slate-50 dark:bg-slate-950',
+    scheduling: 'text-violet-500 bg-violet-50 dark:bg-violet-950',
+    general: 'text-neutral-500 bg-neutral-50 dark:bg-neutral-800',
+};
 
 interface NotificationData {
-    title: string;
-    message: string;
     icon?: string;
-    url?: string;
-    scholarship_name?: string;
-    amount?: string;
-    old_status?: string;
-    new_status?: string;
-    requirement_name?: string;
-    deadline?: string;
-    expiration_date?: string;
-    policy_number?: string;
-    provider?: string;
-    reason?: string;
-    expiry_date?: string;
-    days_left?: number;
+    title: string;
+    body: string;
+    module: string;
+    action_url?: string | null;
+    action_text?: string | null;
 }
 
-interface Notification {
+interface NotificationItem {
     id: string;
     type: string;
     data: NotificationData;
     read_at: string | null;
     created_at: string;
-    updated_at: string;
+    is_unread: boolean;
 }
 
-interface PaginatedNotifications {
-    data: Notification[];
+interface PaginatedResponse {
+    data: NotificationItem[];
     current_page: number;
     last_page: number;
-    per_page: number;
     total: number;
+    per_page: number;
     from: number;
     to: number;
 }
 
-interface NotificationsIndexProps {
-    notifications: PaginatedNotifications;
-    filter: 'all' | 'unread' | 'read';
-}
-
-const iconMap: Record<string, ReactNode> = {
-    award: <Award className="h-5 w-5" />,
-    bell: <Bell className="h-5 w-5" />,
-    clock: <Clock className="h-5 w-5" />,
-    'refresh-cw': <RefreshCw className="h-5 w-5" />,
-    'shield-check': <ShieldCheck className="h-5 w-5" />,
-    'check-circle': <CheckCircle className="h-5 w-5" />,
-    'alert-circle': <AlertCircle className="h-5 w-5" />,
-    'alert-triangle': <AlertTriangle className="h-5 w-5" />,
-};
-
 export default function NotificationsIndex({
     notifications,
     filter,
-}: NotificationsIndexProps) {
-    const handleTabChange = (value: string) => {
-        router.get(
-            '/notifications',
-            { filter: value },
-            { preserveState: true },
-        );
+}: {
+    notifications: PaginatedResponse;
+    filter: string;
+}) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: 'Notifications', href: '/notifications' },
+    ];
+
+    const handleMarkRead = async (id: string) => {
+        await fetch(`/notifications/${id}/read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN':
+                    document
+                        .querySelector('meta[name="csrf-token"]')
+                        ?.getAttribute('content') || '',
+            },
+        });
+        router.reload({ only: ['notifications'] });
     };
 
-    const handleMarkAsRead = async (id: string) => {
-        try {
-            await fetch(`/notifications/${id}/read`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN':
-                        document
-                            .querySelector('meta[name="csrf-token"]')
-                            ?.getAttribute('content') || '',
-                },
-            });
-            router.reload({ only: ['notifications'] });
-        } catch {
-            // Failed to mark notification as read
-        }
+    const handleMarkAllRead = async () => {
+        await fetch('/notifications/read-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN':
+                    document
+                        .querySelector('meta[name="csrf-token"]')
+                        ?.getAttribute('content') || '',
+            },
+        });
+        router.reload({ only: ['notifications'] });
     };
 
-    const handleMarkAllAsRead = async () => {
-        try {
-            await fetch('/notifications/read-all', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN':
-                        document
-                            .querySelector('meta[name="csrf-token"]')
-                            ?.getAttribute('content') || '',
-                },
-            });
-            router.reload({ only: ['notifications'] });
-        } catch {
-            // Failed to mark all notifications as read
-        }
+    const handleClick = (n: NotificationItem) => {
+        if (n.is_unread) handleMarkRead(n.id);
+        if (n.data.action_url) router.visit(n.data.action_url);
     };
 
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diff = now.getTime() - date.getTime();
-        const seconds = Math.floor(diff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-
-        if (days > 7) {
-            return date.toLocaleDateString();
-        } else if (days > 0) {
-            return `${days} ${days === 1 ? 'day' : 'days'} ago`;
-        } else if (hours > 0) {
-            return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
-        } else if (minutes > 0) {
-            return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
-        } else {
-            return 'Just now';
-        }
-    };
+    const filters = [
+        { key: 'all', label: 'All' },
+        { key: 'unread', label: 'Unread' },
+        { key: 'read', label: 'Read' },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Notifications" />
 
-            <div className="space-y-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h1 className="text-2xl font-semibold tracking-tight">
-                            Notifications
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Manage and view your notifications
-                        </p>
+            <div className="mx-auto max-w-3xl space-y-6 p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-2xl font-bold">Notifications</h1>
+                    <div className="flex items-center gap-2">
+                        {notifications.data.filter((n) => n.is_unread).length >
+                            0 && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleMarkAllRead}
+                            >
+                                <CheckCheck className="mr-1 size-4" />
+                                Mark all read
+                            </Button>
+                        )}
                     </div>
-                    {notifications.data.some((n) => !n.read_at) && (
-                        <Button onClick={handleMarkAllAsRead}>
-                            Mark all as read
-                        </Button>
+                </div>
+
+                {/* Filter tabs */}
+                <div className="flex gap-1 rounded-lg border p-1">
+                    {filters.map((f) => (
+                        <Link
+                            key={f.key}
+                            href={`/notifications?filter=${f.key}`}
+                            preserveState
+                            className={cn(
+                                'flex-1 rounded-md px-3 py-1.5 text-center text-sm font-medium transition-colors',
+                                filter === f.key
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'text-muted-foreground hover:bg-accent',
+                            )}
+                        >
+                            {f.label}
+                        </Link>
+                    ))}
+                </div>
+
+                {/* Notifications list */}
+                <div className="space-y-2">
+                    {notifications.data.length === 0 ? (
+                        <Card>
+                            <CardContent className="py-12 text-center">
+                                <Bell className="mx-auto mb-3 size-8 text-muted-foreground/40" />
+                                <p className="text-muted-foreground">
+                                    {filter === 'unread'
+                                        ? 'No unread notifications'
+                                        : filter === 'read'
+                                          ? 'No read notifications'
+                                          : 'No notifications yet'}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        notifications.data.map((n) => {
+                            const IconComponent = n.data.icon
+                                ? iconMap[n.data.icon] || Bell
+                                : Bell;
+                            const colorClass =
+                                moduleColors[n.data.module] ||
+                                moduleColors.general;
+
+                            return (
+                                <button
+                                    key={n.id}
+                                    onClick={() => handleClick(n)}
+                                    className={cn(
+                                        'flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-colors hover:bg-accent',
+                                        n.is_unread &&
+                                            'border-l-4 border-l-blue-500 bg-accent/20',
+                                    )}
+                                >
+                                    <div
+                                        className={cn(
+                                            'flex size-10 shrink-0 items-center justify-center rounded-full',
+                                            colorClass,
+                                        )}
+                                    >
+                                        <IconComponent className="size-5" />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <p
+                                                className={cn(
+                                                    'truncate',
+                                                    n.is_unread &&
+                                                        'font-semibold',
+                                                )}
+                                            >
+                                                {n.data.title}
+                                            </p>
+                                            <span className="shrink-0 text-xs text-muted-foreground">
+                                                {n.created_at}
+                                            </span>
+                                        </div>
+                                        <p className="mt-1 text-sm text-muted-foreground">
+                                            {n.data.body}
+                                        </p>
+                                        <div className="mt-2 flex items-center gap-2">
+                                            {n.data.action_text && (
+                                                <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                                                    {n.data.action_text}
+                                                </span>
+                                            )}
+                                            <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+                                                {n.data.module}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {n.is_unread && (
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleMarkRead(n.id);
+                                            }}
+                                            className="shrink-0 rounded-full p-1 text-muted-foreground/40 hover:text-blue-500"
+                                            title="Mark as read"
+                                        >
+                                            <Check className="size-4" />
+                                        </button>
+                                    )}
+                                </button>
+                            );
+                        })
                     )}
                 </div>
 
-                <Tabs
-                    value={filter}
-                    onValueChange={handleTabChange}
-                    className="w-full"
-                >
-                    <TabsList>
-                        <TabsTrigger value="all">All</TabsTrigger>
-                        <TabsTrigger value="unread">Unread</TabsTrigger>
-                        <TabsTrigger value="read">Read</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value={filter} className="mt-6">
-                        {notifications.data.length === 0 ? (
-                            <Card>
-                                <CardContent className="pt-6">
-                                    <Empty>
-                                        <EmptyMedia>
-                                            <Bell className="size-12 text-muted-foreground" />
-                                        </EmptyMedia>
-                                        <EmptyHeader>
-                                            <EmptyTitle>
-                                                No notifications
-                                            </EmptyTitle>
-                                            <EmptyDescription>
-                                                {filter === 'unread'
-                                                    ? "You're all caught up! No unread notifications."
-                                                    : filter === 'read'
-                                                      ? 'No read notifications yet.'
-                                                      : 'You have no notifications.'}
-                                            </EmptyDescription>
-                                        </EmptyHeader>
-                                        <EmptyContent>
-                                            <Link href={dashboard().url}>
-                                                <Button>Go to Dashboard</Button>
-                                            </Link>
-                                        </EmptyContent>
-                                    </Empty>
-                                </CardContent>
-                            </Card>
-                        ) : (
-                            <div className="space-y-4">
-                                {notifications.data.map((notification) => (
-                                    <Card
-                                        key={notification.id}
-                                        className={cn(
-                                            'transition-colors hover:bg-accent/50',
-                                            !notification.read_at &&
-                                                'border-l-4 border-l-primary',
-                                        )}
-                                    >
-                                        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                                            <div className="flex items-start gap-4">
-                                                <div
-                                                    className={cn(
-                                                        'flex h-10 w-10 items-center justify-center rounded-full',
-                                                        !notification.read_at
-                                                            ? 'bg-primary/10 text-primary'
-                                                            : 'bg-muted text-muted-foreground',
-                                                    )}
-                                                >
-                                                    {iconMap[
-                                                        notification.data
-                                                            .icon || 'bell'
-                                                    ] || (
-                                                        <Bell className="h-5 w-5" />
-                                                    )}
-                                                </div>
-                                                <div className="flex-1 space-y-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <CardTitle className="text-base">
-                                                            {
-                                                                notification
-                                                                    .data.title
-                                                            }
-                                                        </CardTitle>
-                                                        {!notification.read_at && (
-                                                            <Badge
-                                                                variant="default"
-                                                                className="h-5"
-                                                            >
-                                                                New
-                                                            </Badge>
-                                                        )}
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {
-                                                            notification.data
-                                                                .message
-                                                        }
-                                                    </p>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        {formatDate(
-                                                            notification.created_at,
-                                                        )}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                {!notification.read_at && (
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleMarkAsRead(
-                                                                notification.id,
-                                                            )
-                                                        }
-                                                    >
-                                                        Mark as read
-                                                    </Button>
-                                                )}
-                                                {notification.data.url && (
-                                                    <Link
-                                                        href={
-                                                            notification.data
-                                                                .url
-                                                        }
-                                                    >
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                        >
-                                                            View
-                                                        </Button>
-                                                    </Link>
-                                                )}
-                                            </div>
-                                        </CardHeader>
-                                    </Card>
-                                ))}
-
-                                {/* Pagination */}
-                                {notifications.last_page > 1 && (
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-sm text-muted-foreground">
-                                            Showing {notifications.from} to{' '}
-                                            {notifications.to} of{' '}
-                                            {notifications.total} notifications
-                                        </p>
-                                        <div className="flex gap-2">
-                                            {notifications.current_page > 1 && (
-                                                <Link
-                                                    href={`/notifications?filter=${filter}&page=${notifications.current_page - 1}`}
-                                                >
-                                                    <Button variant="outline">
-                                                        Previous
-                                                    </Button>
-                                                </Link>
-                                            )}
-                                            {notifications.current_page <
-                                                notifications.last_page && (
-                                                <Link
-                                                    href={`/notifications?filter=${filter}&page=${notifications.current_page + 1}`}
-                                                >
-                                                    <Button variant="outline">
-                                                        Next
-                                                    </Button>
-                                                </Link>
-                                            )}
-                                        </div>
-                                    </div>
+                {/* Pagination */}
+                {notifications.last_page > 1 && (
+                    <div className="flex items-center justify-center gap-2">
+                        {Array.from(
+                            { length: notifications.last_page },
+                            (_, i) => i + 1,
+                        ).map((page) => (
+                            <Link
+                                key={page}
+                                href={`/notifications?filter=${filter}&page=${page}`}
+                                preserveState
+                                className={cn(
+                                    'flex size-8 items-center justify-center rounded-md text-sm',
+                                    page === notifications.current_page
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'text-muted-foreground hover:bg-accent',
                                 )}
-                            </div>
-                        )}
-                    </TabsContent>
-                </Tabs>
+                            >
+                                {page}
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

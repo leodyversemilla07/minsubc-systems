@@ -1,11 +1,13 @@
 <?php
 
-use App\Models\User;
 use App\Models\Student;
-use Modules\Guidance\Models\Counselor;
-use Modules\Guidance\Models\AppointmentSlot;
+use App\Models\User;
 use Modules\Guidance\Models\Appointment;
+use Modules\Guidance\Models\AppointmentSlot;
 use Modules\Guidance\Models\CounselingSession;
+use Modules\Guidance\Models\Counselor;
+use Modules\Guidance\Models\IncidentReport;
+use Modules\Guidance\Models\Intervention;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -17,7 +19,7 @@ beforeEach(function () {
 
 test('can create counselor', function () {
     $counselor = Counselor::factory()->create(['first_name' => 'Jane', 'specialization' => 'mental_health']);
-    expect($counselor->full_name)->toBe('Jane ' . $counselor->last_name);
+    expect($counselor->full_name)->toBe('Jane '.$counselor->last_name);
     expect($counselor->specialization)->toBe('mental_health');
     expect($counselor->is_available)->toBeTrue();
 });
@@ -55,7 +57,7 @@ test('can create counseling session', function () {
 test('guidance-admin can view dashboard', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('unauthorized user cannot access guidance admin', function () {
@@ -72,7 +74,7 @@ test('guest cannot access guidance admin', function () {
 test('admin can view counselors', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.counselors.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create counselor', function () {
@@ -108,7 +110,7 @@ test('admin can update counselor', function () {
 test('admin can view slots', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.slots.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create slot', function () {
@@ -128,17 +130,40 @@ test('admin can create slot', function () {
 
 // ─── Appointments ───────────────────────────────────
 
+test('student appointments use the string student ID', function () {
+    $user = User::factory()->create();
+    $student = Student::factory()->create(['user_id' => $user->id]);
+    $slot = AppointmentSlot::factory()->create(['date' => now()->addDay()]);
+
+    $this->actingAs($user)->post(route('guidance.my.appointments.store'), [
+        'slot_id' => $slot->id,
+        'reason' => 'Academic concern',
+    ])->assertRedirect(route('guidance.my.appointments'));
+
+    $appointment = Appointment::where('student_id', $student->student_id)->firstOrFail();
+    expect($appointment->slot_id)->toBe($slot->id);
+
+    $this->actingAs($user)->post(route('guidance.my.appointments.cancel', $appointment))
+        ->assertRedirect(route('guidance.my.appointments'));
+    expect($appointment->fresh()->status)->toBe('cancelled');
+    expect($slot->fresh()->booked_count)->toBe(0);
+
+    $this->actingAs($user)->post(route('guidance.my.appointments.cancel', $appointment))
+        ->assertSessionHas('error');
+    expect($slot->fresh()->booked_count)->toBe(0);
+});
+
 test('admin can view appointments', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.appointments.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view appointment details', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $appointment = Appointment::factory()->create();
     $response = $this->actingAs($admin)->get(route('guidance.admin.appointments.show', $appointment));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can confirm appointment', function () {
@@ -162,7 +187,7 @@ test('admin can complete appointment', function () {
 test('admin can view sessions', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.sessions.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create session', function () {
@@ -185,7 +210,7 @@ test('admin can view session details', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $session = CounselingSession::factory()->create();
     $response = $this->actingAs($admin)->get(route('guidance.admin.sessions.show', $session));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Referrals ─────────────────────────────────────
@@ -193,7 +218,7 @@ test('admin can view session details', function () {
 test('admin can view referrals', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.referrals.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Interventions ─────────────────────────────────
@@ -201,7 +226,7 @@ test('admin can view referrals', function () {
 test('admin can view interventions', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.interventions.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create intervention', function () {
@@ -214,7 +239,7 @@ test('admin can create intervention', function () {
         'max_participants' => 30,
     ]);
     $response->assertRedirect(route('guidance.admin.interventions.index'));
-    expect(\Modules\Guidance\Models\Intervention::where('title', 'Stress Management Workshop')->exists())->toBeTrue();
+    expect(Intervention::where('title', 'Stress Management Workshop')->exists())->toBeTrue();
 });
 
 // ─── Incident Reports ──────────────────────────────
@@ -222,7 +247,7 @@ test('admin can create intervention', function () {
 test('admin can view incident reports', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.incident-reports.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can create incident report', function () {
@@ -236,14 +261,14 @@ test('admin can create incident report', function () {
         'severity' => 'moderate',
     ]);
     $response->assertRedirect(route('guidance.admin.incident-reports.index'));
-    expect(\Modules\Guidance\Models\IncidentReport::where('student_id', $student->student_id)->exists())->toBeTrue();
+    expect(IncidentReport::where('student_id', $student->student_id)->exists())->toBeTrue();
 });
 
 // ─── Public Pages ─────────────────────────────────────
 
 test('public can view guidance home', function () {
     $response = $this->get(route('guidance.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Permissions ─────────────────────────────────────
@@ -251,7 +276,7 @@ test('public can view guidance home', function () {
 test('guidance-counselor can access admin dashboard', function () {
     $counselor = User::factory()->create()->assignRole('guidance-counselor');
     $response = $this->actingAs($counselor)->get(route('guidance.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── Reports ─────────────────────────────────────────
@@ -259,25 +284,25 @@ test('guidance-counselor can access admin dashboard', function () {
 test('admin can view reports page', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.reports.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view appointments report', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.reports.appointments'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view sessions report', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.reports.sessions'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 test('admin can view incidents report', function () {
     $admin = User::factory()->create()->assignRole('guidance-admin');
     $response = $this->actingAs($admin)->get(route('guidance.admin.reports.incidents'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $response->assertOk();
 });
 
 // ─── API Endpoints ────────────────────────────────────

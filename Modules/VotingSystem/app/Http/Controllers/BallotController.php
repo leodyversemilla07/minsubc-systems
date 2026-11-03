@@ -5,12 +5,16 @@ namespace Modules\VotingSystem\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Modules\VotingSystem\Models\Position;
 use Modules\VotingSystem\Models\Vote;
+use Modules\VotingSystem\Models\Voter;
 use Modules\VotingSystem\Models\VoterActivityLog;
 
 class BallotController extends Controller
@@ -21,7 +25,7 @@ class BallotController extends Controller
     public function show(Request $request): Response
     {
         $voterId = $request->session()->get('voting.voter_id');
-        $voter = \Modules\VotingSystem\Models\Voter::with(['election', 'user'])->findOrFail($voterId);
+        $voter = Voter::with(['election', 'user'])->findOrFail($voterId);
         $election = $voter->election;
 
         // Log ballot access
@@ -50,26 +54,11 @@ class BallotController extends Controller
     public function preview(Request $request): Response
     {
         $voterId = $request->session()->get('voting.voter_id');
-        $voter = \Modules\VotingSystem\Models\Voter::with(['election', 'user'])->findOrFail($voterId);
+        $voter = Voter::with(['election', 'user'])->findOrFail($voterId);
         $election = $voter->election;
 
-        // Validate the votes
         $positions = Position::where('election_id', $election->id)->get();
-
-        $rules = [];
-        foreach ($positions as $position) {
-            $rules["votes.{$position->position_id}"] = [
-                'required',
-                'array',
-                "max:{$position->max_vote}",
-            ];
-            $rules["votes.{$position->position_id}.*"] = [
-                'integer',
-                'exists:candidates,id',
-            ];
-        }
-
-        $validated = $request->validate($rules);
+        $validated = $this->validateBallot($request, $positions);
 
         // Get all selected candidates with their details
         $selections = [];
@@ -105,8 +94,13 @@ class BallotController extends Controller
     public function submit(Request $request): RedirectResponse
     {
         $voterId = $request->session()->get('voting.voter_id');
-        $voter = \Modules\VotingSystem\Models\Voter::with(['election', 'user'])->findOrFail($voterId);
+        $voter = Voter::with(['election', 'user'])->findOrFail($voterId);
         $election = $voter->election;
+
+        if (! $election->isActive()) {
+            return redirect()->route('voting.index')
+                ->with('error', 'This election is not accepting votes.');
+        }
 
         // Check if voter has already voted
         if ($voter->hasVoted()) {
@@ -114,26 +108,26 @@ class BallotController extends Controller
                 ->with('error', 'You have already voted.');
         }
 
-        // Validate the votes
         $positions = Position::where('election_id', $election->id)->get();
-
-        $rules = [];
-        foreach ($positions as $position) {
-            $rules["votes.{$position->position_id}"] = [
-                'required',
-                'array',
-                "max:{$position->max_vote}",
-            ];
-            $rules["votes.{$position->position_id}.*"] = [
-                'integer',
-                'exists:candidates,id',
-            ];
-        }
-
-        $validated = $request->validate($rules);
+        $validated = $this->validateBallot($request, $positions);
 
         DB::beginTransaction();
         try {
+            // Serialize submissions for this voter before writing any votes.
+            $voter = Voter::whereKey($voter->id)->lockForUpdate()->firstOrFail();
+            if (! $election->fresh()->isActive()) {
+                DB::rollBack();
+
+                return redirect()->route('voting.index')
+                    ->with('error', 'This election is not accepting votes.');
+            }
+            if ($voter->hasVoted()) {
+                DB::rollBack();
+
+                return redirect()->route('voting.confirmation')
+                    ->with('error', 'You have already voted.');
+            }
+
             $timestamp = now();
             $referenceId = 'REF-'.strtoupper(substr(md5($voter->id.$timestamp), 0, 8));
 
@@ -215,6 +209,32 @@ class BallotController extends Controller
 
             return back()->with('error', 'An error occurred while submitting your vote. Please try again.');
         }
+    }
+
+    /**
+     * Validate all ballot entries against the voter's election and position.
+     */
+    private function validateBallot(Request $request, Collection $positions): array
+    {
+        $positionIds = $positions->pluck('position_id')->map(fn ($id) => (string) $id)->all();
+        $submittedVotes = $request->input('votes', []);
+        if (is_array($submittedVotes) && array_diff(array_keys($submittedVotes), $positionIds)) {
+            throw ValidationException::withMessages(['votes' => 'Invalid ballot position.']);
+        }
+
+        $rules = ['votes' => ['required', 'array']];
+        foreach ($positions as $position) {
+            $rules["votes.{$position->position_id}"] = [
+                'required', 'array', "max:{$position->max_vote}",
+            ];
+            $rules["votes.{$position->position_id}.*"] = [
+                'integer', 'distinct',
+                Rule::exists('candidates', 'id')->where('election_id', $position->election_id)
+                    ->where('position_id', $position->position_id),
+            ];
+        }
+
+        return $request->validate($rules);
     }
 
     /**

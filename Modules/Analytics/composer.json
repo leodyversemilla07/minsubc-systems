@@ -1,5 +1,5 @@
 {
-    "name": "ANALYTICS",
+    "name": "minsubc/analytics",
     "type": "library",
     "description": "Cross-module Analytics & Dashboard Module",
     "extra": {

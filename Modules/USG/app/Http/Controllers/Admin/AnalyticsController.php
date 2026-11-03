@@ -4,11 +4,12 @@ namespace Modules\USG\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response as InertiaResponse;
 use Modules\USG\Models\Announcement;
 use Modules\USG\Models\Event;
-use Modules\USG\Models\EventRegistration;
 use Modules\USG\Models\Officer;
 use Modules\USG\Models\Resolution;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,7 +89,8 @@ class AnalyticsController extends Controller
             'upcoming_events' => Event::where('start_date', '>=', now())->count(),
             'past_events' => Event::where('start_date', '<', now())->count(),
             'events_in_period' => Event::where('created_at', '>=', $startDate)->count(),
-            'total_registrations' => EventRegistration::count(),
+            // Event registration was removed from scope (see README) — no model/table exists.
+            'total_registrations' => 0,
 
             'total_officers' => Officer::count(),
             'active_officers' => Officer::where('status', 'active')->count(),
@@ -105,22 +107,21 @@ class AnalyticsController extends Controller
     {
         return [
             'announcements_by_category' => Announcement::query()
-                ->select('category', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
+                ->select('category', DB::raw('count(*) as count'))
                 ->where('created_at', '>=', $startDate)
                 ->groupBy('category')
                 ->get(),
 
+            // Grouped in PHP (DB-agnostic: MONTH()/YEAR() are MySQL-only)
             'events_by_month' => Event::query()
-                ->select(
-                    \Illuminate\Support\Facades\DB::raw('MONTH(start_date) as month'),
-                    \Illuminate\Support\Facades\DB::raw('YEAR(start_date) as year'),
-                    \Illuminate\Support\Facades\DB::raw('count(*) as count')
-                )
                 ->where('start_date', '>=', $startDate)
-                ->groupBy('month', 'year')
-                ->orderBy('year')
-                ->orderBy('month')
-                ->get(),
+                ->orderBy('start_date')
+                ->pluck('start_date')
+                ->map(fn ($date) => ['month' => (int) $date->format('m'), 'year' => (int) $date->format('Y')])
+                ->groupBy(fn ($row) => $row['year'].'-'.$row['month'])
+                ->map(fn ($group) => ['month' => $group[0]['month'], 'year' => $group[0]['year'], 'count' => $group->count()])
+                ->sortBy([['year', 'asc'], ['month', 'asc']])
+                ->values(),
 
             'announcement_trends' => $this->getDailyTrends(Announcement::class, $startDate),
             'event_trends' => $this->getDailyTrends(Event::class, $startDate),
@@ -142,20 +143,20 @@ class AnalyticsController extends Controller
                 'date' => $date,
                 'count' => $count,
             ];
-        });
+        })->all();
     }
 
     /**
      * Get start date based on period.
      */
-    protected function getStartDate(string $period): \Carbon\Carbon
+    protected function getStartDate(string $period): Carbon
     {
         return match ($period) {
             '7days' => now()->subDays(7),
             '30days' => now()->subDays(30),
             '90days' => now()->subDays(90),
             'year' => now()->subYear(),
-            'all' => \Carbon\Carbon::parse('2000-01-01'),
+            'all' => Carbon::parse('2000-01-01'),
             default => now()->subDays(30),
         };
     }

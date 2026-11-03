@@ -128,8 +128,7 @@ test('admin can view activities list', function () {
 });
 
 test('admin can view activities page', function () {
-    $response = $this->get(route('sas.activities.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->get(route('sas.activities.index'))->assertOk();
 });
 
 // ─── Scholarships CRUD ────────────────────────────────────────

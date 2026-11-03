@@ -3,8 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Registrar\Database\Seeders\RegistrarPermissionsSeeder;
+use Modules\SAS\Database\Seeders\SASPermissionsSeeder;
+use Modules\USG\Database\Seeders\USGPermissionsSeeder;
+use Modules\VotingSystem\Database\Seeders\VotingSystemPermissionsSeeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -14,7 +19,7 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run(): void
     {
         // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create core permissions (student and super admin)
         $corePermissions = [
@@ -59,16 +64,30 @@ class RolesAndPermissionsSeeder extends Seeder
         $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
         $superAdminRole->syncPermissions($corePermissions);
 
+        // These roles must exist independently of development-only demo data.
+        foreach ([
+            'accounting-admin', 'accounting-staff', 'alumni-admin', 'alumni-staff',
+            'analytics-viewer', 'clinic-admin', 'clinic-doctor', 'clinic-nurse',
+            'curriculum-admin', 'curriculum-staff', 'discipline-admin', 'discipline-staff',
+            'dormitory-admin', 'dormitory-warden', 'facilities-admin', 'facilities-staff',
+            'guidance-admin', 'guidance-counselor', 'helpdesk-admin', 'helpdesk-technician',
+            'hr-admin', 'hr-staff', 'library-admin', 'library-staff',
+            'research-admin', 'research-panelist', 'research-adviser',
+            'scheduling-admin', 'scheduling-staff',
+        ] as $roleName) {
+            Role::firstOrCreate(['name' => $roleName]);
+        }
+
         $this->command->info('✓ Core roles and permissions created successfully!');
         $this->command->info('');
         $this->command->info('Running module-specific permission seeders...');
 
         // Call module-specific permission seeders
         $this->call([
-            \Modules\Registrar\Database\Seeders\RegistrarPermissionsSeeder::class,
-            \Modules\USG\Database\Seeders\USGPermissionsSeeder::class,
-            \Modules\SAS\Database\Seeders\SASPermissionsSeeder::class,
-            \Modules\VotingSystem\Database\Seeders\VotingSystemPermissionsSeeder::class,
+            RegistrarPermissionsSeeder::class,
+            USGPermissionsSeeder::class,
+            SASPermissionsSeeder::class,
+            VotingSystemPermissionsSeeder::class,
         ]);
 
         $this->command->info('');

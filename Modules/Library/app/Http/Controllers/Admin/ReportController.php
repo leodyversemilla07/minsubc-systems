@@ -28,12 +28,15 @@ class ReportController extends Controller
 
     public function borrowingTrends(): InertiaResponse
     {
-        $monthlyData = BookBorrowing::selectRaw("strftime('%Y-%m', borrowed_at) as month, count(*) as total")
-            ->whereNotNull('borrowed_at')
+        // Grouped in PHP (DB-agnostic: strftime is SQLite-only)
+        $monthlyData = BookBorrowing::whereNotNull('borrowed_at')
             ->where('borrowed_at', '>=', now()->subMonths(12))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+            ->orderBy('borrowed_at')
+            ->pluck('borrowed_at')
+            ->map(fn ($date) => $date->format('Y-m'))
+            ->countBy()
+            ->map(fn ($total, $month) => ['month' => $month, 'total' => $total])
+            ->values();
 
         $categoryData = BookCategory::withCount('books')->get();
 

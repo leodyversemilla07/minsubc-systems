@@ -1,7 +1,8 @@
 <?php
 
-use Modules\Alumni\Models\Alumnus;
+use App\Models\User;
 use Modules\Alumni\Models\AlumniEvent;
+use Modules\Alumni\Models\Alumnus;
 use Modules\Alumni\Models\Donation;
 use Modules\Alumni\Models\EmploymentRecord;
 use Spatie\Permission\Models\Role;
@@ -65,37 +66,32 @@ test('alumni module relationships work', function () {
 });
 
 test('alumni-admin can access dashboard', function () {
-    $admin = \App\Models\User::factory()->create()->assignRole('alumni-admin');
-    $response = $this->actingAs($admin)->get(route('alumni.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $admin = User::factory()->create()->assignRole('alumni-admin');
+    $this->actingAs($admin)->get(route('alumni.admin.dashboard'))->assertOk();
 });
 
 test('alumni-admin can create alumnus via controller', function () {
-    $admin = \App\Models\User::factory()->create()->assignRole('alumni-admin');
-    $response = $this->actingAs($admin)->post(route('alumni.admin.alumni.store'), [
+    $admin = User::factory()->create()->assignRole('alumni-admin');
+    $this->actingAs($admin)->post(route('alumni.admin.alumni.store'), [
         'first_name' => 'Maria',
         'last_name' => 'Santos',
         'email' => 'maria@example.com',
         'graduation_year' => 2025,
-    ]);
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    ])->assertRedirect();
 });
 
 test('alumni-admin can view alumni list', function () {
     Alumnus::factory(3)->create();
-    $admin = \App\Models\User::factory()->create()->assignRole('alumni-admin');
-    $response = $this->actingAs($admin)->get(route('alumni.admin.alumni.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $admin = User::factory()->create()->assignRole('alumni-admin');
+    $this->actingAs($admin)->get(route('alumni.admin.alumni.index'))->assertOk();
 });
 
 test('public can view alumni directory', function () {
     Alumnus::factory(3)->create(['is_verified' => true]);
-    $response = $this->get(route('alumni.directory'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->get(route('alumni.directory'))->assertOk();
 });
 
 test('public can view events', function () {
     AlumniEvent::factory(2)->create(['is_public' => true]);
-    $response = $this->get(route('alumni.events.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $this->get(route('alumni.events.index'))->assertOk();
 });

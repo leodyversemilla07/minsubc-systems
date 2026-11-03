@@ -434,15 +434,18 @@ class PageController extends Controller
             ->sort()
             ->values();
 
+        // Years derived in PHP (DB-agnostic: YEAR() is MySQL-only)
         $years = TransparencyReport::published()
-            ->selectRaw('YEAR(report_period_start) as year')
-            ->union(
-                TransparencyReport::published()
-                    ->selectRaw('YEAR(report_period_end) as year')
-            )
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
+            ->get(['report_period_start', 'report_period_end'])
+            ->flatMap(fn ($report) => [
+                $report->report_period_start?->format('Y'),
+                $report->report_period_end?->format('Y'),
+            ])
+            ->filter()
+            ->map(fn ($year) => (int) $year)
+            ->unique()
+            ->sortDesc()
+            ->values();
 
         // Get statistics
         $stats = [

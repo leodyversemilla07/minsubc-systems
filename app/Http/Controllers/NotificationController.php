@@ -4,23 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class NotificationController extends Controller
 {
     /**
-     * Display a listing of the user's notifications.
+     * Display the notifications page.
      */
     public function index(Request $request): Response
     {
-        $filter = $request->get('filter', 'all'); // all, unread, read
+        $filter = $request->get('filter', 'all');
 
-        $query = DB::table('sas_user_notifications')
-            ->where('notifiable_type', 'App\Models\User')
-            ->where('notifiable_id', $request->user()->id)
-            ->orderBy('created_at', 'desc');
+        $query = $request->user()->notifications();
 
         if ($filter === 'unread') {
             $query->whereNull('read_at');
@@ -28,11 +24,8 @@ class NotificationController extends Controller
             $query->whereNotNull('read_at');
         }
 
-        $notifications = $query->paginate(20)->through(function ($notification) {
-            $notification->data = json_decode($notification->data, true);
-
-            return $notification;
-        });
+        $notifications = $query->orderBy('created_at', 'desc')
+            ->paginate(20);
 
         return Inertia::render('notifications/index', [
             'notifications' => $notifications,
@@ -41,17 +34,34 @@ class NotificationController extends Controller
     }
 
     /**
-     * Get the count of unread notifications.
+     * Get unread count for the bell icon.
      */
     public function unreadCount(Request $request): JsonResponse
     {
-        $count = DB::table('sas_user_notifications')
-            ->where('notifiable_type', 'App\Models\User')
-            ->where('notifiable_id', $request->user()->id)
-            ->whereNull('read_at')
-            ->count();
+        $count = $request->user()->unreadNotifications()->count();
 
         return response()->json(['count' => $count]);
+    }
+
+    /**
+     * Get recent notifications for the dropdown.
+     */
+    public function recent(Request $request): JsonResponse
+    {
+        $notifications = $request->user()->notifications()
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(fn ($n) => [
+                'id' => $n->id,
+                'type' => class_basename($n->type),
+                'data' => $n->data,
+                'read_at' => $n->read_at,
+                'created_at' => $n->created_at->diffForHumans(),
+                'is_unread' => is_null($n->read_at),
+            ]);
+
+        return response()->json($notifications);
     }
 
     /**
@@ -59,34 +69,22 @@ class NotificationController extends Controller
      */
     public function markAsRead(Request $request, string $id): JsonResponse
     {
-        $updated = DB::table('sas_user_notifications')
-            ->where('id', $id)
-            ->where('notifiable_type', 'App\Models\User')
-            ->where('notifiable_id', $request->user()->id)
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+        $notification = $request->user()->notifications()->find($id);
+        $notification?->markAsRead();
 
-        return response()->json([
-            'success' => $updated > 0,
-            'message' => $updated > 0 ? 'Notification marked as read' : 'Notification not found or already read',
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**
-     * Mark all notifications as read for the authenticated user.
+     * Mark all notifications as read.
      */
     public function markAllAsRead(Request $request): JsonResponse
     {
-        $updated = DB::table('sas_user_notifications')
-            ->where('notifiable_type', 'App\Models\User')
-            ->where('notifiable_id', $request->user()->id)
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+        $count = $request->user()->unreadNotifications()->update(['read_at' => now()]);
 
         return response()->json([
             'success' => true,
-            'message' => "Marked {$updated} notifications as read",
-            'count' => $updated,
+            'count' => $count,
         ]);
     }
 }

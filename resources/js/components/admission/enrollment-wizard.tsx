@@ -33,7 +33,7 @@ export function EnrollmentWizard({
 
     const isStepClickable = (stepId: string) => {
         const stepIndex = steps.findIndex((s) => s.id === stepId);
-        return stepIndex <= currentIndex && onStepClick;
+        return stepIndex <= currentIndex && !!onStepClick;
     };
 
     return (
@@ -63,7 +63,7 @@ export function EnrollmentWizard({
                                 isClickable && 'cursor-pointer'
                             )}
                             onClick={() =>
-                                isClickable ? onStepClick(step.id) : undefined
+                                isClickable ? onStepClick?.(step.id) : undefined
                             }
                         >
                             {/* Step Circle */}

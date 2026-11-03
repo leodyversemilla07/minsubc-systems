@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, Save, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,9 +7,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+interface Course {
+    id: number;
+    code: string;
+    name: string;
+    units_lecture: number | null;
+    units_lab: number | null;
+    description: string | null;
+    is_active: boolean;
+}
 
-export default function CourseEdit({ course, prerequisites }: { course: any; prerequisites: any[] }) {
+interface Prerequisite {
+    id: number;
+    prerequisite?: Pick<Course, 'code' | 'name'>;
+}
+
+export default function CourseEdit({ course, prerequisites }: { course: Course; prerequisites: Prerequisite[] }) {
     const { data, setData, put, processing, errors } = useForm({
         code: course.code, name: course.name, units_lecture: String(course.units_lecture ?? '3'), units_lab: String(course.units_lab ?? '0'), description: course.description ?? '', is_active: course.is_active,
     });
@@ -60,12 +73,12 @@ export default function CourseEdit({ course, prerequisites }: { course: any; pre
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {prerequisites.map((p: any) => (
+                                {prerequisites.map((p) => (
                                     <TableRow key={p.id}>
                                         <TableCell className="font-mono">{p.prerequisite?.code ?? '—'}</TableCell>
                                         <TableCell>{p.prerequisite?.name ?? '—'}</TableCell>
                                         <TableCell>
-                                            <Link as="button" method="delete" href={route('curriculum.admin.courses.remove-prerequisite', [course.id, p.id])}>
+                                            <Link as="button" method="delete" href={route('curriculum.admin.courses.remove-prerequisite', { course: course.id, prerequisite: p.id })}>
                                                 <Button variant="ghost" size="icon" className="text-red-600"><Trash2 className="h-4 w-4" /></Button>
                                             </Link>
                                         </TableCell>

@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Helpdesk\Http\Controllers\Admin\DashboardController;
-use Modules\Helpdesk\Http\Controllers\Admin\TicketController;
 use Modules\Helpdesk\Http\Controllers\Admin\CategoryController;
+use Modules\Helpdesk\Http\Controllers\Admin\DashboardController;
 use Modules\Helpdesk\Http\Controllers\Admin\ReportController;
+use Modules\Helpdesk\Http\Controllers\Admin\TicketController;
 
-Route::prefix('admin/helpdesk')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('admin/helpdesk')->middleware(['web', 'auth', 'role:helpdesk-admin|helpdesk-technician|super-admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('helpdesk.admin.dashboard');
     Route::resource('/tickets', TicketController::class, ['as' => 'helpdesk.admin']);
     Route::patch('/tickets/{ticket}/assign', [TicketController::class, 'assign'])->name('helpdesk.admin.tickets.assign');

@@ -1,10 +1,3 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,7 +17,15 @@ import {
     ItemGroup,
     ItemMedia,
 } from '@/components/ui/item';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { toast } from '@/components/ui/toast';
 import {
     Tooltip,
     TooltipContent,
@@ -45,7 +46,6 @@ import {
     Info,
 } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 interface DocumentTypeData {
     value: string;
@@ -212,9 +212,10 @@ export default function Edit({ request, documentTypes }: Props) {
                                         }
                                         method="patch"
                                         onSuccess={() =>
-                                            toast.success(
-                                                'Request updated successfully!',
-                                            )
+                                            toast.add({
+                                                title: 'Request updated successfully!',
+                                                type: 'success',
+                                            })
                                         }
                                     >
                                         {({ errors, processing }) => (
@@ -270,11 +271,23 @@ export default function Edit({ request, documentTypes }: Props) {
                                                                     type ||
                                                                         null,
                                                                 );
-                                                            }} items={documentTypes.map((type) => ({ value: type.value, label: <>{
-                                                                                                                                            type.label
-                                                                                                                                        }{' '}-{' '}{
-                                                                                                                                            type.price_label
-                                                                                                                                        }</> }))}
+                                                            }}
+                                                            items={documentTypes.map(
+                                                                (type) => ({
+                                                                    value: type.value,
+                                                                    label: (
+                                                                        <>
+                                                                            {
+                                                                                type.label
+                                                                            }{' '}
+                                                                            -{' '}
+                                                                            {
+                                                                                type.price_label
+                                                                            }
+                                                                        </>
+                                                                    ),
+                                                                }),
+                                                            )}
                                                         >
                                                             <SelectTrigger className="h-10 md:h-11">
                                                                 <SelectValue />
@@ -446,7 +459,13 @@ export default function Edit({ request, documentTypes }: Props) {
                                                                         '',
                                                                     );
                                                                 }
-                                                            }} items={purposeOptions.map((option) => ({ value: option, label: option }))}
+                                                            }}
+                                                            items={purposeOptions.map(
+                                                                (option) => ({
+                                                                    value: option,
+                                                                    label: option,
+                                                                }),
+                                                            )}
                                                         >
                                                             <SelectTrigger className="h-10 md:h-11">
                                                                 <SelectValue />

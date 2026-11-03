@@ -121,17 +121,13 @@ export default function StudentPortalIndex({
                             </div>
 
                             <div className="flex gap-3">
-                                <Button asChild>
-                                    <Link href={route('student.enrollment.show', currentEnrollment.id)}>
-                                        View Details
-                                        <ArrowRight className="ml-2 h-4 w-4" />
-                                    </Link>
+                                <Button render={<Link href={route('student.enrollment.show', currentEnrollment.id)} />}>
+                                    View Details
+                                    <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
-                                <Button variant="outline" asChild>
-                                    <Link href={route('student.enrollment.schedule')}>
-                                        <Calendar className="mr-2 h-4 w-4" />
-                                        View Schedule
-                                    </Link>
+                                <Button variant="outline" render={<Link href={route('student.enrollment.schedule')} />}>
+                                    <Calendar className="mr-2 h-4 w-4" />
+                                    View Schedule
                                 </Button>
                             </div>
                         </CardContent>
@@ -143,11 +139,9 @@ export default function StudentPortalIndex({
                             <h3 className="mt-4 text-lg font-medium">No Active Enrollment</h3>
                             <p className="mt-2 text-sm text-muted-foreground">You don't have an active enrollment for this semester.</p>
                             {canReEnroll && (
-                                <Button className="mt-6" asChild>
-                                    <Link href={route('student.enrollment.create')}>
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Enroll Now
-                                    </Link>
+                                <Button className="mt-6" render={<Link href={route('student.enrollment.create')} />}>
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Enroll Now
                                 </Button>
                             )}
                         </CardContent>

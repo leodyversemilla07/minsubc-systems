@@ -3,10 +3,34 @@ import { ArrowLeft, BookOpen, BookCheck, History } from 'lucide-react';
 
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export default function BookShow({ book, borrowings }: { book: any; borrowings: any[] }) {
+interface Book {
+    id: number;
+    title: string;
+    is_active: boolean;
+    author?: string;
+    isbn?: string;
+    category?: { name: string };
+    publisher?: string;
+    publication_year?: number;
+    available_copies: number;
+    total_copies: number;
+    description?: string;
+}
+
+interface Borrowing {
+    id: number;
+    user?: { name: string };
+    student_id?: string;
+    borrowed_at?: string;
+    due_date?: string;
+    returned_at?: string;
+    status: string;
+}
+
+export default function BookShow({ book, borrowings }: { book: Book; borrowings: Borrowing[] }) {
     return (
         <AppLayout>
             <Head title={book.title} />
@@ -60,7 +84,7 @@ export default function BookShow({ book, borrowings }: { book: any; borrowings: 
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {borrowings.slice(0, 10).map((b: any) => (
+                                {borrowings.slice(0, 10).map((b) => (
                                     <TableRow key={b.id}>
                                         <TableCell className="font-medium">{b.user?.name ?? b.student_id ?? '—'}</TableCell>
                                         <TableCell>{b.borrowed_at ?? '—'}</TableCell>

@@ -1,10 +1,11 @@
 <?php
 
-use Modules\Clinic\Models\MedicalRecord;
+use App\Models\User;
 use Modules\Clinic\Models\Consultation;
-use Modules\Clinic\Models\Immunization;
-use Modules\Clinic\Models\PhysicalExam;
 use Modules\Clinic\Models\DentalRecord;
+use Modules\Clinic\Models\Immunization;
+use Modules\Clinic\Models\MedicalRecord;
+use Modules\Clinic\Models\PhysicalExam;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -70,14 +71,12 @@ test('clinic module relationships work', function () {
 });
 
 test('clinic-admin can access dashboard', function () {
-    $admin = \App\Models\User::factory()->create()->assignRole('clinic-admin');
-    $response = $this->actingAs($admin)->get(route('clinic.admin.dashboard'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $admin = User::factory()->create()->assignRole('clinic-admin');
+    $this->actingAs($admin)->get(route('clinic.admin.dashboard'))->assertOk();
 });
 
 test('clinic-admin can view medical records list', function () {
     MedicalRecord::factory(3)->create();
-    $admin = \App\Models\User::factory()->create()->assignRole('clinic-admin');
-    $response = $this->actingAs($admin)->get(route('clinic.admin.medical-records.index'));
-    expect(in_array($response->status(), [200, 500]))->toBeTrue();
+    $admin = User::factory()->create()->assignRole('clinic-admin');
+    $this->actingAs($admin)->get(route('clinic.admin.medical-records.index'))->assertOk();
 });

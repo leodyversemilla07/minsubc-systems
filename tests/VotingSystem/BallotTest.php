@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\VotingSystem\Database\Seeders\VotingSystemPermissionsSeeder;
 use Modules\VotingSystem\Models\Candidate;
 use Modules\VotingSystem\Models\Election;
 use Modules\VotingSystem\Models\Position;
@@ -14,7 +14,7 @@ uses(TestCase::class);
 
 beforeEach(function () {
     $this->artisan('migrate:fresh');
-    $this->seed(\Modules\VotingSystem\Database\Seeders\VotingSystemPermissionsSeeder::class);
+    $this->seed(VotingSystemPermissionsSeeder::class);
     $this->election = Election::factory()->active()->create();
     $this->voter = Voter::factory()->notVoted()->create(['election_id' => $this->election->id]);
     $this->position = Position::factory()->create(['election_id' => $this->election->id]);
@@ -107,6 +107,16 @@ test('voter cannot submit vote twice', function () {
     expect(Vote::where('voter_id', $this->voter->id)->count())->toBe(0);
 });
 
+test('voter cannot submit after the election closes', function () {
+    $this->election->update(['status' => false]);
+
+    $this->post(route('voting.submit'), [
+        'votes' => [$this->position->position_id => [$this->candidate->id]],
+    ])->assertRedirect(route('voting.index'));
+
+    expect(Vote::where('voter_id', $this->voter->id)->count())->toBe(0);
+});
+
 test('vote submission is logged', function () {
     $this->post(route('voting.submit'), [
         'votes' => [
@@ -168,11 +178,9 @@ test('voter cannot vote for candidate from different election', function () {
         'votes' => [
             $this->position->position_id => [$otherCandidate->id],
         ],
-    ]);
+    ])->assertSessionHasErrors();
 
-    // The vote may pass basic validation but the candidate belongs to a different election
-    // The controller currently allows this via basic exists:candidates rule
-    expect(true)->toBeTrue();
+    expect(Vote::where('voter_id', $this->voter->id)->count())->toBe(0);
 });
 
 test('voter cannot vote for candidate in wrong position', function () {
@@ -191,6 +199,25 @@ test('voter cannot vote for candidate in wrong position', function () {
     $response->assertSessionHasErrors();
 });
 
+test('voter cannot submit a candidate twice for one position', function () {
+    $this->position->update(['max_vote' => 2]);
+
+    $this->post(route('voting.submit'), [
+        'votes' => [$this->position->position_id => [$this->candidate->id, $this->candidate->id]],
+    ])->assertSessionHasErrors();
+
+    expect(Vote::where('voter_id', $this->voter->id)->count())->toBe(0);
+});
+
+test('voter cannot submit an unknown position', function () {
+    $this->post(route('voting.submit'), [
+        'votes' => [
+            $this->position->position_id => [$this->candidate->id],
+            99999 => [$this->candidate->id],
+        ],
+    ])->assertSessionHasErrors();
+});
+
 test('voter cannot abstain — each position requires a vote', function () {
     // Controller uses required validation on votes array per position
     $response = $this->post(route('voting.submit'), [
@@ -206,7 +233,7 @@ test('voter cannot abstain — each position requires a vote', function () {
 
 test('voter can submit feedback with rating', function () {
     // Use cache token to authenticate feedback
-    $token = 'test_feedback_token_' . $this->voter->id;
+    $token = 'test_feedback_token_'.$this->voter->id;
     Cache::put($token, [
         'voter_id' => $this->voter->id,
         'election_id' => $this->election->id,
@@ -223,7 +250,7 @@ test('voter can submit feedback with rating', function () {
 });
 
 test('feedback requires valid rating', function () {
-    $token = 'test_feedback_token_2_' . $this->voter->id;
+    $token = 'test_feedback_token_2_'.$this->voter->id;
     Cache::put($token, [
         'voter_id' => $this->voter->id,
         'election_id' => $this->election->id,
@@ -237,7 +264,7 @@ test('feedback requires valid rating', function () {
 });
 
 test('feedback is optional — voter can submit without comment', function () {
-    $token = 'test_feedback_token_3_' . $this->voter->id;
+    $token = 'test_feedback_token_3_'.$this->voter->id;
     Cache::put($token, [
         'voter_id' => $this->voter->id,
         'election_id' => $this->election->id,

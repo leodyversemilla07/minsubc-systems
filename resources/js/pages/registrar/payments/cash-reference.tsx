@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { toast } from '@/components/ui/toast';
 import AppLayout from '@/layouts/app-layout';
 import { statusColors } from '@/lib/status-colors';
 import { show } from '@/routes/registrar/document-requests';
@@ -16,7 +17,6 @@ import {
     Info,
     Printer,
 } from 'lucide-react';
-import { toast } from 'sonner';
 
 interface Payment {
     id: number;
@@ -102,7 +102,7 @@ export default function CashPaymentReference({ payment }: Props) {
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
-        toast.success('Copied to clipboard!');
+        toast.add({ title: 'Copied to clipboard!', type: 'success' });
     };
 
     const printReference = () => {

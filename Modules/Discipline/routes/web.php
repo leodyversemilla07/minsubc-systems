@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Discipline\Http\Controllers\Admin\AppealController;
 use Modules\Discipline\Http\Controllers\Admin\DashboardController;
+use Modules\Discipline\Http\Controllers\Admin\IncidentController;
 use Modules\Discipline\Http\Controllers\Admin\OffenseCategoryController;
 use Modules\Discipline\Http\Controllers\Admin\OffenseController;
-use Modules\Discipline\Http\Controllers\Admin\IncidentController;
-use Modules\Discipline\Http\Controllers\Admin\SanctionController;
-use Modules\Discipline\Http\Controllers\Admin\AppealController;
 use Modules\Discipline\Http\Controllers\Admin\ReportController;
+use Modules\Discipline\Http\Controllers\Admin\SanctionController;
 
-Route::prefix('admin/discipline')->name('discipline.admin.')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('admin/discipline')->name('discipline.admin.')->middleware(['web', 'auth', 'role:discipline-admin|discipline-staff|super-admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('offense-categories', OffenseCategoryController::class)->only(['index', 'store', 'update', 'destroy'])->names([
         'index' => 'offense-categories.index',

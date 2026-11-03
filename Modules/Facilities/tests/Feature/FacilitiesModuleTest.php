@@ -1,10 +1,10 @@
 <?php
 
-use Modules\Facilities\Models\Facility;
-use Modules\Facilities\Models\Reservation;
-use Modules\Facilities\Models\Equipment;
-use Modules\Facilities\Models\MaintenanceRequest;
 use App\Models\User;
+use Modules\Facilities\Models\Equipment;
+use Modules\Facilities\Models\Facility;
+use Modules\Facilities\Models\MaintenanceRequest;
+use Modules\Facilities\Models\Reservation;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -95,29 +95,29 @@ test('can create maintenance requests', function () {
 
 test('can access admin dashboard', function () {
     $admin = User::factory()->create()->assignRole('facilities-admin');
-    $response = $this->actingAs($admin)
-        ->get(route('facilities.admin.dashboard'));
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get(route('facilities.admin.dashboard'))
+        ->assertOk();
 });
 
 test('can list facilities', function () {
     Facility::factory()->count(3)->create();
     $admin = User::factory()->create()->assignRole('facilities-admin');
-    $response = $this->actingAs($admin)
-        ->get(route('facilities.admin.facilities.index'));
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get(route('facilities.admin.facilities.index'))
+        ->assertOk();
 });
 
 test('can list reservations', function () {
     $admin = User::factory()->create()->assignRole('facilities-admin');
-    $response = $this->actingAs($admin)
-        ->get(route('facilities.admin.reservations.index'));
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get(route('facilities.admin.reservations.index'))
+        ->assertOk();
 });
 
 test('can list equipment', function () {
     $admin = User::factory()->create()->assignRole('facilities-admin');
-    $response = $this->actingAs($admin)
-        ->get(route('facilities.admin.equipment.index'));
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get(route('facilities.admin.equipment.index'))
+        ->assertOk();
 });

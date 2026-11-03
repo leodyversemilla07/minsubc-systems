@@ -1,11 +1,33 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Send, BookCheck, Target, GraduationCap, BookOpen } from 'lucide-react';
+import { ArrowLeft, Send, BookCheck, GraduationCap, BookOpen } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export default function SyllabusShow({ syllabus, courseOutcomes, textbooks }: { syllabus: any; courseOutcomes: any[]; textbooks: any[] }) {
+interface Syllabus {
+    id: number;
+    title: string;
+    status: string;
+    description?: string;
+    course?: { code: string; name: string };
+}
+
+interface CourseOutcome {
+    id: number;
+    code?: string;
+    description: string;
+}
+
+interface TextbookEntry {
+    id: number;
+    title?: string;
+    author?: string;
+    isbn?: string;
+    textbook?: { title: string; author: string; isbn: string };
+}
+
+export default function SyllabusShow({ syllabus, courseOutcomes, textbooks }: { syllabus: Syllabus; courseOutcomes: CourseOutcome[]; textbooks: TextbookEntry[] }) {
     return (
         <AppLayout>
             <Head title={syllabus.title} />
@@ -57,7 +79,7 @@ export default function SyllabusShow({ syllabus, courseOutcomes, textbooks }: { 
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {courseOutcomes.map((co: any) => (
+                                {courseOutcomes.map((co) => (
                                     <TableRow key={co.id}>
                                         <TableCell className="font-mono text-sm">{co.code ?? 'CO' + co.id}</TableCell>
                                         <TableCell className="max-w-md">{co.description}</TableCell>
@@ -80,7 +102,7 @@ export default function SyllabusShow({ syllabus, courseOutcomes, textbooks }: { 
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {textbooks.map((st: any) => (
+                                {textbooks.map((st) => (
                                     <TableRow key={st.id}>
                                         <TableCell className="font-medium">{st.textbook?.title ?? st.title ?? '—'}</TableCell>
                                         <TableCell>{st.textbook?.author ?? st.author ?? '—'}</TableCell>

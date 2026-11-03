@@ -1,29 +1,40 @@
 <?php
 
-use Modules\Helpdesk\Models\TicketCategory;
-use Modules\Helpdesk\Models\Ticket;
-use Modules\Helpdesk\Models\TicketComment;
 use App\Models\User;
+use Modules\Helpdesk\Models\Ticket;
+use Modules\Helpdesk\Models\TicketCategory;
+use Modules\Helpdesk\Models\TicketComment;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    if (!Schema::hasTable('hlp_categories')) {
+    if (! Schema::hasTable('hlp_categories')) {
         Schema::create('hlp_categories', function ($table) {
-            $table->id(); $table->string('name'); $table->text('description')->nullable();
-            $table->string('color')->nullable(); $table->boolean('is_active')->default(true);
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('color')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
         Schema::create('hlp_tickets', function ($table) {
-            $table->id(); $table->foreignId('category_id')->constrained('hlp_categories');
-            $table->string('title'); $table->text('description'); $table->string('priority')->default('medium');
-            $table->string('status')->default('open'); $table->foreignId('reported_by')->constrained('users');
+            $table->id();
+            $table->foreignId('category_id')->constrained('hlp_categories');
+            $table->string('title');
+            $table->text('description');
+            $table->string('priority')->default('medium');
+            $table->string('status')->default('open');
+            $table->foreignId('reported_by')->constrained('users');
             $table->foreignId('assigned_to')->nullable()->constrained('users');
-            $table->dateTime('resolved_at')->nullable(); $table->timestamps();
+            $table->dateTime('resolved_at')->nullable();
+            $table->timestamps();
         });
         Schema::create('hlp_comments', function ($table) {
-            $table->id(); $table->foreignId('ticket_id')->constrained('hlp_tickets')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users'); $table->text('body');
-            $table->boolean('is_internal')->default(false); $table->timestamps();
+            $table->id();
+            $table->foreignId('ticket_id')->constrained('hlp_tickets')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users');
+            $table->text('body');
+            $table->boolean('is_internal')->default(false);
+            $table->timestamps();
         });
     }
     Role::firstOrCreate(['name' => 'helpdesk-admin']);
@@ -78,18 +89,15 @@ test('can comment on ticket', function () {
 
 test('can access admin dashboard', function () {
     $admin = User::factory()->create()->assignRole('helpdesk-admin');
-    $response = $this->actingAs($admin)->get('/admin/helpdesk/dashboard');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/helpdesk/dashboard')->assertOk();
 });
 
 test('can list tickets', function () {
     $admin = User::factory()->create()->assignRole('helpdesk-admin');
-    $response = $this->actingAs($admin)->get('/admin/helpdesk/tickets');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/helpdesk/tickets')->assertOk();
 });
 
 test('can list categories', function () {
     $admin = User::factory()->create()->assignRole('helpdesk-admin');
-    $response = $this->actingAs($admin)->get('/admin/helpdesk/categories');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)->get('/admin/helpdesk/categories')->assertOk();
 });

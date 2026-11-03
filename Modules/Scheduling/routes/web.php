@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Scheduling\Http\Controllers\Admin\AcademicScheduleController;
 use Modules\Scheduling\Http\Controllers\Admin\DashboardController;
 use Modules\Scheduling\Http\Controllers\Admin\EventController;
-use Modules\Scheduling\Http\Controllers\Admin\AcademicScheduleController;
 
-Route::prefix('admin/scheduling')->name('scheduling.admin.')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('admin/scheduling')->name('scheduling.admin.')->middleware(['web', 'auth', 'role:scheduling-admin|scheduling-staff|super-admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('events', EventController::class)->names([
         'index' => 'events.index',

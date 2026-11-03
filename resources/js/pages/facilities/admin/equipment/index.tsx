@@ -5,12 +5,23 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export default function EquipmentIndex({ equipment }: { equipment: any }) {
+interface Equipment {
+    id: number;
+    code: string;
+    name: string;
+    facility?: { name: string };
+    facility_id: number;
+    quantity: number;
+    available_quantity: number;
+    condition: string;
+}
+
+export default function EquipmentIndex({ equipment }: { equipment: { data: Equipment[] } }) {
     return (
         <AppLayout>
             <Head title="Equipment" />
             <div className="space-y-6 p-6">
-                <h1 className="text-2xl font-bold"><Tool className="mr-2 inline h-6 w-6" />Equipment</h1>
+                <h1 className="text-2xl font-bold"><Wrench className="mr-2 inline h-6 w-6" />Equipment</h1>
                 <Card>
                     <CardContent className="p-0">
                         <Table>
@@ -26,7 +37,7 @@ export default function EquipmentIndex({ equipment }: { equipment: any }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {equipment.data?.map((e: any) => (
+                                {equipment.data?.map((e) => (
                                     <TableRow key={e.id}>
                                         <TableCell className="font-mono">{e.code}</TableCell>
                                         <TableCell className="font-medium">{e.name}</TableCell>

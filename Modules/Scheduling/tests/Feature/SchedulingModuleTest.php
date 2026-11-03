@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Modules\Scheduling\Models\CalendarEvent;
-use Modules\Scheduling\Models\Booking;
-use Modules\Scheduling\Models\AcademicSchedule;
 use App\Models\User;
+use Illuminate\Support\Facades\Schema;
+use Modules\Scheduling\Models\AcademicSchedule;
+use Modules\Scheduling\Models\Booking;
+use Modules\Scheduling\Models\CalendarEvent;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     // Ensure Scheduling tables exist (handles fresh SQLite databases)
-    if (!Schema::hasTable('sch_events')) {
+    if (! Schema::hasTable('sch_events')) {
         Schema::create('sch_events', function ($table) {
             $table->id();
             $table->string('title');
@@ -113,21 +113,18 @@ test('can mark academic schedule as holiday', function () {
 
 test('can access admin dashboard', function () {
     $admin = User::factory()->create()->assignRole('scheduling-admin');
-    $response = $this->actingAs($admin)
-        ->get('/admin/scheduling/dashboard');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get('/admin/scheduling/dashboard')->assertOk();
 });
 
 test('can list events', function () {
     $admin = User::factory()->create()->assignRole('scheduling-admin');
-    $response = $this->actingAs($admin)
-        ->get('/admin/scheduling/events');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get('/admin/scheduling/events')->assertOk();
 });
 
 test('can list academic schedules', function () {
     $admin = User::factory()->create()->assignRole('scheduling-admin');
-    $response = $this->actingAs($admin)
-        ->get('/admin/scheduling/academic-schedules');
-    expect(in_array($response->status(), [200, 302, 500]))->toBeTrue();
+    $this->actingAs($admin)
+        ->get('/admin/scheduling/academic-schedules')->assertOk();
 });

@@ -1,12 +1,43 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Users, Briefcase, Calendar, Clock, Mail, Phone, MapPin } from 'lucide-react';
+import { ArrowLeft, Users, Briefcase, Calendar, Clock, Mail, Phone, MapPin, Building2 } from 'lucide-react';
 
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export default function EmployeeShow({ employee, attendance, leaveRequests }: { employee: any; attendance: any[]; leaveRequests: any[] }) {
+interface Employee {
+    first_name: string;
+    last_name: string;
+    position?: { title: string };
+    department?: { name: string };
+    employment_status: string;
+    employee_id: string;
+    email: string;
+    phone?: string;
+    address?: string;
+    hire_date?: string;
+    salary?: number;
+}
+
+interface Attendance {
+    id: number;
+    date: string;
+    time_in?: string;
+    time_out?: string;
+    status: string;
+}
+
+interface LeaveRequest {
+    id: number;
+    leave_type?: { name: string };
+    type?: string;
+    start_date: string;
+    end_date?: string;
+    status: string;
+}
+
+export default function EmployeeShow({ employee, attendance, leaveRequests }: { employee: Employee; attendance: Attendance[]; leaveRequests: LeaveRequest[] }) {
     return (
         <AppLayout>
             <Head title={`${employee.first_name} ${employee.last_name}`} />
@@ -61,7 +92,7 @@ export default function EmployeeShow({ employee, attendance, leaveRequests }: { 
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {attendance.slice(0, 5).map((a: any) => (
+                                    {attendance.slice(0, 5).map((a) => (
                                         <TableRow key={a.id}>
                                             <TableCell>{a.date}</TableCell>
                                             <TableCell>{a.time_in ?? '—'}</TableCell>
@@ -88,7 +119,7 @@ export default function EmployeeShow({ employee, attendance, leaveRequests }: { 
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {leaveRequests.slice(0, 5).map((l: any) => (
+                                    {leaveRequests.slice(0, 5).map((l) => (
                                         <TableRow key={l.id}>
                                             <TableCell className="capitalize">{l.leave_type?.name ?? l.type ?? '—'}</TableCell>
                                             <TableCell>{l.start_date} → {l.end_date ?? ''}</TableCell>
@@ -106,5 +137,3 @@ export default function EmployeeShow({ employee, attendance, leaveRequests }: { 
         </AppLayout>
     );
 }
-
-const Building2 = (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>;

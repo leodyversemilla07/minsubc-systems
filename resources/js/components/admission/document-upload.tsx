@@ -87,7 +87,7 @@ export function DocumentUpload({
                         setUploadingFiles((prev) =>
                             prev.map((f) =>
                                 f.id === tempId
-                                    ? { ...f, progress: progress.percentage }
+                                    ? { ...f, progress: progress?.percentage ?? 0 }
                                     : f
                             )
                         );
@@ -152,8 +152,7 @@ export function DocumentUpload({
                 router.delete(
                     route(
                         'admission.application.documents.delete',
-                        applicationNumber,
-                        documentId
+                        { applicationNumber, documentId }
                     ),
                     {
                         preserveScroll: true,

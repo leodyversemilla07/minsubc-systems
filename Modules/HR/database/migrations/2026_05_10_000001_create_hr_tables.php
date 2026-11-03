@@ -10,20 +10,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (!Schema::hasTable('hr_departments')) {
+        if (! Schema::hasTable('hr_departments')) {
             Schema::create('hr_departments', function (Blueprint $table) {
                 $table->id();
                 $table->string('code', 20)->unique();
                 $table->string('name');
                 $table->string('type')->default('academic'); // academic, administrative, office
                 $table->text('description')->nullable();
-                $table->foreignId('head_id')->nullable()->constrained('hr_employees')->nullOnDelete();
+                // NOTE: head_id FK is added after hr_employees is created below —
+                // MySQL requires the referenced table to exist, SQLite ignores order.
+                $table->foreignId('head_id')->nullable();
                 $table->boolean('is_active')->default(true);
                 $table->timestamps();
             });
         }
 
-        if (!Schema::hasTable('hr_positions')) {
+        if (! Schema::hasTable('hr_positions')) {
             Schema::create('hr_positions', function (Blueprint $table) {
                 $table->id();
                 $table->string('title');
@@ -37,7 +39,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('hr_employees')) {
+        if (! Schema::hasTable('hr_employees')) {
             Schema::create('hr_employees', function (Blueprint $table) {
                 $table->id();
                 $table->string('employee_id', 20)->unique();
@@ -65,7 +67,11 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('hr_attendance')) {
+        Schema::table('hr_departments', function (Blueprint $table) {
+            $table->foreign('head_id')->references('id')->on('hr_employees')->nullOnDelete();
+        });
+
+        if (! Schema::hasTable('hr_attendance')) {
             Schema::create('hr_attendance', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('employee_id')->constrained('hr_employees')->cascadeOnDelete();
@@ -79,7 +85,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('hr_leave_types')) {
+        if (! Schema::hasTable('hr_leave_types')) {
             Schema::create('hr_leave_types', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
@@ -93,7 +99,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('hr_leave_requests')) {
+        if (! Schema::hasTable('hr_leave_requests')) {
             Schema::create('hr_leave_requests', function (Blueprint $table) {
                 $table->id();
                 $table->string('leave_code', 20)->unique();
@@ -111,7 +117,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('hr_evaluations')) {
+        if (! Schema::hasTable('hr_evaluations')) {
             Schema::create('hr_evaluations', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('employee_id')->constrained('hr_employees')->cascadeOnDelete();
